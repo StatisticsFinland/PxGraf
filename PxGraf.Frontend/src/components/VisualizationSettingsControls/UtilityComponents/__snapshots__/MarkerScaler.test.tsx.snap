@@ -1,0 +1,104 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Rendering test renders correctly 1`] = `
+<DocumentFragment>
+  <div
+    class="MuiStack-root sc-aXZVg bhONhf css-m69qwo-MuiStack-root"
+  >
+    <div
+      class="MuiBox-root css-0"
+    >
+      <p
+        class="MuiTypography-root MuiTypography-body1 MuiTypography-gutterBottom css-d3wcwz-MuiTypography-root"
+        id="input-slider"
+      >
+        chartSettings.markerScale
+      </p>
+      <span
+        class="MuiSlider-root MuiSlider-marked MuiSlider-colorPrimary MuiSlider-sizeMedium sc-gEvEer djUniZ css-ltlhnc-MuiSlider-root"
+      >
+        <span
+          class="MuiSlider-rail css-7o8aqz-MuiSlider-rail"
+        />
+        <span
+          class="MuiSlider-track css-ttgsjq-MuiSlider-track"
+          style="left: 0%; width: 49.74874371859296%;"
+        />
+        <span
+          class="MuiSlider-mark MuiSlider-markActive css-z5sdnj-MuiSlider-mark"
+          data-index="0"
+          style="left: 0%;"
+        />
+        <span
+          aria-hidden="true"
+          class="MuiSlider-markLabel MuiSlider-markLabel MuiSlider-markLabelActive css-1ucwjgd-MuiSlider-markLabel"
+          data-index="0"
+          style="left: 0%;"
+        >
+          1%
+        </span>
+        <span
+          class="MuiSlider-mark MuiSlider-markActive css-z5sdnj-MuiSlider-mark"
+          data-index="1"
+          style="left: 49.74874371859296%;"
+        />
+        <span
+          aria-hidden="true"
+          class="MuiSlider-markLabel MuiSlider-markLabel MuiSlider-markLabelActive css-1ucwjgd-MuiSlider-markLabel"
+          data-index="1"
+          style="left: 49.74874371859296%;"
+        >
+          100%
+        </span>
+        <span
+          class="MuiSlider-mark css-hzp7sc-MuiSlider-mark"
+          data-index="2"
+          style="left: 100%;"
+        />
+        <span
+          aria-hidden="true"
+          class="MuiSlider-markLabel MuiSlider-markLabel css-1bvr8oc-MuiSlider-markLabel"
+          data-index="2"
+          style="left: 100%;"
+        >
+          200%
+        </span>
+        <span
+          class="MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary css-1as9v07-MuiSlider-thumb"
+          data-index="0"
+          style="left: 49.74874371859296%;"
+        >
+          <input
+            aria-label="chartSettings.markerScaleDefaultLabel"
+            aria-orientation="horizontal"
+            aria-valuemax="200"
+            aria-valuemin="1"
+            aria-valuenow="100"
+            data-index="0"
+            max="200"
+            min="1"
+            step="1"
+            style="border: 0px; height: 100%; margin: -1px; overflow: hidden; padding: 0px; position: absolute; white-space: nowrap; width: 100%; direction: ltr;"
+            type="range"
+            value="100"
+          />
+          <span
+            aria-hidden="true"
+            class="MuiSlider-valueLabel css-14gyywz-MuiSlider-valueLabel"
+          >
+            <span
+              class="MuiSlider-valueLabelCircle"
+            >
+              <span
+                class="MuiSlider-valueLabelLabel"
+              >
+                100
+              </span>
+            </span>
+          </span>
+        </span>
+      </span>
+    </div>
+  </div>
+</DocumentFragment>
+`;

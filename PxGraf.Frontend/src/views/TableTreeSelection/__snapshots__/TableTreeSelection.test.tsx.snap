@@ -1,0 +1,136 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Rendering test renders correctly 1`] = `
+<DocumentFragment>
+  <div
+    class="MuiContainer-root MuiContainer-maxWidthMd sc-ibQAlb iOxBWl css-xdmu94-MuiContainer-root"
+  >
+    <nav
+      aria-labelledby="nested-list-subheader"
+      class="MuiList-root MuiList-padding MuiList-subheader css-p64g7a-MuiList-root"
+    >
+      <div
+        class="MuiListSubheader-root MuiListSubheader-gutters MuiListSubheader-sticky css-uob957-MuiListSubheader-root"
+        id="nested-list-subheader"
+      >
+        <div
+          class="sc-jGKxIK cLHFcM"
+        >
+          <div>
+            tableSelect.title
+          </div>
+          <button
+            aria-label="tooltip.open: tableSelect.title"
+            class="sc-dAlyuH ghYgyh"
+            id="mainContent"
+          >
+            <svg
+              aria-hidden="true"
+              class="MuiSvgIcon-root MuiSvgIcon-colorInfo MuiSvgIcon-fontSizeMedium css-1yq1soz-MuiSvgIcon-root"
+              data-testid="InfoIcon"
+              focusable="false"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m1 15h-2v-6h2zm0-8h-2V7h2z"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+      <li
+        class="MuiListItem-root MuiListItem-gutters MuiListItem-padding sc-iMTnTL gwgsRo css-1p823my-MuiListItem-root"
+        id="id1"
+      >
+        <a
+          class="MuiButtonBase-root MuiListItemButton-root MuiListItemButton-gutters MuiListItemButton-root MuiListItemButton-gutters css-un12p1-MuiButtonBase-root-MuiListItemButton-root"
+          href="/editor/id1/"
+          tabindex="0"
+        >
+          <div
+            class="MuiListItemIcon-root css-16myrmq-MuiListItemIcon-root"
+          >
+            <svg
+              aria-hidden="true"
+              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+              data-testid="InsertDriveFileOutlinedIcon"
+              focusable="false"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8zM6 20V4h7v5h5v11z"
+              />
+            </svg>
+          </div>
+          <div
+            class="MuiListItemText-root MuiListItemText-multiline css-konndc-MuiListItemText-root"
+          >
+            <span
+              class="MuiTypography-root MuiTypography-body1 MuiListItemText-primary css-10hburv-MuiTypography-root"
+            >
+              foo1 (FI, EN, SV)
+            </span>
+            <p
+              class="MuiTypography-root MuiTypography-body2 MuiListItemText-secondary css-83ijpv-MuiTypography-root"
+            >
+              tableSelect.updated: 1.1.2000 klo 0.00.00
+            </p>
+          </div>
+          <span
+            class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+          />
+        </a>
+      </li>
+      <hr
+        class="MuiDivider-root MuiDivider-fullWidth css-9mgopn-MuiDivider-root"
+      />
+      <li
+        class="MuiListItem-root MuiListItem-gutters MuiListItem-padding sc-iMTnTL gwgsRo css-1p823my-MuiListItem-root"
+        id="id2"
+      >
+        <a
+          class="MuiButtonBase-root MuiListItemButton-root MuiListItemButton-gutters MuiListItemButton-root MuiListItemButton-gutters css-un12p1-MuiButtonBase-root-MuiListItemButton-root"
+          href="/editor/id2/"
+          tabindex="0"
+        >
+          <div
+            class="MuiListItemIcon-root css-16myrmq-MuiListItemIcon-root"
+          >
+            <svg
+              aria-hidden="true"
+              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+              data-testid="InsertDriveFileOutlinedIcon"
+              focusable="false"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8zM6 20V4h7v5h5v11z"
+              />
+            </svg>
+          </div>
+          <div
+            class="MuiListItemText-root MuiListItemText-multiline css-konndc-MuiListItemText-root"
+          >
+            <span
+              class="MuiTypography-root MuiTypography-body1 MuiListItemText-primary css-10hburv-MuiTypography-root"
+            >
+              foo2 (FI, EN)
+            </span>
+            <p
+              class="MuiTypography-root MuiTypography-body2 MuiListItemText-secondary css-83ijpv-MuiTypography-root"
+            >
+              tableSelect.updated: 1.1.2000 klo 0.00.00
+            </p>
+          </div>
+          <span
+            class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+          />
+        </a>
+      </li>
+      <hr
+        class="MuiDivider-root MuiDivider-fullWidth css-9mgopn-MuiDivider-root"
+      />
+    </nav>
+  </div>
+</DocumentFragment>
+`;

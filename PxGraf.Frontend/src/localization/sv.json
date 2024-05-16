@@ -1,0 +1,180 @@
+{
+  "general": {
+    "noResults": "Inget resultat",
+    "results": "Resultat",
+    "noPossibleVisualizations": "En visualisering kan inte skapas utgående från de värden du valt. Försök att ändra ditt uttag.",
+    "uiLanguage": "Språk för användargränssnitt",
+    "databaseSelectorLink": "Databasval",
+    "search": "Sök",
+    "selectDatabaseTitle": "Välj databastabellen",
+    "editorTitle": "Val av variabler och visualisering",
+    "contentLink": "Gå till innehållet"
+  },
+  "navbar": {
+    "logoAlt": "Till förstasidan"
+  },
+  "lang": {
+    "fi": "suomi",
+    "sv": "svenska",
+    "en": "English",
+    "local": {
+      "fi": "suomi",
+      "sv": "ruotsi",
+      "en": "englanti"
+    }
+  },
+  "pages": {
+    "tableTreeSelection": "Val av databastabell",
+    "editor": "Val av variabel",
+    "tableList": "Listvy",
+    "sqid": "Uttagets identifierare"
+  },
+  "chartTypes": {
+    "LineChart": "Linje",
+    "PieChart": "Cirkel",
+    "PyramidChart": "Pyramid",
+    "ScatterPlot": "Spridning",
+    "VerticalBarChart": "Vertikal stapel",
+    "GroupVerticalBarChart": "Vertikal stapelgrupp",
+    "StackedVerticalBarChart": "Vertikal staplad stapel",
+    "PercentVerticalBarChart": "Proportionelt vertikal staplad stapel",
+    "HorizontalBarChart": "Horisontell stapel",
+    "GroupHorizontalBarChart": "Horisontell stapelgrupp",
+    "StackedHorizontalBarChart": "Horisontell staplad stapel",
+    "PercentHorizontalBarChart": "Proportionelt horisontell staplad stapel",
+    "Table": "Tabell",
+    "Note": "Förklaring"
+  },
+  "tableSelect": {
+    "title": "Välj från katalogträdet en databastabell som fungerar som källa för de data som visualiseras.",
+    "listView": "Lista",
+    "showChildren": "Visa barnen",
+    "hideChildren": "Göm barnen",
+    "openTable": "Öppna databastabell",
+    "updated": "Updaterad"
+  },
+  "variableSelect": {
+    "allFilter": "Alla",
+    "fromFilter": "från det valda värdet framåt",
+    "topFilter": "n senaste värden",
+    "itemFilter": "manuellt val",
+    "selectable": "Flytta spaken till höger om du vill att variabeln ska ha valmöjligheter",
+    "title": "Välj manuellt värden bland variablerna eller använd de dynamiska alternativen i menyn. Användargränssnittet uppdateras genast enligt dina val.",
+    "openMenu": "Öppna menyn",
+    "closeMenu": "Stäng menyn"
+  },
+  "editMetadata": {
+    "editorTitle": "Metadata",
+    "header": "Visualiseringens rubrik som publiceras",
+    "valueName": "Värde",
+    "unit": "Enhet",
+    "source": "Källa",
+    "noVariableValuesSelected": "Inga valda variabel värde",
+    "discardChanges": "Avvisa valen"
+  },
+  "editor": {
+    "contentLanguage": "Redigera visualiseringens språkversioner",
+    "save": "Spara"
+  },
+  "chartSettings": {
+    "pivot": "Rotera grafen",
+    "rowVariables": "Rad variabel",
+    "columnVariables": "Kolumn variabel",
+    "cutYAxis": "Bryt Y-axeln",
+    "sort": "Sortera",
+    "matchXLabelsToEnd": "Centrera etiketterna till x-axelns slut",
+    "labelInterval": "Etiketternas intervall",
+    "markerScale": "Punkternas storlek",
+    "markerScaleDefaultLabel": "Standard",
+    "multiSelectVariable": "Flervalsvariabel",
+    "noMultiselectable": "Ingen Multiselect-variabel"
+  },
+  "tableSettings": {
+    "up": "Flytta upp",
+    "down": "Flytta ner",
+    "swap": "Flytta till en annan dimension"
+  },
+  "saveDialog": {
+    "save": "Spara",
+    "cancel": "Avbryt",
+    "saveQuery": "Välj lagringsformat",
+    "saveOptions": "Välj i vilket format du vill spara",
+    "saveDynamic": "Dynamisk enkät och data som uppdateras",
+    "saveStatic": "Statisk enkät och statiska data"
+  },
+  "saveResultDialog": {
+    "ok": "ok",
+    "success": "Sparad. Ta vara på identifieraren.",
+    "fail": "Det gick inte att spara.",
+    "errorMessage": "Kontrollera variabelvalen och försök igen.",
+    "id": "Uttagets identifierare",
+    "copyToClipBoard": "Kopiera till urklipp"
+  },
+  "error": {
+    "contentLoad": "Innehållet kunde inte hämtas",
+    "queryLoad": "Det gick inte att ladda ner visualiseringen",
+    "contentVariableMissing": "Tabellen saknar innehållsvariabel. Kontakta tabellens producent eller administratör. ",
+    "timeVariableMissing": "Tabellen saknar tidsvariabel. Kontakta tabellens producent eller administratör. ",
+    "variablesMissingValues": "Tabellen saknar variabelvärden. Kontakta tabellens producent eller administratör. "
+  },
+  "rejectionDialog": {
+    "buttonText": "Övriga diagramtyper",
+    "titleText": "Övriga diagramtyper",
+    "closeButton": "Stäng"
+  },
+  "cellCount": {
+    "infoText": "Antalet celler i extraktionen",
+    "warningText": "Antalet celler i uttaget är nära maximiantalet.",
+    "dangerText": "Antalet celler i uttaget överskrider maximiantalet. Välj färre värden för att visualiseringen ska lyckas."
+  },
+  "previewGuide": {
+    "tooSmallQuery": "Visualiseringen syns först när ett värde har valts för varje variabel.",
+    "impossibleToVisualize": "Eventuella visualiseringstyper visas när du har valt minst ett värde för varje variabel."
+  },
+  "infoText": {
+    "treeSelection": "Välj från katalogträdet en px-tabell som fungerar som källa för de data som visualiseras.",
+    "langSelector": "Välj språket för gränssnittets menyer",
+    "langTab": "Redigera nödvändig information i de olika språkversionerna. Korrigera åtminstone rubrikerna.",
+    "varSelection": "",
+    "selectableButton": "Om du vill att visualiseringen ska ha valmöjligheter i fråga om den här variabeln, välj ”valmöjligheter”. Då kan användaren byta variabelvärde i visualiseringen.",
+    "selectableInput": "Du kan välja standardvärdet för den variabel som visas i visualiseringen och som användaren ser innan han eller hon gör sina egna val.",
+    "titleEdition": "Redigera visualiseringens rubrik så att den blir så tydlig som möjligt. Lämna FIRST/LAST åtminstone i de visualiseringar som uppdateras, för att rubrikens tidsvariabler ska uppdateras automatiskt.",
+    "metaEdition": "Redigera vid behov stavningen av metadata för visualiseringen.",
+    "visualizationSelection": "Välj önskad visualiseringstyp. Om den diagramtyp du önskar inte är möjlig, läs mera genom att klicka på \"Övriga diagramtyper\".",
+    "otherVisualizations": "Med knappen \"Övriga diagramtyper\" kan man undersöka orsakerna till att man förkastat de diagramtyper som saknas. PxGraf möjliggör de diagramtyper som följer rekommendationerna för statistisk grafik.",
+    "visualizationConfiguration": "Redigera visualiseringen. Olika visualiseringar har olika bearbetningsalternativ.",
+    "save": "Spara det färdiga diagrammet/den färdiga tabellen samt identifieraren. Välj ett fryst statiskt alternativ för meddelandet och ett dynamiskt alternativ som uppdateras för statistikgrenens webbsida genom dialogen som öppnas då du klickar på knappen \"Spara\".",
+    "rescaleButtons": "Visualiseringen kan anpassa sig automatiskt till skärmar av olika storlek. Testa hur visualiseringen ser ut i olika storlekar."
+  },
+  "selectable": {
+    "noSelections": "Inga valbara värden",
+    "labelText": "Variabelns standardvärde som visas i visualiseringen",
+    "open": "Öppna",
+    "close": "Stäng",
+    "clear": "Tömma"
+  },
+  "savedQuery": {
+    "errorMsg": "Kontrollera visualiseringens identifierare och försök igen",
+    "dialogButtonTxt": "sök den gamla visualiseringen",
+    "dialogTitleTxt": "hämta den gamla visualiseringen",
+    "inputLabel": "visualiseringens identifierare",
+    "closeButton": "Ångra",
+    "searchTxt": "Sök",
+    "searchingTxt": "Söker..."
+  },
+  "titleWarning": {
+    "charactersText": "tecken",
+    "maxLengthText": "Rubrikens maximala längd är",
+    "usedLengthText": "Du har använt"
+  },
+  "tooltip": {
+    "open": "Öppna ledtråd",
+    "close": "Stäng ledtråd",
+    "visualizationType": "Val av diagramtyp",
+    "visualizationConfig": "Diagramtypsspecifika val",
+    "visualizationSize": "Val av diagramstorlek för förhandsvisning"
+  },
+  "visualizationSettings": {
+    "showDataPoints": "Visa datavärden i diagrammet"
+  }
+}

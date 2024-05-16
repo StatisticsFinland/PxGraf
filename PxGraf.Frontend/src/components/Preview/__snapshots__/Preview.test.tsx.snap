@@ -1,0 +1,142 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Rendering test renders correctly 1`] = `
+<DocumentFragment>
+  <div
+  class="sc-dcJsrY hLoHLO"
+>
+  <button
+    aria-label="tooltip.open: tooltip.visualizationSize"
+    class="sc-aXZVg lSzEq"
+  >
+    <svg
+      aria-hidden="true"
+      class="MuiSvgIcon-root MuiSvgIcon-colorInfo MuiSvgIcon-fontSizeMedium css-1yq1soz-MuiSvgIcon-root"
+      data-testid="InfoIcon"
+      focusable="false"
+      viewBox="0 0 24 24"
+    >
+      <path
+        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m1 15h-2v-6h2zm0-8h-2V7h2z"
+      />
+    </svg>
+  </button>
+  <div
+    aria-label="tooltip.visualizationSize"
+    class="MuiToggleButtonGroup-root css-bghv3y-MuiToggleButtonGroup-root"
+    role="group"
+  >
+    <button
+      aria-pressed="true"
+      class="MuiButtonBase-root MuiToggleButtonGroup-grouped MuiToggleButtonGroup-groupedHorizontal MuiToggleButton-root Mui-selected MuiToggleButton-sizeMedium MuiToggleButton-primary MuiToggleButtonGroup-grouped MuiToggleButtonGroup-groupedHorizontal MuiToggleButtonGroup-firstButton css-d9c359-MuiButtonBase-root-MuiToggleButton-root"
+      tabindex="0"
+      type="button"
+      value="100%"
+    >
+      <b>
+        100%
+      </b>
+      <span
+        class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+      />
+    </button>
+    <button
+      aria-pressed="false"
+      class="MuiButtonBase-root MuiToggleButtonGroup-grouped MuiToggleButtonGroup-groupedHorizontal MuiToggleButton-root MuiToggleButton-sizeMedium MuiToggleButton-primary MuiToggleButtonGroup-grouped MuiToggleButtonGroup-groupedHorizontal MuiToggleButtonGroup-middleButton css-d9c359-MuiButtonBase-root-MuiToggleButton-root"
+      tabindex="0"
+      type="button"
+      value="1200px"
+    >
+      1200px
+      <span
+        class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+      />
+    </button>
+    <button
+      aria-pressed="false"
+      class="MuiButtonBase-root MuiToggleButtonGroup-grouped MuiToggleButtonGroup-groupedHorizontal MuiToggleButton-root MuiToggleButton-sizeMedium MuiToggleButton-primary MuiToggleButtonGroup-grouped MuiToggleButtonGroup-groupedHorizontal MuiToggleButtonGroup-middleButton css-d9c359-MuiButtonBase-root-MuiToggleButton-root"
+      tabindex="0"
+      type="button"
+      value="992px"
+    >
+      992px
+      <span
+        class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+      />
+    </button>
+    <button
+      aria-pressed="false"
+      class="MuiButtonBase-root MuiToggleButtonGroup-grouped MuiToggleButtonGroup-groupedHorizontal MuiToggleButton-root MuiToggleButton-sizeMedium MuiToggleButton-primary MuiToggleButtonGroup-grouped MuiToggleButtonGroup-groupedHorizontal MuiToggleButtonGroup-middleButton css-d9c359-MuiButtonBase-root-MuiToggleButton-root"
+      tabindex="0"
+      type="button"
+      value="768px"
+    >
+      768px
+      <span
+        class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+      />
+    </button>
+    <button
+      aria-pressed="false"
+      class="MuiButtonBase-root MuiToggleButtonGroup-grouped MuiToggleButtonGroup-groupedHorizontal MuiToggleButton-root MuiToggleButton-sizeMedium MuiToggleButton-primary MuiToggleButtonGroup-grouped MuiToggleButtonGroup-groupedHorizontal MuiToggleButtonGroup-middleButton css-d9c359-MuiButtonBase-root-MuiToggleButton-root"
+      tabindex="0"
+      type="button"
+      value="576px"
+    >
+      576px
+      <span
+        class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+      />
+    </button>
+    <button
+      aria-pressed="false"
+      class="MuiButtonBase-root MuiToggleButtonGroup-grouped MuiToggleButtonGroup-groupedHorizontal MuiToggleButton-root MuiToggleButton-sizeMedium MuiToggleButton-primary MuiToggleButtonGroup-grouped MuiToggleButtonGroup-groupedHorizontal MuiToggleButtonGroup-middleButton css-d9c359-MuiButtonBase-root-MuiToggleButton-root"
+      tabindex="0"
+      type="button"
+      value="390px"
+    >
+      390px
+      <span
+        class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+      />
+    </button>
+    <button
+      aria-pressed="false"
+      class="MuiButtonBase-root MuiToggleButtonGroup-grouped MuiToggleButtonGroup-groupedHorizontal MuiToggleButton-root MuiToggleButton-sizeMedium MuiToggleButton-primary MuiToggleButtonGroup-grouped MuiToggleButtonGroup-groupedHorizontal MuiToggleButtonGroup-middleButton css-d9c359-MuiButtonBase-root-MuiToggleButton-root"
+      tabindex="0"
+      type="button"
+      value="360px"
+    >
+      360px
+      <span
+        class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+      />
+    </button>
+    <button
+      aria-pressed="false"
+      class="MuiButtonBase-root MuiToggleButtonGroup-grouped MuiToggleButtonGroup-groupedHorizontal MuiToggleButton-root MuiToggleButton-sizeMedium MuiToggleButton-primary MuiToggleButtonGroup-grouped MuiToggleButtonGroup-groupedHorizontal MuiToggleButtonGroup-lastButton css-d9c359-MuiButtonBase-root-MuiToggleButton-root"
+      tabindex="0"
+      type="button"
+      value="320px"
+    >
+      320px
+      <span
+        class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+      />
+    </button>
+  </div>
+</div>
+  <div
+  class="MuiStack-root css-pl8gqh-MuiStack-root"
+/>
+  <div
+  class="sc-iGgWBj fhbmWs tk-table"
+>
+  <pre
+    data-testid="Chart"
+  >
+    args=[{"locale":"fi","pxGraphData":{"data":[3107,2383,1555,1839],"missingDataInfo":{},"dataNotes":{},"metaData":[{"code":"Tiedot","name":{"fi":"Tiedot","sv":"Uppgifter","en":"Information"},"note":null,"type":"C","values":[{"code":"kulutus_t","name":{"fi":"kulutus_t-fi","sv":"kulutus_t-sv","en":"kulutus_t-en"},"note":null,"isSum":false,"contentComponent":{"unit":{"fi":"1000 t","sv":"1000 t","en":"1000 t"},"source":{"fi":"PxGraf-fi","sv":"PxGraf-sv","en":"PxGraf-en"},"numberOfDecimals":0,"lastUpdated":"2023-02-01T06:00:00Z"}}]},{"code":"Vuosi","name":{"fi":"Vuosi","sv":"År","en":"Year"},"note":null,"type":"T","values":[{"code":"2018","name":{"fi":"2018","sv":"2018","en":"2018"},"note":null,"isSum":false,"contentComponent":null},{"code":"2019","name":{"fi":"2019","sv":"2019","en":"2019"},"note":null,"isSum":false,"contentComponent":null},{"code":"2020","name":{"fi":"2020","sv":"2020","en":"2020"},"note":null,"isSum":false,"contentComponent":null},{"code":"2021","name":{"fi":"2021","sv":"2021","en":"2021"},"note":null,"isSum":false,"contentComponent":null}]}],"selectableVariableCodes":[],"rowVariableCodes":[],"columnVariableCodes":["Vuosi"],"header":{"fi":"kulutus_t-fi 2018-2021","sv":"kulutus_t-sv 2018-2021","en":"kulutus_t-en 2018-2021"},"visualizationSettings":{"visualizationType":"VerticalBarChart","timeVariableIntervals":"Year","defaultSelectableVariableCodes":null},"tableReference":{"hierarchy":["foo","bar"],"name":"table"}},"selectedVariableCodes":{}},{}]
+  </pre>
+</div>
+</DocumentFragment>
+`;

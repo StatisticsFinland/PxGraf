@@ -1,0 +1,80 @@
+:root {
+    --primary-color-dark: #1A3061;
+    --primary-color-medium: #1A56EC;
+    --primary-color-light: #E8EEFD;
+    --table-hover-color: #d1ddfb;
+    --normal-font-size: 1rem;
+    --regular-font-weight: 400;
+    --semibold-font-weight: 600;
+    --text-gray: #666666;
+    --text-black: #000000;
+    --selected-blue: #1870C9;
+    --selected-blue-light: #EDF4FB;
+    --selected-blue-dark: #072840;
+    --editorfield-outline: #839583;
+    --editorfield-background: #EEFFEE;
+    --editorfield-outline-edited: #949400;
+    --editorfield-background-edited: #FFFFDD;
+    --warning-orange: #E06D10;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+*:focus-visible {
+  outline: 2px solid var(--primary-color-dark);
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.tk-table table {
+  font-family: "Barlow Semi Condensed", Arial, Verdana, Lucida, Helvetica, sans-serif;
+  font-size: var(--normal-font-size);
+  font-weight: var(--regular-font-weight);
+  border-collapse: collapse;
+  border: 0.25px solid var(--primary-color-medium);
+}
+
+.tk-table table td {
+  padding: 8px 10px;
+  border: 0.25px solid var(--primary-color-medium);
+  text-align: left;
+}
+
+.tk-table table th {
+  border: 0.25px solid var(--primary-color-medium);
+  border-top-width: 0.5px;
+  border-bottom-width: 0.5px;
+  padding: 8px 10px;
+  font-weight: var(--semibold-font-weight);
+  background-color: var(--primary-color-light);
+}
+
+.tk-table table tr:hover {
+  background-color: var(--table-hover-color);
+}
+
+.tk-table table thead {
+  background-color: var(--primary-color-light);
+}
+
+.tk-table table thead:hover th {
+  background-color: var(--table-hover-color);
+}
+
+.tk-table table tbody td {
+  text-align: right;
+}
+
+.tk-table table tbody th {
+  text-align: left;
+}

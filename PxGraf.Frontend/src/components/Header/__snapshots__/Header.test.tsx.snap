@@ -1,0 +1,111 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Header component should render correctly 1`] = `
+<DocumentFragment>
+  <div
+    class="sc-dhKdcB gLUTap MuiBox-root css-0"
+  >
+    <div
+      class="MuiStack-root sc-dAlyuH bGwpnZ css-m69qwo-MuiStack-root"
+    >
+      <a
+        class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary Mui-focusVisible MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-1ycpeoo-MuiButtonBase-root-MuiButton-root"
+        href="#"
+        tabindex="0"
+      >
+        general.contentLink
+        <span
+          class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+        >
+          <span
+            class="css-y4cjyz-MuiTouchRipple-ripple MuiTouchRipple-ripple MuiTouchRipple-rippleVisible MuiTouchRipple-ripplePulsate"
+            style="width: 1px; height: 1px; top: -0.5px; left: -0.5px;"
+          >
+            <span
+              class="MuiTouchRipple-child MuiTouchRipple-childPulsate"
+            />
+          </span>
+        </span>
+      </a>
+      <a
+        href="/"
+      >
+        <img
+          alt="navbar.logoAlt"
+          class="sc-jXbUNg cNhkRY"
+          src="pxgraf-logo.png"
+        />
+      </a>
+      <div
+        class="sc-cwHptR jObgoh"
+      >
+        <h1
+          class="MuiTypography-root MuiTypography-h1 css-o2w69a-MuiTypography-root"
+        >
+          general.selectDatabaseTitle
+        </h1>
+      </div>
+      <div
+        class="sc-jlZhew gZJaXm"
+      >
+        <a
+          class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-1e6y48t-MuiButtonBase-root-MuiButton-root"
+          href="/"
+          tabindex="0"
+        >
+          general.databaseSelectorLink
+          <span
+            class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+          />
+        </a>
+        <button
+          class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorPrimary css-1rwt2y5-MuiButtonBase-root-MuiButton-root"
+          tabindex="0"
+          type="button"
+        >
+          savedQuery.dialogButtonTxt
+          <span
+            class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+          />
+        </button>
+      </div>
+      <div
+        class="MuiStack-root sc-kpDqfm eWDTXh css-1os650h-MuiStack-root"
+      >
+        <div
+          class="MuiStack-root sc-dcJsrY cFRBfh css-nen11g-MuiStack-root"
+        >
+          <div
+            class="sc-gsFSXq ikcDaC"
+          >
+            <p
+              class="MuiTypography-root MuiTypography-body2 sc-iGgWBj kZqdxe css-r40f8v-MuiTypography-root"
+            >
+              general.uiLanguage
+            </p>
+            <button
+              aria-label="tooltip.open: general.uiLanguage"
+              class="sc-gEvEer gTgWxG"
+            >
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-colorInfo MuiSvgIcon-fontSizeMedium css-1yq1soz-MuiSvgIcon-root"
+                data-testid="InfoIcon"
+                focusable="false"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m1 15h-2v-6h2zm0-8h-2V7h2z"
+                />
+              </svg>
+            </button>
+          </div>
+          <div
+            class="MuiStack-root css-1d0f7f9-MuiStack-root"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

@@ -1,0 +1,61 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <StartupObject>PxGraf.Program</StartupObject>
+    <RootNamespace>PxGraf</RootNamespace>
+    <AssemblyName>PxGraf</AssemblyName>
+    <UserSecretsId>5fefcbdc-e04e-4475-9927-aab412b027ff</UserSecretsId>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <VersionPrefix>3.0.27</VersionPrefix>
+    <AssemblyVersion>3.0.16.0</AssemblyVersion>
+    <FileVersion>3.0.16.0</FileVersion>
+	<SpaRoot>..\PxGraf.Frontend</SpaRoot>
+	<Configurations>Debug;Release;Test</Configurations>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>obj\Debug\netcoreapp3.1\PxGraf.xml</DocumentationFile>
+    <WarningLevel>4</WarningLevel>
+    <NoWarn>1701;1702;CS1591;S3267;S2368;S3220;S1135;S3925;S108</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <WarningLevel>7</WarningLevel>
+    <NoWarn>1701;1702;CS1591;S3267;S2368;S3220;S1135;S3925;S108</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Test|AnyCPU'">
+    <WarningLevel>7</WarningLevel>
+    <NoWarn>1701;1702;CS1591;S3267;S2368;S3220;S1135;S3925;S108</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(Configuration)'=='Debug' Or '$(Configuration)'=='Release'">
+	<ProjectReference Include="..\PxGraf.Frontend\pxgraf.frontend.esproj">
+	  <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+	</ProjectReference>
+  </ItemGroup>
+	
+  <ItemGroup>
+    <Compile Remove="Logs\**" />
+    <Content Remove="Logs\**" />
+    <EmbeddedResource Remove="Logs\**" />
+    <None Remove="Logs\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="7.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="7.0.0" />
+    <PackageReference Include="Microsoft.FeatureManagement.AspNetCore" Version="2.5.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+    <PackageReference Include="NLog" Version="5.2.8" />
+    <PackageReference Include="NLog.Web.AspNetCore" Version="5.3.8" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+    <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
+    <PackageReference Include="System.Runtime.Caching" Version="7.0.0" />
+  </ItemGroup>
+</Project>

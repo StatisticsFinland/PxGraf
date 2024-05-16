@@ -1,0 +1,294 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Rendering test renders correctly 1`] = `
+<DocumentFragment>
+  <div
+    class="sc-eDPEul iwxOrq MuiBox-root css-0"
+  >
+    <div
+      class="sc-jEACwC hQKOWv"
+    >
+      <p
+        class="MuiTypography-root MuiTypography-body2 css-r40f8v-MuiTypography-root"
+      >
+        variableSelect.title
+      </p>
+      <button
+        aria-label="tooltip.open: variableSelect.title"
+        class="sc-dAlyuH ghYgyh"
+        id="mainContent"
+      >
+        <svg
+          aria-hidden="true"
+          class="MuiSvgIcon-root MuiSvgIcon-colorInfo MuiSvgIcon-fontSizeMedium css-1yq1soz-MuiSvgIcon-root"
+          data-testid="InfoIcon"
+          focusable="false"
+          viewBox="0 0 24 24"
+        >
+          <path
+            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m1 15h-2v-6h2zm0-8h-2V7h2z"
+          />
+        </svg>
+      </button>
+    </div>
+    <div
+      class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiAccordion-root MuiAccordion-rounded Mui-expanded MuiAccordion-gutters sc-dLMFU iA-dgxh css-1086bdv-MuiPaper-root-MuiAccordion-root"
+    >
+      <div
+        aria-controls="panel1a-content"
+        aria-expanded="true"
+        class="MuiButtonBase-root MuiAccordionSummary-root Mui-expanded MuiAccordionSummary-gutters css-1f773le-MuiButtonBase-root-MuiAccordionSummary-root"
+        role="button"
+        tabindex="0"
+      >
+        <div
+          class="MuiAccordionSummary-content Mui-expanded MuiAccordionSummary-contentGutters css-eqpfi5-MuiAccordionSummary-content"
+        >
+          <h2
+            class="MuiTypography-root MuiTypography-h2 css-1sra7t5-MuiTypography-root"
+          >
+            <b>
+              name 3/1
+            </b>
+          </h2>
+        </div>
+        <div
+          class="MuiAccordionSummary-expandIconWrapper Mui-expanded css-yw020d-MuiAccordionSummary-expandIconWrapper"
+        >
+          <svg
+            aria-hidden="true"
+            class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+            data-testid="ExpandMoreIcon"
+            focusable="false"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M16.59 8.59 12 13.17 7.41 8.59 6 10l6 6 6-6z"
+            />
+          </svg>
+        </div>
+      </div>
+      <div
+        class="MuiCollapse-root MuiCollapse-vertical MuiCollapse-entered css-pwcg7p-MuiCollapse-root"
+        style="min-height: 0px;"
+      >
+        <div
+          class="MuiCollapse-wrapper MuiCollapse-vertical css-smkl36-MuiCollapse-wrapper"
+        >
+          <div
+            class="MuiCollapse-wrapperInner MuiCollapse-vertical css-9l5vo-MuiCollapse-wrapperInner"
+          >
+            <div
+              class="MuiAccordion-region"
+              id="panel1a-content"
+              role="region"
+            >
+              <div
+                class="MuiAccordionDetails-root sc-cPiKLX cPtdoH css-15v22id-MuiAccordionDetails-root"
+              >
+                <div
+                  class="MuiStack-root sc-kpDqfm qNSeK css-1sazv7p-MuiStack-root"
+                >
+                  <div
+                    class="MuiStack-root sc-dhKdcB cPrxpS css-m69qwo-MuiStack-root"
+                  >
+                    <span
+                      aria-label="variableSelect.openMenu"
+                      class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-78trlr-MuiButtonBase-root-MuiIconButton-root"
+                      role="button"
+                      style="padding-left: 0px; margin-right: 12px;"
+                      tabindex="0"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                        data-testid="MenuIcon"
+                        focusable="false"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          d="M3 18h18v-2H3zm0-5h18v-2H3zm0-7v2h18V6z"
+                        />
+                      </svg>
+                      <span
+                        class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                      />
+                    </span>
+                    <div
+                      class="sc-gsFSXq eVRlmu MuiBox-root css-0"
+                    >
+                      <p
+                        class="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
+                      >
+                        variableSelect.allFilter
+                      </p>
+                    </div>
+                  </div>
+                  <div
+                    class="MuiStack-root sc-dcJsrY ieXMju css-nen11g-MuiStack-root"
+                  >
+                    <p
+                      class="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
+                    >
+                      general.results:
+                    </p>
+                    <ul
+                      class="MuiList-root MuiList-padding MuiList-dense sc-aXZVg TPXJr css-1f8gdww-MuiList-root"
+                    >
+                      <li
+                        class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding sc-gEvEer jCorEE css-6lnq02-MuiListItem-root"
+                      >
+                        <div
+                          class="MuiListItemText-root MuiListItemText-dense css-tlelie-MuiListItemText-root"
+                        >
+                          <span
+                            class="MuiTypography-root MuiTypography-body2 MuiListItemText-primary css-et1ao3-MuiTypography-root"
+                          >
+                            foo
+                          </span>
+                        </div>
+                      </li>
+                      <li
+                        class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding sc-gEvEer jCorEE css-6lnq02-MuiListItem-root"
+                      >
+                        <div
+                          class="MuiListItemText-root MuiListItemText-dense css-tlelie-MuiListItemText-root"
+                        >
+                          <span
+                            class="MuiTypography-root MuiTypography-body2 MuiListItemText-primary css-et1ao3-MuiTypography-root"
+                          >
+                            name
+                          </span>
+                        </div>
+                      </li>
+                      <li
+                        class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding sc-gEvEer jCorEE css-6lnq02-MuiListItem-root"
+                      >
+                        <div
+                          class="MuiListItemText-root MuiListItemText-dense css-tlelie-MuiListItemText-root"
+                        >
+                          <span
+                            class="MuiTypography-root MuiTypography-body2 MuiListItemText-primary css-et1ao3-MuiTypography-root"
+                          >
+                            baz
+                          </span>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                  <div
+                    class="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
+                  >
+                    <label
+                      class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-j204z7-MuiFormControlLabel-root"
+                    >
+                      <span
+                        class="MuiSwitch-root MuiSwitch-sizeMedium css-julti5-MuiSwitch-root"
+                      >
+                        <span
+                          class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked Mui-checked css-byenzh-MuiButtonBase-root-MuiSwitch-switchBase"
+                        >
+                          <input
+                            checked=""
+                            class="PrivateSwitchBase-input MuiSwitch-input css-1m9pwf3"
+                            type="checkbox"
+                          />
+                          <span
+                            class="MuiSwitch-thumb css-jsexje-MuiSwitch-thumb"
+                          />
+                          <span
+                            class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                          />
+                        </span>
+                        <span
+                          class="MuiSwitch-track css-1yjjitx-MuiSwitch-track"
+                        />
+                      </span>
+                      <span
+                        class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
+                      >
+                        variableSelect.selectable
+                      </span>
+                    </label>
+                  </div>
+                  <div
+                    class="MuiAutocomplete-root MuiAutocomplete-hasPopupIcon sc-jXbUNg czVAOp css-clttge-MuiAutocomplete-root"
+                  >
+                    <div
+                      class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-wb57ya-MuiFormControl-root-MuiTextField-root"
+                    >
+                      <label
+                        class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-sizeMedium MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-sizeMedium MuiInputLabel-outlined css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root"
+                        data-shrink="false"
+                        for=":r0:"
+                        id=":r0:-label"
+                      >
+                        selectable.labelText
+                      </label>
+                      <div
+                        class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-adornedEnd MuiAutocomplete-inputRoot css-154xyx0-MuiInputBase-root-MuiOutlinedInput-root"
+                      >
+                        <input
+                          aria-autocomplete="list"
+                          aria-expanded="false"
+                          aria-invalid="false"
+                          autocapitalize="none"
+                          autocomplete="off"
+                          class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputAdornedEnd MuiAutocomplete-input MuiAutocomplete-inputFocused css-nxo287-MuiInputBase-input-MuiOutlinedInput-input"
+                          id=":r0:"
+                          role="combobox"
+                          spellcheck="false"
+                          type="text"
+                          value=""
+                        />
+                        <div
+                          class="MuiAutocomplete-endAdornment css-p1olib-MuiAutocomplete-endAdornment"
+                        >
+                          <button
+                            aria-label="selectable.open"
+                            class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium MuiAutocomplete-popupIndicator css-qzbt6i-MuiButtonBase-root-MuiIconButton-root-MuiAutocomplete-popupIndicator"
+                            tabindex="-1"
+                            title="selectable.open"
+                            type="button"
+                          >
+                            <svg
+                              aria-hidden="true"
+                              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                              data-testid="ArrowDropDownIcon"
+                              focusable="false"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                d="M7 10l5 5 5-5z"
+                              />
+                            </svg>
+                            <span
+                              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                            />
+                          </button>
+                        </div>
+                        <fieldset
+                          aria-hidden="true"
+                          class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+                        >
+                          <legend
+                            class="css-yjsfm1"
+                          >
+                            <span>
+                              selectable.labelText
+                            </span>
+                          </legend>
+                        </fieldset>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

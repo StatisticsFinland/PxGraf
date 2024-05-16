@@ -1,0 +1,180 @@
+{
+  "general": {
+    "noResults": "Ei tuloksia",
+    "results": "Tulokset",
+    "noPossibleVisualizations": "Valitsemillasi arvoilla ei voida muodostaa visualisointia. Kokeile muuttaa poimintaasi.",
+    "uiLanguage": "Käyttöliittymän kielivalinta",
+    "databaseSelectorLink": "Tietokantataulukon valinta",
+    "search": "Haku",
+    "selectDatabaseTitle": "Valitse tietokantataulukko",
+    "editorTitle": "Muuttujien valinta ja visualisoinnin teko",
+    "contentLink": "Siirry sisältöön"
+  },
+  "navbar": {
+    "logoAlt": "Siirry etusivulle"
+  },
+  "lang": {
+    "fi": "suomi",
+    "sv": "svenska",
+    "en": "English",
+    "local": {
+      "fi": "suomi",
+      "sv": "ruotsi",
+      "en": "englanti"
+    }
+  },
+  "pages": {
+    "tableTreeSelection": "Valitse taulu",
+    "editor": "Muuttujavalinta",
+    "tableList": "Valitse taulu, listanäkymä",
+    "sqid": "Poiminnan tunniste"
+  },
+  "chartTypes": {
+    "LineChart": "Viiva",
+    "PieChart": "Piirakka",
+    "PyramidChart": "Pyramidi",
+    "ScatterPlot": "Hajontakuvio",
+    "VerticalBarChart": "Pystypylväs",
+    "GroupVerticalBarChart": "Pystypylväsryhmä",
+    "StackedVerticalBarChart": "Pinottu pystypylväs",
+    "PercentVerticalBarChart": "Suhteellinen pystypylväs",
+    "HorizontalBarChart": "Vaakapylväs",
+    "GroupHorizontalBarChart": "Vaakapylväsryhmä",
+    "StackedHorizontalBarChart": "Pinottu vaakapylväs",
+    "PercentHorizontalBarChart": "Suhteellinen vaakapylväs",
+    "Table": "Taulukko",
+    "Note": "Selite"
+  },
+  "tableSelect": {
+    "title": "Valitse hakemistopuusta tietokantataulukko, joka toimii visualisoinnin datan lähteenä.",
+    "listView": "Listanäkymä",
+    "showChildren": "Näytä lapset",
+    "hideChildren": "Piilota lapset",
+    "openTable": "Avaa tietokantataulukko",
+    "updated": "Päivitetty"
+  },
+  "variableSelect": {
+    "allFilter": "Kaikki",
+    "fromFilter": "valitusta arvosta eteenpäin",
+    "topFilter": "n viimeisintä arvoa",
+    "itemFilter": "manuaalinen valinta",
+    "selectable": "Siirrä täppä oikealle, jos haluat että muuttuja on selattava",
+    "title": "Valitse muuttujista arvoja manuaalisesti tai hyödynnä menun dynaamisia vaihtoehtoja. Käyttöliittymä päivittyy heti valintojesi mukaisesti.",
+    "openMenu": "Avaa valikko",
+    "closeMenu": "Sulje valikko"
+  },
+  "editMetadata": {
+    "editorTitle": "Metatiedot",
+    "header": "Visualisoinnin julkaistava otsikko",
+    "valueName": "Arvo",
+    "unit": "Yksikkö",
+    "source": "Lähde",
+    "noVariableValuesSelected": "Ei valittuja muuttujan arvoja",
+    "discardChanges": "Hylkää muutokset"
+  },
+  "editor": {
+    "contentLanguage": "Muokkaa visualisoinnin kieliversioita",
+    "save": "Tallenna"
+  },
+  "chartSettings": {
+    "pivot": "Käännä kuvaaja",
+    "rowVariables": "Rivimuuttujat",
+    "columnVariables": "Sarakemuuttujat",
+    "cutYAxis": "Katkaise Y-akseli",
+    "sort": "Järjestä",
+    "matchXLabelsToEnd": "Tasaa X-akselin selitteet loppuun",
+    "labelInterval": "Selitteiden välit",
+    "markerScale": "Pisteiden koko",
+    "markerScaleDefaultLabel": "Oletus",
+    "multiSelectVariable": "Monivalintaselausmuuttuja",
+    "noMultiselectable": "Ei monivalintaselausta"
+  },
+  "tableSettings": {
+    "up": "Siirrä ylös",
+    "down": "Siirrä alas",
+    "swap": "Siirrä toiseen ulottuvuuteen"
+  },
+  "saveDialog": {
+    "save": "Tallenna",
+    "cancel": "Peruuta",
+    "saveQuery": "Valitse tallennuksen muoto",
+    "saveOptions": "Valitse missä muodossa haluat tallentaa",
+    "saveDynamic": "Dynaaminen kysely ja päivittyvä data",
+    "saveStatic": "Staattinen kysely ja staattinen data"
+  },
+  "saveResultDialog": {
+    "ok": "OK",
+    "success": "Tallennus onnistui. Ota tunniste talteen.",
+    "fail": "Tallennus epäonnistui.",
+    "errorMessage": "Tarkista muuttujavalinnat ja yritä uudelleen.",
+    "id": "Poiminnan tunniste",
+    "copyToClipBoard": "Kopioi leikepöydälle"
+  },
+  "error": {
+    "contentLoad": "Sisällön lataaminen ei onnistunut",
+    "queryLoad": "Visualisoinnin lataaminen epäonnistui",
+    "contentVariableMissing": "Taulukosta puuttuu sisältömuuttuja. Ota yhteyttä tämän taulukon tuottajaan tai ylläpitoon. ",
+    "timeVariableMissing": "Taulukosta puuttuu aikamuuttuja. Ota yhteyttä tämän taulukon tuottajaan tai ylläpitoon. ",
+    "variablesMissingValues": "Taulukosta puuttuu muuttujan arvoja. Ota yhteyttä tämän taulukon tuottajaan tai ylläpitoon. "
+  },
+  "rejectionDialog":{
+    "buttonText": "Muut kuviotyypit",
+    "titleText": "Muut kuviotyypit",
+    "closeButton": "Sulje"
+  },
+  "cellCount": {
+    "infoText": "Poiminnan solumäärä",
+    "warningText": "Poiminnan solumäärä on lähellä maksimia.",
+    "dangerText": "Poimittujen solujen määrä ylittää maksimin. Valitse vähemmän arvoja, jotta visualisointi onnistuu."
+  },
+  "previewGuide": {
+    "tooSmallQuery": "Visualisointi näkyy vasta, kun jokaisesta muuttujasta on valittuna arvo.",
+    "impossibleToVisualize": "Saat mahdolliset visualisointityypit näkyville, kun olet valinnut jokaisesta muuttujasta vähintään yhden arvon."
+  },
+  "infoText": {
+    "treeSelection": "Valitse hakemistopuusta px-taulukko, joka toimii visualisoinnin datan lähteenä.",
+    "langSelector": "Valitse käyttöliittymän valikoissa näytettävä kieli",
+    "langTab": "Muokkaa tarvittavat tiedot eri kieliversioissa. Korjaa vähintään otsikot.",
+    "varSelection": "",
+    "selectableButton": "Jos haluat visualisoinnin olevan tämän muuttujan osalta selattava, valitse \"Selattava\". Tällöin käyttäjä pystyy vaihtamaan visualisoinnissa muuttujan arvoa.",
+    "selectableInput": "Voit valita visualisoinnissa näkyvän muuttujan oletusarvon, jonka käyttäjä näkee ennen omien valintojensa tekoa.",
+    "titleEdition": "Muokkaa visualisoinnin otsikko mahdollisimman selkeäksi. Jätä ainakin päivittyviin visualisointeihin FIRST/ LAST, jotta otsikon aikamuuttujat päivittyvät automaattisesti.",
+    "metaEdition": "Muokkaa tarvittaessa visualisoinnin metatietojen kirjoitusasua.",
+    "visualizationSelection": "Valitse haluamasi visualisointityyppi. Jos haluamasi kuviotyyppi ei ole mahdollinen, katso lisätietoja painikkeesta \"Muut kuviotyypit\".",
+    "otherVisualizations": "\"muut kuviotyypit\" -painikkeella voi tutkia puuttuvien kuviotyyppien hylkäämisen syitä. PxGraf mahdollistaa tilastografiikan suositusten mukaiset kuviotyypit.",
+    "visualizationConfiguration": "Muokkaa visualisointia. Eri visualisoinneilla on erilaiset muokkausvaihtoehdot.",
+    "save": "Tallenna valmis kuvio/taulukko ja ota tunniste talteen. Valitse tiedotteelle jäädytetty staattinen vaihtoehto ja tilaston sivulle dynaaminen päivittyvä vaihtoehto \\Tallenna\\-painikkeesta avautuvalla dialogilla.",
+    "rescaleButtons": "Visualisointi osaa mukautua automaattisesti eri kokoisille näytöille. Testaa miltä visualisointi näyttää eri kokoisena."
+  },
+  "selectable": {
+    "noSelections": "Ei valittavia arvoja",
+    "labelText": "Visualisoinnissa näkyvä muuttujan oletusarvo",
+    "open": "Avaa",
+    "close": "Sulje",
+    "clear": "Tyhjennä"
+  },
+  "savedQuery": {
+    "errorMsg": "Tarkista visualisoinnin tunniste ja yritä uudelleen",
+    "dialogButtonTxt": "hae vanha visualisointi",
+    "dialogTitleTxt": "hae vanha visualisointi",
+    "inputLabel": "visualisoinnin tunniste",
+    "closeButton": "Peruuta",
+    "searchTxt": "Hae",
+    "searchingTxt": "Haetaan..."
+  },
+  "titleWarning": {
+    "charactersText": "merkkiä",
+    "maxLengthText": "Otsikon maksimipituus on",
+    "usedLengthText": "Olet käyttänyt"
+  },
+  "tooltip": {
+    "open": "Avaa vihje",
+    "close": "Sulje vihje",
+    "visualizationType": "Kuviotyypin valinta",
+    "visualizationConfig": "Kuviotyyppikohtaiset valinnat",
+    "visualizationSize": "Kuvion kokovalinta esikatselua varten"
+  },
+  "visualizationSettings": {
+    "showDataPoints": "Näytä kuviossa data-arvot"
+  }
+}

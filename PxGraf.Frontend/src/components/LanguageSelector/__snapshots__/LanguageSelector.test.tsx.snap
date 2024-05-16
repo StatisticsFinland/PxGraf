@@ -1,0 +1,84 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Rendering test renders correctly 1`] = `
+<DocumentFragment>
+  <div
+    class="MuiStack-root sc-dcJsrY cFRBfh css-nen11g-MuiStack-root"
+  >
+    <div
+      class="sc-gsFSXq ikcDaC"
+    >
+      <p
+        class="MuiTypography-root MuiTypography-body2 sc-iGgWBj kZqdxe css-r40f8v-MuiTypography-root"
+      >
+        general.uiLanguage
+      </p>
+      <button
+        aria-label="tooltip.open: general.uiLanguage"
+        class="sc-gEvEer gTgWxG"
+      >
+        <svg
+          aria-hidden="true"
+          class="MuiSvgIcon-root MuiSvgIcon-colorInfo MuiSvgIcon-fontSizeMedium css-1yq1soz-MuiSvgIcon-root"
+          data-testid="InfoIcon"
+          focusable="false"
+          viewBox="0 0 24 24"
+        >
+          <path
+            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m1 15h-2v-6h2zm0-8h-2V7h2z"
+          />
+        </svg>
+      </button>
+    </div>
+    <div
+      class="MuiStack-root css-1d0f7f9-MuiStack-root"
+    >
+      <a
+        aria-label="general.uiLanguage: lang.fi"
+        class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeSmall MuiButton-textSizeSmall MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeSmall MuiButton-textSizeSmall MuiButton-colorPrimary sc-kAyceB eaaFZu css-1knaqv7-MuiButtonBase-root-MuiButton-root"
+        href="#"
+        tabindex="0"
+      >
+        <p
+          class="MuiTypography-root MuiTypography-body1 sc-aXZVg cbFDbf css-ahj2mt-MuiTypography-root"
+        >
+          FI
+        </p>
+        <span
+          class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+        />
+      </a>
+      <a
+        aria-label="general.uiLanguage: lang.en"
+        class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeSmall MuiButton-textSizeSmall MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeSmall MuiButton-textSizeSmall MuiButton-colorPrimary sc-kAyceB eaaFZu css-1knaqv7-MuiButtonBase-root-MuiButton-root"
+        href="#"
+        tabindex="0"
+      >
+        <p
+          class="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
+        >
+          EN
+        </p>
+        <span
+          class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+        />
+      </a>
+      <a
+        aria-label="general.uiLanguage: lang.sv"
+        class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeSmall MuiButton-textSizeSmall MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeSmall MuiButton-textSizeSmall MuiButton-colorPrimary sc-kAyceB eaaFZu css-1knaqv7-MuiButtonBase-root-MuiButton-root"
+        href="#"
+        tabindex="0"
+      >
+        <p
+          class="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
+        >
+          SV
+        </p>
+        <span
+          class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+        />
+      </a>
+    </div>
+  </div>
+</DocumentFragment>
+`;

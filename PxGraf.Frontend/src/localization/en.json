@@ -1,0 +1,180 @@
+{
+  "general": {
+    "noResults": "No results",
+    "results": "Results",
+    "noPossibleVisualizations": "Visualisation cannot be formed with the selected values. Try changing your selection.",
+    "uiLanguage": "User interface language",
+    "databaseSelectorLink": "Database table selection",
+    "search": "Search",
+    "selectDatabaseTitle": "Select database table",
+    "editorTitle": "Selecting variables and making a visualisation",
+    "contentLink": "Gå till innehållet"
+  },
+  "navbar": {
+    "logoAlt": "Go to the home page"
+  },
+  "lang": {
+    "fi": "suomi",
+    "sv": "svenska",
+    "en": "English",
+    "local": {
+      "fi": "suomi",
+      "sv": "ruotsi",
+      "en": "englanti"
+    }
+  },
+  "pages": {
+    "tableTreeSelection": "Database table selection",
+    "editor": "Variable selection",
+    "tableList": "List view",
+    "sqid": "Selection identifier"
+  },
+  "chartTypes": {
+    "LineChart": "Line",
+    "PieChart": "Pie",
+    "PyramidChart": "Pyramid",
+    "ScatterPlot": "Dispersion",
+    "VerticalBarChart": "Vertical bar",
+    "GroupVerticalBarChart": "Vertical bar group",
+    "StackedVerticalBarChart": "Stacked vertical bar",
+    "PercentVerticalBarChart": "Relative vertical bar",
+    "HorizontalBarChart": "Horizontal bar",
+    "GroupHorizontalBarChart": "Horizontal bar group",
+    "StackedHorizontalBarChart": "Stacked horizontal bar",
+    "PercentHorizontalBarChart": "Relative horizontal bar",
+    "Table": "Table",
+    "Note": "Note"
+  },
+  "tableSelect": {
+    "title": "Select the database table from the directory tree that is the source for the visualisation data.",
+    "listView": "List view",
+    "showChildren": "Show children",
+    "hideChildren": "Hide children",
+    "openTable": "Open database table",
+    "updated": "Updated"
+  },
+  "variableSelect": {
+    "allFilter": "All",
+    "fromFilter": "from the selected value forward",
+    "topFilter": "n latest values",
+    "itemFilter": "manual selection",
+    "selectable": "Move the mark to the right to allow the variable to be browsed",
+    "title": "Select the values manually from the variables or utilise the dynamic alternatives in the menu. The user interface is updated immediately according to your selections.",
+    "openMenu": "Open the menu",
+    "closeMenu": "Close the menu"
+  },
+  "editMetadata": {
+    "editorTitle": "Metadata",
+    "header": "Visualisation heading to be published",
+    "valueName": "Value",
+    "unit": "Unit",
+    "source": "Source",
+    "noVariableValuesSelected": "No selected variable values",
+    "discardChanges": "Discard changes"
+  },
+  "editor": {
+    "contentLanguage": "Edit language versions of the visualisation",
+    "save": "Save"
+  },
+  "chartSettings": {
+    "pivot": "Pivot chart",
+    "rowVariables": "Row variables",
+    "columnVariables": "Column variables",
+    "cutYAxis": "Cut Y Axis",
+    "sort": "Sort",
+    "matchXLabelsToEnd": "Match X-axis labels to end",
+    "labelInterval": "Label interval",
+    "markerScale": "Marker size",
+    "markerScaleDefaultLabel": "Default",
+    "multiSelectVariable": "Multiselect variable",
+    "noMultiselectable": "No multiselects"
+  },
+  "tableSettings": {
+    "up": "Move up",
+    "down": "Move down",
+    "swap": "Move to another dimension"
+  },
+  "saveDialog": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "saveQuery": "Select saving format",
+    "saveOptions": "Select in which format you want to save",
+    "saveDynamic": "Dynamic query and updated data",
+    "saveStatic": "Static query and static data"
+  },
+  "saveResultDialog": {
+    "ok": "OK",
+    "success": "Saving successful. Store the identifier.",
+    "fail": "Saving unsuccessful.",
+    "errorMessage": "Check the variable selections and try again.",
+    "id": "Selection identifier",
+    "copyToClipBoard": "Copy to clipboardd"
+  },
+  "error": {
+    "contentLoad": "Content could not be loaded",
+    "queryLoad": "Failed to load visualisation",
+    "contentVariableMissing": "Content variable missing from the table. Please contact the producer of this table or maintenance. ",
+    "timeVariableMissing": "Time variable missing from the table. Please contact the producer of this table or maintenance. ",
+    "variablesMissingValues": "Variable values missing from the table. Please contact the producer of this table or maintenance. "
+  },
+  "rejectionDialog": {
+    "buttonText": "Other chart types",
+    "titleText": "Other chart types",
+    "closeButton": "Close"
+  },
+  "cellCount": {
+    "infoText": "The number of cells in the selection",
+    "warningText": "The number of cells in your selection is close to the maximum.",
+    "dangerText": "The number of selected cells exceeds the maximum. Select fewer values for visualisation to succeed."
+  },
+  "previewGuide": {
+    "tooSmallQuery": "Visualisation can be viewed only when a value is selected for each variable.",
+    "impossibleToVisualize": "You can view the possible visualisation types when you have selected at least one value for each variable."
+  },
+  "infoText": {
+    "treeSelection": "Select the PX table from the directory tree that is the source for the visualisation data.",
+    "langSelector": "Select the language to be shown in the user interface menus",
+    "langTab": "Edit the necessary data in different language versions. Correct the headings at least.",
+    "varSelection": "",
+    "selectableButton": "If you want the visualisation for this variable to be selectable, select \"Selectable\". In this case, the user can change the variable value in the visualisation. ",
+    "selectableInput": "You can select the default value of the variable visible in the visualisation, which the user sees before making their own selections.",
+    "titleEdition": "Edit the heading of the visualisation to be as clear as possible. Keep FIRST/LAST at least in updated visualisations, so the time variables in the heading are updated automatically.",
+    "metaEdition": "Edit the writing of the visualisation metadata if necessary.",
+    "visualizationSelection": "Select the visualisation type you want. If the graph type you want is not possible, see the button \"Other chart types\" for further information.",
+    "otherVisualizations": "The \"Other chart types\" button can be used to view the reasons for the rejection of missing graph types. PxGraf enables graph types in accordance with the recommendations of statistical graphics.",
+    "visualizationConfiguration": "Edit visualisation. Different visualisations have different editing options.",
+    "save": "Save the finished graph/table and store the identifier. Select a frozen static option for the release and a dynamic updated option for the statistics page in the dialogue which opens by clicking \"Save\".",
+    "rescaleButtons": "Visualisation adapts automatically to displays of different sizes. Test what the visualisation looks like in different sizes."
+  },
+  "selectable": {
+    "noSelections": "No selectable values",
+    "labelText": "Default value of the variable visible in the visualisation",
+    "open": "Open",
+    "close": "Close",
+    "clear": "Clear"
+  },
+  "savedQuery": {
+    "errorMsg": "Check the visualisation identifier and try again.",
+    "dialogButtonTxt": "retrieve old visualisation",
+    "dialogTitleTxt": "retrieve old visualisation",
+    "inputLabel": "visualisation identifier",
+    "closeButton": "Cancel",
+    "searchTxt": "Search",
+    "searchingTxt": "Searching..."
+  },
+  "titleWarning": {
+    "charactersText": "characters",
+    "maxLengthText": "The maximum length of the heading is",
+    "usedLengthText": "You have used"
+  },
+  "tooltip": {
+    "open": "Open hint",
+    "close": "Close hint",
+    "visualizationType": "Chart type selection",
+    "visualizationConfig": "Chart type-specific selections",
+    "visualizationSize": "Chart size selection for preview"
+  },
+  "visualizationSettings": {
+    "showDataPoints": "Show data values in the graph"
+  }
+}

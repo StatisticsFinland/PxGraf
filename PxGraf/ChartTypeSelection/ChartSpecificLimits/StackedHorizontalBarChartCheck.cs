@@ -1,0 +1,100 @@
+﻿using PxGraf.ChartTypeSelection.JsonObjects;
+using PxGraf.Enums;
+using System.Collections.Generic;
+
+namespace PxGraf.ChartTypeSelection.ChartSpecificLimits
+{
+    /// <summary>
+    /// Functionality to check the query compatibility with the stacked horizontal bar chart spesific rules.
+    /// </summary>
+    public class StackedHorizontalBarChartCheck : ChartRulesCheck
+    {
+        // Elimination conditions and priorities:
+        // 1. Minimum number of multiselect dimensions
+        // 2. Maximum number of multiselect dimensions
+        // 3. Number of selections from the content dimension
+        // 4. The time dimension is not allowed
+        // 5. Progressive dimensions are not allowed (Fixed rule, but could be made adjustable)
+        // 6. Data can not contain negative values.
+        // 7. Multiselect dimensions cannot have combination values (Fixed rule)
+        // 8. Number of values in the greater multiselect dimension
+        // 9. Number of values in the smaller multiselect dimension
+
+        /// <summary>
+        /// Stacked horizontal bar chart
+        /// </summary>
+        public override VisualizationType Type => VisualizationType.StackedHorizontalBarChart;
+
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        /// <param name="limits"></param>
+        public StackedHorizontalBarChartCheck(IChartTypeLimits limits) : base(limits) {}
+
+
+        /// <summary>
+        /// Checks query compatibility with stacked horizontal charts fixed rules.
+        /// </summary>
+        protected override IEnumerable<ChartRejectionInfo> CheckChartSpecificRules(VisualizationTypeSelectionObject input)
+        {
+            // Check for progressive variables
+            var largestMultiselect = GetLargestMultiselect(input);
+            var smallerMultiselect = GetSmallerMultiselect(input);
+
+            if (largestMultiselect != null && largestMultiselect.Type == VariableType.Ordinal)
+            {
+                yield return BuildRejectionInfo(RejectionReason.ProgressiveNotAllowed, largestMultiselect);
+            }
+            if (smallerMultiselect != null && smallerMultiselect.Type == VariableType.Ordinal)
+            {
+                yield return BuildRejectionInfo(RejectionReason.ProgressiveNotAllowed, smallerMultiselect);
+            }
+
+            // Check for combination values
+            if (largestMultiselect != null && !string.IsNullOrEmpty(largestMultiselect.CombinationValueCode))
+            {
+                yield return BuildRejectionInfo(RejectionReason.CombinationValuesNotAllowed, largestMultiselect, largestMultiselect.CombinationValueCode);
+            }
+            if (smallerMultiselect != null && !string.IsNullOrEmpty(smallerMultiselect.CombinationValueCode))
+            {
+                yield return BuildRejectionInfo(RejectionReason.CombinationValuesNotAllowed, smallerMultiselect, smallerMultiselect.CombinationValueCode);
+            }
+
+            if (input.HasNegativeData) yield return BuildRejectionInfo(RejectionReason.NegativeDataNotAllowed);
+        }
+
+        /// <summary>
+        /// Provides the priorities for different rejection reasons.
+        /// </summary>
+        /// <param name="reason"></param>
+        /// <returns></returns>
+        protected override int GetPriority(RejectionReason reason)
+        {
+            var reasons = new RejectionReason[]
+            {
+                RejectionReason.NotEnoughMultiselections,
+                RejectionReason.TooManyMultiselections,
+                RejectionReason.ContentRequired,
+                RejectionReason.ContentNotAllowed,
+                RejectionReason.UnambiguousContentUnitRequired,
+                RejectionReason.ContentBelowMin,
+                RejectionReason.ContentOverMax,
+                RejectionReason.ContentUnitsBelowMin,
+                RejectionReason.ContentUnitsOverMax,
+                RejectionReason.TimeRequired,
+                RejectionReason.TimeNotAllowed,
+                RejectionReason.TimeBelowMin,
+                RejectionReason.TimeOverMax,
+                RejectionReason.ProgressiveNotAllowed,
+                RejectionReason.NegativeDataNotAllowed,
+                RejectionReason.CombinationValuesNotAllowed,
+                RejectionReason.FirstMultiselectBelowMin,
+                RejectionReason.FirstMultiselectOverMax,
+                RejectionReason.SecondMultiselectBelowMin,
+                RejectionReason.SecondMultiselectOverMax,
+            };
+
+            return GetPriorityIndex(reasons, reason);
+        }
+    }
+}
