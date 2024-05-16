@@ -14,10 +14,10 @@ Some good things to know:
 
 This is the simplest setup. A single instance if PxGraf that serves the frontend SPA and runs the visualization API.
 
-![PxGraf setup with one instance](/pxgraf_setup_1.png)
+![PxGraf setup with one instance](/docs/pxgraf_setup_1.png)
 
 ## Two PxGraf instances
 
 In some cases it might be beneficial to have separate instances for the creation api and the visualization api. This enables authentication on instance basis and independent scaling for example. All of the instances must access the same query files and the data received from the PxWeb instances must be identical if there are more than one.
 
-![PxGraf setup with two instances](/pxgraf_setup_2.png)
+![PxGraf setup with two instances](/docs/pxgraf_setup_2.png)

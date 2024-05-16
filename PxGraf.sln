@@ -12,6 +12,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{C3438262-2BAE-4156-85CD-0A1556E5EAC6}"
 	ProjectSection(SolutionItems) = preProject
 		docs\API_DOCUMENTATION.md = docs\API_DOCUMENTATION.md
+		docs\LICENSE.md = docs\LICENSE.md
 		docs\LOCAL_SETUP.md = docs\LOCAL_SETUP.md
 		docs\PRODUCTION_SETUP.md = docs\PRODUCTION_SETUP.md
 		docs\pxgraf_setup_1.png = docs\pxgraf_setup_1.png
