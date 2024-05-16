@@ -24,7 +24,6 @@ jobs:
         os: [ubuntu-latest]
         dotnet-version: ['8.x']
         node-version: ['21.x']
-        configuration: ['Debug']
 
     runs-on: ${{ matrix.os }}
 
@@ -46,7 +45,7 @@ jobs:
         run: dotnet restore
 
       - name: Build backend
-        run: dotnet build --verbosity normal -- no-restore --configuration ${{ matrix.configuration }}
+        run: dotnet build --verbosity normal -- no-restore
 
       - name: Run backend tests
         run: dotnet test
