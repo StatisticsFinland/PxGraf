@@ -45,7 +45,7 @@ jobs:
         run: dotnet restore
 
       - name: Build backend
-        run: dotnet build --verbosity normal -- no-restore
+        run: dotnet build --verbosity normal --no-restore
 
       - name: Run backend tests
         run: dotnet test

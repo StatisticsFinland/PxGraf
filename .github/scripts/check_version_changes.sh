@@ -2,10 +2,10 @@
 backendVersionNumber=$(grep '<VersionPrefix>' ./PxGraf/PxGraf.csproj | grep -o "[0-9]*\.[0-9]*\.[0-9]*")
 frontendVersionNumber=$(grep '"version"' ./PxGraf.Frontend/package.json | grep -o "[0-9]*\.[0-9]*\.[0-9]*")
 
-git fetch origin develop --quiet
+git fetch origin dev --quiet
 
-backendVersionInDev=$(git show origin/develop:PxGraf/PxGraf.csproj | grep '<VersionPrefix>' | grep -o "[0-9]*\.[0-9]*\.[0-9]*")
-frontendVersionInDev=$(git show origin/develop:PxGraf.Frontend/package.json | grep '"version"' | grep -o "[0-9]*\.[0-9]*\.[0-9]*")
+backendVersionInDev=$(git show origin/dev:PxGraf/PxGraf.csproj | grep '<VersionPrefix>' | grep -o "[0-9]*\.[0-9]*\.[0-9]*")
+frontendVersionInDev=$(git show origin/dev:PxGraf.Frontend/package.json | grep '"version"' | grep -o "[0-9]*\.[0-9]*\.[0-9]*")
 
 echo "Backend version: This branch $backendVersionNumber, dev branch $backendVersionInDev"
 echo "Frontend version: This branch $frontendVersionNumber, dev branch $frontendVersionInDev"
@@ -32,7 +32,7 @@ smallerOrEqual() {
     return 0
 }
 
-if ! git diff --quiet origin/develop HEAD PxGraf; then
+if ! git diff --quiet origin/dev HEAD PxGraf; then
     if smallerOrEqual $backendVersionNumber $backendVersionInDev
 	then
         echo "##vso[task.logissue type=error]Backend version number needs to be updated."
@@ -40,7 +40,7 @@ if ! git diff --quiet origin/develop HEAD PxGraf; then
 	fi
 fi
 
-if ! git diff --quiet origin/develop HEAD PxGraf.Frontend; then
+if ! git diff --quiet origin/dev HEAD PxGraf.Frontend; then
     if smallerOrEqual $frontendVersionNumber $frontendVersionInDev
     then 
         echo "##vso[task.logissue type=error]Frontend version number needs to be updated."
