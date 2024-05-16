@@ -1,0 +1,66 @@
+name: PxGraf CI
+
+run-name: ${{ github.event_name == 'pull_request' &&
+  format('CI for PR {0}', github.event.pull_request.number) || 
+  format('CI for {0}', github.event.head_commit.message) }}
+
+on:
+  pull_request:
+    branches:
+    - main
+    - test
+    - dev
+  push:
+    branches:
+    - main
+    - test
+    - dev
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        dotnet-version: ['8.x']
+        node-version: ['21.x']
+        configuration: ['Debug']
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check project versions
+        if: ${{ github.event_name == 'pull_request' }} && ${{ github.ref == 'refs/heads/dev' }}
+        run: bash .github/scripts/check_version_changes.sh
+
+      - name: Set up dotnet 
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
+
+      - name: Install backend dependencies
+        run: dotnet restore
+
+      - name: Build backend
+        run: dotnet build --verbosity normal -- no-restore --configuration ${{ matrix.configuration }}
+
+      - name: Run backend tests
+        run: dotnet test
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Build frontend
+        run: npm run build
+
+      - name: Run frontend tests
+        run: npm run test:ci
