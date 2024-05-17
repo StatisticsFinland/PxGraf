@@ -9,23 +9,14 @@ exports[`Header component should render correctly 1`] = `
       class="MuiStack-root sc-dAlyuH bGwpnZ css-m69qwo-MuiStack-root"
     >
       <a
-        class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary Mui-focusVisible MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-1ycpeoo-MuiButtonBase-root-MuiButton-root"
+        class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-1ycpeoo-MuiButtonBase-root-MuiButton-root"
         href="#"
         tabindex="0"
       >
         general.contentLink
         <span
           class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-        >
-          <span
-            class="css-y4cjyz-MuiTouchRipple-ripple MuiTouchRipple-ripple MuiTouchRipple-rippleVisible MuiTouchRipple-ripplePulsate"
-            style="width: 1px; height: 1px; top: -0.5px; left: -0.5px;"
-          >
-            <span
-              class="MuiTouchRipple-child MuiTouchRipple-childPulsate"
-            />
-          </span>
-        </span>
+        />
       </a>
       <a
         href="/"
