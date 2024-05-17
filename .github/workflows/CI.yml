@@ -27,6 +27,7 @@ jobs:
         os: [ubuntu-latest]
         dotnet-version: ['8.x']
         node-version: ['21.x']
+        configuration: [ 'Debug' ]
 
     runs-on: ${{ matrix.os }}
 
@@ -47,11 +48,8 @@ jobs:
       - name: Install backend dependencies
         run: dotnet restore
 
-      - name: Build backend
-        run: dotnet build --verbosity normal --no-restore
-
       - name: Run backend tests
-        run: dotnet test
+        run: dotnet test --configuration ${{ matrix.configuration }}
 
       - name: Install Node.js
         uses: actions/setup-node@v4
@@ -60,9 +58,6 @@ jobs:
 
       - name: Install frontend dependencies
         run: npm ci
-
-      - name: Build frontend
-        run: npm run build
 
       - name: Run frontend tests
         run: npm run test:ci
