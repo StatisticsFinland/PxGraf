@@ -48,8 +48,11 @@ jobs:
       - name: Install backend dependencies
         run: dotnet restore
 
+      - name: Build backend
+        run: dotnet build --no-restore --verbosity normal --configuration ${{ matrix.configuration }}
+
       - name: Run backend tests
-        run: dotnet test --configuration ${{ matrix.configuration }}
+        run: dotnet test --no-restore --verbosity normal --configuration ${{ matrix.configuration }}
 
       - name: Install Node.js
         uses: actions/setup-node@v4
