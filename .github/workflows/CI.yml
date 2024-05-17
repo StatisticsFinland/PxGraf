@@ -17,6 +17,9 @@ on:
     - dev
   workflow_dispatch:
 
+env: 
+  CI: false
+
 jobs:
   build:
     strategy:
