@@ -68,4 +68,3 @@ jobs:
 
       - name: Run backend tests
         run: dotnet test --no-restore --verbosity normal --configuration ${{ matrix.configuration }}
-        if: false
