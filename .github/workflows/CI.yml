@@ -44,16 +44,31 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: Install frontend dependencies
-        run: npm ci
-        working-directory: ..\PxGraf.frontend
+        run: |
+            cd ..
+            pwd
+            cd ..
+            pwd
+            cd pxgraf-frontend
+            npm ci
 
       - name: Build frontend
-        run: npm run build
-        working-directory: ..\PxGraf.frontend
+        run: |
+            cd ..
+            pwd
+            cd ..
+            pwd
+            cd pxgraf-frontend
+            npm run build
 
       - name: Run frontend tests
-        run: npm run test
-        working-directory: ..\PxGraf.frontend
+        run: |
+            cd ..
+            pwd
+            cd ..
+            pwd
+            cd pxgraf-frontend
+            npm run test
 
       - name: Set up dotnet 
         uses: actions/setup-dotnet@v4
