@@ -46,19 +46,19 @@ jobs:
       - name: Install frontend dependencies
         run: |
             cd ..
-            cd PxGraf.frontend
+            cd ./PxGraf.frontend
             npm ci
 
       - name: Build frontend
         run: |
             cd ..
-            cd PxGraf.frontend
+            cd ./PxGraf.frontend
             npm run build
 
       - name: Run frontend tests
         run: |
             cd ..
-            cd PxGraf.frontend
+            cd ./PxGraf.frontend
             npm run test
 
       - name: Set up dotnet 
