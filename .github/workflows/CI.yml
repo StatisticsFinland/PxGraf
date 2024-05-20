@@ -7,8 +7,6 @@ run-name: ${{ github.event_name == 'pull_request' &&
 on:
   pull_request:
     branches:
-    - main
-    - test
     - dev
   push:
     branches:
