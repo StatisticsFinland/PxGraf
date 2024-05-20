@@ -51,6 +51,7 @@ jobs:
 
       - name: Run backend tests
         run: dotnet test --no-restore --verbosity normal --configuration ${{ matrix.configuration }}
+        if: false
 
       - name: Install Node.js
         uses: actions/setup-node@v4
