@@ -21,17 +21,17 @@ namespace UnitTests.TestDummies.DummyQueries
 
         public static CubeQuery BuildTestCubeQuery(List<VariableParameters> varParams)
         {
-            var query = new CubeQuery
+            CubeQuery query = new()
             {
                 TableReference = new PxFileReference()
                 {
                     Name = "TestPxFile.px",
-                    Hierarchy = new List<string>() { "testpath", "to", "test", "file" }
+                    Hierarchy = ["testpath", "to", "test", "file"]
                 },
                 ChartHeaderEdit = null
             };
 
-            Dictionary<string, VariableQuery> variableQueries = new();
+            Dictionary<string, VariableQuery> variableQueries = [];
             for (int i = 0; i < varParams.Count; i++)
             {
                 variableQueries[$"variable-{i}"] = BuildTestVariableQuery(varParams[i]);
@@ -48,9 +48,8 @@ namespace UnitTests.TestDummies.DummyQueries
 
         public static SavedQuery BuildTestSavedQuery(List<VariableParameters> varParams, bool archived, VisualizationCreationSettings creationSettings, DataCube cube)
         {
-
-            var query = BuildTestCubeQuery(varParams);
-            var settings = creationSettings.ToVisualizationSettings(cube.Meta, query);
+            CubeQuery query = BuildTestCubeQuery(varParams);
+            VisualizationSettings settings = creationSettings.ToVisualizationSettings(cube.Meta, query);
 
             return new SavedQuery(BuildTestCubeQuery(varParams), archived, settings, DateTime.Now);
         }
@@ -69,7 +68,7 @@ namespace UnitTests.TestDummies.DummyQueries
             }
             else
             {
-                List<string> values = new();
+                List<string> values = [];
                 if (varParams.Type == VariableType.Time && !varParams.Irregular)
                 {
                     for (int i = 0; i < varParams.Size; i++)
@@ -96,8 +95,8 @@ namespace UnitTests.TestDummies.DummyQueries
 
         public static DataCube BuildTestDataCube(List<VariableParameters> variables, bool negativeData = false, bool missingData = false)
         {
-            var meta = BuildTestMeta(variables);
-            var dataSize = meta.Variables.Count == 0 ? 0 : meta.Variables.Aggregate(1, (acc, var) => acc * var.IncludedValues.Count);
+            CubeMeta meta = BuildTestMeta(variables);
+            int dataSize = meta.Variables.Count == 0 ? 0 : meta.Variables.Aggregate(1, (acc, var) => acc * var.IncludedValues.Count);
             return new DataCube(meta, BuildTestData(dataSize, negativeData, missingData).ToArray());
         }
 
@@ -105,20 +104,20 @@ namespace UnitTests.TestDummies.DummyQueries
         {
             if (varParams.Exists(v => v.Size < 1)) return null;
 
-            var languages = new List<string>() { "fi", "en" };
-            var variables = BuildTestVariables(varParams);
+            List<string> languages = ["fi", "en"];
+            List<Variable> variables = BuildTestVariables(varParams);
             Dictionary<string, string> headerTranslations = new()
             {
                 { "fi", "Test Header" },
                 { "en", "Test Header.en" }
             };
-            var header = new MultiLanguageString(headerTranslations);
+            MultiLanguageString header = new(headerTranslations);
             Dictionary<string, string> noteTranslations = new()
             {
                 { "fi", "Test note" },
                 { "en", "Test note.en" }
             };
-            var note = new MultiLanguageString(noteTranslations);
+            MultiLanguageString note = new(noteTranslations);
             return new CubeMeta(languages, header, note, variables);
         }
 
@@ -175,7 +174,7 @@ namespace UnitTests.TestDummies.DummyQueries
 
         private static List<VariableValue> BuildVariableValues(VariableParameters varParam)
         {
-            List<VariableValue> results = new();
+            List<VariableValue> results = [];
             for (int i = 0; i < varParam.Size; i++)
             {
                 string name = (varParam.Type == VariableType.Time && !varParam.Irregular) ? $"{2000 + i}" : $"value-{i}";
@@ -209,7 +208,7 @@ namespace UnitTests.TestDummies.DummyQueries
 
         private static List<VariableValue> BuildVariableValues(List<string> valueNames, VariableType type, int decimals, bool sameUnit, bool sameSource, bool hasCombinationValue)
         {
-            List<VariableValue> results = new();
+            List<VariableValue> results = [];
             foreach (var name in valueNames)
             {
                 Dictionary<string, string> nameTranslations = new()

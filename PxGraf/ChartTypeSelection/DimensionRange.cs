@@ -67,16 +67,16 @@ namespace PxGraf.ChartTypeSelection
         /// <param name="input">Must be in the format of: "min-max"</param>
         public DimensionRange(string input)
         {
-            string trimdInput = input.Replace(" ", "");
+            string trimmedInput = input.Replace(" ", "");
 
-            if (trimdInput.ToUpper() == "NOTALLOWED" || trimdInput == "0" || trimdInput == "")
+            if (trimmedInput.Equals("NOTALLOWED", StringComparison.CurrentCultureIgnoreCase) || trimmedInput == "0" || trimmedInput == "")
             {
                 Min = 0;
                 Max = 0;
                 return;
             }
 
-            if (trimdInput.ToUpper() == "IGNORE")
+            if (trimmedInput.Equals("IGNORE", StringComparison.CurrentCultureIgnoreCase))
             {
                 Min = 0;
                 Max = int.MaxValue;
@@ -85,15 +85,15 @@ namespace PxGraf.ChartTypeSelection
 
             int min, max;
 
-            if (trimdInput.Contains('-'))
+            if (trimmedInput.Contains('-'))
             {
                 try
                 {
-                    string[] values = trimdInput.Split('-');
+                    string[] values = trimmedInput.Split('-');
 
                     if (values.Length == 1)
                     {
-                        throw new ArgumentException($"{trimdInput} is not valid range for limits", nameof(input));
+                        throw new ArgumentException($"{trimmedInput} is not valid range for limits", nameof(input));
                     }
                     else if (values.Length == 2)
                     {
@@ -104,19 +104,19 @@ namespace PxGraf.ChartTypeSelection
                 }
                 catch (Exception e) // If parsing throws or lower < 0 || upper < lower
                 {
-                    throw new ArgumentException($"{trimdInput} is not valid range for limits", nameof(input), e);
+                    throw new ArgumentException($"{trimmedInput} is not valid range for limits", nameof(input), e);
                 }
             }
             else
             {
                 try
                 {
-                    min = int.Parse(trimdInput);
-                    max = int.Parse(trimdInput);
+                    min = int.Parse(trimmedInput);
+                    max = int.Parse(trimmedInput);
                 }
                 catch (Exception e)
                 {
-                    throw new ArgumentException($"{trimdInput} is not valid input for generating a range", nameof(input), e);
+                    throw new ArgumentException($"{trimmedInput} is not valid input for generating a range", nameof(input), e);
                 }
             }
 

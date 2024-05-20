@@ -22,10 +22,10 @@ namespace PxGraf.Visualization
 
             public VariableLayout()
             {
-                SingleValueVariables = new List<string>();
-                RowVariableCodes = new List<string>();
-                ColumnVariableCodes = new List<string>();
-                SelectableVariableCodes = new List<string>();
+                SingleValueVariables = [];
+                RowVariableCodes = [];
+                ColumnVariableCodes = [];
+                SelectableVariableCodes = [];
             }
         }
 
@@ -100,22 +100,16 @@ namespace PxGraf.Visualization
                 remainingVars.Remove(code);
             }
 
-            foreach (string code in settings.Layout.RowVariableCodes)
+            foreach (var code in settings.Layout.RowVariableCodes.Where(code => remainingVars.Exists(vc => vc == code)))
             {
-                if (remainingVars.Exists(vc => vc == code))
-                {
-                    layout.RowVariableCodes.Add(code);
-                    remainingVars.Remove(code);
-                }
+                layout.RowVariableCodes.Add(code);
+                remainingVars.Remove(code);
             }
 
-            foreach (string code in settings.Layout.ColumnVariableCodes)
+            foreach (var code in settings.Layout.ColumnVariableCodes.Where(code => remainingVars.Exists(vc => vc == code)))
             {
-                if (remainingVars.Exists(vc => vc == code))
-                {
-                    layout.ColumnVariableCodes.Add(code);
-                    remainingVars.Remove(code);
-                }
+                layout.ColumnVariableCodes.Add(code);
+                remainingVars.Remove(code);
             }
 
             layout.SingleValueVariables.AddRange(remainingVars);

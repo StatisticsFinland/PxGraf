@@ -17,10 +17,10 @@ namespace PxGraf.Models.Queries
         /// <summary>
         /// VariableValue.Code to VariableValueEdition
         /// </summary>
-        public Dictionary<string, VariableValueEdition> ValueEdits { get; set; } = new Dictionary<string, VariableValueEdition>();
+        public Dictionary<string, VariableValueEdition> ValueEdits { get; set; } = [];
 
         public ValueFilter ValueFilter { get; set; }
-        public List<VirtualValueDefinition> VirtualValueDefinitions { get; set; } = new List<VirtualValueDefinition>();
+        public List<VirtualValueDefinition> VirtualValueDefinitions { get; set; } = [];
 
         /// <summary>
         /// When true the final value that is displayed on the visualization can be chosen from the included values and the rest are not shown.

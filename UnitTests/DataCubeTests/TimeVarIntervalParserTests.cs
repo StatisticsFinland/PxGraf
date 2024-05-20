@@ -14,7 +14,7 @@ namespace DataCubeTests
         [Test]
         public void ValidWeekSeriesTest()
         {
-            List<string> testInput = new() { "2021W49", "2021W50", "2021W51", "2021W52", "2022W01" };
+            List<string> testInput = ["2021W49", "2021W50", "2021W51", "2021W52", "2022W01"];
             TimeVariableInterval result = TimeVarIntervalParser.DetermineIntervalFromCodes(testInput);
             Assert.AreEqual(TimeVariableInterval.Week, result);
         }
@@ -22,7 +22,7 @@ namespace DataCubeTests
         [Test]
         public void ValidSingleWeekSeriesTest()
         {
-            List<string> testInput = new() { "2021W49" };
+            List<string> testInput = ["2021W49"];
             TimeVariableInterval result = TimeVarIntervalParser.DetermineIntervalFromCodes(testInput);
             Assert.AreEqual(TimeVariableInterval.Week, result);
         }
@@ -30,7 +30,7 @@ namespace DataCubeTests
         [Test]
         public void IrregularWeekSeriesTest()
         {
-            List<string> testInput = new() { "2021W49", "2021W50", "2021W51", "2022W01" };
+            List<string> testInput = ["2021W49", "2021W50", "2021W51", "2022W01"];
             TimeVariableInterval result = TimeVarIntervalParser.DetermineIntervalFromCodes(testInput);
             Assert.AreEqual(TimeVariableInterval.Irregular, result);
         }
@@ -38,7 +38,7 @@ namespace DataCubeTests
         [Test]
         public void ValidMonthSeriesTest()
         {
-            List<string> testInput = new() { "2021M10", "2021M11", "2021M12", "2022M01", "2022M02" };
+            List<string> testInput = ["2021M10", "2021M11", "2021M12", "2022M01", "2022M02"];
             TimeVariableInterval result = TimeVarIntervalParser.DetermineIntervalFromCodes(testInput);
             Assert.AreEqual(TimeVariableInterval.Month, result);
         }
@@ -46,7 +46,7 @@ namespace DataCubeTests
         [Test]
         public void ValidSingleMonthSeriesTest()
         {
-            List<string> testInput = new() { "2021M11" };
+            List<string> testInput = ["2021M11"];
             TimeVariableInterval result = TimeVarIntervalParser.DetermineIntervalFromCodes(testInput);
             Assert.AreEqual(TimeVariableInterval.Month, result);
         }
@@ -54,7 +54,7 @@ namespace DataCubeTests
         [Test]
         public void IrregularMonthSeriesTest()
         {
-            List<string> testInput = new() { "2021M10", "2021M12", "2022M01", "2022M02" };
+            List<string> testInput = ["2021M10", "2021M12", "2022M01", "2022M02"];
             TimeVariableInterval result = TimeVarIntervalParser.DetermineIntervalFromCodes(testInput);
             Assert.AreEqual(TimeVariableInterval.Irregular, result);
         }
@@ -62,7 +62,7 @@ namespace DataCubeTests
         [Test]
         public void ValidQuarterlySeriesTest()
         {
-            List<string> testInput = new() { "2021Q1", "2021Q2", "2021Q3", "2021Q4", "2022Q1" };
+            List<string> testInput = ["2021Q1", "2021Q2", "2021Q3", "2021Q4", "2022Q1"];
             TimeVariableInterval result = TimeVarIntervalParser.DetermineIntervalFromCodes(testInput);
             Assert.AreEqual(TimeVariableInterval.Quarter, result);
         }
@@ -70,7 +70,7 @@ namespace DataCubeTests
         [Test]
         public void ValidSingleQuarterSeriesTest()
         {
-            List<string> testInput = new() { "2021Q1" };
+            List<string> testInput = ["2021Q1"];
             TimeVariableInterval result = TimeVarIntervalParser.DetermineIntervalFromCodes(testInput);
             Assert.AreEqual(TimeVariableInterval.Quarter, result);
         }
@@ -78,7 +78,7 @@ namespace DataCubeTests
         [Test]
         public void ValidBiAnnualSeriesTest()
         {
-            List<string> testInput = new() { "2021H1", "2021H2", "2022H1", "2022H2", "2023H1" };
+            List<string> testInput = ["2021H1", "2021H2", "2022H1", "2022H2", "2023H1"];
             TimeVariableInterval result = TimeVarIntervalParser.DetermineIntervalFromCodes(testInput);
             Assert.AreEqual(TimeVariableInterval.HalfYear, result);
         }
@@ -86,7 +86,7 @@ namespace DataCubeTests
         [Test]
         public void ValidSingleBiAnnualSeriesTest()
         {
-            List<string> testInput = new() { "2020H1" };
+            List<string> testInput = ["2020H1"];
             TimeVariableInterval result = TimeVarIntervalParser.DetermineIntervalFromCodes(testInput);
             Assert.AreEqual(TimeVariableInterval.HalfYear, result);
         }
@@ -94,7 +94,7 @@ namespace DataCubeTests
         [Test]
         public void IrregularQuarterlySeriesTest()
         {
-            List<string> testInput = new() { "2021Q1", "2021Q2", "2021Q3", "2022Q1" };
+            List<string> testInput = ["2021Q1", "2021Q2", "2021Q3", "2022Q1"];
             TimeVariableInterval result = TimeVarIntervalParser.DetermineIntervalFromCodes(testInput);
             Assert.AreEqual(TimeVariableInterval.Irregular, result);
         }
@@ -102,7 +102,7 @@ namespace DataCubeTests
         [Test]
         public void ValidYearlySeriesTest()
         {
-            List<string> testInput = new() { "2021", "2022", "2023", "2024", "2025" };
+            List<string> testInput = ["2021", "2022", "2023", "2024", "2025"];
             TimeVariableInterval result = TimeVarIntervalParser.DetermineIntervalFromCodes(testInput);
             Assert.AreEqual(TimeVariableInterval.Year, result);
         }
@@ -110,7 +110,7 @@ namespace DataCubeTests
         [Test]
         public void ValidSingleYearSeriesTest()
         {
-            List<string> testInput = new() { "2022" };
+            List<string> testInput = ["2022"];
             TimeVariableInterval result = TimeVarIntervalParser.DetermineIntervalFromCodes(testInput);
             Assert.AreEqual(TimeVariableInterval.Year, result);
         }
@@ -118,7 +118,7 @@ namespace DataCubeTests
         [Test]
         public void IrregularYearlySeriesTest()
         {
-            List<string> testInput = new() { "2021", "2022", "2023", "2025" };
+            List<string> testInput = ["2021", "2022", "2023", "2025"];
             TimeVariableInterval result = TimeVarIntervalParser.DetermineIntervalFromCodes(testInput);
             Assert.AreEqual(TimeVariableInterval.Irregular, result);
         }
@@ -126,7 +126,7 @@ namespace DataCubeTests
         [Test]
         public void IrregularNonsenseSeriesTest()
         {
-            List<string> testInput = new() { "foo", "bar", "12234", "lol" };
+            List<string> testInput = ["foo", "bar", "12234", "lol"];
             TimeVariableInterval result = TimeVarIntervalParser.DetermineIntervalFromCodes(testInput);
             Assert.AreEqual(TimeVariableInterval.Irregular, result);
         }
@@ -134,7 +134,7 @@ namespace DataCubeTests
         [Test]
         public void IrregularNonsenseSeriesTest2()
         {
-            List<string> testInput = new() { "1234", "foobar" };
+            List<string> testInput = ["1234", "foobar"];
             TimeVariableInterval result = TimeVarIntervalParser.DetermineIntervalFromCodes(testInput);
             Assert.AreEqual(TimeVariableInterval.Irregular, result);
         }
@@ -142,7 +142,7 @@ namespace DataCubeTests
         [Test]
         public void IrregularNumericNonsenseSeriesTest()
         {
-            List<string> testInput = new() { "1234", "4563", "12234", "3" };
+            List<string> testInput = ["1234", "4563", "12234", "3"];
             TimeVariableInterval result = TimeVarIntervalParser.DetermineIntervalFromCodes(testInput);
             Assert.AreEqual(TimeVariableInterval.Irregular, result);
         }
@@ -150,7 +150,7 @@ namespace DataCubeTests
         [Test]
         public void EmptySeriesTest()
         {
-            List<string> testInput = new();
+            List<string> testInput = [];
             TimeVariableInterval result = TimeVarIntervalParser.DetermineIntervalFromCodes(testInput);
             Assert.AreEqual(TimeVariableInterval.Irregular, result);
         }
@@ -210,13 +210,13 @@ namespace DataCubeTests
         [Test]
         public void ParserTest()
         {
-            List<VariableParameters> varParams = new()
-            {
+            List<VariableParameters> varParams =
+            [
                 new VariableParameters(VariableType.Content, 1),
                 new VariableParameters(VariableType.OtherClassificatory, 3),
                 new VariableParameters(VariableType.OtherClassificatory, 3) { Selectable = true },
                 new VariableParameters(VariableType.Time, 3),
-            };
+            ];
 
             IReadOnlyCubeMeta inputMeta = TestDataCubeBuilder.BuildTestMeta(varParams);
             TimeVarIntervalParser.TimeVariableInformation result = TimeVarIntervalParser.Parse(inputMeta);

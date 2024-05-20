@@ -32,7 +32,7 @@ namespace CreationControllerTests
                 .Build();
             Configuration.Load(_configuration);
 
-            Configuration.Current.LanguageOptions.Available = new List<string> { "foo", "bar" };
+            Configuration.Current.LanguageOptions.Available = ["foo", "bar"];
             Configuration.Current.LanguageOptions.Default = "foo";
         }
 
@@ -40,11 +40,11 @@ namespace CreationControllerTests
         public async Task GetDataBaseListingAsync_NoDbPath_ReturnsDatabasesForAllLanguages()
         {
             // Arrange
-            List<DataBaseListResponseItem> primaryLanguageDatabases = new() { new() { Dbid = "dbid1", Text = "foobar1" } };
-            List<DataBaseListResponseItem> otherDatabases = new() {
+            List<DataBaseListResponseItem> primaryLanguageDatabases = [new() { Dbid = "dbid1", Text = "foobar1" }];
+            List<DataBaseListResponseItem> otherDatabases = [
                 new DataBaseListResponseItem { Dbid = "dbid1", Text = "foobar1" },
                 new DataBaseListResponseItem { Dbid = "dbid2", Text = "foobar2" }
-            };
+            ];
 
             _mockCachedPxWebConnection.Setup(x => x.GetDataBaseListingAsync("foo")).ReturnsAsync(primaryLanguageDatabases);
             _mockCachedPxWebConnection.Setup(x => x.GetDataBaseListingAsync("bar")).ReturnsAsync(otherDatabases);
@@ -62,17 +62,17 @@ namespace CreationControllerTests
         {
             // Arrange
             string mockPath = "path/db";
-            List<string> mockPathList = mockPath.Split("/").ToList();
-            List<TableListResponseItem> primaryLanguageTables = new() {
+            List<string> mockPathList = [.. mockPath.Split("/")];
+            List<TableListResponseItem> primaryLanguageTables = [
                 new() { Id = "id1", Text = "foobar1" },
                 new() { Id = "id2", Text = "foobar2" }
-            };
+            ];
 
-            List<TableListResponseItem> otherTables = new() {
+            List<TableListResponseItem> otherTables = [
                 new TableListResponseItem { Id = "id1", Text = "foobar1" },
                 new TableListResponseItem { Id = "id2", Text = "foobar2" },
                 new TableListResponseItem { Id = "id3", Text = "foobar3" }
-            };
+            ];
 
             _mockCachedPxWebConnection.Setup(x => x.GetDataTableItemListingAsync("foo", mockPathList)).ReturnsAsync(primaryLanguageTables);
             _mockCachedPxWebConnection.Setup(x => x.GetDataTableItemListingAsync("bar", mockPathList)).ReturnsAsync(otherTables);
@@ -91,11 +91,11 @@ namespace CreationControllerTests
         public async Task GetDataBaseListingAsync_WithoutPreferredLanguage_ReturnsDataBasesPreferringDefaultLanguage()
         {
             // Arrange
-            List<DataBaseListResponseItem> primaryLanguageDatabases = new() { new() { Dbid = "dbid1", Text = "foobar1" } };
-            List<DataBaseListResponseItem> otherDatabases = new() {
+            List<DataBaseListResponseItem> primaryLanguageDatabases = [new() { Dbid = "dbid1", Text = "foobar1" }];
+            List<DataBaseListResponseItem> otherDatabases = [
                 new() { Dbid = "dbid1", Text = "foobar1" },
                 new() { Dbid = "dbid2", Text = "foobar2"}
-            };
+            ];
 
             _mockCachedPxWebConnection.Setup(x => x.GetDataBaseListingAsync("foo")).ReturnsAsync(primaryLanguageDatabases);
             _mockCachedPxWebConnection.Setup(x => x.GetDataBaseListingAsync("bar")).ReturnsAsync(otherDatabases);

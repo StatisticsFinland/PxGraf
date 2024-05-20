@@ -11,12 +11,10 @@ using System.Threading.Tasks;
 
 namespace PxGraf.PxWebInterface.Caching
 {
-    public class PxWebApiResponseCache : IPxWebApiResponseCache
+    public class PxWebApiResponseCache(IMemoryCache memoryCache) : IPxWebApiResponseCache
     {
         private static CacheOptions CacheOptions => Configuration.Current.CacheOptions;
-        private readonly IMemoryCache _memoryCache;
-        public PxWebApiResponseCache(IMemoryCache memoryCache) => _memoryCache = memoryCache;
-
+        private readonly IMemoryCache _memoryCache = memoryCache;
         private const string META_FRESHNESS_CHECK_HASH_SEED = "meta_freshness_check_identifier";
         private const string META_FETCH_HASH_SEED = "table_check_identifier";
 
@@ -36,7 +34,7 @@ namespace PxGraf.PxWebInterface.Caching
 
         public void CacheMeta(PxFileReference pxFileRef, Task<IReadOnlyCubeMeta> meta)
         {
-            var cacheEntryOptions = new MemoryCacheEntryOptions()
+            MemoryCacheEntryOptions cacheEntryOptions = new MemoryCacheEntryOptions()
                 .SetSlidingExpiration(TimeSpan.FromSeconds(CacheOptions.Meta.SlidingExpiration))
                 .SetAbsoluteExpiration(TimeSpan.FromSeconds(CacheOptions.Meta.AbsoluteExpiration));
 
@@ -46,7 +44,7 @@ namespace PxGraf.PxWebInterface.Caching
 
         public void UpdateMetaCacheFreshness(PxFileReference pxFileRef)
         {
-            var cacheEntryOptions = new MemoryCacheEntryOptions()
+            MemoryCacheEntryOptions cacheEntryOptions = new MemoryCacheEntryOptions()
                 .SetAbsoluteExpiration(TimeSpan.FromSeconds(CacheOptions.CacheFreshnessCheckInterval));
             _memoryCache.Set(pxFileRef.BuildCacheKeyHash(META_FRESHNESS_CHECK_HASH_SEED), "", cacheEntryOptions);
         }
@@ -78,7 +76,7 @@ namespace PxGraf.PxWebInterface.Caching
 
         public void CacheData(IReadOnlyCubeMeta meta, Task<DataCube> data)
         {
-            var cacheEntryOptions = new MemoryCacheEntryOptions()
+            MemoryCacheEntryOptions cacheEntryOptions = new MemoryCacheEntryOptions()
                 .SetSlidingExpiration(TimeSpan.FromMinutes(CacheOptions.Data.SlidingExpiration))
                 .SetAbsoluteExpiration(TimeSpan.FromMinutes(CacheOptions.Data.AbsoluteExpiration));
 

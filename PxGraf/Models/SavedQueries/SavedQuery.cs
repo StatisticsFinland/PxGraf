@@ -49,7 +49,7 @@ namespace PxGraf.Models.SavedQueries
             Archived = archived;
             Settings = settings;
             CreationTime = creationTime;
-            LegacyProperties = new Dictionary<string, object>();
+            LegacyProperties = [];
         }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace PxGraf.Models.SavedQueries
         /// </summary>
         public SavedQuery()
         {
-            LegacyProperties = new Dictionary<string, object>();
+            LegacyProperties = [];
         }
     }
 }

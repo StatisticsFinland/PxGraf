@@ -46,8 +46,8 @@ namespace PxGraf.Models.SavedQueries
 
             Meta = cube.Meta.Clone();
 
-            List<double?> data = new();
-            Dictionary<int, string> dataNotes = new();
+            List<double?> data = [];
+            Dictionary<int, string> dataNotes = [];
 
             DataValue[] dataList = cube.Data;
             int dataLen = dataList.Length;

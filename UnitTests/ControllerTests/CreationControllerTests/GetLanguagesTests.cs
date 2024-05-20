@@ -26,7 +26,7 @@ namespace CreationControllerTests
                 .Build();
             Configuration.Load(configuration);
 
-            PxWebApiDummy pxWebApiDummy = new(new List<VariableParameters>(), new List<VariableParameters>());
+            PxWebApiDummy pxWebApiDummy = new([], []);
             ServiceCollection services = new();
             services.AddMemoryCache();
             ServiceProvider serviceProvider = services.BuildServiceProvider();
@@ -34,7 +34,7 @@ namespace CreationControllerTests
             IPxWebApiResponseCache apiCache = new PxWebApiResponseCache(memoryCache);
             CreationController controller = new(new CachedPxWebConnection(pxWebApiDummy, apiCache), new Mock<ILogger<CreationController>>().Object);
 
-            Configuration.Current.LanguageOptions.Available = new List<string> { "foo", "bar" };
+            Configuration.Current.LanguageOptions.Available = ["foo", "bar"];
 
             // Act
             List<string> result = await controller.GetLanguagesAsync();

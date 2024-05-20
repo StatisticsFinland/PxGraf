@@ -3,13 +3,8 @@ using System.Net;
 
 namespace PxGraf.Exceptions
 {
-    public class BadPxWebResponseException : Exception
+    public class BadPxWebResponseException(HttpStatusCode statusCode, string message) : Exception(message)
     {
-        public HttpStatusCode StatusCode { get; set; }
-
-        public BadPxWebResponseException(HttpStatusCode statusCode, string message) : base(message)
-        {
-            StatusCode = statusCode;
-        }
+        public HttpStatusCode StatusCode { get; set; } = statusCode;
     }
 }

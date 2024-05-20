@@ -28,7 +28,7 @@ namespace ChartTypeSelectionTests
         [Test]
         public void NoData_NotEnoughMultiselections()
         {
-            List<VariableParameters> variable = new();
+            List<VariableParameters> variable = [];
 
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(variable);
             StackedVerticalBarChartCheck check = new(Limits.StackedVerticalBarChartLimits);
@@ -43,17 +43,17 @@ namespace ChartTypeSelectionTests
         [Test]
         public void ValidData_Pass()
         {
-            List<VariableParameters> varParams = new()
-            {
+            List<VariableParameters> varParams =
+            [
                 new VariableParameters(VariableType.Content, 1),
                 new VariableParameters(VariableType.Time, 5),
                 new VariableParameters(VariableType.Unknown, 2)
-            };
+            ];
 
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(varParams);
             StackedVerticalBarChartCheck check = new(Limits.StackedVerticalBarChartLimits);
 
-            Assert.IsTrue(!check.CheckValidity(input).Any());
+            Assert.IsTrue(check.CheckValidity(input).Count == 0);
         }
 
         /// <summary>
@@ -63,11 +63,11 @@ namespace ChartTypeSelectionTests
         [Test]
         public void OneMultiselect_NotEnoughMultiselections()
         {
-            List<VariableParameters> variable = new()
-            {
+            List<VariableParameters> variable =
+            [
                 new VariableParameters(VariableType.Content, 1),
                 new VariableParameters(VariableType.Time, 5)
-            };
+            ];
 
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(variable);
             StackedVerticalBarChartCheck check = new(Limits.StackedVerticalBarChartLimits);
@@ -82,13 +82,13 @@ namespace ChartTypeSelectionTests
         [Test]
         public void ThreeMultiselect_TooManyMultiselections()
         {
-            List<VariableParameters> variable = new()
-            {
+            List<VariableParameters> variable =
+            [
                 new VariableParameters(VariableType.Content, 1),
                 new VariableParameters(VariableType.Time, 5),
                 new VariableParameters(VariableType.Ordinal, 6),
                 new VariableParameters(VariableType.Unknown, 2)
-            };
+            ];
 
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(variable);
             StackedVerticalBarChartCheck check = new(Limits.StackedVerticalBarChartLimits);
@@ -103,11 +103,11 @@ namespace ChartTypeSelectionTests
         [Test]
         public void NoContentDimension_ContentRequired()
         {
-            List<VariableParameters> varParams = new()
-            {
+            List<VariableParameters> varParams =
+            [
                 new VariableParameters(VariableType.Time, 5),
                 new VariableParameters(VariableType.Ordinal, 6)
-            };
+            ];
 
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(varParams);
             StackedVerticalBarChartCheck check = new(Limits.StackedVerticalBarChartLimits);
@@ -122,11 +122,11 @@ namespace ChartTypeSelectionTests
         [Test]
         public void ContentHas2SelectionsWithSameUnits_Pass()
         {
-            List<VariableParameters> variable = new()
-            {
+            List<VariableParameters> variable =
+            [
                 new VariableParameters(VariableType.Time, 5),
                 new VariableParameters(VariableType.Content, 2) { SameUnit = true }
-            };
+            ];
 
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(variable);
             StackedVerticalBarChartCheck check = new(Limits.StackedVerticalBarChartLimits);
@@ -135,7 +135,7 @@ namespace ChartTypeSelectionTests
             string msg = "Ok";
             if (reasons.Count > 0) msg = reasons[0].ToString();
 
-            Assert.True(!reasons.Any(), msg);
+            Assert.True(reasons.Count == 0, msg);
         }
 
         /// <summary>
@@ -145,11 +145,11 @@ namespace ChartTypeSelectionTests
         [Test]
         public void ContentHas2Selections_UnambiguousContentUnitRequired()
         {
-            List<VariableParameters> variable = new()
-            {
+            List<VariableParameters> variable =
+            [
                 new VariableParameters(VariableType.Time, 5),
                 new VariableParameters(VariableType.Content, 2)
-            };
+            ];
 
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(variable);
             StackedVerticalBarChartCheck check = new(Limits.StackedVerticalBarChartLimits);
@@ -165,12 +165,12 @@ namespace ChartTypeSelectionTests
         [Test]
         public void NoTimeOrProgressive_TimeOrProgressiveRequired()
         {
-            List<VariableParameters> variable = new()
-            {
+            List<VariableParameters> variable =
+            [
                 new VariableParameters(VariableType.Unknown, 5),
                 new VariableParameters(VariableType.Geological, 5),
                 new VariableParameters(VariableType.Content, 1)
-            };
+            ];
 
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(variable);
             StackedVerticalBarChartCheck check = new(Limits.StackedVerticalBarChartLimits);
@@ -185,12 +185,12 @@ namespace ChartTypeSelectionTests
         [Test]
         public void ContainOneCombinationValue_CombinationValuesNotAllowed()
         {
-            List<VariableParameters> variable = new()
-            {
+            List<VariableParameters> variable =
+            [
                 new VariableParameters(VariableType.Time, 5),
                 new VariableParameters(VariableType.Geological, 5, true), // <- Combination
                 new VariableParameters(VariableType.Content, 1)
-            };
+            ];
 
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(variable);
             StackedVerticalBarChartCheck check = new(Limits.StackedVerticalBarChartLimits);
@@ -205,12 +205,12 @@ namespace ChartTypeSelectionTests
         [Test]
         public void OneMultiselectDimensionHasOver40_FirstMultiselectOverMax()
         {
-            List<VariableParameters> variable = new()
-            {
+            List<VariableParameters> variable =
+            [
                 new VariableParameters(VariableType.Time, 2),
                 new VariableParameters(VariableType.Geological, 45), // <- Combination
                 new VariableParameters(VariableType.Content, 1)
-            };
+            ];
 
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(variable);
             StackedVerticalBarChartCheck check = new(Limits.StackedVerticalBarChartLimits);
@@ -225,12 +225,12 @@ namespace ChartTypeSelectionTests
         [Test]
         public void BothMultiselectsOver10_SecondMultiselectOverMax()
         {
-            List<VariableParameters> variable = new()
-            {
+            List<VariableParameters> variable =
+            [
                 new VariableParameters(VariableType.Time, 12),
                 new VariableParameters(VariableType.Geological, 15), // <- Combination
                 new VariableParameters(VariableType.Content, 1)
-            };
+            ];
 
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(variable);
             StackedVerticalBarChartCheck check = new(Limits.StackedVerticalBarChartLimits);
@@ -245,12 +245,12 @@ namespace ChartTypeSelectionTests
         [Test]
         public void NegativeData_NegativeDataNotAllowed()
         {
-            List<VariableParameters> variable = new()
-            {
+            List<VariableParameters> variable =
+            [
                 new VariableParameters(VariableType.Content, 1),
                 new VariableParameters(VariableType.Time, 5),
                 new VariableParameters(VariableType.Unknown, 2)
-            };
+            ];
 
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(variable, true); // <- true causes negative data to be built
             StackedVerticalBarChartCheck check = new(Limits.StackedVerticalBarChartLimits);
@@ -265,12 +265,12 @@ namespace ChartTypeSelectionTests
         [Test]
         public void TooManyIrregularTimeVariableValuesTest()
         {
-            List<VariableParameters> variable = new()
-            {
+            List<VariableParameters> variable =
+            [
                 new VariableParameters(VariableType.Content, 1),
                 new VariableParameters(VariableType.OtherClassificatory, 3),
                 new VariableParameters(VariableType.Time, 11) { Irregular = true}
-            };
+            ];
 
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(variable);
             StackedVerticalBarChartCheck check = new(Limits.StackedVerticalBarChartLimits);
@@ -285,17 +285,17 @@ namespace ChartTypeSelectionTests
         [Test]
         public void IrregularTimeVariableValuesTest_Pass()
         {
-            List<VariableParameters> variable = new()
-            {
+            List<VariableParameters> variable =
+            [
                 new VariableParameters(VariableType.Content, 1),
                 new VariableParameters(VariableType.OtherClassificatory, 3),
                 new VariableParameters(VariableType.Time, 10) { Irregular = true}
-            };
+            ];
 
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(variable);
             StackedVerticalBarChartCheck check = new(Limits.StackedVerticalBarChartLimits);
 
-            Assert.True(!check.CheckValidity(input).Any());
+            Assert.True(check.CheckValidity(input).Count == 0);
         }
     }
 }

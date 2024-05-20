@@ -7,6 +7,7 @@ using PxGraf.Utility;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using UnitTests.Fixtures;
 using UnitTests.TestDummies;
 using UnitTests.TestDummies.DummyQueries;
 
@@ -16,19 +17,19 @@ namespace DataCubeTests
     {
         public CubeMetaHeaderGenerationTests()
         {
-            Localization.Load(Path.Combine(AppContext.BaseDirectory, "Pars\\translations.json"));
+            Localization.Load(TranslationFixture.DefaultLanguage, TranslationFixture.Translations);
         }
 
         [Test]
         public void CreateDefaultChartHeader_1TimeVar_ReturnsCorrectHeader()
         {
-            List<VariableParameters> metaParams = new()
-            {
+            List<VariableParameters> metaParams =
+            [
                 new (VariableType.Content, 1),
                 new (VariableType.Time, 1),
                 new (VariableType.OtherClassificatory, 4),
                 new (VariableType.OtherClassificatory, 2)
-            };
+            ];
 
             CubeQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(metaParams);
             CubeMeta cubeMeta = TestDataCubeBuilder.BuildTestMeta(metaParams);
@@ -45,13 +46,13 @@ namespace DataCubeTests
         [Test]
         public void CreateDefaultChartHeader_MultipleTimeVars_ReturnsCorrectHeader()
         {
-            List<VariableParameters> metaParams = new()
-            {
+            List<VariableParameters> metaParams =
+            [
                 new (VariableType.Content, 1),
                 new (VariableType.Time, 10),
                 new (VariableType.OtherClassificatory, 4),
                 new (VariableType.OtherClassificatory, 2)
-            };
+            ];
 
             CubeQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(metaParams);
             CubeMeta cubeMeta = TestDataCubeBuilder.BuildTestMeta(metaParams);
@@ -68,12 +69,12 @@ namespace DataCubeTests
         [Test]
         public void CreateDefaultChartHeader_1ContentVar1Value_ReturnsCorrectHeader()
         {
-            List<VariableParameters> metaParams = new()
-            {
+            List<VariableParameters> metaParams =
+            [
                 new (VariableType.Content, 1),
                 new (VariableType.Time, 5),
                 new (VariableType.OtherClassificatory, 1)
-            };
+            ];
 
             CubeQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(metaParams);
             CubeMeta cubeMeta = TestDataCubeBuilder.BuildTestMeta(metaParams);
@@ -89,12 +90,12 @@ namespace DataCubeTests
         [Test]
         public void CreateDefaultChartHeader_1ContentVarMultipleValues_ReturnsCorrectHeader()
         {
-            List<VariableParameters> metaParams = new()
-            {
+            List<VariableParameters> metaParams =
+            [
                 new (VariableType.Content, 1),
                 new (VariableType.Time, 5),
                 new (VariableType.OtherClassificatory, 4)
-            };
+            ];
 
             CubeQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(metaParams);
             CubeMeta cubeMeta = TestDataCubeBuilder.BuildTestMeta(metaParams);
@@ -110,13 +111,13 @@ namespace DataCubeTests
         [Test]
         public void CreateDefaultChartHeader_1TimeVarMultipleValues_ReturnsCorrectHeader()
         {
-            List<VariableParameters> metaParams = new()
-            {
+            List<VariableParameters> metaParams =
+            [
                 new (VariableType.Content, 1),
                 new (VariableType.Time, 1),
                 new (VariableType.OtherClassificatory, 1),
                 new (VariableType.OtherClassificatory, 4),
-            };
+            ];
 
             CubeQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(metaParams);
             CubeMeta cubeMeta = TestDataCubeBuilder.BuildTestMeta(metaParams);
@@ -133,12 +134,12 @@ namespace DataCubeTests
         [Test]
         public void CreateDefaultChartHeader_SumType_ReturnsCorrectHeader()
         {
-            List<VariableParameters> metaParams = new()
-            {
+            List<VariableParameters> metaParams =
+            [
                 new (VariableType.Content, 1),
                 new (VariableType.Time, 5),
                 new (VariableType.OtherClassificatory, 1) { HasCombinationValue = true }
-            };
+            ];
 
             CubeQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(metaParams);
             CubeMeta cubeMeta = TestDataCubeBuilder.BuildTestMeta(metaParams);
@@ -153,13 +154,13 @@ namespace DataCubeTests
         [Test]
         public void CreateDefaultChartHeader_SelectableTimeValue_ReturnsCorrectHeader()
         {
-            List<VariableParameters> metaParams = new()
-            {
+            List<VariableParameters> metaParams =
+            [
                 new (VariableType.Content, 1),
                 new (VariableType.Time, 10) { Selectable = true },
                 new (VariableType.OtherClassificatory, 4),
                 new (VariableType.OtherClassificatory, 2)
-            };
+            ];
 
             CubeQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(metaParams);
             CubeMeta cubeMeta = TestDataCubeBuilder.BuildTestMeta(metaParams);
@@ -176,13 +177,13 @@ namespace DataCubeTests
         [Test]
         public void CreateDefaultChartHeader_MultipleTimeVars_ReturnsCorrectHeaderForEn()
         {
-            List<VariableParameters> metaParams = new()
-            {
+            List<VariableParameters> metaParams =
+            [
                 new (VariableType.Content, 1),
                 new (VariableType.Time, 10),
                 new (VariableType.OtherClassificatory, 4),
                 new (VariableType.OtherClassificatory, 2)
-            };
+            ];
 
             CubeQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(metaParams);
             CubeMeta cubeMeta = TestDataCubeBuilder.BuildTestMeta(metaParams);

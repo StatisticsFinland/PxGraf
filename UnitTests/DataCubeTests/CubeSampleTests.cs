@@ -9,10 +9,10 @@ namespace DataCubeTests
     {
         private static CubeMap BuildTestMap(int var = 3, int val = 5)
         {
-            List<VariableMap> testVars = new();
+            List<VariableMap> testVars = [];
             for (int varInd = 1; varInd <= var; varInd++)
             {
-                List<string> valueCodes = new();
+                List<string> valueCodes = [];
                 for (int valInd = 1; valInd <= val; valInd++)
                 {
                     valueCodes.Add("val" + valInd);
@@ -58,17 +58,17 @@ namespace DataCubeTests
         public void GetCoordinatesTestVarVals_Pass()
         {
             var testMap = BuildTestMap(2, 3);
-            string[][] coords = new string[][]
-            {
+            string[][] coords =
+            [
                 testMap.GetCoordinates().Select(c => c["var1"]).ToArray(),
                 testMap.GetCoordinates().Select(c => c["var2"]).ToArray()
-            };
+            ];
 
-            string[][] expected = new string[][]
-            {
-                new string[] { "val1", "val1", "val1", "val2", "val2", "val2", "val3", "val3", "val3" },
-                new string[] { "val1", "val2", "val3", "val1", "val2", "val3", "val1", "val2", "val3" }
-            };
+            string[][] expected =
+            [
+                ["val1", "val1", "val1", "val2", "val2", "val2", "val3", "val3", "val3"],
+                ["val1", "val2", "val3", "val1", "val2", "val3", "val1", "val2", "val3"]
+            ];
 
             Assert.AreEqual(expected, coords);
         }

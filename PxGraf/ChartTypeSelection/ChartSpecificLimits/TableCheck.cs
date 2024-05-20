@@ -8,7 +8,11 @@ namespace PxGraf.ChartTypeSelection.ChartSpecificLimits
     /// <summary>
     /// Functionality to check the query compatibility with the pie chart spesific rules.
     /// </summary>
-    public class TableCheck : ChartRulesCheck
+    /// <remarks>
+    /// Default constructor
+    /// </remarks>
+    /// <param name="limits"></param>
+    public class TableCheck(IChartTypeLimits limits) : ChartRulesCheck(limits)
     {
 
         // Elimination conditions and priorities:
@@ -24,15 +28,9 @@ namespace PxGraf.ChartTypeSelection.ChartSpecificLimits
         public override VisualizationType Type => VisualizationType.Table;
 
         /// <summary>
-        /// Default constructor
-        /// </summary>
-        /// <param name="limits"></param>
-        public TableCheck(IChartTypeLimits limits) : base(limits) { }
-
-        /// <summary>
         /// Table does not have any unique limits.
         /// </summary>
-        protected override IEnumerable<ChartRejectionInfo> CheckChartSpecificRules(VisualizationTypeSelectionObject input) => Enumerable.Empty<ChartRejectionInfo>();
+        protected override IEnumerable<ChartRejectionInfo> CheckChartSpecificRules(VisualizationTypeSelectionObject input) => [];
 
         /// <summary>
         /// Sets the priority for differenet rejection reasons.

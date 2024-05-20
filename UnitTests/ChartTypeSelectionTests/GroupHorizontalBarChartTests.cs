@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using PxGraf.ChartTypeSelection;
 using PxGraf.ChartTypeSelection.ChartSpecificLimits;
 using PxGraf.ChartTypeSelection.JsonObjects;
 using PxGraf.Enums;
@@ -28,10 +29,10 @@ namespace ChartTypeSelectionTests
         [Test]
         public void NoData_NotEnoughMultiselections()
         {
-            List<VariableParameters> dimension = new();
+            List<VariableParameters> dimension = [];
 
-            var input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
-            var check = new GroupHorizontalBarChartCheck(Limits.GroupHorizontalBarChartLimits);
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
+            GroupHorizontalBarChartCheck check = new(Limits.GroupHorizontalBarChartLimits);
 
             Assert.AreEqual(RejectionReason.NotEnoughMultiselections, check.CheckValidity(input)[0].Reason);
         }
@@ -43,21 +44,21 @@ namespace ChartTypeSelectionTests
         [Test]
         public void ValidData_Pass()
         {
-            List<VariableParameters> dimension = new()
-            {
+            List<VariableParameters> dimension =
+            [
                 new VariableParameters(VariableType.Content, 1),
                 new VariableParameters(VariableType.Unknown, 10),
                 new VariableParameters(VariableType.Geological, 3)
-            };
+            ];
 
-            var input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
-            var check = new GroupHorizontalBarChartCheck(Limits.GroupHorizontalBarChartLimits);
-            var reasons = check.CheckValidity(input);
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
+            GroupHorizontalBarChartCheck check = new(Limits.GroupHorizontalBarChartLimits);
+            List<ChartRejectionInfo> reasons = check.CheckValidity(input);
 
             string msg = "Ok";
             if (reasons.Count > 0) msg = reasons[0].ToString();
 
-            Assert.True(!reasons.Any(), msg);
+            Assert.True(reasons.Count == 0, msg);
         }
 
         /// <summary>
@@ -67,17 +68,17 @@ namespace ChartTypeSelectionTests
         [Test]
         public void ValidDataWithTime_Pass()
         {
-            List<VariableParameters> dimension = new()
-            {
+            List<VariableParameters> dimension =
+            [
                 new VariableParameters(VariableType.Content, 1),
                 new VariableParameters(VariableType.Unknown, 15),
                 new VariableParameters(VariableType.Time, 2)
-            };
+            ];
 
-            var input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
-            var check = new GroupHorizontalBarChartCheck(Limits.GroupHorizontalBarChartLimits);
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
+            GroupHorizontalBarChartCheck check = new(Limits.GroupHorizontalBarChartLimits);
 
-            Assert.True(!check.CheckValidity(input).Any());
+            Assert.True(check.CheckValidity(input).Count == 0);
         }
 
         /// <summary>
@@ -87,15 +88,15 @@ namespace ChartTypeSelectionTests
         [Test]
         public void OneMultiselectDimensions_NotEnoughMultiselections()
         {
-            List<VariableParameters> dimension = new()
-            {
+            List<VariableParameters> dimension =
+            [
                 new VariableParameters(VariableType.Content, 1),
                 new VariableParameters(VariableType.Unknown, 15),
                 new VariableParameters(VariableType.Time, 1)
-            };
+            ];
 
-            var input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
-            var check = new GroupHorizontalBarChartCheck(Limits.GroupHorizontalBarChartLimits);
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
+            GroupHorizontalBarChartCheck check = new(Limits.GroupHorizontalBarChartLimits);
 
             Assert.AreEqual(RejectionReason.NotEnoughMultiselections, check.CheckValidity(input)[0].Reason);
         }
@@ -107,16 +108,16 @@ namespace ChartTypeSelectionTests
         [Test]
         public void ThreeMultiselectDimensions_TooManyMultiselections()
         {
-            List<VariableParameters> dimension = new()
-            {
+            List<VariableParameters> dimension =
+            [
                 new VariableParameters(VariableType.Content, 1),
                 new VariableParameters(VariableType.Unknown, 15),
                 new VariableParameters(VariableType.Time, 2),
                 new VariableParameters(VariableType.Geological, 3)
-            };
+            ];
 
-            var input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
-            var check = new GroupHorizontalBarChartCheck(Limits.GroupHorizontalBarChartLimits);
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
+            GroupHorizontalBarChartCheck check = new(Limits.GroupHorizontalBarChartLimits);
 
             Assert.AreEqual(RejectionReason.TooManyMultiselections, check.CheckValidity(input)[0].Reason);
         }
@@ -128,14 +129,14 @@ namespace ChartTypeSelectionTests
         [Test]
         public void NoContentDimension_ContentRequired()
         {
-            List<VariableParameters> dimension = new()
-            {
+            List<VariableParameters> dimension =
+            [
                 new VariableParameters(VariableType.Unknown, 15),
                 new VariableParameters(VariableType.Time, 2),
-            };
+            ];
 
-            var input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
-            var check = new GroupHorizontalBarChartCheck(Limits.GroupHorizontalBarChartLimits);
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
+            GroupHorizontalBarChartCheck check = new(Limits.GroupHorizontalBarChartLimits);
 
             Assert.AreEqual(RejectionReason.ContentRequired, check.CheckValidity(input)[0].Reason);
         }
@@ -147,20 +148,20 @@ namespace ChartTypeSelectionTests
         [Test]
         public void ThreeSelectedFromContent_Pass()
         {
-            List<VariableParameters> dimension = new()
-            {
+            List<VariableParameters> dimension =
+            [
                 new VariableParameters(VariableType.Content, 3) { SameUnit = true },
                 new VariableParameters(VariableType.Unknown, 5),
-            };
+            ];
 
-            var input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
-            var check = new GroupHorizontalBarChartCheck(Limits.GroupHorizontalBarChartLimits);
-            var reasons = check.CheckValidity(input);
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
+            GroupHorizontalBarChartCheck check = new(Limits.GroupHorizontalBarChartLimits);
+            List<ChartRejectionInfo> reasons = check.CheckValidity(input);
 
             string msg = "Ok";
             if (reasons.Count > 0) msg = reasons[0].ToString();
 
-            Assert.True(!reasons.Any(), msg);
+            Assert.True(reasons.Count == 0, msg);
         }
 
         /// <summary>
@@ -170,15 +171,15 @@ namespace ChartTypeSelectionTests
         [Test]
         public void OneProgressiveMultiselectDimension_ProgressiveNotAllowed()
         {
-            List<VariableParameters> dimension = new()
-            {
+            List<VariableParameters> dimension =
+            [
                 new VariableParameters(VariableType.Content, 1),
                 new VariableParameters(VariableType.Ordinal, 3),
                 new VariableParameters(VariableType.Unknown, 15),
-            };
+            ];
 
-            var input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
-            var check = new GroupHorizontalBarChartCheck(Limits.GroupHorizontalBarChartLimits);
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
+            GroupHorizontalBarChartCheck check = new(Limits.GroupHorizontalBarChartLimits);
 
             Assert.AreEqual(RejectionReason.ProgressiveNotAllowed, check.CheckValidity(input)[0].Reason);
         }
@@ -190,15 +191,15 @@ namespace ChartTypeSelectionTests
         [Test]
         public void TwoProgressiveMultiselectDimensions_ProgressiveNotAllowed()
         {
-            List<VariableParameters> dimension = new()
-            {
+            List<VariableParameters> dimension =
+            [
                 new VariableParameters(VariableType.Content, 1),
                 new VariableParameters(VariableType.Ordinal, 3),
                 new VariableParameters(VariableType.Ordinal, 15),
-            };
+            ];
 
-            var input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
-            var check = new GroupHorizontalBarChartCheck(Limits.GroupHorizontalBarChartLimits);
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
+            GroupHorizontalBarChartCheck check = new(Limits.GroupHorizontalBarChartLimits);
 
             Assert.AreEqual(RejectionReason.ProgressiveNotAllowed, check.CheckValidity(input)[0].Reason);
         }
@@ -210,15 +211,15 @@ namespace ChartTypeSelectionTests
         [Test]
         public void TimeDimensionsHasFiveSelectons_TimeOverMax()
         {
-            List<VariableParameters> dimension = new()
-            {
+            List<VariableParameters> dimension =
+            [
                 new VariableParameters(VariableType.Content, 1),
                 new VariableParameters(VariableType.Time, 5),
                 new VariableParameters(VariableType.Unknown, 3),
-            };
+            ];
 
-            var input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
-            var check = new GroupHorizontalBarChartCheck(Limits.GroupHorizontalBarChartLimits);
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
+            GroupHorizontalBarChartCheck check = new(Limits.GroupHorizontalBarChartLimits);
 
             Assert.AreEqual(RejectionReason.TimeOverMax, check.CheckValidity(input)[0].Reason);
         }
@@ -230,15 +231,15 @@ namespace ChartTypeSelectionTests
         [Test]
         public void OneMultiselectWithCombinationValue_CombinationValuesNotAllowed()
         {
-            List<VariableParameters> dimension = new()
-            {
+            List<VariableParameters> dimension =
+            [
                 new VariableParameters(VariableType.Content, 1),
                 new VariableParameters(VariableType.Geological, 5),
                 new VariableParameters(VariableType.Unknown, 3, true), // <- Combination
-            };
+            ];
 
-            var input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
-            var check = new GroupHorizontalBarChartCheck(Limits.GroupHorizontalBarChartLimits);
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
+            GroupHorizontalBarChartCheck check = new(Limits.GroupHorizontalBarChartLimits);
 
             Assert.AreEqual(RejectionReason.CombinationValuesNotAllowed, check.CheckValidity(input)[0].Reason);
         }
@@ -250,15 +251,15 @@ namespace ChartTypeSelectionTests
         [Test]
         public void TwoMultiselectsWithCombinationValues_CombinationValuesNotAllowed()
         {
-            List<VariableParameters> dimension = new()
-            {
+            List<VariableParameters> dimension =
+            [
                 new VariableParameters(VariableType.Content, 1),
                 new VariableParameters(VariableType.Geological, 5, true), // <- Combination
                 new VariableParameters(VariableType.Unknown, 3, true) // <- Combination
-            };
+            ];
 
-            var input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
-            var check = new GroupHorizontalBarChartCheck(Limits.GroupHorizontalBarChartLimits);
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
+            GroupHorizontalBarChartCheck check = new(Limits.GroupHorizontalBarChartLimits);
 
             Assert.AreEqual(RejectionReason.CombinationValuesNotAllowed, check.CheckValidity(input)[0].Reason);
         }
@@ -270,15 +271,15 @@ namespace ChartTypeSelectionTests
         [Test]
         public void MultiselectWith25Values_FirstMultiselectOverMax()
         {
-            List<VariableParameters> dimension = new()
-            {
+            List<VariableParameters> dimension =
+            [
                 new VariableParameters(VariableType.Content, 1),
                 new VariableParameters(VariableType.Geological, 25),
                 new VariableParameters(VariableType.Unknown, 2)
-            };
+            ];
 
-            var input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
-            var check = new GroupHorizontalBarChartCheck(Limits.GroupHorizontalBarChartLimits);
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
+            GroupHorizontalBarChartCheck check = new(Limits.GroupHorizontalBarChartLimits);
 
             Assert.AreEqual(RejectionReason.FirstMultiselectOverMax, check.CheckValidity(input)[0].Reason);
         }
@@ -290,15 +291,15 @@ namespace ChartTypeSelectionTests
         [Test]
         public void TwoMultiselectsWithOver4Values_SecondMultiselectOverMax()
         {
-            List<VariableParameters> dimension = new()
-            {
+            List<VariableParameters> dimension =
+            [
                 new VariableParameters(VariableType.Content, 1),
                 new VariableParameters(VariableType.Geological, 12),
                 new VariableParameters(VariableType.Unknown, 5)
-            };
+            ];
 
-            var input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
-            var check = new GroupHorizontalBarChartCheck(Limits.GroupHorizontalBarChartLimits);
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
+            GroupHorizontalBarChartCheck check = new(Limits.GroupHorizontalBarChartLimits);
 
             Assert.AreEqual(RejectionReason.SecondMultiselectOverMax, check.CheckValidity(input)[0].Reason);
         }
@@ -310,15 +311,15 @@ namespace ChartTypeSelectionTests
         [Test]
         public void ProductOver40_MultiselectProductOverMax()
         {
-            List<VariableParameters> dimension = new()
-            {
+            List<VariableParameters> dimension =
+            [
                 new VariableParameters(VariableType.Content, 1),
                 new VariableParameters(VariableType.Geological, 15),
                 new VariableParameters(VariableType.Unknown, 4)
-            };
+            ];
 
-            var input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
-            var check = new GroupHorizontalBarChartCheck(Limits.GroupHorizontalBarChartLimits);
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
+            GroupHorizontalBarChartCheck check = new(Limits.GroupHorizontalBarChartLimits);
 
             Assert.AreEqual(RejectionReason.MultiselectProductOverMax, check.CheckValidity(input)[0].Reason);
         }

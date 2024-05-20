@@ -24,24 +24,18 @@ namespace PxGraf.Controllers
     /// <summary>
     /// Handles API requests for chart creation by providing endpoints for fetching and validating data, determining valid visualization types, and creating visualizations. Interacts with the PxWeb API through a cached connection.
     /// </summary>
+    /// <remarks>
+    /// Default constructor.
+    /// </remarks>
+    /// <param name="cachedPxWebConnection">Instance of a <see cref="ICachedPxWebConnection"/> object. Used to interact with PxWeb API and cache data.</param>
+    /// <param name="logger"><see cref="ILogger"/> instance used for logging.</param>
     [FeatureGate("CreationAPI")]
     [ApiController]
     [Route("api/creation")]
-    public class CreationController : ControllerBase
+    public class CreationController(ICachedPxWebConnection cachedPxWebConnection, ILogger<CreationController> logger) : ControllerBase
     {
-        private readonly ICachedPxWebConnection _cachedPxWebConnection;
-        private readonly ILogger<CreationController> _logger;
-
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        /// <param name="cachedPxWebConnection">Instance of a <see cref="ICachedPxWebConnection"/> object. Used to interact with PxWeb API and cache data.</param>
-        /// <param name="logger"><see cref="ILogger"/> instance used for logging.</param>
-        public CreationController(ICachedPxWebConnection cachedPxWebConnection, ILogger<CreationController> logger)
-        {
-            _cachedPxWebConnection = cachedPxWebConnection;
-            _logger = logger;
-        }
+        private readonly ICachedPxWebConnection _cachedPxWebConnection = cachedPxWebConnection;
+        private readonly ILogger<CreationController> _logger = logger;
 
         /// <summary>
         /// Returns a list of database items from the given level of the data base based on the dbPath.
@@ -59,7 +53,7 @@ namespace PxGraf.Controllers
             // Get a list of available languages with the preferred language first
             List<string> languages = DataBaseListingUtilities.GetPrioritizedLanguages(preferredLanguage);
 
-            Dictionary<string, DataBaseListingItem> response = new();
+            Dictionary<string, DataBaseListingItem> response = [];
 
             // Find databases and tables with all available languages and add them to the response
             foreach (string language in languages)
@@ -71,13 +65,13 @@ namespace PxGraf.Controllers
                 }
                 else
                 {
-                    IEnumerable<TableListResponseItem> tables = await _cachedPxWebConnection.GetDataTableItemListingAsync(language, dbPath.Split("/").ToList());
+                    IEnumerable<TableListResponseItem> tables = await _cachedPxWebConnection.GetDataTableItemListingAsync(language, [.. dbPath.Split("/")]);
                     DataBaseListingUtilities.AddOrAppendTableItems(response, tables, language);
                 }
             }
 
             _logger.LogDebug("data-bases/{DbPath} result: {Response}", dbPath, response);
-            return response.Values.ToList();
+            return [.. response.Values];
         }
 
         /// <summary>
@@ -88,7 +82,7 @@ namespace PxGraf.Controllers
         public async Task<List<string>> GetLanguagesAsync()
         {
             _logger.LogDebug("Getting available languages. GET: api/creation/languages");
-            List<string> validLanguages = new();
+            List<string> validLanguages = [];
             // Checks if any database is available for the given languages
             foreach (string language in Configuration.Current.LanguageOptions.Available)
             {
@@ -155,15 +149,15 @@ namespace PxGraf.Controllers
         public async Task<ActionResult<Dictionary<string, List<string>>>> GetVariableFilterResultAsync([FromBody] FilterRequest filterRequest)
         {
             _logger.LogDebug("Requesting filter result for {FilterRequest} POST: api/creation/filter-variable", filterRequest);
-            var tableMeta = await _cachedPxWebConnection.GetCubeMetaCachedAsync(filterRequest.TableReference);
+            IReadOnlyCubeMeta tableMeta = await _cachedPxWebConnection.GetCubeMetaCachedAsync(filterRequest.TableReference);
 
-            var result = filterRequest.Filters.ToDictionary(
+            Dictionary<string, List<string>> result = filterRequest.Filters.ToDictionary(
                 filter => filter.Key,
                 filter =>
                 {
                     if (tableMeta.Variables.FirstOrDefault(variable => variable.Code == filter.Key) is Variable variable)
                     {
-                        var filteredValues = filter.Value.Filter(variable.IncludedValues);
+                        IEnumerable<IReadOnlyVariableValue> filteredValues = filter.Value.Filter(variable.IncludedValues);
                         List<string> filteredValueCodes = filteredValues.Select(value => value.Code).ToList();
                         _logger.LogDebug("filter-variable result: {FilteredValueCodes}", filteredValueCodes);
                         return filteredValueCodes;
@@ -171,7 +165,7 @@ namespace PxGraf.Controllers
                     else
                     {
                         _logger.LogDebug("filter-variable result: []");
-                        return new List<string>();
+                        return [];
                     }
                 }
             );
@@ -188,8 +182,8 @@ namespace PxGraf.Controllers
         public async Task<ActionResult<MultiLanguageString>> GetDefaultHeaderAsync([FromBody] CubeQuery input)
         {
             _logger.LogDebug("Requesting default header for {Input} POST: api/creation/default-header", input);
-            var tableMeta = await _cachedPxWebConnection.GetCubeMetaCachedAsync(input.TableReference);
-            var tableMetaCopy = tableMeta.Clone();
+            IReadOnlyCubeMeta tableMeta = await _cachedPxWebConnection.GetCubeMetaCachedAsync(input.TableReference);
+            CubeMeta tableMetaCopy = tableMeta.Clone();
             tableMetaCopy.ApplyEditionFromQuery(input);
             tableMetaCopy.Header.Truncate(Configuration.Current.QueryOptions.MaxHeaderLength);
 
@@ -206,8 +200,8 @@ namespace PxGraf.Controllers
         public async Task<ActionResult<List<string>>> GetValidVisualizationTypesAsync([FromBody] CubeQuery cubeQuery)
         {
             _logger.LogDebug("Requesting valid visualizations for {CubeQuery} POST: api/creation/valid-visualization", cubeQuery);
-            var tableMeta = await _cachedPxWebConnection.GetCubeMetaCachedAsync(cubeQuery.TableReference);
-            var tableMetaCopy = tableMeta.Clone();
+            IReadOnlyCubeMeta tableMeta = await _cachedPxWebConnection.GetCubeMetaCachedAsync(cubeQuery.TableReference);
+            CubeMeta tableMetaCopy = tableMeta.Clone();
             tableMetaCopy.ApplyEditionFromQuery(cubeQuery);
 
             if (tableMetaCopy.Variables.Exists(v => v.IncludedValues.Count == 0))
@@ -216,9 +210,9 @@ namespace PxGraf.Controllers
                 return new List<string>();
             }
 
-            var dataCube = await _cachedPxWebConnection.GetDataCubeCachedAsync(cubeQuery.TableReference, tableMetaCopy);
+            DataCube dataCube = await _cachedPxWebConnection.GetDataCubeCachedAsync(cubeQuery.TableReference, tableMetaCopy);
 
-            var validTypes = ChartTypeSelector.Selector.GetValidChartTypes(cubeQuery, dataCube);
+            IReadOnlyList<VisualizationType> validTypes = ChartTypeSelector.Selector.GetValidChartTypes(cubeQuery, dataCube);
             List<string> validTypesList = validTypes.Select(ct => ChartTypeEnumConverter.ToJsonString(ct)).ToList();
             _logger.LogDebug("valid-visualizations result: {ValidTypesList}", validTypesList);
             return validTypesList;
@@ -236,8 +230,8 @@ namespace PxGraf.Controllers
             int maxQuerySize = Configuration.Current.QueryOptions.MaxQuerySize;
             int maxHeaderLength = Configuration.Current.QueryOptions.MaxHeaderLength;
 
-            var tableMeta = await _cachedPxWebConnection.GetCubeMetaCachedAsync(cubeQuery.TableReference);
-            var tableMetaCopy = tableMeta.Clone();
+            IReadOnlyCubeMeta tableMeta = await _cachedPxWebConnection.GetCubeMetaCachedAsync(cubeQuery.TableReference);
+            CubeMeta tableMetaCopy = tableMeta.Clone();
             tableMetaCopy.ApplyEditionFromQuery(cubeQuery);
 
             int includedValuesCount = tableMetaCopy.Variables.Select(x => x.IncludedValues.Count).Aggregate((a, x) => a * x);
@@ -255,9 +249,9 @@ namespace PxGraf.Controllers
                 return queryInfoResponse;
             }
 
-            var dataCube = await _cachedPxWebConnection.GetDataCubeCachedAsync(cubeQuery.TableReference, tableMetaCopy);
+            DataCube dataCube = await _cachedPxWebConnection.GetDataCubeCachedAsync(cubeQuery.TableReference, tableMetaCopy);
 
-            var response = new QueryInfoResponse()
+            QueryInfoResponse response = new()
             {
                 Size = dataCube.Data.Length,
                 SizeWarningLimit = Convert.ToInt32(maxQuerySize * 0.75),
@@ -265,7 +259,7 @@ namespace PxGraf.Controllers
                 MaximumHeaderLength = maxHeaderLength
             };
 
-            foreach (var reasonKvp in ChartTypeSelector.Selector.GetRejectionReasons(cubeQuery, dataCube))
+            foreach (KeyValuePair<VisualizationType, IReadOnlyList<ChartRejectionInfo>> reasonKvp in ChartTypeSelector.Selector.GetRejectionReasons(cubeQuery, dataCube))
             {
                 if (reasonKvp.Value.Any())
                 {
@@ -294,21 +288,21 @@ namespace PxGraf.Controllers
         public async Task<ActionResult<VisualizationRules>> GetVisualizationRulesAsync([FromBody] VisualizationSettingsRequest rulesQuery)
         {
             _logger.LogDebug("Requesting visualization rules for {RulesQuery} POST: api/creation/visualization-rules", rulesQuery);
-            var tableMeta = await _cachedPxWebConnection.GetCubeMetaCachedAsync(rulesQuery.Query.TableReference);
-            var tableMetaCopy = tableMeta.Clone();
+            IReadOnlyCubeMeta tableMeta = await _cachedPxWebConnection.GetCubeMetaCachedAsync(rulesQuery.Query.TableReference);
+            CubeMeta tableMetaCopy = tableMeta.Clone();
             tableMetaCopy.ApplyEditionFromQuery(rulesQuery.Query);
 
             // All variables must have atleast one value selected
-            if (!tableMetaCopy.Variables.TrueForAll(v => v.IncludedValues.Any()))
+            if (!tableMetaCopy.Variables.TrueForAll(v => v.IncludedValues.Count != 0))
             {
                 _logger.LogDebug("visualization-rules result: All variables must have atleast one value selected.");
                 return new VisualizationRules(false, false);
             }
 
-            var dataCube = await _cachedPxWebConnection.GetDataCubeCachedAsync(rulesQuery.Query.TableReference, tableMetaCopy);
+            DataCube dataCube = await _cachedPxWebConnection.GetDataCubeCachedAsync(rulesQuery.Query.TableReference, tableMetaCopy);
 
-            var selector = ChartTypeSelector.Selector;
-            var validTypes = selector.GetValidChartTypes(rulesQuery.Query, dataCube);
+            IChartTypeSelector selector = ChartTypeSelector.Selector;
+            IReadOnlyList<VisualizationType> validTypes = selector.GetValidChartTypes(rulesQuery.Query, dataCube);
 
             if (!validTypes.Contains(rulesQuery.SelectedVisualization))
             {
@@ -317,9 +311,9 @@ namespace PxGraf.Controllers
                 return new VisualizationRules(false, false);
             }
 
-            var manualPivotability = ManualPivotRules.GetManualPivotability(rulesQuery.SelectedVisualization, tableMetaCopy, rulesQuery.Query);
-            var multiSelVar = IsMultivalueSelectableAllowed(rulesQuery.SelectedVisualization, rulesQuery.Query.VariableQueries.Values);
-            var sortingOptions = CubeSorting.Get(tableMetaCopy, rulesQuery);
+            bool manualPivotability = ManualPivotRules.GetManualPivotability(rulesQuery.SelectedVisualization, tableMetaCopy, rulesQuery.Query);
+            bool multiSelVar = IsMultivalueSelectableAllowed(rulesQuery.SelectedVisualization, rulesQuery.Query.VariableQueries.Values);
+            IReadOnlyList<SortingOption> sortingOptions = CubeSorting.Get(tableMetaCopy, rulesQuery);
             VisualizationRules.TypeSpecificVisualizationRules typeSpecificRules = new (rulesQuery.SelectedVisualization);
             VisualizationRules visualizationRules = new (manualPivotability, multiSelVar, typeSpecificRules, sortingOptions);
             _logger.LogDebug("visualization-rules result: {VisualizationRules}", visualizationRules);
@@ -345,7 +339,7 @@ namespace PxGraf.Controllers
         public async Task<ActionResult<VisualizationResponse>> GetVisualizationAsync([FromBody] ChartRequest request)
         {
             _logger.LogDebug("Requesting visualization for {Request} POST: api/creation/visualization", request);
-            var readOnlyTableMeta = await _cachedPxWebConnection.GetCubeMetaCachedAsync(request.Query.TableReference);
+            IReadOnlyCubeMeta readOnlyTableMeta = await _cachedPxWebConnection.GetCubeMetaCachedAsync(request.Query.TableReference);
             CubeMeta tableMetaCopy = readOnlyTableMeta.Clone();
             tableMetaCopy.ApplyEditionFromQuery(request.Query);
             tableMetaCopy.Header.Truncate(Configuration.Current.QueryOptions.MaxHeaderLength);
@@ -357,9 +351,9 @@ namespace PxGraf.Controllers
                 return BadRequest();
             }
 
-            var dataCube = await _cachedPxWebConnection.GetDataCubeCachedAsync(request.Query.TableReference, tableMetaCopy);
+            DataCube dataCube = await _cachedPxWebConnection.GetDataCubeCachedAsync(request.Query.TableReference, tableMetaCopy);
 
-            var selector = ChartTypeSelector.Selector;
+            IChartTypeSelector selector = ChartTypeSelector.Selector;
 
             if (selector.GetValidChartTypes(request.Query, dataCube).Contains(request.VisualizationSettings.SelectedVisualization))
             {

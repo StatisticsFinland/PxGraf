@@ -5,8 +5,11 @@ namespace PxGraf.ChartTypeSelection.JsonObjects
     /// <summary>
     /// Collection of limits to determine which chart types can be drawn from the data.
     /// This class is meant to be possible to construct from a json and its state should not change afterwards.
-    /// IMPORTANT: USE UNLY VIA THE IChartSelectionLimits INTERFACE WHEN NOT PARSING/UNPARSING JSON!
+    /// IMPORTANT: USE ONLY VIA THE IChartSelectionLimits INTERFACE WHEN NOT PARSING/UNPARSING JSON!
     /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage(
+        "Minor Code Smell", "S1192:String literals should not be duplicated",
+        Justification = "Makes it harder to read if some of the values are strings and some are constants")]
     public class ChartSelectionLimits : IChartSelectionLimits
     {
         /// <summary>

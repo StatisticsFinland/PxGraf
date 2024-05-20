@@ -8,28 +8,20 @@ namespace PxGraf.Controllers
     /// <summary>
     /// Handles requests for API info.
     /// </summary>
+    /// <remarks>
+    /// Default constructor.
+    /// </remarks>
+    /// <param name="env">Instance of a <see cref="IWebHostEnvironment"/> object. Used for getting information about the API.</param>
+    /// <param name="logger"><see cref="ILogger"/> instance used for logging API calls.</param>
     [ApiController]
     [Route("api/info")]
-    public class InfoController : ControllerBase
+    public class InfoController(IWebHostEnvironment env, ILogger<InfoController> logger) : ControllerBase
     {
-        private readonly string _name;
-        private readonly string _environment;
-        private readonly string _version;
-        private readonly ILogger<InfoController> _logger;
-
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        /// <param name="env">Instance of a <see cref="IWebHostEnvironment"/> object. Used for getting information about the API.</param>
-        /// <param name="logger"><see cref="ILogger"/> instance used for logging API calls.</param>
-        public InfoController(IWebHostEnvironment env, ILogger<InfoController> logger)
-        {
-            _name = env.ApplicationName;
-            _environment = env.EnvironmentName;
-            _version = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>()
+        private readonly string _name = env.ApplicationName;
+        private readonly string _environment = env.EnvironmentName;
+        private readonly string _version = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>()
                 .InformationalVersion;
-            _logger = logger;
-        }
+        private readonly ILogger<InfoController> _logger = logger;
 
         /// <summary>
         /// Returns information about the API including the name of the application, the environment it's running in, and version of the API.

@@ -5,6 +5,7 @@ using Moq;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
 using PxGraf.Controllers;
+using PxGraf.Data.MetaData;
 using PxGraf.Enums;
 using PxGraf.Exceptions;
 using PxGraf.Language;
@@ -17,6 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using UnitTests.Fixtures;
 using UnitTests.TestDummies;
 using UnitTests.TestDummies.DummyQueries;
 
@@ -27,14 +29,15 @@ namespace ControllerTests
         [OneTimeSetUp]
         public void DoSetup()
         {
-            Localization.Load(Path.Combine(AppContext.BaseDirectory, "Pars\\translations.json"));
+            Localization.Load(TranslationFixture.DefaultLanguage, TranslationFixture.Translations);
 
-            var inMemorySettings = new Dictionary<string, string> {
-                    {"pxwebUrl", "http://pxwebtesturl:12345/"},
-                    {"pxgrafUrl", "http://pxgraftesturl:8443/PxGraf"},
-                    {"savedQueryDirectory", "goesNowhere"},
-                    {"archiveFileDirectory", "goesNowhere"}
-                };
+            Dictionary<string, string> inMemorySettings = new()
+            {
+                {"pxwebUrl", "http://pxwebtesturl:12345/"},
+                {"pxgrafUrl", "http://pxgraftesturl:8443/PxGraf"},
+                {"savedQueryDirectory", "goesNowhere"},
+                {"archiveFileDirectory", "goesNowhere"}
+            };
 
             IConfiguration configuration = new ConfigurationBuilder()
                 .AddInMemoryCollection(inMemorySettings)
@@ -45,28 +48,28 @@ namespace ControllerTests
         [Test]
         public async Task GetQueryMetaTest_ReturnValidMeta()
         {
-            var mockCachedPxWebConnection = new Mock<ICachedPxWebConnection>();
-            var mockSqFileInterface = new Mock<ISqFileInterface>();
+            Mock<ICachedPxWebConnection> mockCachedPxWebConnection = new();
+            Mock<ISqFileInterface> mockSqFileInterface = new();
 
-            var testQueryId = "aaa-bbb-111-222-333";
+            string testQueryId = "aaa-bbb-111-222-333";
 
-            List<VariableParameters> queryParams = new()
-            {
+            List<VariableParameters> queryParams =
+            [
                 new VariableParameters(VariableType.Content, 1),
                 new VariableParameters(VariableType.Time, 10),
                 new VariableParameters(VariableType.OtherClassificatory, 3),
                 new VariableParameters(VariableType.OtherClassificatory, 1)
-            };
+            ];
 
-            List<VariableParameters> metaParams = new()
-            {
+            List<VariableParameters> metaParams =
+            [
                 new VariableParameters(VariableType.Content, 10),
                 new VariableParameters(VariableType.Time, 10),
                 new VariableParameters(VariableType.OtherClassificatory, 15),
                 new VariableParameters(VariableType.OtherClassificatory, 7)
-            };
+            ];
 
-            var meta = TestDataCubeBuilder.BuildTestMeta(metaParams);
+            CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(metaParams);
             mockCachedPxWebConnection.Setup(x => x.GetCubeMetaCachedAsync(It.IsAny<PxFileReference>()))
                 .ReturnsAsync(() => meta);
 
@@ -90,37 +93,37 @@ namespace ControllerTests
             Assert.AreEqual("2009-09-01T00:00:00.000Z", result.Value.LastUpdated);
             Assert.AreEqual("TestPxFile.px", result.Value.TableReference.Name);
 
-            var expectedHierarchy = new List<string>() { "testpath", "to", "test", "file" };
+            List<string> expectedHierarchy = ["testpath", "to", "test", "file"];
             Assert.AreEqual(expectedHierarchy, result.Value.TableReference.Hierarchy);  
         }
 
         [Test]
         public async Task GetQueryMetaTest_ReturnSelectableTrue()
         {
-            var mockCachedPxWebConnection = new Mock<ICachedPxWebConnection>();
-            var mockSqFileInterface = new Mock<ISqFileInterface>();
+            Mock<ICachedPxWebConnection> mockCachedPxWebConnection = new();
+            Mock<ISqFileInterface> mockSqFileInterface = new();
 
-            var testQueryId = "aaa-bbb-111-222-333";
+            string testQueryId = "aaa-bbb-111-222-333";
 
-            List<VariableParameters> queryParams = new()
-            {
+            List<VariableParameters> queryParams =
+            [
                 new VariableParameters(VariableType.Content, 1),
                 new VariableParameters(VariableType.Time, 10),
                 new VariableParameters(VariableType.OtherClassificatory, 3),
                 new VariableParameters(VariableType.OtherClassificatory, 3) { Selectable = true },
                 new VariableParameters(VariableType.OtherClassificatory, 1)
-            };
+            ];
 
-            List<VariableParameters> metaParams = new()
-            {
+            List<VariableParameters> metaParams =
+            [
                 new VariableParameters(VariableType.Content, 10),
                 new VariableParameters(VariableType.Time, 10),
                 new VariableParameters(VariableType.OtherClassificatory, 15),
                 new VariableParameters(VariableType.OtherClassificatory, 4),
                 new VariableParameters(VariableType.OtherClassificatory, 7)
-            };
+            ];
 
-            var meta = TestDataCubeBuilder.BuildTestMeta(metaParams);
+            CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(metaParams);
             mockCachedPxWebConnection.Setup(x => x.GetCubeMetaCachedAsync(It.IsAny<PxFileReference>()))
                 .ReturnsAsync(() => meta);
 
@@ -140,28 +143,28 @@ namespace ControllerTests
         [Test]
         public async Task GetQueryMetaTest_NotFound()
         {
-            var mockCachedPxWebConnection = new Mock<ICachedPxWebConnection>();
-            var mockSqFileInterface = new Mock<ISqFileInterface>();
+            Mock<ICachedPxWebConnection> mockCachedPxWebConnection = new();
+            Mock<ISqFileInterface> mockSqFileInterface = new();
 
-            var testQueryId = "aaa-bbb-111-222-333";
+            string testQueryId = "aaa-bbb-111-222-333";
 
-            List<VariableParameters> queryParams = new()
-            {
+            List<VariableParameters> queryParams =
+            [
                 new VariableParameters(VariableType.Content, 1),
                 new VariableParameters(VariableType.Time, 10),
                 new VariableParameters(VariableType.OtherClassificatory, 3),
                 new VariableParameters(VariableType.OtherClassificatory, 1)
-            };
+            ];
 
-            List<VariableParameters> metaParams = new()
-            {
+            List<VariableParameters> metaParams =
+            [
                 new VariableParameters(VariableType.Content, 10),
                 new VariableParameters(VariableType.Time, 10),
                 new VariableParameters(VariableType.OtherClassificatory, 15),
                 new VariableParameters(VariableType.OtherClassificatory, 7)
-            };
+            ];
 
-            var meta = TestDataCubeBuilder.BuildTestMeta(metaParams);
+            CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(metaParams);
             mockCachedPxWebConnection.Setup(x => x.GetCubeMetaCachedAsync(It.IsAny<PxFileReference>()))
                 .ReturnsAsync(() => meta);
 
@@ -178,26 +181,26 @@ namespace ControllerTests
         [Test]
         public async Task GetQueryMetaTest_ArchivedQuery()
         {
-            var mockCachedPxWebConnection = new Mock<ICachedPxWebConnection>();
-            var mockSqFileInterface = new Mock<ISqFileInterface>();
+            Mock<ICachedPxWebConnection> mockCachedPxWebConnection = new();
+            Mock<ISqFileInterface> mockSqFileInterface = new();
 
-            var testQueryId = "aaa-bbb-111-222-333";
+            string testQueryId = "aaa-bbb-111-222-333";
 
-            List<VariableParameters> queryParams = new()
-            {
+            List<VariableParameters> queryParams =
+            [
                 new VariableParameters(VariableType.Content, 1),
                 new VariableParameters(VariableType.Time, 10),
                 new VariableParameters(VariableType.OtherClassificatory, 3),
                 new VariableParameters(VariableType.OtherClassificatory, 1)
-            };
+            ];
 
-            List<VariableParameters> metaParams = new()
-            {
+            List<VariableParameters> metaParams =
+            [
                 new VariableParameters(VariableType.Content, 10),
                 new VariableParameters(VariableType.Time, 10),
                 new VariableParameters(VariableType.OtherClassificatory, 15),
                 new VariableParameters(VariableType.OtherClassificatory, 7)
-            };
+            ];
 
             mockCachedPxWebConnection.Setup(x => x.GetCubeMetaCachedAsync(It.IsAny<PxFileReference>()))
                 .ThrowsAsync(new BadPxWebResponseException(System.Net.HttpStatusCode.BadRequest, "Foobar"));
@@ -228,7 +231,7 @@ namespace ControllerTests
             Assert.AreEqual("2009-09-01T00:00:00.000Z", result.Value.LastUpdated);
             Assert.AreEqual("TestPxFile.px", result.Value.TableReference.Name);
 
-            var expectedHierarchy = new List<string>() { "testpath", "to", "test", "file" };
+            List<string> expectedHierarchy = ["testpath", "to", "test", "file"];
             Assert.AreEqual(expectedHierarchy, result.Value.TableReference.Hierarchy);
 
         }
@@ -236,26 +239,26 @@ namespace ControllerTests
         [Test]
         public void GetQueryMetaTest_BadPxWebResponse_When_No_TableFound()
         {
-            var mockCachedPxWebConnection = new Mock<ICachedPxWebConnection>();
-            var mockSqFileInterface = new Mock<ISqFileInterface>();
+            Mock<ICachedPxWebConnection> mockCachedPxWebConnection = new();
+            Mock<ISqFileInterface> mockSqFileInterface = new();
 
-            var testQueryId = "aaa-bbb-111-222-333";
+            string testQueryId = "aaa-bbb-111-222-333";
 
-            List<VariableParameters> queryParams = new()
-            {
+            List<VariableParameters> queryParams =
+            [
                 new VariableParameters(VariableType.Content, 1),
                 new VariableParameters(VariableType.Time, 10),
                 new VariableParameters(VariableType.OtherClassificatory, 3),
                 new VariableParameters(VariableType.OtherClassificatory, 1)
-            };
+            ];
 
-            List<VariableParameters> metaParams = new()
-            {
+            List<VariableParameters> metaParams =
+            [
                 new VariableParameters(VariableType.Content, 10),
                 new VariableParameters(VariableType.Time, 10),
                 new VariableParameters(VariableType.OtherClassificatory, 15),
                 new VariableParameters(VariableType.OtherClassificatory, 7)
-            };
+            ];
 
             mockCachedPxWebConnection.Setup(x => x.GetCubeMetaCachedAsync(It.IsAny<PxFileReference>()))
                 .ThrowsAsync(new BadPxWebResponseException(System.Net.HttpStatusCode.BadRequest, "Foobar"));
@@ -279,26 +282,26 @@ namespace ControllerTests
         [Test]
         public void GetQueryMetaTest_ArchiveFileNotFound()
         {
-            var mockCachedPxWebConnection = new Mock<ICachedPxWebConnection>();
-            var mockSqFileInterface = new Mock<ISqFileInterface>();
+            Mock<ICachedPxWebConnection> mockCachedPxWebConnection = new();
+            Mock<ISqFileInterface> mockSqFileInterface = new();
 
-            var testQueryId = "aaa-bbb-111-222-333";
+            string testQueryId = "aaa-bbb-111-222-333";
 
-            List<VariableParameters> queryParams = new()
-            {
+            List<VariableParameters> queryParams =
+            [
                 new VariableParameters(VariableType.Content, 1),
                 new VariableParameters(VariableType.Time, 10),
                 new VariableParameters(VariableType.OtherClassificatory, 3),
                 new VariableParameters(VariableType.OtherClassificatory, 1)
-            };
+            ];
 
-            List<VariableParameters> metaParams = new()
-            {
+            List<VariableParameters> metaParams =
+            [
                 new VariableParameters(VariableType.Content, 10),
                 new VariableParameters(VariableType.Time, 10),
                 new VariableParameters(VariableType.OtherClassificatory, 15),
                 new VariableParameters(VariableType.OtherClassificatory, 7)
-            };
+            ];
 
             mockCachedPxWebConnection.Setup(x => x.GetCubeMetaCachedAsync(It.IsAny<PxFileReference>()))
                 .ThrowsAsync(new BadPxWebResponseException(System.Net.HttpStatusCode.BadRequest, "Foobar"));

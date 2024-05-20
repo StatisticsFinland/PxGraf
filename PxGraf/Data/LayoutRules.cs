@@ -14,10 +14,10 @@ namespace PxGraf.Data
         public static Layout GetOneDimensionalLayout(IReadOnlyCubeMeta meta, CubeQuery query)
         {
             return new Layout(
-                rowVariableCodes: new List<string>(),
-                columnVariableCodes: new List<string>() { meta.GetMultivalueVariables()
+                rowVariableCodes: [],
+                columnVariableCodes: [ meta.GetMultivalueVariables()
                 .Where(v => !query.VariableQueries[v.Code].Selectable)
-                .ToArray()[0].Code });
+                .ToArray()[0].Code ]);
         }
 
         public static Layout GetTwoDimensionalLayout(bool pivotRequested, VisualizationType visualizationType, IReadOnlyCubeMeta meta, CubeQuery query)
@@ -35,14 +35,14 @@ namespace PxGraf.Data
             if (transpose)
             {
                 return new Layout(
-                    rowVariableCodes: new List<string>() { multiValueVars[1].Code },
-                    columnVariableCodes: new List<string>() { multiValueVars[0].Code });
+                    rowVariableCodes: [multiValueVars[1].Code],
+                    columnVariableCodes: [multiValueVars[0].Code]);
             }
             else
             {
                 return new Layout(
-                    rowVariableCodes: new List<string>() { multiValueVars[0].Code },
-                    columnVariableCodes: new List<string>() { multiValueVars[1].Code });
+                    rowVariableCodes: [multiValueVars[0].Code],
+                    columnVariableCodes: [multiValueVars[1].Code]);
             }
         }
 
@@ -61,7 +61,7 @@ namespace PxGraf.Data
 
             return new Layout(
                 multiValueVars.Select(v => v.Code).Where(vc => vc != columnVariableCode).ToList(),
-                new List<string>() { columnVariableCode });
+                [columnVariableCode]);
         }
 
         public static Layout GetTableLayout(IReadOnlyList<string> rowCodes, IReadOnlyList<string> columnCodes)

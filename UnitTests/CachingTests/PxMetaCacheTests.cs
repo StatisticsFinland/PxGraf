@@ -25,7 +25,7 @@ namespace CachingTests
                 .Returns(Task.Factory.StartNew(() => (IReadOnlyCubeMeta)new CubeMeta()));
 
             Mock<IPxWebApiResponseCache> mockMemoryCache = new();
-            var fileRef = new PxFileReference(new List<string>() { "test1" }, "testName");
+            var fileRef = new PxFileReference(["test1"], "testName");
 
             mockMemoryCache.Setup(x => x.CheckMetaCacheFreshness(It.IsAny<PxFileReference>())).Returns(false);
             var cachedConnection = new CachedPxWebConnection(mockPxWebApi.Object, mockMemoryCache.Object);
@@ -40,7 +40,7 @@ namespace CachingTests
             Mock<IPxWebApiInterface> mockPxWebApi = new();
 
             Mock<IPxWebApiResponseCache> mockMemoryCache = new();
-            var fileRef = new PxFileReference(new List<string>() { "test1" }, "testName");
+            var fileRef = new PxFileReference(["test1"], "testName");
 
             Task<IReadOnlyCubeMeta> faultyMetaTask = Task.FromException<IReadOnlyCubeMeta>(new BadPxWebResponseException(HttpStatusCode.BadRequest, "This is a faulty task"));
             mockMemoryCache.Setup(x => x.TryGetMeta(fileRef, out faultyMetaTask)).Returns(true);
@@ -62,7 +62,7 @@ namespace CachingTests
                 .Returns(Task.Factory.StartNew(() => (IReadOnlyCubeMeta)new CubeMeta()));
 
             Mock<IPxWebApiResponseCache> mockMemoryCache = new();
-            var fileRef = new PxFileReference(new List<string>() { "test1" }, "testName");
+            var fileRef = new PxFileReference(["test1"], "testName");
 
             Task<IReadOnlyCubeMeta> metaTask = Task.Factory.StartNew(() => (IReadOnlyCubeMeta)new CubeMeta());
             mockMemoryCache.Setup(x => x.TryGetMeta(fileRef, out metaTask)).Returns(true);
@@ -76,15 +76,15 @@ namespace CachingTests
         [Test]
         public static async Task PxMetaFetchTriggersIfUnfreshDataInCache()
         {
-            List<VariableParameters> variables = new()
-            {
+            List<VariableParameters> variables =
+            [
                 new VariableParameters(VariableType.Content, 1),
                 new VariableParameters(VariableType.Time, 5),
                 new VariableParameters(VariableType.Unknown, 1)
-            };
+            ];
 
             var meta = TestDataCubeBuilder.BuildTestMeta(variables);
-            var fileRef = new PxFileReference(new List<string>() { "test1" }, "testName");
+            var fileRef = new PxFileReference(["test1"], "testName");
 
             Mock<IPxWebApiInterface> mockPxWebApi = new();
             mockPxWebApi.Setup(x => x.GetPxTableMetaAsync(It.IsAny<PxFileReference>(), It.IsAny<List<string>>()))

@@ -7,7 +7,10 @@ namespace PxGraf.ChartTypeSelection.ChartSpecificLimits
     /// <summary>
     /// Functionality to check the query compatibility with the line chart spesific rules.
     /// </summary>
-    public class LineChartCheck : ChartRulesCheck
+    /// <remarks>
+    /// Default constructor
+    /// </remarks>
+    public class LineChartCheck(IChartTypeLimits limits) : ChartRulesCheck(limits)
     {
         // Elimination conditions and priorities:
         // 1. Must contain time or progressive multiselect dimension
@@ -18,11 +21,6 @@ namespace PxGraf.ChartTypeSelection.ChartSpecificLimits
         /// Line chart
         /// </summary>
         public override VisualizationType Type => VisualizationType.LineChart;
-
-        /// <summary>
-        /// Default constructor
-        /// </summary>
-        public LineChartCheck(IChartTypeLimits limits) : base(limits) { }
 
 
         /// <summary>

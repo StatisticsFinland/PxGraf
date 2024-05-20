@@ -7,7 +7,11 @@ namespace PxGraf.ChartTypeSelection.ChartSpecificLimits
     /// <summary>
     /// Functionality to check the query compatibility with the stacked horizontal bar chart spesific rules.
     /// </summary>
-    public class StackedHorizontalBarChartCheck : ChartRulesCheck
+    /// <remarks>
+    /// Default constructor
+    /// </remarks>
+    /// <param name="limits"></param>
+    public class StackedHorizontalBarChartCheck(IChartTypeLimits limits) : ChartRulesCheck(limits)
     {
         // Elimination conditions and priorities:
         // 1. Minimum number of multiselect dimensions
@@ -24,12 +28,6 @@ namespace PxGraf.ChartTypeSelection.ChartSpecificLimits
         /// Stacked horizontal bar chart
         /// </summary>
         public override VisualizationType Type => VisualizationType.StackedHorizontalBarChart;
-
-        /// <summary>
-        /// Default constructor
-        /// </summary>
-        /// <param name="limits"></param>
-        public StackedHorizontalBarChartCheck(IChartTypeLimits limits) : base(limits) {}
 
 
         /// <summary>

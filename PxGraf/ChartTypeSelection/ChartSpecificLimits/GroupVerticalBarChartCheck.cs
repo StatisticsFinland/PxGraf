@@ -7,7 +7,11 @@ namespace PxGraf.ChartTypeSelection.ChartSpecificLimits
     /// <summary>
     /// Functionality to check the query compatibility with the group vertical bar chart spesific rules.
     /// </summary>
-    public class GroupVerticalBarChartCheck : ChartRulesCheck
+    /// <remarks>
+    /// Default constructor
+    /// </remarks>
+    /// <param name="limits"></param>
+    public class GroupVerticalBarChartCheck(IChartTypeLimits limits) : ChartRulesCheck(limits)
     {
         // Elimination conditions and priorities:
         // 1. Minumum number of multiselect dimensions
@@ -23,12 +27,6 @@ namespace PxGraf.ChartTypeSelection.ChartSpecificLimits
         /// Group vertical bar chart
         /// </summary>
         public override VisualizationType Type => VisualizationType.GroupVerticalBarChart;
-
-        /// <summary>
-        /// Default constructor
-        /// </summary>
-        /// <param name="limits"></param>
-        public GroupVerticalBarChartCheck(IChartTypeLimits limits) : base(limits) { }
 
         /// <summary>
         /// Checks query compatibility with group vertical bar charts fixed rules.

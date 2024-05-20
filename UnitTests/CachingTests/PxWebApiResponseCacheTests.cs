@@ -9,9 +9,7 @@ using PxGraf.Models.Queries;
 using PxGraf.PxWebInterface.Caching;
 using PxGraf.PxWebInterface.SerializationModels;
 using PxGraf.Settings;
-using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Threading.Tasks;
 using UnitTests.Fixtures;
 
@@ -22,7 +20,7 @@ namespace CachingTests
         [OneTimeSetUp]
         public static void DoSetup()
         {
-            Localization.Load(Path.Combine(AppContext.BaseDirectory, "Pars\\translations.json"));
+            Localization.Load(TranslationFixture.DefaultLanguage, TranslationFixture.Translations);
 
             IConfiguration configuration = new ConfigurationBuilder()
                 .AddInMemoryCollection(TestInMemoryConfiguration.Get())
@@ -39,7 +37,7 @@ namespace CachingTests
             mockMemoryCache.Setup(x => x.TryGetValue(It.IsAny<string>(), out outParam)).Returns(true);
 
             PxWebApiResponseCache cache = new (mockMemoryCache.Object);
-            Assert.IsTrue(cache.TryGetMeta(new PxFileReference(new System.Collections.Generic.List<string>(), "testName"), out Task<IReadOnlyCubeMeta> _));
+            Assert.IsTrue(cache.TryGetMeta(new PxFileReference([], "testName"), out Task<IReadOnlyCubeMeta> _));
         }
 
         [Test]
@@ -51,7 +49,7 @@ namespace CachingTests
             mockMemoryCache.Setup(x => x.TryGetValue(It.IsAny<string>(), out outParam)).Returns(false);
 
             PxWebApiResponseCache cache = new(mockMemoryCache.Object);
-            Assert.IsFalse(cache.TryGetMeta(new PxFileReference(new System.Collections.Generic.List<string>(), "testName"), out Task<IReadOnlyCubeMeta> _));
+            Assert.IsFalse(cache.TryGetMeta(new PxFileReference([], "testName"), out Task<IReadOnlyCubeMeta> _));
         }
 
         [Test]
@@ -63,7 +61,7 @@ namespace CachingTests
             mockMemoryCache.Setup(m => m.CreateEntry(It.IsAny<object>())).Returns(cacheEntry);
 
             PxWebApiResponseCache cache = new(mockMemoryCache.Object);
-            cache.CacheMeta(new PxFileReference(new List<string>(), "testName"), Task.FromResult<IReadOnlyCubeMeta>(new CubeMeta()));
+            cache.CacheMeta(new PxFileReference([], "testName"), Task.FromResult<IReadOnlyCubeMeta>(new CubeMeta()));
 
             mockMemoryCache.Verify(m => m.CreateEntry(It.IsAny<object>()), Times.Exactly(2));
             Mock.Get(cacheEntry).Verify(c => c.Dispose(), Times.Exactly(2));
@@ -78,7 +76,7 @@ namespace CachingTests
             mockMemoryCache.Setup(m => m.CreateEntry(It.IsAny<object>())).Returns(cacheEntry);
 
             PxWebApiResponseCache cache = new(mockMemoryCache.Object);
-            cache.UpdateMetaCacheFreshness(new PxFileReference(new List<string>(), "testName"));
+            cache.UpdateMetaCacheFreshness(new PxFileReference([], "testName"));
 
             mockMemoryCache.Verify(m => m.CreateEntry(It.IsAny<object>()), Times.Once());
             Mock.Get(cacheEntry).Verify(c => c.Dispose(), Times.Once());
@@ -91,7 +89,7 @@ namespace CachingTests
             mockCache.Setup(x => x.TryGetValue(It.IsAny<string>(), out It.Ref<object>.IsAny)).Returns(true);
 
             PxWebApiResponseCache cache = new(mockCache.Object);
-            Assert.IsTrue(cache.CheckMetaCacheFreshness(new PxFileReference(new List<string>(), "testName")));
+            Assert.IsTrue(cache.CheckMetaCacheFreshness(new PxFileReference([], "testName")));
         }
 
         [Test]
@@ -101,7 +99,7 @@ namespace CachingTests
             mockCache.Setup(x => x.TryGetValue(It.IsAny<string>(), out It.Ref<object>.IsAny)).Returns(false);
 
             PxWebApiResponseCache cache = new(mockCache.Object);
-            Assert.IsFalse(cache.CheckMetaCacheFreshness(new PxFileReference(new List<string>(), "testName")));
+            Assert.IsFalse(cache.CheckMetaCacheFreshness(new PxFileReference([], "testName")));
         }
 
         [Test]
@@ -111,7 +109,7 @@ namespace CachingTests
             mockCache.Setup(x => x.Remove(It.IsAny<string>()));
 
             PxWebApiResponseCache cache = new(mockCache.Object);
-            cache.RemoveMeta(new PxFileReference(new List<string>(), "testName"));
+            cache.RemoveMeta(new PxFileReference([], "testName"));
 
             mockCache.Verify(x => x.Remove(It.IsAny<string>()), Times.Exactly(2));
         }
@@ -224,7 +222,7 @@ namespace CachingTests
             mockMemoryCache.Setup(x => x.TryGetValue(It.IsAny<string>(), out outParam)).Returns(true);
 
             PxWebApiResponseCache cache = new(mockMemoryCache.Object);
-            Assert.IsTrue(cache.TryGetTableItems("en", new List<string>(), out Task<List<TableListResponseItem>> _));
+            Assert.IsTrue(cache.TryGetTableItems("en", [], out Task<List<TableListResponseItem>> _));
         }
 
         [Test]
@@ -236,7 +234,7 @@ namespace CachingTests
             mockMemoryCache.Setup(x => x.TryGetValue(It.IsAny<string>(), out outParam)).Returns(false);
 
             PxWebApiResponseCache cache = new(mockMemoryCache.Object);
-            Assert.IsFalse(cache.TryGetTableItems("en", new List<string>(), out Task<List<TableListResponseItem>> _));
+            Assert.IsFalse(cache.TryGetTableItems("en", [], out Task<List<TableListResponseItem>> _));
         }
 
         [Test]
@@ -248,7 +246,7 @@ namespace CachingTests
             mockMemoryCache.Setup(m => m.CreateEntry(It.IsAny<object>())).Returns(cacheEntry);
 
             PxWebApiResponseCache cache = new(mockMemoryCache.Object);
-            cache.CacheTableItems("en", new List<string>(), Task.FromResult(new List<TableListResponseItem>()));
+            cache.CacheTableItems("en", [], Task.FromResult(new List<TableListResponseItem>()));
 
             mockMemoryCache.Verify(m => m.CreateEntry(It.IsAny<object>()), Times.Once);
             Mock.Get(cacheEntry).Verify(c => c.Dispose(), Times.Once);
@@ -261,7 +259,7 @@ namespace CachingTests
             mockCache.Setup(x => x.Remove(It.IsAny<string>()));
 
             PxWebApiResponseCache cache = new(mockCache.Object);
-            cache.RemoveTableItems("en", new List<string>());
+            cache.RemoveTableItems("en", []);
 
             mockCache.Verify(x => x.Remove(It.IsAny<string>()), Times.Once);
         }

@@ -19,26 +19,19 @@ using System.Diagnostics.CodeAnalysis;
 namespace PxGraf.PxWebInterface
 {
     [ExcludeFromCodeCoverage] // HTTP client object can not be mocked with reasonable effort
-    public class PxWebV1ApiInterface : IPxWebApiInterface
+    public class PxWebV1ApiInterface(IHttpClientFactory clientFactory, ILogger<PxWebV1ApiInterface> logger) : IPxWebApiInterface
     {
-        private readonly IHttpClientFactory _clientFactory;
-        private readonly ILogger<PxWebV1ApiInterface> _logger;
+        private readonly IHttpClientFactory _clientFactory = clientFactory;
+        private readonly ILogger<PxWebV1ApiInterface> _logger = logger;
         private const int RetryDelayMs = 2000;
         private const int RetryMaxTryCount = 10;
-
-
-        public PxWebV1ApiInterface(IHttpClientFactory clientFactory, ILogger<PxWebV1ApiInterface> logger)
-        {
-            _clientFactory = clientFactory;
-            _logger = logger;
-        }
 
         public async Task<IReadOnlyCubeMeta> GetPxTableMetaAsync(PxFileReference tableReference, IEnumerable<string> languages = null)
         {
             IEnumerable<string> langOptions = languages ?? Configuration.Current.LanguageOptions.Available;
             CubeMeta resultMeta = new();
 
-            List<string> succeededLanguages = new();
+            List<string> succeededLanguages = [];
             foreach (var lang in langOptions)
             {
                 PxMetaResponse response = await GetPxWebMetaRespInLanguageAsync(lang, tableReference);
@@ -134,7 +127,7 @@ namespace PxGraf.PxWebInterface
         public async Task<List<DataBaseListResponseItem>> GetDataBaseListingAsync(string lang)
         {
             _logger.LogDebug("PxWeb GET: api/v1/{Lang}/", lang);
-            var resp = await GetAsync($"api/v1/{lang}/");
+            HttpResponseMessage resp = await GetAsync($"api/v1/{lang}/");
             if (resp.IsSuccessStatusCode)
             {
                 string json = await resp.Content.ReadAsStringAsync();
@@ -145,7 +138,7 @@ namespace PxGraf.PxWebInterface
             {
                 _logger.LogWarning("PxWeb: api/v1/{Lang}/ failed with status code {StatusCode}", lang, resp.StatusCode);
             }
-            return new List<DataBaseListResponseItem>();
+            return [];
 
         }
 
@@ -156,7 +149,7 @@ namespace PxGraf.PxWebInterface
         {
             string joinedPath = string.Join("/", path);
             _logger.LogDebug("PxWeb GET: api/v1/{Lang}/{JoinedPath}/", lang, joinedPath);
-            var resp = await GetAsync($"api/v1/{lang}/{joinedPath}/");
+            HttpResponseMessage resp = await GetAsync($"api/v1/{lang}/{joinedPath}/");
             if (resp.IsSuccessStatusCode)
             {
                 string json = await resp.Content.ReadAsStringAsync();
@@ -167,7 +160,7 @@ namespace PxGraf.PxWebInterface
             {
                 _logger.LogWarning("PxWeb: api/v1/{Lang}/ failed with status code {StatusCode}", lang, resp.StatusCode);
             }
-            return new List<TableListResponseItem>();
+            return [];
         }
 
         /// <summary>
@@ -188,9 +181,9 @@ namespace PxGraf.PxWebInterface
                 _logger.LogWarning("PxWeb: GetSinglePointJsonStat2RespAsync failed because one of the variables has no values. pxFile: {PxFile}, referenceMeta: {ReferenceMeta}, language: {Language}.", pxFile, referenceMeta, language);
                 return null;
             }
-            var queries = referenceMeta.Variables.Select(v => BuildVariableQuery(v.Code, new string[] { v.IncludedValues[0].Code }));
-            var postParams = BuildPostParams(queries);
-            var jsonStat2 = await GetPxWebDataResponseAsync<JsonStat2>(language, pxFile, postParams);
+            IEnumerable<PxWebDataQueryPostParams.VariableQuery> queries = referenceMeta.Variables.Select(v => BuildVariableQuery(v.Code, [v.IncludedValues[0].Code]));
+            PxWebDataQueryPostParams postParams = BuildPostParams(queries);
+            JsonStat2 jsonStat2 = await GetPxWebDataResponseAsync<JsonStat2>(language, pxFile, postParams);
             FixPxWebBrokenDateFormat(jsonStat2);
             return jsonStat2;
         }
@@ -235,7 +228,7 @@ namespace PxGraf.PxWebInterface
 
         private static IEnumerable<PxWebDataQueryPostParams.VariableQuery> BuildMinimalContentVariableQueries(IEnumerable<Variable> variables)
         {
-            foreach (var variable in variables)
+            foreach (Variable variable in variables)
             {
                 string[] selectedValues;
                 if (variable.Type == Enums.VariableType.Content)
@@ -244,7 +237,7 @@ namespace PxGraf.PxWebInterface
                 }
                 else
                 {
-                    selectedValues = new string[] { variable.IncludedValues[0].Code };
+                    selectedValues = [variable.IncludedValues[0].Code];
                 }
 
                 yield return BuildVariableQuery(variable.Code, selectedValues);
@@ -381,8 +374,6 @@ namespace PxGraf.PxWebInterface
         }
 
         /*
-          TODO: Fix original bug in PxWeb and remove this workaround.
-          
           Currently PxWeb may return dates at yyyy-MM-ddTHH.mm.ssZ format while ISO-8601 is clearly intended: yyyy-MM-ddTHH:mm:ssZ
           Bug may originate for something like: dateTime.ToString("yyyy-MM-ddTHH:mm:ssZ") or similiar.
           Point there is that while "-", "T", "Z" are just meaningless separators that will come to final output as is, ":" IS NOT!

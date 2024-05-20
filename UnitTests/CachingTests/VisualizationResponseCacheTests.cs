@@ -18,7 +18,7 @@ namespace CachingTests
         [SetUp]
         public void DoSetup()
         {
-            Localization.Load(Path.Combine(AppContext.BaseDirectory, "Pars\\translations.json"));
+            Localization.Load(TranslationFixture.DefaultLanguage, TranslationFixture.Translations);
             IConfiguration configuration = new ConfigurationBuilder()
                 .AddInMemoryCollection(TestInMemoryConfiguration.Get())
                 .Build();

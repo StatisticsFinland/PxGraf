@@ -17,11 +17,11 @@ namespace PxGraf.Data
     }
 
     [DebuggerDisplay("{Type == DataValueType.Exist ? (object)Value : (object)Type}")]
-    public readonly struct DataValue
+    public readonly struct DataValue(double value, DataValueType type)
     {
         //Indexed by DataValueType with offset of one
-        private static readonly string[] MissingValueDotCodes = new string[]
-        {
+        private static readonly string[] MissingValueDotCodes =
+        [
             ".",
             "..",
             "...",
@@ -29,13 +29,11 @@ namespace PxGraf.Data
             ".....",
             "......",
             "-",
-        };
+        ];
 
+        public readonly DataValueType Type = type;
 
-
-        public readonly DataValueType Type;
-
-        public readonly double UnsafeValue;
+        public readonly double UnsafeValue = value;
 
         public double Value
         {
@@ -50,14 +48,6 @@ namespace PxGraf.Data
                     throw new InvalidOperationException("Value does not exist");
                 }
             }
-        }
-
-        //Note that struct will always have parameterless constructor too which init zero values: { Value = 0.0, Type = Exist }
-        //Note that Value is always set even that it's only recoveable if type = Exist. It does not harm and we might want to recover exact original value later.
-        public DataValue(double value, DataValueType type)
-        {
-            UnsafeValue = value;
-            Type = type;
         }
 
         public static implicit operator double?(DataValue d) => d.Type == DataValueType.Exist ? d.Value : null;
@@ -108,7 +98,7 @@ namespace PxGraf.Data
 
         public string ToHumanReadableString(int decimals, CultureInfo formatProvider)
         {
-            if (TryGetValue(out var value))
+            if (TryGetValue(out double tryValue))
             {
                 /*
                   .NET Core 2.1+ uses MidpointRounding.ToEven style rounding inside double.ToString("N#") so we need to use explicit rounding.
@@ -118,7 +108,7 @@ namespace PxGraf.Data
                     ((double)10.5).ToString("N0") => 11 // .NET Framework 4
                     ((double)10.5).ToString("N0") => 10 // .NET Core 3.1 !!!
                 */
-                var roundedValue = Math.Round(value, decimals, MidpointRounding.AwayFromZero);
+                var roundedValue = Math.Round(tryValue, decimals, MidpointRounding.AwayFromZero);
                 return roundedValue.ToString("N" + decimals, formatProvider);
             }
             else
@@ -129,10 +119,10 @@ namespace PxGraf.Data
 
         public string ToMachineReadableString(int decimals)
         {
-            if (TryGetValue(out var value))
+            if (TryGetValue(out double tryValue))
             {
                 var formatString = "0." + new string('0', decimals);
-                return value.ToString(formatString, CultureInfo.InvariantCulture);
+                return tryValue.ToString(formatString, CultureInfo.InvariantCulture);
             }
             else
             {

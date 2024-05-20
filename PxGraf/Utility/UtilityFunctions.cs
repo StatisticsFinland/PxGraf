@@ -37,7 +37,7 @@ namespace PxGraf.Utility
         {
             //Naturally this implementation calculates product in unconventional order, sort of inverted.
             //This is compensated by pre and post reversal.
-            IEnumerable<IEnumerable<T>> result = new[] { Enumerable.Empty<T>() };
+            IEnumerable<IEnumerable<T>> result = [[]];
             foreach (IEnumerable<T> set in setOfSets.Reverse()) result = CartesianProduct(result, set);
             return result.Select(r => r.Reverse());
         }

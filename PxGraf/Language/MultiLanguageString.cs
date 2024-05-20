@@ -37,7 +37,7 @@ namespace PxGraf.Language
         {
             Debug.Assert(langs.Count == strings.Count);
 
-            _translations = new Dictionary<string, string>();
+            _translations = [];
             for (int langIndex = 0; langIndex < langs.Count; langIndex++)
             {
                 _translations[langs[langIndex]] = strings[langIndex];
@@ -64,7 +64,7 @@ namespace PxGraf.Language
         /// </summary>
         public MultiLanguageString()
         {
-            _translations = new Dictionary<string, string>();
+            _translations = [];
         }
 
         /// <summary>

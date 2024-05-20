@@ -11,14 +11,14 @@ namespace LayoutTests
         {
             Layout layout1 = new()
             {
-                RowVariableCodes = new List<string> { "foo", "bar" },
-                ColumnVariableCodes = new List<string> { "foo", "bar" },
+                RowVariableCodes = ["foo", "bar"],
+                ColumnVariableCodes = ["foo", "bar"],
             };
 
             Layout layout2 = new()
             {
-                RowVariableCodes = new List<string> { "foo", "bar" },
-                ColumnVariableCodes = new List<string> { "foo", "bar" },
+                RowVariableCodes = ["foo", "bar"],
+                ColumnVariableCodes = ["foo", "bar"],
             };
 
             Assert.IsTrue(layout1.Equals(layout2));
@@ -29,14 +29,14 @@ namespace LayoutTests
         {
             Layout layout1 = new()
             {
-                RowVariableCodes = new List<string> { "foo", "bar" },
-                ColumnVariableCodes = new List<string> { "foo", "bar" }
+                RowVariableCodes = ["foo", "bar"],
+                ColumnVariableCodes = ["foo", "bar"]
             };
 
             Layout layout2 = new()
             {
-                RowVariableCodes = new List<string> { "bar", "foo" },
-                ColumnVariableCodes = new List<string> { "foo", "bar" }
+                RowVariableCodes = ["bar", "foo"],
+                ColumnVariableCodes = ["foo", "bar"]
             };
 
             Assert.IsFalse(layout1.Equals(layout2));
@@ -47,14 +47,14 @@ namespace LayoutTests
         {
             Layout layout1 = new()
             {
-                RowVariableCodes = new List<string> { "foo", "bar" },
-                ColumnVariableCodes = new List<string> { "foo", "bar" }
+                RowVariableCodes = ["foo", "bar"],
+                ColumnVariableCodes = ["foo", "bar"]
             };
 
             Layout layout2 = new()
             {
-                RowVariableCodes = new List<string> { "xxx", "bar" },
-                ColumnVariableCodes = new List<string> { "foo", "bar" }
+                RowVariableCodes = ["xxx", "bar"],
+                ColumnVariableCodes = ["foo", "bar"]
             };
 
             Assert.IsFalse(layout1.Equals(layout2));
@@ -65,11 +65,11 @@ namespace LayoutTests
         {
             Layout layout1 = new()
             {
-                RowVariableCodes = new List<string> { "foo", "bar" },
-                ColumnVariableCodes = new List<string> { "foo", "bar" }
+                RowVariableCodes = ["foo", "bar"],
+                ColumnVariableCodes = ["foo", "bar"]
             };
 
-            List<string> layout2 = new() { "foo", "bar" };
+            List<string> layout2 = ["foo", "bar"];
 
             Assert.IsFalse(layout1.Equals(layout2));
         }
@@ -79,8 +79,8 @@ namespace LayoutTests
         {
             Layout layout1 = new()
             {
-                RowVariableCodes = new List<string> { "foo", "bar" },
-                ColumnVariableCodes = new List<string> { "foo", "bar" }
+                RowVariableCodes = ["foo", "bar"],
+                ColumnVariableCodes = ["foo", "bar"]
             };
 
             Layout layout2 = null;

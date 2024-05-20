@@ -5,7 +5,6 @@ using PxGraf.Enums;
 using PxGraf.Models.Queries;
 using PxGraf.Models.SavedQueries;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace PxGraf.ChartTypeSelection
 {
@@ -107,12 +106,12 @@ namespace PxGraf.ChartTypeSelection
             VerticalBarChart = new VerticalBarChartCheck(limits.VerticalBarChartLimits);
             GroupVerticalBarChart = new GroupVerticalBarChartCheck(limits.GroupVerticalBarChartLimits);
             StackedVerticalBarChart = new StackedVerticalBarChartCheck(limits.StackedVerticalBarChartLimits);
-            PercentVerticalBarChart = new PercentVerticalBarChartCheck(limits.StackedVerticalBarChartLimits); //TODO: new rule set for percent even if it is identical
+            PercentVerticalBarChart = new PercentVerticalBarChartCheck(limits.StackedVerticalBarChartLimits); // Percent vertical should have its own rule set
 
             HorizontalBarChart = new HorizontalBarChartCheck(limits.HorizontalBarChartLimits);
             GroupHorizontalBarChart = new GroupHorizontalBarChartCheck(limits.GroupHorizontalBarChartLimits);
             StackedHorizontalBarChart = new StackedHorizontalBarChartCheck(limits.StackedHorizontalBarChartLimits);
-            PercentHorizontalBarChart = new PercentHorizontalBarChartCheck(limits.StackedHorizontalBarChartLimits); //TODO: new rule set for percent even if it is identical
+            PercentHorizontalBarChart = new PercentHorizontalBarChartCheck(limits.StackedHorizontalBarChartLimits); // Percent horizontal should have its own rule set
 
             PieChart = new PieChartCheck(limits.PieChartLimits);
             LineChart = new LineChartCheck(limits.LineChartLimits);
@@ -121,8 +120,8 @@ namespace PxGraf.ChartTypeSelection
 
             Table = new TableCheck(limits.TableLimits);
 
-            AllLimitChecks = new List<ChartRulesCheck>()
-            {
+            AllLimitChecks =
+            [
                 LineChart,
                 HorizontalBarChart,
                 GroupHorizontalBarChart,
@@ -136,15 +135,15 @@ namespace PxGraf.ChartTypeSelection
                 PyramidChart,
                 ScatterPlot,
                 Table
-            };
+            ];
         }
 
         public IReadOnlyList<VisualizationType> GetValidChartTypes(DataCube cube)
         {
-            List<VisualizationType> validTypes = new();
-            foreach (var check in AllLimitChecks)
+            List<VisualizationType> validTypes = [];
+            foreach (ChartRulesCheck check in AllLimitChecks)
             {
-                if (!check.CheckValidity(VisualizationTypeSelectionObject.FromCube(cube)).Any())
+                if (check.CheckValidity(VisualizationTypeSelectionObject.FromCube(cube)).Count == 0)
                 {
                     validTypes.Add(check.Type);
                 }
@@ -155,10 +154,10 @@ namespace PxGraf.ChartTypeSelection
 
         public IReadOnlyList<VisualizationType> GetValidChartTypes(CubeQuery query, DataCube cube)
         {
-            List<VisualizationType> validTypes = new();
-            foreach (var check in AllLimitChecks)
+            List<VisualizationType> validTypes = [];
+            foreach (ChartRulesCheck check in AllLimitChecks)
             {
-                if (!check.CheckValidity(VisualizationTypeSelectionObject.FromQueryAndCube(query, cube)).Any())
+                if (check.CheckValidity(VisualizationTypeSelectionObject.FromQueryAndCube(query, cube)).Count == 0)
                 {
                     validTypes.Add(check.Type);
                 }
@@ -169,10 +168,10 @@ namespace PxGraf.ChartTypeSelection
 
         public IReadOnlyList<VisualizationType> GetValidChartTypes(CubeQuery query, ArchiveCube cube)
         {
-            List<VisualizationType> validTypes = new();
-            foreach (var check in AllLimitChecks)
+            List<VisualizationType> validTypes = [];
+            foreach (ChartRulesCheck check in AllLimitChecks)
             {
-                if (!check.CheckValidity(VisualizationTypeSelectionObject.FromQueryAndCube(query, cube)).Any())
+                if (check.CheckValidity(VisualizationTypeSelectionObject.FromQueryAndCube(query, cube)).Count == 0)
                 {
                     validTypes.Add(check.Type);
                 }
@@ -183,8 +182,8 @@ namespace PxGraf.ChartTypeSelection
 
         public IReadOnlyDictionary<VisualizationType, IReadOnlyList<ChartRejectionInfo>> GetRejectionReasons(CubeQuery query, DataCube cube)
         {
-            Dictionary<VisualizationType, IReadOnlyList<ChartRejectionInfo>> rejectionReasons = new();
-            foreach (var check in AllLimitChecks)
+            Dictionary<VisualizationType, IReadOnlyList<ChartRejectionInfo>> rejectionReasons = [];
+            foreach (ChartRulesCheck check in AllLimitChecks)
             {
                 rejectionReasons[check.Type] = check.CheckValidity(VisualizationTypeSelectionObject.FromQueryAndCube(query, cube));
             }

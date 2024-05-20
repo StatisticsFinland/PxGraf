@@ -27,8 +27,8 @@
         /// </summary>
         public static bool IsSumValue(this PxMetaResponse.Variable variable, int valueIndex)
         {
-            return variable.Values[valueIndex].ToLower() == "sss" ||
-                variable.ValueTexts[valueIndex].ToLower() == "yhteensä";
+            return variable.Values[valueIndex].Equals("sss", System.StringComparison.CurrentCultureIgnoreCase) ||
+                variable.ValueTexts[valueIndex].Equals("yhteensä", System.StringComparison.CurrentCultureIgnoreCase);
         }
     }
 }

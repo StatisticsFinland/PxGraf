@@ -41,8 +41,8 @@ namespace PxGraf.Models.Responses
 
         public QueryInfoResponse()
         {
-            ValidVisualizations = new List<VisualizationType>();
-            VisualizationRejectionReasons = new Dictionary<VisualizationType, MultiLanguageString>();
+            ValidVisualizations = [];
+            VisualizationRejectionReasons = [];
         }
     }
 }

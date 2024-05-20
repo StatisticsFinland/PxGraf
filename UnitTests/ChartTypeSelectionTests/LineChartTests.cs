@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using PxGraf.ChartTypeSelection;
 using PxGraf.ChartTypeSelection.ChartSpecificLimits;
 using PxGraf.ChartTypeSelection.JsonObjects;
 using PxGraf.Enums;
@@ -27,10 +28,10 @@ namespace ChartTypeSelectionTests
         [Test]
         public void NoData_TimeOrProgressiveRequired()
         {
-            List<VariableParameters> dimension = new();
+            List<VariableParameters> dimension = [];
 
-            var input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
-            var check = new LineChartCheck(Limits.LineChartLimits);
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
+            LineChartCheck check = new(Limits.LineChartLimits);
 
             Assert.AreEqual(RejectionReason.TimeOrProgressiveRequired, check.CheckValidity(input)[0].Reason);
         }
@@ -42,20 +43,20 @@ namespace ChartTypeSelectionTests
         [Test]
         public void ValidWithTime_Pass()
         {
-            List<VariableParameters> dimension = new()
-            {
+            List<VariableParameters> dimension =
+            [
                 new VariableParameters(VariableType.Time, 2),
                 new VariableParameters(VariableType.Content, 1),
-            };
+            ];
 
-            var input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
-            var check = new LineChartCheck(Limits.LineChartLimits);
-            var reasons = check.CheckValidity(input);
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
+            LineChartCheck check = new(Limits.LineChartLimits);
+            List<ChartRejectionInfo> reasons = check.CheckValidity(input);
 
             string msg = "Ok";
             if (reasons.Count > 0) msg = reasons[0].ToString();
 
-            Assert.True(!reasons.Any(), msg);
+            Assert.True(reasons.Count == 0, msg);
         }
 
         /// <summary>
@@ -65,20 +66,20 @@ namespace ChartTypeSelectionTests
         [Test]
         public void ValidWithTimeAndContent_Pass()
         {
-            List<VariableParameters> dimension = new()
-            {
+            List<VariableParameters> dimension =
+            [
                 new VariableParameters(VariableType.Time, 10),
                 new VariableParameters(VariableType.Content, 1)
-            };
+            ];
 
-            var input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
-            var check = new LineChartCheck(Limits.LineChartLimits);
-            var reasons = check.CheckValidity(input);
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
+            LineChartCheck check = new(Limits.LineChartLimits);
+            List<ChartRejectionInfo> reasons = check.CheckValidity(input);
 
             string msg = "Ok";
             if (reasons.Count > 0) msg = reasons[0].ToString();
 
-            Assert.True(!reasons.Any(), msg);
+            Assert.True(reasons.Count == 0, msg);
         }
 
         /// <summary>
@@ -88,21 +89,21 @@ namespace ChartTypeSelectionTests
         [Test]
         public void ValidWithTimeContentAndOther_Pass()
         {
-            List<VariableParameters> dimension = new()
-            {
+            List<VariableParameters> dimension =
+            [
                 new VariableParameters(VariableType.Time, 10),
                 new VariableParameters(VariableType.Unknown, 4),
                 new VariableParameters(VariableType.Content, 1)
-            };
+            ];
 
-            var input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
-            var check = new LineChartCheck(Limits.LineChartLimits);
-            var reasons = check.CheckValidity(input);
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
+            LineChartCheck check = new(Limits.LineChartLimits);
+            List<ChartRejectionInfo> reasons = check.CheckValidity(input);
 
             string msg = "Ok";
             if (reasons.Count > 0) msg = reasons[0].ToString();
 
-            Assert.True(!reasons.Any(), msg);
+            Assert.True(reasons.Count == 0, msg);
         }
 
         /// <summary>
@@ -112,20 +113,20 @@ namespace ChartTypeSelectionTests
         [Test]
         public void ValidWithProgressive_Pass()
         {
-            List<VariableParameters> dimension = new()
-            {
+            List<VariableParameters> dimension =
+            [
                 new VariableParameters(VariableType.Ordinal, 2),
                 new VariableParameters(VariableType.Content, 1),
-            };
+            ];
 
-            var input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
-            var check = new LineChartCheck(Limits.LineChartLimits);
-            var reasons = check.CheckValidity(input);
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
+            LineChartCheck check = new(Limits.LineChartLimits);
+            List<ChartRejectionInfo> reasons = check.CheckValidity(input);
 
             string msg = "Ok";
             if (reasons.Count > 0) msg = reasons[0].ToString();
 
-            Assert.True(!reasons.Any(), msg);
+            Assert.True(reasons.Count == 0, msg);
         }
 
         /// <summary>
@@ -135,13 +136,13 @@ namespace ChartTypeSelectionTests
         [Test]
         public void FirstMultiselectHAs1000_FirstMultiselectOverMax()
         {
-            List<VariableParameters> dimension = new()
-            {
+            List<VariableParameters> dimension =
+            [
                 new VariableParameters(VariableType.Time, 1000)
-            };
+            ];
 
-            var input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
-            var check = new LineChartCheck(Limits.LineChartLimits);
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
+            LineChartCheck check = new(Limits.LineChartLimits);
 
             Assert.AreEqual(RejectionReason.FirstMultiselectOverMax, check.CheckValidity(input)[0].Reason);
         }
@@ -153,15 +154,15 @@ namespace ChartTypeSelectionTests
         [Test]
         public void LargeMultiselectProduct_MultiselectProductOverMax()
         {
-            List<VariableParameters> dimension = new()
-            {
+            List<VariableParameters> dimension =
+            [
                 new VariableParameters(VariableType.Ordinal, 6),
                 new VariableParameters(VariableType.Unknown, 4),
                 new VariableParameters(VariableType.Time, 5)
-            };
+            ];
 
-            var input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
-            var check = new LineChartCheck(Limits.LineChartLimits);
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
+            LineChartCheck check = new(Limits.LineChartLimits);
 
             Assert.AreEqual(RejectionReason.MultiselectProductOverMax, check.CheckValidity(input)[0].Reason);
         }
@@ -173,14 +174,14 @@ namespace ChartTypeSelectionTests
         [Test]
         public void ProgressiveAndTime_ContentRequired()
         {
-            List<VariableParameters> dimension = new()
-            {
+            List<VariableParameters> dimension =
+            [
                 new VariableParameters(VariableType.Ordinal, 1),
                 new VariableParameters(VariableType.Time, 6)
-            };
+            ];
 
-            var input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
-            var check = new LineChartCheck(Limits.LineChartLimits);
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
+            LineChartCheck check = new(Limits.LineChartLimits);
 
             Assert.AreEqual(RejectionReason.ContentRequired, check.CheckValidity(input)[0].Reason);
         }
@@ -192,21 +193,21 @@ namespace ChartTypeSelectionTests
         [Test]
         public void ProgressiveAndTime_Pass()
         {
-            List<VariableParameters> dimension = new()
-            {
+            List<VariableParameters> dimension =
+            [
                 new VariableParameters(VariableType.Ordinal, 1),
                 new VariableParameters(VariableType.Time, 6),
                 new VariableParameters(VariableType.Content, 1),
-            };
+            ];
 
-            var input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
-            var check = new LineChartCheck(Limits.LineChartLimits);
-            var reasons = check.CheckValidity(input);
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
+            LineChartCheck check = new(Limits.LineChartLimits);
+            List<ChartRejectionInfo> reasons = check.CheckValidity(input);
 
             string msg = "Ok";
             if (reasons.Count > 0) msg = reasons[0].ToString();
 
-            Assert.True(!reasons.Any(), msg);
+            Assert.True(reasons.Count == 0, msg);
         }
 
         /// <summary>
@@ -216,21 +217,21 @@ namespace ChartTypeSelectionTests
         [Test]
         public void TimeAndSelectableContent_Pass()
         {
-            List<VariableParameters> dimension = new()
-            {
+            List<VariableParameters> dimension =
+            [
                 new VariableParameters(VariableType.Ordinal, 1),
                 new VariableParameters(VariableType.Time, 15),
                 new VariableParameters(VariableType.Content, 5) { Selectable = true },
-            };
+            ];
 
-            var input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
-            var check = new LineChartCheck(Limits.LineChartLimits);
-            var reasons = check.CheckValidity(input);
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
+            LineChartCheck check = new(Limits.LineChartLimits);
+            List<ChartRejectionInfo> reasons = check.CheckValidity(input);
 
             string msg = "Ok";
             if (reasons.Count > 0) msg = reasons[0].ToString();
 
-            Assert.True(!reasons.Any(), msg);
+            Assert.True(reasons.Count == 0, msg);
         }
 
         /// <summary>
@@ -240,21 +241,21 @@ namespace ChartTypeSelectionTests
         [Test]
         public void LargeOrdinalAndNominal_Pass()
         {
-            List<VariableParameters> dimension = new()
-            {
+            List<VariableParameters> dimension =
+            [
                 new VariableParameters(VariableType.Ordinal, 25),
                 new VariableParameters(VariableType.OtherClassificatory, 4),
                 new VariableParameters(VariableType.Content, 1),
-            };
+            ];
 
-            var input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
-            var check = new LineChartCheck(Limits.LineChartLimits);
-            var reasons = check.CheckValidity(input);
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
+            LineChartCheck check = new(Limits.LineChartLimits);
+            List<ChartRejectionInfo> reasons = check.CheckValidity(input);
 
             string msg = "Ok";
             if (reasons.Count > 0) msg = reasons[0].ToString();
 
-            Assert.True(!reasons.Any(), msg);
+            Assert.True(reasons.Count == 0, msg);
         }
 
         /// <summary>
@@ -264,15 +265,15 @@ namespace ChartTypeSelectionTests
         [Test]
         public void IrregularTime_IrregularTimeNotAllowed()
         {
-            List<VariableParameters> dimension = new()
-            {
+            List<VariableParameters> dimension =
+            [
                 new VariableParameters(VariableType.Time, 10) { Irregular = true },
                 new VariableParameters(VariableType.OtherClassificatory, 2),
                 new VariableParameters(VariableType.Content, 1),
-            };
+            ];
 
-            var input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
-            var check = new LineChartCheck(Limits.LineChartLimits);
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
+            LineChartCheck check = new(Limits.LineChartLimits);
 
             Assert.AreEqual(RejectionReason.IrregularTimeNotAllowed, check.CheckValidity(input)[0].Reason);
         }

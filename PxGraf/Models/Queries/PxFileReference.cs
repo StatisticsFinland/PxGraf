@@ -32,7 +32,7 @@ namespace PxGraf.Models.Queries
         /// </summary>
         public PxFileReference()
         {
-            Hierarchy = new();
+            Hierarchy = [];
         }
 
         /// <summary>

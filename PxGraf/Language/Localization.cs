@@ -7,23 +7,13 @@ using System.Linq;
 
 namespace PxGraf.Language
 {
-    public class Localization
+    public class Localization(Translation translation, CultureInfo cultureInfo)
     {
         private static Dictionary<string, Localization> localizations = null;
         private static Localization defaultLocalization = null;
 
-
-
-        public CultureInfo Culture { get; }
-        public Translation Translation { get; }
-
-        public Localization(Translation translation, CultureInfo cultureInfo)
-        {
-            Translation = translation;
-            Culture = cultureInfo;
-        }
-
-
+        public CultureInfo Culture { get; } = cultureInfo;
+        public Translation Translation { get; } = translation;
 
         public static Localization FromLanguage(string lang)
         {
@@ -51,7 +41,7 @@ namespace PxGraf.Language
             var json = File.ReadAllText(configPath);
 
             //Strict json deserialization
-            var config = JsonConvert.DeserializeObject<LocalizationConfig>(
+            LocalizationConfig config = JsonConvert.DeserializeObject<LocalizationConfig>(
                 json,
                 new JsonSerializerSettings()
                 {
@@ -61,24 +51,22 @@ namespace PxGraf.Language
                     MissingMemberHandling = MissingMemberHandling.Error,
                 }
             );
+            Load(config.DefaultLanguage, config.Translations);
+        }
 
-            localizations = config.Translations.ToDictionary(
-                p => p.Key,
-                p =>
-                {
-                    CultureInfo cultureInfo = new(p.Key);
-                    cultureInfo.NumberFormat.NegativeSign = "-"; // Override other minus signs
-                    return new Localization(p.Value, cultureInfo);
-                }
+        public static void Load(string defaultLang, IReadOnlyDictionary<string, Translation> translations)
+        {
+            localizations = translations.ToDictionary(
+                kvp => kvp.Key,
+                kvp => new Localization(kvp.Value, new CultureInfo(kvp.Key))
             );
-
-            defaultLocalization = localizations[config.DefaultLanguage];
+            defaultLocalization = localizations[defaultLang];
         }
 
         private sealed class LocalizationConfig
         {
             public string DefaultLanguage { get; } = "en";
-            public Dictionary<string, Translation> Translations { get; } = new Dictionary<string, Translation>();
+            public Dictionary<string, Translation> Translations { get; } = [];
         }
 
         /// <summary>

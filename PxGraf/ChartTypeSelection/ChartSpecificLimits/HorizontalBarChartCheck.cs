@@ -7,7 +7,11 @@ namespace PxGraf.ChartTypeSelection.ChartSpecificLimits
     /// <summary>
     /// Functionality to check the query compatibility with the basic horizontal bar chart spesific rules.
     /// </summary>
-    public class HorizontalBarChartCheck : ChartRulesCheck
+    /// <remarks>
+    /// Default constructor
+    /// </remarks>
+    /// <param name="limits"></param>
+    public class HorizontalBarChartCheck(IChartTypeLimits limits) : ChartRulesCheck(limits)
     {
         // Elimination conditions and priorities:
         // 1. Minimum number of multiselect dimension
@@ -21,12 +25,6 @@ namespace PxGraf.ChartTypeSelection.ChartSpecificLimits
         /// Horizontal bar chart
         /// </summary>
         public override VisualizationType Type => VisualizationType.HorizontalBarChart;
-
-        /// <summary>
-        /// Default constructor
-        /// </summary>
-        /// <param name="limits"></param>
-        public HorizontalBarChartCheck(IChartTypeLimits limits) : base(limits) { }
 
         /// <summary>
         /// Checks query compatibility with horizontal bar charts fixed rules.

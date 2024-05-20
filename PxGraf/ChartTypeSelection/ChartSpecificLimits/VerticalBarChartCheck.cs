@@ -7,7 +7,11 @@ namespace PxGraf.ChartTypeSelection.ChartSpecificLimits
     /// <summary>
     /// Functionality to check the query compatibility with the basic vertical bar chart spesific rules.
     /// </summary>
-    public class VerticalBarChartCheck : ChartRulesCheck
+    /// <remarks>
+    /// Default constructor
+    /// </remarks>
+    /// <param name="limits"></param>
+    public class VerticalBarChartCheck(IChartTypeLimits limits) : ChartRulesCheck(limits)
     {
 
         // Elimination conditions and priorities:
@@ -21,12 +25,6 @@ namespace PxGraf.ChartTypeSelection.ChartSpecificLimits
         /// Vertical bar chart
         /// </summary>
         public override VisualizationType Type => VisualizationType.VerticalBarChart;
-
-        /// <summary>
-        /// Default constructor
-        /// </summary>
-        /// <param name="limits"></param>
-        public VerticalBarChartCheck(IChartTypeLimits limits) : base(limits) {}
 
 
         /// <summary>
