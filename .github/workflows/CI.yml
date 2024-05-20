@@ -44,11 +44,8 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: Install frontend dependencies
-        run: |
-            pwd
-            dir
-            cd ./PxGraf.Frontend
-            npm ci
+        run: npm ci
+        working-directory: ./PxGraf.Frontend
 
       - name: Build frontend
         run: |
