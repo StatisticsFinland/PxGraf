@@ -45,7 +45,6 @@ jobs:
 
       - name: Install frontend dependencies
         run: |
-            cd ..
             pwd
             cd ..
             pwd
@@ -54,7 +53,6 @@ jobs:
 
       - name: Build frontend
         run: |
-            cd ..
             pwd
             cd ..
             pwd
@@ -63,7 +61,6 @@ jobs:
 
       - name: Run frontend tests
         run: |
-            cd ..
             pwd
             cd ..
             pwd
