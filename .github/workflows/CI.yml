@@ -50,7 +50,7 @@ jobs:
             cd ..
             pwd
             dir
-            cd .\PxGraf-Frontend\
+            cd .\PxGraf.Frontend\
             npm ci
 
       - name: Build frontend
@@ -60,7 +60,7 @@ jobs:
             cd ..
             pwd
             dir
-            cd .\PxGraf-Frontend\
+            cd .\PxGraf.Frontend\
             npm run build
 
       - name: Run frontend tests
@@ -70,7 +70,7 @@ jobs:
             cd ..
             pwd
             dir
-            cd .\PxGraf-Frontend\
+            cd .\PxGraf.Frontend\
             npm run test
 
       - name: Set up dotnet 
