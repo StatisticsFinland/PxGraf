@@ -48,24 +48,12 @@ jobs:
         working-directory: ./PxGraf.Frontend
 
       - name: Build frontend
-        run: |
-            pwd
-            dir
-            cd ..
-            pwd
-            dir
-            cd .\PxGraf.Frontend\
-            npm run build
+        run: npm run build
+        working-directory: ./PxGraf.Frontend
 
       - name: Run frontend tests
-        run: |
-            pwd
-            dir
-            cd ..
-            pwd
-            dir
-            cd .\PxGraf.Frontend\
-            npm run test
+        run: npm run test
+        working-directory: ./PxGraf.Frontend
 
       - name: Set up dotnet 
         uses: actions/setup-dotnet@v4
