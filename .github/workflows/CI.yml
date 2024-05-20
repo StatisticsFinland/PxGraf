@@ -47,10 +47,7 @@ jobs:
         run: |
             pwd
             dir
-            cd ..
-            pwd
-            dir
-            cd .\PxGraf.Frontend\
+            cd ./PxGraf.Frontend
             npm ci
 
       - name: Build frontend
