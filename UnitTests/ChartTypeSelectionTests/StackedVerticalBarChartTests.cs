@@ -1,10 +1,10 @@
 ﻿using NUnit.Framework;
+using NUnit.Framework.Constraints;
 using PxGraf.ChartTypeSelection;
 using PxGraf.ChartTypeSelection.ChartSpecificLimits;
 using PxGraf.ChartTypeSelection.JsonObjects;
 using PxGraf.Enums;
 using System.Collections.Generic;
-using System.Linq;
 using UnitTests.TestDummies;
 using UnitTests.TestDummies.DummyQueries;
 
@@ -33,7 +33,7 @@ namespace ChartTypeSelectionTests
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(variable);
             StackedVerticalBarChartCheck check = new(Limits.StackedVerticalBarChartLimits);
 
-            Assert.AreEqual(RejectionReason.NotEnoughMultiselections, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.NotEnoughMultiselections));
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace ChartTypeSelectionTests
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(varParams);
             StackedVerticalBarChartCheck check = new(Limits.StackedVerticalBarChartLimits);
 
-            Assert.IsTrue(check.CheckValidity(input).Count == 0);
+            Assert.That(check.CheckValidity(input).Count, Is.EqualTo(0));
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace ChartTypeSelectionTests
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(variable);
             StackedVerticalBarChartCheck check = new(Limits.StackedVerticalBarChartLimits);
 
-            Assert.AreEqual(RejectionReason.NotEnoughMultiselections, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.NotEnoughMultiselections));
         }
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace ChartTypeSelectionTests
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(variable);
             StackedVerticalBarChartCheck check = new(Limits.StackedVerticalBarChartLimits);
 
-            Assert.AreEqual(RejectionReason.TooManyMultiselections, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.TooManyMultiselections));
         }
 
         /// <summary>
@@ -112,7 +112,7 @@ namespace ChartTypeSelectionTests
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(varParams);
             StackedVerticalBarChartCheck check = new(Limits.StackedVerticalBarChartLimits);
 
-            Assert.AreEqual(RejectionReason.ContentRequired, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.ContentRequired));
         }
 
         /// <summary>
@@ -135,7 +135,7 @@ namespace ChartTypeSelectionTests
             string msg = "Ok";
             if (reasons.Count > 0) msg = reasons[0].ToString();
 
-            Assert.True(reasons.Count == 0, msg);
+            Assert.That(reasons.Count, Is.EqualTo(0), msg);
         }
 
         /// <summary>
@@ -153,9 +153,8 @@ namespace ChartTypeSelectionTests
 
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(variable);
             StackedVerticalBarChartCheck check = new(Limits.StackedVerticalBarChartLimits);
-            List<ChartRejectionInfo> reasons = check.CheckValidity(input);
 
-            Assert.AreEqual(RejectionReason.UnambiguousContentUnitRequired, reasons[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.UnambiguousContentUnitRequired));
         }
 
         /// <summary>
@@ -175,7 +174,7 @@ namespace ChartTypeSelectionTests
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(variable);
             StackedVerticalBarChartCheck check = new(Limits.StackedVerticalBarChartLimits);
 
-            Assert.AreEqual(RejectionReason.TimeOrProgressiveRequired, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.TimeOrProgressiveRequired));
         }
 
         /// <summary>
@@ -195,7 +194,7 @@ namespace ChartTypeSelectionTests
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(variable);
             StackedVerticalBarChartCheck check = new(Limits.StackedVerticalBarChartLimits);
 
-            Assert.AreEqual(RejectionReason.CombinationValuesNotAllowed, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.CombinationValuesNotAllowed));
         }
 
         /// <summary>
@@ -215,7 +214,7 @@ namespace ChartTypeSelectionTests
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(variable);
             StackedVerticalBarChartCheck check = new(Limits.StackedVerticalBarChartLimits);
 
-            Assert.AreEqual(RejectionReason.FirstMultiselectOverMax, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.FirstMultiselectOverMax));
         }
 
         /// <summary>
@@ -235,7 +234,7 @@ namespace ChartTypeSelectionTests
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(variable);
             StackedVerticalBarChartCheck check = new(Limits.StackedVerticalBarChartLimits);
 
-            Assert.AreEqual(RejectionReason.SecondMultiselectOverMax, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.SecondMultiselectOverMax));
         }
 
         /// <summary>
@@ -255,7 +254,7 @@ namespace ChartTypeSelectionTests
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(variable, true); // <- true causes negative data to be built
             StackedVerticalBarChartCheck check = new(Limits.StackedVerticalBarChartLimits);
 
-            Assert.AreEqual(RejectionReason.NegativeDataNotAllowed, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.NegativeDataNotAllowed));
         }
 
         /// <summary>
@@ -275,7 +274,7 @@ namespace ChartTypeSelectionTests
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(variable);
             StackedVerticalBarChartCheck check = new(Limits.StackedVerticalBarChartLimits);
 
-            Assert.AreEqual(RejectionReason.IrregularTimeOverMax, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.IrregularTimeOverMax));
         }
 
         /// <summary>
@@ -295,7 +294,7 @@ namespace ChartTypeSelectionTests
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(variable);
             StackedVerticalBarChartCheck check = new(Limits.StackedVerticalBarChartLimits);
 
-            Assert.True(check.CheckValidity(input).Count == 0);
+            Assert.That(check.CheckValidity(input).Count, Is.EqualTo(0));
         }
     }
 }

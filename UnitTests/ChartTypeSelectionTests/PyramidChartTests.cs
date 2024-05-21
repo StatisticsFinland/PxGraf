@@ -33,7 +33,7 @@ namespace ChartTypeSelectionTests
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
             PyramidChartCheck check = new(Limits.PyramidChartLimits);
 
-            Assert.AreEqual(RejectionReason.NotEnoughMultiselections, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.NotEnoughMultiselections));
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace ChartTypeSelectionTests
             string msg = "Ok";
             if (reasons.Count > 0) msg = reasons[0].ToString();
 
-            Assert.True(reasons.Count == 0, msg);
+            Assert.That(reasons.Count, Is.EqualTo(0), msg);
         }
 
         /// <summary>
@@ -78,7 +78,7 @@ namespace ChartTypeSelectionTests
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
             PyramidChartCheck check = new(Limits.PyramidChartLimits);
 
-            Assert.AreEqual(RejectionReason.ContentRequired, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.ContentRequired));
         }
 
         /// <summary>
@@ -97,9 +97,8 @@ namespace ChartTypeSelectionTests
 
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
             PyramidChartCheck check = new(Limits.PyramidChartLimits);
-            List<ChartRejectionInfo> reasons = check.CheckValidity(input);
 
-            Assert.AreEqual(RejectionReason.UnambiguousContentUnitRequired, reasons[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.UnambiguousContentUnitRequired));
         }
 
         /// <summary>
@@ -123,7 +122,7 @@ namespace ChartTypeSelectionTests
             string msg = "Ok";
             if (reasons.Count > 0) msg = reasons[0].ToString();
 
-            Assert.True(reasons.Count == 0, msg);
+            Assert.That(reasons.Count, Is.EqualTo(0), msg);
         }
 
         /// <summary>
@@ -143,7 +142,7 @@ namespace ChartTypeSelectionTests
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
             PyramidChartCheck check = new(Limits.PyramidChartLimits);
 
-            Assert.AreEqual(RejectionReason.TimeRequired, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.TimeRequired));
         }
 
         /// <summary>
@@ -163,7 +162,7 @@ namespace ChartTypeSelectionTests
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
             PyramidChartCheck check = new(Limits.PyramidChartLimits);
 
-            Assert.AreEqual(RejectionReason.TimeOverMax, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.TimeOverMax));
         }
 
         /// <summary>
@@ -184,7 +183,7 @@ namespace ChartTypeSelectionTests
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
             PyramidChartCheck check = new(Limits.PyramidChartLimits);
 
-            Assert.AreEqual(RejectionReason.SecondMultiselectOverMax, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.SecondMultiselectOverMax));
         }
 
         /// <summary>
@@ -205,7 +204,7 @@ namespace ChartTypeSelectionTests
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
             PyramidChartCheck check = new(Limits.PyramidChartLimits);
 
-            Assert.AreEqual(RejectionReason.FirstMultiselectBelowMin, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.FirstMultiselectBelowMin));
         }
 
         /// <summary>
@@ -226,7 +225,7 @@ namespace ChartTypeSelectionTests
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
             PyramidChartCheck check = new(Limits.PyramidChartLimits);
 
-            Assert.AreEqual(RejectionReason.ProgressiveRequired, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.ProgressiveRequired));
         }
 
         /// <summary>
@@ -251,7 +250,7 @@ namespace ChartTypeSelectionTests
             string msg = "Ok";
             if (reasons.Count > 0) msg = reasons[0].ToString();
 
-            Assert.True(reasons.Count == 0, msg);
+            Assert.That(reasons.Count, Is.EqualTo(0), msg);
         }
 
         /// <summary>
@@ -272,7 +271,7 @@ namespace ChartTypeSelectionTests
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
             PyramidChartCheck check = new(Limits.PyramidChartLimits);
 
-            Assert.AreEqual(RejectionReason.FirstMultiselectOverMax, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.FirstMultiselectOverMax));
         }
 
         /// <summary>
@@ -293,7 +292,7 @@ namespace ChartTypeSelectionTests
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
             PyramidChartCheck check = new(Limits.PyramidChartLimits);
 
-            Assert.AreEqual(RejectionReason.CombinationValuesNotAllowed, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.CombinationValuesNotAllowed));
         }
 
         /// <summary>
@@ -314,7 +313,7 @@ namespace ChartTypeSelectionTests
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
             PyramidChartCheck check = new(Limits.PyramidChartLimits);
 
-            Assert.AreEqual(RejectionReason.CombinationValuesNotAllowed, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.CombinationValuesNotAllowed));
         }
 
         /// <summary>
@@ -335,7 +334,7 @@ namespace ChartTypeSelectionTests
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension, true); // <- true causes negative data to be built
             PyramidChartCheck check = new(Limits.PyramidChartLimits);
 
-            Assert.AreEqual(RejectionReason.NegativeDataNotAllowed, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.NegativeDataNotAllowed));
         }
     }
 }

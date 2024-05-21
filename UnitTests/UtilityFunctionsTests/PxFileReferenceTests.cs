@@ -12,7 +12,7 @@ namespace UtilityFunctionsTests
             List<string> hierarchy = ["DB", "folder1", "folder2"];
             PxFileReference sample = new(hierarchy, "foobar");
 
-            Assert.AreEqual("DB/folder1/folder2/foobar", sample.ToPath());
+            Assert.That(sample.ToPath(), Is.EqualTo("DB/folder1/folder2/foobar"));
         }
     }
 }

@@ -32,7 +32,7 @@ namespace ChartTypeSelectionTests
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
             HorizontalBarChartCheck check = new(Limits.HorizontalBarChartLimits);
 
-            Assert.AreEqual(RejectionReason.NotEnoughMultiselections, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.NotEnoughMultiselections));
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace ChartTypeSelectionTests
             string msg = "Ok";
             if (reasons.Count > 0) msg = reasons[0].ToString();
 
-            Assert.IsTrue(reasons.Count == 0, msg);
+            Assert.That(reasons.Count, Is.EqualTo(0), msg);
         }
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace ChartTypeSelectionTests
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
             HorizontalBarChartCheck check = new(Limits.HorizontalBarChartLimits);
 
-            Assert.AreEqual(RejectionReason.NotEnoughMultiselections, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.NotEnoughMultiselections));
         }
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace ChartTypeSelectionTests
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
             HorizontalBarChartCheck check = new(Limits.HorizontalBarChartLimits);
 
-            Assert.AreEqual(RejectionReason.TooManyMultiselections, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.TooManyMultiselections));
         }
 
         /// <summary>
@@ -116,7 +116,7 @@ namespace ChartTypeSelectionTests
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
             HorizontalBarChartCheck check = new(Limits.HorizontalBarChartLimits);
 
-            Assert.AreEqual(RejectionReason.ContentRequired, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.ContentRequired));
         }
 
         /// <summary>
@@ -135,7 +135,7 @@ namespace ChartTypeSelectionTests
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
             HorizontalBarChartCheck check = new(Limits.HorizontalBarChartLimits);
 
-            Assert.AreEqual(RejectionReason.UnambiguousContentUnitRequired, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.UnambiguousContentUnitRequired));
         }
 
         /// <summary>
@@ -154,7 +154,7 @@ namespace ChartTypeSelectionTests
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
             HorizontalBarChartCheck check = new(Limits.HorizontalBarChartLimits);
 
-            Assert.AreEqual(RejectionReason.TimeRequired, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.TimeRequired));
         }
 
         /// <summary>
@@ -173,7 +173,7 @@ namespace ChartTypeSelectionTests
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
             HorizontalBarChartCheck check = new(Limits.HorizontalBarChartLimits);
 
-            Assert.AreEqual(RejectionReason.TimeOverMax, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.TimeOverMax));
         }
 
         /// <summary>
@@ -193,7 +193,7 @@ namespace ChartTypeSelectionTests
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
             HorizontalBarChartCheck check = new(Limits.HorizontalBarChartLimits);
 
-            Assert.AreEqual(RejectionReason.ProgressiveNotAllowed, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.ProgressiveNotAllowed));
         }
 
         /// <summary>
@@ -213,7 +213,7 @@ namespace ChartTypeSelectionTests
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
             HorizontalBarChartCheck check = new(Limits.HorizontalBarChartLimits);
 
-            Assert.AreEqual(RejectionReason.FirstMultiselectOverMax, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.FirstMultiselectOverMax));
         }
     }
 }

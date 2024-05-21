@@ -53,8 +53,8 @@ namespace CreationControllerTests
             var result = await _controller.GetDataBaseListingAsync(null, new Dictionary<string, string> { { "lang", "foo" } });
 
             // Assert
-            Assert.IsTrue(result.Exists(r => r.Id == "dbid1" && r.Languages.Count == 2));
-            Assert.IsTrue(result.Exists(r => r.Id == "dbid2" && r.Languages.Count == 1));
+            Assert.That(result.Exists(r => r.Id == "dbid1" && r.Languages.Count == 2), Is.True);
+            Assert.That(result.Exists(r => r.Id == "dbid2" && r.Languages.Count == 1), Is.True);
         }
 
         [Test]
@@ -81,10 +81,10 @@ namespace CreationControllerTests
             var result = await _controller.GetDataBaseListingAsync(mockPath, new Dictionary<string, string> { { "lang", "foo" } });
 
             // Assert
-            Assert.AreEqual(3, result.Count);
-            Assert.IsTrue(result.Exists(r => r.Id == "id1" && r.Languages.Count == 2));
-            Assert.IsTrue(result.Exists(r => r.Id == "id2" && r.Languages.Count == 2));
-            Assert.IsTrue(result.Exists(r => r.Id == "id3" && r.Languages.Count == 1));
+            Assert.That(result.Count, Is.EqualTo(3));
+            Assert.That(result.Exists(r => r.Id == "id1" && r.Languages.Count == 2), Is.True);
+            Assert.That(result.Exists(r => r.Id == "id2" && r.Languages.Count == 2), Is.True);
+            Assert.That(result.Exists(r => r.Id == "id3" && r.Languages.Count == 1), Is.True);
         }
 
         [Test]
@@ -104,8 +104,8 @@ namespace CreationControllerTests
             var result = await _controller.GetDataBaseListingAsync(null, new Dictionary<string, string> { { "param", "baz" } });
 
             // Assert
-            Assert.IsTrue(result.Exists(r => r.Id == "dbid1" && r.Languages.Count == 2));
-            Assert.IsTrue(result.Exists(r => r.Id == "dbid2" && r.Languages.Count == 1));
+            Assert.That(result.Exists(r => r.Id == "dbid1" && r.Languages.Count == 2), Is.True);
+            Assert.That(result.Exists(r => r.Id == "dbid2" && r.Languages.Count == 1), Is.True);
         }
     }
 }

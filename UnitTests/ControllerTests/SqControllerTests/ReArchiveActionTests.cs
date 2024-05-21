@@ -79,7 +79,7 @@ namespace ControllerTests
 
             SqController testController = BuildController(cubeParams, metaParams);
             ActionResult<ReArchiveResponse> actionResult = await testController.ReArchiveExistingQueryAsync(new ReArchiveRequest() { SqId = "not_found_asdf" });
-            Assert.IsInstanceOf<NotFoundResult>(actionResult.Result);
+            Assert.That(actionResult.Result, Is.InstanceOf<NotFoundResult>());
         }
 
         [Test]
@@ -103,7 +103,7 @@ namespace ControllerTests
 
             SqController testController = BuildController(cubeParams, metaParams, new HorizontalBarChartVisualizationSettings(null));
             ActionResult<ReArchiveResponse> actionResult = await testController.ReArchiveExistingQueryAsync(new ReArchiveRequest() { SqId = TEST_SQ_ID });
-            Assert.IsInstanceOf<BadRequestResult>(actionResult.Result);
+            Assert.That(actionResult.Result, Is.InstanceOf<BadRequestResult>());
         }
 
         [Test]
@@ -127,7 +127,7 @@ namespace ControllerTests
 
             SqController testController = BuildController(cubeParams, metaParams, new HorizontalBarChartVisualizationSettings(null));
             ActionResult<ReArchiveResponse> actionResult = await testController.ReArchiveExistingQueryAsync(new ReArchiveRequest() { SqId = TEST_SQ_ID });
-            Assert.IsInstanceOf<ReArchiveResponse>(actionResult.Value);
+            Assert.That(actionResult.Value, Is.InstanceOf<ReArchiveResponse>());
         }
     }
 }

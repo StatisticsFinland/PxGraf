@@ -29,9 +29,9 @@ namespace DataCubeTests
             List<string> expectedVarValueOrder1 = ["value-3", "value-2", "value-1", "value-0"];
             List<string> expectedVarValueOrder2 = ["value-1", "value-0", "value-2"];
 
-            Assert.IsTrue(DataValueUtilities.Compare(expectedDataOrder, result.Data, out string message), message);
-            Assert.AreEqual(expectedVarValueOrder1, result.Meta.Variables[1].IncludedValues.Select(vv => vv.Code));
-            Assert.AreEqual(expectedVarValueOrder2, result.Meta.Variables[2].IncludedValues.Select(vv => vv.Code));
+            Assert.That(DataValueUtilities.Compare(expectedDataOrder, result.Data, out string message), Is.True, message);
+            Assert.That(result.Meta.Variables[1].IncludedValues.Select(vv => vv.Code), Is.EqualTo(expectedVarValueOrder1));
+            Assert.That(result.Meta.Variables[2].IncludedValues.Select(vv => vv.Code), Is.EqualTo(expectedVarValueOrder2));
         }
 
         [Test]
@@ -51,9 +51,9 @@ namespace DataCubeTests
             List<string> expectedVarValueOrder1 = ["value-1", "value-0", "value-2", "value-3"];
             List<string> expectedVarValueOrder2 = ["value-2", "value-1", "value-0"];
 
-            Assert.IsTrue(DataValueUtilities.Compare(expectedDataOrder, result.Data, out string message), message);
-            Assert.AreEqual(expectedVarValueOrder1, result.Meta.Variables[1].IncludedValues.Select(vv => vv.Code));
-            Assert.AreEqual(expectedVarValueOrder2, result.Meta.Variables[2].IncludedValues.Select(vv => vv.Code));
+            Assert.That(DataValueUtilities.Compare(expectedDataOrder, result.Data, out string message), Is.True, message);
+            Assert.That(result.Meta.Variables[1].IncludedValues.Select(vv => vv.Code), Is.EqualTo(expectedVarValueOrder1));
+            Assert.That(result.Meta.Variables[2].IncludedValues.Select(vv => vv.Code), Is.EqualTo(expectedVarValueOrder2));
         }
 
         [Test]
@@ -73,9 +73,9 @@ namespace DataCubeTests
             List<string> expectedVarValueOrder1 = ["value-3", "value-2", "value-1", "value-0"];
             List<string> expectedVarValueOrder2 = ["value-0", "value-1", "value-2"];
 
-            Assert.IsTrue(DataValueUtilities.Compare(expectedDataOrder, result.Data, out string message), message);
-            Assert.AreEqual(expectedVarValueOrder1, result.Meta.Variables[1].IncludedValues.Select(vv => vv.Code));
-            Assert.AreEqual(expectedVarValueOrder2, result.Meta.Variables[2].IncludedValues.Select(vv => vv.Code));
+            Assert.That(DataValueUtilities.Compare(expectedDataOrder, result.Data, out string message), Is.True, message);
+            Assert.That(result.Meta.Variables[1].IncludedValues.Select(vv => vv.Code), Is.EqualTo(expectedVarValueOrder1));
+            Assert.That(result.Meta.Variables[2].IncludedValues.Select(vv => vv.Code), Is.EqualTo(expectedVarValueOrder2));
         }
 
         [Test]
@@ -95,9 +95,9 @@ namespace DataCubeTests
             List<string> expectedVarValueOrder1 = ["value-0", "value-1", "value-2"];
             List<string> expectedVarValueOrder2 = ["value-2", "value-1", "value-0"];
 
-            Assert.IsTrue(DataValueUtilities.Compare(expectedDataOrder, result.Data, out string message), message);
-            Assert.AreEqual(expectedVarValueOrder1, result.Meta.Variables[1].IncludedValues.Select(vv => vv.Code));
-            Assert.AreEqual(expectedVarValueOrder2, result.Meta.Variables[2].IncludedValues.Select(vv => vv.Code));
+            Assert.That(DataValueUtilities.Compare(expectedDataOrder, result.Data, out string message), Is.True, message);
+            Assert.That(result.Meta.Variables[1].IncludedValues.Select(vv => vv.Code), Is.EqualTo(expectedVarValueOrder1));
+            Assert.That(result.Meta.Variables[2].IncludedValues.Select(vv => vv.Code), Is.EqualTo(expectedVarValueOrder2));
         }
 
         [Test]
@@ -117,9 +117,9 @@ namespace DataCubeTests
             List<string> expectedVarValueOrder1 = ["value-2", "value-1", "value-0"];
             List<string> expectedVarValueOrder2 = ["value-1", "value-0", "value-2"];
 
-            Assert.IsTrue(DataValueUtilities.Compare(expectedDataOrder, result.Data, out string message), message);
-            Assert.AreEqual(expectedVarValueOrder1, result.Meta.Variables[1].IncludedValues.Select(vv => vv.Code));
-            Assert.AreEqual(expectedVarValueOrder2, result.Meta.Variables[2].IncludedValues.Select(vv => vv.Code));
+            Assert.That(DataValueUtilities.Compare(expectedDataOrder, result.Data, out string message), Is.True, message);
+            Assert.That(result.Meta.Variables[1].IncludedValues.Select(vv => vv.Code), Is.EqualTo(expectedVarValueOrder1));
+            Assert.That(result.Meta.Variables[2].IncludedValues.Select(vv => vv.Code), Is.EqualTo(expectedVarValueOrder2));
         }
 
         [Test]
@@ -139,9 +139,9 @@ namespace DataCubeTests
             List<string> expectedVarValueOrder1 = ["value-2", "value-0", "value-1"];
             List<string> expectedVarValueOrder2 = ["value-2", "value-1", "value-0"];
 
-            Assert.IsTrue(DataValueUtilities.Compare(expectedDataOrder, result.Data, out string message), message);
-            Assert.AreEqual(expectedVarValueOrder1, result.Meta.Variables[1].IncludedValues.Select(vv => vv.Code));
-            Assert.AreEqual(expectedVarValueOrder2, result.Meta.Variables[2].IncludedValues.Select(vv => vv.Code));
+            Assert.That(DataValueUtilities.Compare(expectedDataOrder, result.Data, out string message), Is.True, message);
+            Assert.That(result.Meta.Variables[1].IncludedValues.Select(vv => vv.Code), Is.EqualTo(expectedVarValueOrder1));
+            Assert.That(result.Meta.Variables[2].IncludedValues.Select(vv => vv.Code), Is.EqualTo(expectedVarValueOrder2));
         }
 
         [Test]
@@ -161,9 +161,9 @@ namespace DataCubeTests
             List<string> expectedVarValueOrder1 = ["value-0", "value-1", "value-2"];
             List<string> expectedVarValueOrder2 = ["value-2", "value-1", "value-0"];
 
-            Assert.IsTrue(DataValueUtilities.Compare(expectedDataOrder, result.Data, out string message), message);
-            Assert.AreEqual(expectedVarValueOrder1, result.Meta.Variables[1].IncludedValues.Select(vv => vv.Code));
-            Assert.AreEqual(expectedVarValueOrder2, result.Meta.Variables[2].IncludedValues.Select(vv => vv.Code));
+            Assert.That(DataValueUtilities.Compare(expectedDataOrder, result.Data, out string message), Is.True, message);
+            Assert.That(result.Meta.Variables[1].IncludedValues.Select(vv => vv.Code), Is.EqualTo(expectedVarValueOrder1));
+            Assert.That(result.Meta.Variables[2].IncludedValues.Select(vv => vv.Code), Is.EqualTo(expectedVarValueOrder2));
         }
 
         [Test]
@@ -183,10 +183,10 @@ namespace DataCubeTests
             List<string> expectedVarValueOrder1 = ["value-0", "value-1", "value-2"];
             List<string> expectedVarValueOrder2 = ["value-0", "value-1", "value-2"];
 
-            Assert.IsTrue(DataValueUtilities.Compare(expectedDataOrder, result.Data, out string message1), message1);
-            Assert.IsTrue(DataValueUtilities.Compare(cube.Data, result.Data, out string message2), message2);
-            Assert.AreEqual(expectedVarValueOrder1, result.Meta.Variables[1].IncludedValues.Select(vv => vv.Code));
-            Assert.AreEqual(expectedVarValueOrder2, result.Meta.Variables[2].IncludedValues.Select(vv => vv.Code));
+            Assert.That(DataValueUtilities.Compare(expectedDataOrder, result.Data, out string message1), Is.True, message1);
+            Assert.That(DataValueUtilities.Compare(cube.Data, result.Data, out string message2), Is.True, message2);
+            Assert.That(result.Meta.Variables[1].IncludedValues.Select(vv => vv.Code), Is.EqualTo(expectedVarValueOrder1));
+            Assert.That(result.Meta.Variables[2].IncludedValues.Select(vv => vv.Code), Is.EqualTo(expectedVarValueOrder2));
         }
 
         [Test]
@@ -206,10 +206,10 @@ namespace DataCubeTests
             List<string> expectedVarValueOrder1 = ["value-0", "value-1", "value-2"];
             List<string> expectedVarValueOrder2 = ["value-0", "value-1", "value-2"];
 
-            Assert.IsTrue(DataValueUtilities.Compare(expectedDataOrder, result.Data, out string message1), message1);
-            Assert.IsTrue(DataValueUtilities.Compare(cube.Data, result.Data, out string message2), message2);
-            Assert.AreEqual(expectedVarValueOrder1, result.Meta.Variables[1].IncludedValues.Select(vv => vv.Code));
-            Assert.AreEqual(expectedVarValueOrder2, result.Meta.Variables[2].IncludedValues.Select(vv => vv.Code));
+            Assert.That(DataValueUtilities.Compare(expectedDataOrder, result.Data, out string message1), Is.True, message1);
+            Assert.That(DataValueUtilities.Compare(cube.Data, result.Data, out string message2), Is.True, message2);
+            Assert.That(result.Meta.Variables[1].IncludedValues.Select(vv => vv.Code), Is.EqualTo(expectedVarValueOrder1));
+            Assert.That(result.Meta.Variables[2].IncludedValues.Select(vv => vv.Code), Is.EqualTo(expectedVarValueOrder2));
         }
 
         [Test]
@@ -227,9 +227,9 @@ namespace DataCubeTests
             IReadOnlyList<DataValue> expectedDataOrder = DataValueUtilities.List(0.123, 1.123, 2.123, 3.123, 4.123);
             List<string> expectedVarValueOrder = ["value-0", "value-1", "value-2", "value-3", "value-4"];
 
-            Assert.IsTrue(DataValueUtilities.Compare(expectedDataOrder, result.Data, out string message1), message1);
-            Assert.IsTrue(DataValueUtilities.Compare(cube.Data, result.Data, out string message2), message2);
-            Assert.AreEqual(expectedVarValueOrder, result.Meta.Variables[1].IncludedValues.Select(vv => vv.Code));
+            Assert.That(DataValueUtilities.Compare(expectedDataOrder, result.Data, out string message1), Is.True, message1);
+            Assert.That(DataValueUtilities.Compare(cube.Data, result.Data, out string message2), Is.True, message2);
+            Assert.That(result.Meta.Variables[1].IncludedValues.Select(vv => vv.Code), Is.EqualTo(expectedVarValueOrder));
         }
 
         [Test]
@@ -247,8 +247,8 @@ namespace DataCubeTests
             IReadOnlyList<DataValue> expectedDataOrder = DataValueUtilities.List(0.123, 1.123, 2.123, 3.123, 4.123);
             List<string> expectedVarValueOrder = ["value-0", "value-1", "value-2", "value-3", "value-4"];
 
-            Assert.IsTrue(DataValueUtilities.Compare(expectedDataOrder, result.Data, out string message1), message1);
-            Assert.AreEqual(expectedVarValueOrder, result.Meta.Variables[1].IncludedValues.Select(vv => vv.Code));
+            Assert.That(DataValueUtilities.Compare(expectedDataOrder, result.Data, out string message1), Is.True, message1);
+            Assert.That(result.Meta.Variables[1].IncludedValues.Select(vv => vv.Code), Is.EqualTo(expectedVarValueOrder));
         }
 
         [Test]
@@ -266,8 +266,8 @@ namespace DataCubeTests
             IReadOnlyList<DataValue> expectedDataOrder = DataValueUtilities.List(4.123, 3.123, 2.123, 1.123, 0.123);
             List<string> expectedVarValueOrder = ["value-4", "value-3", "value-2", "value-1", "value-0"];
 
-            Assert.IsTrue(DataValueUtilities.Compare(expectedDataOrder, result.Data, out string message1), message1);
-            Assert.AreEqual(expectedVarValueOrder, result.Meta.Variables[1].IncludedValues.Select(vv => vv.Code));
+            Assert.That(DataValueUtilities.Compare(expectedDataOrder, result.Data, out string message1), Is.True, message1);
+            Assert.That(result.Meta.Variables[1].IncludedValues.Select(vv => vv.Code), Is.EqualTo(expectedVarValueOrder));
         }
 
         [Test]
@@ -285,8 +285,8 @@ namespace DataCubeTests
             IReadOnlyList<DataValue> expectedDataOrder = DataValueUtilities.List(4.123, 3.123, 2.123, 1.123, 0.123);
             List<string> expectedVarValueOrder = ["value-4", "value-3", "value-2", "value-1", "value-0"];
 
-            Assert.IsTrue(DataValueUtilities.Compare(expectedDataOrder, result.Data, out string message1), message1);
-            Assert.AreEqual(expectedVarValueOrder, result.Meta.Variables[1].IncludedValues.Select(vv => vv.Code));
+            Assert.That(DataValueUtilities.Compare(expectedDataOrder, result.Data, out string message1), Is.True, message1);
+            Assert.That(result.Meta.Variables[1].IncludedValues.Select(vv => vv.Code), Is.EqualTo(expectedVarValueOrder));
         }
     }
 }

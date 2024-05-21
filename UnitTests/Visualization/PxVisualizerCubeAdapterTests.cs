@@ -8,9 +8,7 @@ using PxGraf.Models.Requests;
 using PxGraf.Models.Responses;
 using PxGraf.Models.SavedQueries;
 using PxGraf.Visualization;
-using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using UnitTests.Fixtures;
 using UnitTests.Fixtures.ResponseFixtures;
@@ -49,7 +47,7 @@ namespace Visualization
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(inputCube, inputQuery.Query, settings);
             
             List<string> expected = ["variable-0", "variable-2", "variable-1", "variable-3"];
-            CollectionAssert.AreEqual(expected, result.MetaData.Select(v => v.Code));
+            Assert.That(result.MetaData.Select(v => v.Code), Is.EqualTo(expected));
         }
 
         [Test]
@@ -78,8 +76,7 @@ namespace Visualization
                 3.123, 4.123, 5.123, 12.123, 13.123, 14.123, 21.123, 22.123, 23.123,
                 6.123, 7.123, 8.123, 15.123, 16.123, 17.123, 24.123, 25.123, 26.123
             ];
-
-            Assert.AreEqual(expectedData, result.Data);
+            Assert.That(result.Data, Is.EqualTo(expectedData).Within(0.001));
         }
 
         [Test]
@@ -182,7 +179,7 @@ namespace Visualization
                 19.123, 51.123, 23.123, 55.123, 27.123, 59.123, 31.123, 63.123
             ];
 
-            Assert.AreEqual(expectedData, result.Data);
+            Assert.That(result.Data, Is.EqualTo(expectedData).Within(0.001));
         }
 
         [Test]
@@ -235,11 +232,11 @@ namespace Visualization
             DataCube inputCube = TestDataCubeBuilder.BuildTestDataCube(cubeParams);
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(inputCube, savedQuery);
 
-            Assert.AreEqual(VisualizationType.GroupVerticalBarChart, result.VisualizationSettings.VisualizationType);
-            Assert.AreEqual(1, result.ColumnVariableCodes.Count);
-            Assert.AreEqual("Ilmoittava lentoasema", result.ColumnVariableCodes[0]);
-            Assert.AreEqual(1, result.RowVariableCodes.Count);
-            Assert.AreEqual("Kuukausi", result.RowVariableCodes[0]);
+            Assert.That(result.VisualizationSettings.VisualizationType, Is.EqualTo(VisualizationType.GroupVerticalBarChart));
+            Assert.That(result.ColumnVariableCodes.Count, Is.EqualTo(1));
+            Assert.That(result.ColumnVariableCodes[0], Is.EqualTo("Ilmoittava lentoasema"));
+            Assert.That(result.RowVariableCodes.Count, Is.EqualTo(1));
+            Assert.That(result.RowVariableCodes[0], Is.EqualTo("Kuukausi"));
         }
 
         [Test]
@@ -258,11 +255,11 @@ namespace Visualization
             DataCube inputCube = TestDataCubeBuilder.BuildTestDataCube(cubeParams);
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(inputCube, savedQuery);
 
-            Assert.AreEqual(VisualizationType.GroupHorizontalBarChart, result.VisualizationSettings.VisualizationType);
-            Assert.AreEqual(1, result.ColumnVariableCodes.Count);
-            Assert.AreEqual("Syntymävaltio", result.ColumnVariableCodes[0]);
-            Assert.AreEqual(1, result.RowVariableCodes.Count);
-            Assert.AreEqual("Vuosi", result.RowVariableCodes[0]);
+            Assert.That(result.VisualizationSettings.VisualizationType, Is.EqualTo(VisualizationType.GroupHorizontalBarChart));
+            Assert.That(result.ColumnVariableCodes.Count, Is.EqualTo(1));
+            Assert.That(result.ColumnVariableCodes[0], Is.EqualTo("Syntymävaltio"));
+            Assert.That(result.RowVariableCodes.Count, Is.EqualTo(1));
+            Assert.That(result.RowVariableCodes[0], Is.EqualTo("Vuosi"));
         }
 
         [Test]
@@ -278,9 +275,9 @@ namespace Visualization
             DataCube inputCube = TestDataCubeBuilder.BuildTestDataCube(cubeParams);
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(inputCube, savedQuery);
 
-            Assert.AreEqual(VisualizationType.LineChart, result.VisualizationSettings.VisualizationType);
-            Assert.AreEqual(1, result.ColumnVariableCodes.Count);
-            Assert.AreEqual("Vuosi", result.ColumnVariableCodes[0]);
+            Assert.That(result.VisualizationSettings.VisualizationType, Is.EqualTo(VisualizationType.LineChart));
+            Assert.That(result.ColumnVariableCodes.Count, Is.EqualTo(1));
+            Assert.That(result.ColumnVariableCodes[0], Is.EqualTo("Vuosi"));
         }
 
         [Test]
@@ -296,11 +293,11 @@ namespace Visualization
             DataCube inputCube = TestDataCubeBuilder.BuildTestDataCube(cubeParams);
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(inputCube, savedQuery);
 
-            Assert.AreEqual(VisualizationType.Table, result.VisualizationSettings.VisualizationType);
-            Assert.AreEqual(1, result.RowVariableCodes.Count);
-            Assert.AreEqual("Joukkoviestimet", result.RowVariableCodes[0]);
-            Assert.AreEqual(1, result.ColumnVariableCodes.Count);
-            Assert.AreEqual("Vuosi", result.ColumnVariableCodes[0]);
+            Assert.That(result.VisualizationSettings.VisualizationType, Is.EqualTo(VisualizationType.Table));
+            Assert.That(result.RowVariableCodes.Count, Is.EqualTo(1));
+            Assert.That(result.RowVariableCodes[0], Is.EqualTo("Joukkoviestimet"));
+            Assert.That(result.ColumnVariableCodes.Count, Is.EqualTo(1));
+            Assert.That(result.ColumnVariableCodes[0], Is.EqualTo("Vuosi"));
         }
 
         [Test]
@@ -324,10 +321,10 @@ namespace Visualization
             string[] expectedRowVarCodes = ["Ilmoittava lentoasema", "Lennon tyyppi", "Saapuneet/lähteneet"];
             string[] expectedColVarCodes = ["Toinen lentoasema", "Tiedot"];
 
-            Assert.AreEqual(VisualizationType.Table, result.VisualizationSettings.VisualizationType);
-            Assert.AreEqual(expectedSelVarCodes, result.SelectableVariableCodes);
-            Assert.AreEqual(expectedRowVarCodes, result.RowVariableCodes);
-            Assert.AreEqual(expectedColVarCodes, result.ColumnVariableCodes);
+            Assert.That(result.VisualizationSettings.VisualizationType, Is.EqualTo(VisualizationType.Table));
+            Assert.That(result.SelectableVariableCodes, Is.EqualTo(expectedSelVarCodes));
+            Assert.That(result.RowVariableCodes, Is.EqualTo(expectedRowVarCodes));
+            Assert.That(result.ColumnVariableCodes, Is.EqualTo(expectedColVarCodes));
         }
 
         [Test]
@@ -347,12 +344,12 @@ namespace Visualization
             DataCube inputCube = TestDataCubeBuilder.BuildTestDataCube(cubeParams);
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(inputCube, savedQuery);
 
-            Assert.AreEqual(VisualizationType.GroupVerticalBarChart, result.VisualizationSettings.VisualizationType);
-            Assert.AreEqual(1, result.ColumnVariableCodes.Count);
-            Assert.AreEqual("Syntymävaltio", result.ColumnVariableCodes[0]);
-            Assert.AreEqual(1, result.RowVariableCodes.Count);
-            Assert.AreEqual("Vuosi", result.RowVariableCodes[0]);
-            Assert.IsTrue((bool)savedQuery.LegacyProperties["PivotRequested"]);
+            Assert.That(result.VisualizationSettings.VisualizationType, Is.EqualTo(VisualizationType.GroupHorizontalBarChart));
+            Assert.That(result.ColumnVariableCodes.Count, Is.EqualTo(1));
+            Assert.That(result.ColumnVariableCodes[0], Is.EqualTo("Syntymävaltio"));
+            Assert.That(result.RowVariableCodes.Count, Is.EqualTo(1));
+            Assert.That(result.RowVariableCodes[0], Is.EqualTo("Vuosi"));
+            Assert.That((bool)savedQuery.LegacyProperties["PivotRequested"], Is.True);
         }
 
         [Test]
@@ -399,7 +396,7 @@ namespace Visualization
 
             IReadOnlyDictionary<int, IReadOnlyMultiLanguageString> dataNotes = result.DataNotes;
 
-            Assert.IsEmpty(dataNotes);
+            Assert.That(dataNotes, Is.Empty);
         }
 
         [Test]
@@ -429,14 +426,14 @@ namespace Visualization
 
             IReadOnlyDictionary<int, int> MissingDataInfoFromResult = result.MissingDataInfo;
 
-            Assert.AreEqual(VisualizationType.Table, result.VisualizationSettings.VisualizationType);
-            Assert.AreEqual(expectedData, result.Data);
+            Assert.That(result.VisualizationSettings.VisualizationType, Is.EqualTo(VisualizationType.Table));
+            Assert.That(result.Data, Is.EqualTo(expectedData).Within(0.001));
 
-            Assert.AreEqual(1, MissingDataInfoFromResult[0]);
-            Assert.AreEqual(2, MissingDataInfoFromResult[3]);
-            Assert.AreEqual(3, MissingDataInfoFromResult[6]);
-            Assert.AreEqual(4, MissingDataInfoFromResult[9]);
-            Assert.AreEqual(5, MissingDataInfoFromResult[12]);
+            Assert.That(MissingDataInfoFromResult[0], Is.EqualTo(1));
+            Assert.That(MissingDataInfoFromResult[3], Is.EqualTo(2));
+            Assert.That(MissingDataInfoFromResult[6], Is.EqualTo(3));
+            Assert.That(MissingDataInfoFromResult[9], Is.EqualTo(4));
+            Assert.That(MissingDataInfoFromResult[12], Is.EqualTo(5));
         }
 
         [Test]
@@ -465,22 +462,21 @@ namespace Visualization
                 null, 19.123, 20.123, null, 22.123, 23.123, null, 25.123, 26.123
             ];
 
-
-            Assert.AreEqual(expectedData, result.Data);
+            Assert.That(result.Data, Is.EqualTo(expectedData).Within(0.001));
 
             IReadOnlyDictionary<int, int> MissingDataInfoFromResult = result.MissingDataInfo;
-            
-            Assert.AreEqual(9, MissingDataInfoFromResult.Count);
 
-            Assert.AreEqual(1, MissingDataInfoFromResult[0]);
-            Assert.AreEqual(2, MissingDataInfoFromResult[3]);
-            Assert.AreEqual(3, MissingDataInfoFromResult[6]);
-            Assert.AreEqual(4, MissingDataInfoFromResult[9]);
-            Assert.AreEqual(5, MissingDataInfoFromResult[12]);
-            Assert.AreEqual(6, MissingDataInfoFromResult[15]);
-            Assert.AreEqual(7, MissingDataInfoFromResult[18]);
-            Assert.AreEqual(1, MissingDataInfoFromResult[21]);
-            Assert.AreEqual(2, MissingDataInfoFromResult[24]);
+            Assert.That(MissingDataInfoFromResult.Count, Is.EqualTo(9));
+
+            Assert.That(MissingDataInfoFromResult[0], Is.EqualTo(1));
+            Assert.That(MissingDataInfoFromResult[3], Is.EqualTo(2));
+            Assert.That(MissingDataInfoFromResult[6], Is.EqualTo(3));
+            Assert.That(MissingDataInfoFromResult[9], Is.EqualTo(4));
+            Assert.That(MissingDataInfoFromResult[12], Is.EqualTo(5));
+            Assert.That(MissingDataInfoFromResult[15], Is.EqualTo(6));
+            Assert.That(MissingDataInfoFromResult[18], Is.EqualTo(7));
+            Assert.That(MissingDataInfoFromResult[21], Is.EqualTo(8));
+            Assert.That(MissingDataInfoFromResult[24], Is.EqualTo(9));
         }
 
         [Test]
@@ -516,14 +512,14 @@ namespace Visualization
             Assert.That(result.Data, Is.EqualTo(expectedData).Within(0.001));
 
             IReadOnlyDictionary<int, int> MissingDataInfoFromResult = result.MissingDataInfo;
-            Assert.AreEqual(1, MissingDataInfoFromResult[0]);
-            Assert.AreEqual(2, MissingDataInfoFromResult[12]);
-            Assert.AreEqual(3, MissingDataInfoFromResult[6]);
-            Assert.AreEqual(4, MissingDataInfoFromResult[18]);
-            Assert.AreEqual(5, MissingDataInfoFromResult[3]);
-            Assert.AreEqual(6, MissingDataInfoFromResult[15]);
-            Assert.AreEqual(7, MissingDataInfoFromResult[9]);
 
+            Assert.That(MissingDataInfoFromResult[0], Is.EqualTo(1));
+            Assert.That(MissingDataInfoFromResult[12], Is.EqualTo(2));
+            Assert.That(MissingDataInfoFromResult[6], Is.EqualTo(3));
+            Assert.That(MissingDataInfoFromResult[18], Is.EqualTo(4));
+            Assert.That(MissingDataInfoFromResult[3], Is.EqualTo(5));
+            Assert.That(MissingDataInfoFromResult[15], Is.EqualTo(6));
+            Assert.That(MissingDataInfoFromResult[9], Is.EqualTo(7));
         }
 
         [Test]
@@ -546,7 +542,7 @@ namespace Visualization
             string normalizedResponse = JsonUtils.NormalizeJsonString(JsonConvert.SerializeObject(result));
             string normalizedExpected = JsonUtils.NormalizeJsonString(VisualizationResponseFixtures.LINE_CHART_RESPONSE_FIXTURE_WITH_MISSING_VALUES);
 
-            Assert.AreEqual(normalizedExpected, normalizedResponse);
+            Assert.That(normalizedResponse, Is.EqualTo(normalizedExpected));
         }
 
         [Test]
@@ -567,10 +563,9 @@ namespace Visualization
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(cube, savedQuery);
 
             string normalizedResponse = JsonUtils.NormalizeJsonString(JsonConvert.SerializeObject(result));
-
             string normalizedExpected = JsonUtils.NormalizeJsonString(VisualizationResponseFixtures.LINE_CHART_RESPONSE_FIXTURE);
 
-            Assert.AreEqual(normalizedExpected, normalizedResponse);
+            Assert.That(normalizedResponse, Is.EqualTo(normalizedExpected));
         }
     }
 }

@@ -4,9 +4,7 @@ using PxGraf.Enums;
 using PxGraf.Language;
 using PxGraf.Models.Queries;
 using PxGraf.Utility;
-using System;
 using System.Collections.Generic;
-using System.IO;
 using UnitTests.Fixtures;
 using UnitTests.TestDummies;
 using UnitTests.TestDummies.DummyQueries;
@@ -40,7 +38,7 @@ namespace DataCubeTests
             string expectedResult = "foobar 1 [FIRST] muuttujina foobar 2, foobar 3";
             cubeMeta.CreateDefaultChartHeader(cubeQuery).TryGetLanguage("fi", out string result);
 
-            Assert.AreEqual(expectedResult, result);
+            Assert.That(result, Is.EqualTo(expectedResult));
         }
 
         [Test]
@@ -63,7 +61,7 @@ namespace DataCubeTests
             string expectedResult = "foobar 1 [FIRST]-[LAST] muuttujina foobar 2, foobar 3";
             cubeMeta.CreateDefaultChartHeader(cubeQuery).TryGetLanguage("fi", out string result);
 
-            Assert.AreEqual(expectedResult, result);
+            Assert.That(result, Is.EqualTo(expectedResult));
         }
 
         [Test]
@@ -84,7 +82,7 @@ namespace DataCubeTests
             string expectedResult = "foobar 1, foobar 2 [FIRST]-[LAST]";
             cubeMeta.CreateDefaultChartHeader(cubeQuery).TryGetLanguage("fi", out string result);
 
-            Assert.AreEqual(expectedResult, result);
+            Assert.That(result, Is.EqualTo(expectedResult));
         }
 
         [Test]
@@ -105,7 +103,7 @@ namespace DataCubeTests
             string expectedResult = "foobar 1 [FIRST]-[LAST] muuttujana variable-2";
             cubeMeta.CreateDefaultChartHeader(cubeQuery).TryGetLanguage("fi", out string result);
 
-            Assert.AreEqual(expectedResult, result);
+            Assert.That(result, Is.EqualTo(expectedResult));
         }
 
         [Test]
@@ -128,7 +126,7 @@ namespace DataCubeTests
             string expectedResult = "foobar 1, foobar 2 [FIRST] muuttujana variable-3";
             cubeMeta.CreateDefaultChartHeader(cubeQuery).TryGetLanguage("fi", out string result);
 
-            Assert.AreEqual(expectedResult, result);
+            Assert.That(result, Is.EqualTo(expectedResult));
         }
 
         [Test]
@@ -148,7 +146,7 @@ namespace DataCubeTests
             string expectedResult = "foobar 1 [FIRST]-[LAST]";
             cubeMeta.CreateDefaultChartHeader(cubeQuery).TryGetLanguage("fi", out string result);
 
-            Assert.AreEqual(expectedResult, result);
+            Assert.That(result, Is.EqualTo(expectedResult));
         }
 
         [Test]
@@ -171,7 +169,7 @@ namespace DataCubeTests
             string expectedResult = "foobar 1 muuttujina foobar 2, foobar 3";
             cubeMeta.CreateDefaultChartHeader(cubeQuery).TryGetLanguage("fi", out string result);
 
-            Assert.AreEqual(expectedResult, result);
+            Assert.That(result, Is.EqualTo(expectedResult));
         }
 
         [Test]
@@ -194,7 +192,7 @@ namespace DataCubeTests
             string expectedResult = "foobar 1.en in [FIRST] to [LAST] by foobar 2.en, foobar 3.en";
             cubeMeta.CreateDefaultChartHeader(cubeQuery).TryGetLanguage("en", out string result);
 
-            Assert.AreEqual(expectedResult, result);
+            Assert.That(result, Is.EqualTo(expectedResult));
         }
     }
 }

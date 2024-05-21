@@ -21,7 +21,7 @@ namespace LayoutTests
             ];
 
             CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(variables);
-            Assert.IsFalse(AutoPivotRules.BasicVerticalBarChart(meta));
+            Assert.That(AutoPivotRules.BasicVerticalBarChart(meta), Is.False);
         }
 
         [Test]
@@ -35,7 +35,7 @@ namespace LayoutTests
             ];
 
             CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(variables);
-            Assert.IsTrue(AutoPivotRules.GroupVerticalBarChart(meta));
+            Assert.That(AutoPivotRules.GroupVerticalBarChart(meta), Is.True);
         }
 
         [Test]
@@ -49,7 +49,7 @@ namespace LayoutTests
             ];
 
             CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(variables);
-            Assert.IsFalse(AutoPivotRules.GroupVerticalBarChart(meta));
+            Assert.That(AutoPivotRules.GroupVerticalBarChart(meta), Is.False);
         }
 
         [Test]
@@ -63,7 +63,7 @@ namespace LayoutTests
             ];
 
             CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(variables);
-            Assert.IsTrue(AutoPivotRules.GroupVerticalBarChart(meta));
+            Assert.That(AutoPivotRules.GroupVerticalBarChart(meta), Is.True);
         }
 
         [Test]
@@ -77,7 +77,7 @@ namespace LayoutTests
             ];
 
             CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(variables);
-            Assert.IsTrue(AutoPivotRules.GroupVerticalBarChart(meta));
+            Assert.That(AutoPivotRules.GroupVerticalBarChart(meta), Is.True);
         }
 
         [Test]
@@ -91,7 +91,7 @@ namespace LayoutTests
             ];
 
             CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(variables);
-            Assert.IsFalse(AutoPivotRules.GroupVerticalBarChart(meta));
+            Assert.That(AutoPivotRules.GroupVerticalBarChart(meta), Is.False);
         }
 
         [Test]
@@ -105,7 +105,7 @@ namespace LayoutTests
             ];
 
             CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(variables);
-            Assert.IsTrue(AutoPivotRules.StackedVerticalBarChart(meta));
+            Assert.That(AutoPivotRules.StackedVerticalBarChart(meta), Is.True);
         }
 
         [Test]
@@ -119,7 +119,7 @@ namespace LayoutTests
             ];
 
             CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(variables);
-            Assert.IsFalse(AutoPivotRules.StackedVerticalBarChart(meta));
+            Assert.That(AutoPivotRules.StackedVerticalBarChart(meta), Is.False);
         }
 
         [Test]
@@ -133,7 +133,7 @@ namespace LayoutTests
             ];
 
             CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(variables);
-            Assert.IsTrue(AutoPivotRules.StackedVerticalBarChart(meta));
+            Assert.That(AutoPivotRules.StackedVerticalBarChart(meta), Is.True);
         }
 
         [Test]
@@ -147,7 +147,7 @@ namespace LayoutTests
             ];
 
             CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(variables);
-            Assert.IsTrue(AutoPivotRules.StackedVerticalBarChart(meta));
+            Assert.That(AutoPivotRules.StackedVerticalBarChart(meta), Is.True);
         }
 
         [Test]
@@ -161,7 +161,7 @@ namespace LayoutTests
             ];
 
             CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(variables);
-            Assert.IsTrue(AutoPivotRules.StackedVerticalBarChart(meta));
+            Assert.That(AutoPivotRules.StackedVerticalBarChart(meta), Is.True);
         }
 
         [Test]
@@ -175,7 +175,7 @@ namespace LayoutTests
             ];
 
             CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(variables);
-            Assert.IsFalse(AutoPivotRules.StackedVerticalBarChart(meta));
+            Assert.That(AutoPivotRules.StackedVerticalBarChart(meta), Is.False);
         }
 
         [Test]
@@ -189,7 +189,7 @@ namespace LayoutTests
             ];
 
             CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(variables);
-            Assert.IsTrue(AutoPivotRules.StackedVerticalBarChart(meta));
+            Assert.That(AutoPivotRules.StackedVerticalBarChart(meta), Is.True);
         }
 
         [Test]
@@ -203,7 +203,7 @@ namespace LayoutTests
             ];
 
             CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(variables);
-            Assert.IsFalse(AutoPivotRules.BasicHorizontalBarChart(meta));
+            Assert.That(AutoPivotRules.BasicHorizontalBarChart(meta), Is.False);
         }
 
         [Test]
@@ -217,7 +217,7 @@ namespace LayoutTests
             ];
 
             CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(variables);
-            Assert.IsTrue(AutoPivotRules.GroupHorizontalBarChart(meta));
+            Assert.That(AutoPivotRules.GroupHorizontalBarChart(meta), Is.True);
         }
 
         [Test]
@@ -231,7 +231,7 @@ namespace LayoutTests
             ];
 
             CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(variables);
-            Assert.IsFalse(AutoPivotRules.GroupHorizontalBarChart(meta));
+            Assert.That(AutoPivotRules.GroupHorizontalBarChart(meta), Is.False);
         }
 
         [Test]
@@ -245,7 +245,7 @@ namespace LayoutTests
             ];
 
             CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(variables);
-            Assert.IsTrue(AutoPivotRules.GroupHorizontalBarChart(meta));
+            Assert.That(AutoPivotRules.GroupHorizontalBarChart(meta), Is.True);
         }
 
         [Test]
@@ -259,7 +259,7 @@ namespace LayoutTests
             ];
 
             CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(variables);
-            Assert.IsTrue(AutoPivotRules.GroupHorizontalBarChart(meta));
+            Assert.That(AutoPivotRules.GroupHorizontalBarChart(meta), Is.True);
         }
 
         [Test]
@@ -273,7 +273,7 @@ namespace LayoutTests
             ];
 
             CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(variables);
-            Assert.IsTrue(AutoPivotRules.StackedHorizontalBarChart(meta));
+            Assert.That(AutoPivotRules.StackedHorizontalBarChart(meta), Is.True);
         }
 
         [Test]
@@ -287,7 +287,7 @@ namespace LayoutTests
             ];
 
             CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(variables);
-            Assert.IsFalse(AutoPivotRules.StackedHorizontalBarChart(meta));
+            Assert.That(AutoPivotRules.StackedHorizontalBarChart(meta), Is.False);
         }
 
         [Test]
@@ -300,7 +300,7 @@ namespace LayoutTests
             ];
 
             CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(variables);
-            Assert.IsFalse(AutoPivotRules.PieChart(meta));
+            Assert.That(AutoPivotRules.PieChart(meta), Is.False);
         }
 
         [Test]
@@ -314,7 +314,7 @@ namespace LayoutTests
             ];
 
             CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(variables);
-            Assert.IsTrue(AutoPivotRules.LineChart(meta));
+            Assert.That(AutoPivotRules.LineChart(meta), Is.True);
         }
 
         [Test]
@@ -328,7 +328,7 @@ namespace LayoutTests
             ];
 
             CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(variables);
-            Assert.IsFalse(AutoPivotRules.LineChart(meta));
+            Assert.That(AutoPivotRules.LineChart(meta), Is.False);
         }
 
         [Test]
@@ -343,7 +343,7 @@ namespace LayoutTests
             ];
 
             CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(variables);
-            Assert.IsFalse(AutoPivotRules.LineChart(meta));
+            Assert.That(AutoPivotRules.LineChart(meta), Is.False);
         }
 
         [Test]
@@ -356,7 +356,7 @@ namespace LayoutTests
             ];
 
             CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(variables);
-            Assert.IsFalse(AutoPivotRules.LineChart(meta));
+            Assert.That(AutoPivotRules.LineChart(meta), Is.False);
         }
 
         [Test]
@@ -370,7 +370,7 @@ namespace LayoutTests
             ];
 
             CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(variables);
-            Assert.IsTrue(AutoPivotRules.PyramidChart(meta));
+            Assert.That(AutoPivotRules.PyramidChart(meta), Is.True);
         }
 
         [Test]
@@ -384,7 +384,7 @@ namespace LayoutTests
             ];
 
             CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(variables);
-            Assert.IsFalse(AutoPivotRules.PyramidChart(meta));
+            Assert.That(AutoPivotRules.PyramidChart(meta), Is.False);
         }
 
         [Test]
@@ -397,7 +397,7 @@ namespace LayoutTests
             ];
 
             CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(variables);
-            Assert.IsTrue(AutoPivotRules.ScatterPlot(meta));
+            Assert.That(AutoPivotRules.ScatterPlot(meta), Is.True);
         }
 
         [Test]
@@ -410,7 +410,7 @@ namespace LayoutTests
             ];
 
             CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(variables);
-            Assert.IsFalse(AutoPivotRules.ScatterPlot(meta));
+            Assert.That(AutoPivotRules.ScatterPlot(meta), Is.True);
         }
 
         [Test]
@@ -423,7 +423,7 @@ namespace LayoutTests
             ];
 
             CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(variables);
-            Assert.IsFalse(AutoPivotRules.ScatterPlot(meta));
+            Assert.That(AutoPivotRules.ScatterPlot(meta), Is.False);
         }
 
         [Test]
@@ -436,7 +436,7 @@ namespace LayoutTests
             ];
 
             CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(variables);
-            Assert.IsTrue(AutoPivotRules.ScatterPlot(meta));
+            Assert.That(AutoPivotRules.ScatterPlot(meta), Is.True);
         }
 
     }

@@ -5,7 +5,6 @@ using PxGraf.ChartTypeSelection.JsonObjects;
 using PxGraf.Enums;
 using PxGraf.Models.Queries;
 using System.Collections.Generic;
-using System.Linq;
 using UnitTests.TestDummies;
 using UnitTests.TestDummies.DummyQueries;
 
@@ -34,7 +33,7 @@ namespace ChartTypeSelectionTests
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
             VerticalBarChartCheck check = new(Limits.VerticalBarChartLimits);
 
-            Assert.AreEqual(RejectionReason.NotEnoughMultiselections, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.NotEnoughMultiselections));
         }
 
         /// <summary>
@@ -57,7 +56,7 @@ namespace ChartTypeSelectionTests
             string msg = "Ok";
             if (reasons.Count > 0) msg = reasons[0].ToString();
 
-            Assert.True(reasons.Count == 0, msg);
+            Assert.That(reasons.Count, Is.EqualTo(0), msg);
         }
 
         /// <summary>
@@ -77,7 +76,7 @@ namespace ChartTypeSelectionTests
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
             VerticalBarChartCheck check = new(Limits.VerticalBarChartLimits);
 
-            Assert.True(check.CheckValidity(input).Count == 0);
+            Assert.That(check.CheckValidity(input).Count, Is.EqualTo(0));
         }
 
         /// <summary>
@@ -96,7 +95,7 @@ namespace ChartTypeSelectionTests
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
             VerticalBarChartCheck check = new(Limits.VerticalBarChartLimits);
 
-            Assert.AreEqual(RejectionReason.NotEnoughMultiselections, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.NotEnoughMultiselections));
         }
 
         /// <summary>
@@ -116,7 +115,7 @@ namespace ChartTypeSelectionTests
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
             VerticalBarChartCheck check = new(Limits.VerticalBarChartLimits);
 
-            Assert.AreEqual(RejectionReason.TooManyMultiselections, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.TooManyMultiselections));
         }
 
         /// <summary>
@@ -135,7 +134,7 @@ namespace ChartTypeSelectionTests
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
             VerticalBarChartCheck check = new(Limits.VerticalBarChartLimits);
 
-            Assert.AreEqual(RejectionReason.ContentRequired, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.ContentRequired));
         }
 
         /// <summary>
@@ -154,7 +153,7 @@ namespace ChartTypeSelectionTests
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
             VerticalBarChartCheck check = new(Limits.VerticalBarChartLimits);
 
-            Assert.AreEqual(RejectionReason.TimeOrProgressiveRequired, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.TimeOrProgressiveRequired));
         }
 
         /// <summary>
@@ -174,7 +173,7 @@ namespace ChartTypeSelectionTests
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
             VerticalBarChartCheck check = new(Limits.VerticalBarChartLimits);
 
-            Assert.AreEqual(RejectionReason.TimeOrProgressiveRequired, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.TimeOrProgressiveRequired));
         }
 
         /// <summary>
@@ -193,7 +192,7 @@ namespace ChartTypeSelectionTests
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
             VerticalBarChartCheck check = new(Limits.VerticalBarChartLimits);
 
-            Assert.AreEqual(RejectionReason.FirstMultiselectOverMax, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.FirstMultiselectOverMax));
         }
 
         /// <summary>
@@ -213,7 +212,7 @@ namespace ChartTypeSelectionTests
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
             VerticalBarChartCheck check = new(Limits.VerticalBarChartLimits);
 
-            Assert.AreEqual(RejectionReason.FirstMultiselectOverMax, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.FirstMultiselectOverMax));
         }
 
         /// <summary>
@@ -232,7 +231,7 @@ namespace ChartTypeSelectionTests
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
             VerticalBarChartCheck check = new(Limits.VerticalBarChartLimits);
 
-            Assert.AreEqual(RejectionReason.IrregularTimeOverMax, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.IrregularTimeOverMax));
         }
 
         /// <summary>
@@ -251,7 +250,7 @@ namespace ChartTypeSelectionTests
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
             VerticalBarChartCheck check = new(Limits.VerticalBarChartLimits);
 
-            Assert.True(check.CheckValidity(input).Count == 0);
+            Assert.That(check.CheckValidity(input).Count, Is.EqualTo(0));
         }
 
         /// <summary>
@@ -268,38 +267,49 @@ namespace ChartTypeSelectionTests
                 new VariableParameters(VariableType.OtherClassificatory, 10),
             ];
 
+            SanityCheck();
+            ValidWithSelectables();
+            WithDynamicQueries();
+            FailWithoutSelectables();
+
             // Sanity check: Too many multiselects by default
+            void SanityCheck()
             {
                 VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
                 VerticalBarChartCheck check = new(Limits.VerticalBarChartLimits);
-                Assert.AreEqual(RejectionReason.TooManyMultiselections, check.CheckValidity(input)[0].Reason);
+                Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.TooManyMultiselections));
             }
 
             // Selectable should have be considered as single values => check should pass
-            dimension[2].Selectable = true; // OtherClassificatory
-            dimension[3].Selectable = true; // OtherClassificatory
-            {
+            void ValidWithSelectables()
+            { 
+                dimension[2].Selectable = true; // OtherClassificatory
+                dimension[3].Selectable = true; // OtherClassificatory
+            
                 VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
                 VerticalBarChartCheck check = new(Limits.VerticalBarChartLimits);
-                Assert.IsFalse(check.CheckValidity(input).Count != 0);
+                Assert.That(check.CheckValidity(input).Count, Is.EqualTo(0));
             }
 
             // Dynamic queries force multivalue interpretation, UNLESS variable is selectable => check should still pass
-            dimension[2].ValueFilter = new AllFilter(); // OtherClassificatory
-            dimension[3].ValueFilter = new FromFilter("abc"); // OtherClassificatory
+            void WithDynamicQueries()
             {
+                dimension[2].ValueFilter = new AllFilter(); // OtherClassificatory
+                dimension[3].ValueFilter = new FromFilter("abc"); // OtherClassificatory
+
                 VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
                 VerticalBarChartCheck check = new(Limits.VerticalBarChartLimits);
-                Assert.IsFalse(check.CheckValidity(input).Count != 0);
+                Assert.That(check.CheckValidity(input).Count, Is.EqualTo(0));
             }
 
             // Sanity check: And when variables are not selectable, query should fail again
-            dimension[2].Selectable = false; // OtherClassificatory
-            dimension[3].Selectable = false; // OtherClassificatory,
+            void FailWithoutSelectables()
             {
+                dimension[2].Selectable = false; // OtherClassificatory
+                dimension[3].Selectable = false; // OtherClassificatory,
                 VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
                 VerticalBarChartCheck check = new(Limits.VerticalBarChartLimits);
-                Assert.AreEqual(RejectionReason.TooManyMultiselections, check.CheckValidity(input)[0].Reason);
+                Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.TooManyMultiselections));
             }
         }
     }

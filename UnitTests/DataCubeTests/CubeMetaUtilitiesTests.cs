@@ -27,7 +27,7 @@ namespace DataCubeTests
 
             CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(varParams);
             int numOfMultivalue = meta.GetNumberOfMultivalueVariables();
-            Assert.AreEqual(3, numOfMultivalue);
+            Assert.That(numOfMultivalue, Is.EqualTo(3));
         }
 
         [Test]
@@ -41,7 +41,7 @@ namespace DataCubeTests
 
             CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(varParams);
             int numOfMultivalue = meta.GetNumberOfMultivalueVariables();
-            Assert.AreEqual(0, numOfMultivalue);
+            Assert.That(numOfMultivalue, Is.EqualTo(0));
         }
 
         [Test]
@@ -57,26 +57,26 @@ namespace DataCubeTests
 
             CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(varParams);
             IReadOnlyList<IReadOnlyVariable> multivalueVars = meta.GetMultivalueVariables();
-            Assert.AreEqual(3, multivalueVars.Count);
+            Assert.That(multivalueVars.Count, Is.EqualTo(3));
 
             List<IReadOnlyVariable> expected = [meta.Variables[1], meta.Variables[2], meta.Variables[3]];
-            Assert.AreEqual(expected, multivalueVars);
+            Assert.That(multivalueVars, Is.EquivalentTo(expected));
 
             //Time, 2
-            Assert.AreEqual(VariableType.Time, multivalueVars[0].Type);
-            Assert.AreEqual(2, multivalueVars[0].IncludedValues.Count);
+            Assert.That(multivalueVars[0].Type, Is.EqualTo(VariableType.Time));
+            Assert.That(multivalueVars[0].IncludedValues.Count, Is.EqualTo(2));
 
             //OtherClassificatory, 5
-            Assert.AreEqual(VariableType.OtherClassificatory, multivalueVars[1].Type);
-            Assert.AreEqual(5, multivalueVars[1].IncludedValues.Count);
+            Assert.That(multivalueVars[1].Type, Is.EqualTo(VariableType.OtherClassificatory));
+            Assert.That(multivalueVars[1].IncludedValues.Count, Is.EqualTo(5));
 
             //Unknown, 3
-            Assert.AreEqual(VariableType.Unknown, multivalueVars[2].Type);
-            Assert.AreEqual(3, multivalueVars[2].IncludedValues.Count);
+            Assert.That(multivalueVars[2].Type, Is.EqualTo(VariableType.Unknown));
+            Assert.That(multivalueVars[2].IncludedValues.Count, Is.EqualTo(3));
 
             //Variable values in order
             IEnumerable<string> expectedValues = ["value-0", "value-1", "value-2", "value-3", "value-4"];
-            Assert.AreEqual(expectedValues, multivalueVars[1].IncludedValues.Select(vv => vv.Code));
+            Assert.That(multivalueVars[1].IncludedValues.Select(vv => vv.Code), Is.EquivalentTo(expectedValues));
         }
 
         [Test]
@@ -90,7 +90,7 @@ namespace DataCubeTests
 
             CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(varParams);
             IReadOnlyList<IReadOnlyVariable> multivalueVars = meta.GetMultivalueVariables();
-            Assert.IsEmpty(multivalueVars);
+            Assert.That(multivalueVars, Is.Empty);
         }
 
         [Test]
@@ -106,26 +106,26 @@ namespace DataCubeTests
 
             CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(varParams);
             IReadOnlyList<IReadOnlyVariable> multivalueVars = meta.GetSortedMultivalueVariables();
-            Assert.AreEqual(3, multivalueVars.Count);
+            Assert.That(multivalueVars.Count, Is.EqualTo(3));
 
             List<IReadOnlyVariable> expected = [meta.Variables[2], meta.Variables[3], meta.Variables[1]];
-            Assert.AreEqual(expected, multivalueVars);
+            Assert.That(multivalueVars, Is.EquivalentTo(expected));
 
             //OtherClassificatory, 5
-            Assert.AreEqual(VariableType.OtherClassificatory, multivalueVars[0].Type);
-            Assert.AreEqual(5, multivalueVars[0].IncludedValues.Count);
+            Assert.That(multivalueVars[0].Type, Is.EqualTo(VariableType.OtherClassificatory));
+            Assert.That(multivalueVars[0].IncludedValues.Count, Is.EqualTo(5));
 
             //Unknown, 3
-            Assert.AreEqual(VariableType.Unknown, multivalueVars[1].Type);
-            Assert.AreEqual(3, multivalueVars[1].IncludedValues.Count);
+            Assert.That(multivalueVars[1].Type, Is.EqualTo(VariableType.Unknown));
+            Assert.That(multivalueVars[1].IncludedValues.Count, Is.EqualTo(3));
 
             //Time, 2
-            Assert.AreEqual(VariableType.Time, multivalueVars[2].Type);
-            Assert.AreEqual(2, multivalueVars[2].IncludedValues.Count);
+            Assert.That(multivalueVars[2].Type, Is.EqualTo(VariableType.Time));
+            Assert.That(multivalueVars[2].IncludedValues.Count, Is.EqualTo(2));
 
             //Variable values in order
             IEnumerable<string> expectedValues = ["value-0", "value-1", "value-2"];
-            Assert.AreEqual(expectedValues, multivalueVars[1].IncludedValues.Select(vv => vv.Code));
+            Assert.That(multivalueVars[1].IncludedValues.Select(vv => vv.Code), Is.EquivalentTo(expectedValues));
         }
 
         [Test]
@@ -139,7 +139,7 @@ namespace DataCubeTests
 
             CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(varParams);
             IReadOnlyList<IReadOnlyVariable> multivalueVars = meta.GetSortedMultivalueVariables();
-            Assert.IsEmpty(multivalueVars);
+            Assert.That(multivalueVars, Is.Empty);
         }
 
         [Test]
@@ -154,8 +154,7 @@ namespace DataCubeTests
             ];
 
             CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(varParams);
-            IReadOnlyVariable largest = meta.GetLargestMultivalueVariable();
-            Assert.AreSame(meta.Variables[2], largest);
+            Assert.That(meta.Variables[2], Is.SameAs(meta.GetLargestMultivalueVariable()));
         }
 
         [Test]
@@ -171,14 +170,14 @@ namespace DataCubeTests
 
             CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(varParams);
             IReadOnlyVariable largest = meta.GetLargestMultivalueVariable();
-            Assert.NotNull(largest);
+            Assert.That(largest, Is.Not.Null);
 
-            Assert.AreEqual(VariableType.OtherClassificatory, largest.Type);
-            Assert.AreEqual(5, largest.IncludedValues.Count);
+            Assert.That(largest.Type, Is.EqualTo(VariableType.OtherClassificatory));
+            Assert.That(largest.IncludedValues.Count, Is.EqualTo(5));
 
             //Variable values in order
             IEnumerable<string> expectedValues = ["value-0", "value-1", "value-2", "value-3", "value-4"];
-            Assert.AreEqual(expectedValues, largest.IncludedValues.Select(vv => vv.Code));
+            Assert.That(largest.IncludedValues.Select(vv => vv.Code), Is.EquivalentTo(expectedValues));
         }
 
         [Test]
@@ -192,7 +191,7 @@ namespace DataCubeTests
 
             CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(varParams);
             IReadOnlyVariable largest = meta.GetLargestMultivalueVariable();
-            Assert.IsNull(largest);
+            Assert.That(largest, Is.Null);
         }
 
         [Test]
@@ -206,7 +205,7 @@ namespace DataCubeTests
 
             CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(varParams);
             IReadOnlyVariable smaller = meta.GetSmallerMultivalueVariable();
-            Assert.IsNull(smaller);
+            Assert.That(smaller, Is.Null);
         }
 
         [Test]
@@ -221,7 +220,7 @@ namespace DataCubeTests
 
             CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(varParams);
             IReadOnlyVariable smaller = meta.GetSmallerMultivalueVariable();
-            Assert.IsNull(smaller);
+            Assert.That(smaller, Is.Null);
         }
 
         [Test]
@@ -237,7 +236,7 @@ namespace DataCubeTests
 
             CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(varParams);
             IReadOnlyVariable smaller = meta.GetSmallerMultivalueVariable();
-            Assert.AreSame(meta.Variables[2], smaller);
+            Assert.That(smaller, Is.SameAs(meta.Variables[2]));
         }
 
         [Test]
@@ -251,7 +250,7 @@ namespace DataCubeTests
 
             CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(varParams);
             IReadOnlyVariable largest = meta.GetMultivalueTimeOrLargestOrdinal();
-            Assert.IsNull(largest);
+            Assert.That(largest, Is.Null);
         }
 
         [Test]
@@ -265,7 +264,7 @@ namespace DataCubeTests
 
             CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(varParams);
             IReadOnlyVariable mvtolo = meta.GetMultivalueTimeOrLargestOrdinal();
-            Assert.AreSame(meta.Variables[1], mvtolo);
+            Assert.That(mvtolo, Is.SameAs(meta.Variables[1]));
         }
 
         [Test]
@@ -280,7 +279,7 @@ namespace DataCubeTests
 
             var meta = TestDataCubeBuilder.BuildTestMeta(varParams);
             var mvtolo = meta.GetMultivalueTimeOrLargestOrdinal();
-            Assert.AreSame(meta.Variables[1], mvtolo);
+            Assert.That(mvtolo, Is.SameAs(meta.Variables[1]));
         }
 
         [Test]
@@ -295,7 +294,7 @@ namespace DataCubeTests
 
             CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(varParams);
             IReadOnlyVariable mvtolo = meta.GetMultivalueTimeOrLargestOrdinal();
-            Assert.AreSame(meta.Variables[1], mvtolo);
+            Assert.That(mvtolo, Is.SameAs(meta.Variables[1]));
         }
 
         [Test]
@@ -310,7 +309,7 @@ namespace DataCubeTests
 
             CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(varParams);
             IReadOnlyVariable mvtolo = meta.GetMultivalueTimeOrLargestOrdinal();
-            Assert.AreSame(meta.Variables[2], mvtolo);
+            Assert.That(mvtolo, Is.SameAs(meta.Variables[2]));
         }
 
         [Test]
@@ -354,7 +353,7 @@ namespace DataCubeTests
 
             CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(varParams);
             IReadOnlyVariable contentVar = meta.GetContentVariable();
-            Assert.AreSame(meta.Variables[1], contentVar);
+            Assert.That(contentVar, Is.SameAs(meta.Variables[1]));
         }
 
 
@@ -399,7 +398,7 @@ namespace DataCubeTests
 
             CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(varParams);
             IReadOnlyVariable timeVar = meta.GetTimeVariable();
-            Assert.AreSame(meta.Variables[1], timeVar);
+            Assert.That(timeVar, Is.SameAs(meta.Variables[1]));
         }
 
         [Test]
@@ -415,7 +414,7 @@ namespace DataCubeTests
 
             CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(varParams);
             string unit = meta.GetUnambiguousUnitsInLang("fi");
-            Assert.AreEqual("testUnit", unit);
+            Assert.That(unit, Is.EqualTo("testUnit"));
         }
 
         [Test]
@@ -431,7 +430,7 @@ namespace DataCubeTests
 
             CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(varParams);
             string unit = meta.GetUnambiguousUnitsInLang("fi");
-            Assert.IsNull(unit);
+            Assert.That(unit, Is.Null);
         }
 
         [Test]
@@ -446,8 +445,8 @@ namespace DataCubeTests
             ];
 
             CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(varParams);
-            string unit = meta.GetUnambiguousSourceInLang("fi");
-            Assert.AreEqual("testSource", unit);
+            string source = meta.GetUnambiguousSourceInLang("fi");
+            Assert.That(source, Is.EqualTo("testSource"));
         }
 
         [Test]
@@ -463,7 +462,7 @@ namespace DataCubeTests
 
             CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(varParams);
             string unit = meta.GetUnambiguousSourceInLang("fi");
-            Assert.IsNull(unit);
+            Assert.That(unit, Is.Null);
         }
 
         [Test]
@@ -480,7 +479,7 @@ namespace DataCubeTests
             CubeMeta cubeMeta = TestDataCubeBuilder.BuildTestMeta(metaParams);
             cubeMeta.ApplyEditionFromQuery(cubeQuery);
 
-            Assert.AreEqual("value-0 2000-2004 muuttujana variable-2", cubeMeta.GetHeaderWithoutTimePlaceholders()["fi"]);
+            Assert.That(cubeMeta.GetHeaderWithoutTimePlaceholders()["fi"], Is.EqualTo("value-0 2000-2004 muuttujana variable-2"));
         }
 
         [Test]
@@ -497,7 +496,7 @@ namespace DataCubeTests
             CubeMeta cubeMeta = TestDataCubeBuilder.BuildTestMeta(metaParams);
             cubeMeta.ApplyEditionFromQuery(cubeQuery);
 
-            Assert.AreEqual("value-0 2000 muuttujana variable-2", cubeMeta.GetHeaderWithoutTimePlaceholders()["fi"]);
+            Assert.That(cubeMeta.GetHeaderWithoutTimePlaceholders()["fi"], Is.EqualTo("value-0 2000 muuttujana variable-2"));
         }
     }
 }

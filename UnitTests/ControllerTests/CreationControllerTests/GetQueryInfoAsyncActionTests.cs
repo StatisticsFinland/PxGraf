@@ -73,7 +73,7 @@ namespace CreationControllerTests
             CubeQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
             ActionResult<QueryInfoResponse> actionResult = await testController.GetQueryInfoAsync(cubeQuery);
 
-            Assert.IsInstanceOf<ActionResult<QueryInfoResponse>>(actionResult);
+            Assert.That(actionResult, Is.InstanceOf<ActionResult<QueryInfoResponse>>());
         }
 
         [Test]
@@ -100,7 +100,7 @@ namespace CreationControllerTests
             ActionResult<QueryInfoResponse> actionResult = await testController.GetQueryInfoAsync(cubeQuery);
 
             List<VisualizationType> expected = [VisualizationType.LineChart, VisualizationType.VerticalBarChart, VisualizationType.Table];
-            Assert.AreEqual(expected, actionResult.Value.ValidVisualizations);
+            Assert.That(actionResult.Value.ValidVisualizations, Is.EqualTo(expected));
         }
 
         [Test]
@@ -127,7 +127,7 @@ namespace CreationControllerTests
             ActionResult<QueryInfoResponse> actionResult = await testController.GetQueryInfoAsync(cubeQuery);
 
             // 10 * 3 * 15
-            Assert.AreEqual(450, actionResult.Value.Size);
+            Assert.That(actionResult.Value.Size, Is.EqualTo(450));
         }
 
         [Test]
@@ -165,7 +165,7 @@ namespace CreationControllerTests
                 VisualizationType.ScatterPlot
             ];
 
-            Assert.AreEqual(expectedTypes, actionResult.Value.VisualizationRejectionReasons.Keys);
+            Assert.That(actionResult.Value.VisualizationRejectionReasons.Keys, Is.EqualTo(expectedTypes));
         }
 
         [Test]
@@ -192,9 +192,9 @@ namespace CreationControllerTests
             ActionResult<QueryInfoResponse> actionResult = await testController.GetQueryInfoAsync(cubeQuery);
 
             KeyValuePair<VisualizationType, MultiLanguageString> firstReason = actionResult.Value.VisualizationRejectionReasons.First();
-            Assert.AreEqual(VisualizationType.HorizontalBarChart, firstReason.Key);
-            Assert.AreEqual(3, firstReason.Value.Languages.Count());
-            Assert.AreEqual("Poiminnassa on liikaa monivalintaulottuvuuksia (2 / 1)", firstReason.Value["fi"]);
+            Assert.That(firstReason.Key, Is.EqualTo(VisualizationType.HorizontalBarChart));
+            Assert.That(firstReason.Value.Languages.Count(), Is.EqualTo(3));
+            Assert.That(firstReason.Value["fi"], Is.EqualTo("Poiminnassa on liikaa monivalintaulottuvuuksia (2 / 1)"));
         }
 
         [Test]
@@ -220,7 +220,7 @@ namespace CreationControllerTests
             CubeQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
             ActionResult<QueryInfoResponse> actionResult = await testController.GetQueryInfoAsync(cubeQuery);
 
-            Assert.True(actionResult.Value.SizeWarningLimit < actionResult.Value.MaximumSupportedSize);
+            Assert.That(actionResult.Value.SizeWarningLimit, Is.LessThan(actionResult.Value.MaximumSupportedSize));
         }
 
         [Test]
@@ -248,7 +248,7 @@ namespace CreationControllerTests
             CubeQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
             ActionResult<QueryInfoResponse> actionResult = await testController.GetQueryInfoAsync(cubeQuery);
 
-            Assert.True(actionResult.Value.Size > actionResult.Value.MaximumSupportedSize);
+            Assert.That(actionResult.Value.Size, Is.GreaterThan(actionResult.Value.MaximumSupportedSize));
         }
     }
 }

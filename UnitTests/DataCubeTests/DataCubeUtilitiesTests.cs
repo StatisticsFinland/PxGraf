@@ -31,7 +31,7 @@ namespace DataCubeTests
             cube = DataCubeUtilities.ApplySelectableVariableSelections(cube, selections);
             IReadOnlyList<DataValue> expected = DataValueUtilities.List(0.123, 3.123, 6.123, 9.123, 12.123, 15.123);
 
-            Assert.IsTrue(DataValueUtilities.Compare(expected, cube.Data, out string message), message);
+            Assert.That(DataValueUtilities.Compare(expected, cube.Data, out string message), Is.True, message);
         }
 
         [Test]
@@ -53,7 +53,7 @@ namespace DataCubeTests
             cube = DataCubeUtilities.ApplySelectableVariableSelections(cube, selections);
             IReadOnlyList<DataValue> expected = DataValueUtilities.List(0.123, 1.123, 2.123, 6.123, 7.123, 8.123, 12.123, 13.123, 14.123, 18.123, 19.123, 20.123);
 
-            Assert.IsTrue(DataValueUtilities.Compare(expected, cube.Data, out string message), message);
+            Assert.That(DataValueUtilities.Compare(expected, cube.Data, out string message), Is.True, message);
         }
     }
 }

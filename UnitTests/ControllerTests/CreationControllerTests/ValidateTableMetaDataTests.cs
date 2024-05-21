@@ -58,9 +58,9 @@ namespace CreationControllerTests
             TableMetaValidationResult result = await controller.ValidateTableMetaData(tablePath);
 
             // Assert
-            Assert.AreEqual(hasContentVariable, result.TableHasContentVariable);
-            Assert.AreEqual(hasTimeVariable, result.TableHasTimeVariable);
-            Assert.AreEqual(noZeroSizedVariables, result.AllVariablesContainValues);
+            Assert.That(result.TableHasContentVariable, Is.EqualTo(hasContentVariable));
+            Assert.That(result.TableHasTimeVariable, Is.EqualTo(hasTimeVariable));
+            Assert.That(result.AllVariablesContainValues, Is.EqualTo(noZeroSizedVariables));
         }
     }
 }

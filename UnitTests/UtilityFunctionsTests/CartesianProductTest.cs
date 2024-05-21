@@ -21,7 +21,7 @@ namespace UtilityFunctionsTests
                 ["B", "2"]
             ];
 
-            Assert.AreEqual(product, UtilityFunctions.CartesianProduct(set));
+            Assert.That(UtilityFunctions.CartesianProduct(set), Is.EqualTo(product));
         }
 
         [Test]
@@ -30,7 +30,7 @@ namespace UtilityFunctionsTests
             List<List<string>> empty = [];
             List<List<string>> product = [[]];
 
-            Assert.AreEqual(product, UtilityFunctions.CartesianProduct(empty));
+            Assert.That(UtilityFunctions.CartesianProduct(empty), Is.EqualTo(product));
         }
 
         [Test]
@@ -38,7 +38,7 @@ namespace UtilityFunctionsTests
         {
             List<List<string>> test = [["test"]];
 
-            Assert.AreEqual(test, UtilityFunctions.CartesianProduct(test));
+            Assert.That(UtilityFunctions.CartesianProduct(test), Is.EqualTo(test));
         }
 
         [Test]
@@ -64,7 +64,7 @@ namespace UtilityFunctionsTests
                 ["B", "2", "!"]
             ];
 
-            Assert.AreEqual(product, UtilityFunctions.CartesianProduct(set));
+            Assert.That(UtilityFunctions.CartesianProduct(set), Is.EqualTo(product));
         }
     }
 }

@@ -21,7 +21,7 @@ namespace LayoutTests
                 ColumnVariableCodes = ["foo", "bar"],
             };
 
-            Assert.IsTrue(layout1.Equals(layout2));
+            Assert.That(layout1, Is.EqualTo(layout2));
         }
 
         [Test]
@@ -39,7 +39,7 @@ namespace LayoutTests
                 ColumnVariableCodes = ["foo", "bar"]
             };
 
-            Assert.IsFalse(layout1.Equals(layout2));
+            Assert.That(layout1, Is.Not.EqualTo(layout2));
         }
 
         [Test]
@@ -57,7 +57,7 @@ namespace LayoutTests
                 ColumnVariableCodes = ["foo", "bar"]
             };
 
-            Assert.IsFalse(layout1.Equals(layout2));
+            Assert.That(layout1, Is.Not.EqualTo(layout2));
         }
 
         [Test]
@@ -71,7 +71,7 @@ namespace LayoutTests
 
             List<string> layout2 = ["foo", "bar"];
 
-            Assert.IsFalse(layout1.Equals(layout2));
+            Assert.That(layout1, Is.Not.EqualTo(layout2));
         }
 
         [Test]
@@ -85,7 +85,7 @@ namespace LayoutTests
 
             Layout layout2 = null;
 
-            Assert.IsFalse(layout1.Equals(layout2));
+            Assert.That(layout1, Is.Not.EqualTo(layout2));
         }
     }
 }

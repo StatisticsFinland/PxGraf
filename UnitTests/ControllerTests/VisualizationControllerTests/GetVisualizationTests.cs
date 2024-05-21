@@ -91,7 +91,7 @@ namespace ControllerTests
             ActionResult<VisualizationResponse> result = await vController.GetVisualization(testQueryId);
 
             mockCachedPxWebConnection.Verify(x => x.BuildDataCubeCachedAsync(It.IsAny<CubeQuery>()), Times.Never());
-            Assert.IsInstanceOf<VisualizationResponse>(result.Value);
+            Assert.That(result.Value, Is.InstanceOf<VisualizationResponse>());
         }
 
         [Test]
@@ -143,7 +143,7 @@ namespace ControllerTests
             ActionResult<VisualizationResponse> result = await vController.GetVisualization(testQueryId);
 
             mockCachedPxWebConnection.Verify(x => x.BuildDataCubeCachedAsync(It.IsAny<CubeQuery>()), Times.Once());
-            Assert.IsInstanceOf<VisualizationResponse>(result.Value);
+            Assert.That(result.Value, Is.InstanceOf<VisualizationResponse>());
         }
 
         [Test]
@@ -195,7 +195,7 @@ namespace ControllerTests
             ActionResult<VisualizationResponse> result = await vController.GetVisualization(testQueryId);
 
             mockCachedPxWebConnection.Verify(x => x.BuildDataCubeCachedAsync(It.IsAny<CubeQuery>()), Times.Never());
-            Assert.IsInstanceOf<AcceptedResult>(result.Result);
+            Assert.That(result.Result, Is.InstanceOf<AcceptedResult>());
         }
 
         [Test]
@@ -243,7 +243,7 @@ namespace ControllerTests
             ActionResult<VisualizationResponse> result = await vController.GetVisualization(testQueryId);
 
             mockCachedPxWebConnection.Verify(x => x.BuildDataCubeCachedAsync(It.IsAny<CubeQuery>()), Times.Once());
-            Assert.IsInstanceOf<AcceptedResult>(result.Result);
+            Assert.That(result.Result, Is.InstanceOf<AcceptedResult>());
         }
 
         [Test]
@@ -263,7 +263,7 @@ namespace ControllerTests
             ActionResult<VisualizationResponse> result = await vController.GetVisualization(testQueryId);
 
             mockCachedPxWebConnection.Verify(x => x.BuildDataCubeCachedAsync(It.IsAny<CubeQuery>()), Times.Never());
-            Assert.IsInstanceOf<BadRequestResult>(result.Result);
+            Assert.That(result.Result, Is.InstanceOf<BadRequestResult>());
         }
     }
 }

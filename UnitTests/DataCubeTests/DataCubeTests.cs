@@ -65,7 +65,7 @@ namespace DataCubeTests
             int[] varSizes = [2, 1, 2, 3];
             var cube = new DataCube(BuildTestCubeMeta(varSizes), BuildTestData(varSizes));
             double[] expected = [0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0];
-            Assert.AreEqual(expected, FromDataValues(cube.Data));
+            Assert.That(FromDataValues(cube.Data), Is.EqualTo(expected));
         }
 
         [Test]
@@ -75,7 +75,7 @@ namespace DataCubeTests
             var cube = new DataCube(BuildTestCubeMeta(varSizes), BuildTestData(varSizes));
             var transform = cube.GetTransform(BuildTestCubeMeta(2, 1, 2, 1).BuildMap());
             double[] expected = [0.0, 3.0, 6.0, 9.0];
-            Assert.AreEqual(expected, FromDataValues(transform.Data));
+            Assert.That(FromDataValues(transform.Data), Is.EqualTo(expected));
         }
 
         [Test]
@@ -85,7 +85,7 @@ namespace DataCubeTests
             var cube = new DataCube(BuildTestCubeMeta(varSizes), BuildTestData(varSizes));
             var pick = cube.GetTransform(BuildTestCubeMeta(2, 1, 1, 3).BuildMap());
             double[] expected = [0.0, 1.0, 2.0, 6.0, 7.0, 8.0];
-            Assert.AreEqual(expected, FromDataValues(pick.Data));
+            Assert.That(FromDataValues(pick.Data), Is.EqualTo(expected));
         }
 
         [Test]
@@ -101,7 +101,7 @@ namespace DataCubeTests
             var transform = cube.GetTransform(map);
             double[] expected = [0.0, 1.0, 2.0, 6.0, 7.0, 8.0, 3.0, 4.0, 5.0, 9.0, 10.0, 11.0];
             var actual = FromDataValues(transform.Data);
-            Assert.AreEqual(expected, actual);
+            Assert.That(actual, Is.EqualTo(expected));
         }
 
         [Test]
@@ -123,7 +123,7 @@ namespace DataCubeTests
             var transform = cube.GetTransform(map);
             double[] expected = [0.0, 3.0, 6.0, 9.0, 1.0, 4.0, 7.0, 10.0, 2.0, 5.0, 8.0, 11.0];
             var actual = FromDataValues(transform.Data);
-            Assert.AreEqual(expected, actual);
+            Assert.That(actual, Is.EqualTo(expected));
         }
     }
 }

@@ -89,7 +89,7 @@ namespace CreationControllerTests
                 });
 
             mockCachedPxWebConnection.Verify(x => x.GetDataCubeCachedAsync(It.IsAny<PxFileReference>(), It.IsAny<IReadOnlyCubeMeta>()), Times.Once());
-            Assert.IsInstanceOf<VisualizationResponse>(result.Value);
+            Assert.That(result.Value, Is.InstanceOf<VisualizationResponse>());
         }
 
         [Test]
@@ -134,7 +134,7 @@ namespace CreationControllerTests
                 });
 
             mockCachedPxWebConnection.Verify(x => x.GetDataCubeCachedAsync(It.IsAny<PxFileReference>(), It.IsAny<IReadOnlyCubeMeta>()), Times.Never());
-            Assert.IsInstanceOf<BadRequestResult>(result.Result);
+            Assert.That(result.Result, Is.InstanceOf<BadRequestResult>());
         }
 
         [Test]
@@ -184,7 +184,7 @@ namespace CreationControllerTests
                 });
 
             mockCachedPxWebConnection.Verify(x => x.GetDataCubeCachedAsync(It.IsAny<PxFileReference>(), It.IsAny<IReadOnlyCubeMeta>()), Times.Once());
-            Assert.IsNotInstanceOf<BadRequestResult>(result.Result);
+            Assert.That(result.Result, Is.Not.InstanceOf<BadRequestResult>());
         }
 
         [Test]
@@ -234,7 +234,7 @@ namespace CreationControllerTests
                 });
 
             mockCachedPxWebConnection.Verify(x => x.GetDataCubeCachedAsync(It.IsAny<PxFileReference>(), It.IsAny<IReadOnlyCubeMeta>()), Times.Once());
-            Assert.IsInstanceOf<BadRequestResult>(result.Result);
+            Assert.That(result.Result, Is.InstanceOf<BadRequestResult>());
         }
     }
 }

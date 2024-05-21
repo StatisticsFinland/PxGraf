@@ -140,9 +140,9 @@ namespace CachingTests
             CachedPxWebConnection cachedConnection = new (mockPxWebApi.Object, mockMemoryCache.Object);
             DataCube result = await cachedConnection.BuildDataCubeCachedAsync(testQuery);
 
-            Assert.IsNotNull(result);
-            Assert.AreEqual(3, result.Meta.Variables.Count);
-            Assert.AreEqual(testData.Data.Length, result.Data.Length);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Meta.Variables.Count, Is.EqualTo(3));
+            Assert.That(result.Data.Length, Is.EqualTo(testData.Data.Length));
         }
 
         [Test]
@@ -171,9 +171,9 @@ namespace CachingTests
             CachedPxWebConnection cachedConnection = new(mockPxWebApi.Object, mockMemoryCache.Object);
             ArchiveCube result = await cachedConnection.BuildArchiveCubeCachedAsync(testQuery);
 
-            Assert.IsNotNull(result);
-            Assert.AreEqual(3, result.Meta.Variables.Count);
-            Assert.AreEqual(testData.Data.Length, result.Data.Count);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Meta.Variables.Count, Is.EqualTo(3));
+            Assert.That(result.Data.Count, Is.EqualTo(testData.Data.Length));
         }
     }
 }

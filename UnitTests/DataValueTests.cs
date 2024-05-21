@@ -34,7 +34,7 @@ namespace DataValueTests
                 "......",
                 "-",
             ];
-            Assert.AreEqual(expected, dataValues);
+            Assert.That(dataValues, Is.EqualTo(expected));
         }
 
         [Test]
@@ -61,7 +61,7 @@ namespace DataValueTests
                 "......",
                 "-",
             ];
-            Assert.AreEqual(expected, dataValues);
+            Assert.That(dataValues, Is.EqualTo(expected));
         }
 
         [Test]
@@ -89,7 +89,7 @@ namespace DataValueTests
                 "......",
                 "-",
             ];
-            Assert.AreEqual(expected, dataValues);
+            Assert.That(dataValues, Is.EqualTo(expected));
         }
 
         /// <summary>
@@ -106,8 +106,8 @@ namespace DataValueTests
             var humanString = dataValue.ToHumanReadableString(0, culture);
             var machineString = dataValue.ToMachineReadableString(0);
 
-            Assert.AreEqual("11", humanString);
-            Assert.AreEqual("11", machineString);
+            Assert.That(humanString, Is.EqualTo("11"));
+            Assert.That(machineString, Is.EqualTo("11"));
         }
 
         [Test]
@@ -119,8 +119,8 @@ namespace DataValueTests
             var humanString = dataValue.ToHumanReadableString(0, culture);
             var machineString = dataValue.ToMachineReadableString(0);
 
-            Assert.AreEqual("-11", humanString);
-            Assert.AreEqual("-11", machineString);
+            Assert.That(humanString, Is.EqualTo("-11"));
+            Assert.That(machineString, Is.EqualTo("-11"));
         }
 
         [Test]
@@ -132,8 +132,8 @@ namespace DataValueTests
             var humanString = dataValue.ToHumanReadableString(1, culture);
             var machineString = dataValue.ToMachineReadableString(1);
 
-            Assert.AreEqual("10.5", humanString);
-            Assert.AreEqual("10.5", machineString);
+            Assert.That(humanString, Is.EqualTo("10.5"));
+            Assert.That(machineString, Is.EqualTo("10.5"));
         }
 
         [Test]
@@ -145,8 +145,8 @@ namespace DataValueTests
             var humanString = dataValue.ToHumanReadableString(1, culture);
             var machineString = dataValue.ToMachineReadableString(1);
 
-            Assert.AreEqual("10.0", humanString);
-            Assert.AreEqual("10.0", machineString);
+            Assert.That(humanString, Is.EqualTo("10.0"));
+            Assert.That(machineString, Is.EqualTo("10.0"));
         }
 
         [Test]
@@ -166,22 +166,16 @@ namespace DataValueTests
                 System.Threading.Thread.CurrentThread.CurrentCulture = enCulture;
                 System.Threading.Thread.CurrentThread.CurrentUICulture = enCulture;
 
-                string humanStringEn = dataValue.ToHumanReadableString(1, fiCulture);
-                string machineStringEn = dataValue.ToMachineReadableString(1);
-
-                Assert.AreEqual("10.5", dataValue.Value.ToString("0.0"));    //By default current culture: en
-                Assert.AreEqual("10,5", humanStringEn);                   //Parameter: fi
-                Assert.AreEqual("10.5", machineStringEn);                 //Always en
+                Assert.That(dataValue.Value.ToString("0.0"), Is.EqualTo("10.5"));               // By default current culture: en
+                Assert.That(dataValue.ToHumanReadableString(1, fiCulture), Is.EqualTo("10,5")); // Parameter: fi
+                Assert.That(dataValue.ToMachineReadableString(1), Is.EqualTo("10.5"));          // Always en
                 
                 System.Threading.Thread.CurrentThread.CurrentCulture = fiCulture;
                 System.Threading.Thread.CurrentThread.CurrentUICulture = fiCulture;
 
-                string humanStringFi = dataValue.ToHumanReadableString(1, enCulture);
-                string machineStringFi = dataValue.ToMachineReadableString(1);
-
-                Assert.AreEqual("10,5", dataValue.Value.ToString("0.0"));    //By default current culture: en
-                Assert.AreEqual("10.5", humanStringFi);                   //Parameter: en
-                Assert.AreEqual("10.5", machineStringFi);                 //Always en
+                Assert.That(dataValue.Value.ToString("0.0"), Is.EqualTo("10,5"));               // By default current culture: fi
+                Assert.That(dataValue.ToHumanReadableString(1, enCulture), Is.EqualTo("10.5")); // Parameter: en
+                Assert.That(dataValue.ToMachineReadableString(1), Is.EqualTo("10.5"));          // Always en
             }
             finally
             {

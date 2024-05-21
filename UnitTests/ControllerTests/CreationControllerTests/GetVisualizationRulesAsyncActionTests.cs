@@ -81,7 +81,7 @@ namespace CreationControllerTests
             };
 
             ActionResult<VisualizationRules> actionResult = await testController.GetVisualizationRulesAsync(rulesRequest);
-            Assert.IsInstanceOf<ActionResult<VisualizationRules>>(actionResult);
+            Assert.That(actionResult, Is.InstanceOf<ActionResult<VisualizationRules>>());
         }
 
         [Test]
@@ -117,7 +117,7 @@ namespace CreationControllerTests
             ActionResult<VisualizationRules> actionResult = await testController.GetVisualizationRulesAsync(rulesRequest);
             List<string> sortingOptionCodes = actionResult.Value.SortingOptions.Select(so => so.Code).ToList();
             List<string> expected = ["descending", "ascending", "no_sorting"];
-            Assert.AreEqual(expected, sortingOptionCodes);
+            Assert.That(sortingOptionCodes, Is.EqualTo(expected));
         }
 
         [Test]
@@ -153,7 +153,7 @@ namespace CreationControllerTests
             ActionResult<VisualizationRules> actionResult = await testController.GetVisualizationRulesAsync(rulesRequest);
             List<string> sortingOptionCodes = actionResult.Value.SortingOptions.Select(so => so.Code).ToList();
             List<string> expected = ["value-0", "value-1", "value-2", "value-3", "sum", "no_sorting"];
-            Assert.AreEqual(expected, sortingOptionCodes);
+            Assert.That(sortingOptionCodes, Is.EqualTo(expected));
         }
 
         [Test]
@@ -189,7 +189,7 @@ namespace CreationControllerTests
             ActionResult<VisualizationRules> actionResult = await testController.GetVisualizationRulesAsync(rulesRequest);
             List<string> sortingOptionCodes = actionResult.Value.SortingOptions.Select(so => so.Code).ToList();
             List<string> expected = ["value-0", "value-1", "value-2", "sum", "no_sorting"];
-            Assert.AreEqual(expected, sortingOptionCodes);
+            Assert.That(sortingOptionCodes, Is.EqualTo(expected));
         }
 
         [Test]
@@ -223,7 +223,7 @@ namespace CreationControllerTests
             };
 
             ActionResult<VisualizationRules> actionResult = await testController.GetVisualizationRulesAsync(rulesRequest);
-            Assert.IsFalse(actionResult.Value.AllowManualPivot);
+            Assert.That(actionResult.Value.AllowManualPivot, Is.False);
         }
 
         [Test]
@@ -257,7 +257,7 @@ namespace CreationControllerTests
             };
 
             ActionResult<VisualizationRules> actionResult = await testController.GetVisualizationRulesAsync(rulesRequest);
-            Assert.IsTrue(actionResult.Value.MultiselectVariableAllowed);
+            Assert.That(actionResult.Value.MultiselectVariableAllowed, Is.True);
         }
 
         [Test]
@@ -288,10 +288,10 @@ namespace CreationControllerTests
 
             ActionResult<VisualizationRules> result = await testController.GetVisualizationRulesAsync(rulesRequest);
 
-            Assert.IsNotNull(result.Value.VisualizationTypeSpecificRules);
-            Assert.IsTrue(result.Value.VisualizationTypeSpecificRules.AllowShowingDataPoints);
-            Assert.IsFalse(result.Value.VisualizationTypeSpecificRules.AllowMatchXLabelsToEnd);
-            Assert.IsFalse(result.Value.VisualizationTypeSpecificRules.AllowSetMarkerScale);
+            Assert.That(result.Value.VisualizationTypeSpecificRules, Is.Not.Null);
+            Assert.That(result.Value.VisualizationTypeSpecificRules.AllowShowingDataPoints, Is.True);
+            Assert.That(result.Value.VisualizationTypeSpecificRules.AllowMatchXLabelsToEnd, Is.False);
+            Assert.That(result.Value.VisualizationTypeSpecificRules.AllowSetMarkerScale, Is.False);
         }
     }
 }

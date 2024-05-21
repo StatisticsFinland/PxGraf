@@ -40,9 +40,9 @@ namespace CreationControllerTests
             List<string> result = await controller.GetLanguagesAsync();
 
             // Assert
-            Assert.AreEqual(2, result.Count);
-            Assert.Contains("foo", result);
-            Assert.Contains("bar", result);
+            Assert.That(result.Count, Is.EqualTo(2));
+            Assert.That(result, Does.Contain("foo"));
+            Assert.That(result, Does.Contain("bar"));
         }
     }
 }

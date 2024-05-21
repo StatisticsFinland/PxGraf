@@ -37,7 +37,7 @@ namespace CachingTests
             mockMemoryCache.Setup(x => x.TryGetValue(It.IsAny<string>(), out outParam)).Returns(true);
 
             PxWebApiResponseCache cache = new (mockMemoryCache.Object);
-            Assert.IsTrue(cache.TryGetMeta(new PxFileReference([], "testName"), out Task<IReadOnlyCubeMeta> _));
+            Assert.That(cache.TryGetMeta(new PxFileReference([], "testName"), out Task<IReadOnlyCubeMeta> _), Is.True);
         }
 
         [Test]
@@ -49,7 +49,7 @@ namespace CachingTests
             mockMemoryCache.Setup(x => x.TryGetValue(It.IsAny<string>(), out outParam)).Returns(false);
 
             PxWebApiResponseCache cache = new(mockMemoryCache.Object);
-            Assert.IsFalse(cache.TryGetMeta(new PxFileReference([], "testName"), out Task<IReadOnlyCubeMeta> _));
+            Assert.That(cache.TryGetMeta(new PxFileReference([], "testName"), out Task<IReadOnlyCubeMeta> _), Is.False);
         }
 
         [Test]
@@ -89,7 +89,7 @@ namespace CachingTests
             mockCache.Setup(x => x.TryGetValue(It.IsAny<string>(), out It.Ref<object>.IsAny)).Returns(true);
 
             PxWebApiResponseCache cache = new(mockCache.Object);
-            Assert.IsTrue(cache.CheckMetaCacheFreshness(new PxFileReference([], "testName")));
+            Assert.That(cache.CheckMetaCacheFreshness(new PxFileReference([], "testName")), Is.True);
         }
 
         [Test]
@@ -99,7 +99,7 @@ namespace CachingTests
             mockCache.Setup(x => x.TryGetValue(It.IsAny<string>(), out It.Ref<object>.IsAny)).Returns(false);
 
             PxWebApiResponseCache cache = new(mockCache.Object);
-            Assert.IsFalse(cache.CheckMetaCacheFreshness(new PxFileReference([], "testName")));
+            Assert.That(cache.CheckMetaCacheFreshness(new PxFileReference([], "testName")), Is.False);
         }
 
         [Test]
@@ -123,7 +123,7 @@ namespace CachingTests
             mockMemoryCache.Setup(x => x.TryGetValue(It.IsAny<string>(), out outParam)).Returns(true);
 
             PxWebApiResponseCache cache = new(mockMemoryCache.Object);
-            Assert.IsTrue(cache.TryGetData(new CubeMeta(), out Task<DataCube> _));
+            Assert.That(cache.TryGetData(new CubeMeta(), out Task<DataCube> _), Is.True);
         }
 
         [Test]
@@ -134,7 +134,7 @@ namespace CachingTests
             mockCache.Setup(x => x.TryGetValue(It.IsAny<string>(), out outParam)).Returns(false);
 
             PxWebApiResponseCache cache = new(mockCache.Object);
-            Assert.IsFalse(cache.TryGetData(new CubeMeta(), out Task<DataCube> _));
+            Assert.That(cache.TryGetData(new CubeMeta(), out Task<DataCube> _), Is.False);
         }
 
         [Test]
@@ -173,7 +173,7 @@ namespace CachingTests
             mockMemoryCache.Setup(x => x.TryGetValue(It.IsAny<string>(), out outParam)).Returns(true);
 
             PxWebApiResponseCache cache = new(mockMemoryCache.Object);
-            Assert.IsTrue(cache.TryGetDataBases("en", out Task<List<DataBaseListResponseItem>> _));
+            Assert.That(cache.TryGetDataBases("en", out Task<List<DataBaseListResponseItem>> _), Is.True);
         }
 
         [Test]
@@ -183,7 +183,7 @@ namespace CachingTests
             mockMemoryCache.Setup(m => m.CreateEntry(It.IsAny<object>())).Returns((ICacheEntry)null);
 
             PxWebApiResponseCache cache = new(mockMemoryCache.Object);
-            Assert.IsFalse(cache.TryGetDataBases("en", out Task<List<DataBaseListResponseItem>> _));
+            Assert.That(cache.TryGetDataBases("en", out Task<List<DataBaseListResponseItem>> _), Is.False);
         }
 
         [Test]
@@ -222,7 +222,7 @@ namespace CachingTests
             mockMemoryCache.Setup(x => x.TryGetValue(It.IsAny<string>(), out outParam)).Returns(true);
 
             PxWebApiResponseCache cache = new(mockMemoryCache.Object);
-            Assert.IsTrue(cache.TryGetTableItems("en", [], out Task<List<TableListResponseItem>> _));
+            Assert.That(cache.TryGetTableItems("en", [], out Task<List<TableListResponseItem>> _), Is.True);
         }
 
         [Test]
@@ -234,7 +234,7 @@ namespace CachingTests
             mockMemoryCache.Setup(x => x.TryGetValue(It.IsAny<string>(), out outParam)).Returns(false);
 
             PxWebApiResponseCache cache = new(mockMemoryCache.Object);
-            Assert.IsFalse(cache.TryGetTableItems("en", [], out Task<List<TableListResponseItem>> _));
+            Assert.That(cache.TryGetTableItems("en", [], out Task<List<TableListResponseItem>> _), Is.False);
         }
 
         [Test]

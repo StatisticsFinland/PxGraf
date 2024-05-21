@@ -39,8 +39,8 @@ namespace Visualization
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(inputCube, inputQuery.Query, testSettings);
 
             string[] expected = ["variable-2", "variable-0", "variable-1", "variable-3"];
-            Assert.AreEqual(expected, result.MetaData.Select(v => v.Code));
-            Assert.AreEqual(expectedData, result.Data);
+            Assert.That(result.MetaData.Select(v => v.Code), Is.EqualTo(expected));
+            Assert.That(result.Data, Is.EqualTo(expectedData));
         }
 
         [Test]
@@ -61,8 +61,8 @@ namespace Visualization
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(inputCube, inputQuery.Query, testSettings);
 
             string[] expected = ["variable-0", "variable-2", "variable-1", "variable-3"];
-            Assert.AreEqual(expected, result.MetaData.Select(v => v.Code));
-            Assert.AreEqual(expectedData, result.Data);
+            Assert.That(result.MetaData.Select(v => v.Code), Is.EqualTo(expected));
+            Assert.That(result.Data, Is.EqualTo(expectedData));
         }
 
         [Test]
@@ -89,8 +89,8 @@ namespace Visualization
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(inputCube, inputQuery.Query, testSettings);
 
             string[] expected = ["variable-2", "variable-4", "variable-1", "variable-0", "variable-3"];
-            Assert.AreEqual(expected, result.MetaData.Select(v => v.Code));
-            Assert.AreEqual(1 * 3 * 3 * 4 * 5, result.Data.Count);
+            Assert.That(result.MetaData.Select(v => v.Code), Is.EqualTo(expected));
+            Assert.That(result.Data.Count, Is.EqualTo(1 * 3 * 3 * 4 * 5));
         }
     }
 }

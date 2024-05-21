@@ -27,7 +27,7 @@ namespace LayoutTests
             Layout result = LayoutRules.GetLineChartLayout(testMeta, testCubeQuery);
             Layout expexted = new([], ["variable-1"]);
 
-            Assert.IsTrue(result.Equals(expexted));
+            Assert.That(result, Is.EqualTo(expexted));
         }
 
         [Test]
@@ -46,7 +46,7 @@ namespace LayoutTests
             Layout result = LayoutRules.GetLineChartLayout(testMeta, testCubeQuery);
             Layout expexted = new(["variable-2"], ["variable-1"]);
 
-            Assert.IsTrue(result.Equals(expexted));
+            Assert.That(result, Is.EqualTo(expexted));
         }
 
         [Test]
@@ -66,7 +66,7 @@ namespace LayoutTests
             Layout result = LayoutRules.GetLineChartLayout(testMeta, testCubeQuery);
             Layout expexted = new(["variable-2", "variable-3"], ["variable-1"]);
 
-            Assert.IsTrue(result.Equals(expexted));
+            Assert.That(result, Is.EqualTo(expexted));
         }
 
         [Test]
@@ -86,7 +86,7 @@ namespace LayoutTests
             Layout result = LayoutRules.GetLineChartLayout(testMeta, testCubeQuery);
             Layout expexted = new(["variable-1", "variable-2"], ["variable-3"]);
 
-            Assert.IsTrue(result.Equals(expexted));
+            Assert.That(result, Is.EqualTo(expexted));
         }
 
         [Test]
@@ -106,7 +106,7 @@ namespace LayoutTests
             Layout result = LayoutRules.GetLineChartLayout(testMeta, testCubeQuery);
             Layout expexted = new(["variable-1"], ["variable-3"]);
 
-            Assert.IsTrue(result.Equals(expexted));
+            Assert.That(result, Is.EqualTo(expexted));
         }
 
         [Test]
@@ -127,7 +127,7 @@ namespace LayoutTests
             Layout result = LayoutRules.GetLineChartLayout(testMeta, testCubeQuery);
             Layout expexted = new(["variable-1"], ["variable-4"]);
 
-            Assert.IsTrue(result.Equals(expexted));
+            Assert.That(result, Is.EqualTo(expexted));
         }
 
         [Test]
@@ -146,7 +146,7 @@ namespace LayoutTests
             Layout result = LayoutRules.GetLineChartLayout(testMeta, testCubeQuery);
             Layout expexted = new([], ["variable-2"]);
 
-            Assert.IsTrue(result.Equals(expexted));
+            Assert.That(result, Is.EqualTo(expexted));
         }
     }
 }

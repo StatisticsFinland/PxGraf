@@ -80,7 +80,7 @@ namespace ControllerTests
             SqController metaController = new(mockCachedPxWebConnection.Object, mockSqFileInterface.Object, new Mock<ILogger<SqController>>().Object);
             ActionResult<SaveQueryParams> result = await metaController.GetSavedQueryAsync(testQueryId);
 
-            Assert.IsInstanceOf<ActionResult<SaveQueryParams>>(result);
+            Assert.That(result, Is.InstanceOf<ActionResult<SaveQueryParams>>());
         }
 
         [Test]
@@ -120,7 +120,7 @@ namespace ControllerTests
             SqController metaController = new(mockCachedPxWebConnection.Object, mockSqFileInterface.Object, new Mock<ILogger<SqController>>().Object);
             ActionResult<SaveQueryParams> actionResult = await metaController.GetSavedQueryAsync(testQueryId);
 
-            Assert.IsInstanceOf<BadRequestResult>(actionResult.Result);
+            Assert.That(actionResult.Result, Is.InstanceOf<BadRequestResult>());
         }
 
         [Test]
@@ -137,7 +137,7 @@ namespace ControllerTests
             SqController metaController = new(mockCachedPxWebConnection.Object, mockSqFileInterface.Object, new Mock<ILogger<SqController>>().Object);
             ActionResult<SaveQueryParams> actionResult = await metaController.GetSavedQueryAsync(testQueryId);
 
-            Assert.IsInstanceOf<NotFoundResult>(actionResult.Result);
+            Assert.That(actionResult.Result, Is.InstanceOf<NotFoundResult>());
         }
     }
 }
