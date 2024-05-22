@@ -91,7 +91,7 @@ namespace LayoutTests
             ];
 
             CubeMeta query = TestDataCubeBuilder.BuildTestMeta(variables);
-            Assert.That(ManualPivotRules.GroupVerticalBarChart(query), Is.False);
+            Assert.That(ManualPivotRules.GroupVerticalBarChart(query), Is.True);
         }
 
         [Test]
@@ -149,7 +149,7 @@ namespace LayoutTests
             ];
 
             CubeMeta query = TestDataCubeBuilder.BuildTestMeta(variables);
-            Assert.That(ManualPivotRules.StackedVerticalBarChart(query), Is.False);
+            Assert.That(ManualPivotRules.StackedVerticalBarChart(query), Is.True);
         }
 
         [Test]

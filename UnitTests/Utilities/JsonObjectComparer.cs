@@ -10,7 +10,7 @@ namespace UnitTests.Utilities
         {
             var expectedJson = JsonConvert.SerializeObject(expected);
             var actualJson = JsonConvert.SerializeObject(actual);
-            Assert.AreEqual(expectedJson, actualJson);
+            Assert.That(actualJson, Is.EqualTo(expectedJson));
         }
 
         [GeneratedRegex("\\s")]

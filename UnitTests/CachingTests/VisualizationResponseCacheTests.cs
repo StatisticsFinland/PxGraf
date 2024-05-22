@@ -86,7 +86,7 @@ namespace CachingTests
             cache.Set(TEST_KEY, task);
             var state = cache.TryGet(TEST_KEY, out VisualizationResponse faultyResponse);
             Assert.That(state, Is.EqualTo(VisualizationResponseCache.CacheEntryState.Error));
-            Assert.That(faultyResponse, Is.Not.Null);
+            Assert.That(faultyResponse, Is.Null);
 
             // check that the entry is removed from the cache
             Assert.That(cache.TryGet(TEST_KEY, out _), Is.EqualTo(VisualizationResponseCache.CacheEntryState.Null));

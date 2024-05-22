@@ -16,7 +16,7 @@ namespace SerializerTests
         public void SavedQueryDeserializationTest_Success()
         {
             SavedQuery query = JsonConvert.DeserializeObject<SavedQuery>(testSavedQuery);
-            Assert.AreEqual(VisualizationType.LineChart, query.Settings.VisualizationType);
+            Assert.That(query.Settings.VisualizationType, Is.EqualTo(VisualizationType.LineChart));
         }
 
         [Test]
@@ -51,12 +51,12 @@ namespace SerializerTests
 
             SavedQuery savedQuery = JsonConvert.DeserializeObject<SavedQuery>(testJson);
 
-            Assert.AreEqual(DateTime.Parse("023-04-24T14:36:18.7550813+03:00", CultureInfo.InvariantCulture), savedQuery.CreationTime);
-            Assert.AreEqual(VisualizationType.Table, savedQuery.Settings.VisualizationType);
-            Assert.IsTrue(savedQuery.Archived);
-            Assert.AreEqual(3, savedQuery.Settings.Layout.ColumnVariableCodes.Count);
-            Assert.AreEqual("1.0", savedQuery.Version);
-            Assert.IsNull(savedQuery.Settings.DefaultSelectableVariableCodes);
+            Assert.That(savedQuery.CreationTime, Is.EqualTo(DateTime.Parse("023-04-24T14:36:18.7550813+03:00", CultureInfo.InvariantCulture)));
+            Assert.That(savedQuery.Settings.VisualizationType, Is.EqualTo(VisualizationType.Table));
+            Assert.That(savedQuery.Archived, Is.True);
+            Assert.That(savedQuery.Settings.Layout.ColumnVariableCodes.Count, Is.EqualTo(3));
+            Assert.That(savedQuery.Version, Is.EqualTo("1.0"));
+            Assert.That(savedQuery.Settings.DefaultSelectableVariableCodes, Is.Null);
         }
 
         [Test]
@@ -82,12 +82,12 @@ namespace SerializerTests
 
             SavedQuery savedQuery = JsonConvert.DeserializeObject<SavedQuery>(testJson);
 
-            Assert.AreEqual(DateTime.Parse("023-04-24T14:36:18.7550813+03:00", CultureInfo.InvariantCulture), savedQuery.CreationTime);
-            Assert.AreEqual(VisualizationType.Table, savedQuery.Settings.VisualizationType);
-            Assert.IsTrue(savedQuery.Archived);
-            Assert.AreEqual(3, savedQuery.Settings.Layout.ColumnVariableCodes.Count);
-            Assert.AreEqual("1.0", savedQuery.Version);
-            Assert.IsNotNull(savedQuery.Settings.DefaultSelectableVariableCodes);
+            Assert.That(savedQuery.CreationTime, Is.EqualTo(DateTime.Parse("023-04-24T14:36:18.7550813+03:00", CultureInfo.InvariantCulture)));
+            Assert.That(savedQuery.Settings.VisualizationType, Is.EqualTo(VisualizationType.Table));
+            Assert.That(savedQuery.Archived, Is.True);
+            Assert.That(savedQuery.Settings.Layout.ColumnVariableCodes.Count, Is.EqualTo(3));
+            Assert.That(savedQuery.Version, Is.EqualTo("1.0"));
+            Assert.That(savedQuery.Settings.DefaultSelectableVariableCodes, Is.Not.Null);
         }
 
         [Test]
@@ -116,15 +116,15 @@ namespace SerializerTests
 
             SavedQuery savedQuery = JsonConvert.DeserializeObject<SavedQuery>(testJson);
 
-            Assert.AreEqual(DateTime.Parse("023-04-24T14:36:18.7550813+03:00", CultureInfo.InvariantCulture), savedQuery.CreationTime);
-            Assert.AreEqual(VisualizationType.GroupVerticalBarChart, savedQuery.Settings.VisualizationType);
-            Assert.IsTrue(savedQuery.Archived);
-            Assert.AreEqual(1, savedQuery.Settings.Layout.RowVariableCodes.Count);
-            Assert.AreEqual("Kuukausi", savedQuery.Settings.Layout.RowVariableCodes[0]);
-            Assert.AreEqual(1, savedQuery.Settings.Layout.ColumnVariableCodes.Count);
-            Assert.AreEqual("Ilmoittava lentoasema", savedQuery.Settings.Layout.ColumnVariableCodes[0]);
-            Assert.AreEqual("1.1", savedQuery.Version);
-            Assert.IsNull(savedQuery.Settings.DefaultSelectableVariableCodes);
+            Assert.That(savedQuery.CreationTime, Is.EqualTo(DateTime.Parse("023-04-24T14:36:18.7550813+03:00", CultureInfo.InvariantCulture)));
+            Assert.That(savedQuery.Settings.VisualizationType, Is.EqualTo(VisualizationType.GroupVerticalBarChart));
+            Assert.That(savedQuery.Archived, Is.True);
+            Assert.That(savedQuery.Settings.Layout.RowVariableCodes.Count, Is.EqualTo(1));
+            Assert.That(savedQuery.Settings.Layout.RowVariableCodes[0], Is.EqualTo("Kuukausi"));
+            Assert.That(savedQuery.Settings.Layout.ColumnVariableCodes.Count, Is.EqualTo(1));
+            Assert.That(savedQuery.Settings.Layout.ColumnVariableCodes[0], Is.EqualTo("Ilmoittava lentoasema"));
+            Assert.That(savedQuery.Version, Is.EqualTo("1.1"));
+            Assert.That(savedQuery.Settings.DefaultSelectableVariableCodes, Is.Null);
         }
 
         [Test]
@@ -153,15 +153,15 @@ namespace SerializerTests
 
             SavedQuery savedQuery = JsonConvert.DeserializeObject<SavedQuery>(testJson);
 
-            Assert.AreEqual(DateTime.Parse("023-04-24T14:36:18.7550813+03:00", CultureInfo.InvariantCulture), savedQuery.CreationTime);
-            Assert.AreEqual(VisualizationType.GroupVerticalBarChart, savedQuery.Settings.VisualizationType);
-            Assert.IsTrue(savedQuery.Archived);
-            Assert.AreEqual(1, savedQuery.Settings.Layout.RowVariableCodes.Count);
-            Assert.AreEqual("Kuukausi", savedQuery.Settings.Layout.RowVariableCodes[0]);
-            Assert.AreEqual(1, savedQuery.Settings.Layout.ColumnVariableCodes.Count);
-            Assert.AreEqual("Ilmoittava lentoasema", savedQuery.Settings.Layout.ColumnVariableCodes[0]);
-            Assert.AreEqual("1.1", savedQuery.Version);
-            Assert.IsNotNull(savedQuery.Settings.DefaultSelectableVariableCodes);
+            Assert.That(savedQuery.CreationTime, Is.EqualTo(DateTime.Parse("023-04-24T14:36:18.7550813+03:00", CultureInfo.InvariantCulture)));
+            Assert.That(savedQuery.Settings.VisualizationType, Is.EqualTo(VisualizationType.GroupVerticalBarChart));
+            Assert.That(savedQuery.Archived, Is.True);
+            Assert.That(savedQuery.Settings.Layout.RowVariableCodes.Count, Is.EqualTo(1));
+            Assert.That(savedQuery.Settings.Layout.RowVariableCodes[0], Is.EqualTo("Kuukausi"));
+            Assert.That(savedQuery.Settings.Layout.ColumnVariableCodes.Count, Is.EqualTo(1));
+            Assert.That(savedQuery.Settings.Layout.ColumnVariableCodes[0], Is.EqualTo("Ilmoittava lentoasema"));
+            Assert.That(savedQuery.Version, Is.EqualTo("1.1"));
+            Assert.That(savedQuery.Settings.DefaultSelectableVariableCodes, Is.Not.Null);
         }
 
         [Test]
@@ -190,14 +190,14 @@ namespace SerializerTests
 
             SavedQuery savedQuery = JsonConvert.DeserializeObject<SavedQuery>(testJson);
 
-            Assert.AreEqual(DateTime.Parse("023-04-24T14:36:18.7550813+03:00", CultureInfo.InvariantCulture), savedQuery.CreationTime);
-            Assert.AreEqual(VisualizationType.GroupVerticalBarChart, savedQuery.Settings.VisualizationType);
-            Assert.IsTrue(savedQuery.Archived);
-            Assert.AreEqual(1, savedQuery.Settings.Layout.RowVariableCodes.Count);
-            Assert.AreEqual("Ilmoittava lentoasema", savedQuery.Settings.Layout.RowVariableCodes[0]);
-            Assert.AreEqual(1, savedQuery.Settings.Layout.ColumnVariableCodes.Count);
-            Assert.AreEqual("Kuukausi", savedQuery.Settings.Layout.ColumnVariableCodes[0]);
-            Assert.AreEqual("1.1", savedQuery.Version);
+            Assert.That(savedQuery.CreationTime, Is.EqualTo(DateTime.Parse("023-04-24T14:36:18.7550813+03:00", CultureInfo.InvariantCulture)));
+            Assert.That(savedQuery.Settings.VisualizationType, Is.EqualTo(VisualizationType.GroupVerticalBarChart));
+            Assert.That(savedQuery.Archived, Is.True);
+            Assert.That(savedQuery.Settings.Layout.RowVariableCodes.Count, Is.EqualTo(1));
+            Assert.That(savedQuery.Settings.Layout.RowVariableCodes[0], Is.EqualTo("Ilmoittava lentoasema"));
+            Assert.That(savedQuery.Settings.Layout.ColumnVariableCodes.Count, Is.EqualTo(1));
+            Assert.That(savedQuery.Settings.Layout.ColumnVariableCodes[0], Is.EqualTo("Kuukausi"));
+            Assert.That(savedQuery.Version, Is.EqualTo("1.1"));
         }
 
         [Test]
@@ -221,11 +221,11 @@ namespace SerializerTests
 
             SavedQuery savedQuery = JsonConvert.DeserializeObject<SavedQuery>(testJson);
 
-            Assert.AreEqual(DateTime.Parse("023-04-24T14:36:18.7550813+03:00", CultureInfo.InvariantCulture), savedQuery.CreationTime);
-            Assert.AreEqual(VisualizationType.Table, savedQuery.Settings.VisualizationType);
-            Assert.IsTrue(savedQuery.Archived);
-            Assert.AreEqual(3, savedQuery.Settings.Layout.ColumnVariableCodes.Count);
-            Assert.AreEqual("1.0", savedQuery.Version);
+            Assert.That(savedQuery.CreationTime, Is.EqualTo(DateTime.Parse("023-04-24T14:36:18.7550813+03:00", CultureInfo.InvariantCulture)));
+            Assert.That(savedQuery.Settings.VisualizationType, Is.EqualTo(VisualizationType.Table));
+            Assert.That(savedQuery.Archived, Is.True);
+            Assert.That(savedQuery.Settings.Layout.ColumnVariableCodes.Count, Is.EqualTo(3));
+            Assert.That(savedQuery.Version, Is.EqualTo("1.0"));
         }
 
         [Test]
@@ -263,13 +263,13 @@ namespace SerializerTests
 
             SavedQuery savedQuery = JsonConvert.DeserializeObject<SavedQuery>(testJson);
 
-            Assert.AreEqual(DateTime.Parse("023-04-24T14:36:18.7550813+03:00", CultureInfo.InvariantCulture), savedQuery.CreationTime);
-            Assert.AreEqual(VisualizationType.Table, savedQuery.Settings.VisualizationType);
-            Assert.IsTrue(savedQuery.Archived);
-            Assert.IsTrue((bool)savedQuery.LegacyProperties["PivotRequested"]);
-            Assert.AreEqual(0, savedQuery.Settings.Layout.RowVariableCodes.Count);
-            Assert.AreEqual(3, savedQuery.Settings.Layout.ColumnVariableCodes.Count);
-            Assert.AreEqual("1.0", savedQuery.Version);
+            Assert.That(savedQuery.CreationTime, Is.EqualTo(DateTime.Parse("023-04-24T14:36:18.7550813+03:00", CultureInfo.InvariantCulture)));
+            Assert.That(savedQuery.Settings.VisualizationType, Is.EqualTo(VisualizationType.Table));
+            Assert.That(savedQuery.Archived, Is.True);
+            Assert.That((bool)savedQuery.LegacyProperties["PivotRequested"], Is.True);
+            Assert.That(savedQuery.Settings.Layout.RowVariableCodes.Count, Is.EqualTo(0));
+            Assert.That(savedQuery.Settings.Layout.ColumnVariableCodes.Count, Is.EqualTo(3));
+            Assert.That(savedQuery.Version, Is.EqualTo("1.0"));
         }
     }
 }

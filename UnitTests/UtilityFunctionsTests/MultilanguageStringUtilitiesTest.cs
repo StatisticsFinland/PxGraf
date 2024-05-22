@@ -15,9 +15,9 @@ namespace UtilityFunctionsTests
 
             input.Truncate(50);
 
-            Assert.AreEqual(str, input["fi"]);
-            Assert.AreEqual(str, input["sv"]);
-            Assert.AreEqual(str, input["en"]);
+            Assert.That(input["fi"], Is.EqualTo(str));
+            Assert.That(input["sv"], Is.EqualTo(str));
+            Assert.That(input["en"], Is.EqualTo(str));
         }
 
         public static void TruncateTest_50Chars_Truncation()
@@ -30,9 +30,9 @@ namespace UtilityFunctionsTests
             input.Truncate(30);
 
             string expected = "123456789_123456789_123456789_";
-            Assert.AreEqual(expected, input["fi"]);
-            Assert.AreEqual(expected, input["sv"]);
-            Assert.AreEqual(expected, input["en"]);
+            Assert.That(input["fi"], Is.EqualTo(expected));
+            Assert.That(input["sv"], Is.EqualTo(expected));
+            Assert.That(input["en"], Is.EqualTo(expected));
         }
     }
 }

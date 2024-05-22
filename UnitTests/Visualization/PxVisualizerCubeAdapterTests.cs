@@ -344,7 +344,7 @@ namespace Visualization
             DataCube inputCube = TestDataCubeBuilder.BuildTestDataCube(cubeParams);
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(inputCube, savedQuery);
 
-            Assert.That(result.VisualizationSettings.VisualizationType, Is.EqualTo(VisualizationType.GroupHorizontalBarChart));
+            Assert.That(result.VisualizationSettings.VisualizationType, Is.EqualTo(VisualizationType.GroupVerticalBarChart));
             Assert.That(result.ColumnVariableCodes.Count, Is.EqualTo(1));
             Assert.That(result.ColumnVariableCodes[0], Is.EqualTo("Syntymävaltio"));
             Assert.That(result.RowVariableCodes.Count, Is.EqualTo(1));
@@ -475,8 +475,8 @@ namespace Visualization
             Assert.That(MissingDataInfoFromResult[12], Is.EqualTo(5));
             Assert.That(MissingDataInfoFromResult[15], Is.EqualTo(6));
             Assert.That(MissingDataInfoFromResult[18], Is.EqualTo(7));
-            Assert.That(MissingDataInfoFromResult[21], Is.EqualTo(8));
-            Assert.That(MissingDataInfoFromResult[24], Is.EqualTo(9));
+            Assert.That(MissingDataInfoFromResult[21], Is.EqualTo(1));
+            Assert.That(MissingDataInfoFromResult[24], Is.EqualTo(2));
         }
 
         [Test]

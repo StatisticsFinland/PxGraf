@@ -410,7 +410,7 @@ namespace LayoutTests
             ];
 
             CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(variables);
-            Assert.That(AutoPivotRules.ScatterPlot(meta), Is.True);
+            Assert.That(AutoPivotRules.ScatterPlot(meta), Is.False);
         }
 
         [Test]

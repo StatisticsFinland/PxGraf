@@ -18,7 +18,7 @@ namespace SerializerTests
             };
             var serialized = JsonConvert.SerializeObject(mls, settings);
 
-            Assert.AreEqual("null", serialized);
+            Assert.That(serialized, Is.EqualTo("null"));
         }
 
         [Test]
@@ -31,7 +31,7 @@ namespace SerializerTests
 
             var deserialized = JsonConvert.DeserializeObject<MultiLanguageString>("null", settings);
 
-            Assert.AreEqual(null, deserialized);
+            Assert.That(deserialized, Is.Null);
         }
     }
 }
