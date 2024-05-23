@@ -5,7 +5,7 @@ exports[`Rendering test renders grouphorizontalbarchart correctly 1`] = `
   <div>
     <button
       aria-label="tooltip.open: tooltip.visualizationConfig"
-      class="sc-iGgWBj hthaMe"
+      class="sc-iGgVNO VnJWv"
     >
       <svg
         aria-hidden="true"
@@ -20,10 +20,10 @@ exports[`Rendering test renders grouphorizontalbarchart correctly 1`] = `
       </svg>
     </button>
     <div
-      class="sc-dhKdcB bxPCti"
+      class="sc-dhKdPU jQyLlf"
     >
       <div
-        class="MuiStack-root sc-fqkvVR hTQalb css-m69qwo-MuiStack-root"
+        class="MuiStack-root sc-fqkwJk eayMTK css-m69qwo-MuiStack-root"
       >
         <div
           class="MuiBox-root css-0"
@@ -35,7 +35,7 @@ exports[`Rendering test renders grouphorizontalbarchart correctly 1`] = `
             chartSettings.markerScale
           </p>
           <span
-            class="MuiSlider-root MuiSlider-marked MuiSlider-colorPrimary MuiSlider-sizeMedium sc-dcJsrY zOIcO css-ltlhnc-MuiSlider-root"
+            class="MuiSlider-root MuiSlider-marked MuiSlider-colorPrimary MuiSlider-sizeMedium sc-dcJtft kPYCGF css-ltlhnc-MuiSlider-root"
           >
             <span
               class="MuiSlider-rail css-7o8aqz-MuiSlider-rail"
@@ -122,7 +122,7 @@ exports[`Rendering test renders grouphorizontalbarchart correctly 1`] = `
       </div>
     </div>
     <div
-      class="sc-dhKdcB bxPCti"
+      class="sc-dhKdPU jQyLlf"
     >
       <div
         class="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
@@ -155,7 +155,7 @@ exports[`Rendering test renders grouphorizontalbarchart correctly 1`] = `
             class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jXbUNg tWssk css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jXbVAB exbeUY css-ahj2mt-MuiTypography-root"
             >
               chartSettings.cutYAxis
             </p>
@@ -163,7 +163,7 @@ exports[`Rendering test renders grouphorizontalbarchart correctly 1`] = `
         </label>
       </div>
       <div
-        class="MuiFormControl-root MuiFormControl-fullWidth sc-imWYAI kwphLg css-q8hpuo-MuiFormControl-root"
+        class="MuiFormControl-root MuiFormControl-fullWidth sc-imWZod gWNPOB css-q8hpuo-MuiFormControl-root"
       >
         <label
           class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-j204z7-MuiFormControlLabel-root"
@@ -193,7 +193,7 @@ exports[`Rendering test renders grouphorizontalbarchart correctly 1`] = `
             class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jXbUNg tWssk css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jXbVAB exbeUY css-ahj2mt-MuiTypography-root"
             >
               chartSettings.matchXLabelsToEnd
             </p>
@@ -231,7 +231,7 @@ exports[`Rendering test renders grouphorizontalbarchart correctly 1`] = `
             class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jXbUNg tWssk css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jXbVAB exbeUY css-ahj2mt-MuiTypography-root"
             >
               visualizationSettings.showDataPoints
             </p>
@@ -248,7 +248,7 @@ exports[`Rendering test renders groupverticalbarchart correctly 1`] = `
   <div>
     <button
       aria-label="tooltip.open: tooltip.visualizationConfig"
-      class="sc-iGgWBj hthaMe"
+      class="sc-iGgVNO VnJWv"
     >
       <svg
         aria-hidden="true"
@@ -263,10 +263,10 @@ exports[`Rendering test renders groupverticalbarchart correctly 1`] = `
       </svg>
     </button>
     <div
-      class="sc-dhKdcB bxPCti"
+      class="sc-dhKdPU jQyLlf"
     >
       <div
-        class="MuiStack-root sc-fqkvVR hTQalb css-m69qwo-MuiStack-root"
+        class="MuiStack-root sc-fqkwJk eayMTK css-m69qwo-MuiStack-root"
       >
         <div
           class="MuiBox-root css-0"
@@ -278,7 +278,7 @@ exports[`Rendering test renders groupverticalbarchart correctly 1`] = `
             chartSettings.markerScale
           </p>
           <span
-            class="MuiSlider-root MuiSlider-marked MuiSlider-colorPrimary MuiSlider-sizeMedium sc-dcJsrY zOIcO css-ltlhnc-MuiSlider-root"
+            class="MuiSlider-root MuiSlider-marked MuiSlider-colorPrimary MuiSlider-sizeMedium sc-dcJtft kPYCGF css-ltlhnc-MuiSlider-root"
           >
             <span
               class="MuiSlider-rail css-7o8aqz-MuiSlider-rail"
@@ -365,7 +365,7 @@ exports[`Rendering test renders groupverticalbarchart correctly 1`] = `
       </div>
     </div>
     <div
-      class="sc-dhKdcB bxPCti"
+      class="sc-dhKdPU jQyLlf"
     >
       <div
         class="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
@@ -398,7 +398,7 @@ exports[`Rendering test renders groupverticalbarchart correctly 1`] = `
             class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jXbUNg tWssk css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jXbVAB exbeUY css-ahj2mt-MuiTypography-root"
             >
               chartSettings.cutYAxis
             </p>
@@ -406,7 +406,7 @@ exports[`Rendering test renders groupverticalbarchart correctly 1`] = `
         </label>
       </div>
       <div
-        class="MuiFormControl-root MuiFormControl-fullWidth sc-imWYAI kwphLg css-q8hpuo-MuiFormControl-root"
+        class="MuiFormControl-root MuiFormControl-fullWidth sc-imWZod gWNPOB css-q8hpuo-MuiFormControl-root"
       >
         <label
           class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-j204z7-MuiFormControlLabel-root"
@@ -436,7 +436,7 @@ exports[`Rendering test renders groupverticalbarchart correctly 1`] = `
             class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jXbUNg tWssk css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jXbVAB exbeUY css-ahj2mt-MuiTypography-root"
             >
               chartSettings.matchXLabelsToEnd
             </p>
@@ -474,7 +474,7 @@ exports[`Rendering test renders groupverticalbarchart correctly 1`] = `
             class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jXbUNg tWssk css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jXbVAB exbeUY css-ahj2mt-MuiTypography-root"
             >
               visualizationSettings.showDataPoints
             </p>
@@ -491,7 +491,7 @@ exports[`Rendering test renders horizontalbarchart correctly 1`] = `
   <div>
     <button
       aria-label="tooltip.open: tooltip.visualizationConfig"
-      class="sc-iGgWBj hthaMe"
+      class="sc-iGgVNO VnJWv"
     >
       <svg
         aria-hidden="true"
@@ -506,10 +506,10 @@ exports[`Rendering test renders horizontalbarchart correctly 1`] = `
       </svg>
     </button>
     <div
-      class="sc-dhKdcB bxPCti"
+      class="sc-dhKdPU jQyLlf"
     >
       <div
-        class="MuiStack-root sc-fqkvVR hTQalb css-m69qwo-MuiStack-root"
+        class="MuiStack-root sc-fqkwJk eayMTK css-m69qwo-MuiStack-root"
       >
         <div
           class="MuiBox-root css-0"
@@ -521,7 +521,7 @@ exports[`Rendering test renders horizontalbarchart correctly 1`] = `
             chartSettings.markerScale
           </p>
           <span
-            class="MuiSlider-root MuiSlider-marked MuiSlider-colorPrimary MuiSlider-sizeMedium sc-dcJsrY zOIcO css-ltlhnc-MuiSlider-root"
+            class="MuiSlider-root MuiSlider-marked MuiSlider-colorPrimary MuiSlider-sizeMedium sc-dcJtft kPYCGF css-ltlhnc-MuiSlider-root"
           >
             <span
               class="MuiSlider-rail css-7o8aqz-MuiSlider-rail"
@@ -608,7 +608,7 @@ exports[`Rendering test renders horizontalbarchart correctly 1`] = `
       </div>
     </div>
     <div
-      class="sc-dhKdcB bxPCti"
+      class="sc-dhKdPU jQyLlf"
     >
       <div
         class="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
@@ -641,7 +641,7 @@ exports[`Rendering test renders horizontalbarchart correctly 1`] = `
             class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jXbUNg tWssk css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jXbVAB exbeUY css-ahj2mt-MuiTypography-root"
             >
               chartSettings.cutYAxis
             </p>
@@ -649,7 +649,7 @@ exports[`Rendering test renders horizontalbarchart correctly 1`] = `
         </label>
       </div>
       <div
-        class="MuiFormControl-root MuiFormControl-fullWidth sc-imWYAI kwphLg css-q8hpuo-MuiFormControl-root"
+        class="MuiFormControl-root MuiFormControl-fullWidth sc-imWZod gWNPOB css-q8hpuo-MuiFormControl-root"
       >
         <label
           class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-j204z7-MuiFormControlLabel-root"
@@ -679,7 +679,7 @@ exports[`Rendering test renders horizontalbarchart correctly 1`] = `
             class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jXbUNg tWssk css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jXbVAB exbeUY css-ahj2mt-MuiTypography-root"
             >
               chartSettings.matchXLabelsToEnd
             </p>
@@ -717,7 +717,7 @@ exports[`Rendering test renders horizontalbarchart correctly 1`] = `
             class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jXbUNg tWssk css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jXbVAB exbeUY css-ahj2mt-MuiTypography-root"
             >
               visualizationSettings.showDataPoints
             </p>
@@ -734,7 +734,7 @@ exports[`Rendering test renders linechart correctly 1`] = `
   <div>
     <button
       aria-label="tooltip.open: tooltip.visualizationConfig"
-      class="sc-iGgWBj hthaMe"
+      class="sc-iGgVNO VnJWv"
     >
       <svg
         aria-hidden="true"
@@ -749,10 +749,10 @@ exports[`Rendering test renders linechart correctly 1`] = `
       </svg>
     </button>
     <div
-      class="sc-dhKdcB bxPCti"
+      class="sc-dhKdPU jQyLlf"
     >
       <div
-        class="MuiStack-root sc-fqkvVR hTQalb css-m69qwo-MuiStack-root"
+        class="MuiStack-root sc-fqkwJk eayMTK css-m69qwo-MuiStack-root"
       >
         <div
           class="MuiBox-root css-0"
@@ -764,7 +764,7 @@ exports[`Rendering test renders linechart correctly 1`] = `
             chartSettings.markerScale
           </p>
           <span
-            class="MuiSlider-root MuiSlider-marked MuiSlider-colorPrimary MuiSlider-sizeMedium sc-dcJsrY zOIcO css-ltlhnc-MuiSlider-root"
+            class="MuiSlider-root MuiSlider-marked MuiSlider-colorPrimary MuiSlider-sizeMedium sc-dcJtft kPYCGF css-ltlhnc-MuiSlider-root"
           >
             <span
               class="MuiSlider-rail css-7o8aqz-MuiSlider-rail"
@@ -851,7 +851,7 @@ exports[`Rendering test renders linechart correctly 1`] = `
       </div>
     </div>
     <div
-      class="sc-dhKdcB bxPCti"
+      class="sc-dhKdPU jQyLlf"
     >
       <div
         class="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
@@ -884,7 +884,7 @@ exports[`Rendering test renders linechart correctly 1`] = `
             class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jXbUNg tWssk css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jXbVAB exbeUY css-ahj2mt-MuiTypography-root"
             >
               chartSettings.cutYAxis
             </p>
@@ -892,7 +892,7 @@ exports[`Rendering test renders linechart correctly 1`] = `
         </label>
       </div>
       <div
-        class="MuiFormControl-root MuiFormControl-fullWidth sc-imWYAI kwphLg css-q8hpuo-MuiFormControl-root"
+        class="MuiFormControl-root MuiFormControl-fullWidth sc-imWZod gWNPOB css-q8hpuo-MuiFormControl-root"
       >
         <label
           class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-j204z7-MuiFormControlLabel-root"
@@ -922,7 +922,7 @@ exports[`Rendering test renders linechart correctly 1`] = `
             class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jXbUNg tWssk css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jXbVAB exbeUY css-ahj2mt-MuiTypography-root"
             >
               chartSettings.matchXLabelsToEnd
             </p>
@@ -960,7 +960,7 @@ exports[`Rendering test renders linechart correctly 1`] = `
             class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jXbUNg tWssk css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jXbVAB exbeUY css-ahj2mt-MuiTypography-root"
             >
               visualizationSettings.showDataPoints
             </p>
@@ -977,7 +977,7 @@ exports[`Rendering test renders percenthorizontalbarchart correctly 1`] = `
   <div>
     <button
       aria-label="tooltip.open: tooltip.visualizationConfig"
-      class="sc-iGgWBj hthaMe"
+      class="sc-iGgVNO VnJWv"
     >
       <svg
         aria-hidden="true"
@@ -992,10 +992,10 @@ exports[`Rendering test renders percenthorizontalbarchart correctly 1`] = `
       </svg>
     </button>
     <div
-      class="sc-dhKdcB bxPCti"
+      class="sc-dhKdPU jQyLlf"
     >
       <div
-        class="MuiStack-root sc-fqkvVR hTQalb css-m69qwo-MuiStack-root"
+        class="MuiStack-root sc-fqkwJk eayMTK css-m69qwo-MuiStack-root"
       >
         <div
           class="MuiBox-root css-0"
@@ -1007,7 +1007,7 @@ exports[`Rendering test renders percenthorizontalbarchart correctly 1`] = `
             chartSettings.markerScale
           </p>
           <span
-            class="MuiSlider-root MuiSlider-marked MuiSlider-colorPrimary MuiSlider-sizeMedium sc-dcJsrY zOIcO css-ltlhnc-MuiSlider-root"
+            class="MuiSlider-root MuiSlider-marked MuiSlider-colorPrimary MuiSlider-sizeMedium sc-dcJtft kPYCGF css-ltlhnc-MuiSlider-root"
           >
             <span
               class="MuiSlider-rail css-7o8aqz-MuiSlider-rail"
@@ -1094,7 +1094,7 @@ exports[`Rendering test renders percenthorizontalbarchart correctly 1`] = `
       </div>
     </div>
     <div
-      class="sc-dhKdcB bxPCti"
+      class="sc-dhKdPU jQyLlf"
     >
       <div
         class="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
@@ -1127,7 +1127,7 @@ exports[`Rendering test renders percenthorizontalbarchart correctly 1`] = `
             class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jXbUNg tWssk css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jXbVAB exbeUY css-ahj2mt-MuiTypography-root"
             >
               chartSettings.cutYAxis
             </p>
@@ -1135,7 +1135,7 @@ exports[`Rendering test renders percenthorizontalbarchart correctly 1`] = `
         </label>
       </div>
       <div
-        class="MuiFormControl-root MuiFormControl-fullWidth sc-imWYAI kwphLg css-q8hpuo-MuiFormControl-root"
+        class="MuiFormControl-root MuiFormControl-fullWidth sc-imWZod gWNPOB css-q8hpuo-MuiFormControl-root"
       >
         <label
           class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-j204z7-MuiFormControlLabel-root"
@@ -1165,7 +1165,7 @@ exports[`Rendering test renders percenthorizontalbarchart correctly 1`] = `
             class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jXbUNg tWssk css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jXbVAB exbeUY css-ahj2mt-MuiTypography-root"
             >
               chartSettings.matchXLabelsToEnd
             </p>
@@ -1203,7 +1203,7 @@ exports[`Rendering test renders percenthorizontalbarchart correctly 1`] = `
             class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jXbUNg tWssk css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jXbVAB exbeUY css-ahj2mt-MuiTypography-root"
             >
               visualizationSettings.showDataPoints
             </p>
@@ -1220,7 +1220,7 @@ exports[`Rendering test renders percentverticalbarchart correctly 1`] = `
   <div>
     <button
       aria-label="tooltip.open: tooltip.visualizationConfig"
-      class="sc-iGgWBj hthaMe"
+      class="sc-iGgVNO VnJWv"
     >
       <svg
         aria-hidden="true"
@@ -1235,10 +1235,10 @@ exports[`Rendering test renders percentverticalbarchart correctly 1`] = `
       </svg>
     </button>
     <div
-      class="sc-dhKdcB bxPCti"
+      class="sc-dhKdPU jQyLlf"
     >
       <div
-        class="MuiStack-root sc-fqkvVR hTQalb css-m69qwo-MuiStack-root"
+        class="MuiStack-root sc-fqkwJk eayMTK css-m69qwo-MuiStack-root"
       >
         <div
           class="MuiBox-root css-0"
@@ -1250,7 +1250,7 @@ exports[`Rendering test renders percentverticalbarchart correctly 1`] = `
             chartSettings.markerScale
           </p>
           <span
-            class="MuiSlider-root MuiSlider-marked MuiSlider-colorPrimary MuiSlider-sizeMedium sc-dcJsrY zOIcO css-ltlhnc-MuiSlider-root"
+            class="MuiSlider-root MuiSlider-marked MuiSlider-colorPrimary MuiSlider-sizeMedium sc-dcJtft kPYCGF css-ltlhnc-MuiSlider-root"
           >
             <span
               class="MuiSlider-rail css-7o8aqz-MuiSlider-rail"
@@ -1337,7 +1337,7 @@ exports[`Rendering test renders percentverticalbarchart correctly 1`] = `
       </div>
     </div>
     <div
-      class="sc-dhKdcB bxPCti"
+      class="sc-dhKdPU jQyLlf"
     >
       <div
         class="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
@@ -1370,7 +1370,7 @@ exports[`Rendering test renders percentverticalbarchart correctly 1`] = `
             class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jXbUNg tWssk css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jXbVAB exbeUY css-ahj2mt-MuiTypography-root"
             >
               chartSettings.cutYAxis
             </p>
@@ -1378,7 +1378,7 @@ exports[`Rendering test renders percentverticalbarchart correctly 1`] = `
         </label>
       </div>
       <div
-        class="MuiFormControl-root MuiFormControl-fullWidth sc-imWYAI kwphLg css-q8hpuo-MuiFormControl-root"
+        class="MuiFormControl-root MuiFormControl-fullWidth sc-imWZod gWNPOB css-q8hpuo-MuiFormControl-root"
       >
         <label
           class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-j204z7-MuiFormControlLabel-root"
@@ -1408,7 +1408,7 @@ exports[`Rendering test renders percentverticalbarchart correctly 1`] = `
             class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jXbUNg tWssk css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jXbVAB exbeUY css-ahj2mt-MuiTypography-root"
             >
               chartSettings.matchXLabelsToEnd
             </p>
@@ -1446,7 +1446,7 @@ exports[`Rendering test renders percentverticalbarchart correctly 1`] = `
             class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jXbUNg tWssk css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jXbVAB exbeUY css-ahj2mt-MuiTypography-root"
             >
               visualizationSettings.showDataPoints
             </p>
@@ -1463,7 +1463,7 @@ exports[`Rendering test renders piechart correctly 1`] = `
   <div>
     <button
       aria-label="tooltip.open: tooltip.visualizationConfig"
-      class="sc-iGgWBj hthaMe"
+      class="sc-iGgVNO VnJWv"
     >
       <svg
         aria-hidden="true"
@@ -1478,10 +1478,10 @@ exports[`Rendering test renders piechart correctly 1`] = `
       </svg>
     </button>
     <div
-      class="sc-dhKdcB bxPCti"
+      class="sc-dhKdPU jQyLlf"
     >
       <div
-        class="MuiStack-root sc-fqkvVR hTQalb css-m69qwo-MuiStack-root"
+        class="MuiStack-root sc-fqkwJk eayMTK css-m69qwo-MuiStack-root"
       >
         <div
           class="MuiBox-root css-0"
@@ -1493,7 +1493,7 @@ exports[`Rendering test renders piechart correctly 1`] = `
             chartSettings.markerScale
           </p>
           <span
-            class="MuiSlider-root MuiSlider-marked MuiSlider-colorPrimary MuiSlider-sizeMedium sc-dcJsrY zOIcO css-ltlhnc-MuiSlider-root"
+            class="MuiSlider-root MuiSlider-marked MuiSlider-colorPrimary MuiSlider-sizeMedium sc-dcJtft kPYCGF css-ltlhnc-MuiSlider-root"
           >
             <span
               class="MuiSlider-rail css-7o8aqz-MuiSlider-rail"
@@ -1580,7 +1580,7 @@ exports[`Rendering test renders piechart correctly 1`] = `
       </div>
     </div>
     <div
-      class="sc-dhKdcB bxPCti"
+      class="sc-dhKdPU jQyLlf"
     >
       <div
         class="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
@@ -1613,7 +1613,7 @@ exports[`Rendering test renders piechart correctly 1`] = `
             class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jXbUNg tWssk css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jXbVAB exbeUY css-ahj2mt-MuiTypography-root"
             >
               chartSettings.cutYAxis
             </p>
@@ -1621,7 +1621,7 @@ exports[`Rendering test renders piechart correctly 1`] = `
         </label>
       </div>
       <div
-        class="MuiFormControl-root MuiFormControl-fullWidth sc-imWYAI kwphLg css-q8hpuo-MuiFormControl-root"
+        class="MuiFormControl-root MuiFormControl-fullWidth sc-imWZod gWNPOB css-q8hpuo-MuiFormControl-root"
       >
         <label
           class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-j204z7-MuiFormControlLabel-root"
@@ -1651,7 +1651,7 @@ exports[`Rendering test renders piechart correctly 1`] = `
             class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jXbUNg tWssk css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jXbVAB exbeUY css-ahj2mt-MuiTypography-root"
             >
               chartSettings.matchXLabelsToEnd
             </p>
@@ -1689,7 +1689,7 @@ exports[`Rendering test renders piechart correctly 1`] = `
             class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jXbUNg tWssk css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jXbVAB exbeUY css-ahj2mt-MuiTypography-root"
             >
               visualizationSettings.showDataPoints
             </p>
@@ -1706,7 +1706,7 @@ exports[`Rendering test renders scatterplot correctly 1`] = `
   <div>
     <button
       aria-label="tooltip.open: tooltip.visualizationConfig"
-      class="sc-iGgWBj hthaMe"
+      class="sc-iGgVNO VnJWv"
     >
       <svg
         aria-hidden="true"
@@ -1721,10 +1721,10 @@ exports[`Rendering test renders scatterplot correctly 1`] = `
       </svg>
     </button>
     <div
-      class="sc-dhKdcB bxPCti"
+      class="sc-dhKdPU jQyLlf"
     >
       <div
-        class="MuiStack-root sc-fqkvVR hTQalb css-m69qwo-MuiStack-root"
+        class="MuiStack-root sc-fqkwJk eayMTK css-m69qwo-MuiStack-root"
       >
         <div
           class="MuiBox-root css-0"
@@ -1736,7 +1736,7 @@ exports[`Rendering test renders scatterplot correctly 1`] = `
             chartSettings.markerScale
           </p>
           <span
-            class="MuiSlider-root MuiSlider-marked MuiSlider-colorPrimary MuiSlider-sizeMedium sc-dcJsrY zOIcO css-ltlhnc-MuiSlider-root"
+            class="MuiSlider-root MuiSlider-marked MuiSlider-colorPrimary MuiSlider-sizeMedium sc-dcJtft kPYCGF css-ltlhnc-MuiSlider-root"
           >
             <span
               class="MuiSlider-rail css-7o8aqz-MuiSlider-rail"
@@ -1823,7 +1823,7 @@ exports[`Rendering test renders scatterplot correctly 1`] = `
       </div>
     </div>
     <div
-      class="sc-dhKdcB bxPCti"
+      class="sc-dhKdPU jQyLlf"
     >
       <div
         class="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
@@ -1856,7 +1856,7 @@ exports[`Rendering test renders scatterplot correctly 1`] = `
             class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jXbUNg tWssk css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jXbVAB exbeUY css-ahj2mt-MuiTypography-root"
             >
               chartSettings.cutYAxis
             </p>
@@ -1864,7 +1864,7 @@ exports[`Rendering test renders scatterplot correctly 1`] = `
         </label>
       </div>
       <div
-        class="MuiFormControl-root MuiFormControl-fullWidth sc-imWYAI kwphLg css-q8hpuo-MuiFormControl-root"
+        class="MuiFormControl-root MuiFormControl-fullWidth sc-imWZod gWNPOB css-q8hpuo-MuiFormControl-root"
       >
         <label
           class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-j204z7-MuiFormControlLabel-root"
@@ -1894,7 +1894,7 @@ exports[`Rendering test renders scatterplot correctly 1`] = `
             class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jXbUNg tWssk css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jXbVAB exbeUY css-ahj2mt-MuiTypography-root"
             >
               chartSettings.matchXLabelsToEnd
             </p>
@@ -1932,7 +1932,7 @@ exports[`Rendering test renders scatterplot correctly 1`] = `
             class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jXbUNg tWssk css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jXbVAB exbeUY css-ahj2mt-MuiTypography-root"
             >
               visualizationSettings.showDataPoints
             </p>
@@ -1949,7 +1949,7 @@ exports[`Rendering test renders stackedhorizontalbarchart correctly 1`] = `
   <div>
     <button
       aria-label="tooltip.open: tooltip.visualizationConfig"
-      class="sc-iGgWBj hthaMe"
+      class="sc-iGgVNO VnJWv"
     >
       <svg
         aria-hidden="true"
@@ -1964,10 +1964,10 @@ exports[`Rendering test renders stackedhorizontalbarchart correctly 1`] = `
       </svg>
     </button>
     <div
-      class="sc-dhKdcB bxPCti"
+      class="sc-dhKdPU jQyLlf"
     >
       <div
-        class="MuiStack-root sc-fqkvVR hTQalb css-m69qwo-MuiStack-root"
+        class="MuiStack-root sc-fqkwJk eayMTK css-m69qwo-MuiStack-root"
       >
         <div
           class="MuiBox-root css-0"
@@ -1979,7 +1979,7 @@ exports[`Rendering test renders stackedhorizontalbarchart correctly 1`] = `
             chartSettings.markerScale
           </p>
           <span
-            class="MuiSlider-root MuiSlider-marked MuiSlider-colorPrimary MuiSlider-sizeMedium sc-dcJsrY zOIcO css-ltlhnc-MuiSlider-root"
+            class="MuiSlider-root MuiSlider-marked MuiSlider-colorPrimary MuiSlider-sizeMedium sc-dcJtft kPYCGF css-ltlhnc-MuiSlider-root"
           >
             <span
               class="MuiSlider-rail css-7o8aqz-MuiSlider-rail"
@@ -2066,7 +2066,7 @@ exports[`Rendering test renders stackedhorizontalbarchart correctly 1`] = `
       </div>
     </div>
     <div
-      class="sc-dhKdcB bxPCti"
+      class="sc-dhKdPU jQyLlf"
     >
       <div
         class="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
@@ -2099,7 +2099,7 @@ exports[`Rendering test renders stackedhorizontalbarchart correctly 1`] = `
             class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jXbUNg tWssk css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jXbVAB exbeUY css-ahj2mt-MuiTypography-root"
             >
               chartSettings.cutYAxis
             </p>
@@ -2107,7 +2107,7 @@ exports[`Rendering test renders stackedhorizontalbarchart correctly 1`] = `
         </label>
       </div>
       <div
-        class="MuiFormControl-root MuiFormControl-fullWidth sc-imWYAI kwphLg css-q8hpuo-MuiFormControl-root"
+        class="MuiFormControl-root MuiFormControl-fullWidth sc-imWZod gWNPOB css-q8hpuo-MuiFormControl-root"
       >
         <label
           class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-j204z7-MuiFormControlLabel-root"
@@ -2137,7 +2137,7 @@ exports[`Rendering test renders stackedhorizontalbarchart correctly 1`] = `
             class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jXbUNg tWssk css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jXbVAB exbeUY css-ahj2mt-MuiTypography-root"
             >
               chartSettings.matchXLabelsToEnd
             </p>
@@ -2175,7 +2175,7 @@ exports[`Rendering test renders stackedhorizontalbarchart correctly 1`] = `
             class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jXbUNg tWssk css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jXbVAB exbeUY css-ahj2mt-MuiTypography-root"
             >
               visualizationSettings.showDataPoints
             </p>
@@ -2192,7 +2192,7 @@ exports[`Rendering test renders stackedverticalbarchart correctly 1`] = `
   <div>
     <button
       aria-label="tooltip.open: tooltip.visualizationConfig"
-      class="sc-iGgWBj hthaMe"
+      class="sc-iGgVNO VnJWv"
     >
       <svg
         aria-hidden="true"
@@ -2207,10 +2207,10 @@ exports[`Rendering test renders stackedverticalbarchart correctly 1`] = `
       </svg>
     </button>
     <div
-      class="sc-dhKdcB bxPCti"
+      class="sc-dhKdPU jQyLlf"
     >
       <div
-        class="MuiStack-root sc-fqkvVR hTQalb css-m69qwo-MuiStack-root"
+        class="MuiStack-root sc-fqkwJk eayMTK css-m69qwo-MuiStack-root"
       >
         <div
           class="MuiBox-root css-0"
@@ -2222,7 +2222,7 @@ exports[`Rendering test renders stackedverticalbarchart correctly 1`] = `
             chartSettings.markerScale
           </p>
           <span
-            class="MuiSlider-root MuiSlider-marked MuiSlider-colorPrimary MuiSlider-sizeMedium sc-dcJsrY zOIcO css-ltlhnc-MuiSlider-root"
+            class="MuiSlider-root MuiSlider-marked MuiSlider-colorPrimary MuiSlider-sizeMedium sc-dcJtft kPYCGF css-ltlhnc-MuiSlider-root"
           >
             <span
               class="MuiSlider-rail css-7o8aqz-MuiSlider-rail"
@@ -2309,7 +2309,7 @@ exports[`Rendering test renders stackedverticalbarchart correctly 1`] = `
       </div>
     </div>
     <div
-      class="sc-dhKdcB bxPCti"
+      class="sc-dhKdPU jQyLlf"
     >
       <div
         class="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
@@ -2342,7 +2342,7 @@ exports[`Rendering test renders stackedverticalbarchart correctly 1`] = `
             class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jXbUNg tWssk css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jXbVAB exbeUY css-ahj2mt-MuiTypography-root"
             >
               chartSettings.cutYAxis
             </p>
@@ -2350,7 +2350,7 @@ exports[`Rendering test renders stackedverticalbarchart correctly 1`] = `
         </label>
       </div>
       <div
-        class="MuiFormControl-root MuiFormControl-fullWidth sc-imWYAI kwphLg css-q8hpuo-MuiFormControl-root"
+        class="MuiFormControl-root MuiFormControl-fullWidth sc-imWZod gWNPOB css-q8hpuo-MuiFormControl-root"
       >
         <label
           class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-j204z7-MuiFormControlLabel-root"
@@ -2380,7 +2380,7 @@ exports[`Rendering test renders stackedverticalbarchart correctly 1`] = `
             class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jXbUNg tWssk css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jXbVAB exbeUY css-ahj2mt-MuiTypography-root"
             >
               chartSettings.matchXLabelsToEnd
             </p>
@@ -2418,7 +2418,7 @@ exports[`Rendering test renders stackedverticalbarchart correctly 1`] = `
             class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jXbUNg tWssk css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jXbVAB exbeUY css-ahj2mt-MuiTypography-root"
             >
               visualizationSettings.showDataPoints
             </p>
@@ -2435,7 +2435,7 @@ exports[`Rendering test renders table correctly 1`] = `
   <div>
     <button
       aria-label="tooltip.open: tooltip.visualizationConfig"
-      class="sc-iGgWBj hthaMe"
+      class="sc-iGgVNO VnJWv"
     >
       <svg
         aria-hidden="true"
@@ -2450,16 +2450,16 @@ exports[`Rendering test renders table correctly 1`] = `
       </svg>
     </button>
     <div
-      class="sc-dhKdcB bxPCti"
+      class="sc-dhKdPU jQyLlf"
     >
       <div
         class="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
       >
         <div
-          class="MuiStack-root sc-gEvEer dSbliT css-m69qwo-MuiStack-root"
+          class="MuiStack-root sc-gEvDqW bZJbke css-m69qwo-MuiStack-root"
         >
           <ul
-            class="MuiList-root MuiList-padding MuiList-dense MuiList-subheader sc-aXZVg htWJIQ css-p64g7a-MuiList-root"
+            class="MuiList-root MuiList-padding MuiList-dense MuiList-subheader sc-aYaIB cnEXlN css-p64g7a-MuiList-root"
           >
             <li
               class="MuiListSubheader-root MuiListSubheader-gutters MuiListSubheader-sticky css-uob957-MuiListSubheader-root"
@@ -2504,7 +2504,7 @@ exports[`Rendering test renders table correctly 1`] = `
             </div>
           </ul>
           <div
-            class="MuiStack-root sc-eqUAAy lphtNa css-nen11g-MuiStack-root"
+            class="MuiStack-root sc-eqUzNf gAUYPs css-nen11g-MuiStack-root"
           >
             <button
               aria-label="tableSettings.up"
@@ -2571,7 +2571,7 @@ exports[`Rendering test renders table correctly 1`] = `
             </button>
           </div>
           <ul
-            class="MuiList-root MuiList-padding MuiList-dense MuiList-subheader sc-aXZVg htWJIQ css-p64g7a-MuiList-root"
+            class="MuiList-root MuiList-padding MuiList-dense MuiList-subheader sc-aYaIB cnEXlN css-p64g7a-MuiList-root"
           >
             <li
               class="MuiListSubheader-root MuiListSubheader-gutters MuiListSubheader-sticky css-uob957-MuiListSubheader-root"
@@ -2618,7 +2618,7 @@ exports[`Rendering test renders table correctly 1`] = `
         </div>
       </div>
       <div
-        class="MuiStack-root sc-fqkvVR hTQalb css-m69qwo-MuiStack-root"
+        class="MuiStack-root sc-fqkwJk eayMTK css-m69qwo-MuiStack-root"
       >
         <div
           class="MuiBox-root css-0"
@@ -2630,7 +2630,7 @@ exports[`Rendering test renders table correctly 1`] = `
             chartSettings.markerScale
           </p>
           <span
-            class="MuiSlider-root MuiSlider-marked MuiSlider-colorPrimary MuiSlider-sizeMedium sc-dcJsrY zOIcO css-ltlhnc-MuiSlider-root"
+            class="MuiSlider-root MuiSlider-marked MuiSlider-colorPrimary MuiSlider-sizeMedium sc-dcJtft kPYCGF css-ltlhnc-MuiSlider-root"
           >
             <span
               class="MuiSlider-rail css-7o8aqz-MuiSlider-rail"
@@ -2717,7 +2717,7 @@ exports[`Rendering test renders table correctly 1`] = `
       </div>
     </div>
     <div
-      class="sc-dhKdcB bxPCti"
+      class="sc-dhKdPU jQyLlf"
     >
       <div
         class="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
@@ -2750,7 +2750,7 @@ exports[`Rendering test renders table correctly 1`] = `
             class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jXbUNg tWssk css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jXbVAB exbeUY css-ahj2mt-MuiTypography-root"
             >
               chartSettings.cutYAxis
             </p>
@@ -2758,7 +2758,7 @@ exports[`Rendering test renders table correctly 1`] = `
         </label>
       </div>
       <div
-        class="MuiFormControl-root MuiFormControl-fullWidth sc-imWYAI kwphLg css-q8hpuo-MuiFormControl-root"
+        class="MuiFormControl-root MuiFormControl-fullWidth sc-imWZod gWNPOB css-q8hpuo-MuiFormControl-root"
       >
         <label
           class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-j204z7-MuiFormControlLabel-root"
@@ -2788,7 +2788,7 @@ exports[`Rendering test renders table correctly 1`] = `
             class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jXbUNg tWssk css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jXbVAB exbeUY css-ahj2mt-MuiTypography-root"
             >
               chartSettings.matchXLabelsToEnd
             </p>
@@ -2826,7 +2826,7 @@ exports[`Rendering test renders table correctly 1`] = `
             class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jXbUNg tWssk css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jXbVAB exbeUY css-ahj2mt-MuiTypography-root"
             >
               visualizationSettings.showDataPoints
             </p>
@@ -2843,7 +2843,7 @@ exports[`Rendering test renders verticalbarchart correctly 1`] = `
   <div>
     <button
       aria-label="tooltip.open: tooltip.visualizationConfig"
-      class="sc-iGgWBj hthaMe"
+      class="sc-iGgVNO VnJWv"
     >
       <svg
         aria-hidden="true"
@@ -2858,10 +2858,10 @@ exports[`Rendering test renders verticalbarchart correctly 1`] = `
       </svg>
     </button>
     <div
-      class="sc-dhKdcB bxPCti"
+      class="sc-dhKdPU jQyLlf"
     >
       <div
-        class="MuiStack-root sc-fqkvVR hTQalb css-m69qwo-MuiStack-root"
+        class="MuiStack-root sc-fqkwJk eayMTK css-m69qwo-MuiStack-root"
       >
         <div
           class="MuiBox-root css-0"
@@ -2873,7 +2873,7 @@ exports[`Rendering test renders verticalbarchart correctly 1`] = `
             chartSettings.markerScale
           </p>
           <span
-            class="MuiSlider-root MuiSlider-marked MuiSlider-colorPrimary MuiSlider-sizeMedium sc-dcJsrY zOIcO css-ltlhnc-MuiSlider-root"
+            class="MuiSlider-root MuiSlider-marked MuiSlider-colorPrimary MuiSlider-sizeMedium sc-dcJtft kPYCGF css-ltlhnc-MuiSlider-root"
           >
             <span
               class="MuiSlider-rail css-7o8aqz-MuiSlider-rail"
@@ -2960,7 +2960,7 @@ exports[`Rendering test renders verticalbarchart correctly 1`] = `
       </div>
     </div>
     <div
-      class="sc-dhKdcB bxPCti"
+      class="sc-dhKdPU jQyLlf"
     >
       <div
         class="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
@@ -2993,7 +2993,7 @@ exports[`Rendering test renders verticalbarchart correctly 1`] = `
             class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jXbUNg tWssk css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jXbVAB exbeUY css-ahj2mt-MuiTypography-root"
             >
               chartSettings.cutYAxis
             </p>
@@ -3001,7 +3001,7 @@ exports[`Rendering test renders verticalbarchart correctly 1`] = `
         </label>
       </div>
       <div
-        class="MuiFormControl-root MuiFormControl-fullWidth sc-imWYAI kwphLg css-q8hpuo-MuiFormControl-root"
+        class="MuiFormControl-root MuiFormControl-fullWidth sc-imWZod gWNPOB css-q8hpuo-MuiFormControl-root"
       >
         <label
           class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-j204z7-MuiFormControlLabel-root"
@@ -3031,7 +3031,7 @@ exports[`Rendering test renders verticalbarchart correctly 1`] = `
             class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jXbUNg tWssk css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jXbVAB exbeUY css-ahj2mt-MuiTypography-root"
             >
               chartSettings.matchXLabelsToEnd
             </p>
@@ -3069,7 +3069,7 @@ exports[`Rendering test renders verticalbarchart correctly 1`] = `
             class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jXbUNg tWssk css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jXbVAB exbeUY css-ahj2mt-MuiTypography-root"
             >
               visualizationSettings.showDataPoints
             </p>

@@ -7,6 +7,7 @@ import { initReactI18next } from "react-i18next";
 // Extends the NodeRequire interface to allow require.context to be used in TypeScript
 declare const require: NodeRequire;
 interface NodeRequire {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     context: (directory: string, useSubdirectories?: boolean, regExp?: RegExp) => any;
 }
 

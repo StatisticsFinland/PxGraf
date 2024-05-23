@@ -3,14 +3,14 @@
 exports[`Rendering test renders correctly 1`] = `
 <DocumentFragment>
   <div
-  class="sc-gsFSXq jknzzI MuiBox-root css-0"
+  class="sc-gsFSjX byexzi MuiBox-root css-0"
 >
   <div
-    class="sc-dcJsrY hLoHLO"
+    class="sc-dcJtft gWaAR"
   >
     <button
       aria-label="tooltip.open: tooltip.visualizationSize"
-      class="sc-aXZVg lSzEq"
+      class="sc-aYaIB gUIDUH"
     >
       <svg
         aria-hidden="true"
@@ -133,7 +133,7 @@ exports[`Rendering test renders correctly 1`] = `
     class="MuiStack-root css-pl8gqh-MuiStack-root"
   />
   <div
-    class="sc-iGgWBj fhbmWs tk-table"
+    class="sc-iGgVNO fwccUH tk-table"
   >
     <pre
       data-testid="Chart"
@@ -148,7 +148,7 @@ exports[`Rendering test renders correctly 1`] = `
 exports[`Rendering test renders correctly with no valid visualizations 1`] = `
 <DocumentFragment>
   <div
-  class="sc-kAyceB dZVFsH"
+  class="sc-kAycRU etURhS"
 >
   <span>
     previewGuide.impossibleToVisualize
@@ -160,7 +160,7 @@ exports[`Rendering test renders correctly with no valid visualizations 1`] = `
 exports[`Rendering test renders correctly with no valid visualizations or rejected visualizations 1`] = `
 <DocumentFragment>
   <div
-  class="sc-kAyceB dZVFsH"
+  class="sc-kAycRU etURhS"
 >
   <span>
     previewGuide.tooSmallQuery

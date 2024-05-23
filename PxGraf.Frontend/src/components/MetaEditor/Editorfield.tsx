@@ -1,9 +1,9 @@
 import React, { useId } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { IconButton, FormControl, InputLabel, OutlinedInput, InputAdornment, Tooltip, Alert } from '@mui/material';
-import UndoIcon from '@mui/icons-material/Undo';
+import { FormControl, InputLabel, OutlinedInput, InputAdornment, Alert } from '@mui/material';
 import styled from 'styled-components';
+import RevertButton from './RevertButton';
 
 interface IEditorFieldProps {
     label: string;
@@ -14,17 +14,25 @@ interface IEditorFieldProps {
     maxLength?: number;
 }
 
-const StyledOutlinedInput = styled(({...other }) => <OutlinedInput {...other} />)(
-    ({ isEdited }) => ({
-        backgroundColor: isEdited ? 'var(--editorfield-background-edited)' : 'var(--editorfield-background)',
-        '& .MuiOutlinedInput-notchedOutline': {
-            borderColor: isEdited ? 'var(--editorfield-outline-edited)' : 'var(--editorfield-outline)',
-        },
-        '& input': {
-            fontWeight: isEdited ? 'bold' : 'normal',
-        }
-    }),
-);
+const StyledEditedOutlinedInput = styled(({ ...other }) => <OutlinedInput {...other} />)({
+    backgroundColor: 'var(--editorfield-background-edited)',
+    '& .MuiOutlinedInput-notchedOutline': {
+        borderColor: 'var(--editorfield-outline-edited)'
+    },
+    '& input': {
+        fontWeight: 'bold'
+    }
+});
+
+const StyledOutlinedInput = styled(({ ...other }) => <OutlinedInput {...other} />)({
+    backgroundColor: 'var(--editorfield-background)',
+    '& .MuiOutlinedInput-notchedOutline': {
+        borderColor: 'var(--editorfield-outline)',
+    },
+    '& input': {
+        fontWeight: 'normal',
+    }
+});
 
 export const EditorField: React.FC<IEditorFieldProps> = ({ label, defaultValue, editValue, onChange, maxLength, style = {} }) => {
     const { t } = useTranslation();
@@ -35,15 +43,10 @@ export const EditorField: React.FC<IEditorFieldProps> = ({ label, defaultValue, 
     const isEdited: boolean = editValue != null;
     const showAlert = maxLength && (value.length / maxLength) > ALERT_TRESHOLD;
 
-    const getLabel = (label) => {
-        return label + (isEdited ? '*' : '');
-    };
-
     return (
         <FormControl variant="outlined" style={style}>
-            <InputLabel htmlFor={inputId}>{isEdited ? <b>{getLabel(label)}</b> : getLabel(label)}</InputLabel>
-            <StyledOutlinedInput
-                isEdited={isEdited}
+            <InputLabel htmlFor={inputId}>{isEdited ? <b>{label + '*'}</b> : label}</InputLabel>
+            { isEdited ? <StyledEditedOutlinedInput
                 id={inputId}
                 type='text'
                 value={value.substring(0, maxLength || value.length)}
@@ -52,23 +55,23 @@ export const EditorField: React.FC<IEditorFieldProps> = ({ label, defaultValue, 
                     onChange(parsedValue);
                 }}
                 endAdornment={
-                    (isEdited && <InputAdornment position="end">
-                        <Tooltip title={t("editMetadata.discardChanges")}>
-                            <span>{/* span wrapper is needed to tooltip work when IconButton is disabled */}
-                                <IconButton
-                                    aria-label={t("editMetadata.discardChanges")}
-                                    disabled={!isEdited}
-                                    onClick={() => onChange()}
-                                    edge="end"
-                                >
-                                    <UndoIcon />
-                                </IconButton>
-                            </span>
-                        </Tooltip>
-                    </InputAdornment>)
+                    <InputAdornment position="end">
+                        <RevertButton onClick={onChange} />
+                    </InputAdornment>
                 }
                 label={label}
             />
+            : <StyledOutlinedInput
+                id={inputId}
+                type='text'
+                value={value.substring(0, maxLength || value.length)}
+                onChange={evt => {
+                    const parsedValue = evt.target.value.substring(0, maxLength || evt.target.value.length);
+                    onChange(parsedValue);
+                }}
+                label={label}
+            />
+            }
             <div aria-live='polite'>
             {
                 showAlert &&

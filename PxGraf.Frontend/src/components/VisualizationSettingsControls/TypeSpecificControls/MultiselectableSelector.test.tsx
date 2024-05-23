@@ -2,6 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { MultiselectableSelector } from './MultiselectableSelector';
 import { IVariable, VariableType } from "types/cubeMeta";
+import { IVisualizationSettings } from '../../../types/visualizationSettings';
 
 const mockVariables: IVariable[] = [
 	{
@@ -55,10 +56,24 @@ const mockVariables: IVariable[] = [
 ];
 
 const mockSettingsChangedHandler = jest.fn();
-const mockVisualizationSettings = { multiselectableVariableCode: 'msVar' };
+const mockVisualizationSettings: IVisualizationSettings = {
+	multiselectableVariableCode: 'msVar'
+};
 const mockVisualizationRules = {
 	allowManualPivot: false, sortingOptions: null, multiselectVariableAllowed: true
 };
+
+jest.mock('react-i18next', () => ({
+	...jest.requireActual('react-i18next'),
+	useTranslation: () => {
+		return {
+			t: (str: string) => str,
+			i18n: {
+				changeLanguage: () => new Promise(() => undefined),
+			},
+		};
+	},
+}));
 
 describe('Rendering test', () => {
 	it('renders correctly', () => {
@@ -97,16 +112,5 @@ describe('Assertion tests', () => {
 			settingsChangedHandler={mockSettingsChangedHandler}
 		></MultiselectableSelector>);
 		expect(screen.queryByDisplayValue("msVar")).toBeInTheDocument();
-	});
-
-	it('If no multiselect variables are provided, the select componenet should not be rendered', () => {
-		const mockSettingsChangedHandler = jest.fn();
-		render(<MultiselectableSelector
-			variables={[]}
-			visualizationRules={mockVisualizationRules}
-			visualizationSettings={mockVisualizationSettings}
-			settingsChangedHandler={mockSettingsChangedHandler}
-		></MultiselectableSelector>);
-		expect(screen.queryByDisplayValue("noMultiselectable")).not.toBeInTheDocument();
 	});
 });

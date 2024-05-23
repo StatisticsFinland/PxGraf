@@ -6,7 +6,6 @@ import { useTranslation } from "react-i18next";
 interface IInfoBubbleProps {
     info: React.ReactNode;
     ariaLabel: string;
-    isOpen?: boolean;
     placement?: 'auto' | 'auto-end' | 'auto-start' | 'top' | 'top-end' | 'top-start' | 'left' | 'left-end' | 'left-start' | 'right' | 'right-end' | 'right-start' | 'bottom' | 'bottom-end' | 'bottom-start';
     id?: string;
 }
@@ -30,8 +29,8 @@ const StyledPopper = styled(Popper)`
     z-index: 999;
 `;
 
-export const InfoBubble: React.FC<IInfoBubbleProps> = ({ info, ariaLabel, isOpen = false, placement = 'auto', id = null }) => {
-    const [open, setOpen] = React.useState(isOpen);
+export const InfoBubble: React.FC<IInfoBubbleProps> = ({ info, ariaLabel, placement = 'auto', id = null }) => {
+    const [open, setOpen] = React.useState(false);
     const anchorElement = React.useRef(null);
     const { t } = useTranslation();
 
@@ -56,7 +55,16 @@ export const InfoBubble: React.FC<IInfoBubbleProps> = ({ info, ariaLabel, isOpen
 
     return (
         <>
-            <InfoButton id={id} aria-label={`${open ? t('tooltip.close') : t('tooltip.open')}: ${ariaLabel}`} onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)} onClick={() => setOpen(!open)} ref={anchorElement}><InfoIcon color={'info'} /></InfoButton>
+            <InfoButton
+                id={id}
+                aria-label={`${open ? t('tooltip.close') : t('tooltip.open')}: ${ariaLabel}`}
+                onMouseEnter={() => setOpen(true)}
+                onMouseLeave={() => setOpen(false)}
+                onClick={() => setOpen(!open)}
+                ref={anchorElement}
+            >
+                <InfoIcon color={'info'} />
+            </InfoButton>
             <StyledPopper role="alert" keepMounted popperOptions={{ placement: placement }} open={open} anchorEl={anchorElement.current} onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)} >
                 <PopperInfo>
                     {info}

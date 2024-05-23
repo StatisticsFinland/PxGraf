@@ -70,7 +70,7 @@ exports[`Rendering test renders correctly 1`] = `
     class="MuiDivider-root MuiDivider-fullWidth css-9mgopn-MuiDivider-root"
   />
   <li
-    class="MuiListItem-root MuiListItem-gutters MuiListItem-padding sc-hwdzOV LPCXa css-1p823my-MuiListItem-root"
+    class="MuiListItem-root MuiListItem-gutters MuiListItem-padding sc-jaXxZZ jfniVQ css-1p823my-MuiListItem-root"
     id="foo-bar-baz-asd2"
   >
     <a

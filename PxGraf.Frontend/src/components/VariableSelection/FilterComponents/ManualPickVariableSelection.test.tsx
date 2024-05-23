@@ -55,7 +55,7 @@ jest.mock('react-i18next', () => ({
         return {
             t: (str: string) => str,
             i18n: {
-                changeLanguage: () => new Promise(() => { }),
+                changeLanguage: () => new Promise(() => undefined),
             },
         };
     },
@@ -66,7 +66,7 @@ describe('Rendering test', () => {
         const { asFragment } = render(<ManualPickVariableSelection
             options={mockVariableValues}
             selectedValues={[mockVariableValues[0], mockVariableValues[1]]}
-            onQueryChanged={(newValues) => { }}
+            onQueryChanged={() => undefined}
         ></ManualPickVariableSelection>);
         expect(asFragment()).toMatchSnapshot();
     });

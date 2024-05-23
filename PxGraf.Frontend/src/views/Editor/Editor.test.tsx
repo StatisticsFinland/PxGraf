@@ -105,8 +105,8 @@ const mockVisualizationResult: IVisualizationResult = {
         data: [],
         missingDataInfo: {},
         dataNotes: [],
-        rowVariableCodes: [],
-        columnVariableCodes: [],
+        rowVariableCodes: ["foobar2"],
+        columnVariableCodes: ["foobar1"],
         header: { fi: "foo", sv: "bar", en: "foobar" },
         selectableVariableCodes: ["foobar1", "foobar2"],
         visualizationSettings:
@@ -124,13 +124,23 @@ const mockVisualizationResult: IVisualizationResult = {
                 name: { fi: "fyy1", sv: "bör1", en: "fyybör1" },
                 note: { fi: "fuu1", sv: "baar1", en: "fuubaar1" },
                 isSum: false,
-                contentComponent: null,
+                contentComponent: {
+                    unit: { fi: "unitfi1", sv: "unitsv1", en: "uniten1" },
+                    source: { fi: "sourcefi1", sv: "sourcesv1", en: "sourceen1" },
+                    numberOfDecimals: 0,
+                    lastUpdated: "2021-01-01T00:00:00Z"
+                }
             }, {
                 code: "barfoo2",
                 name: { fi: "fyy2", sv: "bör2", en: "fyybör2" },
                 note: { fi: "fuu2", sv: "baar2", en: "fuubaar2" },
                 isSum: false,
-                contentComponent: null,
+                contentComponent: {
+                    unit: { fi: "unitfi2", sv: "unitsv2", en: "uniten2" },
+                    source: { fi: "sourcefi2", sv: "sourcesv2", en: "sourceen2" },
+                    numberOfDecimals: 0,
+                    lastUpdated: "2021-01-01T00:00:00Z"
+                }
             }],
         }, {
             code: "foobar2",
