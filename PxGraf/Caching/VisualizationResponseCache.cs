@@ -33,7 +33,7 @@ namespace PxGraf.Caching
             Error
         }
 
-        private readonly IMemoryCache _cache;
+        private readonly MemoryCache _cache;
         private readonly ConcurrentDictionary<string, DateTime> _cacheValidationTimes;
         private static CacheValues CacheValues => Configuration.Current.CacheOptions.Visualization;
         private static int DataFreshnessTime => Configuration.Current.CacheOptions.CacheFreshnessCheckInterval;

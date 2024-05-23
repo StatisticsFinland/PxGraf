@@ -5,27 +5,21 @@ namespace PxGraf.Data
     /// <summary>
     /// Representation of variable's structure containing the variable code and its values' codes.
     /// </summary>
-    public class VariableMap
+    /// <remarks>
+    /// Default constructor.
+    /// </remarks>
+    /// <param name="code">Code of the variable.</param>
+    /// <param name="valueCodes">Codes for the values of the variable.</param>
+    public class VariableMap(string code, IReadOnlyList<string> valueCodes)
     {
         /// <summary>
         /// Code of the variable.
         /// </summary>
-        public string Code { get; }
-        
+        public string Code { get; } = code;
+
         /// <summary>
         /// Codes for the values of the variable.
         /// </summary>
-        public IReadOnlyList<string> ValueCodes { get; }
-
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        /// <param name="code">Code of the variable.</param>
-        /// <param name="valueCodes">Codes for the values of the variable.</param>
-        public VariableMap(string code, IReadOnlyList<string> valueCodes)
-        {
-            Code = code;
-            ValueCodes = valueCodes;
-        }
+        public IReadOnlyList<string> ValueCodes { get; } = valueCodes;
     }
 }

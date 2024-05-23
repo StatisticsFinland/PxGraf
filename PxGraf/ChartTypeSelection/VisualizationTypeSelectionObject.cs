@@ -150,7 +150,7 @@ namespace PxGraf.ChartTypeSelection
 
             public static VariableInfo FromVariable(IReadOnlyVariable variable)
             {
-                var result = new VariableInfo(variable.Code, variable.Type, variable.IncludedValues.Count);
+                VariableInfo result = new(variable.Code, variable.Type, variable.IncludedValues.Count);
                 if (variable.IncludedValues.FirstOrDefault(val => val.IsSumValue) is VariableValue v)
                 {
                     result.CombinationValueCode = v.Code;
@@ -222,8 +222,8 @@ namespace PxGraf.ChartTypeSelection
             private static int GetUniqueUnits(IEnumerable<IReadOnlyMultiLanguageString> units)
             {
                 int result = 0;
-                List<IReadOnlyMultiLanguageString> chkd = new();
-                foreach (var unit in units)
+                List<IReadOnlyMultiLanguageString> chkd = [];
+                foreach (IReadOnlyMultiLanguageString unit in units)
                 {
                     if (!chkd.Contains(unit))
                     {

@@ -16,26 +16,19 @@ namespace PxGraf.Controllers
     /// <summary>
     /// Handles requests for saved query metadata requests.
     /// </summary>
+    /// <remarks>
+    /// Default constructor.
+    /// </remarks>
+    /// <param name="sqFileInterface">Instance of a <see cref="ISqFileInterface"/> object. Used for interacting with saved queries.</param>
+    /// <param name="cachedPxWebConnection">Instance of a <see cref="ICachedPxWebConnection"/> object. Used to interact with PxWeb API and cache data.</param>
+    /// <param name="logger">Instance of the <see cref="ILogger"/> used for logging API calls.</param>
     [ApiController]
     [Route("api/sq/meta")]
-    public class QueryMetaController : ControllerBase
+    public class QueryMetaController(ISqFileInterface sqFileInterface, ICachedPxWebConnection cachedPxWebConnection, ILogger<QueryMetaController> logger) : ControllerBase
     {
-        private readonly ICachedPxWebConnection _cachedPxWebConnection;
-        private readonly ISqFileInterface _sqFileInterface;
-        private readonly ILogger<QueryMetaController> _logger;
-
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        /// <param name="sqFileInterface">Instance of a <see cref="ISqFileInterface"/> object. Used for interacting with saved queries.</param>
-        /// <param name="cachedPxWebConnection">Instance of a <see cref="ICachedPxWebConnection"/> object. Used to interact with PxWeb API and cache data.</param>
-        /// <param name="logger">Instance of the <see cref="ILogger"/> used for logging API calls.</param>
-        public QueryMetaController(ISqFileInterface sqFileInterface, ICachedPxWebConnection cachedPxWebConnection, ILogger<QueryMetaController> logger)
-        {
-            _cachedPxWebConnection = cachedPxWebConnection;
-            _sqFileInterface = sqFileInterface;
-            _logger = logger;
-        }
+        private readonly ICachedPxWebConnection _cachedPxWebConnection = cachedPxWebConnection;
+        private readonly ISqFileInterface _sqFileInterface = sqFileInterface;
+        private readonly ILogger<QueryMetaController> _logger = logger;
 
         /// <summary>
         /// Returns metadata about a saved query.

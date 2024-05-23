@@ -9,10 +9,10 @@ namespace DataCubeTests
     {
         private static CubeMap BuildTestMap(int var = 3, int val = 5)
         {
-            List<VariableMap> testVars = new();
+            List<VariableMap> testVars = [];
             for (int varInd = 1; varInd <= var; varInd++)
             {
-                List<string> valueCodes = new();
+                List<string> valueCodes = [];
                 for (int valInd = 1; valInd <= val; valInd++)
                 {
                     valueCodes.Add("val" + valInd);
@@ -35,7 +35,7 @@ namespace DataCubeTests
                 ["var3"] = "val5"
             };
 
-            Assert.AreEqual(expected, lastCoord);
+            Assert.That(lastCoord, Is.EqualTo(expected));
         }
 
         [Test]
@@ -51,26 +51,26 @@ namespace DataCubeTests
                 ["var3"] = "val1"
             };
 
-            Assert.AreEqual(expected, lastCoord);
+            Assert.That(lastCoord, Is.EqualTo(expected));
         }
 
         [Test]
         public void GetCoordinatesTestVarVals_Pass()
         {
             var testMap = BuildTestMap(2, 3);
-            string[][] coords = new string[][]
-            {
+            string[][] coords =
+            [
                 testMap.GetCoordinates().Select(c => c["var1"]).ToArray(),
                 testMap.GetCoordinates().Select(c => c["var2"]).ToArray()
-            };
+            ];
 
-            string[][] expected = new string[][]
-            {
-                new string[] { "val1", "val1", "val1", "val2", "val2", "val2", "val3", "val3", "val3" },
-                new string[] { "val1", "val2", "val3", "val1", "val2", "val3", "val1", "val2", "val3" }
-            };
+            string[][] expected =
+            [
+                ["val1", "val1", "val1", "val2", "val2", "val2", "val3", "val3", "val3"],
+                ["val1", "val2", "val3", "val1", "val2", "val3", "val1", "val2", "val3"]
+            ];
 
-            Assert.AreEqual(expected, coords);
+            Assert.That(coords, Is.EqualTo(expected));
         }
 
         [Test]
@@ -83,7 +83,7 @@ namespace DataCubeTests
                 ["var2"] = "val1"
             };
 
-            Assert.AreEqual(0, testMap.GetCoordinateIndex(testCoord));
+            Assert.That(testMap.GetCoordinateIndex(testCoord), Is.EqualTo(0));
         }
 
         [Test]
@@ -93,7 +93,7 @@ namespace DataCubeTests
             int i = 0;
             foreach (var coord in testMap.GetCoordinates())
             {
-                Assert.AreEqual(i, testMap.GetCoordinateIndex(coord));
+                Assert.That(testMap.GetCoordinateIndex(coord), Is.EqualTo(i));
                 i++;
             }
         }
@@ -103,7 +103,7 @@ namespace DataCubeTests
         {
             var testMap = BuildTestMap(5, 4);
             int numOfCoords = testMap.GetCoordinates().Count();
-            Assert.AreEqual(testMap.DataMapSize, numOfCoords);
+            Assert.That(testMap.DataMapSize, Is.EqualTo(numOfCoords));
         }
     }
 }

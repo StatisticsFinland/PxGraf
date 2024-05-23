@@ -19,16 +19,15 @@ namespace UnitTests.SerializerTests
         [Test]
         public void CanConvert_ReturnsTrueForStringType()
         {
-            bool canConvertString = _converter.CanConvert(typeof(string));
-            Assert.IsTrue(canConvertString);
+            Assert.That(_converter.CanConvert(typeof(string)), Is.True);
         }
 
         [Test]
         public void CanConvert_ReturnsFalseForNonStringTypes()
         {
-            Assert.IsFalse(_converter.CanConvert(typeof(int)));
-            Assert.IsFalse(_converter.CanConvert(typeof(DateTime)));
-            Assert.IsFalse(_converter.CanConvert(typeof(object)));
+            Assert.That(_converter.CanConvert(typeof(int)), Is.False);
+            Assert.That(_converter.CanConvert(typeof(DateTime)), Is.False);
+            Assert.That(_converter.CanConvert(typeof(object)), Is.False);
         }
 
         [Test]
@@ -48,7 +47,7 @@ namespace UnitTests.SerializerTests
 
             // Assert: The result should be the date as an ISO 8601 formatted string.
             string expected = date.ToString("o");
-            Assert.AreEqual(expected, result);
+            Assert.That(result, Is.EqualTo(expected));
         }
 
         [Test]
@@ -67,7 +66,7 @@ namespace UnitTests.SerializerTests
             string result = _converter.ReadJson(jsonReader, typeof(string), null, JsonSerializer.CreateDefault());
 
             // Assert
-            Assert.AreEqual(nonDateValue, result);
+            Assert.That(result, Is.EqualTo(nonDateValue));
         }
     }
 }

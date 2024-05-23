@@ -9,10 +9,12 @@ namespace PxGraf.ChartTypeSelection.JsonObjects
     /// </summary>
     public class ChartTypeLimits : IChartTypeLimits
     {
+        private const string DEFAULT_IGONE = "Ignore";
+
         /// <summary>
         /// The allowed range for the number of selevtions with multiple values.
         /// </summary>
-        public DimensionRange NumberOfMultiselectsRange { get; private set; } = new DimensionRange("Ignore");
+        public DimensionRange NumberOfMultiselectsRange { get; private set; } = new DimensionRange(DEFAULT_IGONE);
 
         /// <summary>
         /// Sets the limits on how many selections can contain multiple values
@@ -26,7 +28,7 @@ namespace PxGraf.ChartTypeSelection.JsonObjects
         /// <summary>
         /// The allowed range for the time dimension size
         /// </summary>
-        public DimensionRange TimeRange { get; private set; } = new DimensionRange("Ignore");
+        public DimensionRange TimeRange { get; private set; } = new DimensionRange(DEFAULT_IGONE);
 
         /// <summary>
         /// Set the limits for time dimension size, example format: "1-999"
@@ -41,7 +43,7 @@ namespace PxGraf.ChartTypeSelection.JsonObjects
         /// <summary>
         /// The range for the product of number of selections in first and second classifier dimension
         /// </summary>
-        public DimensionRange IrregularTimeRange { get; private set; } = new DimensionRange("Ignore");
+        public DimensionRange IrregularTimeRange { get; private set; } = new DimensionRange(DEFAULT_IGONE);
 
         /// <summary>
         /// , example format: "1-999"
@@ -56,7 +58,7 @@ namespace PxGraf.ChartTypeSelection.JsonObjects
         /// <summary>
         /// The allowed range for the content dimension size
         /// </summary>
-        public DimensionRange ContentRange { get; private set; } = new DimensionRange("Ignore");
+        public DimensionRange ContentRange { get; private set; } = new DimensionRange(DEFAULT_IGONE);
 
         /// <summary>
         /// Set the limits for content dimension size, example format: "1-999"
@@ -71,7 +73,7 @@ namespace PxGraf.ChartTypeSelection.JsonObjects
         /// <summary>
         /// The allowed range for the unique units in content dimension
         /// </summary>
-        public DimensionRange ContentUnitRange { get; private set; } = new DimensionRange("Ignore");
+        public DimensionRange ContentUnitRange { get; private set; } = new DimensionRange(DEFAULT_IGONE);
 
         /// <summary>
         /// Set the limits for unique units in content dimension, example format: "1-999"
@@ -86,7 +88,7 @@ namespace PxGraf.ChartTypeSelection.JsonObjects
         /// <summary>
         /// The allowed range for the size of the first classifier dimension.
         /// </summary>
-        public DimensionRange FirstMultiselectRange { get; private set; } = new DimensionRange("Ignore");
+        public DimensionRange FirstMultiselectRange { get; private set; } = new DimensionRange(DEFAULT_IGONE);
 
         /// <summary>
         /// Set the limits for the first classifier dimension size, example format: "1-999"
@@ -101,7 +103,7 @@ namespace PxGraf.ChartTypeSelection.JsonObjects
         /// <summary>
         /// The allowed range for the size of the second classifier dimension.
         /// </summary>
-        public DimensionRange SecondMultiselectRange { get; private set; } = new DimensionRange("Ignore");
+        public DimensionRange SecondMultiselectRange { get; private set; } = new DimensionRange(DEFAULT_IGONE);
 
         /// <summary>
         /// Set the limits for the second classifier dimension size, example format: "1-999"
@@ -116,7 +118,7 @@ namespace PxGraf.ChartTypeSelection.JsonObjects
         /// <summary>
         /// The allowed range for the size of the extra classifier dimensions.
         /// </summary>
-        public DimensionRange AdditionalMultiselectDimensionsRange { get; private set; } = new DimensionRange("Ignore");
+        public DimensionRange AdditionalMultiselectDimensionsRange { get; private set; } = new DimensionRange(DEFAULT_IGONE);
 
         /// <summary>
         /// Set the limits for the size of all of the multiselect dimensions after the first two, example format: "1-999"
@@ -131,7 +133,7 @@ namespace PxGraf.ChartTypeSelection.JsonObjects
         /// <summary>
         /// The range for the product of number of selections in first and second classifier dimension
         /// </summary>
-        public DimensionRange ProductOfMultiselectsRange { get; private set; } = new DimensionRange("Ignore");
+        public DimensionRange ProductOfMultiselectsRange { get; private set; } = new DimensionRange(DEFAULT_IGONE);
 
         /// <summary>
         /// The limits for the product of number of selections in first and second classifier dimension, example format: "1-999"

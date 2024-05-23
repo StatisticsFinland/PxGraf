@@ -19,29 +19,21 @@ namespace PxGraf.Controllers
     /// <summary>
     /// Controller for returning data required for visualizing a saved query
     /// </summary>
+    /// <remarks>
+    /// Default constructor.
+    /// </remarks>
+    /// <param name="sqFileInterface">Instance of <see cref="ISqFileInterface"/> that is used to interact with sq and sqa files.</param>
+    /// <param name="respCache"><see cref="IVisualizationResponseCache"/> instance for caching <see cref="VisualizationResponse"/> objects.</param>
+    /// <param name="cachedPxWebConnection"><see cref="ICachedPxWebConnection"/> instance for handling PxWeb connection and cached data.</param>
+    /// <param name="logger"><see cref="ILogger"/> instance used for logging.</param>
     [ApiController]
     [Route("api/sq/visualization")]
-    public class VisualizationController : ControllerBase
+    public class VisualizationController(ISqFileInterface sqFileInterface, IVisualizationResponseCache respCache, ICachedPxWebConnection cachedPxWebConnection, ILogger<VisualizationController> logger) : ControllerBase
     {
-        private readonly ICachedPxWebConnection _cachedPxWebConnection;
-        private readonly IVisualizationResponseCache _visualizationResponseCache;
-        private readonly ISqFileInterface _sqFileInterface;
-        private readonly ILogger<VisualizationController> _logger;
-
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        /// <param name="sqFileInterface">Instance of <see cref="ISqFileInterface"/> that is used to interact with sq and sqa files.</param>
-        /// <param name="respCache"><see cref="IVisualizationResponseCache"/> instance for caching <see cref="VisualizationResponse"/> objects.</param>
-        /// <param name="cachedPxWebConnection"><see cref="ICachedPxWebConnection"/> instance for handling PxWeb connection and cached data.</param>
-        /// <param name="logger"><see cref="ILogger"/> instance used for logging.</param>
-        public VisualizationController(ISqFileInterface sqFileInterface, IVisualizationResponseCache respCache, ICachedPxWebConnection cachedPxWebConnection, ILogger<VisualizationController> logger)
-        {
-            _cachedPxWebConnection = cachedPxWebConnection;
-            _visualizationResponseCache = respCache;
-            _sqFileInterface = sqFileInterface;
-            _logger = logger;
-        }
+        private readonly ICachedPxWebConnection _cachedPxWebConnection = cachedPxWebConnection;
+        private readonly IVisualizationResponseCache _visualizationResponseCache = respCache;
+        private readonly ISqFileInterface _sqFileInterface = sqFileInterface;
+        private readonly ILogger<VisualizationController> _logger = logger;
 
         #region ACTIONS
 

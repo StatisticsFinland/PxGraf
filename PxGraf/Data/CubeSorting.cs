@@ -51,7 +51,7 @@ namespace PxGraf.Data
                 VisualizationType.PieChart => GetPieChartOptions(meta.Languages),
                 VisualizationType.LineChart => GetLineChartOptions(),
                 VisualizationType.ScatterPlot => GetScatterPlotOptions(),
-                _ => new List<SortingOption>(),
+                _ => [],
             };
         }
 
@@ -76,30 +76,29 @@ namespace PxGraf.Data
         #region SORTING_OPTIONS
 
         // Not sortable at the moment
-        private static IReadOnlyList<SortingOption> GetVerticalBarChartOptions() => new List<SortingOption>();
+        private static List<SortingOption> GetVerticalBarChartOptions() => [];
 
         // Not sortable at the moment
-        private static IReadOnlyList<SortingOption> GetGroupVerticalBarChartOptions() => new List<SortingOption>();
+        private static List<SortingOption> GetGroupVerticalBarChartOptions() => [];
 
         // Not sortable at the moment
-        private static IReadOnlyList<SortingOption> GetStackedVerticalBarChartOptions() => new List<SortingOption>();
+        private static List<SortingOption> GetStackedVerticalBarChartOptions() => [];
 
-        private static IReadOnlyList<SortingOption> GetHorizontalBarChartOptions(IEnumerable<string> languages)
-            => new List<SortingOption>()
-            {
+        private static List<SortingOption> GetHorizontalBarChartOptions(IEnumerable<string> languages)
+            =>
+            [
                 GetDescendingSorting(languages),
                 GetAscendingSorting(languages),
                 GetSameAsDataSorting(languages)
-            };
+            ];
 
-        private static IReadOnlyList<SortingOption> GetMultiDimHorizontalBarChartOptions(VisualizationType visualization, IReadOnlyCubeMeta meta, VisualizationSettingsRequest request)
+        private static List<SortingOption> GetMultiDimHorizontalBarChartOptions(VisualizationType visualization, IReadOnlyCubeMeta meta, VisualizationSettingsRequest request)
         {
             // Selectable variables are excluded from sorting, OBS: '!'
-            var multiselects = meta.GetMultivalueVariables().Where(mvv => !request.Query.VariableQueries[mvv.Code].Selectable).ToList();
-            var sortingOptionsVariable = GetPivot(visualization, meta, request) ? multiselects[1] : multiselects[0];
+            List<IReadOnlyVariable> multiselects = meta.GetMultivalueVariables().Where(mvv => !request.Query.VariableQueries[mvv.Code].Selectable).ToList();
+            IReadOnlyVariable sortingOptionsVariable = GetPivot(visualization, meta, request) ? multiselects[1] : multiselects[0];
 
-            var options = new List<SortingOption>();
-            options.AddRange(GetVariableSortingOptions(sortingOptionsVariable));
+            List<SortingOption> options = [.. GetVariableSortingOptions(sortingOptionsVariable)];
             // Sort time variables descendingly for GroupHorizontalBarChart
             if (request.SelectedVisualization == VisualizationType.GroupHorizontalBarChart && sortingOptionsVariable.Type == VariableType.Time)
             {
@@ -111,20 +110,20 @@ namespace PxGraf.Data
         }
 
         // Not sortable at the moment
-        private static IReadOnlyList<SortingOption> GetLineChartOptions() => new List<SortingOption>();
+        private static List<SortingOption> GetLineChartOptions() => [];
 
-        private static IReadOnlyList<SortingOption> GetPieChartOptions(IEnumerable<string> languages)
-            => new List<SortingOption>()
-            {
+        private static List<SortingOption> GetPieChartOptions(IEnumerable<string> languages)
+            =>
+            [
                 GetDescendingSorting(languages),
                 GetAscendingSorting(languages),
                 GetSameAsDataSorting(languages)
-            };
+            ];
 
         // Not sortable at the moment
-        private static IReadOnlyList<SortingOption> GetPyramidChartOptions() => new List<SortingOption>();
+        private static List<SortingOption> GetPyramidChartOptions() => [];
 
-        private static IReadOnlyList<SortingOption> GetScatterPlotOptions() => new List<SortingOption>();
+        private static List<SortingOption> GetScatterPlotOptions() => [];
 
         #endregion
 
@@ -199,9 +198,9 @@ namespace PxGraf.Data
             return GetPivot(visualization, meta, pivotRequested) ? multiselects[1] : multiselects[0];
         }
 
-        private static IReadOnlyList<SortingOption> GetVariableSortingOptions(IReadOnlyVariable variable)
+        private static List<SortingOption> GetVariableSortingOptions(IReadOnlyVariable variable)
         {
-            List<SortingOption> options = new();
+            List<SortingOption> options = [];
             foreach (var val in variable.IncludedValues)
             {
                 options.Add(new SortingOption(val.Code, val.Name));
@@ -280,31 +279,29 @@ namespace PxGraf.Data
 
         #region SORTING_FUNCTIONS
 
-        private static IReadOnlyList<IReadOnlyVariableValue> DescendingSumSorting(IReadOnlyVariable sortingVariable, DataCube cube)
+        private static List<IReadOnlyVariableValue> DescendingSumSorting(IReadOnlyVariable sortingVariable, DataCube cube)
         {
-            return sortingVariable.IncludedValues
+            return [.. sortingVariable.IncludedValues
                 .OrderByDescending(v =>
                    {
                        var map = cube.Meta.BuildMap().CollapseOneVariableInMap(v, sortingVariable);
                        return cube.GetTransform(map).CalculateCubeSum();
                    }
-                )
-                .ToArray();
+                )];
         }
 
-        private static IReadOnlyList<IReadOnlyVariableValue> SumSorting(IReadOnlyVariable sortingVariable, DataCube data)
+        private static List<IReadOnlyVariableValue> SumSorting(IReadOnlyVariable sortingVariable, DataCube data)
         {
-            return sortingVariable.IncludedValues
+            return [.. sortingVariable.IncludedValues
                 .OrderBy(v =>
                     {
                         var map = data.Meta.BuildMap().CollapseOneVariableInMap(v, sortingVariable);
                         return data.GetTransform(map).CalculateCubeSum();
                     }
-                )
-                .ToArray();
+                )];
         }
 
-        private static IReadOnlyList<IReadOnlyVariableValue> VariableValueSorting(
+        private static List<IReadOnlyVariableValue> VariableValueSorting(
             IReadOnlyVariableValue sortingBaseVariableValue,
             IReadOnlyVariable sortingBaseVariable,
             IReadOnlyVariable sortingVariable,

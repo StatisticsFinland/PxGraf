@@ -61,7 +61,6 @@ namespace PxGraf
                 {
                     // It is not recommended that any origin is allowed but this is sometimes nessessary for debugging etc.
                     // Warning is disabled, because this is an optional block.
-#pragma warning disable S5122 
                     options.AddPolicy(name: PxGrafAllowSpecificOrigins,
                         builder =>
                         {
@@ -70,7 +69,6 @@ namespace PxGraf
                                 .AllowAnyHeader()
                                 .AllowAnyMethod();
                         });
-#pragma warning restore S5122
                 }
                 else
                 {
@@ -78,7 +76,7 @@ namespace PxGraf
                         builder =>
                         {
                             builder
-                                .WithOrigins(Configuration.Current.CorsOptions.AllowedOrigins.ToArray())
+                                .WithOrigins(Configuration.Current.CorsOptions.AllowedOrigins)
                                 .AllowAnyHeader()
                                 .AllowAnyMethod();
                         });

@@ -23,28 +23,20 @@ namespace PxGraf.Controllers
     /// <summary>
     /// Controller for serving and saving queries (sq = saved query).
     /// </summary>
+    /// <remarks>
+    /// Default constructor.
+    /// </remarks>
+    /// <param name="cachedPxWebConnection">Instance of a <see cref="ICachedPxWebConnection"/> object. Used to interact with PxWeb API and cache data.</param>
+    /// <param name="sqFileInterface">Instance of a <see cref="ISqFileInterface"/> object. Used for interacting with saved queries.</param>
+    /// <param name="logger"><see cref="ILogger"/> instance used for logging.</param>
     [FeatureGate("CreationAPI")]
     [ApiController]
     [Route("api/sq")]
-    public class SqController : ControllerBase
+    public class SqController(ICachedPxWebConnection cachedPxWebConnection, ISqFileInterface sqFileInterface, ILogger<SqController> logger) : ControllerBase
     {
-        private readonly ICachedPxWebConnection _cachedPxWebConnection;
-        private readonly ISqFileInterface _sqFileInterface;
-        private readonly ILogger<SqController> _logger;
-
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        /// <param name="cachedPxWebConnection">Instance of a <see cref="ICachedPxWebConnection"/> object. Used to interact with PxWeb API and cache data.</param>
-        /// <param name="sqFileInterface">Instance of a <see cref="ISqFileInterface"/> object. Used for interacting with saved queries.</param>
-        /// <param name="logger"><see cref="ILogger"/> instance used for logging.</param>
-        public SqController(ICachedPxWebConnection cachedPxWebConnection, ISqFileInterface sqFileInterface, ILogger<SqController> logger)
-        {
-            _cachedPxWebConnection = cachedPxWebConnection;
-            _sqFileInterface = sqFileInterface;
-            _logger = logger;
-        }
-
+        private readonly ICachedPxWebConnection _cachedPxWebConnection = cachedPxWebConnection;
+        private readonly ISqFileInterface _sqFileInterface = sqFileInterface;
+        private readonly ILogger<SqController> _logger = logger;
 
         /// <summary>
         /// Returns a saved query and its settings based on the given id.
@@ -66,7 +58,7 @@ namespace PxGraf.Controllers
                 CubeMeta tableMeta = readOnlyTableMeta.Clone();
                 tableMeta.ApplyEditionFromQuery(savedQuery.Query);
 
-                if (tableMeta.Variables.Exists(v => !v.IncludedValues.Any()))
+                if (tableMeta.Variables.Exists(v => v.IncludedValues.Count == 0))
                 {
                     _logger.LogWarning("Saved query {SavedQueryId} contains variables with no values", savedQueryId);
                     BadRequest();
@@ -118,7 +110,7 @@ namespace PxGraf.Controllers
             VisualizationSettings visualizationSettings = parameters.Settings.ToVisualizationSettings(tableMetaCopy, parameters.Query);
 
             // All variables must have atleast one value selected
-            if (!tableMetaCopy.Variables.TrueForAll(v => v.IncludedValues.Any()) || !ValidateVisualizationSettings(tableMetaCopy, visualizationSettings))
+            if (!tableMetaCopy.Variables.TrueForAll(v => v.IncludedValues.Count != 0) || !ValidateVisualizationSettings(tableMetaCopy, visualizationSettings))
             {
                 _logger.LogWarning("Query {NewGuid} is missing a value for a variable. {Parameters}", newGuid, parameters);
                 return BadRequest();
@@ -159,7 +151,7 @@ namespace PxGraf.Controllers
             VisualizationSettings visualizationSettings = parameters.Settings.ToVisualizationSettings(archiveCube.Meta, parameters.Query);
 
             // All variables must have atleast one value selected
-            if (!archiveCube.Meta.Variables.TrueForAll(v => v.IncludedValues.Any()) || !ValidateVisualizationSettings(archiveCube.Meta, visualizationSettings))
+            if (!archiveCube.Meta.Variables.TrueForAll(v => v.IncludedValues.Count != 0) || !ValidateVisualizationSettings(archiveCube.Meta, visualizationSettings))
             {
                 _logger.LogWarning("Archived query {NewGuid} is missing a value for a variable. {Parameters}", newGuid, parameters);
                 return BadRequest();

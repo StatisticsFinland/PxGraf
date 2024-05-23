@@ -113,7 +113,7 @@ namespace PxGraf.Data
         /// <returns>The coordinate that matches the given data point index.</returns>
         public Coordinate GetCoordinate(int dataIndex)
         {
-            Coordinate coordinate = new();
+            Coordinate coordinate = [];
             int size = this.Count;
             for (var variableIndex = 0; variableIndex < size; variableIndex++)
             {

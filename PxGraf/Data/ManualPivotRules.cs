@@ -175,14 +175,14 @@ namespace PxGraf.Data
         /// </summary>
         public static bool GetManualPivotability(VisualizationType visualization, IReadOnlyCubeMeta meta, CubeQuery query)
         {
-            var varList = meta.BuildMap().ToList();
-            var resultList = new List<VariableMap>();
-            foreach (var varMap in varList)
+            List<VariableMap> varList = [.. meta.BuildMap()];
+            List<VariableMap> resultList = [];
+            foreach (VariableMap varMap in varList)
             {
                 // Selectable varaibles always have a size of 1 and for purposes of this class the actual value does not matter, just the size.
                 if (query.VariableQueries[varMap.Code].Selectable)
                 {
-                    resultList.Add(new VariableMap(varMap.Code, new List<string> { varMap.ValueCodes[0] }));
+                    resultList.Add(new VariableMap(varMap.Code, [varMap.ValueCodes[0]]));
                 }
                 else
                 {
@@ -190,7 +190,7 @@ namespace PxGraf.Data
                 }
             }
 
-            var newMata = meta.GetTransform(new CubeMap(resultList));
+            CubeMeta newMata = meta.GetTransform(new CubeMap(resultList));
 
             return GetManualPivotability(visualization, newMata);
         }

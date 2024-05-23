@@ -110,8 +110,8 @@ namespace PxGraf.Data.MetaData
         public Variable(string lang, PxMetaResponse.Variable metaVar)
         {
             Name = new MultiLanguageString();
-            Note = null; //TODO: PxWeb does not yet support variable notes.
-            IncludedValues = new List<VariableValue>();
+            Note = null; //OBS: PxWeb does not yet support variable notes.
+            IncludedValues = [];
 
             Name.AddTranslation(lang, metaVar.Text);
             Code = metaVar.Code;
@@ -121,7 +121,7 @@ namespace PxGraf.Data.MetaData
                 IncludedValues.Add(new VariableValue(
                     code: metaVar.Values[i],
                     name: new MultiLanguageString(lang, metaVar.ValueTexts[i]),
-                    note: null, //TODO: PxWeb does not yet support variable value notes.
+                    note: null, //OBS: PxWeb does not yet support variable value notes.
                     isSumValue: metaVar.IsSumValue(i)
                     ));
             }

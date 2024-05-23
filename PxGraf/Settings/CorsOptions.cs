@@ -5,6 +5,6 @@ namespace PxGraf.Settings
     public class CorsOptions
     {
         public bool AllowAnyOrigin { get; set; }
-        public List<string> AllowedOrigins { get; set; }
+        public string[] AllowedOrigins { get; set; }
     }
 }

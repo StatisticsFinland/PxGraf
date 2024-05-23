@@ -9,7 +9,11 @@ namespace PxGraf.ChartTypeSelection
     /// <summary>
     /// Defines the limits for data dimensions for a spesific chart type.
     /// </summary>
-    public abstract class ChartRulesCheck
+    /// <remarks>
+    /// Default constructor
+    /// </remarks>
+    /// <param name="limits">Numeric limits used with this limit object</param>
+    public abstract class ChartRulesCheck(IChartTypeLimits limits)
     {
         /// <summary>
         /// The type of the chart this selection limit applies to.
@@ -19,16 +23,7 @@ namespace PxGraf.ChartTypeSelection
         /// <summary>
         /// Chart type spesific limits
         /// </summary>
-        IChartTypeLimits Limits { get; }
-
-        /// <summary>
-        /// Default constructor
-        /// </summary>
-        /// <param name="limits">Numeric limits used with this limit object</param>
-        protected ChartRulesCheck(IChartTypeLimits limits)
-        {
-            Limits = limits;
-        }
+        IChartTypeLimits Limits { get; } = limits;
 
         /// <summary>
         /// Checks if the given query fits in the limits of this limit object
@@ -62,7 +57,7 @@ namespace PxGraf.ChartTypeSelection
                 .ToList();
 
             // First multiselect
-            reasons.AddRange(CheckVariableLimits((multiselects.Any() ? multiselects[0] : null),
+            reasons.AddRange(CheckVariableLimits((multiselects.Count != 0 ? multiselects[0] : null),
                 Limits.FirstMultiselectRange, RejectionReason.FirstMultiselectOverMax, RejectionReason.FirstMultiselectBelowMin));
 
             // Second multiselect
@@ -271,7 +266,7 @@ namespace PxGraf.ChartTypeSelection
         protected VisualizationTypeSelectionObject.VariableInfo GetLargestMultiselect(VisualizationTypeSelectionObject input)
         {
             var multiselects = GetSortedMultiselects(input.Variables);
-            return multiselects != null && multiselects.Any() ? multiselects[0] : null;
+            return multiselects != null && multiselects.Count != 0 ? multiselects[0] : null;
 
         }
 
@@ -289,18 +284,17 @@ namespace PxGraf.ChartTypeSelection
         protected VisualizationTypeSelectionObject.VariableInfo GetTimeOrLargestOrdinal(IEnumerable<VisualizationTypeSelectionObject.VariableInfo> variables)
         {
             var multiselects = GetSortedMultiselects(variables); //OBS: multiselects are sorted here so First() can be used!
-            if (multiselects.FirstOrDefault(v => v.Type == VariableType.Time) is VisualizationTypeSelectionObject.VariableInfo tv) return tv;
-            if (multiselects.FirstOrDefault(v => v.Type == VariableType.Ordinal) is VisualizationTypeSelectionObject.VariableInfo ov) return ov;
+            if (multiselects.Find(v => v.Type == VariableType.Time) is VisualizationTypeSelectionObject.VariableInfo tv) return tv;
+            if (multiselects.Find(v => v.Type == VariableType.Ordinal) is VisualizationTypeSelectionObject.VariableInfo ov) return ov;
 
             return null;
         }
 
-        private static IReadOnlyList<VisualizationTypeSelectionObject.VariableInfo> GetSortedMultiselects(IEnumerable<VisualizationTypeSelectionObject.VariableInfo> variables)
+        private static List<VisualizationTypeSelectionObject.VariableInfo> GetSortedMultiselects(IEnumerable<VisualizationTypeSelectionObject.VariableInfo> variables)
         {
-            return variables
+            return [.. variables
                 .Where(variable => variable.Size > 1)
-                .OrderByDescending(x => x.Size)
-                .ToList();
+                .OrderByDescending(x => x.Size)];
         }
 
         /// <summary>

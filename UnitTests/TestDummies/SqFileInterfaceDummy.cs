@@ -7,14 +7,9 @@ using System.Threading.Tasks;
 
 namespace UnitTests.TestDummies
 {
-    public class SqFileInterfaceDummy : ISqFileInterface
+    public class SqFileInterfaceDummy(IReadOnlyDictionary<string, SavedQuery> availableQueries) : ISqFileInterface
     {
-        readonly IReadOnlyDictionary<string, SavedQuery> _queries;
-
-        public SqFileInterfaceDummy(IReadOnlyDictionary<string, SavedQuery> availableQueries)
-        {
-            _queries = availableQueries;
-        }
+        readonly IReadOnlyDictionary<string, SavedQuery> _queries = availableQueries;
 
         public bool SavedQueryExists(string id, string savedQueryDirectory)
         {
@@ -28,7 +23,7 @@ namespace UnitTests.TestDummies
 
         public Task<SavedQuery> ReadSavedQueryFromFile(string id, string savedQueryDirectory)
         {
-            var task = new Task<SavedQuery>(() => _queries[id]);
+            Task<SavedQuery> task = new(() => _queries[id]);
             task.Start();
             return task;
         }

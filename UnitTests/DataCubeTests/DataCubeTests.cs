@@ -12,11 +12,11 @@ namespace DataCubeTests
     {
         private static CubeMeta BuildTestCubeMeta(params int[] variabliSizes)
         {
-            List<Variable> testVariables = new();
+            List<Variable> testVariables = [];
             for (int varInd = 0; varInd < variabliSizes.Length; varInd++)
             {
                 string varCode = "var" + varInd;
-                List<VariableValue> variableValues = new();
+                List<VariableValue> variableValues = [];
                 for (int valInd = 0; valInd < variabliSizes[varInd]; valInd++)
                 {
                     string valCode = "val" + valInd;
@@ -27,12 +27,12 @@ namespace DataCubeTests
                 testVariables.Add(testVar);
             }
 
-            return new CubeMeta(new List<string> { "fi" }, new MultiLanguageString("fi", "testHeader"), null, testVariables);
+            return new CubeMeta(["fi"], new MultiLanguageString("fi", "testHeader"), null, testVariables);
         }
 
         private static DataValue[] BuildTestData(params int[] variabliSizes)
         {
-            List<DataValue> testData = new();
+            List<DataValue> testData = [];
             double td = 0.0;
             int size = 1;
             foreach (int numOfValues in variabliSizes)
@@ -46,7 +46,7 @@ namespace DataCubeTests
                 td += 1.0;
             }
 
-            return testData.ToArray();
+            return [.. testData];
         }
 
         private static double[] FromDataValues(IReadOnlyList<DataValue> input)
@@ -62,36 +62,36 @@ namespace DataCubeTests
         [Test]
         public void DataCubeBasicConstructor_Pass()
         {
-            int[] varSizes = new[] { 2, 1, 2, 3 };
+            int[] varSizes = [2, 1, 2, 3];
             var cube = new DataCube(BuildTestCubeMeta(varSizes), BuildTestData(varSizes));
-            double[] expected = new double[] { 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0 };
-            Assert.AreEqual(expected, FromDataValues(cube.Data));
+            double[] expected = [0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0];
+            Assert.That(FromDataValues(cube.Data), Is.EqualTo(expected));
         }
 
         [Test]
         public void DataCubeBasicPick_Pass()
         {
-            int[] varSizes = new[] { 2, 1, 2, 3 };
+            int[] varSizes = [2, 1, 2, 3];
             var cube = new DataCube(BuildTestCubeMeta(varSizes), BuildTestData(varSizes));
             var transform = cube.GetTransform(BuildTestCubeMeta(2, 1, 2, 1).BuildMap());
-            double[] expected = new double[] { 0.0, 3.0, 6.0, 9.0 };
-            Assert.AreEqual(expected, FromDataValues(transform.Data));
+            double[] expected = [0.0, 3.0, 6.0, 9.0];
+            Assert.That(FromDataValues(transform.Data), Is.EqualTo(expected));
         }
 
         [Test]
         public void DataCubeBasicPick2_Pass()
         {
-            int[] varSizes = new[] { 2, 1, 2, 3 };
+            int[] varSizes = [2, 1, 2, 3];
             var cube = new DataCube(BuildTestCubeMeta(varSizes), BuildTestData(varSizes));
             var pick = cube.GetTransform(BuildTestCubeMeta(2, 1, 1, 3).BuildMap());
-            double[] expected = new double[] { 0.0, 1.0, 2.0, 6.0, 7.0, 8.0 };
-            Assert.AreEqual(expected, FromDataValues(pick.Data));
+            double[] expected = [0.0, 1.0, 2.0, 6.0, 7.0, 8.0];
+            Assert.That(FromDataValues(pick.Data), Is.EqualTo(expected));
         }
 
         [Test]
         public void DataCubeMutationPickTest1_Pass()
         {
-            int[] varSizes = new[] { 2, 1, 2, 3 };
+            int[] varSizes = [2, 1, 2, 3];
             var cube = new DataCube(BuildTestCubeMeta(varSizes), BuildTestData(varSizes));
 
             var mutatorMap = cube.Meta.Variables.Select(v => v.BuildVariableMap()).ToList();
@@ -99,9 +99,9 @@ namespace DataCubeTests
             (mutatorMap[2], mutatorMap[0]) = (mutatorMap[0], mutatorMap[2]);
             var map = new CubeMap(mutatorMap);
             var transform = cube.GetTransform(map);
-            double[] expected = new double[] { 0.0, 1.0, 2.0, 6.0, 7.0, 8.0, 3.0, 4.0, 5.0, 9.0, 10.0, 11.0 };
+            double[] expected = [0.0, 1.0, 2.0, 6.0, 7.0, 8.0, 3.0, 4.0, 5.0, 9.0, 10.0, 11.0];
             var actual = FromDataValues(transform.Data);
-            Assert.AreEqual(expected, actual);
+            Assert.That(actual, Is.EqualTo(expected));
         }
 
         [Test]
@@ -109,7 +109,7 @@ namespace DataCubeTests
         {
             // var0 var1 var2 var3 -> var3 var1 var0 var2
 
-            int[] varSizes = new[] { 2, 1, 2, 3 };
+            int[] varSizes = [2, 1, 2, 3];
             var cube = new DataCube(BuildTestCubeMeta(varSizes), BuildTestData(varSizes));
 
             var mutatorMaps = cube.Meta.Variables.Select(v => v.BuildVariableMap()).ToList();
@@ -121,9 +121,9 @@ namespace DataCubeTests
             var map = new CubeMap(mutatorMaps);
 
             var transform = cube.GetTransform(map);
-            double[] expected = new double[] { 0.0, 3.0, 6.0, 9.0, 1.0, 4.0, 7.0, 10.0, 2.0, 5.0, 8.0, 11.0 };
+            double[] expected = [0.0, 3.0, 6.0, 9.0, 1.0, 4.0, 7.0, 10.0, 2.0, 5.0, 8.0, 11.0];
             var actual = FromDataValues(transform.Data);
-            Assert.AreEqual(expected, actual);
+            Assert.That(actual, Is.EqualTo(expected));
         }
     }
 }

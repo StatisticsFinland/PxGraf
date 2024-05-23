@@ -18,7 +18,7 @@ namespace CachingTests
         [SetUp]
         public void DoSetup()
         {
-            Localization.Load(Path.Combine(AppContext.BaseDirectory, "Pars\\translations.json"));
+            Localization.Load(TranslationFixture.DefaultLanguage, TranslationFixture.Translations);
             IConfiguration configuration = new ConfigurationBuilder()
                 .AddInMemoryCollection(TestInMemoryConfiguration.Get())
                 .Build();
@@ -29,7 +29,7 @@ namespace CachingTests
         public static void ConstructorTest()
         {
             VisualizationResponseCache cache = new();
-            Assert.IsNotNull(cache);
+            Assert.That(cache, Is.Not.Null);
         }
 
         [Test]
@@ -40,8 +40,8 @@ namespace CachingTests
             task.Wait();
             cache.Set(TEST_KEY, task);
             var state = cache.TryGet(TEST_KEY, out VisualizationResponse response);
-            Assert.AreEqual(VisualizationResponseCache.CacheEntryState.Fresh, state);
-            Assert.IsNotNull(response);
+            Assert.That(state, Is.EqualTo(VisualizationResponseCache.CacheEntryState.Fresh));
+            Assert.That(response, Is.Not.Null);
             cache.Dispose();
         }
 
@@ -51,7 +51,7 @@ namespace CachingTests
             VisualizationResponseCache cache = new();
             cache.Set(TEST_KEY, new TaskCompletionSource<VisualizationResponse>().Task);
             var state = cache.TryGet(TEST_KEY, out VisualizationResponse _);
-            Assert.AreEqual(VisualizationResponseCache.CacheEntryState.Pending, state);
+            Assert.That(state, Is.EqualTo(VisualizationResponseCache.CacheEntryState.Pending));
             cache.Dispose();
         }
 
@@ -64,8 +64,8 @@ namespace CachingTests
             task.Wait();
             cache.Set(TEST_KEY, task);
             var state = cache.TryGet(TEST_KEY, out VisualizationResponse response);
-            Assert.AreEqual(VisualizationResponseCache.CacheEntryState.Stale, state);
-            Assert.IsNotNull(response);
+            Assert.That(state, Is.EqualTo(VisualizationResponseCache.CacheEntryState.Stale));
+            Assert.That(response, Is.Not.Null);
             cache.Dispose();
         }
 
@@ -74,7 +74,7 @@ namespace CachingTests
         {
             VisualizationResponseCache cache = new();
             var state = cache.TryGet(TEST_KEY, out VisualizationResponse _);
-            Assert.AreEqual(VisualizationResponseCache.CacheEntryState.Null, state);
+            Assert.That(state, Is.EqualTo(VisualizationResponseCache.CacheEntryState.Null));
             cache.Dispose();
         }
 
@@ -85,11 +85,11 @@ namespace CachingTests
             var task = Task.FromException<VisualizationResponse>(new Exception("This is a faulty task"));
             cache.Set(TEST_KEY, task);
             var state = cache.TryGet(TEST_KEY, out VisualizationResponse faultyResponse);
-            Assert.AreEqual(VisualizationResponseCache.CacheEntryState.Error, state);
-            Assert.IsNull(faultyResponse);
+            Assert.That(state, Is.EqualTo(VisualizationResponseCache.CacheEntryState.Error));
+            Assert.That(faultyResponse, Is.Null);
 
             // check that the entry is removed from the cache
-            Assert.AreEqual(VisualizationResponseCache.CacheEntryState.Null, cache.TryGet(TEST_KEY, out _));
+            Assert.That(cache.TryGet(TEST_KEY, out _), Is.EqualTo(VisualizationResponseCache.CacheEntryState.Null));
 
             cache.Dispose();
         }
@@ -105,14 +105,14 @@ namespace CachingTests
             var preFreshState = cache.TryGet(TEST_KEY, out VisualizationResponse response1);
             Configuration.Current.CacheOptions.CacheFreshnessCheckInterval = 45;
 
-            Assert.AreEqual(VisualizationResponseCache.CacheEntryState.Stale, preFreshState);
-            Assert.IsNotNull(response1);
+            Assert.That(preFreshState, Is.EqualTo(VisualizationResponseCache.CacheEntryState.Stale));
+            Assert.That(response1, Is.Not.Null);
 
             cache.Refresh(TEST_KEY);
 
             var freshState = cache.TryGet(TEST_KEY, out VisualizationResponse response2);
-            Assert.AreEqual(VisualizationResponseCache.CacheEntryState.Fresh, freshState);
-            Assert.IsNotNull(response2);
+            Assert.That(freshState, Is.EqualTo(VisualizationResponseCache.CacheEntryState.Fresh));
+            Assert.That(response2, Is.Not.Null);
 
             cache.Dispose();
         }

@@ -4,7 +4,7 @@ namespace PxGraf.Models.Queries
 {
     public class VirtualValueDefinition
     {
-        public string Operator { get; set; } // TODO: operator enums
+        public string Operator { get; set; }
 
         public List<string> OperandCodes { get; set; }
     }

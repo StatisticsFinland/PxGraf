@@ -48,8 +48,8 @@ namespace PxGraf.Data.MetaData
         /// </summary>
         public CubeMeta()
         {
-            Languages = new List<string>();
-            Variables = new List<Variable>();
+            Languages = [];
+            Variables = [];
             Header = null;
             Note = null;
         }
@@ -118,7 +118,7 @@ namespace PxGraf.Data.MetaData
         /// <returns>A <see cref="CubeMap"/> object that represents the structure of the cube meta - its variable codes and their included value codes.</returns>
         public CubeMap BuildMap()
         {
-            var variableMap = Variables.Select(v => v.BuildVariableMap()).ToList();
+            List<VariableMap> variableMap = Variables.Select(v => v.BuildVariableMap()).ToList();
             return new CubeMap(variableMap);
         }
 
@@ -248,15 +248,15 @@ namespace PxGraf.Data.MetaData
 
         private void ValidateQuery(CubeQuery query)
         {
-            List<string> mismatchingVarCodes = new();
-            mismatchingVarCodes.AddRange(
-                query.VariableQueries.Where(qv => !Variables.Exists(v => v.Code == qv.Key))
-                .Select(kvp => kvp.Key));
-            mismatchingVarCodes.AddRange(
-                Variables.Where(v => !query.VariableQueries.ContainsKey(v.Code))
-                .Select(v => v.Code));
+            List<string> mismatchingVarCodes =
+            [
+                .. query.VariableQueries.Where(qv => !Variables.Exists(v => v.Code == qv.Key))
+                .Select(kvp => kvp.Key),
+                .. Variables.Where(v => !query.VariableQueries.ContainsKey(v.Code))
+                .Select(v => v.Code),
+            ];
 
-            if (mismatchingVarCodes.Any())
+            if (mismatchingVarCodes.Count != 0)
             {
                 throw new ArgumentException($"Mismatch between query and metadata. The following variable codes differ: {string.Join(",", mismatchingVarCodes)}.");
             }

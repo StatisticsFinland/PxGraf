@@ -47,7 +47,7 @@ namespace PxGraf.Settings
                 CorsOptions = new()
                 {
                     AllowAnyOrigin = configuration.GetSection("Cors:AllowAnyOrigin").Get<bool>(),
-                    AllowedOrigins = configuration.GetSection("Cors:AllowedOrigins").Get<List<string>>(),
+                    AllowedOrigins = configuration.GetSection("Cors:AllowedOrigins").Get<string[]>(),
                 },
             };
 

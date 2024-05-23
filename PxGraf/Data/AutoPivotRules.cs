@@ -247,7 +247,7 @@ namespace PxGraf.Data
                 // Selectable varaibles always have a size of 1 and for purposes of this class the actual value does not matter, just the size.
                 if (query.VariableQueries[varMap.Code].Selectable)
                 {
-                    resultList.Add(new VariableMap(varMap.Code, new List<string> { varMap.ValueCodes[0] }));
+                    resultList.Add(new VariableMap(varMap.Code, [varMap.ValueCodes[0]]));
                 }
                 else
                 {

@@ -24,12 +24,12 @@ namespace PxGraf.Utility
         /// </summary>
         public static DataCube ApplySelectableVariableSelections(DataCube dataCube, IReadOnlyDictionary<string, IReadOnlyList<string>> selections)
         {
-            List<VariableMap> transformMap = new();
-            foreach (var varMap in dataCube.Meta.BuildMap())
+            List<VariableMap> transformMap = [];
+            foreach (VariableMap varMap in dataCube.Meta.BuildMap())
             {
                 if (selections.ContainsKey(varMap.Code))
                 {
-                    var varSelections = selections[varMap.Code];
+                    IReadOnlyList<string> varSelections = selections[varMap.Code];
                     transformMap.Add(new VariableMap(varMap.Code, varSelections));
                 }
                 else
@@ -59,8 +59,8 @@ namespace PxGraf.Utility
         {
             double?[] data = new double?[cube.Data.Length];
             // This will be empty as long as pxweb api doesn't return notes
-            Dictionary<int, IReadOnlyMultiLanguageString> notes = new();
-            Dictionary<int, int> missingValueInfo = new();
+            Dictionary<int, IReadOnlyMultiLanguageString> notes = [];
+            Dictionary<int, int> missingValueInfo = [];
             IReadOnlyList<DataValue> inputData = cube.Data;
 
             int dataLength = cube.Data.Length;
@@ -91,9 +91,9 @@ namespace PxGraf.Utility
         /// </summary>
         public static CubeMap CollapseOneVariableInMap(this CubeMap map, IReadOnlyVariableValue keepThisValue, IReadOnlyVariable fromThisVariable)
         {
-            var varMapList = map.ToList();
-            var variableIndex = varMapList.FindIndex(vs => vs.Code == fromThisVariable.Code);
-            varMapList[variableIndex] = new VariableMap(varMapList[variableIndex].Code, new List<string> { keepThisValue.Code });
+            List<VariableMap> varMapList = [.. map];
+            int variableIndex = varMapList.FindIndex(vs => vs.Code == fromThisVariable.Code);
+            varMapList[variableIndex] = new VariableMap(varMapList[variableIndex].Code, [keepThisValue.Code]);
 
             return new CubeMap(varMapList);
         }

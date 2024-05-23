@@ -1,9 +1,9 @@
 ﻿using NUnit.Framework;
+using PxGraf.ChartTypeSelection;
 using PxGraf.ChartTypeSelection.ChartSpecificLimits;
 using PxGraf.ChartTypeSelection.JsonObjects;
 using PxGraf.Enums;
 using System.Collections.Generic;
-using System.Linq;
 using UnitTests.TestDummies;
 using UnitTests.TestDummies.DummyQueries;
 
@@ -27,12 +27,12 @@ namespace ChartTypeSelectionTests
         [Test]
         public void NoData_ContentRequired()
         {
-            List<VariableParameters> dimension = new();
+            List<VariableParameters> dimension = [];
 
-            var input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
-            var check = new ScatterPlotCheck(Limits.ScatterPlotLimits);
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
+            ScatterPlotCheck check = new(Limits.ScatterPlotLimits);
 
-            Assert.AreEqual(RejectionReason.ContentRequired, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.ContentRequired));
         }
 
         /// <summary>
@@ -42,15 +42,15 @@ namespace ChartTypeSelectionTests
         [Test]
         public void ValidDataWithContentOnly_NotEnoughMultiselections()
         {
-            List<VariableParameters> dimension = new()
-            {
+            List<VariableParameters> dimension =
+            [
                 new VariableParameters(VariableType.Content, 2),
-            };
+            ];
 
-            var input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
-            var check = new ScatterPlotCheck(Limits.ScatterPlotLimits);
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
+            ScatterPlotCheck check = new(Limits.ScatterPlotLimits);
 
-            Assert.AreEqual(RejectionReason.NotEnoughMultiselections, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.NotEnoughMultiselections));
         }
 
         /// <summary>
@@ -60,20 +60,20 @@ namespace ChartTypeSelectionTests
         [Test]
         public void ValidDataWith2Multiselect_Pass()
         {
-            List<VariableParameters> dimension = new()
-            {
+            List<VariableParameters> dimension =
+            [
                 new VariableParameters(VariableType.Content, 2),
                 new VariableParameters(VariableType.Unknown, 4)
-            };
+            ];
 
-            var input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
-            var check = new ScatterPlotCheck(Limits.ScatterPlotLimits);
-            var reasons = check.CheckValidity(input);
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
+            ScatterPlotCheck check = new(Limits.ScatterPlotLimits);
+            List<ChartRejectionInfo> reasons = check.CheckValidity(input);
 
             string msg = "Ok";
             if (reasons.Count > 0) msg = reasons[0].ToString();
 
-            Assert.True(!reasons.Any(), msg);
+            Assert.That(reasons.Count, Is.EqualTo(0), msg);
         }
 
         /// <summary>
@@ -83,15 +83,15 @@ namespace ChartTypeSelectionTests
         [Test]
         public void NoContent_ContentRequired()
         {
-            List<VariableParameters> dimension = new()
-            {
+            List<VariableParameters> dimension =
+            [
                 new VariableParameters(VariableType.Unknown, 4)
-            };
+            ];
 
-            var input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
-            var check = new ScatterPlotCheck(Limits.ScatterPlotLimits);
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
+            ScatterPlotCheck check = new(Limits.ScatterPlotLimits);
 
-            Assert.AreEqual(RejectionReason.ContentRequired, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.ContentRequired));
         }
 
         /// <summary>
@@ -101,16 +101,16 @@ namespace ChartTypeSelectionTests
         [Test]
         public void ContentHasOne_ContentBelowMin()
         {
-            List<VariableParameters> dimension = new()
-            {
+            List<VariableParameters> dimension =
+            [
                 new VariableParameters(VariableType.Content, 1),
                 new VariableParameters(VariableType.Unknown, 4)
-            };
+            ];
 
-            var input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
-            var check = new ScatterPlotCheck(Limits.ScatterPlotLimits);
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
+            ScatterPlotCheck check = new(Limits.ScatterPlotLimits);
 
-            Assert.AreEqual(RejectionReason.ContentBelowMin, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.ContentBelowMin));
         }
 
         /// <summary>
@@ -120,16 +120,16 @@ namespace ChartTypeSelectionTests
         [Test]
         public void ContentHasThree_ContentOverMax()
         {
-            List<VariableParameters> dimension = new()
-            {
+            List<VariableParameters> dimension =
+            [
                 new VariableParameters(VariableType.Content, 3),
                 new VariableParameters(VariableType.Unknown, 4)
-            };
+            ];
 
-            var input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
-            var check = new ScatterPlotCheck(Limits.ScatterPlotLimits);
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
+            ScatterPlotCheck check = new(Limits.ScatterPlotLimits);
 
-            Assert.AreEqual(RejectionReason.ContentOverMax, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.ContentOverMax));
         }
 
         /// <summary>
@@ -139,16 +139,16 @@ namespace ChartTypeSelectionTests
         [Test]
         public void FirstMultiselectHAs1000_FirstMultiselectOverMax()
         {
-            List<VariableParameters> dimension = new()
-            {
+            List<VariableParameters> dimension =
+            [
                 new VariableParameters(VariableType.Content, 2),
                 new VariableParameters(VariableType.Unknown, 1000)
-            };
+            ];
 
-            var input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
-            var check = new ScatterPlotCheck(Limits.ScatterPlotLimits);
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
+            ScatterPlotCheck check = new(Limits.ScatterPlotLimits);
 
-            Assert.AreEqual(RejectionReason.FirstMultiselectOverMax, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.FirstMultiselectOverMax));
         }
     }
 }

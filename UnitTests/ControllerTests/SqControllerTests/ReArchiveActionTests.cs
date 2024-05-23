@@ -32,7 +32,7 @@ namespace ControllerTests
         [OneTimeSetUp]
         public void DoSetup()
         {
-            Localization.Load(Path.Combine(AppContext.BaseDirectory, "Pars\\translations.json"));
+            Localization.Load(TranslationFixture.DefaultLanguage, TranslationFixture.Translations);
 
             IConfiguration configuration = new ConfigurationBuilder()
                 .AddInMemoryCollection(TestInMemoryConfiguration.Get())
@@ -40,7 +40,7 @@ namespace ControllerTests
             Configuration.Load(configuration);
         }
 
-        private SqController BuildController(List<VariableParameters> cubeParams, List<VariableParameters> metaParams, VisualizationSettings vSettings = null)
+        private static SqController BuildController(List<VariableParameters> cubeParams, List<VariableParameters> metaParams, VisualizationSettings vSettings = null)
         {
             PxWebApiDummy pxWebApiDummy = new(cubeParams, metaParams);
             Dictionary<string, SavedQuery> testQueries = new()
@@ -62,75 +62,72 @@ namespace ControllerTests
         [Test]
         public async Task SqNotFoundTest_NotFoundResult()
         {
-            List<VariableParameters> cubeParams = new()
-            {
+            List<VariableParameters> cubeParams =
+            [
                 new VariableParameters(VariableType.Content, 1),
                 new VariableParameters(VariableType.Time, 10),
                 new VariableParameters(VariableType.OtherClassificatory, 1)
-            };
+            ];
 
-            List<VariableParameters> metaParams = new()
-            {
+            List<VariableParameters> metaParams =
+            [
                 new VariableParameters(VariableType.Content, 10),
                 new VariableParameters(VariableType.Time, 10),
                 new VariableParameters(VariableType.OtherClassificatory, 15),
                 new VariableParameters(VariableType.OtherClassificatory, 7),
-            };
-
+            ];
 
             SqController testController = BuildController(cubeParams, metaParams);
             ActionResult<ReArchiveResponse> actionResult = await testController.ReArchiveExistingQueryAsync(new ReArchiveRequest() { SqId = "not_found_asdf" });
-            Assert.IsInstanceOf<NotFoundResult>(actionResult.Result);
+            Assert.That(actionResult.Result, Is.InstanceOf<NotFoundResult>());
         }
 
         [Test]
         public async Task SqNotFoundTest_WrongChartType()
         {
-            List<VariableParameters> cubeParams = new()
-            {
+            List<VariableParameters> cubeParams =
+            [
                 new VariableParameters(VariableType.Content, 1),
                 new VariableParameters(VariableType.Time, 2), // horizontal bar chart is not possible with multiple time values
                 new VariableParameters(VariableType.OtherClassificatory, 5),
                 new VariableParameters(VariableType.OtherClassificatory, 1)
-            };
+            ];
 
-            List<VariableParameters> metaParams = new()
-            {
+            List<VariableParameters> metaParams =
+            [
                 new VariableParameters(VariableType.Content, 10),
                 new VariableParameters(VariableType.Time, 10),
                 new VariableParameters(VariableType.OtherClassificatory, 15),
                 new VariableParameters(VariableType.OtherClassificatory, 7),
-            };
-
+            ];
 
             SqController testController = BuildController(cubeParams, metaParams, new HorizontalBarChartVisualizationSettings(null));
             ActionResult<ReArchiveResponse> actionResult = await testController.ReArchiveExistingQueryAsync(new ReArchiveRequest() { SqId = TEST_SQ_ID });
-            Assert.IsInstanceOf<BadRequestResult>(actionResult.Result);
+            Assert.That(actionResult.Result, Is.InstanceOf<BadRequestResult>());
         }
 
         [Test]
         public async Task SqNotFoundTest_Success()
         {
-            List<VariableParameters> cubeParams = new()
-            {
+            List<VariableParameters> cubeParams =
+            [
                 new VariableParameters(VariableType.Content, 1),
                 new VariableParameters(VariableType.Time, 1),
                 new VariableParameters(VariableType.OtherClassificatory, 5),
                 new VariableParameters(VariableType.OtherClassificatory, 1)
-            };
+            ];
 
-            List<VariableParameters> metaParams = new()
-            {
+            List<VariableParameters> metaParams =
+            [
                 new VariableParameters(VariableType.Content, 10),
                 new VariableParameters(VariableType.Time, 10),
                 new VariableParameters(VariableType.OtherClassificatory, 15),
                 new VariableParameters(VariableType.OtherClassificatory, 7),
-            };
-
+            ];
 
             SqController testController = BuildController(cubeParams, metaParams, new HorizontalBarChartVisualizationSettings(null));
             ActionResult<ReArchiveResponse> actionResult = await testController.ReArchiveExistingQueryAsync(new ReArchiveRequest() { SqId = TEST_SQ_ID });
-            Assert.IsInstanceOf<ReArchiveResponse>(actionResult.Value);
+            Assert.That(actionResult.Value, Is.InstanceOf<ReArchiveResponse>());
         }
     }
 }

@@ -15,7 +15,6 @@ using PxGraf.PxWebInterface.Caching;
 using PxGraf.Settings;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using UnitTests.Fixtures;
@@ -29,7 +28,7 @@ namespace CreationControllerTests
         [OneTimeSetUp]
         public void DoSetup()
         {
-            Localization.Load(Path.Combine(AppContext.BaseDirectory, "Pars\\translations.json"));
+            Localization.Load(TranslationFixture.DefaultLanguage, TranslationFixture.Translations);
 
             IConfiguration configuration = new ConfigurationBuilder()
                 .AddInMemoryCollection(TestInMemoryConfiguration.Get())
@@ -54,108 +53,108 @@ namespace CreationControllerTests
         [Test]
         public async Task SimpleSuccessTest_Success()
         {
-            List<VariableParameters> cubeParams = new()
-            {
+            List<VariableParameters> cubeParams =
+            [
                 new VariableParameters(VariableType.Content, 1),
                 new VariableParameters(VariableType.Time, 10),
                 new VariableParameters(VariableType.OtherClassificatory, 1),
                 new VariableParameters(VariableType.OtherClassificatory, 1)
-            };
+            ];
 
-            List<VariableParameters> metaParams = new()
-            {
+            List<VariableParameters> metaParams =
+            [
                 new VariableParameters(VariableType.Content, 10),
                 new VariableParameters(VariableType.Time, 10),
                 new VariableParameters(VariableType.OtherClassificatory, 15),
                 new VariableParameters(VariableType.OtherClassificatory, 7),
-            };
+            ];
 
             CreationController testController = BuildController(cubeParams, metaParams);
             CubeQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
             ActionResult<QueryInfoResponse> actionResult = await testController.GetQueryInfoAsync(cubeQuery);
 
-            Assert.IsInstanceOf<ActionResult<QueryInfoResponse>>(actionResult);
+            Assert.That(actionResult, Is.InstanceOf<ActionResult<QueryInfoResponse>>());
         }
 
         [Test]
         public async Task ValidChartTypesTest_LineChart_HorizontalBarChart_Table()
         {
-            List<VariableParameters> cubeParams = new()
-            {
+            List<VariableParameters> cubeParams =
+            [
                 new VariableParameters(VariableType.Content, 1),
                 new VariableParameters(VariableType.Time, 10),
                 new VariableParameters(VariableType.OtherClassificatory, 1),
                 new VariableParameters(VariableType.OtherClassificatory, 1)
-            };
+            ];
 
-            List<VariableParameters> metaParams = new()
-            {
+            List<VariableParameters> metaParams =
+            [
                 new VariableParameters(VariableType.Content, 10),
                 new VariableParameters(VariableType.Time, 10),
                 new VariableParameters(VariableType.OtherClassificatory, 15),
                 new VariableParameters(VariableType.OtherClassificatory, 7),
-            };
+            ];
 
-            var testController = BuildController(cubeParams, metaParams);
-            var cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
-            var actionResult = await testController.GetQueryInfoAsync(cubeQuery);
+            CreationController testController = BuildController(cubeParams, metaParams);
+            CubeQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
+            ActionResult<QueryInfoResponse> actionResult = await testController.GetQueryInfoAsync(cubeQuery);
 
-            var expected = new List<VisualizationType>() { VisualizationType.LineChart, VisualizationType.VerticalBarChart, VisualizationType.Table };
-            Assert.AreEqual(expected, actionResult.Value.ValidVisualizations);
+            List<VisualizationType> expected = [VisualizationType.LineChart, VisualizationType.VerticalBarChart, VisualizationType.Table];
+            Assert.That(actionResult.Value.ValidVisualizations, Is.EqualTo(expected));
         }
 
         [Test]
         public async Task SizeTest_450()
         {
-            List<VariableParameters> cubeParams = new()
-            {
+            List<VariableParameters> cubeParams =
+            [
                 new VariableParameters(VariableType.Content, 1),
                 new VariableParameters(VariableType.Time, 10),
                 new VariableParameters(VariableType.OtherClassificatory, 3),
                 new VariableParameters(VariableType.OtherClassificatory, 15)
-            };
+            ];
 
-            List<VariableParameters> metaParams = new()
-            {
+            List<VariableParameters> metaParams =
+            [
                 new VariableParameters(VariableType.Content, 10),
                 new VariableParameters(VariableType.Time, 10),
                 new VariableParameters(VariableType.OtherClassificatory, 15),
                 new VariableParameters(VariableType.OtherClassificatory, 70),
-            };
+            ];
 
-            var testController = BuildController(cubeParams, metaParams);
-            var cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
-            var actionResult = await testController.GetQueryInfoAsync(cubeQuery);
+            CreationController testController = BuildController(cubeParams, metaParams);
+            CubeQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
+            ActionResult<QueryInfoResponse> actionResult = await testController.GetQueryInfoAsync(cubeQuery);
 
             // 10 * 3 * 15
-            Assert.AreEqual(450, actionResult.Value.Size);
+            Assert.That(actionResult.Value.Size, Is.EqualTo(450));
         }
 
         [Test]
         public async Task RejectionReasonsTest_8Rejected()
         {
-            List<VariableParameters> cubeParams = new()
-            {
+            List<VariableParameters> cubeParams =
+            [
                 new VariableParameters(VariableType.Content, 1),
                 new VariableParameters(VariableType.Time, 10),
                 new VariableParameters(VariableType.OtherClassificatory, 3),
                 new VariableParameters(VariableType.OtherClassificatory, 1)
-            };
+            ];
 
-            List<VariableParameters> metaParams = new()
-            {
+            List<VariableParameters> metaParams =
+            [
                 new VariableParameters(VariableType.Content, 10),
                 new VariableParameters(VariableType.Time, 10),
                 new VariableParameters(VariableType.OtherClassificatory, 15),
                 new VariableParameters(VariableType.OtherClassificatory, 70),
-            };
+            ];
 
-            var testController = BuildController(cubeParams, metaParams);
-            var cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
-            var actionResult = await testController.GetQueryInfoAsync(cubeQuery);
+            CreationController testController = BuildController(cubeParams, metaParams);
+            CubeQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
+            ActionResult<QueryInfoResponse> actionResult = await testController.GetQueryInfoAsync(cubeQuery);
 
-            var expectedTypes = new List<VisualizationType>()
-            {
+            List<VisualizationType> expectedTypes =
+            [
                 VisualizationType.HorizontalBarChart,
                 VisualizationType.GroupHorizontalBarChart,
                 VisualizationType.StackedHorizontalBarChart,
@@ -164,92 +163,92 @@ namespace CreationControllerTests
                 VisualizationType.PieChart,
                 VisualizationType.PyramidChart,
                 VisualizationType.ScatterPlot
-            };
+            ];
 
-            Assert.AreEqual(expectedTypes, actionResult.Value.VisualizationRejectionReasons.Keys);
+            Assert.That(actionResult.Value.VisualizationRejectionReasons.Keys, Is.EqualTo(expectedTypes));
         }
 
         [Test]
         public async Task RejectionReasonsTextTest_MultiLanguageString()
         {
-            List<VariableParameters> cubeParams = new()
-            {
+            List<VariableParameters> cubeParams =
+            [
                 new VariableParameters(VariableType.Content, 1),
                 new VariableParameters(VariableType.Time, 10),
                 new VariableParameters(VariableType.OtherClassificatory, 3),
                 new VariableParameters(VariableType.OtherClassificatory, 1)
-            };
+            ];
 
-            List<VariableParameters> metaParams = new()
-            {
+            List<VariableParameters> metaParams =
+            [
                 new VariableParameters(VariableType.Content, 10),
                 new VariableParameters(VariableType.Time, 10),
                 new VariableParameters(VariableType.OtherClassificatory, 15),
                 new VariableParameters(VariableType.OtherClassificatory, 70),
-            };
+            ];
 
-            var testController = BuildController(cubeParams, metaParams);
-            var cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
-            var actionResult = await testController.GetQueryInfoAsync(cubeQuery);
+            CreationController testController = BuildController(cubeParams, metaParams);
+            CubeQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
+            ActionResult<QueryInfoResponse> actionResult = await testController.GetQueryInfoAsync(cubeQuery);
 
-            var firstReason = actionResult.Value.VisualizationRejectionReasons.First();
-            Assert.AreEqual(VisualizationType.HorizontalBarChart, firstReason.Key);
-            Assert.AreEqual(3, firstReason.Value.Languages.Count());
-            Assert.AreEqual("Poiminnassa on liikaa monivalintaulottuvuuksia (2 / 1)", firstReason.Value["fi"]);
+            KeyValuePair<VisualizationType, MultiLanguageString> firstReason = actionResult.Value.VisualizationRejectionReasons.First();
+            Assert.That(firstReason.Key, Is.EqualTo(VisualizationType.HorizontalBarChart));
+            Assert.That(firstReason.Value.Languages.Count(), Is.EqualTo(3));
+            Assert.That(firstReason.Value["fi"], Is.EqualTo("Poiminnassa on liikaa monivalintaulottuvuuksia (2 / 1)"));
         }
 
         [Test]
         public async Task MaxAndWarningLimits_WarningSmallerThanMax()
         {
-            List<VariableParameters> cubeParams = new()
-            {
+            List<VariableParameters> cubeParams =
+            [
                 new VariableParameters(VariableType.Content, 1),
                 new VariableParameters(VariableType.Time, 10),
                 new VariableParameters(VariableType.OtherClassificatory, 3),
                 new VariableParameters(VariableType.OtherClassificatory, 1),
-            };
+            ];
 
-            List<VariableParameters> metaParams = new()
-            {
+            List<VariableParameters> metaParams =
+            [
                 new VariableParameters(VariableType.Content, 10),
                 new VariableParameters(VariableType.Time, 10),
                 new VariableParameters(VariableType.OtherClassificatory, 15),
                 new VariableParameters(VariableType.OtherClassificatory, 70),
-            };
+            ];
 
-            var testController = BuildController(cubeParams, metaParams);
-            var cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
-            var actionResult = await testController.GetQueryInfoAsync(cubeQuery);
+            CreationController testController = BuildController(cubeParams, metaParams);
+            CubeQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
+            ActionResult<QueryInfoResponse> actionResult = await testController.GetQueryInfoAsync(cubeQuery);
 
-            Assert.True(actionResult.Value.SizeWarningLimit < actionResult.Value.MaximumSupportedSize);
+            Assert.That(actionResult.Value.SizeWarningLimit, Is.LessThan(actionResult.Value.MaximumSupportedSize));
         }
 
         [Test]
         public async Task ActualSizeAndMaxLimits_SizeBiggerThanMax()
         {
-            List<VariableParameters> cubeParams = new()
-            {
+            List<VariableParameters> cubeParams =
+            [
                 new VariableParameters(VariableType.Content, 1),
                 new VariableParameters(VariableType.Time, 12),
                 new VariableParameters(VariableType.OtherClassificatory, 10),
                 new VariableParameters(VariableType.OtherClassificatory, 10),
                 new VariableParameters(VariableType.OtherClassificatory, 100)
-            };
+            ];
 
-            List<VariableParameters> metaParams = new()
-            {
+            List<VariableParameters> metaParams =
+            [
                 new VariableParameters(VariableType.Content, 10),
                 new VariableParameters(VariableType.Time, 10),
                 new VariableParameters(VariableType.OtherClassificatory, 15),
                 new VariableParameters(VariableType.OtherClassificatory, 70),
                 new VariableParameters(VariableType.OtherClassificatory, 70)
-            };
+            ];
 
-            var testController = BuildController(cubeParams, metaParams);
-            var cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
-            var actionResult = await testController.GetQueryInfoAsync(cubeQuery);
+            CreationController testController = BuildController(cubeParams, metaParams);
+            CubeQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
+            ActionResult<QueryInfoResponse> actionResult = await testController.GetQueryInfoAsync(cubeQuery);
 
-            Assert.True(actionResult.Value.Size > actionResult.Value.MaximumSupportedSize);
+            Assert.That(actionResult.Value.Size, Is.GreaterThan(actionResult.Value.MaximumSupportedSize));
         }
     }
 }

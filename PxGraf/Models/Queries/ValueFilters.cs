@@ -18,14 +18,9 @@ namespace PxGraf.Models.Queries
     /// <summary>
     /// Filter that selects the last N values.
     /// </summary>
-    public class TopFilter : ValueFilter
+    public class TopFilter(int count) : ValueFilter
     {
-        public int Count { get; set; }
-
-        public TopFilter(int count)
-        {
-            Count = count;
-        }
+        public int Count { get; set; } = count;
 
         public override IEnumerable<IReadOnlyVariableValue> Filter(IReadOnlyList<IReadOnlyVariableValue> values)
         {
@@ -36,14 +31,9 @@ namespace PxGraf.Models.Queries
     /// <summary>
     /// Filter that selects values starting from a specific value.
     /// </summary>
-    public class FromFilter : ValueFilter
+    public class FromFilter(string code) : ValueFilter
     {
-        public string Code { get; set; }
-
-        public FromFilter(string code)
-        {
-            Code = code;
-        }
+        public string Code { get; set; } = code;
 
         public override IEnumerable<IReadOnlyVariableValue> Filter(IReadOnlyList<IReadOnlyVariableValue> values)
         {
@@ -73,14 +63,9 @@ namespace PxGraf.Models.Queries
     /// <summary>
     /// Filter that allows user to pick specific values manually.
     /// </summary>
-    public class ItemFilter : ValueFilter
+    public class ItemFilter(List<string> codes) : ValueFilter
     {
-        public List<string> Codes { get; set; }
-
-        public ItemFilter(List<string> codes)
-        {
-            Codes = codes;
-        }
+        public List<string> Codes { get; set; } = codes;
 
         public override IEnumerable<IReadOnlyVariableValue> Filter(IReadOnlyList<IReadOnlyVariableValue> values)
         {

@@ -41,10 +41,7 @@ namespace PxGraf.Models.Responses
             Text = new(language, table.Text);
             Type = table.Type;
             Updated = table.Updated;
-            Languages = new List<string>
-            {
-                language
-            };
+            Languages = [language];
         }
 
         /// <summary>
@@ -56,10 +53,7 @@ namespace PxGraf.Models.Responses
         {
             Id = database.Dbid;
             Text = new(language, database.Text);
-            Languages = new List<string>
-            {
-                language
-            };
+            Languages = [language];
         }
     }
 }

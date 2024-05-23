@@ -7,21 +7,16 @@ namespace PxGraf.Controllers
     /// <summary>
     /// Controller for logging errors.
     /// </summary>
+    /// <remarks>
+    /// Default constructor.
+    /// </remarks>
+    /// <param name="logger"><see cref="ILogger"/> instance for writing logs.</param>
     [ApiController]
     [Route("api/error")]
     [ApiExplorerSettings(IgnoreApi = true)]
-    public class ErrorController : ControllerBase
+    public class ErrorController(ILogger<ErrorController> logger) : ControllerBase
     {
-        private readonly ILogger<ErrorController> _logger;
-
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        /// <param name="logger"><see cref="ILogger"/> instance for writing logs.</param>
-        public ErrorController(ILogger<ErrorController> logger)
-        {
-            _logger = logger;
-        }
+        private readonly ILogger<ErrorController> _logger = logger;
 
         public IActionResult Error()
         {

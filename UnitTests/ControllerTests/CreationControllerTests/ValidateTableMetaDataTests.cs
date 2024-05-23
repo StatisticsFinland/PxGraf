@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using UnitTests.TestDummies.DummyQueries;
 using UnitTests.TestDummies;
 using PxGraf.Models.Queries;
+using PxGraf.Models.Responses;
 
 namespace CreationControllerTests
 {
@@ -43,23 +44,23 @@ namespace CreationControllerTests
             int firstVariableSize = 1)
         {
             // Arrange
-            List<VariableParameters> variables = new()
-            {
+            List<VariableParameters> variables =
+            [
                 new VariableParameters(firstVariableType, firstVariableSize),
                 new VariableParameters(secondVariableType, 1)
-            };
+            ];
 
             IReadOnlyCubeMeta testMeta = TestDataCubeBuilder.BuildTestMeta(variables);
 
             mockConnection.Setup(m => m.GetCubeMetaCachedAsync(It.IsAny<PxFileReference>())).ReturnsAsync(testMeta);
 
             // Act
-            var result = await controller.ValidateTableMetaData(tablePath);
+            TableMetaValidationResult result = await controller.ValidateTableMetaData(tablePath);
 
             // Assert
-            Assert.AreEqual(hasContentVariable, result.TableHasContentVariable);
-            Assert.AreEqual(hasTimeVariable, result.TableHasTimeVariable);
-            Assert.AreEqual(noZeroSizedVariables, result.AllVariablesContainValues);
+            Assert.That(result.TableHasContentVariable, Is.EqualTo(hasContentVariable));
+            Assert.That(result.TableHasTimeVariable, Is.EqualTo(hasTimeVariable));
+            Assert.That(result.AllVariablesContainValues, Is.EqualTo(noZeroSizedVariables));
         }
     }
 }

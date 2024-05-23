@@ -14,7 +14,6 @@ using PxGraf.Enums;
 using UnitTests.TestDummies.DummyQueries;
 using UnitTests.TestDummies;
 using PxGraf.Language;
-using System.IO;
 using PxGraf.Models.SavedQueries;
 using Microsoft.Extensions.Configuration;
 using UnitTests.Fixtures;
@@ -27,7 +26,7 @@ namespace CachingTests
         [OneTimeSetUp]
         public static void DoSetup()
         {
-            Localization.Load(Path.Combine(AppContext.BaseDirectory, "Pars\\translations.json"));
+            Localization.Load(TranslationFixture.DefaultLanguage, TranslationFixture.Translations);
 
             IConfiguration configuration = new ConfigurationBuilder()
                 .AddInMemoryCollection(TestInMemoryConfiguration.Get())
@@ -40,13 +39,13 @@ namespace CachingTests
         {
             Mock<IPxWebApiInterface> mockPxWebApi = new();
             Mock<IPxWebApiResponseCache> mockMemoryCache = new();
-            var fileRef = new PxFileReference(new List<string>() { "test1" }, "testName");
-            List<VariableParameters> variables = new()
-            {
+            var fileRef = new PxFileReference(["test1"], "testName");
+            List<VariableParameters> variables =
+            [
                 new VariableParameters(VariableType.Content, 1),
                 new VariableParameters(VariableType.Time, 5),
                 new VariableParameters(VariableType.Unknown, 1)
-            };
+            ];
 
             IReadOnlyCubeMeta testMeta = TestDataCubeBuilder.BuildTestMeta(variables);
 
@@ -64,12 +63,12 @@ namespace CachingTests
         [Test]
         public static async Task PxDataFetchTriggersIfNoValidDataInCache()
         {
-            List<VariableParameters> variables = new()
-            {
+            List<VariableParameters> variables =
+            [
                 new VariableParameters(VariableType.Content, 1),
                 new VariableParameters(VariableType.Time, 5),
                 new VariableParameters(VariableType.Unknown, 1)
-            };
+            ];
 
             IReadOnlyCubeMeta testMeta = TestDataCubeBuilder.BuildTestMeta(variables);
 
@@ -81,7 +80,7 @@ namespace CachingTests
             Task<DataCube> mockParam = default;
             mockMemoryCache.Setup(x => x.TryGetData(It.IsAny<IReadOnlyCubeMeta>(), out mockParam)).Returns(false);
 
-            PxFileReference fileRef = new (new List<string>() { "test1" }, "testName");
+            PxFileReference fileRef = new(["test1"], "testName");
 
             CachedPxWebConnection cachedConnection = new (mockPxWebApi.Object, mockMemoryCache.Object);
             await cachedConnection.GetDataCubeCachedAsync(fileRef, testMeta);
@@ -95,19 +94,19 @@ namespace CachingTests
         {
             Mock<IPxWebApiInterface> mockPxWebApi = new();
             Mock<IPxWebApiResponseCache> mockMemoryCache = new();
-            List<VariableParameters> variables = new()
-            {
+            List<VariableParameters> variables =
+            [
                 new VariableParameters(VariableType.Content, 1),
                 new VariableParameters(VariableType.Time, 5),
                 new VariableParameters(VariableType.Unknown, 1)
-            };
+            ];
 
             IReadOnlyCubeMeta testMeta = TestDataCubeBuilder.BuildTestMeta(variables);
 
             Task<DataCube> mockParam = Task.Factory.StartNew(() => TestDataCubeBuilder.BuildTestDataCube(variables));
             mockMemoryCache.Setup(x => x.TryGetData(It.IsAny<IReadOnlyCubeMeta>(), out mockParam)).Returns(true);
 
-            PxFileReference fileRef = new (new List<string>() { "test1" }, "testName");
+            PxFileReference fileRef = new(["test1"], "testName");
 
             CachedPxWebConnection cachedConnection = new (mockPxWebApi.Object, mockMemoryCache.Object);
             await cachedConnection.GetDataCubeCachedAsync(fileRef, testMeta);
@@ -120,12 +119,12 @@ namespace CachingTests
         {
             Mock<IPxWebApiInterface> mockPxWebApi = new();
             Mock<IPxWebApiResponseCache> mockMemoryCache = new();
-            List<VariableParameters> variables = new()
-            {
+            List<VariableParameters> variables =
+            [
                 new VariableParameters(VariableType.Content, 1),
                 new VariableParameters(VariableType.Time, 5),
                 new VariableParameters(VariableType.Unknown, 1)
-            };
+            ];
 
             IReadOnlyCubeMeta testMeta = TestDataCubeBuilder.BuildTestMeta(variables);
             DataCube testData = TestDataCubeBuilder.BuildTestDataCube(variables);
@@ -141,9 +140,9 @@ namespace CachingTests
             CachedPxWebConnection cachedConnection = new (mockPxWebApi.Object, mockMemoryCache.Object);
             DataCube result = await cachedConnection.BuildDataCubeCachedAsync(testQuery);
 
-            Assert.IsNotNull(result);
-            Assert.AreEqual(3, result.Meta.Variables.Count);
-            Assert.AreEqual(testData.Data.Length, result.Data.Length);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Meta.Variables.Count, Is.EqualTo(3));
+            Assert.That(result.Data.Length, Is.EqualTo(testData.Data.Length));
         }
 
         [Test]
@@ -151,12 +150,12 @@ namespace CachingTests
         {
             Mock<IPxWebApiInterface> mockPxWebApi = new();
             Mock<IPxWebApiResponseCache> mockMemoryCache = new();
-            List<VariableParameters> variables = new()
-            {
+            List<VariableParameters> variables =
+            [
                 new VariableParameters(VariableType.Content, 1),
                 new VariableParameters(VariableType.Time, 5),
                 new VariableParameters(VariableType.Unknown, 1)
-            };
+            ];
 
             IReadOnlyCubeMeta testMeta = TestDataCubeBuilder.BuildTestMeta(variables);
             DataCube testData = TestDataCubeBuilder.BuildTestDataCube(variables);
@@ -172,9 +171,9 @@ namespace CachingTests
             CachedPxWebConnection cachedConnection = new(mockPxWebApi.Object, mockMemoryCache.Object);
             ArchiveCube result = await cachedConnection.BuildArchiveCubeCachedAsync(testQuery);
 
-            Assert.IsNotNull(result);
-            Assert.AreEqual(3, result.Meta.Variables.Count);
-            Assert.AreEqual(testData.Data.Length, result.Data.Count);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Meta.Variables.Count, Is.EqualTo(3));
+            Assert.That(result.Data.Count, Is.EqualTo(testData.Data.Length));
         }
     }
 }

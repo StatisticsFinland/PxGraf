@@ -15,7 +15,7 @@ namespace PxGraf.Utility
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             MultiLanguageString mls = value as MultiLanguageString;
-            Dictionary<string, string> translations = new();
+            Dictionary<string, string> translations = [];
 
             foreach (string language in mls.Languages)
             {

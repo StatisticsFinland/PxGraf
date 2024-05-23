@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace PxGraf.Utility
 {
-    public class LockByKey
+    public class LockByKey(IEqualityComparer<string> keyComparer)
     {
         private sealed class LockInfo {
             public readonly object mutex;
@@ -16,16 +16,11 @@ namespace PxGraf.Utility
             }
         }
 
-        private readonly Dictionary<string, LockInfo> locks;
-
-        public LockByKey(IEqualityComparer<string> keyComparer)
-        {
-            locks = new Dictionary<string, LockInfo>(keyComparer);
-        }
+        private readonly Dictionary<string, LockInfo> locks = new(keyComparer);
 
         public void RunLocked(string key, Action action)
         {
-            var mutex = Lock(key);
+            object mutex = Lock(key);
             try
             {
                 lock (mutex)
@@ -41,7 +36,7 @@ namespace PxGraf.Utility
 
         public T RunLocked<T>(string key, Func<T> action)
         {
-            var mutex = Lock(key);
+            object mutex = Lock(key);
             try
             {
                 lock (mutex)
@@ -74,7 +69,7 @@ namespace PxGraf.Utility
         {
             lock (locks)
             {
-                var lockInfo = locks[key];
+                LockInfo lockInfo = locks[key];
                 lockInfo.threadCounter--;
                 if (lockInfo.threadCounter <= 0)
                 {

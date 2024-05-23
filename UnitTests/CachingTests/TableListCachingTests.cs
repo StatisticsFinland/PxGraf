@@ -79,7 +79,7 @@ namespace CachingTests
             mockMemoryCache.Setup(x => x.RemoveTableItems(It.IsAny<string>(), It.IsAny<IReadOnlyList<string>>()));
 
             CachedPxWebConnection cachedConnection = new(mockPxWebApi.Object, mockMemoryCache.Object);
-            AggregateException ex = Assert.ThrowsAsync<AggregateException>(async () => await cachedConnection.GetDataTableItemListingAsync("en", new List<string>()));
+            AggregateException ex = Assert.ThrowsAsync<AggregateException>(async () => await cachedConnection.GetDataTableItemListingAsync("en", []));
             Assert.That(ex.InnerExceptions[0], Is.TypeOf<BadPxWebResponseException>());
 
             mockMemoryCache.Verify(x => x.TryGetTableItems("en", It.IsAny<IReadOnlyList<string>>(), out It.Ref<Task<List<TableListResponseItem>>>.IsAny), Times.Once);
@@ -99,7 +99,7 @@ namespace CachingTests
                 .Returns(false);
 
             CachedPxWebConnection cachedConnection = new(mockPxWebApi.Object, mockMemoryCache.Object);
-            await cachedConnection.GetDataTableItemListingAsync("en", new List<string>());
+            await cachedConnection.GetDataTableItemListingAsync("en", []);
 
             mockMemoryCache.Verify(x => x.TryGetTableItems("en", It.IsAny<IReadOnlyList<string>>(), out It.Ref<Task<List<TableListResponseItem>>>.IsAny), Times.Once);
             mockPxWebApi.Verify(x => x.GetTableItemListingAsync("en", It.IsAny<IReadOnlyList<string>>()), Times.Once());
@@ -118,7 +118,7 @@ namespace CachingTests
                 .Returns(true);
 
             CachedPxWebConnection cachedConnection = new(mockPxWebApi.Object, mockMemoryCache.Object);
-            await cachedConnection.GetDataTableItemListingAsync("en", new List<string>());
+            await cachedConnection.GetDataTableItemListingAsync("en", []);
 
             mockMemoryCache.Verify(x => x.TryGetTableItems("en", It.IsAny<IReadOnlyList<string>>(), out It.Ref<Task<List<TableListResponseItem>>>.IsAny), Times.Once);
             mockPxWebApi.Verify(x => x.GetTableItemListingAsync(It.IsAny<string>(), It.IsAny<IReadOnlyList<string>>()), Times.Never());

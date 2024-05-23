@@ -59,10 +59,9 @@ namespace PxGraf.Utility
         /// <returns></returns>
         public static IReadOnlyList<IReadOnlyVariable> GetSortedMultivalueVariables(this IReadOnlyCubeMeta cubeMeta)
         {
-            return cubeMeta.Variables
+            return [.. cubeMeta.Variables
                 .Where(variable => variable.IncludedValues.Count > 1)
-                .OrderByDescending(x => x.IncludedValues.Count)
-                .ToList();
+                .OrderByDescending(x => x.IncludedValues.Count)];
         }
 
         /// <summary>
@@ -246,21 +245,21 @@ namespace PxGraf.Utility
 
         private static void AppendSingleValueVariableTexts(this StringBuilder builder, IReadOnlyCubeMeta cubeMeta, string language)
         {
-            foreach (IReadOnlyVariable singleVar in cubeMeta.Variables.Where(v => !IsMultiValue(v) && v.Type != VariableType.Content && v.Type != VariableType.Time))
+            IEnumerable<IReadOnlyVariable> singleValueVariables = cubeMeta.Variables
+                .Where(v => !IsMultiValue(v) && v.Type != VariableType.Content && v.Type != VariableType.Time)
+                .Where(singleVar => singleVar.IncludedValues.Any());
+
+            foreach (var singleVar in singleValueVariables)
             {
-                if (singleVar.IncludedValues.Any())
+                IReadOnlyVariableValue variableValue = singleVar.IncludedValues[0];
+                if (!variableValue.IsSumValue)
                 {
-                    IReadOnlyVariableValue variableValue = singleVar.IncludedValues[0];
-
-                    if (!variableValue.IsSumValue)
+                    if (builder.Length > 0)
                     {
-                        if (builder.Length > 0)
-                        {
-                            builder.Append(", ");
-                        }
-
-                        builder.Append(variableValue.Name[language]);
+                        builder.Append(", ");
                     }
+
+                    builder.Append(variableValue.Name[language]);
                 }
             }
         }

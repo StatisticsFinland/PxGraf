@@ -7,7 +7,10 @@ namespace PxGraf.ChartTypeSelection.ChartSpecificLimits
     /// <summary>
     /// Functionality to check the query compatibility with the pyramid chart spesific rules.
     /// </summary>
-    public class PyramidChartCheck : ChartRulesCheck
+    /// <remarks>
+    /// Default constructor
+    /// </remarks>
+    public class PyramidChartCheck(IChartTypeLimits limits) : ChartRulesCheck(limits)
     {
         // Elimination conditions and priorities:
         // 1. Number of multiselect dimensions
@@ -24,11 +27,6 @@ namespace PxGraf.ChartTypeSelection.ChartSpecificLimits
         /// Pyramid chart
         /// </summary>
         public override VisualizationType Type => VisualizationType.PyramidChart;
-
-        /// <summary>
-        /// Default constructor
-        /// </summary>
-        public PyramidChartCheck(IChartTypeLimits limits) : base(limits) {}
 
         protected override IEnumerable<ChartRejectionInfo> CheckChartSpecificRules(VisualizationTypeSelectionObject input)
         {

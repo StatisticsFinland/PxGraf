@@ -3,20 +3,13 @@
     /// <summary>
     /// Stores information about the validation of a table.
     /// </summary>
-    public class TableMetaValidationResult
-    { 
-        public bool TableHasContentVariable { get; }
-        public bool TableHasTimeVariable { get; }
-        public bool AllVariablesContainValues { get; }
-
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        public TableMetaValidationResult(bool tableHasContentVariable, bool tableHasTimeVariable, bool allVariablesContainValues)
-        {
-            TableHasContentVariable = tableHasContentVariable;
-            TableHasTimeVariable = tableHasTimeVariable;
-            AllVariablesContainValues = allVariablesContainValues;
-        }
+    /// <remarks>
+    /// Default constructor.
+    /// </remarks>
+    public class TableMetaValidationResult(bool tableHasContentVariable, bool tableHasTimeVariable, bool allVariablesContainValues)
+    {
+        public bool TableHasContentVariable { get; } = tableHasContentVariable;
+        public bool TableHasTimeVariable { get; } = tableHasTimeVariable;
+        public bool AllVariablesContainValues { get; } = allVariablesContainValues;
     }
 }

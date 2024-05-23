@@ -14,21 +14,15 @@ namespace PxGraf.PxWebInterface
     /// <summary>
     /// Handles requesting data and metadata from pxweb and caches the results to reduce unnecessary requests.
     /// </summary>
-    public class CachedPxWebConnection : ICachedPxWebConnection
+    /// <remarks>
+    /// Default constructor
+    /// </remarks>
+    /// <param name="pxWebApi">Connection to pxweb</param>
+    /// <param name="apiRespCache">Memory cache to be used with this connection</param>
+    public class CachedPxWebConnection(IPxWebApiInterface pxWebApi, IPxWebApiResponseCache apiRespCache) : ICachedPxWebConnection
     {
-        private readonly IPxWebApiInterface _pxWebApi;
-        private readonly IPxWebApiResponseCache _apiResponseCache;
-
-        /// <summary>
-        /// Default constructor
-        /// </summary>
-        /// <param name="pxWebApi">Connection to pxweb</param>
-        /// <param name="apiRespCache">Memory cache to be used with this connection</param>
-        public CachedPxWebConnection(IPxWebApiInterface pxWebApi, IPxWebApiResponseCache apiRespCache)
-        {
-            _pxWebApi = pxWebApi;
-            _apiResponseCache = apiRespCache;
-        }
+        private readonly IPxWebApiInterface _pxWebApi = pxWebApi;
+        private readonly IPxWebApiResponseCache _apiResponseCache = apiRespCache;
 
         /// <summary>
         /// Retuns variable and variable value metadata from given px file.

@@ -8,7 +8,11 @@ namespace PxGraf.ChartTypeSelection.ChartSpecificLimits
     /// <summary>
     /// Functionality to check the query compatibility with the scatter plot spesific rules.
     /// </summary>
-    public class ScatterPlotCheck : ChartRulesCheck
+    /// <remarks>
+    /// Default constructor
+    /// </remarks>
+    /// <param name="limits"></param>
+    public class ScatterPlotCheck(IChartTypeLimits limits) : ChartRulesCheck(limits)
     {
 
         // Elimination conditions and priorities:
@@ -22,18 +26,12 @@ namespace PxGraf.ChartTypeSelection.ChartSpecificLimits
         public override VisualizationType Type => VisualizationType.ScatterPlot;
 
         /// <summary>
-        /// Default constructor
-        /// </summary>
-        /// <param name="limits"></param>
-        public ScatterPlotCheck(IChartTypeLimits limits) : base(limits) {}
-
-        /// <summary>
         /// Checks query compatibility with pyramid charts fixed rules.
         /// </summary>
         protected override IEnumerable<ChartRejectionInfo> CheckChartSpecificRules(VisualizationTypeSelectionObject input)
         {
             // No fixed rules for scatter plots at the moment.
-            return Enumerable.Empty<ChartRejectionInfo>();
+            return [];
         }
 
         /// <summary>

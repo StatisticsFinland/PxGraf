@@ -2,10 +2,5 @@
 
 namespace PxGraf.Exceptions
 {
-    public class TableMetadataException : Exception
-    {
-        public TableMetadataException(string message) : base(message)
-        {
-        }
-    }
+    public class TableMetadataException(string message) : Exception(message) { }
 }

@@ -24,16 +24,10 @@ namespace PxGraf.Data
         [GeneratedRegex("^[12][0-9]{3}$")]
         private static partial Regex AnnualValuesRegex();
 
-        public class TimeVariableInformation
+        public class TimeVariableInformation(TimeVariableInterval interval, DateTime? startingPoint)
         {
-            public TimeVariableInterval Interval { get; }
-            public DateTime? StartingPoint { get; }
-
-            public TimeVariableInformation(TimeVariableInterval interval, DateTime? startingPoint)
-            {
-                Interval = interval;
-                StartingPoint = startingPoint;
-            }
+            public TimeVariableInterval Interval { get; } = interval;
+            public DateTime? StartingPoint { get; } = startingPoint;
         }
 
         /// <summary>

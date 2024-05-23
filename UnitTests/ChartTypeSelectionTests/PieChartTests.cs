@@ -1,9 +1,9 @@
 ﻿using NUnit.Framework;
+using PxGraf.ChartTypeSelection;
 using PxGraf.ChartTypeSelection.ChartSpecificLimits;
 using PxGraf.ChartTypeSelection.JsonObjects;
 using PxGraf.Enums;
 using System.Collections.Generic;
-using System.Linq;
 using UnitTests.TestDummies;
 using UnitTests.TestDummies.DummyQueries;
 
@@ -27,12 +27,12 @@ namespace ChartTypeSelectionTests
         [Test]
         public void NoData_NotEnoughMultiselections()
         {
-            List<VariableParameters> dimension = new();
+            List<VariableParameters> dimension = [];
 
-            var input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
-            var check = new PieChartCheck(Limits.PieChartLimits);
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
+            PieChartCheck check = new(Limits.PieChartLimits);
 
-            Assert.AreEqual(RejectionReason.NotEnoughMultiselections, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.NotEnoughMultiselections));
         }
 
         /// <summary>
@@ -42,21 +42,21 @@ namespace ChartTypeSelectionTests
         [Test]
         public void ValidData_Pass()
         {
-            List<VariableParameters> dimension = new()
-            {
+            List<VariableParameters> dimension =
+            [
                 new VariableParameters(VariableType.Time, 1),
                 new VariableParameters(VariableType.Content, 1),
                 new VariableParameters(VariableType.Unknown, 4)
-            };
+            ];
 
-            var input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
-            var check = new PieChartCheck(Limits.PieChartLimits);
-            var reasons = check.CheckValidity(input);
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
+            PieChartCheck check = new(Limits.PieChartLimits);
+            List<ChartRejectionInfo> reasons = check.CheckValidity(input);
 
             string msg = "Ok";
             if (reasons.Count > 0) msg = reasons[0].ToString();
 
-            Assert.True(!reasons.Any(), msg);
+            Assert.That(reasons.Count, Is.EqualTo(0), msg);
         }
 
         /// <summary>
@@ -66,16 +66,16 @@ namespace ChartTypeSelectionTests
         [Test]
         public void NoMultiselectDimensions_NotEnoughMultiselections()
         {
-            List<VariableParameters> dimension = new()
-            {
+            List<VariableParameters> dimension =
+            [
                 new VariableParameters(VariableType.Time, 1),
                 new VariableParameters(VariableType.Content, 1)
-            };
+            ];
 
-            var input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
-            var check = new PieChartCheck(Limits.PieChartLimits);
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
+            PieChartCheck check = new(Limits.PieChartLimits);
 
-            Assert.AreEqual(RejectionReason.NotEnoughMultiselections, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.NotEnoughMultiselections));
         }
 
         /// <summary>
@@ -85,18 +85,18 @@ namespace ChartTypeSelectionTests
         [Test]
         public void TwoMultiselectDimensions_TooManyMultiselections()
         {
-            List<VariableParameters> dimension = new()
-            {
+            List<VariableParameters> dimension =
+            [
                 new VariableParameters(VariableType.Time, 1),
                 new VariableParameters(VariableType.Content, 1),
                 new VariableParameters(VariableType.Unknown, 4),
                 new VariableParameters(VariableType.Geological, 4)
-            };
+            ];
 
-            var input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
-            var check = new PieChartCheck(Limits.PieChartLimits);
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
+            PieChartCheck check = new(Limits.PieChartLimits);
 
-            Assert.AreEqual(RejectionReason.TooManyMultiselections, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.TooManyMultiselections));
         }
 
         /// <summary>
@@ -106,16 +106,16 @@ namespace ChartTypeSelectionTests
         [Test]
         public void NoContentDimension_ContentRequired()
         {
-            List<VariableParameters> dimension = new()
-            {
+            List<VariableParameters> dimension =
+            [
                 new VariableParameters(VariableType.Time, 1),
                 new VariableParameters(VariableType.Unknown, 4),
-            };
+            ];
 
-            var input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
-            var check = new PieChartCheck(Limits.PieChartLimits);
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
+            PieChartCheck check = new(Limits.PieChartLimits);
 
-            Assert.AreEqual(RejectionReason.ContentRequired, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.ContentRequired));
         }
 
         /// <summary>
@@ -125,17 +125,16 @@ namespace ChartTypeSelectionTests
         [Test]
         public void ContentHas2_UnambiguousContentUnitRequired()
         {
-            List<VariableParameters> dimension = new()
-            {
+            List<VariableParameters> dimension =
+            [
                 new VariableParameters(VariableType.Time, 1),
                 new VariableParameters(VariableType.Content, 2)
-            };
+            ];
 
-            var input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
-            var check = new PieChartCheck(Limits.PieChartLimits);
-            var reasons = check.CheckValidity(input);
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
+            PieChartCheck check = new(Limits.PieChartLimits);
 
-            Assert.AreEqual(RejectionReason.UnambiguousContentUnitRequired, reasons[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.UnambiguousContentUnitRequired));
         }
 
         /// <summary>
@@ -145,20 +144,20 @@ namespace ChartTypeSelectionTests
         [Test]
         public void ContentHas3WithSameUnit_Pass()
         {
-            List<VariableParameters> dimension = new()
-            {
+            List<VariableParameters> dimension =
+            [
                 new VariableParameters(VariableType.Time, 1),
                 new VariableParameters(VariableType.Content, 3) {SameUnit = true}
-            };
+            ];
 
-            var input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
-            var check = new PieChartCheck(Limits.PieChartLimits);
-            var reasons = check.CheckValidity(input);
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
+            PieChartCheck check = new(Limits.PieChartLimits);
+            List<ChartRejectionInfo> reasons = check.CheckValidity(input);
 
             string msg = "Ok";
             if (reasons.Count > 0) msg = reasons[0].ToString();
 
-            Assert.True(!reasons.Any(), msg);
+            Assert.That(reasons.Count, Is.EqualTo(0), msg);
         }
 
         /// <summary>
@@ -168,16 +167,16 @@ namespace ChartTypeSelectionTests
         [Test]
         public void NoTimeDimension_TimeRequired()
         {
-            List<VariableParameters> dimension = new()
-            {
+            List<VariableParameters> dimension =
+            [
                 new VariableParameters(VariableType.Content, 1),
                 new VariableParameters(VariableType.Unknown, 4),
-            };
+            ];
 
-            var input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
-            var check = new PieChartCheck(Limits.PieChartLimits);
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
+            PieChartCheck check = new(Limits.PieChartLimits);
 
-            Assert.AreEqual(RejectionReason.TimeRequired, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.TimeRequired));
         }
 
         /// <summary>
@@ -187,16 +186,16 @@ namespace ChartTypeSelectionTests
         [Test]
         public void TimeHas2_TimeOverMax()
         {
-            List<VariableParameters> dimension = new()
-            {
+            List<VariableParameters> dimension =
+            [
                 new VariableParameters(VariableType.Time, 2),
                 new VariableParameters(VariableType.Content, 1)
-            };
+            ];
 
-            var input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
-            var check = new PieChartCheck(Limits.PieChartLimits);
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
+            PieChartCheck check = new(Limits.PieChartLimits);
 
-            Assert.AreEqual(RejectionReason.TimeOverMax, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.TimeOverMax));
         }
 
 
@@ -207,17 +206,17 @@ namespace ChartTypeSelectionTests
         [Test]
         public void MultiselectHasCombinationValue_CombinationValuesNotAllowed()
         {
-            List<VariableParameters> dimension = new()
-            {
+            List<VariableParameters> dimension =
+            [
                 new VariableParameters(VariableType.Time, 1),
                 new VariableParameters(VariableType.Content, 1),
                 new VariableParameters(VariableType.Unknown, 4, true)
-            };
+            ];
 
-            var input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
-            var check = new PieChartCheck(Limits.PieChartLimits);
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
+            PieChartCheck check = new(Limits.PieChartLimits);
 
-            Assert.AreEqual(RejectionReason.CombinationValuesNotAllowed, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.CombinationValuesNotAllowed));
         }
 
         /// <summary>
@@ -227,17 +226,17 @@ namespace ChartTypeSelectionTests
         [Test]
         public void MultiselectHasOver10_FirstMultiselectOverMax()
         {
-            List<VariableParameters> dimension = new()
-            {
+            List<VariableParameters> dimension =
+            [
                 new VariableParameters(VariableType.Time, 1),
                 new VariableParameters(VariableType.Content, 1),
                 new VariableParameters(VariableType.Unknown, 11)
-            };
+            ];
 
-            var input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
-            var check = new PieChartCheck(Limits.PieChartLimits);
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
+            PieChartCheck check = new(Limits.PieChartLimits);
 
-            Assert.AreEqual(RejectionReason.FirstMultiselectOverMax, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.FirstMultiselectOverMax));
         }
 
 
@@ -248,17 +247,17 @@ namespace ChartTypeSelectionTests
         [Test]
         public void NegativeData_NegativeDataNotAllowed()
         {
-            List<VariableParameters> dimension = new()
-            {
+            List<VariableParameters> dimension =
+            [
                 new VariableParameters(VariableType.Time, 1),
                 new VariableParameters(VariableType.Content, 1),
                 new VariableParameters(VariableType.Unknown, 5)
-            };
+            ];
 
-            var input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension, true); // <- true causes negative data to be built
-            var check = new PieChartCheck(Limits.PieChartLimits);
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension, true); // <- true causes negative data to be built
+            PieChartCheck check = new(Limits.PieChartLimits);
 
-            Assert.AreEqual(RejectionReason.NegativeDataNotAllowed, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.NegativeDataNotAllowed));
         }
     }
 }

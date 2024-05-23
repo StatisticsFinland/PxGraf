@@ -6,14 +6,14 @@ using System.Collections.Generic;
 namespace PxGraf.Models.Queries
 {
     [JsonObject(ItemNullValueHandling = NullValueHandling.Ignore)]
-    public abstract class VisualizationSettings
+    public abstract class VisualizationSettings(Layout layout, Dictionary<string, List<string>> defaultSelectableVariableCodes)
     {
         /// <summary>
         /// Currently selected visualization type. (various charts, table, text)
         /// </summary>
         public abstract VisualizationType VisualizationType { get; }
 
-        public Layout Layout { get; set; }
+        public Layout Layout { get; set; } = layout;
 
         public bool? CutYAxis { get; protected set; } = false;
 
@@ -27,25 +27,16 @@ namespace PxGraf.Models.Queries
 
         public string Sorting { get; protected set; }
 
-        public Dictionary<string, List<string>> DefaultSelectableVariableCodes { get; }
+        public Dictionary<string, List<string>> DefaultSelectableVariableCodes { get; } = defaultSelectableVariableCodes;
         public bool? ShowDataPoints { get; protected set; } = false;
-
-        protected VisualizationSettings(Layout layout, Dictionary<string, List<string>> defaultSelectableVariableCodes)
-        {
-            Layout = layout;
-            DefaultSelectableVariableCodes = defaultSelectableVariableCodes;
-        }
     }
 
-    public class TableVisualizationSettings : VisualizationSettings
+    /// <summary>
+    /// Default constructor
+    /// </summary>
+    public class TableVisualizationSettings(Layout layout, Dictionary<string, List<string>> defaultSelectableVariableCodes = null) : VisualizationSettings(layout, defaultSelectableVariableCodes)
     {
         public override VisualizationType VisualizationType => VisualizationType.Table;
-
-        /// <summary>
-        /// Default constructor
-        /// </summary>
-        public TableVisualizationSettings(Layout layout, Dictionary<string, List<string>> defaultSelectableVariableCodes = null)
-            : base(layout, defaultSelectableVariableCodes) { }
     }
 
     public class LineChartVisualizationSettings : VisualizationSettings

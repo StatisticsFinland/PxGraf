@@ -1,9 +1,9 @@
 ﻿using NUnit.Framework;
+using PxGraf.ChartTypeSelection;
 using PxGraf.ChartTypeSelection.ChartSpecificLimits;
 using PxGraf.ChartTypeSelection.JsonObjects;
 using PxGraf.Enums;
 using System.Collections.Generic;
-using System.Linq;
 using UnitTests.TestDummies;
 using UnitTests.TestDummies.DummyQueries;
 
@@ -27,12 +27,12 @@ namespace ChartTypeSelectionTests
         [Test]
         public void NoData_NotEnoughMultiselections()
         {
-            List<VariableParameters> dimension = new();
+            List<VariableParameters> dimension = [];
 
-            var input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
-            var check = new StackedHorizontalBarChartCheck(Limits.StackedHorizontalBarChartLimits);
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
+            StackedHorizontalBarChartCheck check = new(Limits.StackedHorizontalBarChartLimits);
 
-            Assert.AreEqual(RejectionReason.NotEnoughMultiselections, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.NotEnoughMultiselections));
         }
 
         /// <summary>
@@ -42,21 +42,21 @@ namespace ChartTypeSelectionTests
         [Test]
         public void ValidData_Pass()
         {
-            List<VariableParameters> dimension = new()
-            {
+            List<VariableParameters> dimension =
+            [
                 new(VariableType.Content, 1),
                 new(VariableType.Unknown, 5),
                 new(VariableType.Geological, 4)
-            };
+            ];
 
-            var input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
-            var check = new StackedHorizontalBarChartCheck(Limits.StackedHorizontalBarChartLimits);
-            var reasons = check.CheckValidity(input);
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
+            StackedHorizontalBarChartCheck check = new(Limits.StackedHorizontalBarChartLimits);
+            List<ChartRejectionInfo> reasons = check.CheckValidity(input);
 
             string msg = "Ok";
             if (reasons.Count > 0) msg = reasons[0].ToString();
 
-            Assert.True(!reasons.Any(), msg);
+            Assert.That(reasons.Count, Is.EqualTo(0), msg);
         }
 
         /// <summary>
@@ -66,17 +66,17 @@ namespace ChartTypeSelectionTests
         [Test]
         public void OneMultiselectDimension_NotEnoughMultiselections()
         {
-            List<VariableParameters> dimension = new()
-            {
+            List<VariableParameters> dimension =
+            [
                 new(VariableType.Content, 1),
                 new(VariableType.Time, 1),
                 new(VariableType.Unknown, 15)
-            };
+            ];
 
-            var input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
-            var check = new StackedHorizontalBarChartCheck(Limits.StackedHorizontalBarChartLimits);
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
+            StackedHorizontalBarChartCheck check = new(Limits.StackedHorizontalBarChartLimits);
 
-            Assert.AreEqual(RejectionReason.NotEnoughMultiselections, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.NotEnoughMultiselections));
         }
 
         /// <summary>
@@ -86,19 +86,19 @@ namespace ChartTypeSelectionTests
         [Test]
         public void ThreeMultiselectDimensions_TooManyMultiselections()
         {
-            List<VariableParameters> dimension = new()
-            {
+            List<VariableParameters> dimension =
+            [
                 new(VariableType.Content, 1),
                 new(VariableType.Time, 1),
                 new(VariableType.Unknown, 15),
                 new(VariableType.Geological, 4),
                 new(VariableType.Unknown, 2)
-            };
+            ];
 
-            var input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
-            var check = new StackedHorizontalBarChartCheck(Limits.StackedHorizontalBarChartLimits);
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
+            StackedHorizontalBarChartCheck check = new(Limits.StackedHorizontalBarChartLimits);
 
-            Assert.AreEqual(RejectionReason.TooManyMultiselections, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.TooManyMultiselections));
         }
 
         /// <summary>
@@ -108,17 +108,17 @@ namespace ChartTypeSelectionTests
         [Test]
         public void NoContentDimension_ContentRequired()
         {
-            List<VariableParameters> dimension = new()
-            {
+            List<VariableParameters> dimension =
+            [
                 new(VariableType.Time, 1),
                 new(VariableType.Unknown, 15),
                 new(VariableType.Geological, 4)
-            };
+            ];
 
-            var input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
-            var check = new StackedHorizontalBarChartCheck(Limits.StackedHorizontalBarChartLimits);
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
+            StackedHorizontalBarChartCheck check = new(Limits.StackedHorizontalBarChartLimits);
 
-            Assert.AreEqual(RejectionReason.ContentRequired, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.ContentRequired));
         }
 
         /// <summary>
@@ -128,21 +128,21 @@ namespace ChartTypeSelectionTests
         [Test]
         public void ContentHas4WithSameUnits_Pass()
         {
-            List<VariableParameters> dimension = new()
-            {
+            List<VariableParameters> dimension =
+            [
                 new(VariableType.Content, 4) { SameUnit = true },
                 new(VariableType.Time, 1),
                 new(VariableType.Unknown, 15),
-            };
+            ];
 
-            var input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
-            var check = new StackedHorizontalBarChartCheck(Limits.StackedHorizontalBarChartLimits);
-            var reasons = check.CheckValidity(input);
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
+            StackedHorizontalBarChartCheck check = new(Limits.StackedHorizontalBarChartLimits);
+            List<ChartRejectionInfo> reasons = check.CheckValidity(input);
 
             string msg = "Ok";
             if (reasons.Count > 0) msg = reasons[0].ToString();
 
-            Assert.True(!reasons.Any(), msg);
+            Assert.That(reasons.Count, Is.EqualTo(0), msg);
         }
 
 
@@ -153,18 +153,17 @@ namespace ChartTypeSelectionTests
         [Test]
         public void ContentHas4_UnambiguousContentUnitRequired()
         {
-            List<VariableParameters> dimension = new()
-            {
+            List<VariableParameters> dimension =
+            [
                 new(VariableType.Content, 4),
                 new(VariableType.Time, 1),
                 new(VariableType.Unknown, 15),
-            };
+            ];
 
-            var input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
-            var check = new StackedHorizontalBarChartCheck(Limits.StackedHorizontalBarChartLimits);
-            var reasons = check.CheckValidity(input);
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
+            StackedHorizontalBarChartCheck check = new(Limits.StackedHorizontalBarChartLimits);
 
-            Assert.AreEqual(RejectionReason.UnambiguousContentUnitRequired, reasons[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.UnambiguousContentUnitRequired));
         }
 
         /// <summary>
@@ -174,17 +173,17 @@ namespace ChartTypeSelectionTests
         [Test]
         public void TwoFromTime_TimeOverMax()
         {
-            List<VariableParameters> dimension = new()
-            {
+            List<VariableParameters> dimension =
+            [
                 new(VariableType.Content, 1),
                 new(VariableType.Time, 2),
                 new(VariableType.Unknown, 15),
-            };
+            ];
 
-            var input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
-            var check = new StackedHorizontalBarChartCheck(Limits.StackedHorizontalBarChartLimits);
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
+            StackedHorizontalBarChartCheck check = new(Limits.StackedHorizontalBarChartLimits);
 
-            Assert.AreEqual(RejectionReason.TimeOverMax, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.TimeOverMax));
         }
 
         /// <summary>
@@ -194,18 +193,18 @@ namespace ChartTypeSelectionTests
         [Test]
         public void ProgressiveMultiselect_ProgressiveNotAllowed()
         {
-            List<VariableParameters> dimension = new()
-            {
+            List<VariableParameters> dimension =
+            [
                 new(VariableType.Content, 1),
                 new(VariableType.Time, 1),
                 new(VariableType.Unknown, 4),
                 new(VariableType.Ordinal, 15),
-            };
+            ];
 
-            var input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
-            var check = new StackedHorizontalBarChartCheck(Limits.StackedHorizontalBarChartLimits);
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
+            StackedHorizontalBarChartCheck check = new(Limits.StackedHorizontalBarChartLimits);
 
-            Assert.AreEqual(RejectionReason.ProgressiveNotAllowed, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.ProgressiveNotAllowed));
         }
 
         /// <summary>
@@ -215,23 +214,23 @@ namespace ChartTypeSelectionTests
         [Test]
         public void ProgressiveWithOneValue_Pass()
         {
-            List<VariableParameters> dimension = new()
-            {
+            List<VariableParameters> dimension =
+            [
                 new(VariableType.Content, 1),
                 new(VariableType.Time, 1),
                 new(VariableType.Unknown, 4),
                 new(VariableType.Unknown, 5),
                 new(VariableType.Ordinal, 1),
-            };
+            ];
 
-            var input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
-            var check = new StackedHorizontalBarChartCheck(Limits.StackedHorizontalBarChartLimits);
-            var reasons = check.CheckValidity(input);
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
+            StackedHorizontalBarChartCheck check = new(Limits.StackedHorizontalBarChartLimits);
+            List<ChartRejectionInfo> reasons = check.CheckValidity(input);
 
             string msg = "Ok";
             if (reasons.Count > 0) msg = reasons[0].ToString();
 
-            Assert.True(!reasons.Any(), msg);
+            Assert.That(reasons.Count, Is.EqualTo(0), msg);
         }
 
         /// <summary>
@@ -241,17 +240,17 @@ namespace ChartTypeSelectionTests
         [Test]
         public void FirstMultiselectHasCombinationValue_CombinationValuesNotAllowed()
         {
-            List<VariableParameters> dimension = new()
-            {
+            List<VariableParameters> dimension =
+            [
                 new(VariableType.Content, 1),
                 new(VariableType.Unknown, 5, true),
                 new(VariableType.Unknown, 4)
-            };
+            ];
 
-            var input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
-            var check = new StackedHorizontalBarChartCheck(Limits.StackedHorizontalBarChartLimits);
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
+            StackedHorizontalBarChartCheck check = new(Limits.StackedHorizontalBarChartLimits);
 
-            Assert.AreEqual(RejectionReason.CombinationValuesNotAllowed, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.CombinationValuesNotAllowed));
         }
 
         /// <summary>
@@ -261,17 +260,17 @@ namespace ChartTypeSelectionTests
         [Test]
         public void SecondMultiselectHasCombinationValue_CombinationValuesNotAllowed()
         {
-            List<VariableParameters> dimension = new()
-            {
+            List<VariableParameters> dimension =
+            [
                 new(VariableType.Content, 1),
                 new(VariableType.Unknown, 5),
                 new(VariableType.Unknown, 4, true)
-            };
+            ];
 
-            var input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
-            var check = new StackedHorizontalBarChartCheck(Limits.StackedHorizontalBarChartLimits);
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
+            StackedHorizontalBarChartCheck check = new(Limits.StackedHorizontalBarChartLimits);
 
-            Assert.AreEqual(RejectionReason.CombinationValuesNotAllowed, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.CombinationValuesNotAllowed));
         }
 
         /// <summary>
@@ -281,17 +280,17 @@ namespace ChartTypeSelectionTests
         [Test]
         public void MultiselectHAsOver30_FirstMultiselectOverMax()
         {
-            List<VariableParameters> dimension = new()
-            {
+            List<VariableParameters> dimension =
+            [
                 new(VariableType.Content, 1),
                 new(VariableType.Unknown, 31),
                 new(VariableType.Unknown, 4)
-            };
+            ];
 
-            var input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
-            var check = new StackedHorizontalBarChartCheck(Limits.StackedHorizontalBarChartLimits);
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
+            StackedHorizontalBarChartCheck check = new(Limits.StackedHorizontalBarChartLimits);
 
-            Assert.AreEqual(RejectionReason.FirstMultiselectOverMax, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.FirstMultiselectOverMax));
         }
 
         /// <summary>
@@ -301,17 +300,17 @@ namespace ChartTypeSelectionTests
         [Test]
         public void BothMultiselectsHaveOver10_SecondMultiselectOverMax()
         {
-            List<VariableParameters> dimension = new()
-            {
+            List<VariableParameters> dimension =
+            [
                 new(VariableType.Content, 1),
                 new(VariableType.Unknown, 11),
                 new(VariableType.Unknown, 12)
-            };
+            ];
 
-            var input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
-            var check = new StackedHorizontalBarChartCheck(Limits.StackedHorizontalBarChartLimits);
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
+            StackedHorizontalBarChartCheck check = new(Limits.StackedHorizontalBarChartLimits);
 
-            Assert.AreEqual(RejectionReason.SecondMultiselectOverMax, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.SecondMultiselectOverMax));
         }
 
         /// <summary>
@@ -321,17 +320,17 @@ namespace ChartTypeSelectionTests
         [Test]
         public void NegativeData_NegativeDataNotAllowed()
         {
-            List<VariableParameters> dimension = new()
-            {
+            List<VariableParameters> dimension =
+            [
                 new(VariableType.Content, 1),
                 new(VariableType.Unknown, 5),
                 new(VariableType.Geological, 4)
-            };
+            ];
 
-            var input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension, true); // <- true causes negative data to be built
-            var check = new StackedHorizontalBarChartCheck(Limits.StackedHorizontalBarChartLimits);
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension, true); // <- true causes negative data to be built
+            StackedHorizontalBarChartCheck check = new(Limits.StackedHorizontalBarChartLimits);
 
-            Assert.AreEqual(RejectionReason.NegativeDataNotAllowed, check.CheckValidity(input)[0].Reason);
+            Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.NegativeDataNotAllowed));
         }
     }
 }

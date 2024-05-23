@@ -10,18 +10,11 @@ using UnitTests.TestDummies.DummyQueries;
 
 namespace UnitTests.TestDummies
 {
-    internal class PxWebApiDummy : IPxWebApiInterface
+    internal class PxWebApiDummy(List<VariableParameters> cubeParams, List<VariableParameters> metaParams, bool useNegativeData = false) : IPxWebApiInterface
     {
-        private List<VariableParameters> CubeParams { get; }
-        private List<VariableParameters> MetaParams { get; }
-        private bool UseNegativeData { get; set; }
-
-        public PxWebApiDummy(List<VariableParameters> cubeParams, List<VariableParameters> metaParams, bool useNegativeData = false)
-        {
-            CubeParams = cubeParams;
-            MetaParams = metaParams;
-            UseNegativeData = useNegativeData;
-        }
+        private List<VariableParameters> CubeParams { get; } = cubeParams;
+        private List<VariableParameters> MetaParams { get; } = metaParams;
+        private bool UseNegativeData { get; set; } = useNegativeData;
 
         public Task<DataCube> GetPxTableDataAsync(PxFileReference tableReference, IReadOnlyCubeMeta table)
         {
@@ -39,7 +32,7 @@ namespace UnitTests.TestDummies
 
         public Task<List<DataBaseListResponseItem>> GetDataBaseListingAsync(string lang)
         {
-            Task<List<DataBaseListResponseItem>> task = new(() => new List<DataBaseListResponseItem> { new () });
+            Task<List<DataBaseListResponseItem>> task = new(() => [new()]);
             task.Start();
             return task;
         }

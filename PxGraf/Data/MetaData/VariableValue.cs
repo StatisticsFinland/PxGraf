@@ -109,7 +109,6 @@ namespace PxGraf.Data.MetaData
         public void ApplyEdition(VariableQuery.VariableValueEdition valueEdit)
         {
             Name.Edit(valueEdit.NameEdit);
-            // TODO: implement note edit
 
             if (valueEdit.ContentComponent is ContentComponentEdition cce && ContentComponent is ContentComponent cc)
             {

@@ -7,7 +7,11 @@ namespace PxGraf.ChartTypeSelection.ChartSpecificLimits
     /// <summary>
     /// Functionality to check the query compatibility with the group horizontal bar charts rules.
     /// </summary>
-    public class GroupHorizontalBarChartCheck : ChartRulesCheck
+    /// <remarks>
+    /// Default constructor
+    /// </remarks>
+    /// <param name="limits"></param>
+    public class GroupHorizontalBarChartCheck(IChartTypeLimits limits) : ChartRulesCheck(limits)
     {
 
         // Elimination conditions and priorities:
@@ -25,12 +29,6 @@ namespace PxGraf.ChartTypeSelection.ChartSpecificLimits
         /// Group horizontal bar chart
         /// </summary>
         public override VisualizationType Type => VisualizationType.GroupHorizontalBarChart;
-
-        /// <summary>
-        /// Default constructor
-        /// </summary>
-        /// <param name="limits"></param>
-        public GroupHorizontalBarChartCheck(IChartTypeLimits limits) : base(limits) { }
 
         /// <summary>
         /// Checks query compatibility with group horizontal bar charts fixed rules.
