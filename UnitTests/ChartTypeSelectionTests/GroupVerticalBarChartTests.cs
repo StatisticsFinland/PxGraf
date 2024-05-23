@@ -1,11 +1,9 @@
-﻿using Microsoft.AspNetCore.Hosting.StaticWebAssets;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using PxGraf.ChartTypeSelection;
 using PxGraf.ChartTypeSelection.ChartSpecificLimits;
 using PxGraf.ChartTypeSelection.JsonObjects;
 using PxGraf.Enums;
 using System.Collections.Generic;
-using System.Linq;
 using UnitTests.TestDummies;
 using UnitTests.TestDummies.DummyQueries;
 
