@@ -289,7 +289,7 @@ namespace CreationControllerTests
             ActionResult<VisualizationRules> result = await testController.GetVisualizationRulesAsync(rulesRequest);
 
             Assert.That(result.Value.VisualizationTypeSpecificRules, Is.Not.Null);
-            Assert.That(result.Value.VisualizationTypeSpecificRules.AllowShowingDataPoints, Is.True);
+            Assert.That(result.Value.VisualizationTypeSpecificRules.AllowShowingDataPoints, Is.False);
             Assert.That(result.Value.VisualizationTypeSpecificRules.AllowMatchXLabelsToEnd, Is.False);
             Assert.That(result.Value.VisualizationTypeSpecificRules.AllowSetMarkerScale, Is.False);
         }

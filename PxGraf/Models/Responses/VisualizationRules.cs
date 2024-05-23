@@ -25,9 +25,8 @@ namespace PxGraf.Models.Responses
         /// <param name="selectedVisualization">Selected visualization type.</param>
         public class TypeSpecificVisualizationRules(VisualizationType selectedVisualization)
         {
-            public bool AllowShowingDataPoints { get; } = 
-                selectedVisualization != VisualizationType.Table &&
-                selectedVisualization != VisualizationType.ScatterPlot;
+            public bool AllowShowingDataPoints { get; } =
+                selectedVisualization == VisualizationType.VerticalBarChart;
             public bool AllowCuttingYAxis { get; } = 
                 selectedVisualization == VisualizationType.LineChart ||
                 selectedVisualization == VisualizationType.ScatterPlot;
