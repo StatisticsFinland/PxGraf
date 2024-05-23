@@ -98,21 +98,36 @@ jest.mock('api/services/visualization', () => ({
     }
 }));
 
+jest.mock('@statisticsfinland/pxvisualizer', () => {
+    const lib = jest.requireActual("@statisticsfinland/pxvisualizer");
+    return {
+        ...lib,
+        Chart: (...args: any[]) => {
+            return (
+                <pre data-testid={'Chart'}>
+                   args={JSON.stringify(args)}
+                </pre>
+            );
+        }
+    }
+});
+
 const mockVisualizationResult: IVisualizationResult = {
     isLoading: false,
     isError: false,
     data: {
-        data: [],
+        data: [ 1, 2, 3, 4 ],
         missingDataInfo: {},
         dataNotes: [],
         rowVariableCodes: ["foobar2"],
         columnVariableCodes: ["foobar1"],
         header: { fi: "foo", sv: "bar", en: "foobar" },
-        selectableVariableCodes: ["foobar1", "foobar2"],
+        selectableVariableCodes: ["foobar1"],
         visualizationSettings:
         {
             timeVariableIntervals: ETimeVariableInterval.Irregular,
-            visualizationType: EVisualizationType.HorizontalBarChart
+            visualizationType: EVisualizationType.HorizontalBarChart,
+            sorting: 'DESCENDING'
         },
         metaData: [{
             code: "foobar1",
@@ -190,9 +205,9 @@ const mockVisualizationSettingsResult: IVisualizationSettingsResult = {
         multiselectVariableAllowed: false,
         sortingOptions: [
             {
-                code: 'sortingOptionCode',
+                code: 'DESCENDING',
                 description: {
-                    'fi': 'sortingOptionDescription'
+                    'fi': 'Laskeva'
                 }
             }
         ],
@@ -216,7 +231,7 @@ const mockQueryInfoResult: IQueryInfoResult = {
         maximumSupportedSize: 100,
         size: 5,
         sizeWarningLimit: 75,
-        validVisualizations: ['VerticalBarChart', 'HorizontalBarChart'],
+        validVisualizations: ['HorizontalBarChart', 'VerticalBarChart'],
         visualizationRejectionReasons: {
             'pieChart': {
                 'fi': 'huono kaavio'
@@ -291,7 +306,7 @@ const mockInvalidTableValidationResult: IValidateTableMetaDataResult = {
     }
 }
 
-let mockResult;
+let mockResult: IValidateTableMetaDataResult;
 
 jest.mock('api/services/validate-table-metadata', () => ({
     useValidateTableMetadataQuery: () => mockResult,

@@ -36,7 +36,7 @@ const SelectorWrapper = styled(Box)<{width: number, $maxWidthPercentage: number}
 /**
  * Component for the filter section in the editor. Contains @see {@link VariableSelectionList} for each variable for filtering values and defining selectable variables.
  * @param {IVariable[]} variables Variables available for the table.
- * @param {{  [key:string]: string[] }} resolvedVariableCodes Codes for the resolved variable values.
+ * @param {{[key:string]: string[]}} resolvedVariableCodes Codes for the resolved variable values.
  * @param {Query} queries Object that contains variable queries
  * @param {number} width Width of the variable filter section
  * @param {number} maxWidthPercentage Maximum width of the variable filter section on the whole window defined in percentages
