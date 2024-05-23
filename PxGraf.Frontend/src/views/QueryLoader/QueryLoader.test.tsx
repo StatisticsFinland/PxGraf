@@ -44,7 +44,7 @@ describe('Assertion tests', () => {
     });
 
     it('displays loading state', () => {
-        (fetchSavedQuery as jest.Mock).mockImplementation(() => new Promise(() => { }));
+        (fetchSavedQuery as jest.Mock).mockImplementation(() => new Promise(() => null));
         const { getByRole } = render(<HashRouter><QueryLoader /></HashRouter>);
         expect(getByRole('loading')).toBeInTheDocument();
     });
