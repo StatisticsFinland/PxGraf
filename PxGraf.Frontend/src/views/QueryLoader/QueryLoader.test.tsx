@@ -3,7 +3,6 @@ import QueryLoader from "./QueryLoader";
 import React from "react";
 import { HashRouter } from "react-router-dom";
 import { fetchSavedQuery } from 'api/services/queries';
-import { useNavigate } from 'react-router-dom';
 
 jest.mock('api/services/queries');
 const mockNavigate = jest.fn();
@@ -13,13 +12,27 @@ jest.mock('react-router-dom', () => ({
     useNavigate: () => mockNavigate,
 }));
 
+jest.mock('react-i18next', () => ({
+    ...jest.requireActual('react-i18next'),
+    useTranslation: () => {
+        return {
+            t: (str: string) => str,
+            i18n: {
+                changeLanguage: () => new Promise(() => {}),
+            },
+        };
+    },
+}));
+
 describe('Rendering test', () => {
 
     it('renders correctly', () => {
         const { asFragment } = render(
             <HashRouter><QueryLoader /></HashRouter>
         );
-        expect(asFragment()).toMatchSnapshot();
+        waitFor(() => {
+            expect(asFragment()).toMatchSnapshot();
+        });
     });
 });
 

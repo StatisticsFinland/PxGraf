@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { Typography, Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import VariableSelection from './VariableSelection';
@@ -10,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { useTheme } from '@mui/material/styles';
 import { UiLanguageContext } from 'contexts/uiLanguageContext';
+import { sortedVariables } from 'utils/variableSorting';
 
 interface VariableSelectionListProps {
     variables: IVariable[],
@@ -35,56 +35,6 @@ const StyledAccordion = styled(Accordion)`
 `;
 
 /**
- * Function for sorting variables for the variable selection list based on their type.
- * @param {IVariable[]} variables  Variables to be sorted.
- * @returns A sorted list of variables.
- */
-export const sortedVariables = (variables) => {
-
-    //Create a new array for sorted variables and store variables based on their type
-    const sortedVariables = [];
-    let contentVariable;
-    const timeVariables = [];
-    const otherVariables = [];
-    const eliminationVariables = [];
-    const singleValueVariables = [];
-    variables.forEach(variable =>
-    {
-        if (variable.type == 'C')
-        {
-            contentVariable = variable;
-        }
-        else if (variable.type == 'T')
-        {
-            timeVariables.push(variable);
-        }
-        else if (variable.values.filter(vv => vv.isSum).length > 0)
-        {
-            eliminationVariables.push(variable);
-        }
-        else if (variable.values.length === 1)
-        {
-            singleValueVariables.push(variable);
-        }
-        else
-        {
-            otherVariables.push(variable);
-        }
-    });
-
-    //Populate sortedVariables array with variables in the correct order
-    if (contentVariable) {
-        sortedVariables.push(contentVariable);
-    }
-    sortedVariables.push(...timeVariables);
-    sortedVariables.push(...otherVariables);
-    sortedVariables.push(...eliminationVariables);
-    sortedVariables.push(...singleValueVariables);
-
-    return sortedVariables;
-}
-
-/**
  * Component for defining variable filters and selectable variables in @see {@link Editor}.
  * @param {IVariable[]} variables Variables for the table in question.
  * @param {{ [key: string]: string[] }} resolvedVariableCodes Resolved variable value codes.
@@ -105,7 +55,7 @@ export const VariableSelectionList: React.FC<VariableSelectionListProps> = ({ va
         </>
     );
 
-    const selectedValues = (code) => {
+    const selectedValues = (code: string ) => {
         //Formats the text to show 0 if no values are selected
         return resolvedVariableCodes?.[code] ? resolvedVariableCodes[code].length : 0;
     };

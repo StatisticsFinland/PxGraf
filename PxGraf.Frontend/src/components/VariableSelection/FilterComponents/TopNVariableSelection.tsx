@@ -26,7 +26,12 @@ export const TopNVariableSelection: React.FC<ITopNVariableSelectionProps> = ({ n
     }
 
     return (
-        <StyledTextField label={t("variableSelect.topFilter")} defaultValue={numberOfItems?.toString() ?? ""} onChange={handleChange} fullWidth inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }} />
+        <StyledTextField label={t("variableSelect.topFilter")}
+            defaultValue={numberOfItems?.toString() ?? ""}
+            onChange={handleChange}
+            fullWidth
+            inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
+        />
     );
 }
 
