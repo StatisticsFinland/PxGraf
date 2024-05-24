@@ -3,6 +3,7 @@ import React from "react";
 import { IVariable, VariableType } from "types/cubeMeta";
 import { FilterType, IVariableQuery } from "types/query";
 import VariableSelection from "./VariableSelection";
+import UiLanguageContext from "contexts/uiLanguageContext";
 
 const mockVariable: IVariable =
 {
@@ -71,13 +72,23 @@ const mockQuery: IVariableQuery = {
     virtualValueDefinitions: null
 };
 
+const setLanguage = jest.fn();
+const language = 'fi';
+
+const setLanguageTab = jest.fn();
+const languageTab = 'fi';
+
+const availableUiLanguages = ['fi', 'en', 'sv'];
+const uiContentLanguage = "fi";
+const setUiContentLanguage = jest.fn();
+
 jest.mock('react-i18next', () => ({
     ...jest.requireActual('react-i18next'),
     useTranslation: () => {
         return {
             t: (str: string) => str,
             i18n: {
-                changeLanguage: () => new Promise(() => { }),
+                changeLanguage: () => new Promise(() => null),
             },
         };
     },
@@ -85,12 +96,15 @@ jest.mock('react-i18next', () => ({
 
 describe('Rendering test', () => {
     it('renders correctly', () => {
-        const { asFragment } = render(<VariableSelection
-            variable={mockVariable}
-            resolvedVariableValueCodes={["2018", "2019", "2020", "2021*"]}
-            query={mockQuery}
-            onQueryChanged={(newValues) => { }}
-        ></VariableSelection>);
+        const { asFragment } = render(
+        <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
+            <VariableSelection
+                variable={mockVariable}
+                resolvedVariableValueCodes={["2018", "2019", "2020", "2021*"]}
+                query={mockQuery}
+                onQueryChanged={(newValues) => {}}/>
+        </UiLanguageContext.Provider>
+        );
         expect(asFragment()).toMatchSnapshot();
     });
 });

@@ -55,7 +55,7 @@ jest.mock('react-i18next', () => ({
         return {
             t: (str: string) => str,
             i18n: {
-                changeLanguage: () => new Promise(() => { }),
+                changeLanguage: () => new Promise(() => null),
             },
         };
     },
@@ -66,7 +66,7 @@ describe('Rendering test', () => {
         const { asFragment } = render(<StartingFromVariableSelection
             options={mockVariableValues}
             startingCode={"2019"}
-            onQueryChanged={(newCode) => { }}
+            onQueryChanged={(newCode) => null}
         ></StartingFromVariableSelection>);
         expect(asFragment()).toMatchSnapshot();
     });

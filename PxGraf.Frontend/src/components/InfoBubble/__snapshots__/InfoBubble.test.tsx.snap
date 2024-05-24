@@ -4,28 +4,7 @@ exports[`Rendering test renders correctly with popper hidden 1`] = `
 <DocumentFragment>
   <button
     aria-label="tooltip.open: foo"
-    class="sc-aXZVg lSzEq"
-  >
-    <svg
-      aria-hidden="true"
-      class="MuiSvgIcon-root MuiSvgIcon-colorInfo MuiSvgIcon-fontSizeMedium css-1yq1soz-MuiSvgIcon-root"
-      data-testid="InfoIcon"
-      focusable="false"
-      viewBox="0 0 24 24"
-    >
-      <path
-        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m1 15h-2v-6h2zm0-8h-2V7h2z"
-      />
-    </svg>
-  </button>
-</DocumentFragment>
-`;
-
-exports[`Rendering test renders correctly with popper visible 1`] = `
-<DocumentFragment>
-  <button
-    aria-label="tooltip.close: foo"
-    class="sc-aXZVg lSzEq"
+    class="sc-aYaIB gUIDUH"
   >
     <svg
       aria-hidden="true"

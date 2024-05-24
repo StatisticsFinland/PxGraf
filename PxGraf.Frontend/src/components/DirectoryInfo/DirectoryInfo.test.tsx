@@ -18,7 +18,7 @@ jest.mock('react-i18next', () => ({
         return {
             t: (str: string) => str,
             i18n: {
-                changeLanguage: () => new Promise(() => { }),
+                changeLanguage: () => new Promise(() => null),
             },
         };
     },
@@ -26,7 +26,7 @@ jest.mock('react-i18next', () => ({
 
 jest.mock('api/services/table', () => ({
     ...jest.requireActual('api/services/table'),
-    useTableQuery: (currentPath: string, language: string) => {
+    useTableQuery: () => {
         return mockItem;
     },
 }));

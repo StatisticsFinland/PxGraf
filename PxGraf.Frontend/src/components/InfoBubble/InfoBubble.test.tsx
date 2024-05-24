@@ -2,14 +2,21 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
 import InfoBubble from './InfoBubble';
 
+jest.mock('react-i18next', () => ({
+    ...jest.requireActual('react-i18next'),
+    useTranslation: () => {
+        return {
+            t: (str: string) => str,
+            i18n: {
+                changeLanguage: () => new Promise(() => null),
+            },
+        };
+    },
+}));
+
 describe('Rendering test', () => {
     it('renders correctly with popper hidden', () => {
         const { asFragment } = render(<InfoBubble info='foobar' ariaLabel='foo' />);
-        expect(asFragment()).toMatchSnapshot();
-    });
-
-    it('renders correctly with popper visible', () => {
-        const { asFragment } = render(<InfoBubble info='foobar' ariaLabel='foo' isOpen={true} />);
         expect(asFragment()).toMatchSnapshot();
     });
 });

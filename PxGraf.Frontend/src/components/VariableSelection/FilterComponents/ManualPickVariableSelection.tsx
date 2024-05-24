@@ -1,5 +1,5 @@
 import React from 'react';
-import { Autocomplete, TextField } from '@mui/material';
+import { Autocomplete, Chip, TextField } from '@mui/material';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import { IVariableValue } from 'types/cubeMeta';
@@ -39,6 +39,22 @@ export const ManualPickVariableSelection: React.FC<ManualPickVariableSelectionPr
             closeText={t("selectable.close")}
             clearText={t("selectable.clear")}
             noOptionsText={t("selectable.noSelections")}
+            renderTags={(tagValue, getTagProps) => {
+                return tagValue.map((option: IVariableValue, index) => {
+                    return <Chip 
+                        {...getTagProps({ index })}
+                        key={index + '-key'}
+                        label={option.name[uiContentLanguage] ?? option.code}
+                        />
+                })
+            }}
+            renderOption={(props, option: IVariableValue) => {
+                return (
+                    <li {...props} key={option.code}>
+                        {option.name[uiContentLanguage] ?? option.code}
+                    </li>
+                );
+            }}
             renderInput={(params) => (
                 <TextField {...params} label={t("variableSelect.itemFilter")} />
             )}

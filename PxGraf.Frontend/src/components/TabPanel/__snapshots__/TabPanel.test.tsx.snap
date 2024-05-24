@@ -19,7 +19,7 @@ exports[`Rendering test renders correctly with selected value 1`] = `
     role="tabpanel"
   >
     <div
-      class="sc-aXZVg cfJYPo MuiBox-root css-0"
+      class="sc-aYaIB cpmGeJ MuiBox-root css-0"
     >
       foobarbaz
     </div>

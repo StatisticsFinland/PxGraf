@@ -1,6 +1,6 @@
 import { render } from "@testing-library/react";
 import React from "react";
-import { FilterType, ICubeQuery, Query } from "types/query";
+import { FilterType, Query } from "types/query";
 import { IVisualizationSettings } from "types/visualizationSettings";
 import Preview from "./Preview";
 import { EVariableType, EVisualizationType, ETimeVariableInterval } from "@statisticsfinland/pxvisualizer";
@@ -189,7 +189,7 @@ jest.mock('react-i18next', () => ({
         return {
             t: (str: string) => str,
             i18n: {
-                changeLanguage: () => new Promise(() => { }),
+                changeLanguage: () => new Promise(() => null),
             },
         };
     },
@@ -197,13 +197,7 @@ jest.mock('react-i18next', () => ({
 
 jest.mock('api/services/visualization', () => ({
     ...jest.requireActual('api/services/visualization'),
-    useVisualizationQuery: (
-        idStack: string[],
-        query: Query,
-        cubeQuery: ICubeQuery,
-        language: string,
-        selectedVisualization: string,
-        visualizationSettings: IVisualizationSettings) => {
+    useVisualizationQuery: () => {
         return mockVisualizationQueryResult;
     },
 }));

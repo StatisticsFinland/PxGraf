@@ -1,12 +1,12 @@
+import React from "react";
+import EditorMetaSection from "./EditorMetaSection";
 import { render } from "@testing-library/react";
 import { IHeaderResult } from "api/services/default-header";
 import { IVisualizationSettingsResult } from "api/services/visualization-rules";
-import React from "react";
 import { IVariable, VariableType } from "types/cubeMeta";
 import { FilterType, IQueryInfo, Query } from "types/query";
 import { IVisualizationSettings } from "types/visualizationSettings";
 import { VisualizationType } from "types/visualizationType";
-import EditorMetaSection from "./EditorMetaSection";
 import { ITypeSpecificVisualizationRules } from "types/visualizationRules";
 import { UiLanguageContext } from "contexts/uiLanguageContext";
 
@@ -18,48 +18,109 @@ const headerResultMock: IHeaderResult = {
     }
 }
 
-const mockVariables: IVariable[] = [{
-    code: 'foo',
-    name: {
-        'fi': 'asd',
-        'sv': 'asd',
-        'en': 'asd'
-    },
-    note: {
-        'fi': 'seppo',
-        'sv': 'seppo',
-        'en': 'seppo'
-    },
-    type: VariableType.Content,
-    values: [
-        {
-            code: 'bar',
-            isSum: false,
-            name: {
-                'fi': 'fgfgfg',
-                'sv': 'fgfgfg',
-                'en': 'fgfgfg'
+const mockVariables: IVariable[] = [
+    {
+        code: 'foo',
+        name: {
+            'fi': 'foofi',
+            'sv': 'foosv',
+            'en': 'fooen'
+        },
+        note: {
+            'fi': 'foonotefi',
+            'sv': 'foonotesv',
+            'en': 'foonoteen'
+        },
+        type: VariableType.Content,
+        values: [
+            {
+                code: 'fooval1',
+                isSum: false,
+                name: {
+                    'fi': 'fgfgfg1',
+                    'sv': 'fgfgfg1',
+                    'en': 'fgfgfg1'
+                },
+                note: {
+                    'fi': 'fghjfgh1',
+                    'sv': 'fghjfgh1',
+                    'en': 'fghjfgh1'
+                }
             },
-            note: {
-                'fi': 'fghjfgh',
-                'sv': 'fghjfgh',
-                'en': 'fghjfgh'
+            {
+                code: 'fooval2',
+                isSum: false,
+                name: {
+                    'fi': 'fgfgfg2',
+                    'sv': 'fgfgfg2',
+                    'en': 'fgfgfg2'
+                },
+                note: {
+                    'fi': 'fghjfgh2',
+                    'sv': 'fghjfgh2',
+                    'en': 'fghjfgh2'
+                }
             }
-        }
-    ]
-}]
+        ]
+    },
+    {
+        code: 'bar',
+        name: {
+            'fi': 'barfi',
+            'sv': 'barsv',
+            'en': 'baren'
+        },
+        note: {
+            'fi': 'barnotefi',
+            'sv': 'barnotesv',
+            'en': 'barnoteen'
+        },
+        type: VariableType.Content,
+        values: [
+            {
+                code: 'barval1',
+                isSum: false,
+                name: {
+                    'fi': 'fgfgfg1',
+                    'sv': 'fgfgfg1',
+                    'en': 'fgfgfg1'
+                },
+                note: {
+                    'fi': 'fghjfgh1',
+                    'sv': 'fghjfgh1',
+                    'en': 'fghjfgh1'
+                }
+            },
+            {
+                code: 'barval2',
+                isSum: false,
+                name: {
+                    'fi': 'fgfgfg2',
+                    'sv': 'fgfgfg2',
+                    'en': 'fgfgfg2'
+                },
+                note: {
+                    'fi': 'fghjfgh2',
+                    'sv': 'fghjfgh2',
+                    'en': 'fghjfgh2'
+                }
+            }
+        ]
+    }
+]
 
 const mockVisualizationSettings: IVisualizationSettings = {
-    columnVariableCodes: ['foo', 'bar', 'baz'],
+    columnVariableCodes: ['foo'],
+    rowVariableCodes: ['bar'],
     cutYAxis: false,
     defaultSelectableVariableCodes: {
-        'foo': ['bar', 'baz']
+        'foo': ['fooval1']
     },
     markerSize: 1,
     matchXLabelsToEnd: false,
     multiselectableVariableCode: 'foo',
     pivotRequested: false,
-    rowVariableCodes: ['foo', 'bar', 'baz']
+    sorting: 'DESCENDING'
 }
 
 const mockQuery: Query = {
@@ -98,9 +159,11 @@ const visualizationRulesResponseMock: IVisualizationSettingsResult = {
         multiselectVariableAllowed: false,
         sortingOptions: [
             {
-                code: 'foo',
+                code: 'DESCENDING',
                 description: {
-                    'fi': 'bar'
+                    'fi': 'aaa',
+                    'en': 'bbb',
+                    'sv': 'ccc'
                 }
             }
         ],
@@ -113,13 +176,13 @@ const mockQueryInfo: IQueryInfo = {
     maximumSupportedSize: 200,
     size: 5,
     sizeWarningLimit: 175,
-    validVisualizations: ['lineChart', 'foo', 'bar', 'baz'],
+    validVisualizations: ['HorizontalBarChart'],
     visualizationRejectionReasons: {'pieChart': {
         'fi': 'huono kaavio'
     }
 }}
 
-const selectedVisualizationMock: VisualizationType = VisualizationType.LineChart;
+const selectedVisualizationMock: VisualizationType = VisualizationType.HorizontalBarChart
 
 jest.mock('react-i18next', () => ({
     ...jest.requireActual('react-i18next'),
@@ -127,7 +190,7 @@ jest.mock('react-i18next', () => ({
         return {
             t: (str: string) => str,
             i18n: {
-                changeLanguage: () => new Promise(() => {}),
+                changeLanguage: () => new Promise(() => null),
             },
         };
     },

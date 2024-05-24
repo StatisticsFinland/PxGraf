@@ -98,21 +98,36 @@ jest.mock('api/services/visualization', () => ({
     }
 }));
 
+jest.mock('@statisticsfinland/pxvisualizer', () => {
+    const lib = jest.requireActual("@statisticsfinland/pxvisualizer");
+    return {
+        ...lib,
+        Chart: (...args: any[]) => {
+            return (
+                <pre data-testid={'Chart'}>
+                   args={JSON.stringify(args)}
+                </pre>
+            );
+        }
+    }
+});
+
 const mockVisualizationResult: IVisualizationResult = {
     isLoading: false,
     isError: false,
     data: {
-        data: [],
+        data: [ 1, 2, 3, 4 ],
         missingDataInfo: {},
         dataNotes: [],
-        rowVariableCodes: [],
-        columnVariableCodes: [],
+        rowVariableCodes: ["foobar2"],
+        columnVariableCodes: ["foobar1"],
         header: { fi: "foo", sv: "bar", en: "foobar" },
-        selectableVariableCodes: ["foobar1", "foobar2"],
+        selectableVariableCodes: ["foobar1"],
         visualizationSettings:
         {
             timeVariableIntervals: ETimeVariableInterval.Irregular,
-            visualizationType: EVisualizationType.HorizontalBarChart
+            visualizationType: EVisualizationType.HorizontalBarChart,
+            sorting: 'DESCENDING'
         },
         metaData: [{
             code: "foobar1",
@@ -124,13 +139,23 @@ const mockVisualizationResult: IVisualizationResult = {
                 name: { fi: "fyy1", sv: "bör1", en: "fyybör1" },
                 note: { fi: "fuu1", sv: "baar1", en: "fuubaar1" },
                 isSum: false,
-                contentComponent: null,
+                contentComponent: {
+                    unit: { fi: "unitfi1", sv: "unitsv1", en: "uniten1" },
+                    source: { fi: "sourcefi1", sv: "sourcesv1", en: "sourceen1" },
+                    numberOfDecimals: 0,
+                    lastUpdated: "2021-01-01T00:00:00Z"
+                }
             }, {
                 code: "barfoo2",
                 name: { fi: "fyy2", sv: "bör2", en: "fyybör2" },
                 note: { fi: "fuu2", sv: "baar2", en: "fuubaar2" },
                 isSum: false,
-                contentComponent: null,
+                contentComponent: {
+                    unit: { fi: "unitfi2", sv: "unitsv2", en: "uniten2" },
+                    source: { fi: "sourcefi2", sv: "sourcesv2", en: "sourceen2" },
+                    numberOfDecimals: 0,
+                    lastUpdated: "2021-01-01T00:00:00Z"
+                }
             }],
         }, {
             code: "foobar2",
@@ -180,9 +205,9 @@ const mockVisualizationSettingsResult: IVisualizationSettingsResult = {
         multiselectVariableAllowed: false,
         sortingOptions: [
             {
-                code: 'sortingOptionCode',
+                code: 'DESCENDING',
                 description: {
-                    'fi': 'sortingOptionDescription'
+                    'fi': 'Laskeva'
                 }
             }
         ],
@@ -206,7 +231,7 @@ const mockQueryInfoResult: IQueryInfoResult = {
         maximumSupportedSize: 100,
         size: 5,
         sizeWarningLimit: 75,
-        validVisualizations: ['VerticalBarChart', 'HorizontalBarChart'],
+        validVisualizations: ['HorizontalBarChart', 'VerticalBarChart'],
         visualizationRejectionReasons: {
             'pieChart': {
                 'fi': 'huono kaavio'
@@ -281,7 +306,7 @@ const mockInvalidTableValidationResult: IValidateTableMetaDataResult = {
     }
 }
 
-let mockResult;
+let mockResult: IValidateTableMetaDataResult;
 
 jest.mock('api/services/validate-table-metadata', () => ({
     useValidateTableMetadataQuery: () => mockResult,

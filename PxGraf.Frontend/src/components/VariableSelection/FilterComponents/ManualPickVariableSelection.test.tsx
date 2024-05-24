@@ -1,6 +1,7 @@
 import { render } from "@testing-library/react";
 import React from "react";
 import ManualPickVariableSelection from "./ManualPickVariableSelection";
+import UiLanguageContext from "contexts/uiLanguageContext";
 
 const mockVariableValues = [
     {
@@ -49,13 +50,23 @@ const mockVariableValues = [
     }
 ];
 
+const setLanguage = jest.fn();
+const language = 'fi';
+
+const setLanguageTab = jest.fn();
+const languageTab = 'fi';
+
+const availableUiLanguages = ['fi', 'en', 'sv'];
+const uiContentLanguage = "fi";
+const setUiContentLanguage = jest.fn();
+
 jest.mock('react-i18next', () => ({
     ...jest.requireActual('react-i18next'),
     useTranslation: () => {
         return {
             t: (str: string) => str,
             i18n: {
-                changeLanguage: () => new Promise(() => { }),
+                changeLanguage: () => new Promise(() => null),
             },
         };
     },
@@ -63,11 +74,14 @@ jest.mock('react-i18next', () => ({
 
 describe('Rendering test', () => {
     it('renders correctly', () => {
-        const { asFragment } = render(<ManualPickVariableSelection
-            options={mockVariableValues}
-            selectedValues={[mockVariableValues[0], mockVariableValues[1]]}
-            onQueryChanged={(newValues) => { }}
-        ></ManualPickVariableSelection>);
+        const { asFragment } = render(
+        <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
+            <ManualPickVariableSelection
+                options={mockVariableValues}
+                selectedValues={[mockVariableValues[0], mockVariableValues[1]]}
+                onQueryChanged={() => {}}/>
+        </UiLanguageContext.Provider>
+        );
         expect(asFragment()).toMatchSnapshot();
     });
 });
