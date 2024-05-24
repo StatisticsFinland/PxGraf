@@ -21,6 +21,20 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{C3438262-2
 		docs\VISUALIZATION_RESPONSE.md = docs\VISUALIZATION_RESPONSE.md
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "github", "github", "{A7A9AA2F-492F-494C-8850-CC98FC6BEB8F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{9722791C-4582-42C9-873B-B04B66369E50}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\BackEndSonarScan.yml = .github\workflows\BackEndSonarScan.yml
+		.github\workflows\CI.yml = .github\workflows\CI.yml
+		.github\workflows\FrontEndSonarScan.yml = .github\workflows\FrontEndSonarScan.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{6CD31513-990A-4FA8-BC92-48249CA96FCC}"
+	ProjectSection(SolutionItems) = preProject
+		.github\scripts\check_version_changes.sh = .github\scripts\check_version_changes.sh
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +63,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{9722791C-4582-42C9-873B-B04B66369E50} = {A7A9AA2F-492F-494C-8850-CC98FC6BEB8F}
+		{6CD31513-990A-4FA8-BC92-48249CA96FCC} = {A7A9AA2F-492F-494C-8850-CC98FC6BEB8F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6DCAEC5A-BCC8-416E-AF5E-933E20EC5C25}
