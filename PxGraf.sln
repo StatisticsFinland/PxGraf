@@ -27,7 +27,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\BackEndSonarScan.yml = .github\workflows\BackEndSonarScan.yml
 		.github\workflows\CI.yml = .github\workflows\CI.yml
-		.github\workflows\FrontEndSonarScan.yml = .github\workflows\FrontEndSonarScan.yml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{6CD31513-990A-4FA8-BC92-48249CA96FCC}"
