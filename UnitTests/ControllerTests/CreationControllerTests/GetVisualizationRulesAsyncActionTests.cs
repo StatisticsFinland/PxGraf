@@ -289,9 +289,90 @@ namespace CreationControllerTests
             ActionResult<VisualizationRules> result = await testController.GetVisualizationRulesAsync(rulesRequest);
 
             Assert.That(result.Value.VisualizationTypeSpecificRules, Is.Not.Null);
-            Assert.That(result.Value.VisualizationTypeSpecificRules.AllowShowingDataPoints, Is.True);
+            Assert.That(result.Value.VisualizationTypeSpecificRules.AllowShowingDataPoints, Is.False);
             Assert.That(result.Value.VisualizationTypeSpecificRules.AllowMatchXLabelsToEnd, Is.False);
             Assert.That(result.Value.VisualizationTypeSpecificRules.AllowSetMarkerScale, Is.False);
+        }
+
+        [Test]
+        public async Task GetVisualizationRulesAsync_VerticalBarChart_AllowsShowingDataPoints()
+        {
+            List<VariableParameters> cubeParams =
+            [
+                new VariableParameters(VariableType.Content, 1),
+                new VariableParameters(VariableType.Time, 10),
+                new VariableParameters(VariableType.OtherClassificatory, 1)
+            ];
+
+            List<VariableParameters> metaParams =
+            [
+                new VariableParameters(VariableType.Content, 5),
+                new VariableParameters(VariableType.Time, 15),
+                new VariableParameters(VariableType.OtherClassificatory, 6)
+            ];
+
+            CreationController testController = BuildController(cubeParams, metaParams);
+            CubeQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
+            VisualizationSettingsRequest rulesRequest = new()
+            {
+                SelectedVisualization = VisualizationType.VerticalBarChart,
+                PivotRequested = false,
+                Query = cubeQuery,
+            };
+
+            ActionResult<VisualizationRules> actionResult = await testController.GetVisualizationRulesAsync(rulesRequest);
+            Assert.That(actionResult.Value.VisualizationTypeSpecificRules.AllowShowingDataPoints, Is.True);
+        }
+
+        [Test]
+        [TestCase(VisualizationType.GroupVerticalBarChart, 1, 3, 3, 1, 1)]
+        [TestCase(VisualizationType.StackedVerticalBarChart, 1, 2, 5, 1, 1)]
+        [TestCase(VisualizationType.PercentVerticalBarChart, 1, 2, 5, 1, 1)]
+        [TestCase(VisualizationType.HorizontalBarChart, 1, 1, 5, 1, 1)]
+        [TestCase(VisualizationType.GroupHorizontalBarChart, 1, 2, 2, 1, 1)]
+        [TestCase(VisualizationType.StackedHorizontalBarChart, 1, 1, 3, 3, 1)]
+        [TestCase(VisualizationType.PercentHorizontalBarChart, 1, 1, 3, 3, 1)]
+        [TestCase(VisualizationType.LineChart, 1, 10, 1, 1, 1)]
+        [TestCase(VisualizationType.ScatterPlot, 2, 10, 1, 1, 1)]
+        [TestCase(VisualizationType.PieChart, 1, 1, 5, 1, 1)]
+        public async Task GetVisualizationRulesAsync_OtherVisualizationTypes_DontAllowShowingDataPoints(
+            VisualizationType visualizationType,
+            int cVarAmount,
+            int timeVarAmount,
+            int otherVarAAmount,
+            int otherVarBAmount,
+            int otherVarCAmount)
+        {
+            List<VariableParameters> cubeParams =
+            [
+                new VariableParameters(VariableType.Content, cVarAmount),
+                new VariableParameters(VariableType.Time, timeVarAmount),
+                new VariableParameters(VariableType.OtherClassificatory, otherVarAAmount),
+                new VariableParameters(VariableType.OtherClassificatory, otherVarBAmount),
+                new VariableParameters(VariableType.OtherClassificatory, otherVarCAmount)
+            ];
+
+            List<VariableParameters> metaParams =
+            [
+                new VariableParameters(VariableType.Content, 5),
+                new VariableParameters(VariableType.Time, 15),
+                new VariableParameters(VariableType.OtherClassificatory, 6),
+                new VariableParameters(VariableType.OtherClassificatory, 6),
+                new VariableParameters(VariableType.OtherClassificatory, 6)
+            ];
+
+            CreationController testController = BuildController(cubeParams, metaParams);
+            CubeQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
+
+            VisualizationSettingsRequest rulesRequest = new()
+            {
+                SelectedVisualization = visualizationType,
+                PivotRequested = false,
+                Query = cubeQuery,
+            };
+
+            ActionResult<VisualizationRules> actionResult = await testController.GetVisualizationRulesAsync(rulesRequest);
+            Assert.That(actionResult.Value.VisualizationTypeSpecificRules.AllowShowingDataPoints, Is.False);
         }
     }
 }

@@ -116,8 +116,7 @@ namespace PxGraf.Models.Requests
                                     query),
                                 MatchXLabelsToEnd ?? false,
                                 XLabelInterval ?? 1,
-                                DefaultSelectableVariableCodes,
-                                ShowDataPoints ?? false);
+                                DefaultSelectableVariableCodes);
                     }
                 case VisualizationType.StackedVerticalBarChart:
                     {
@@ -129,8 +128,7 @@ namespace PxGraf.Models.Requests
                                 query),
                             MatchXLabelsToEnd ?? false,
                             XLabelInterval ?? 1,
-                            DefaultSelectableVariableCodes,
-                            ShowDataPoints ?? false);
+                            DefaultSelectableVariableCodes);
                     }
                 case VisualizationType.PercentVerticalBarChart:
                     {
@@ -142,16 +140,14 @@ namespace PxGraf.Models.Requests
                                 query),
                             MatchXLabelsToEnd ?? false,
                             XLabelInterval ?? 1,
-                            DefaultSelectableVariableCodes,
-                            ShowDataPoints ?? false);
+                            DefaultSelectableVariableCodes);
                     }
                 case VisualizationType.HorizontalBarChart:
                     {
                         return new HorizontalBarChartVisualizationSettings(
                             LayoutRules.GetOneDimensionalLayout(meta, query),
                             Sorting,
-                            DefaultSelectableVariableCodes,
-                            ShowDataPoints ?? false);
+                            DefaultSelectableVariableCodes);
                     }
                 case VisualizationType.GroupHorizontalBarChart:
                     {
@@ -162,8 +158,7 @@ namespace PxGraf.Models.Requests
                                 meta,
                                 query),
                             Sorting,
-                            DefaultSelectableVariableCodes,
-                            ShowDataPoints ?? false);
+                            DefaultSelectableVariableCodes);
                     }
                 case VisualizationType.StackedHorizontalBarChart:
                     {
@@ -174,8 +169,7 @@ namespace PxGraf.Models.Requests
                                 meta,
                                 query),
                             Sorting,
-                            DefaultSelectableVariableCodes,
-                            ShowDataPoints ?? false);
+                            DefaultSelectableVariableCodes);
                     }
                 case VisualizationType.PercentHorizontalBarChart:
                     {
@@ -186,9 +180,7 @@ namespace PxGraf.Models.Requests
                                 meta,
                                 query),
                             Sorting,
-                            DefaultSelectableVariableCodes,
-                            ShowDataPoints ?? false
-                            );
+                            DefaultSelectableVariableCodes);
                     }
                 case VisualizationType.PyramidChart:
                     {
@@ -198,16 +190,14 @@ namespace PxGraf.Models.Requests
                                 VisualizationType.PyramidChart,
                                 meta,
                                 query),
-                            DefaultSelectableVariableCodes,
-                            ShowDataPoints ?? false);
+                            DefaultSelectableVariableCodes);
                     }
                 case VisualizationType.PieChart:
                     {
                         return new PieChartVisualizationSettings(
                             LayoutRules.GetOneDimensionalLayout(meta, query),
                             Sorting,
-                            DefaultSelectableVariableCodes,
-                            ShowDataPoints ?? false);
+                            DefaultSelectableVariableCodes);
                     }
                 case VisualizationType.LineChart:
                     {
@@ -215,8 +205,7 @@ namespace PxGraf.Models.Requests
                             LayoutRules.GetLineChartLayout(meta, query),
                             CutYAxis ?? false,
                             MultiselectableVariableCode,
-                            DefaultSelectableVariableCodes,
-                            ShowDataPoints ?? false);
+                            DefaultSelectableVariableCodes);
                     }
                 case VisualizationType.ScatterPlot:
                     {
