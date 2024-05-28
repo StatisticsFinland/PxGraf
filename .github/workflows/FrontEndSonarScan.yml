@@ -28,7 +28,5 @@ jobs:
         with:
           projectBaseDir: ./PxGraf.Frontend
           args: >
-            -D sonar.oranization=statisticsfinland-github
+            -D sonar.organization=statisticsfinland-github
             -D sonar.projectKey=statisticsfinland-github_pxgraf_frontend
-            -D sonar.log.level=TRACE
-            -D sonar.verbose=true
