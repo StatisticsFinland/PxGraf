@@ -21,6 +21,10 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Rename sonar properties file 
+        run: mv frontend-sonar-project.properties sonar-project.properties
+        working-directory: ./pxgraf.frontend
+
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
