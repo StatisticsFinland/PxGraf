@@ -38,7 +38,7 @@ jobs:
       
       - name: Install SonarCloud scanner
         run: dotnet tool install -g dotnet-sonarscanner
-        working-directory: ./PxGraf.Frontend
+        working-directory: ./PxGraf
 
       - name: Begin SonarScanner
         run: dotnet sonarscanner begin /k:statisticsfinland-github_pxgraf_backend
@@ -48,12 +48,12 @@ jobs:
             /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
             /d:sonar.coverage.exclusions=../pxgraf.frontend/*
             # frontend is covered by separate scan in FrontEndSonarScan.yml
-        working-directory: ./PxGraf.Frontend
+        working-directory: ./PxGraf
 
       - name: Run coverage test
         run: dotnet-coverage collect "dotnet test" -f xml -o "coverage.xml"
-        working-directory: ./PxGraf.Frontend
+        working-directory: ./PxGraf
         
       - name: End SonarScanner
         run: dotnet sonarscanner end /d:sonar.token=${{ secrets.SONAR_TOKEN }}
-        working-directory: ./PxGraf.Frontend
+        working-directory: ./PxGraf
