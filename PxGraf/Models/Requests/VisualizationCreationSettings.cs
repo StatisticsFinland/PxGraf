@@ -5,6 +5,7 @@ using PxGraf.Enums;
 using PxGraf.Models.Queries;
 using PxGraf.Models.SavedQueries;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace PxGraf.Models.Requests
 {
@@ -18,6 +19,7 @@ namespace PxGraf.Models.Requests
         /// <summary>
         /// Currently selected visualization type. (various charts, table, text)
         /// </summary>    
+        [Required]
         public VisualizationType SelectedVisualization { get; set; }
 
         public IReadOnlyList<string> RowVariableCodes { get; set; }
