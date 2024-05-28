@@ -21,10 +21,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Rename sonar properties file 
-        run: mv frontend-sonar-project.properties sonar-project.properties
-        working-directory: ./PxGraf.Frontend
-
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
@@ -34,3 +30,5 @@ jobs:
           args: >
             -D sonar.oranization=statisticsfinland-github
             -D sonar.projectKey=statisticsfinland-github_pxgraf_frontend
+            -D sonar.log.level=TRACE
+            -D sonar.verbose=true
