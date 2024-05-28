@@ -27,3 +27,6 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           projectBaseDir: ./PxGraf.Frontend
+          args: >
+            -Dsonar.oranization=statisticsfinland-github
+            -Dsonar.projectKey=statisticsfinland-github_pxgraf_frontend
