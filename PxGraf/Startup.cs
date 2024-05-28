@@ -51,12 +51,14 @@ namespace PxGraf
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
+        [SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "After evaluating the function and CORS permissions, we have deemed the warning to be unnecessary.")]
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddFeatureManagement();
             services.AddResponseCaching();
             services.AddCors(options =>
             {
+#pragma warning disable S5122
                 if (Configuration.Current.CorsOptions.AllowAnyOrigin)
                 {
                     // It is not recommended that any origin is allowed but this is sometimes nessessary for debugging etc.
@@ -81,6 +83,7 @@ namespace PxGraf
                                 .AllowAnyMethod();
                         });
                 }
+#pragma warning restore S5122
             });
             services.AddMemoryCache();
 
