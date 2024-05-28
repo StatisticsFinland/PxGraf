@@ -23,7 +23,8 @@ jobs:
 
       - name: Rename sonar properties file 
         run: mv frontend-sonar-project.properties sonar-project.properties
-        working-directory: ../PxGraf.Frontend
+        with:
+          projectBaseDir: ./PxGraf.Frontend
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
