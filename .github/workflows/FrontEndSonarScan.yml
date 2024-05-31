@@ -29,6 +29,19 @@ jobs:
         run: npm run test:ci
         working-directory: ./PxGraf.Frontend
 
+      - name: Show test-reporter.xml contents
+        run: cat reports/test-reporter.xml
+        working-directory: ./PxGraf.Frontend
+
+      - name: Convert absolute paths to relative in test-reporter.xml
+        run: |
+          sed -i 's|/home/runner/work/PxGraf/PxGraf/PxGraf.Frontend/||g' reports/test-reporter.xml
+        working-directory: ./PxGraf.Frontend
+
+      - name: Show test-reporter.xml contents again
+        run: cat reports/test-reporter.xml
+        working-directory: ./PxGraf.Frontend
+
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
