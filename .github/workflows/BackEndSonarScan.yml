@@ -47,6 +47,10 @@ jobs:
             /d:sonar.host.url=https://sonarcloud.io
             /d:sonar.token=${{ secrets.SONAR_TOKEN }}
             /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
+            /d:sonar.cs.nunit.reportsPaths=./*.trx
+
+      - name: Build
+        run: dotnet build --configuration Test
         
       - name: End SonarScanner
         run: dotnet sonarscanner end /d:sonar.token=${{ secrets.SONAR_TOKEN }}
