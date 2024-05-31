@@ -47,6 +47,7 @@
     "reportPath": "reports",
     "reportFile": "test-reporter.xml",
     "indent": 4
+    "relativePath": true
   },
   "browserslist": {
     "production": [

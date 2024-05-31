@@ -29,15 +29,6 @@ jobs:
         run: npm run test:ci
         working-directory: ./PxGraf.Frontend
 
-      - name: Print coverage report PART 1
-        run: cat coverage/lcov.info
-        working-directory: ./PxGraf.Frontend
-      
-      - name: Print coverage report PART 2
-        run: cat reports/test-reporter.xml
-        working-directory: ./PxGraf.Frontend
-
-
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
