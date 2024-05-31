@@ -21,6 +21,12 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Install dependencies
+        run: npm install
+
+      - name: Test with coverage and generate report
+        run: npm run test:ci
+
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
@@ -30,3 +36,5 @@ jobs:
           args: >
             -D sonar.organization=statisticsfinland-github
             -D sonar.projectKey=statisticsfinland-github_pxgraf_frontend
+            -D sonar.coverage.lcov.reportPaths=coverage/lcov.info
+            -D sonar.testExecutionReportPaths=reports/test-reporter.xml
