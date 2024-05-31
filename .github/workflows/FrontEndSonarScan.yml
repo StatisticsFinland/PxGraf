@@ -23,9 +23,11 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+        working-directory: ./PxGraf.Frontend
 
       - name: Test with coverage and generate report
         run: npm run test:ci
+        working-directory: ./PxGraf.Frontend
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
