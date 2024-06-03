@@ -49,7 +49,7 @@ jobs:
             /d:sonar.tests=./PxGraf/UnitTests
 
       - name: Run coverage test
-        run: dotnet-coverage collect "dotnet test --configuration Test --results-directory --logger trx" -f xml -o coverage.xml
+        run: dotnet-coverage collect "dotnet test --configuration Test --logger trx" -f xml -o coverage.xml
 
       - name: Print coverage report
         run: cat coverage.xml
