@@ -46,8 +46,7 @@
   "jestSonar": {
     "reportPath": "reports",
     "reportFile": "test-reporter.xml",
-    "indent": 4,
-    "relativePath": true
+    "indent": 4
   },
   "browserslist": {
     "production": [
