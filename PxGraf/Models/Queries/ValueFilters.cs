@@ -37,7 +37,7 @@ namespace PxGraf.Models.Queries
 
         public override IEnumerable<IReadOnlyVariableValue> Filter(IReadOnlyList<IReadOnlyVariableValue> values)
         {
-            var index = values.FindIndex(value => value.Code == Code);
+            int index = values.ToList().FindIndex(value => value.Code == Code);
             if (index >= 0)
             {
                 return values.Skip(index);
