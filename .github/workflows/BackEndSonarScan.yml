@@ -37,21 +37,20 @@ jobs:
       
       - name: Install SonarCloud scanner
         run: dotnet tool install -g dotnet-sonarscanner
-            
-      - name: Run coverage test
-        run: dotnet-coverage collect "dotnet test --configuration Test" -f xml -o "coverage.xml"
 
       - name: Begin SonarScanner
         run: dotnet sonarscanner begin /k:statisticsfinland-github_pxgraf_backend
             /o:statisticsfinland-github
             /d:sonar.host.url=https://sonarcloud.io
-            /d:sonar.token=${{ secrets.SONAR_TOKEN }}
-            /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
-            /d:sonar.cs.nunit.reportsPaths=**/*.trx
+            /d:sonar.token=${{ secrets.SONAR_TOKEN }}    
+            /d:sonar.cs.vscoveragexml.reportsPaths=**/coverage.xml
             /d:sonar.verbose=true
 
       - name: Build
-        run: dotnet build --configuration Test
+        run: dotnet build --configuration Test --no-incremental
+            
+      - name: Run coverage test
+        run: dotnet-coverage collect "dotnet test --configuration Test" -f xml -o "coverage.xml"
         
       - name: End SonarScanner
         run: dotnet sonarscanner end /d:sonar.token=${{ secrets.SONAR_TOKEN }}
