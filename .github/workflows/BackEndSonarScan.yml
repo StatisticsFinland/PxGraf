@@ -15,6 +15,7 @@ on:
 jobs:
  sonar_backend:
     runs-on: windows-latest
+    # Note: for inexplicable reasons, the SonarScanner does not work on Ubuntu-latest, so we have to use Windows-latest
 
     steps:
       - uses: actions/checkout@v4
@@ -44,15 +45,11 @@ jobs:
             /d:sonar.host.url=https://sonarcloud.io
             /d:sonar.token=${{ secrets.SONAR_TOKEN }}    
             /d:sonar.cs.vscoveragexml.reportsPaths=**/coverage.xml
-            /d:sonar.verbose=true
             /d:sonar.sources=./PxGraf/PxGraf
             /d:sonar.tests=./PxGraf/UnitTests
 
       - name: Run coverage test
         run: dotnet-coverage collect "dotnet test --configuration Test --logger trx" -f xml -o coverage.xml
-
-      - name: Print coverage report
-        run: cat coverage.xml
         
       - name: End SonarScanner
         run: dotnet sonarscanner end /d:sonar.token=${{ secrets.SONAR_TOKEN }}
