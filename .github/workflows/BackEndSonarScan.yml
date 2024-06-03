@@ -53,6 +53,9 @@ jobs:
             
       - name: Run coverage test
         run: dotnet-coverage collect "dotnet test --configuration Test" -f xml -o "coverage.xml"
+
+      - name: Print coverage report
+        run: cat coverage.xml
         
       - name: End SonarScanner
         run: dotnet sonarscanner end /d:sonar.token=${{ secrets.SONAR_TOKEN }}
