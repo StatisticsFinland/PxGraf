@@ -14,7 +14,8 @@ on:
 
 jobs:
  sonar_backend:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
+    # Note: for inexplicable reasons, the SonarScanner does not work on Ubuntu-latest, so we have to use Windows-latest
 
     steps:
       - uses: actions/checkout@v4
@@ -42,13 +43,13 @@ jobs:
         run: dotnet sonarscanner begin /k:statisticsfinland-github_pxgraf_backend
             /o:statisticsfinland-github
             /d:sonar.host.url=https://sonarcloud.io
-            /d:sonar.token=${{ secrets.SONAR_TOKEN }}
-            /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
-            /d:sonar.coverage.exclusions=./pxgraf.frontend/*
-            # frontend is covered by separate scan in FrontEndSonarScan.yml
+            /d:sonar.token=${{ secrets.SONAR_TOKEN }}    
+            /d:sonar.cs.vscoveragexml.reportsPaths=**/coverage.xml
+            /d:sonar.sources=./PxGraf/PxGraf
+            /d:sonar.tests=./PxGraf/UnitTests
 
       - name: Run coverage test
-        run: dotnet-coverage collect "dotnet test" -f xml -o "coverage.xml"
+        run: dotnet-coverage collect "dotnet test --configuration Test --logger trx" -f xml -o coverage.xml
         
       - name: End SonarScanner
         run: dotnet sonarscanner end /d:sonar.token=${{ secrets.SONAR_TOKEN }}
