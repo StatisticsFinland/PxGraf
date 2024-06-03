@@ -43,8 +43,9 @@ jobs:
             /o:statisticsfinland-github
             /d:sonar.host.url=https://sonarcloud.io
             /d:sonar.token=${{ secrets.SONAR_TOKEN }}    
-            /d:sonar.cs.vscoveragexml.reportsPaths=**/coverage.xml
+            /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
             /d:sonar.verbose=true
+            /d:sonar.sources=./PxGraf
 
       - name: Build
         run: dotnet build --configuration Test --no-incremental
