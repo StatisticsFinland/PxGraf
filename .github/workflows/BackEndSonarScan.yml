@@ -45,7 +45,9 @@ jobs:
             /d:sonar.token=${{ secrets.SONAR_TOKEN }}    
             /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
             /d:sonar.verbose=true
-            /d:sonar.sources=.
+            /d:sonar.sources=./PxGraf
+            /d:sonar.tests=./UnitTests
+
 
       - name: Build
         run: dotnet build --configuration Test --no-incremental
