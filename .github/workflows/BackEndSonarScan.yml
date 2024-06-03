@@ -37,7 +37,7 @@ jobs:
 
       - name: Install coverlet collector
         run: dotnet add package coverlet.collector
-        working-directory: ./PxGraf/UnitTests
+        working-directory: ./UnitTests
       
       - name: Install SonarCloud scanner
         run: dotnet tool install -g dotnet-sonarscanner
