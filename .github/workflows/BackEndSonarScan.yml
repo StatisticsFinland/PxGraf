@@ -32,12 +32,8 @@ jobs:
             distribution: 'zulu'
             java-version: '21'
 
-      - name: Install coverlet console
-        run: dotnet tool install --global coverlet.console
-
-      - name: Install coverlet collector
-        run: dotnet add package coverlet.collector
-        working-directory: ./UnitTests
+      - name: Install dotnet-coverage
+        run: dotnet tool install -g dotnet-coverage
       
       - name: Install SonarCloud scanner
         run: dotnet tool install -g dotnet-sonarscanner
@@ -46,21 +42,14 @@ jobs:
         run: dotnet sonarscanner begin /k:statisticsfinland-github_pxgraf_backend
             /o:statisticsfinland-github
             /d:sonar.host.url=https://sonarcloud.io
-            /d:sonar.token=${{ secrets.SONAR_TOKEN }}
-            /d:sonar.cs.opencover.reportsPaths=coverage.xml
+            /d:sonar.token=${{ secrets.SONAR_TOKEN }}    
+            /d:sonar.cs.vscoveragexml.reportsPaths=**/coverage.xml
             /d:sonar.verbose=true
             /d:sonar.sources=./PxGraf/PxGraf
             /d:sonar.tests=./PxGraf/UnitTests
 
-      - name: Build
-        run: dotnet build --configuration Test --no-incremental
-
-      - name: Coverlet test coverage
-        run: coverlet ./UnitTests/bin/Test/net8.0-windows8.0/UnitTests.dll
-            --target "dotnet" 
-            --targetargs "test --configuration Test --no-build"
-            --format opencover 
-            --output ./coverage.xml
+      - name: Run coverage test
+        run: dotnet-coverage collect "dotnet test --configuration Test --results-directory --logger trx" -f xml -o file.xml
 
       - name: Print coverage report
         run: cat coverage.xml
