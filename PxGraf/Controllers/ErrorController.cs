@@ -24,7 +24,7 @@ namespace PxGraf.Controllers
             if (exceptionHandlerPathFeature?.Error == null)
             {
                 //No actual exception? User may have requested error path manually
-                _logger.LogError("Error handler hitted without exception.");
+                _logger.LogError("Error handler requested without exception.");
                 return BadRequest();
             }
             if (exceptionHandlerPathFeature.Error is IOException)
