@@ -14,7 +14,6 @@ using PxGraf.Models.SavedQueries;
 using PxGraf.PxWebInterface;
 using PxGraf.Settings;
 using PxGraf.Utility;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnitTests.Fixtures;
@@ -37,7 +36,7 @@ namespace ControllerTests
         }
 
         [Test]
-        public async Task SqNotFoundTest_NotFoundResult()
+        public async Task ValidSaveRequestReturnsSaveQueryResponseAndCallsSerializeToFile()
         {
             Mock<ICachedPxWebConnection> mockCachedPxWebConnection = new();
             Mock<ISqFileInterface> mockSqFileInterface = new();
