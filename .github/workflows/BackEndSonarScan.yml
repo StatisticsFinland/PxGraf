@@ -1,0 +1,55 @@
+name: PxGraf Backend SonarScan
+
+run-name: ${{ github.event_name == 'pull_request' &&
+  format('Backend SonarScan for PR {0}', github.event.pull_request.number) || 
+  format('Backend SonarScan for {0}', github.event.head_commit.message) }}
+
+on:
+  pull_request:
+    branches:
+      - 'dev'
+  push:
+    branches:
+      - 'dev'
+
+jobs:
+ sonar_backend:
+    runs-on: windows-latest
+    # Note: for inexplicable reasons, the SonarScanner does not work on Ubuntu-latest, so we have to use Windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.x'
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+            distribution: 'zulu'
+            java-version: '21'
+
+      - name: Install dotnet-coverage
+        run: dotnet tool install -g dotnet-coverage
+      
+      - name: Install SonarCloud scanner
+        run: dotnet tool install -g dotnet-sonarscanner
+
+      - name: Begin SonarScanner
+        run: dotnet sonarscanner begin /k:statisticsfinland-github_pxgraf_backend
+            /o:statisticsfinland-github
+            /d:sonar.host.url=https://sonarcloud.io
+            /d:sonar.token=${{ secrets.SONAR_TOKEN }}    
+            /d:sonar.cs.vscoveragexml.reportsPaths=**/coverage.xml
+            /d:sonar.sources=./PxGraf/PxGraf
+            /d:sonar.tests=./PxGraf/UnitTests
+
+      - name: Run coverage test
+        run: dotnet-coverage collect "dotnet test --configuration Test --logger trx" -f xml -o coverage.xml
+        
+      - name: End SonarScanner
+        run: dotnet sonarscanner end /d:sonar.token=${{ secrets.SONAR_TOKEN }}

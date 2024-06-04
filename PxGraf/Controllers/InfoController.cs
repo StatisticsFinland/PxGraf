@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Reflection;
@@ -15,6 +16,7 @@ namespace PxGraf.Controllers
     /// <param name="logger"><see cref="ILogger"/> instance used for logging API calls.</param>
     [ApiController]
     [Route("api/info")]
+    [ProducesResponseType<int>(StatusCodes.Status200OK)]
     public class InfoController(IWebHostEnvironment env, ILogger<InfoController> logger) : ControllerBase
     {
         private readonly string _name = env.ApplicationName;
