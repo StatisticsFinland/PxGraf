@@ -9,7 +9,6 @@ using Microsoft.Extensions.Configuration;
 using UnitTests.Fixtures;
 using PxGraf.Settings;
 using PxGraf.PxWebInterface.SerializationModels;
-using System.Linq;
 
 namespace CreationControllerTests
 {
