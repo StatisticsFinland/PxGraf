@@ -5,7 +5,7 @@ import { ListItem, ListItemIcon, ListItemText, Divider, Skeleton, Alert } from '
 
 import UiLanguageContext from 'contexts/uiLanguageContext';
 import styled from 'styled-components';
-import { useTableQuery } from 'api/services/table';
+import { useTableQuery, sortTableData } from 'api/services/table';
 import { TableItem } from './TableItem';
 import { TableListItem } from './TableListItem';
 import { useLanguagesQuery } from "../../api/services/languages";
@@ -52,6 +52,11 @@ export const NestedList: React.FC<INestedListProps> = ({ path, depth }) => {
     const shouldScroll: boolean = activeId && data && path.length === tablePath.length - 1 && tablePath.join(',').startsWith(path.join(','));
     useScrollToElement(shouldScroll && activeId);
 
+    const sortedData = React.useMemo(() => {
+        if (!data) return null;
+
+        return sortTableData(data, primaryLanguage, databaseLanguages);
+    }, [data, primaryLanguage, databaseLanguages]);
 
     if (isLoading) {
         return <React.Fragment key={-1}>
@@ -76,9 +81,9 @@ export const NestedList: React.FC<INestedListProps> = ({ path, depth }) => {
     return (
         <>
             {
-                data ? data.map((item) => {
+                sortedData ? sortedData.map((item) => {
                     if (!item.type || item.type === "l") { // DB or subfolder
-                        const initiallyOpen: boolean = data.length < 2 || tablePath.join(',').startsWith([...path, item.id].join(','));
+                        const initiallyOpen: boolean = sortedData.length < 2 || tablePath.join(',').startsWith([...path, item.id].join(','));
                         return <TableListItem key={`${item.id}-list-key`} currentPath={[...path, item.id]} item={item} initialOpenState={initiallyOpen} depth={depth ?? 0} />
                     }
                     else if (item.type === "t") {
