@@ -46,7 +46,7 @@ export const TableListSelection: React.FC = () => {
     const sortedData = React.useMemo(() => {
         if (!data) return null;
 
-        return sortTableData(data, primaryLanguage, databaseLanguages);
+        return sortTableData(data, primaryLanguage);
     }, [data, primaryLanguage, databaseLanguages]);
 
     let content: React.ReactNode;

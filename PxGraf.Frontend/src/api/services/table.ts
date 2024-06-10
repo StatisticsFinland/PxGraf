@@ -44,10 +44,10 @@ const fetchTable = async (idStack: string[], lang: string): Promise<ITableListRe
     return await client.getAsync(url, getParams);
 };
 
-export const sortTableData = (data: ITableListResponse[], primaryLanguage: string, databaseLanguages: string[]): ITableListResponse[] => {
+export const sortTableData = (data: ITableListResponse[], primaryLanguage: string): ITableListResponse[] => {
     return [...data].sort((a, b) => {
-        const textA = a.text[primaryLanguage] || a.text[databaseLanguages[0]];
-        const textB = b.text[primaryLanguage] || b.text[databaseLanguages[0]];
+        const textA = a.text[primaryLanguage] || a.text[a.languages[0]];
+        const textB = b.text[primaryLanguage] || b.text[a.languages[0]];
 
         return textA.localeCompare(textB, primaryLanguage);
     });

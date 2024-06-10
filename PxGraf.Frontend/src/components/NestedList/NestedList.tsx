@@ -55,7 +55,7 @@ export const NestedList: React.FC<INestedListProps> = ({ path, depth }) => {
     const sortedData = React.useMemo(() => {
         if (!data) return null;
 
-        return sortTableData(data, primaryLanguage, databaseLanguages);
+        return sortTableData(data, primaryLanguage);
     }, [data, primaryLanguage, databaseLanguages]);
 
     if (isLoading) {
