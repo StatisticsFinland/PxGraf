@@ -44,6 +44,15 @@ const fetchTable = async (idStack: string[], lang: string): Promise<ITableListRe
     return await client.getAsync(url, getParams);
 };
 
+export const sortTableData = (data: ITableListResponse[], primaryLanguage: string, databaseLanguages: string[]): ITableListResponse[] => {
+    return [...data].sort((a, b) => {
+        const textA = a.text[primaryLanguage] || a.text[databaseLanguages[0]];
+        const textB = b.text[primaryLanguage] || b.text[databaseLanguages[0]];
+
+        return textA.localeCompare(textB, primaryLanguage);
+    });
+};
+
 export const useTableQuery = (idStack: string[], lang: string): ITableResult => {
     // If trying to fetch a database without a language, return empty
     const fetchFunction = lang ?
