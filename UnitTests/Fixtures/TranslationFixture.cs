@@ -58,8 +58,9 @@ namespace UnitTests.Fixtures
                     {
                         Ascending = "Nouseva",
                         Descending = "Laskeva",
-                        NoSorting = "Ei lajittelua",
-                        Sum = "Summa"
+                        NoSorting = "Lähdedatan mukainen järjestys",
+                        Sum = "Summa",
+                        NoSortingReversed = "Lähdedatalle käänteinen järjestys"
                     },
                     MissingData = new MissingDataTranslation()
                     {
@@ -131,8 +132,9 @@ namespace UnitTests.Fixtures
                     {
                         Ascending = "Ascending",
                         Descending = "Descending",
-                        NoSorting = "No sorting",
-                        Sum = "Sum"
+                        NoSorting = "Order is the same as in source data",
+                        Sum = "Sum",
+                        NoSortingReversed = "Order is reversed from source data"
                     },
                     MissingData = new MissingDataTranslation()
                     {
@@ -204,8 +206,9 @@ namespace UnitTests.Fixtures
                     {
                         Ascending = "Stigande",
                         Descending = "Fallande",
-                        NoSorting = "Ingen sortering",
-                        Sum = "Summa"
+                        NoSorting = "Samma ordning som i källdata",
+                        Sum = "Summa",
+                        NoSortingReversed = "Omvänd ordning jämfört med källdata"
                     },
                     MissingData = new MissingDataTranslation()
                     {

@@ -35,6 +35,11 @@ namespace PxGraf.Data
         public const string NO_SORTING = "no_sorting";
 
         /// <summary>
+        /// Reversed from the original data ordering
+        /// </summary>
+        public const string REVERSED = "reversed";
+
+        /// <summary>
         /// Provides all valid sorting options for a visualization. Languages are based on the languages of the cube meta object.
         /// </summary>
         public static IReadOnlyList<SortingOption> Get(IReadOnlyCubeMeta meta, VisualizationSettingsRequest request)
@@ -89,7 +94,8 @@ namespace PxGraf.Data
             [
                 GetDescendingSorting(languages),
                 GetAscendingSorting(languages),
-                GetSameAsDataSorting(languages)
+                GetSameAsDataSorting(languages),
+                GetReversedFromDataSorting(languages)
             ];
 
         private static List<SortingOption> GetMultiDimHorizontalBarChartOptions(VisualizationType visualization, IReadOnlyCubeMeta meta, VisualizationSettingsRequest request)
@@ -106,6 +112,7 @@ namespace PxGraf.Data
             }
             options.Add(GetSumSorting(meta.Languages));
             options.Add(GetSameAsDataSorting(meta.Languages));
+            options.Add(GetReversedFromDataSorting(meta.Languages));
             return options;
         }
 
@@ -167,6 +174,12 @@ namespace PxGraf.Data
             if (sorting == SUM)
             {
                 return cube.Meta.BuildMap().CloneWithEditedVariable(sortingVariable.Code, DescendingSumSorting(sortingVariable, cube));
+            }
+            else if (sorting == REVERSED)
+            {
+                var sortingValue = GetSortingVariable(visualization, cube.Meta, pivotRequested);
+                var reversedValues = sortingValue.IncludedValues.Reverse().ToList();
+                return cube.Meta.BuildMap().CloneWithEditedVariable(sortingValue.Code, reversedValues);
             }
             else // sorted based on particular variable value
             {
@@ -273,6 +286,18 @@ namespace PxGraf.Data
             }
 
             return new SortingOption(NO_SORTING, translations);
+        }
+
+        private static SortingOption GetReversedFromDataSorting(IEnumerable<string> languages)
+        {
+            MultiLanguageString translations = new();
+            foreach (var lang in languages)
+            {
+                var local = Localization.FromLanguage(lang);
+                translations.AddTranslation(lang, local.Translation.SortingOptions.NoSortingReversed);
+            }
+
+            return new SortingOption(REVERSED, translations);
         }
 
         #endregion
