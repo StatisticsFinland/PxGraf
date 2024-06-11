@@ -190,6 +190,28 @@ namespace DataCubeTests
         }
 
         [Test]
+        public void DataCubeSortingTest_SHBC_reversed_NoPivot()
+        {
+            List<VariableParameters> varParams =
+            [
+                new VariableParameters(VariableType.Content, 1),
+                new VariableParameters(VariableType.OtherClassificatory, 3),
+                new VariableParameters(VariableType.Unknown, 3),
+            ];
+
+            DataCube cube = TestDataCubeBuilder.BuildTestDataCube(varParams);
+            StackedHorizontalBarChartVisualizationSettings shbcs = new(null, CubeSorting.REVERSED);
+            DataCube result = CubeSorting.SortMultidimHorizontalBarChart(VisualizationType.StackedHorizontalBarChart, cube, shbcs.Sorting, false);
+            IReadOnlyList<DataValue> expectedDataOrder = DataValueUtilities.List(2.123, 1.123, 0.123, 5.123, 4.123, 3.123, 8.123, 7.123, 6.123);
+            List<string> expectedVarValueOrder1 = ["value-0", "value-1", "value-2"];
+            List<string> expectedVarValueOrder2 = ["value-2", "value-1", "value-0"];
+
+            Assert.That(DataValueUtilities.Compare(expectedDataOrder, result.Data, out string message1), Is.True, message1);
+            Assert.That(result.Meta.Variables[1].IncludedValues.Select(vv => vv.Code), Is.EqualTo(expectedVarValueOrder1));
+            Assert.That(result.Meta.Variables[2].IncludedValues.Select(vv => vv.Code), Is.EqualTo(expectedVarValueOrder2));
+        }
+
+        [Test]
         public void DataCubeSortingTest_SHBC_no_sorting_Pivot()
         {
             List<VariableParameters> varParams =
@@ -213,6 +235,28 @@ namespace DataCubeTests
         }
 
         [Test]
+        public void DataCubeSortingTest_SHBC_reversed_Pivot()
+        {
+            List<VariableParameters> varParams =
+            [
+                new VariableParameters(VariableType.Content, 1),
+                new VariableParameters(VariableType.OtherClassificatory, 3),
+                new VariableParameters(VariableType.Unknown, 3),
+            ];
+
+            DataCube cube = TestDataCubeBuilder.BuildTestDataCube(varParams);
+            StackedHorizontalBarChartVisualizationSettings shbcs = new(null, CubeSorting.REVERSED);
+            DataCube result = CubeSorting.SortMultidimHorizontalBarChart(VisualizationType.StackedHorizontalBarChart, cube, shbcs.Sorting, true);
+            IReadOnlyList<DataValue> expectedDataOrder = DataValueUtilities.List(6.123, 7.123, 8.123, 3.123, 4.123, 5.123, 0.123, 1.123, 2.123);
+            List<string> expectedVarValueOrder1 = ["value-2", "value-1", "value-0"];
+            List<string> expectedVarValueOrder2 = ["value-0", "value-1", "value-2"];
+
+            Assert.That(DataValueUtilities.Compare(expectedDataOrder, result.Data, out string message1), Is.True, message1);
+            Assert.That(result.Meta.Variables[1].IncludedValues.Select(vv => vv.Code), Is.EqualTo(expectedVarValueOrder1));
+            Assert.That(result.Meta.Variables[2].IncludedValues.Select(vv => vv.Code), Is.EqualTo(expectedVarValueOrder2));
+        }
+
+        [Test]
         public void DataCubeSortingTest_HBC_no_sorting()
         {
             List<VariableParameters> varParams =
@@ -223,6 +267,26 @@ namespace DataCubeTests
 
             DataCube cube = TestDataCubeBuilder.BuildTestDataCube(varParams);
             HorizontalBarChartVisualizationSettings hbcs = new(null, CubeSorting.NO_SORTING);
+            DataCube result = CubeSorting.SortOneDimensionalCharts(cube, hbcs.Sorting);
+            IReadOnlyList<DataValue> expectedDataOrder = DataValueUtilities.List(0.123, 1.123, 2.123, 3.123, 4.123);
+            List<string> expectedVarValueOrder = ["value-0", "value-1", "value-2", "value-3", "value-4"];
+
+            Assert.That(DataValueUtilities.Compare(expectedDataOrder, result.Data, out string message1), Is.True, message1);
+            Assert.That(DataValueUtilities.Compare(cube.Data, result.Data, out string message2), Is.True, message2);
+            Assert.That(result.Meta.Variables[1].IncludedValues.Select(vv => vv.Code), Is.EqualTo(expectedVarValueOrder));
+        }
+
+        [Test]
+        public void DataCubeSortingTest_HBC_reversed()
+        {
+            List<VariableParameters> varParams =
+            [
+                new VariableParameters(VariableType.Content, 1),
+                new VariableParameters(VariableType.OtherClassificatory, 5)
+            ];
+
+            DataCube cube = TestDataCubeBuilder.BuildTestDataCube(varParams);
+            HorizontalBarChartVisualizationSettings hbcs = new(null, CubeSorting.REVERSED);
             DataCube result = CubeSorting.SortOneDimensionalCharts(cube, hbcs.Sorting);
             IReadOnlyList<DataValue> expectedDataOrder = DataValueUtilities.List(0.123, 1.123, 2.123, 3.123, 4.123);
             List<string> expectedVarValueOrder = ["value-0", "value-1", "value-2", "value-3", "value-4"];

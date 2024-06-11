@@ -42,7 +42,7 @@ namespace SortingTests
                 Query = query
             };
             IReadOnlyList<SortingOption> sortingOptions = CubeSorting.Get(meta, settingsRequest);
-            List<string> expected = ["descending", "ascending", "no_sorting"];
+            List<string> expected = ["descending", "ascending", "no_sorting", "reversed"];
             Assert.That(sortingOptions.Select(so => so.Code).ToList(), Is.EqualTo(expected));
         }
 
@@ -66,7 +66,7 @@ namespace SortingTests
                 Query = query
             };
             IReadOnlyList<SortingOption> sortingOptions = CubeSorting.Get(meta, settingsRequest);
-            List<string> expected = ["value-0", "value-1", "value-2", "sum", "no_sorting"];
+            List<string> expected = ["value-0", "value-1", "value-2", "sum", "no_sorting", "reversed"];
             Assert.That(sortingOptions.Select(so => so.Code).ToList(), Is.EqualTo(expected));
         }
 
@@ -90,7 +90,7 @@ namespace SortingTests
                 Query = query
             };
             IReadOnlyList<SortingOption> sortingOptions = CubeSorting.Get(meta, settingsRequest);
-            List<string> expected = ["descending", "ascending", "no_sorting"];
+            List<string> expected = ["descending", "ascending", "no_sorting", "reversed"];
             Assert.That(sortingOptions.Select(so => so.Code).ToList(), Is.EqualTo(expected));
         }
 
@@ -115,7 +115,7 @@ namespace SortingTests
                 Query = query
             };
             IReadOnlyList<SortingOption> sortingOptions = CubeSorting.Get(meta, settingsRequest);
-            List<string> expected = ["value-0", "value-1", "value-2", "sum", "no_sorting"];
+            List<string> expected = ["value-0", "value-1", "value-2", "sum", "no_sorting", "reversed"];
             Assert.That(sortingOptions.Select(so => so.Code).ToList(), Is.EqualTo(expected));
         }
 
@@ -141,7 +141,7 @@ namespace SortingTests
                 Query = query
             };
             IReadOnlyList<SortingOption> sortingOptions = CubeSorting.Get(meta, settingsRequest);
-            List<string> expected = ["value-0", "value-1", "value-2", "sum", "no_sorting"];
+            List<string> expected = ["value-0", "value-1", "value-2", "sum", "no_sorting", "reversed"];
             Assert.That(sortingOptions.Select(so => so.Code).ToList(), Is.EqualTo(expected));
         }
 
@@ -165,7 +165,7 @@ namespace SortingTests
                 Query = query
             };
             IReadOnlyList<SortingOption> sortingOptions = CubeSorting.Get(meta, settingsRequest);
-            List<string> expected = ["2001", "2000", "sum", "no_sorting"];
+            List<string> expected = ["2001", "2000", "sum", "no_sorting", "reversed"];
             Assert.That(sortingOptions.Select(so => so.Code).ToList(), Is.EqualTo(expected));
         }
 
@@ -189,7 +189,7 @@ namespace SortingTests
                 Query = query
             };
             IReadOnlyList<SortingOption> sortingOptions = CubeSorting.Get(meta, settingsRequest);
-            List<string> expected = ["value-0", "value-1", "value-2", "sum", "no_sorting"];
+            List<string> expected = ["value-0", "value-1", "value-2", "sum", "no_sorting", "reversed"];
             Assert.That(sortingOptions.Select(so => so.Code).ToList(), Is.EqualTo(expected));
         }
     }
