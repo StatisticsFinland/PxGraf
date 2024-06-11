@@ -5,12 +5,13 @@ import { ListItem, ListItemIcon, ListItemText, Divider, Skeleton, Alert } from '
 
 import UiLanguageContext from 'contexts/uiLanguageContext';
 import styled from 'styled-components';
-import { useTableQuery, sortTableData } from 'api/services/table';
+import { useTableQuery } from 'api/services/table';
 import { TableItem } from './TableItem';
 import { TableListItem } from './TableListItem';
 import { useLanguagesQuery } from "../../api/services/languages";
 import useHierarchyParams from 'hooks/useHierarchyParams';
 import useScrollToElement from 'hooks/useScrollToElement';
+import { sortTableData } from 'utils/sortingHelpers';
 
 const StyledSkeleton = styled(Skeleton)`
   width: 24px;

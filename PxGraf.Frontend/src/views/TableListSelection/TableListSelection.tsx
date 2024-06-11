@@ -7,8 +7,9 @@ import React from "react";
 import { DirectoryInfo } from 'components/DirectoryInfo/DirectoryInfo';
 import TableInfo from "components/TableInfo/TableInfo";
 import styled from "styled-components";
-import { useTableQuery, sortTableData } from "api/services/table";
+import { useTableQuery } from "api/services/table";
 import { useLanguagesQuery } from "../../api/services/languages";
+import { sortTableData } from 'utils/sortingHelpers';
 
 const TableQueryAlert = styled(Alert)`
   width: 100%;
