@@ -9,6 +9,7 @@ import TableInfo from "components/TableInfo/TableInfo";
 import styled from "styled-components";
 import { useTableQuery } from "api/services/table";
 import { useLanguagesQuery } from "../../api/services/languages";
+import { sortTableData } from 'utils/sortingHelpers';
 
 const TableQueryAlert = styled(Alert)`
   width: 100%;
@@ -43,6 +44,12 @@ export const TableListSelection: React.FC = () => {
         document.title = `${t("pages.tableList")} | PxGraf`;
     }, []);
 
+    const sortedData = React.useMemo(() => {
+        if (!data) return null;
+
+        return sortTableData(data, primaryLanguage);
+    }, [data, primaryLanguage, databaseLanguages]);
+
     let content: React.ReactNode;
     if (isError) {
         content =
@@ -72,7 +79,7 @@ export const TableListSelection: React.FC = () => {
             </>
     }
     else {
-        content = data.map((item) =>
+        content = sortedData.map((item) =>
             item.type === "t" ?
                 <TableInfo path={params["*"]} item={item} key={`${item.id}-table-info`} /> :
                 <DirectoryInfo path={params["*"]} item={item} key={`${item.id}-directory-info`} />

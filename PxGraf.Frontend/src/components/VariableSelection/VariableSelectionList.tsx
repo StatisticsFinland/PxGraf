@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { useTheme } from '@mui/material/styles';
 import { UiLanguageContext } from 'contexts/uiLanguageContext';
-import { sortedVariables } from 'utils/variableSorting';
+import { sortedVariables } from 'utils/sortingHelpers';
 
 interface VariableSelectionListProps {
     variables: IVariable[],
