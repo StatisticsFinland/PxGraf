@@ -330,11 +330,12 @@ namespace CreationControllerTests
         [TestCase(VisualizationType.PercentVerticalBarChart, 1, 2, 5, 1, 1)]
         [TestCase(VisualizationType.HorizontalBarChart, 1, 1, 5, 1, 1)]
         [TestCase(VisualizationType.GroupHorizontalBarChart, 1, 2, 2, 1, 1)]
-        [TestCase(VisualizationType.StackedHorizontalBarChart, 1, 1, 3, 3, 1)]
-        [TestCase(VisualizationType.PercentHorizontalBarChart, 1, 1, 3, 3, 1)]
+        [TestCase(VisualizationType.StackedHorizontalBarChart, 1, 1, 3, 1, 3)]
+        [TestCase(VisualizationType.PercentHorizontalBarChart, 1, 1, 3, 1, 3)]
         [TestCase(VisualizationType.LineChart, 1, 10, 1, 1, 1)]
         [TestCase(VisualizationType.ScatterPlot, 2, 10, 1, 1, 1)]
         [TestCase(VisualizationType.PieChart, 1, 1, 5, 1, 1)]
+        [TestCase(VisualizationType.PyramidChart, 1, 1, 2, 5, 1)]
         public async Task GetVisualizationRulesAsync_OtherVisualizationTypes_DontAllowShowingDataPoints(
             VisualizationType visualizationType,
             int cVarAmount,
@@ -347,8 +348,8 @@ namespace CreationControllerTests
             [
                 new VariableParameters(VariableType.Content, cVarAmount),
                 new VariableParameters(VariableType.Time, timeVarAmount),
-                new VariableParameters(VariableType.OtherClassificatory, otherVarAAmount),
-                new VariableParameters(VariableType.OtherClassificatory, otherVarBAmount),
+                new VariableParameters(VariableType.Geological, otherVarAAmount),
+                new VariableParameters(VariableType.Ordinal, otherVarBAmount),
                 new VariableParameters(VariableType.OtherClassificatory, otherVarCAmount)
             ];
 
