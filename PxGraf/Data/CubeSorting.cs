@@ -119,7 +119,7 @@ namespace PxGraf.Data
         private static List<SortingOption> GetVariableSortingOptions(IReadOnlyVariable variable)
         {
             List<SortingOption> options = [];
-            foreach (var val in variable.IncludedValues)
+            foreach (IReadOnlyVariableValue val in variable.IncludedValues)
             {
                 options.Add(new SortingOption(val.Code, val.Name));
             }
@@ -139,9 +139,9 @@ namespace PxGraf.Data
         private static SortingOption GetAscendingSorting(IEnumerable<string> languages)
         {
             MultiLanguageString translations = new();
-            foreach (var lang in languages)
+            foreach (string lang in languages)
             {
-                var local = Localization.FromLanguage(lang);
+                Localization local = Localization.FromLanguage(lang);
                 translations.AddTranslation(lang, local.Translation.SortingOptions.Ascending);
             }
 
@@ -151,9 +151,9 @@ namespace PxGraf.Data
         private static SortingOption GetDescendingSorting(IEnumerable<string> languages)
         {
             MultiLanguageString translations = new();
-            foreach (var lang in languages)
+            foreach (string lang in languages)
             {
-                var local = Localization.FromLanguage(lang);
+                Localization local = Localization.FromLanguage(lang);
                 translations.AddTranslation(lang, local.Translation.SortingOptions.Descending);
             }
 
@@ -163,9 +163,9 @@ namespace PxGraf.Data
         private static SortingOption GetSumSorting(IEnumerable<string> languages)
         {
             MultiLanguageString translations = new();
-            foreach (var lang in languages)
+            foreach (string lang in languages)
             {
-                var local = Localization.FromLanguage(lang);
+                Localization local = Localization.FromLanguage(lang);
                 translations.AddTranslation(lang, local.Translation.SortingOptions.Sum);
             }
 
@@ -175,9 +175,9 @@ namespace PxGraf.Data
         private static SortingOption GetSameAsDataSorting(IEnumerable<string> languages)
         {
             MultiLanguageString translations = new();
-            foreach (var lang in languages)
+            foreach (string lang in languages)
             {
-                var local = Localization.FromLanguage(lang);
+                Localization local = Localization.FromLanguage(lang);
                 translations.AddTranslation(lang, local.Translation.SortingOptions.NoSorting);
             }
 
@@ -187,9 +187,9 @@ namespace PxGraf.Data
         private static SortingOption GetReversedFromDataSorting(IEnumerable<string> languages)
         {
             MultiLanguageString translations = new();
-            foreach (var lang in languages)
+            foreach (string lang in languages)
             {
-                var local = Localization.FromLanguage(lang);
+                Localization local = Localization.FromLanguage(lang);
                 translations.AddTranslation(lang, local.Translation.SortingOptions.NoSortingReversed);
             }
 
