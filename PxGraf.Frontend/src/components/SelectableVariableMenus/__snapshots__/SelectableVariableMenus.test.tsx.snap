@@ -28,14 +28,14 @@ exports[`Rendering test renders correctly 1`] = `
           role="combobox"
           tabindex="0"
         >
-          fyy1
+          fyy2
         </div>
         <input
           aria-hidden="true"
           aria-invalid="false"
           class="MuiSelect-nativeInput css-yf8vq0-MuiSelect-nativeInput"
           tabindex="-1"
-          value="barfoo1"
+          value="barfoo2"
         />
         <svg
           aria-hidden="true"
