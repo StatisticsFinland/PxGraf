@@ -1,4 +1,3 @@
-import React from 'react';
 import { NavigationProvider, useNavigationContext } from "contexts/navigationContext";
 import { act, fireEvent, render } from '@testing-library/react';
 

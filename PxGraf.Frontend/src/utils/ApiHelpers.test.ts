@@ -66,7 +66,7 @@ describe('pxGrafUrl tests', () => {
         process.env = env
     })
     it('Should build a correct format string', () => {
-        process.env.REACT_APP_PXGRAF_URL = 'seppo.fi/';
+        import.meta.env.VITE_PXGRAF_URL = 'seppo.fi/';
         const result = pxGrafUrl('foobar');
         expect(result).toBeTruthy();
         expect(result).toEqual('seppo.fi/foobar');

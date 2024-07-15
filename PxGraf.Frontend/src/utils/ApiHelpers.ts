@@ -45,7 +45,7 @@ export const buildTableReference = (idStack: string[]) => {
 }
 
 export const pxGrafUrl = (path: string) => {
-    return process.env.REACT_APP_PXGRAF_URL + path;
+    return import.meta.env.VITE_PXGRAF_URL + path;
 }
 
 export const defaultQueryOptions = {

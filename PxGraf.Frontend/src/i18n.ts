@@ -4,49 +4,65 @@ import i18n from "i18next";
 import detector from "i18next-browser-languagedetector";
 import { initReactI18next } from "react-i18next";
 
-// Extends the NodeRequire interface to allow require.context to be used in TypeScript
-declare const require: NodeRequire;
-interface NodeRequire {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    context: (directory: string, useSubdirectories?: boolean, regExp?: RegExp) => any;
+interface TranslationContent {
+    [key: string]: any;
+}
+
+interface TranslationsConfig {
+    availableTranslations: string[];
 }
 
 // Import all JSON files from the localization folder
-const localizationContext = require.context('./localization', true, /\.json$/);
+const localizationFiles: Record<string, { default: TranslationContent }> = import.meta.glob('./localization/*.json', {eager: true});
 
-// Search for available languages from the translationsConfig.json file
-const translationsConfigFile = './translationsConfig.json';
-const translationsConfig = localizationContext.keys().includes(translationsConfigFile)
-    ? localizationContext(translationsConfigFile)
-    : null;
+async function loadTranslations() {
+    let availableLanguages: string[] = [];
+    const resources: Record<string, { translation: TranslationContent }> = {};
 
-// If not found, use all JSON files in the localization folder as translations
-const availableLanguages = translationsConfig?.availableTranslations
-    ? translationsConfig.availableTranslations
-    : localizationContext.keys().map(file => file.replace('./', '').replace('.json', ''));
+    // Check if translationsConfig.json is among the imported files
+    const translationsConfigPath: string = './localization/translationsConfig.json';
+    const translationsConfig: TranslationsConfig | null = localizationFiles[translationsConfigPath]
+        ? localizationFiles[translationsConfigPath].default as TranslationsConfig
+        : null;
 
-// Iterate through available languages and create a resource object of the languages
-const resources = availableLanguages.reduce((acc, lang) => { 
-    const file = `./${lang}.json`;
-    if (localizationContext.keys().includes(file) && file !== translationsConfig) {
-        acc[lang] = {
-            translation: localizationContext(file),
-        };
+    // Use translationsConfig if available
+    if (translationsConfig?.availableTranslations) {
+        availableLanguages = translationsConfig.availableTranslations;
+    } else {
+        // Fallback to using all JSON files in the localization folder as translations
+        availableLanguages = Object.keys(localizationFiles)
+            .map(file => file.replace('./localization/', '').replace('.json', ''))
+            .filter(lang => lang !== 'translationsConfig');
     }
-    return acc;
-}, {});
 
-i18n.on('languageChanged', (lng) => {document.documentElement.setAttribute('lang', lng);});
+    // Load translations for available languages
+    availableLanguages.forEach(lang => {
+        const filePath: string = `./localization/${lang}.json`;
+        if (localizationFiles[filePath]) {
+            resources[lang] = {
+                translation: localizationFiles[filePath].default,
+            };
+        }
+    });
 
-i18n
-  .use(detector)
-  .use(initReactI18next)
-  .init({
-    resources,
-    fallbackLng: availableLanguages[0],
-    interpolation: {
-      escapeValue: false, //Html encoding is handled by react
-    }
-  });
+    return { resources, availableLanguages };
+}
 
-  export default i18n;
+async function initI18n() {
+    const { resources, availableLanguages } = await loadTranslations();
+    i18n.on('languageChanged', (lng) => { document.documentElement.setAttribute('lang', lng); });
+
+    i18n
+        .use(detector)
+        .use(initReactI18next)
+        .init({
+            resources,
+            fallbackLng: availableLanguages[0],
+            interpolation: {
+                escapeValue: false, //Html encoding is handled by react
+            }
+        });
+}
+
+initI18n();
+export default i18n;
