@@ -1,5 +1,5 @@
 import { fireEvent, render } from "@testing-library/react";
-import React from "react";
+
 import VisualizationSettingsSwitch from "./VisualizationSettingsSwitch";
 
 jest.mock('react-i18next', () => ({

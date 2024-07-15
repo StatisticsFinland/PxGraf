@@ -1,5 +1,5 @@
 import { render } from "@testing-library/react";
-import React from "react";
+
 import { FilterType, Query } from "types/query";
 import { IVisualizationSettings } from "types/visualizationSettings";
 import Preview from "./Preview";

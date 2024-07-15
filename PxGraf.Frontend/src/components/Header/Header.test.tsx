@@ -1,5 +1,4 @@
 import { render } from "@testing-library/react";
-import React from "react";
 import Header from "./Header";
 
 jest.mock('react-i18next', () => ({

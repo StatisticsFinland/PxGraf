@@ -1,5 +1,5 @@
 import { render } from "@testing-library/react";
-import React from "react";
+
 import ManualPickVariableSelection from "./ManualPickVariableSelection";
 import UiLanguageContext from "contexts/uiLanguageContext";
 

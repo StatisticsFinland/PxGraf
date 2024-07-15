@@ -1,4 +1,4 @@
-import React from "react";
+
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { TablePivotSettings } from "./TablePivotSettings";
 import { VariableType } from "types/cubeMeta";

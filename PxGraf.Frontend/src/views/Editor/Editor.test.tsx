@@ -4,7 +4,7 @@ import { IHeaderResult } from "api/services/default-header";
 import { IFilterVariableResult } from "api/services/filter-variable";
 import { IVisualizationSettingsResult } from "api/services/visualization-rules";
 import { ISaveQueryResult } from "api/services/queries";
-import React from "react";
+
 import { VariableType } from "types/cubeMeta";
 import Editor from "./Editor";
 import { IQueryInfoResult } from "api/services/query-info";

@@ -1,6 +1,6 @@
 import { render, waitFor } from "@testing-library/react";
 import QueryLoader from "./QueryLoader";
-import React from "react";
+
 import { HashRouter } from "react-router-dom";
 import { fetchSavedQuery } from 'api/services/queries';
 

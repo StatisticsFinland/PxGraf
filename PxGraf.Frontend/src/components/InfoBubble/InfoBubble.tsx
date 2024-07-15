@@ -1,5 +1,5 @@
 import { Popper } from "@mui/material";
-import React from "react";
+import React from 'react';
 import styled from "styled-components";
 import InfoIcon from '@mui/icons-material/Info';
 import { useTranslation } from "react-i18next";

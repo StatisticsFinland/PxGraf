@@ -1,7 +1,7 @@
 import { Divider, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import FileIcon from '@mui/icons-material/InsertDriveFileOutlined';
 import { ITableListResponse } from "api/services/table";
-import React from "react";
+import React from 'react';
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
