@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react';
-import React from 'react';
+import '@testing-library/jest-dom';
 import { ErrorDialogContent } from './ErrorDialogContent';
 
 jest.mock('react-i18next', () => ({

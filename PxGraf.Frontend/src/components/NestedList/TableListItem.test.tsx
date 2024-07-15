@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react';
 import UiLanguageContext from 'contexts/uiLanguageContext';
-import React from 'react';
+import '@testing-library/jest-dom';
 import { MemoryRouter } from 'react-router-dom';
 import { ITableListResponse } from 'api/services/table';
 import { TableListItem } from './TableListItem';
@@ -16,6 +16,12 @@ jest.mock('react-i18next', () => ({
         };
     },
 }));
+
+jest.mock('envVars', () => {
+    return {
+        PxGrafUrl: 'test-url.fi/',
+    };
+})
 
 const mockItem: ITableListResponse = {
     id: 'dbid1',

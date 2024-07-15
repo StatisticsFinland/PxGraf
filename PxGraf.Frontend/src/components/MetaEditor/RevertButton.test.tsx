@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react';
-import React from 'react';
+import '@testing-library/jest-dom';
 import RevertButton from "./RevertButton";
 
 describe('Rendering test', () => {

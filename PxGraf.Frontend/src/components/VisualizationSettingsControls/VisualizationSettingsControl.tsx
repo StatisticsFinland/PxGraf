@@ -1,7 +1,6 @@
 import TablePivotSettings from "./TypeSpecificControls/TablePivotSettings";
 import { MarkerScaler } from "./UtilityComponents/MarkerScaler";
 import { IVisualizationSettings } from "types/visualizationSettings";
-
 import { IVisualizationRules } from "types/visualizationRules";
 import { VisualizationType } from "types/visualizationType";
 import { IVariable, VariableType } from "types/cubeMeta";

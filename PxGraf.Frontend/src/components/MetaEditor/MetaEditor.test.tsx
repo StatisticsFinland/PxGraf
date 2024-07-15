@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react';
 import { IHeaderResult } from 'api/services/default-header';
-import React from 'react';
+import '@testing-library/jest-dom';
 import { IVariable, VariableType } from 'types/cubeMeta';
 import { ICubeQuery } from 'types/query';
 import MetaEditor from './MetaEditor';

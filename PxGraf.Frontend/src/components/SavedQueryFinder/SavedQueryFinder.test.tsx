@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import React from 'react';
+import '@testing-library/jest-dom';
 import { HashRouter } from 'react-router-dom';
 import { SavedQueryFinder } from './SavedQueryFinder';
 
@@ -14,6 +14,12 @@ jest.mock('react-i18next', () => ({
         };
     },
 }));
+
+jest.mock('envVars', () => {
+    return {
+        PxGrafUrl: 'test-url.fi/',
+    };
+})
 
 describe('Rendering test', () => {
     it('renders correctly with closed dialog', () => {

@@ -4,7 +4,6 @@ import { IHeaderResult } from "api/services/default-header";
 import { IFilterVariableResult } from "api/services/filter-variable";
 import { IVisualizationSettingsResult } from "api/services/visualization-rules";
 import { ISaveQueryResult } from "api/services/queries";
-
 import { VariableType } from "types/cubeMeta";
 import Editor from "./Editor";
 import { IQueryInfoResult } from "api/services/query-info";
@@ -17,9 +16,9 @@ import { NavigationProvider } from "contexts/navigationContext";
 import { IValidateTableMetaDataResult } from "api/services/validate-table-metadata";
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { UiLanguageContext } from "contexts/uiLanguageContext";
+import '@testing-library/jest-dom';
 
 const queryClient = new QueryClient();
-
 const language = "fi";
 const setLanguage = jest.fn();
 const languageTab = "fi";
@@ -36,6 +35,12 @@ jest.mock('react-router-dom', () => ({
         };
     },
 }));
+
+jest.mock('envVars', () => {
+    return {
+        PxGrafUrl: 'test-url.fi/',
+    };
+})
 
 jest.mock('react-i18next', () => ({
     ...jest.requireActual('react-i18next'),

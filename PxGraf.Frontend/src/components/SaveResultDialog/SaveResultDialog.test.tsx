@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import React from 'react';
+import '@testing-library/jest-dom';
 import SaveResultDialog from './SaveResultDialog';
 import { ISaveQueryResult } from 'api/services/queries';
 

@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react';
 import { IMenuProps, SelectableVariableMenus, ISelectionState } from './SelectableVariableMenus';
-import React from 'react';
+import '@testing-library/jest-dom';
 import { IQueryVisualizationResponse } from '@statisticsfinland/pxvisualizer';
 import { EVariableType } from '@statisticsfinland/pxvisualizer';
 import { IVisualizationSettings } from 'types/visualizationSettings';

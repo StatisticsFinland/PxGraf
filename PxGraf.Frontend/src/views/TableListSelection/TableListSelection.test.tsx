@@ -1,7 +1,7 @@
 import { render } from '@testing-library/react';
 import { ITableResult } from 'api/services/table';
 import UiLanguageContext from 'contexts/uiLanguageContext';
-import React from 'react';
+import '@testing-library/jest-dom';
 import { MemoryRouter } from 'react-router-dom';
 import TableListSelection from './TableListSelection';
 
@@ -16,6 +16,12 @@ jest.mock('react-i18next', () => ({
         };
     },
 }));
+
+jest.mock('envVars', () => {
+    return {
+        PxGrafUrl: 'test-url.fi/',
+    };
+})
 
 jest.mock('api/services/languages', () => ({
     ...jest.requireActual('api/services/languages'),

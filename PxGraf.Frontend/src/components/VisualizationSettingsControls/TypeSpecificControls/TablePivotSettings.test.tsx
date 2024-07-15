@@ -1,9 +1,9 @@
-
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { TablePivotSettings } from "./TablePivotSettings";
 import { VariableType } from "types/cubeMeta";
 import UiLanguageContext from 'contexts/uiLanguageContext';
 import { Query, FilterType } from "types/query";
+import '@testing-library/jest-dom';
 
 jest.mock('react-i18next', () => ({
     ...jest.requireActual('react-i18next'),

@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { DirectoryInfo } from './DirectoryInfo';
-import React from 'react';
+import '@testing-library/jest-dom';
 import { MemoryRouter } from 'react-router-dom';
 import UiLanguageContext from 'contexts/uiLanguageContext';
 
@@ -27,9 +27,16 @@ jest.mock('react-i18next', () => ({
 jest.mock('api/services/table', () => ({
     ...jest.requireActual('api/services/table'),
     useTableQuery: () => {
+
         return mockItem;
     },
 }));
+
+jest.mock('envVars', () => {
+    return {
+        PxGrafUrl: 'test-url.fi/',
+    };
+})
 
 const setLanguage = jest.fn();
 const language = 'fi';

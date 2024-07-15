@@ -1,8 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-
 import { Stack, Paper } from '@mui/material';
-
 import { UiLanguageContext } from 'contexts/uiLanguageContext';
 import EditorField from './Editorfield';
 import styled from 'styled-components';

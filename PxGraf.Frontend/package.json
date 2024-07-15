@@ -34,7 +34,7 @@
     "start": "vite",
     "build": "tsc && vite build",
     "serve": "vite preview",
-    "test": "jest",
+    "test": "jest -c jest.config.ts",
     "test:ci": "npm run test -- --coverage --ci --testResultsProcessor=\"jest-sonar-reporter\" --reporters=default --reporters=jest-junit --watchAll=false"
   },
   "jestSonar": {

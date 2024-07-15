@@ -1,6 +1,5 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-
 import { Stack } from '@mui/material';
 import { ContentVariableEditor } from './ContentVariableEditor';
 import { BasicVariableEditor } from './BasicVariableEditor';

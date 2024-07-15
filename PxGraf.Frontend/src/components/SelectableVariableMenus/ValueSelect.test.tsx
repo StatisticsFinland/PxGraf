@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react';
 import { IValueSelectProps, ValueSelect } from './ValueSelect';
-import React from 'react';
+import '@testing-library/jest-dom';
 import { VariableType } from 'types/cubeMeta';
 import UiLanguageContext from 'contexts/uiLanguageContext';
 

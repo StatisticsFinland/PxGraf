@@ -1,8 +1,8 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import React from 'react';
 import { IVariable, VariableType } from 'types/cubeMeta';
 import { IVariableEditions } from 'types/query';
 import BasicVariableEditor from './BasicVariableEditor';
+import '@testing-library/jest-dom';
 import UiLanguageContext from 'contexts/uiLanguageContext';
 
 jest.mock('react-i18next', () => ({

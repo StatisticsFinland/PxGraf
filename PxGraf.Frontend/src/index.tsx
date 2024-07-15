@@ -5,13 +5,14 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import { BrowserRouter } from 'react-router-dom';
+import { PublicUrl } from './envVars';
 
 const ROOT = document.getElementById('root');
 if (ROOT) {
   const root = ReactDOM.createRoot(ROOT);
     root.render(
         <React.StrictMode>
-            <BrowserRouter basename={import.meta.env.PUBLIC_URL}>
+            <BrowserRouter basename={PublicUrl}>
                 <App />
             </BrowserRouter>
         </React.StrictMode>

@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react';
 import { TableInfo } from './TableInfo';
-import React from 'react';
+import '@testing-library/jest-dom';
 import UiLanguageContext from 'contexts/uiLanguageContext';
 import { MemoryRouter } from 'react-router-dom';
 
@@ -23,6 +23,12 @@ const mockTableQueryResult = {
         ]
     }
 }
+
+jest.mock('envVars', () => {
+    return {
+        PxGrafUrl: 'test-url.fi/',
+    };
+})
 
 jest.mock('react-i18next', () => ({
     ...jest.requireActual('react-i18next'),

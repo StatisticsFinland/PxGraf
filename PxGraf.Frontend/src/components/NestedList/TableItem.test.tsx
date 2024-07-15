@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react';
 import UiLanguageContext from 'contexts/uiLanguageContext';
-import React from 'react';
+import '@testing-library/jest-dom';
 import { MemoryRouter } from 'react-router-dom';
 import { TableItem } from './TableItem';
 import { ITableListResponse } from 'api/services/table';
@@ -49,6 +49,12 @@ describe('Rendering test', () => {
         expect(asFragment()).toMatchSnapshot();
     });
 });
+
+jest.mock('envVars', () => {
+    return {
+        PxGrafUrl: 'test-url.fi/',
+    };
+})
 
 describe('Assertion tests', () => {
     it('shows available languages and last updated with table level item names', async () => {
