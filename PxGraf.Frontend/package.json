@@ -30,7 +30,6 @@
     "web-vitals": "^4.0.1"
   },
   "scripts": {
-    "dev": "vite",
     "start": "vite",
     "build": "tsc && vite build",
     "serve": "vite preview",

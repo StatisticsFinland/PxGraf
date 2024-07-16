@@ -1,13 +1,5 @@
 {
-  "references": [
-    {
-      "path": "./tsconfig.app.json"
-    },
-    {
-      "path": "./tsconfig.node.json"
-    }
-  ],
-  "include": [ "/src/**/*" ],
+  "include": [ "vite.config.ts", "/src/**/*" ],
   "exclude": [ "node_modules", "build/**/*" ],
   "compilerOptions": {
     "jsx": "react-jsx",
@@ -15,7 +7,7 @@
     "skipLibCheck": true,
     "module": "esnext",
     "target": "esnext",
-    "moduleResolution": "bundler",
+    "moduleResolution": "node",
     "noEmit": true,
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
@@ -26,6 +18,11 @@
     "isolatedModules": true,
     "moduleDetection": "auto",
     "useDefineForClassFields": true,
-    "outDir": "build"
+    "outDir": "build",
+    "strictNullChecks": false,
+    "composite": true,
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.tsbuildinfo",
+    "strict": false,
+    "allowJs": false
   }
 }
