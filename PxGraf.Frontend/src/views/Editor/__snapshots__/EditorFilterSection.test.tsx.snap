@@ -212,7 +212,7 @@ exports[`Rendering test renders correctly 1`] = `
                     </label>
                   </div>
                   <div
-                    class="MuiAutocomplete-root MuiAutocomplete-hasPopupIcon sc-jXbVAB iOsuIV css-1j0qgw8-MuiAutocomplete-root"
+                    class="MuiAutocomplete-root MuiAutocomplete-hasPopupIcon sc-jXbVAB iOsuIV css-ka7ti6-MuiAutocomplete-root"
                   >
                     <div
                       class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-wb57ya-MuiFormControl-root-MuiTextField-root"
