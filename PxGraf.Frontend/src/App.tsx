@@ -10,13 +10,13 @@ import {
   CssBaseline, Box, ThemeProvider
 } from '@mui/material';
 
-import { UiLanguageProvider } from "./contexts/uiLanguageContext";
+import { UiLanguageProvider } from "contexts/uiLanguageContext";
 import { Router } from "Router";
 
 import './i18n';
 import styled from 'styled-components';
-import { NavigationProvider } from './contexts/navigationContext';
-import theme from './styles/materialTheme';
+import { NavigationProvider } from 'contexts/navigationContext';
+import theme from 'styles/materialTheme';
 
 const BodyWrapper = styled(Box)`
   min-height: 100vh;
@@ -28,7 +28,7 @@ const BodyWrapper = styled(Box)`
 const queryClient = new QueryClient()
 
 function App() {
-    return (
+  return (
     <QueryClientProvider client={queryClient}>
       <UiLanguageProvider>
         <NavigationProvider>
