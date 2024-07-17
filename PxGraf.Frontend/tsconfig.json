@@ -2,11 +2,11 @@
   "include": [ "vite.config.ts", "/src/**/*" ],
   "exclude": [ "node_modules", "build/**/*" ],
   "compilerOptions": {
-    "jsx": "react-jsx",
+    "jsx": "react",
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "module": "esnext",
-    "target": "esnext",
+    "target": "es2016",
+    "module": "commonjs",
     "moduleResolution": "node",
     "noEmit": true,
     "allowImportingTsExtensions": true,
@@ -23,6 +23,8 @@
     "composite": true,
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.tsbuildinfo",
     "strict": false,
-    "allowJs": false
+    "allowJs": true,
+    "checkJs": true,
+    "forceConsistentCasingInFileNames": true
   }
 }

@@ -1,3 +1,4 @@
+import React from 'react';
 import { render, waitFor } from "@testing-library/react";
 import QueryLoader from "./QueryLoader";
 import { HashRouter } from "react-router-dom";

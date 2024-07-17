@@ -1,3 +1,4 @@
+import React from 'react';
 import { render } from '@testing-library/react';
 import { ITableResult } from 'api/services/table';
 import UiLanguageContext from 'contexts/uiLanguageContext';

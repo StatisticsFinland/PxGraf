@@ -1,3 +1,4 @@
+import React from 'react';
 import EditorPreviewSection from "./EditorPreviewSection";
 import { render } from "@testing-library/react";
 import { IVisualizationResult } from "api/services/visualization";

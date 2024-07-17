@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { DirectoryInfo } from './DirectoryInfo';
+import React from 'react';
 import '@testing-library/jest-dom';
 import { MemoryRouter } from 'react-router-dom';
 import UiLanguageContext from 'contexts/uiLanguageContext';

@@ -1,3 +1,4 @@
+import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { ChartTypeSelector } from './ChartTypeSelector';
 import '@testing-library/jest-dom';

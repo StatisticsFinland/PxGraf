@@ -1,3 +1,4 @@
+import React from 'react';
 import { render, screen } from "@testing-library/react";
 import { ICubeMetaResult } from "api/services/cube-meta";
 import { IHeaderResult } from "api/services/default-header";

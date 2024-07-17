@@ -1,3 +1,4 @@
+import React from 'react';
 import { render } from '@testing-library/react';
 import { IHeaderResult } from 'api/services/default-header';
 import '@testing-library/jest-dom';

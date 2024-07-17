@@ -1,4 +1,4 @@
-
+import React from 'react';
 import EditorMetaSection from "./EditorMetaSection";
 import { render } from "@testing-library/react";
 import { IHeaderResult } from "api/services/default-header";
