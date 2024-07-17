@@ -13,6 +13,11 @@ const mockItem = {
     languages: ['fi', 'en', 'sv'],
 };
 
+jest.mock('envVars', () => ({
+    PxGrafUrl: 'pxGrafUrl.fi/',
+    PublicUrl: 'publicUrl.fi/'
+}));
+
 const mockTableQueryResult = {
     data: {
         variables: [
@@ -24,12 +29,6 @@ const mockTableQueryResult = {
         ]
     }
 }
-
-jest.mock('envVars', () => {
-    return {
-        PxGrafUrl: 'test-url.fi/',
-    };
-})
 
 jest.mock('react-i18next', () => ({
     ...jest.requireActual('react-i18next'),

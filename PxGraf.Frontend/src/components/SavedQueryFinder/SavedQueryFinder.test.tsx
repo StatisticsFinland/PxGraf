@@ -16,11 +16,10 @@ jest.mock('react-i18next', () => ({
     },
 }));
 
-jest.mock('envVars', () => {
-    return {
-        PxGrafUrl: 'test-url.fi/',
-    };
-})
+jest.mock('envVars', () => ({
+    PxGrafUrl: 'pxGrafUrl.fi/',
+    PublicUrl: 'publicUrl.fi/'
+}));
 
 describe('Rendering test', () => {
     it('renders correctly with closed dialog', () => {

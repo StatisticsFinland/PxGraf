@@ -1,5 +1,6 @@
 /* istanbul ignore file */
 
+import React from 'react';
 import {
   QueryClient,
   QueryClientProvider,

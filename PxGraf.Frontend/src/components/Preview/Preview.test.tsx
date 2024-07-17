@@ -18,11 +18,10 @@ function mockComponentMocker(name) {
     };
 }
 
-jest.mock('envVars', () => {
-    return {
-        PxGrafUrl: 'test-url.fi/',
-    };
-})
+jest.mock('envVars', () => ({
+    PxGrafUrl: 'pxGrafUrl.fi/',
+    PublicUrl: 'publicUrl.fi/'
+}));
 
 jest.mock('@statisticsfinland/pxvisualizer', () => {
     const lib = jest.requireActual("@statisticsfinland/pxvisualizer");

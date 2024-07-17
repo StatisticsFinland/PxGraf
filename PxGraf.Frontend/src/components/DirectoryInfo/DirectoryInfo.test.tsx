@@ -13,6 +13,11 @@ const mockItem = {
     languages: ['fi', 'en', 'sv']
 };
 
+jest.mock('envVars', () => ({
+    PxGrafUrl: 'pxGrafUrl.fi/',
+    PublicUrl: 'publicUrl.fi/'
+}));
+
 jest.mock('react-i18next', () => ({
     ...jest.requireActual('react-i18next'),
     useTranslation: () => {
@@ -32,12 +37,6 @@ jest.mock('api/services/table', () => ({
         return mockItem;
     },
 }));
-
-jest.mock('envVars', () => {
-    return {
-        PxGrafUrl: 'test-url.fi/',
-    };
-})
 
 const setLanguage = jest.fn();
 const language = 'fi';

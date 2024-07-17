@@ -18,6 +18,11 @@ jest.mock('react-i18next', () => ({
     },
 }));
 
+jest.mock('envVars', () => ({
+    PxGrafUrl: 'pxGrafUrl.fi/',
+    PublicUrl: 'publicUrl.fi/'
+}));
+
 const mockItem: ITableListResponse = {
     id: 'asd',
     type: 't',
@@ -50,12 +55,6 @@ describe('Rendering test', () => {
         expect(asFragment()).toMatchSnapshot();
     });
 });
-
-jest.mock('envVars', () => {
-    return {
-        PxGrafUrl: 'test-url.fi/',
-    };
-})
 
 describe('Assertion tests', () => {
     it('shows available languages and last updated with table level item names', async () => {

@@ -37,11 +37,10 @@ jest.mock('react-router-dom', () => ({
     },
 }));
 
-jest.mock('envVars', () => {
-    return {
-        PxGrafUrl: 'test-url.fi/',
-    };
-})
+jest.mock('envVars', () => ({
+    PxGrafUrl: 'pxGrafUrl.fi/',
+    PublicUrl: 'publicUrl.fi/'
+}));
 
 jest.mock('react-i18next', () => ({
     ...jest.requireActual('react-i18next'),

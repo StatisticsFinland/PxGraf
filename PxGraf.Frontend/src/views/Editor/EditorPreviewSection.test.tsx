@@ -6,8 +6,12 @@ import { EVisualizationType, EVariableType, ETimeVariableInterval } from "@stati
 import { FilterType, ICubeQuery, Query } from "types/query";
 import { IVisualizationSettings } from "types/visualizationSettings";
 import { VisualizationType } from "types/visualizationType";
-
 import serializer from "../../testUtils/stripHighchartsHashes";
+
+jest.mock('envVars', () => ({
+    PxGrafUrl: 'pxGrafUrl.fi/',
+    PublicUrl: 'publicUrl.fi/'
+}));
 
 const mockVisualizationQueryResult: IVisualizationResult = {
     isLoading: false,
@@ -126,12 +130,6 @@ const mockVisualizationQueryResult: IVisualizationResult = {
         tableReference: { hierarchy: ["foo", "bar"], name:  "table" }
     }
 };
-
-jest.mock('envVars', () => {
-    return {
-        PxGrafUrl: 'test-url.fi/',
-    };
-})
 
 const mockPath = [
     "foo",

@@ -2,7 +2,7 @@ import { IFetchSavedQueryResponse } from "api/services/queries"
 import { merge } from "lodash"
 import { useEffect, useMemo, useState } from "react"
 import { ICubeQuery, IVariableEditions, IVariableQuery, Query } from "types/query"
-import { PxGrafUrl } from "../envVars"
+import { PxGrafUrl } from "envVars"
 
 export const buildCubeQuery = (query: Query, metaEdits: ICubeQuery, idStack: string[]) => {
     return merge(

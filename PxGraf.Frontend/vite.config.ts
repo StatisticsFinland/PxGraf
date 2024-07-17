@@ -8,6 +8,7 @@ export default defineConfig({
     resolve: {
         alias: {
             'Router': '/src/Router.tsx',
+            'envVars': '/src/envVars.ts',
             'contexts': '/src/contexts',
             'types': '/src/types',
             'styles': '/src/styles',
