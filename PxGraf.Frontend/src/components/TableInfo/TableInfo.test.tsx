@@ -1,6 +1,7 @@
+import React from 'react';
 import { render } from '@testing-library/react';
 import { TableInfo } from './TableInfo';
-import React from 'react';
+import '@testing-library/jest-dom';
 import UiLanguageContext from 'contexts/uiLanguageContext';
 import { MemoryRouter } from 'react-router-dom';
 
@@ -11,6 +12,11 @@ const mockItem = {
     text: { 'fi': 'text-fi', 'en': 'text-en', 'sv': 'text-sv'},
     languages: ['fi', 'en', 'sv'],
 };
+
+jest.mock('envVars', () => ({
+    PxGrafUrl: 'pxGrafUrl.fi/',
+    PublicUrl: 'publicUrl.fi/'
+}));
 
 const mockTableQueryResult = {
     data: {

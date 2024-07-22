@@ -1,10 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-
 import { Box, Typography, Accordion, AccordionSummary, AccordionDetails, Tabs, Tab } from '@mui/material';
-
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-
 import { TabPanel } from 'components/TabPanel/TabPanel';
 import { VariableEditor } from './VariableEditor';
 import { HeaderEditor } from './HeaderEditor';

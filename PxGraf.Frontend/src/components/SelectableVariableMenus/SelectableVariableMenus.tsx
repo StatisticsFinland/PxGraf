@@ -61,7 +61,7 @@ export const getSelections = (
             || state.activeSelections[code] == null
             || state.activeSelections[code].length === 0
             || !state.manuallyChanged?.[code]) {
-                newState.activeSelections[code] = defaultSelection || [variable.values[0].code];
+            newState.activeSelections[code] = defaultSelection || [variable.values[0].code];
         } else {
             newState.activeSelections[code] = multiselectable
                 ? state.activeSelections[code]
@@ -79,7 +79,7 @@ export const SelectableVariableMenus: React.FC<ISelectableVariableMenusProps> = 
     const [selectionState, setSelectionState] = useState<ISelectionState>({ activeSelections: null, visualization: null, multiselect: null });
 
     const selectables = getSelectables(data, visualizationSettings);
-    const selections = getSelections(selectables, selectedVisualization, visualizationSettings, selectionState, setSelectionState );
+    const selections = getSelections(selectables, selectedVisualization, visualizationSettings, selectionState, setSelectionState);
     const onValueChanged = (newSelections, code) => setSelectionState(prevState => ({
         ...prevState,
         activeSelections: {
@@ -88,7 +88,7 @@ export const SelectableVariableMenus: React.FC<ISelectableVariableMenusProps> = 
         },
         manuallyChanged: {
             ...prevState.manuallyChanged,
-            [code]: true, 
+            [code]: true,
         },
     }));
 

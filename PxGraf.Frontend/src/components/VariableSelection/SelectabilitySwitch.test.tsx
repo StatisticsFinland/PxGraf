@@ -1,5 +1,6 @@
+import React from 'react';
 import { render } from "@testing-library/react";
-import React from "react";
+
 import SelectabilitySwitch from "./SelectabilitySwitch";
 
 jest.mock('react-i18next', () => ({

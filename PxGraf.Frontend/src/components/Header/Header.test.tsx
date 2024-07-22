@@ -1,5 +1,5 @@
+import React from 'react';
 import { render } from "@testing-library/react";
-import React from "react";
 import Header from "./Header";
 
 jest.mock('react-i18next', () => ({
@@ -12,6 +12,11 @@ jest.mock('react-i18next', () => ({
             },
         };
     },
+}));
+
+jest.mock('envVars', () => ({
+    PxGrafUrl: 'pxGrafUrl.fi/',
+    PublicUrl: 'publicUrl.fi/'
 }));
 
 jest.mock('react-router-dom', () => ({

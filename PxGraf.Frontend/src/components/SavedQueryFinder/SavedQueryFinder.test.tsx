@@ -1,5 +1,6 @@
-import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
+import { fireEvent, render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
 import { HashRouter } from 'react-router-dom';
 import { SavedQueryFinder } from './SavedQueryFinder';
 
@@ -13,6 +14,11 @@ jest.mock('react-i18next', () => ({
             },
         };
     },
+}));
+
+jest.mock('envVars', () => ({
+    PxGrafUrl: 'pxGrafUrl.fi/',
+    PublicUrl: 'publicUrl.fi/'
 }));
 
 describe('Rendering test', () => {

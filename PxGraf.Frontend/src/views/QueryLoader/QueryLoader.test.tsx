@@ -1,8 +1,9 @@
+import React from 'react';
 import { render, waitFor } from "@testing-library/react";
 import QueryLoader from "./QueryLoader";
-import React from "react";
 import { HashRouter } from "react-router-dom";
 import { fetchSavedQuery } from 'api/services/queries';
+import '@testing-library/jest-dom';
 
 jest.mock('api/services/queries');
 const mockNavigate = jest.fn();
@@ -10,6 +11,11 @@ const mockNavigate = jest.fn();
 jest.mock('react-router-dom', () => ({
     ...jest.requireActual('react-router-dom'),
     useNavigate: () => mockNavigate,
+}));
+
+jest.mock('envVars', () => ({
+    PxGrafUrl: 'pxGrafUrl.fi/',
+    PublicUrl: 'publicUrl.fi/'
 }));
 
 jest.mock('react-i18next', () => ({

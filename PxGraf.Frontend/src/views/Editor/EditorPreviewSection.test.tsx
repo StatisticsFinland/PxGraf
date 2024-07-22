@@ -1,13 +1,17 @@
+import React from 'react';
 import EditorPreviewSection from "./EditorPreviewSection";
 import { render } from "@testing-library/react";
 import { IVisualizationResult } from "api/services/visualization";
 import { EVisualizationType, EVariableType, ETimeVariableInterval } from "@statisticsfinland/pxvisualizer";
-import React from "react";
 import { FilterType, ICubeQuery, Query } from "types/query";
 import { IVisualizationSettings } from "types/visualizationSettings";
 import { VisualizationType } from "types/visualizationType";
-
 import serializer from "../../testUtils/stripHighchartsHashes";
+
+jest.mock('envVars', () => ({
+    PxGrafUrl: 'pxGrafUrl.fi/',
+    PublicUrl: 'publicUrl.fi/'
+}));
 
 const mockVisualizationQueryResult: IVisualizationResult = {
     isLoading: false,
@@ -126,6 +130,7 @@ const mockVisualizationQueryResult: IVisualizationResult = {
         tableReference: { hierarchy: ["foo", "bar"], name:  "table" }
     }
 };
+
 const mockPath = [
     "foo",
     "bar",

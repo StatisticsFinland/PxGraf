@@ -54,22 +54,15 @@ describe('buildTableReference tests', () => {
     });
 });
 
+jest.mock('envVars', () => ({
+    PxGrafUrl: 'mockedUrl.fi/'
+}));
+
 describe('pxGrafUrl tests', () => {
-    const env = process.env
-
-    beforeEach(() => {
-        jest.resetModules()
-        process.env = { ...env }
-    })
-
-    afterEach(() => {
-        process.env = env
-    })
     it('Should build a correct format string', () => {
-        process.env.REACT_APP_PXGRAF_URL = 'seppo.fi/';
-        const result = pxGrafUrl('foobar');
+        const result: string = pxGrafUrl('foobar');
         expect(result).toBeTruthy();
-        expect(result).toEqual('seppo.fi/foobar');
+        expect(result).toEqual('mockedUrl.fi/foobar');
     });
 });
 

@@ -112,7 +112,7 @@ exports[`Rendering test renders correctly 1`] = `
                     />
                   </span>
                   <div
-                    class="MuiAutocomplete-root MuiAutocomplete-hasClearIcon MuiAutocomplete-hasPopupIcon sc-iGgVNO iLroeS css-1tw9w9k-MuiAutocomplete-root"
+                    class="MuiAutocomplete-root MuiAutocomplete-hasClearIcon MuiAutocomplete-hasPopupIcon sc-iGgVNO iLroeS css-1x6bjyf-MuiAutocomplete-root"
                   >
                     <div
                       class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-wb57ya-MuiFormControl-root-MuiTextField-root"
@@ -580,7 +580,7 @@ exports[`Rendering test renders correctly 1`] = `
                     />
                   </span>
                   <div
-                    class="MuiAutocomplete-root MuiAutocomplete-hasClearIcon MuiAutocomplete-hasPopupIcon sc-iGgVNO iLroeS css-1tw9w9k-MuiAutocomplete-root"
+                    class="MuiAutocomplete-root MuiAutocomplete-hasClearIcon MuiAutocomplete-hasPopupIcon sc-iGgVNO iLroeS css-1x6bjyf-MuiAutocomplete-root"
                   >
                     <div
                       class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-wb57ya-MuiFormControl-root-MuiTextField-root"
@@ -844,7 +844,7 @@ exports[`Rendering test renders correctly 1`] = `
                     />
                   </span>
                   <div
-                    class="MuiAutocomplete-root MuiAutocomplete-hasClearIcon MuiAutocomplete-hasPopupIcon sc-kAycRU fHrqKK css-1j0qgw8-MuiAutocomplete-root"
+                    class="MuiAutocomplete-root MuiAutocomplete-hasClearIcon MuiAutocomplete-hasPopupIcon sc-kAycRU fHrqKK css-ka7ti6-MuiAutocomplete-root"
                   >
                     <div
                       class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-wb57ya-MuiFormControl-root-MuiTextField-root"
@@ -1300,7 +1300,7 @@ exports[`Rendering test renders correctly 1`] = `
                     />
                   </span>
                   <div
-                    class="MuiAutocomplete-root MuiAutocomplete-hasClearIcon MuiAutocomplete-hasPopupIcon sc-iGgVNO iLroeS css-1tw9w9k-MuiAutocomplete-root"
+                    class="MuiAutocomplete-root MuiAutocomplete-hasClearIcon MuiAutocomplete-hasPopupIcon sc-iGgVNO iLroeS css-1x6bjyf-MuiAutocomplete-root"
                   >
                     <div
                       class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-wb57ya-MuiFormControl-root-MuiTextField-root"
@@ -1541,7 +1541,7 @@ exports[`Rendering test renders correctly 1`] = `
                     />
                   </span>
                   <div
-                    class="MuiAutocomplete-root MuiAutocomplete-hasClearIcon MuiAutocomplete-hasPopupIcon sc-iGgVNO iLroeS css-1tw9w9k-MuiAutocomplete-root"
+                    class="MuiAutocomplete-root MuiAutocomplete-hasClearIcon MuiAutocomplete-hasPopupIcon sc-iGgVNO iLroeS css-1x6bjyf-MuiAutocomplete-root"
                   >
                     <div
                       class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-wb57ya-MuiFormControl-root-MuiTextField-root"
@@ -1782,7 +1782,7 @@ exports[`Rendering test renders correctly 1`] = `
                     />
                   </span>
                   <div
-                    class="MuiAutocomplete-root MuiAutocomplete-hasClearIcon MuiAutocomplete-hasPopupIcon sc-iGgVNO iLroeS css-1tw9w9k-MuiAutocomplete-root"
+                    class="MuiAutocomplete-root MuiAutocomplete-hasClearIcon MuiAutocomplete-hasPopupIcon sc-iGgVNO iLroeS css-1x6bjyf-MuiAutocomplete-root"
                   >
                     <div
                       class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-wb57ya-MuiFormControl-root-MuiTextField-root"

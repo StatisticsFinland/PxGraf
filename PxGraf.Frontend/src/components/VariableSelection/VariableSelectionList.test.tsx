@@ -1,5 +1,5 @@
+import React from 'react';
 import { render } from "@testing-library/react";
-import React from "react";
 import { IVariable, VariableType } from "types/cubeMeta";
 import { FilterType, Query } from "types/query";
 import VariableSelectionList from "./VariableSelectionList";

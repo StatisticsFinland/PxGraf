@@ -24,7 +24,7 @@ exports[`Header component should render correctly 1`] = `
         <img
           alt="navbar.logoAlt"
           class="sc-jXbVAB cBePmw"
-          src="pxgraf-logo.png"
+          src="test-file-stub"
         />
       </a>
       <div

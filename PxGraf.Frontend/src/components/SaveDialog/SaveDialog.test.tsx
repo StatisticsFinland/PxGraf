@@ -1,5 +1,6 @@
-import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
+import { fireEvent, render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
 import { SaveDialog } from './SaveDialog';
 
 jest.mock('react-i18next', () => ({
@@ -30,16 +31,21 @@ describe('Rendering test', () => {
 });
 
 describe('Assertion test', () => {
+    beforeEach(() => {
+        onCloseMock.mockClear();
+        onSaveMock.mockClear();
+    });
+
     it('invokes close function when cancel button is clicked', () => {
         render(<SaveDialog open={true} onClose={onCloseMock} onSave={onSaveMock} />);
         fireEvent.click(screen.getByText('saveDialog.cancel'));
-        expect(onCloseMock).toBeCalledTimes(1);
+        expect(onCloseMock).toHaveBeenCalledTimes(1);
     });
 
     it('invokes save and close function when save button is clicked', () => {
         render(<SaveDialog open={true} onClose={onCloseMock} onSave={onSaveMock} />);
         fireEvent.click(screen.getByText('saveDialog.save'));
-        expect(onSaveMock).toBeCalledTimes(1);
-        expect(onCloseMock).toBeCalledTimes(1);
+        expect(onSaveMock).toHaveBeenCalledTimes(1);
+        expect(onCloseMock).toHaveBeenCalledTimes(1);
     });
 });

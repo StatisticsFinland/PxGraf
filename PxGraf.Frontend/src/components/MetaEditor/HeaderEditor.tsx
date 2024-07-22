@@ -1,6 +1,5 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-
 import { Alert, Skeleton } from '@mui/material';
 import { EditorField } from './Editorfield';
 import { MultiLanguageString } from 'types/multiLanguageString';
