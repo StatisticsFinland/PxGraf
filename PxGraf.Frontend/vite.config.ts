@@ -26,4 +26,7 @@ export default defineConfig({
             '/api': 'http://localhost:8443',
         },
     },
+    build: {
+        outDir: './build',
+    }
 })
