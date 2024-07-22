@@ -3,11 +3,11 @@
 exports[`Rendering test renders correctly 1`] = `
 <DocumentFragment>
   <div
-    class="sc-fqkwJk jYHtqI MuiBox-root css-0"
+    class="sc-fQpRED bwRnBJ MuiBox-root css-0"
   >
     <button
       aria-label="tooltip.open: editor.save"
-      class="sc-aYaIB gUIDUH"
+      class="sc-braxZu jCpbQg"
     >
       <svg
         aria-hidden="true"

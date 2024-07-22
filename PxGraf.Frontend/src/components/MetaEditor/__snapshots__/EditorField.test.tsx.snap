@@ -15,7 +15,7 @@ exports[`Rendering test renders correctly 1`] = `
       </b>
     </label>
     <div
-      class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd sc-aYaIB kSWvok css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root"
+      class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd sc-braxZu dHrRbb css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root"
     >
       <input
         aria-invalid="false"
@@ -90,7 +90,7 @@ exports[`Rendering test renders correctly if limit close 1`] = `
       </b>
     </label>
     <div
-      class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd sc-aYaIB kSWvok css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root"
+      class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd sc-braxZu dHrRbb css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root"
     >
       <input
         aria-invalid="false"
@@ -191,7 +191,7 @@ exports[`Rendering test renders correctly if limit reached 1`] = `
       </b>
     </label>
     <div
-      class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd sc-aYaIB kSWvok css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root"
+      class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd sc-braxZu dHrRbb css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root"
     >
       <input
         aria-invalid="false"
@@ -292,7 +292,7 @@ exports[`Rendering test renders correctly if limit specified but values are shor
       </b>
     </label>
     <div
-      class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd sc-aYaIB kSWvok css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root"
+      class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd sc-braxZu dHrRbb css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root"
     >
       <input
         aria-invalid="false"
