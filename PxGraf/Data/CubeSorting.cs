@@ -1,9 +1,11 @@
-﻿using PxGraf.Data.MetaData;
+﻿using Px.Utils.Models.Metadata.Dimensions;
+using Px.Utils.Models.Metadata.Enums;
+using Px.Utils.Models.Metadata;
 using PxGraf.Enums;
 using PxGraf.Language;
+using PxGraf.Models.Metadata;
 using PxGraf.Models.Requests;
 using PxGraf.Models.Responses;
-using PxGraf.Utility;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -42,7 +44,7 @@ namespace PxGraf.Data
         /// <summary>
         /// Provides all valid sorting options for a visualization. Languages are based on the languages of the cube meta object.
         /// </summary>
-        public static IReadOnlyList<SortingOption> Get(IReadOnlyCubeMeta meta, VisualizationSettingsRequest request)
+        public static IReadOnlyList<SortingOption> Get(IReadOnlyMatrixMetadata meta, VisualizationSettingsRequest request)
         {
             return request.SelectedVisualization switch
             {
@@ -50,10 +52,12 @@ namespace PxGraf.Data
                 VisualizationType.GroupVerticalBarChart => GetGroupVerticalBarChartOptions(),
                 VisualizationType.StackedVerticalBarChart => GetStackedVerticalBarChartOptions(),
                 VisualizationType.PercentVerticalBarChart => GetStackedVerticalBarChartOptions(),
-                VisualizationType.HorizontalBarChart => GetHorizontalBarChartOptions(meta.Languages),
-                VisualizationType.GroupHorizontalBarChart or VisualizationType.StackedHorizontalBarChart or VisualizationType.PercentHorizontalBarChart => GetMultiDimHorizontalBarChartOptions(request.SelectedVisualization, meta, request),
+                VisualizationType.HorizontalBarChart => GetHorizontalBarChartOptions(meta.AvailableLanguages),
+                VisualizationType.GroupHorizontalBarChart or
+                VisualizationType.StackedHorizontalBarChart or
+                VisualizationType.PercentHorizontalBarChart => GetMultiDimHorizontalBarChartOptions(request.SelectedVisualization, meta, request),
                 VisualizationType.PyramidChart => GetPyramidChartOptions(),
-                VisualizationType.PieChart => GetPieChartOptions(meta.Languages),
+                VisualizationType.PieChart => GetPieChartOptions(meta.AvailableLanguages),
                 VisualizationType.LineChart => GetLineChartOptions(),
                 VisualizationType.ScatterPlot => GetScatterPlotOptions(),
                 _ => [],
@@ -80,21 +84,22 @@ namespace PxGraf.Data
                 GetReversedFromDataSorting(languages)
             ];
 
-        private static List<SortingOption> GetMultiDimHorizontalBarChartOptions(VisualizationType visualization, IReadOnlyCubeMeta meta, VisualizationSettingsRequest request)
+        private static List<SortingOption> GetMultiDimHorizontalBarChartOptions(VisualizationType visualization, IReadOnlyMatrixMetadata meta, VisualizationSettingsRequest request)
         {
-            // Selectable variables are excluded from sorting, OBS: '!'
-            List<IReadOnlyVariable> multiselects = meta.GetMultivalueVariables().Where(mvv => !request.Query.VariableQueries[mvv.Code].Selectable).ToList();
-            IReadOnlyVariable sortingOptionsVariable = GetPivot(visualization, meta, request) ? multiselects[1] : multiselects[0];
+            // Selectable dimensions are excluded from sorting, OBS: '!'
+            List<IReadOnlyDimension> multiselects = meta.GetMultivalueDimensions()
+                .Where(mvv => !request.Query.DimensionQueries[mvv.Code].Selectable).ToList();
+            IReadOnlyDimension sortingOptionsDimension = GetPivot(visualization, meta, request) ? multiselects[1] : multiselects[0];
 
-            List<SortingOption> options = [.. GetVariableSortingOptions(sortingOptionsVariable)];
-            // Sort time variables descendingly for GroupHorizontalBarChart
-            if (request.SelectedVisualization == VisualizationType.GroupHorizontalBarChart && sortingOptionsVariable.Type == VariableType.Time)
+            List<SortingOption> options = [.. GetDimensionSortingOptions(sortingOptionsDimension)];
+            // Sort time dimensions descendingly for GroupHorizontalBarChart
+            if (request.SelectedVisualization == VisualizationType.GroupHorizontalBarChart && sortingOptionsDimension.Type == DimensionType.Time)
             {
                 options.Reverse();
             }
-            options.Add(GetSumSorting(meta.Languages));
-            options.Add(GetSameAsDataSorting(meta.Languages));
-            options.Add(GetReversedFromDataSorting(meta.Languages));
+            options.Add(GetSumSorting(meta.AvailableLanguages));
+            options.Add(GetSameAsDataSorting(meta.AvailableLanguages));
+            options.Add(GetReversedFromDataSorting(meta.AvailableLanguages));
             return options;
         }
 
@@ -116,10 +121,10 @@ namespace PxGraf.Data
 
         #endregion
 
-        private static List<SortingOption> GetVariableSortingOptions(IReadOnlyVariable variable)
+        private static List<SortingOption> GetDimensionSortingOptions(IReadOnlyDimension dimension)
         {
             List<SortingOption> options = [];
-            foreach (IReadOnlyVariableValue val in variable.IncludedValues)
+            foreach (IReadOnlyDimensionValue val in dimension.Values)
             {
                 options.Add(new SortingOption(val.Code, val.Name));
             }
@@ -127,7 +132,7 @@ namespace PxGraf.Data
             return options;
         }
 
-        private static bool GetPivot(VisualizationType visualization, IReadOnlyCubeMeta meta, VisualizationSettingsRequest request)
+        private static bool GetPivot(VisualizationType visualization, IReadOnlyMatrixMetadata meta, VisualizationSettingsRequest request)
         {
             bool autoPivot = AutoPivotRules.GetAutoPivot(visualization, meta, request.Query);
             bool manualPivot = ManualPivotRules.GetManualPivotability(visualization, meta, request.Query) && request.PivotRequested;
@@ -138,62 +143,62 @@ namespace PxGraf.Data
 
         private static SortingOption GetAscendingSorting(IEnumerable<string> languages)
         {
-            MultiLanguageString translations = new();
+            Dictionary<string, string> translations = [];
             foreach (string lang in languages)
             {
                 Localization local = Localization.FromLanguage(lang);
-                translations.AddTranslation(lang, local.Translation.SortingOptions.Ascending);
+                translations[lang] = local.Translation.SortingOptions.Ascending;
             }
 
-            return new SortingOption(ASCENDING, translations);
+            return new SortingOption(ASCENDING, new(translations));
         }
 
         private static SortingOption GetDescendingSorting(IEnumerable<string> languages)
         {
-            MultiLanguageString translations = new();
+            Dictionary<string, string> translations = [];
             foreach (string lang in languages)
             {
                 Localization local = Localization.FromLanguage(lang);
-                translations.AddTranslation(lang, local.Translation.SortingOptions.Descending);
+                translations[lang] = local.Translation.SortingOptions.Descending;
             }
 
-            return new SortingOption(DESCENDING, translations);
+            return new SortingOption(DESCENDING, new(translations));
         }
 
         private static SortingOption GetSumSorting(IEnumerable<string> languages)
         {
-            MultiLanguageString translations = new();
+            Dictionary<string, string> translations = [];
             foreach (string lang in languages)
             {
                 Localization local = Localization.FromLanguage(lang);
-                translations.AddTranslation(lang, local.Translation.SortingOptions.Sum);
+                translations[lang] = local.Translation.SortingOptions.Sum;
             }
 
-            return new SortingOption(SUM, translations);
+            return new SortingOption(SUM, new(translations));
         }
 
         private static SortingOption GetSameAsDataSorting(IEnumerable<string> languages)
         {
-            MultiLanguageString translations = new();
+            Dictionary<string, string> translations = [];
             foreach (string lang in languages)
             {
                 Localization local = Localization.FromLanguage(lang);
-                translations.AddTranslation(lang, local.Translation.SortingOptions.NoSorting);
+                translations[lang] = local.Translation.SortingOptions.NoSorting;
             }
 
-            return new SortingOption(NO_SORTING, translations);
+            return new SortingOption(NO_SORTING, new(translations));
         }
 
         private static SortingOption GetReversedFromDataSorting(IEnumerable<string> languages)
         {
-            MultiLanguageString translations = new();
+            Dictionary<string, string> translations = [];
             foreach (string lang in languages)
             {
                 Localization local = Localization.FromLanguage(lang);
-                translations.AddTranslation(lang, local.Translation.SortingOptions.NoSortingReversed);
+                translations[lang] = local.Translation.SortingOptions.NoSortingReversed;
             }
 
-            return new SortingOption(REVERSED, translations);
+            return new SortingOption(REVERSED, new(translations));
         }
 
         #endregion
