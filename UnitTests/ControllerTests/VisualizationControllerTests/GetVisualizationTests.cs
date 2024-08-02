@@ -1,22 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using Moq;
+﻿using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
-using Px.Utils.Models.Metadata.Enums;
-using PxGraf.Caching;
-using PxGraf.Controllers;
-using PxGraf.Data.MetaData;
-using PxGraf.Datasource.PxWebInterface;
-using PxGraf.Enums;
 using PxGraf.Language;
-using PxGraf.Models.Queries;
-using PxGraf.Models.Responses;
 using PxGraf.Settings;
-using PxGraf.Utility;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using UnitTests;
 using UnitTests.Fixtures;
 
 namespace ControllerTests
