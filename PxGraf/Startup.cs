@@ -8,7 +8,6 @@ using Microsoft.FeatureManagement;
 using Microsoft.OpenApi.Models;
 using NLog.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
-using PxGraf.Caching;
 using PxGraf.Settings;
 using PxGraf.Utility;
 using System.Diagnostics.CodeAnalysis;
@@ -128,7 +127,6 @@ namespace PxGraf
                 });
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<ISqFileInterface, SqFileInterface>();
-            services.AddSingleton<IVisualizationResponseCache, VisualizationResponseCache>();
             // TODO: Check from configuration what datasource is being used (api or database) and add that as ICachedDatasource
         }
 
