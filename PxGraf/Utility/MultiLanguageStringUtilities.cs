@@ -1,18 +1,25 @@
-﻿using PxGraf.Language;
+﻿#nullable enable
+using Px.Utils.Language;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace PxGraf.Utility
 {
     public static class MultiLanguageStringUtilities
     {
-        public static void Truncate(this MultiLanguageString input, int maxLength)
+        public static MultilanguageString CopyAndEdit(this MultilanguageString input, MultilanguageString? edit)
         {
+            if(edit is null) return input;
+
+            Dictionary<string, string> editedLanguages = [];
             foreach (string language in input.Languages)
             {
-                if (input[language].Length > maxLength)
-                {
-                    input.EditTranslation(language, input[language][..maxLength]);
-                }
+                editedLanguages[language] = edit.Languages.Contains(language) && !string.IsNullOrEmpty(edit[language])
+                    ? edit[language]
+                    : input[language];
             }
+            return new(editedLanguages);
         }
     }
 }
+#nullable disable

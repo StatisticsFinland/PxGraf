@@ -1,15 +1,16 @@
-﻿using PxGraf.Data.MetaData;
+﻿using Px.Utils.Models.Metadata.Enums;
+using Px.Utils.Models.Metadata;
 using PxGraf.Enums;
+using PxGraf.Models.Metadata;
 using PxGraf.Models.Queries;
 using PxGraf.Utility;
-using System;
 using System.Collections.Generic;
-using System.Linq;
+using System;
 
 namespace PxGraf.Data
 {
     /// <summary>
-    /// Contains the business logic determining when the order of the variables should be reversed
+    /// Contains the business logic determining when the order of the dimensions should be reversed
     /// and the data transposed for draving some spesific chart.
     /// </summary>
     public static class AutoPivotRules
@@ -18,93 +19,93 @@ namespace PxGraf.Data
         /// Delegate representing an auto pivot rule.
         /// </summary>
         /// <returns></returns>
-        public delegate bool AutoPivotRule(IReadOnlyCubeMeta meta);
+        public delegate bool AutoPivotRule(IReadOnlyMatrixMetadata meta);
 
         /// <summary>
         /// Determines the need for autopivoting for basic vertical bar chart.
         /// </summary>
-        public static bool BasicVerticalBarChart(IReadOnlyCubeMeta meta)
+        public static bool BasicVerticalBarChart(IReadOnlyMatrixMetadata meta)
         {
-            if (meta.GetNumberOfMultivalueVariables() > 1)
+            if (meta.GetNumberOfMultivalueDimensions() > 1)
             {
                 var errMsg = $"Cannot determine autopivot for basic vertical bar chart," +
-                    $" the query has {meta.GetNumberOfMultivalueVariables()} multiselect dimensions, but the maximum allowed is 1";
+                    $" the query has {meta.GetNumberOfMultivalueDimensions()} multiselect dimensions, but the maximum allowed is 1";
                 throw new ArgumentException(errMsg);
             }
 
-            // Pivoting is never required here, one variable can only be placed is one order.
+            // Pivoting is never required here, one dimension can only be placed is one order.
             return false;
         }
 
         /// <summary>
         /// Returns true if the data must be pivoted before a group vertical bar chart can be drwn.
         /// If both multiselect dimensions have maximum of 4 values, time or progressive dimensions is the outer dimension.
-        /// The dimension with fewer values is the inner variable by default
+        /// The dimension with fewer values is the inner dimension by default
         /// </summary>
         /// <returns></returns>
-        public static bool GroupVerticalBarChart(IReadOnlyCubeMeta meta)
+        public static bool GroupVerticalBarChart(IReadOnlyMatrixMetadata meta)
         {
-            if (meta.GetNumberOfMultivalueVariables() != 2)
+            if (meta.GetNumberOfMultivalueDimensions() != 2)
             {
                 var errMsg = "Cannot determine autopivot for the group vertical bar chart," +
-                    $" the query has {meta.GetNumberOfMultivalueVariables()} multiselect dimensions, but exactly 2 are required.";
+                    $" the query has {meta.GetNumberOfMultivalueDimensions()} multiselect dimensions, but exactly 2 are required.";
                 throw new ArgumentException(errMsg);
             }
 
-            var multiselects = meta.GetMultivalueVariables();
+            var multiselects = meta.GetMultivalueDimensions();
 
-            if ((multiselects[0].Type == VariableType.Time || multiselects[0].Type == VariableType.Ordinal) &&
-                    !(multiselects[1].Type == VariableType.Time || multiselects[1].Type == VariableType.Ordinal) &&
-                    (multiselects[0].IncludedValues.Count < 5 && multiselects[1].IncludedValues.Count < 5))
+            if ((multiselects[0].Type == DimensionType.Time || multiselects[0].Type == DimensionType.Ordinal) &&
+                    !(multiselects[1].Type == DimensionType.Time || multiselects[1].Type == DimensionType.Ordinal) &&
+                    (multiselects[0].Values.Count < 5 && multiselects[1].Values.Count < 5))
             {
                 return true;
             }
-            return multiselects[0].IncludedValues.Count > multiselects[1].IncludedValues.Count;
+            return multiselects[0].Values.Count > multiselects[1].Values.Count;
         }
 
         /// <summary>
         /// Determines the need for autopivoting for a stacked vertical bar chart.
         /// </summary>
         /// <returns></returns>
-        public static bool StackedVerticalBarChart(IReadOnlyCubeMeta meta)
+        public static bool StackedVerticalBarChart(IReadOnlyMatrixMetadata meta)
         {
-            if (meta.GetNumberOfMultivalueVariables() != 2)
+            if (meta.GetNumberOfMultivalueDimensions() != 2)
             {
                 var errMsg = "Cannot determine autopivot for the stacked vertical bar chart," +
-                    $" the query has {meta.GetNumberOfMultivalueVariables()} multiselect dimensions, but exactly 2 are required.";
+                    $" the query has {meta.GetNumberOfMultivalueDimensions()} multiselect dimensions, but exactly 2 are required.";
                 throw new ArgumentException(errMsg);
             }
 
-            var multiselects = meta.GetMultivalueVariables();
+            var multiselects = meta.GetMultivalueDimensions();
 
-            bool rowVarIsOrdinal = multiselects[0].Type == VariableType.Time || multiselects[0].Type == VariableType.Ordinal;
-            bool colVarIsOrdinal = multiselects[1].Type == VariableType.Time || multiselects[1].Type == VariableType.Ordinal;
+            bool rowVarIsOrdinal = multiselects[0].Type == DimensionType.Time || multiselects[0].Type == DimensionType.Ordinal;
+            bool colVarIsOrdinal = multiselects[1].Type == DimensionType.Time || multiselects[1].Type == DimensionType.Ordinal;
 
             if (rowVarIsOrdinal && !colVarIsOrdinal) return true;
             else if (colVarIsOrdinal && !rowVarIsOrdinal) return false;
-            else return multiselects[0].IncludedValues.Count > multiselects[1].IncludedValues.Count;
+            else return multiselects[0].Values.Count > multiselects[1].Values.Count;
         }
 
         /// <summary>
         /// Determines the need for autopivoting for a percent vertical bar chart.
         /// </summary>
         /// <returns></returns>
-        public static bool PercentVerticalBarChart(IReadOnlyCubeMeta meta) => StackedVerticalBarChart(meta);
+        public static bool PercentVerticalBarChart(IReadOnlyMatrixMetadata meta) => StackedVerticalBarChart(meta);
 
         /// <summary>
         /// Determines the need for autopivoting for a basic horizontal bar chart.
         /// </summary>
         /// <returns></returns>
-        public static bool BasicHorizontalBarChart(IReadOnlyCubeMeta meta)
+        public static bool BasicHorizontalBarChart(IReadOnlyMatrixMetadata meta)
         {
-            if (meta.GetNumberOfMultivalueVariables() > 1)
+            if (meta.GetNumberOfMultivalueDimensions() > 1)
             {
                 var errMsg = $"Cannot determine autopivot for basic horizontal bar chart," +
-                    $" the query has {meta.GetNumberOfMultivalueVariables()} multiselect dimensions, but the maximum allowed is 1";
+                    $" the query has {meta.GetNumberOfMultivalueDimensions()} multiselect dimensions, but the maximum allowed is 1";
                 throw new ArgumentException(errMsg);
             }
 
-            // Pivoting is never required here, one variable can only be placed is one order.
+            // Pivoting is never required here, one dimension can only be placed is one order.
             return false;
         }
 
@@ -112,56 +113,56 @@ namespace PxGraf.Data
         /// Determines the need for autopivoting for a group horizontal bar chart.
         /// </summary>
         /// <returns></returns>
-        public static bool GroupHorizontalBarChart(IReadOnlyCubeMeta meta)
+        public static bool GroupHorizontalBarChart(IReadOnlyMatrixMetadata meta)
         {
-            if (meta.GetNumberOfMultivalueVariables() != 2)
+            if (meta.GetNumberOfMultivalueDimensions() != 2)
             {
                 var errMsg = $"Cannot determine autopivot for the group horizontal bar chart," +
-                    $" the query has {meta.GetNumberOfMultivalueVariables()} multiselect dimensions, but exactly 2 are required";
+                    $" the query has {meta.GetNumberOfMultivalueDimensions()} multiselect dimensions, but exactly 2 are required";
                 throw new ArgumentException(errMsg);
             }
 
-            var multiselects = meta.GetMultivalueVariables();
-            // If the time variable has two values it is the inner variable
-            // The variable with fewer values is the inner variable.
-            return (multiselects[1].Type == VariableType.Time && multiselects[1].IncludedValues.Count == 2) ||
-                multiselects[1].IncludedValues.Count < multiselects[0].IncludedValues.Count;
+            var multiselects = meta.GetMultivalueDimensions();
+            // If the time dimension has two values it is the inner dimension
+            // The dimension with fewer values is the inner dimension.
+            return (multiselects[1].Type == DimensionType.Time && multiselects[1].Values.Count == 2) ||
+                multiselects[1].Values.Count < multiselects[0].Values.Count;
         }
 
         /// <summary>
         /// Determines the need for autopivoting for a stacked horizontal bar chart.
         /// </summary>
         /// <returns></returns>
-        public static bool StackedHorizontalBarChart(IReadOnlyCubeMeta meta)
+        public static bool StackedHorizontalBarChart(IReadOnlyMatrixMetadata meta)
         {
-            if (meta.GetNumberOfMultivalueVariables() != 2)
+            if (meta.GetNumberOfMultivalueDimensions() != 2)
             {
                 var errMsg = $"Cannot determine autopivot for the stacked horizontal bar chart," +
-                    $" the query has {meta.GetNumberOfMultivalueVariables()} multiselect dimensions, but exactly 2 are required";
+                    $" the query has {meta.GetNumberOfMultivalueDimensions()} multiselect dimensions, but exactly 2 are required";
                 throw new ArgumentException(errMsg);
             }
 
-            var multiselects = meta.GetMultivalueVariables();
+            var multiselects = meta.GetMultivalueDimensions();
 
-            // If the time variable has two values it is the inner variable
-            // The variable with fewer values is the inner variable.
-            return multiselects[1].IncludedValues.Count < multiselects[0].IncludedValues.Count;
+            // If the time dimension has two values it is the inner dimension
+            // The dimension with fewer values is the inner dimension.
+            return multiselects[1].Values.Count < multiselects[0].Values.Count;
         }
 
         /// <summary>
         /// Determines the need for autopivoting for a percent horizontal bar chart.
         /// </summary>
         /// <returns></returns>
-        public static bool PercentHorizontalBarChart(IReadOnlyCubeMeta meta) => StackedHorizontalBarChart(meta);
+        public static bool PercentHorizontalBarChart(IReadOnlyMatrixMetadata meta) => StackedHorizontalBarChart(meta);
 
         /// <summary>
         /// Determines the need for autopivoting for a line chart.
         /// </summary>
         /// <returns></returns>
-        public static bool LineChart(IReadOnlyCubeMeta meta)
+        public static bool LineChart(IReadOnlyMatrixMetadata meta)
         {
-            // If the query contains a time variable it is set as the outer variable.
-            // If the query contains multiple progressive variables, the one with most values selected is set as the outer variable.
+            // If the query contains a time dimension it is set as the outer dimension.
+            // If the query contains multiple progressive dimensions, the one with most values selected is set as the outer dimension.
             var timeOrLargestOrdinal = meta.GetMultivalueTimeOrLargestOrdinal();
             if (timeOrLargestOrdinal == null)
             {
@@ -169,23 +170,23 @@ namespace PxGraf.Data
                 throw new ArgumentException(errMsg);
             }
 
-            return meta.GetNumberOfMultivalueVariables() == 2 && meta.GetMultivalueVariables()[0] == timeOrLargestOrdinal;
+            return meta.GetNumberOfMultivalueDimensions() == 2 && meta.GetMultivalueDimensions()[0] == timeOrLargestOrdinal;
         }
 
         /// <summary>
         /// Determines the need for autopivoting for a pie chart.
         /// </summary>
         /// <returns></returns>
-        public static bool PieChart(IReadOnlyCubeMeta meta)
+        public static bool PieChart(IReadOnlyMatrixMetadata meta)
         {
-            if (meta.GetNumberOfMultivalueVariables() != 1)
+            if (meta.GetNumberOfMultivalueDimensions() != 1)
             {
                 var errMsg = $"Cannot determine autopivot for the pie chart," +
-                    $" the query has {meta.GetNumberOfMultivalueVariables()} multiselect dimensions, but the maximum allowed is 1";
+                    $" the query has {meta.GetNumberOfMultivalueDimensions()} multiselect dimensions, but the maximum allowed is 1";
                 throw new ArgumentException(errMsg);
             }
 
-            // Pivoting is never required here, one variable can only be placed is one order.
+            // Pivoting is never required here, one dimension can only be placed is one order.
             return false;
         }
 
@@ -193,28 +194,28 @@ namespace PxGraf.Data
         /// Determines the need for autopivoting for a pyramid chart.
         /// </summary>
         /// <returns></returns>
-        public static bool PyramidChart(IReadOnlyCubeMeta meta)
+        public static bool PyramidChart(IReadOnlyMatrixMetadata meta)
         {
-            // The variable with exactly two values selected must be the inner variable.
-            return meta.GetMultivalueVariables()[0].IncludedValues.Count > 2;
+            // The dimension with exactly two values selected must be the inner dimension.
+            return meta.GetMultivalueDimensions()[0].Values.Count > 2;
         }
 
         /// <summary>
         /// Determines the need for autopivoting for a scatter plot.
         /// </summary>
         /// <returns></returns>
-        public static bool ScatterPlot(IReadOnlyCubeMeta meta)
+        public static bool ScatterPlot(IReadOnlyMatrixMetadata meta)
         {
-            // The content variable with two selected values must be the inner variable.
-            return meta.GetMultivalueVariables()[0].IncludedValues.Count > 2 ||
-                meta.GetMultivalueVariables()[0].Type != VariableType.Content;
+            // The content dimension with two selected values must be the inner dimension.
+            return meta.GetMultivalueDimensions()[0].Values.Count > 2 ||
+                meta.GetMultivalueDimensions()[0].Type != DimensionType.Content;
 
         }
 
         /// <summary>
         /// Checks the autopivoting for the specified visualization type.
         /// </summary>
-        public static bool GetAutoPivot(VisualizationType visualization, IReadOnlyCubeMeta meta)
+        public static bool GetAutoPivot(VisualizationType visualization, IReadOnlyMatrixMetadata meta)
         {
             return visualization switch
             {
@@ -236,18 +237,17 @@ namespace PxGraf.Data
         }
 
         /// <summary>
-        /// Checks the autopivoting for a specified visualization type, selectable variables are collapsed to one value.
+        /// Checks the autopivoting for a specified visualization type, selectable dimensions are collapsed to one value.
         /// </summary>
-        public static bool GetAutoPivot(VisualizationType visualization, IReadOnlyCubeMeta meta, CubeQuery query)
+        public static bool GetAutoPivot(VisualizationType visualization, IReadOnlyMatrixMetadata meta, MatrixQuery query)
         {
-            var varList = meta.BuildMap().ToList();
-            var resultList = new List<VariableMap>();
-            foreach (var varMap in varList)
+            List<IDimensionMap> resultList = [];
+            foreach (IDimensionMap varMap in meta.DimensionMaps)
             {
                 // Selectable varaibles always have a size of 1 and for purposes of this class the actual value does not matter, just the size.
-                if (query.VariableQueries[varMap.Code].Selectable)
+                if (query.DimensionQueries[varMap.Code].Selectable)
                 {
-                    resultList.Add(new VariableMap(varMap.Code, [varMap.ValueCodes[0]]));
+                    resultList.Add(new DimensionMap(varMap.Code, [varMap.ValueCodes[0]]));
                 }
                 else
                 {
@@ -255,7 +255,7 @@ namespace PxGraf.Data
                 }
             }
 
-            var newMata = meta.GetTransform(new CubeMap(resultList));
+            var newMata = meta.GetTransform(new MatrixMap(resultList));
 
             return GetAutoPivot(visualization, newMata);
         }

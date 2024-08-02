@@ -10,7 +10,7 @@ namespace UtilityFunctionsTests
         public void ToPathTest()
         {
             List<string> hierarchy = ["DB", "folder1", "folder2"];
-            PxFileReference sample = new(hierarchy, "foobar");
+            PxTableReference sample = new(hierarchy, "foobar");
 
             Assert.That(sample.ToPath(), Is.EqualTo("DB/folder1/folder2/foobar"));
         }

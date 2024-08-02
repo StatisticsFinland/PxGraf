@@ -1,14 +1,14 @@
 ﻿using NUnit.Framework;
-using PxGraf.Data;
-using PxGraf.Enums;
+using Px.Utils.Models.Data.DataValue;
+using Px.Utils.Models.Metadata.Enums;
+using Px.Utils.Models;
 using PxGraf.Models.Queries;
 using PxGraf.Models.Responses;
 using PxGraf.Models.SavedQueries;
 using PxGraf.Visualization;
 using System.Collections.Generic;
 using System.Linq;
-using UnitTests.TestDummies;
-using UnitTests.TestDummies.DummyQueries;
+using UnitTests;
 
 namespace Visualization
 {
@@ -24,17 +24,17 @@ namespace Visualization
         [Test]
         public static void BuildVisualizationResponseTest_TableOrdering_1_Selectable_ExplicitLayout_For_All()
         {
-            List<VariableParameters> varParams =
+            List<DimensionParameters> varParams =
             [
-                new VariableParameters(VariableType.Content, 1),
-                new VariableParameters(VariableType.OtherClassificatory, 3),
-                new VariableParameters(VariableType.OtherClassificatory, 3) { Selectable = true },
-                new VariableParameters(VariableType.Time, 3),
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Other, 3),
+                new DimensionParameters(DimensionType.Other, 3) { Selectable = true },
+                new DimensionParameters(DimensionType.Time, 3),
             ];
 
             TableVisualizationSettings testSettings = new( new Layout(["variable-0", "variable-1"],["variable-2", "variable-3"]));
 
-            DataCube inputCube = TestDataCubeBuilder.BuildTestDataCube(varParams);
+            Matrix<DecimalDataValue> inputCube = TestDataCubeBuilder.BuildTestMatrix(varParams);
             SavedQuery inputQuery = TestDataCubeBuilder.BuildTestSavedQuery(varParams, false, testSettings);
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(inputCube, inputQuery.Query, testSettings);
 
@@ -46,17 +46,17 @@ namespace Visualization
         [Test]
         public static void BuildVisualizationResponseTest_TableOrdering_1_Selectable_No_ExplicitLayout_For_All()
         {
-            List<VariableParameters> varParams =
+            List<DimensionParameters> varParams =
             [
-                new VariableParameters(VariableType.Content, 1),
-                new VariableParameters(VariableType.OtherClassificatory, 3),
-                new VariableParameters(VariableType.OtherClassificatory, 3) { Selectable = true },
-                new VariableParameters(VariableType.Time, 3),
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Other, 3),
+                new DimensionParameters(DimensionType.Other, 3) { Selectable = true },
+                new DimensionParameters(DimensionType.Time, 3),
             ];
 
             TableVisualizationSettings testSettings = new(new Layout(["variable-1"], ["variable-3"]));
 
-            DataCube inputCube = TestDataCubeBuilder.BuildTestDataCube(varParams);
+            Matrix<DecimalDataValue> inputCube = TestDataCubeBuilder.BuildTestMatrix(varParams);
             SavedQuery inputQuery = TestDataCubeBuilder.BuildTestSavedQuery(varParams, false, testSettings);
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(inputCube, inputQuery.Query, testSettings);
 
@@ -68,13 +68,13 @@ namespace Visualization
         [Test]
         public static void BuildVisualizationResponseTest_TableOrdering_2_Selectables_ExplicitLayout_For_All()
         {
-            List<VariableParameters> varParams =
+            List<DimensionParameters> varParams =
             [
-                new VariableParameters(VariableType.Content, 1),
-                new VariableParameters(VariableType.OtherClassificatory, 3),
-                new VariableParameters(VariableType.OtherClassificatory, 3) { Selectable = true },
-                new VariableParameters(VariableType.Time, 4),
-                new VariableParameters(VariableType.Ordinal, 5) { Selectable = true },
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Other, 3),
+                new DimensionParameters(DimensionType.Other, 3) { Selectable = true },
+                new DimensionParameters(DimensionType.Time, 4),
+                new DimensionParameters(DimensionType.Ordinal, 5) { Selectable = true },
 
             ];
 
@@ -84,7 +84,7 @@ namespace Visualization
                     ["variable-2", "variable-3"]
                 ));
 
-            DataCube inputCube = TestDataCubeBuilder.BuildTestDataCube(varParams);
+            Matrix<DecimalDataValue> inputCube = TestDataCubeBuilder.BuildTestMatrix(varParams);
             SavedQuery inputQuery = TestDataCubeBuilder.BuildTestSavedQuery(varParams, false, testSettings);
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(inputCube, inputQuery.Query, testSettings);
 

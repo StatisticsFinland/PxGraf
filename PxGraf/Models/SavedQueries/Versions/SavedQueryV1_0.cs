@@ -9,7 +9,7 @@ namespace PxGraf.Models.SavedQueries.Versions
 {
     public class SavedQueryV10 : VersionedSavedQuery
     {
-        public CubeQuery Query { get; set; }
+        public MatrixQuery Query { get; set; }
 
         public DateTime CreationTime { get; set; }
 

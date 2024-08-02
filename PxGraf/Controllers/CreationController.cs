@@ -1,99 +1,57 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.FeatureManagement.Mvc;
+using Px.Utils.Language;
+using Px.Utils.Models.Data.DataValue;
+using Px.Utils.Models.Metadata.Dimensions;
+using Px.Utils.Models.Metadata.Enums;
+using Px.Utils.Models.Metadata;
+using Px.Utils.Models;
 using PxGraf.ChartTypeSelection;
-using PxGraf.Data;
 using PxGraf.Data.MetaData;
+using PxGraf.Data;
+using PxGraf.Datasource;
 using PxGraf.Enums;
 using PxGraf.Language;
+using PxGraf.Models.Metadata;
 using PxGraf.Models.Queries;
 using PxGraf.Models.Requests;
+using PxGraf.Models.Responses.DatabaseItems;
 using PxGraf.Models.Responses;
-using PxGraf.PxWebInterface;
-using PxGraf.PxWebInterface.SerializationModels;
 using PxGraf.Settings;
 using PxGraf.Utility;
 using PxGraf.Visualization;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System;
 
 namespace PxGraf.Controllers
 {
-    /// <summary>
-    /// Handles API requests for chart creation by providing endpoints for fetching and validating data, determining valid visualization types, and creating visualizations. Interacts with the PxWeb API through a cached connection.
-    /// </summary>
-    /// <remarks>
-    /// Default constructor.
-    /// </remarks>
-    /// <param name="cachedPxWebConnection">Instance of a <see cref="ICachedPxWebConnection"/> object. Used to interact with PxWeb API and cache data.</param>
-    /// <param name="logger"><see cref="ILogger"/> instance used for logging.</param>
     [FeatureGate("CreationAPI")]
     [ApiController]
     [Route("api/creation")]
-    public class CreationController(ICachedPxWebConnection cachedPxWebConnection, ILogger<CreationController> logger) : ControllerBase
+    public class CreationController(ICachedDatasource datasource, ILogger<CreationController> logger) : ControllerBase
     {
-        private readonly ICachedPxWebConnection _cachedPxWebConnection = cachedPxWebConnection;
+        private readonly ICachedDatasource _datasource = datasource;
         private readonly ILogger<CreationController> _logger = logger;
 
         /// <summary>
         /// Returns a list of database items from the given level of the data base based on the dbPath.
         /// </summary>
         /// <param name="dbPath">Path to the database.</param>
-        /// <param name="queryParameters">Parameters for the query request.</param>
         /// <returns>List of <see cref="DataBaseListingItem"/> objects.</returns>
         [HttpGet("data-bases/{*dbPath}")]
-        public async Task<List<DataBaseListingItem>> GetDataBaseListingAsync([FromRoute] string dbPath, [FromQuery] Dictionary<string, string> queryParameters)
+        public async Task<DatabaseGroupContents> GetDataBaseListingAsync([FromRoute] string dbPath)
         {
-            _logger.LogDebug("Getting database listing with parameters {QueryParameters} GET: api/creation/data-bases/{DbPath}", queryParameters, dbPath);
-
-            string preferredLanguage = DataBaseListingUtilities.GetPreferredLanguage(queryParameters);
-
-            // Get a list of available languages with the preferred language first
-            List<string> languages = DataBaseListingUtilities.GetPrioritizedLanguages(preferredLanguage);
-
-            Dictionary<string, DataBaseListingItem> response = [];
+            const string LOGMSG = "Getting the database listing. GET: api/creation/data-bases/{DbPath}";
+            _logger.LogDebug(LOGMSG, dbPath);
 
             // Find databases and tables with all available languages and add them to the response
-            foreach (string language in languages)
-            {
-                if (string.IsNullOrEmpty(dbPath))
-                {
-                    IEnumerable<DataBaseListResponseItem> dataBases = await _cachedPxWebConnection.GetDataBaseListingAsync(language);
-                    DataBaseListingUtilities.AddOrAppendDataBaseItems(response, dataBases, language);
-                }
-                else
-                {
-                    IEnumerable<TableListResponseItem> tables = await _cachedPxWebConnection.GetDataTableItemListingAsync(language, [.. dbPath.Split("/")]);
-                    DataBaseListingUtilities.AddOrAppendTableItems(response, tables, language);
-                }
-            }
+            DatabaseGroupContents result = await _datasource.GetGroupContentsCachedAsync(dbPath.Split("/"));
 
-            _logger.LogDebug("data-bases/{DbPath} result: {Response}", dbPath, response);
-            return [.. response.Values];
-        }
-
-        /// <summary>
-        /// Returns a list of available languages for all databases.
-        /// </summary>
-        /// <returns>A List of available languages defined by the backend settings that are included in the databases.</returns>
-        [HttpGet("languages")]
-        public async Task<List<string>> GetLanguagesAsync()
-        {
-            _logger.LogDebug("Getting available languages. GET: api/creation/languages");
-            List<string> validLanguages = [];
-            // Checks if any database is available for the given languages
-            foreach (string language in Configuration.Current.LanguageOptions.Available)
-            {
-                List<DataBaseListResponseItem> databases = await _cachedPxWebConnection.GetDataBaseListingAsync(language);
-                if (databases != null)
-                {
-                    validLanguages.Add(language);
-                }
-            }
-            _logger.LogDebug("languages result: {ValidLanguages}", validLanguages);
-            return validLanguages;
+            _logger.LogDebug("data-bases/{DbPath} result: {Result}", dbPath, result);
+            return result;
         }
 
         /// <summary>
@@ -105,15 +63,15 @@ namespace PxGraf.Controllers
         public async Task<ActionResult<CubeMeta>> GetCubeMetaAsync([FromRoute] string tablePath)
         {
             _logger.LogDebug("Requested cube meta for {TablePath} GET: api/creation/cube-meta", tablePath);
-            IReadOnlyCubeMeta readOnlyMeta = await _cachedPxWebConnection.GetCubeMetaCachedAsync(new(tablePath));
+            IReadOnlyMatrixMetadata readOnlyMeta = await _datasource.GetMatrixMetadataCachedAsync(new(tablePath));
             if (readOnlyMeta == null)
             {
-                _logger.LogWarning("cube-meta result or {TablePath}: null. May result from a variable without values.", tablePath);
-                return null;
+                _logger.LogWarning("cube-meta result or {TablePath}: null. May result from a dimension without values.", tablePath);
+                return BadRequest();
             }
-            CubeMeta meta = readOnlyMeta.Clone();
-            _logger.LogDebug("cube-meta result {Meta}", meta);
-            return meta;
+            _logger.LogDebug("cube-meta result {Meta}", readOnlyMeta);
+            // TODO make a serializer for MatrixMetadata and use that here. Needs work on the frontend aswell.
+            return readOnlyMeta.ToCubeMeta();
         }
 
         /// <summary>
@@ -125,46 +83,50 @@ namespace PxGraf.Controllers
         public async Task<TableMetaValidationResult> ValidateTableMetaData([FromRoute] string tablePath)
         {
             _logger.LogDebug("Validating table metadata for {TablePath} GET: api/creation/validate-table-metadata", tablePath);
-            IReadOnlyCubeMeta tableMeta = await _cachedPxWebConnection.GetCubeMetaCachedAsync(new(tablePath));
+            IReadOnlyMatrixMetadata tableMeta = await _datasource.GetMatrixMetadataCachedAsync(new(tablePath));
             if (tableMeta is null)
             {
-                return new(false, false, false);
+                return new(
+                    tableHasContentVariable: false,
+                    tableHasTimeVariable: false,
+                    allVariablesContainValues: false
+                );
             }
             else
             {
                 return new(
-                    tableMeta.Variables.Any(v => v.Type == VariableType.Content),
-                    tableMeta.Variables.Any(v => v.Type == VariableType.Time),
-                    tableMeta.Variables.All(v => v.IncludedValues.Count > 0)
+                    tableMeta.Dimensions.Any(v => v.Type == DimensionType.Content),
+                    tableMeta.Dimensions.Any(v => v.Type == DimensionType.Time),
+                    tableMeta.Dimensions.All(v => v.Values.Count > 0)
                 );
             }
         }
 
         /// <summary>
-        /// Returns a list of values for a given variable using the provided filter.
+        /// Returns a list of values for a given dimension using the provided filter.
         /// </summary>
         /// <param name="filterRequest">Filter request object containing the table reference and the filter.</param>
-        /// <returns>Dictionary with variable codes as keys and their value codes as values</returns>
-        [HttpPost("filter-variable")]
+        /// <returns>Dictionary with dimension codes as keys and their value codes as values</returns>
+        [HttpPost("filter-dimension")]
         public async Task<ActionResult<Dictionary<string, List<string>>>> GetVariableFilterResultAsync([FromBody] FilterRequest filterRequest)
         {
-            _logger.LogDebug("Requesting filter result for {FilterRequest} POST: api/creation/filter-variable", filterRequest);
-            IReadOnlyCubeMeta tableMeta = await _cachedPxWebConnection.GetCubeMetaCachedAsync(filterRequest.TableReference);
+            _logger.LogDebug("Requesting filter result for {FilterRequest} POST: api/creation/filter-dimension", filterRequest);
+            IReadOnlyMatrixMetadata tableMeta = await _datasource.GetMatrixMetadataCachedAsync(filterRequest.TableReference);
 
             Dictionary<string, List<string>> result = filterRequest.Filters.ToDictionary(
                 filter => filter.Key,
                 filter =>
                 {
-                    if (tableMeta.Variables.FirstOrDefault(variable => variable.Code == filter.Key) is Variable variable)
+                    if (tableMeta.Dimensions.FirstOrDefault(dimension => dimension.Code == filter.Key) is IReadOnlyDimension dimension)
                     {
-                        IEnumerable<IReadOnlyVariableValue> filteredValues = filter.Value.Filter(variable.IncludedValues);
+                        IEnumerable<IReadOnlyDimensionValue> filteredValues = filter.Value.Filter(dimension.Values);
                         List<string> filteredValueCodes = filteredValues.Select(value => value.Code).ToList();
-                        _logger.LogDebug("filter-variable result: {FilteredValueCodes}", filteredValueCodes);
+                        _logger.LogDebug("filter-dimension result: {FilteredValueCodes}", filteredValueCodes);
                         return filteredValueCodes;
                     }
                     else
                     {
-                        _logger.LogDebug("filter-variable result: []");
+                        _logger.LogDebug("filter-dimension result: []");
                         return [];
                     }
                 }
@@ -173,47 +135,33 @@ namespace PxGraf.Controllers
             return result;
         }
 
-        /// <summary>
-        /// Returns a default header for a given query.
-        /// </summary>
-        /// <param name="input"><see cref="CubeQuery"/> object containing the table reference and the query.</param>
-        /// <returns><see cref="MultiLanguageString"/> object that contains default headers for the available languages.</returns>
         [HttpPost("default-header")]
-        public async Task<ActionResult<MultiLanguageString>> GetDefaultHeaderAsync([FromBody] CubeQuery input)
+        public async Task<ActionResult<MultilanguageString>> GetDefaultHeaderAsync([FromBody] MatrixQuery input)
         {
             _logger.LogDebug("Requesting default header for {Input} POST: api/creation/default-header", input);
-            IReadOnlyCubeMeta tableMeta = await _cachedPxWebConnection.GetCubeMetaCachedAsync(input.TableReference);
-            CubeMeta tableMetaCopy = tableMeta.Clone();
-            tableMetaCopy.ApplyEditionFromQuery(input);
-            tableMetaCopy.Header.Truncate(Configuration.Current.QueryOptions.MaxHeaderLength);
+            IReadOnlyMatrixMetadata tableMeta = await _datasource.GetMatrixMetadataCachedAsync(input.TableReference);
+            MultilanguageString header = tableMeta.ToQueriedCubeMeta(input).Header;
 
-            _logger.LogDebug("default-header result: {Header}", tableMetaCopy.Header);
-            return tableMetaCopy.Header;
+            _logger.LogDebug("default-header result: {Header}", header);
+            return header;
         }
 
         /// <summary>
         /// Returns a list of valid visualization type names.
         /// </summary>
-        /// <param name="cubeQuery"><see cref="CubeQuery"/> object containing the table reference and the query.</param>
+        /// <param name="cubeQuery"><see cref="MatrixQuery"/> object containing the table reference and the query.</param>
         /// <returns>List of valid visualization type names.</returns>
         [HttpPost("valid-visualizations")]
-        public async Task<ActionResult<List<string>>> GetValidVisualizationTypesAsync([FromBody] CubeQuery cubeQuery)
+        public async Task<ActionResult<List<string>>> GetValidVisualizationTypesAsync([FromBody] MatrixQuery cubeQuery)
         {
             _logger.LogDebug("Requesting valid visualizations for {CubeQuery} POST: api/creation/valid-visualization", cubeQuery);
-            IReadOnlyCubeMeta tableMeta = await _cachedPxWebConnection.GetCubeMetaCachedAsync(cubeQuery.TableReference);
-            CubeMeta tableMetaCopy = tableMeta.Clone();
-            tableMetaCopy.ApplyEditionFromQuery(cubeQuery);
+            IReadOnlyMatrixMetadata tableMeta = await _datasource.GetMatrixMetadataCachedAsync(cubeQuery.TableReference);
+            IReadOnlyMatrixMetadata filteredMeta = tableMeta.FilterDimensionValues(cubeQuery);
 
-            if (tableMetaCopy.Variables.Exists(v => v.IncludedValues.Count == 0))
-            {
-                _logger.LogDebug("valid-visualizations result: []");
-                return new List<string>();
-            }
+            Matrix<DecimalDataValue> matrix = await _datasource.GetMatrixCachedAsync(cubeQuery.TableReference, filteredMeta);
 
-            DataCube dataCube = await _cachedPxWebConnection.GetDataCubeCachedAsync(cubeQuery.TableReference, tableMetaCopy);
-
-            IReadOnlyList<VisualizationType> validTypes = ChartTypeSelector.Selector.GetValidChartTypes(cubeQuery, dataCube);
-            List<string> validTypesList = validTypes.Select(ct => ChartTypeEnumConverter.ToJsonString(ct)).ToList();
+            IReadOnlyList<VisualizationType> validTypes = ChartTypeSelector.Selector.GetValidChartTypes(cubeQuery, matrix);
+            List<string> validTypesList = validTypes.Select(ChartTypeEnumConverter.ToJsonString).ToList();
             _logger.LogDebug("valid-visualizations result: {ValidTypesList}", validTypesList);
             return validTypesList;
         }
@@ -221,20 +169,19 @@ namespace PxGraf.Controllers
         /// <summary>
         /// Returns information about valid and rejected visualization types and query size and size limits.
         /// </summary>
-        /// <param name="cubeQuery"><see cref="CubeQuery"/> object containing the table reference and the query.</param>
+        /// <param name="cubeQuery"><see cref="MatrixQuery"/> object containing the table reference and the query.</param>
         /// <returns><see cref="QueryInfoResponse"/> object that contains information about valid visualization type, reasons for rejected visualization types, query size and limits for header length and query size.</returns>
         [HttpPost("query-info")]
-        public async Task<ActionResult<QueryInfoResponse>> GetQueryInfoAsync([FromBody] CubeQuery cubeQuery)
+        public async Task<ActionResult<QueryInfoResponse>> GetQueryInfoAsync([FromBody] MatrixQuery cubeQuery)
         {
             _logger.LogDebug("Requesting query info for {CubeQuery} POST: api/creation/query-info", cubeQuery);
             int maxQuerySize = Configuration.Current.QueryOptions.MaxQuerySize;
             int maxHeaderLength = Configuration.Current.QueryOptions.MaxHeaderLength;
 
-            IReadOnlyCubeMeta tableMeta = await _cachedPxWebConnection.GetCubeMetaCachedAsync(cubeQuery.TableReference);
-            CubeMeta tableMetaCopy = tableMeta.Clone();
-            tableMetaCopy.ApplyEditionFromQuery(cubeQuery);
+            IReadOnlyMatrixMetadata tableMeta = await _datasource.GetMatrixMetadataCachedAsync(cubeQuery.TableReference);
+            IReadOnlyMatrixMetadata filteredMeta = tableMeta.FilterDimensionValues(cubeQuery);
 
-            int includedValuesCount = tableMetaCopy.Variables.Select(x => x.IncludedValues.Count).Aggregate((a, x) => a * x);
+            int includedValuesCount = filteredMeta.Dimensions.Select(x => x.Values.Count).Aggregate((a, x) => a * x);
             if (includedValuesCount == 0 || includedValuesCount > maxQuerySize)
             {
                 QueryInfoResponse queryInfoResponse = new ()
@@ -249,26 +196,28 @@ namespace PxGraf.Controllers
                 return queryInfoResponse;
             }
 
-            DataCube dataCube = await _cachedPxWebConnection.GetDataCubeCachedAsync(cubeQuery.TableReference, tableMetaCopy);
+            Matrix<DecimalDataValue> matrix = await _datasource.GetMatrixCachedAsync(cubeQuery.TableReference, filteredMeta);
 
             QueryInfoResponse response = new()
             {
-                Size = dataCube.Data.Length,
+                Size = matrix.Data.Length,
                 SizeWarningLimit = Convert.ToInt32(maxQuerySize * 0.75),
                 MaximumSupportedSize = maxQuerySize,
                 MaximumHeaderLength = maxHeaderLength
             };
 
-            foreach (KeyValuePair<VisualizationType, IReadOnlyList<ChartRejectionInfo>> reasonKvp in ChartTypeSelector.Selector.GetRejectionReasons(cubeQuery, dataCube))
+            foreach (KeyValuePair<VisualizationType, IReadOnlyList<ChartRejectionInfo>> reasonKvp in
+                ChartTypeSelector.Selector.GetRejectionReasons(cubeQuery, matrix))
             {
                 if (reasonKvp.Value.Any())
                 {
-                    response.VisualizationRejectionReasons[reasonKvp.Key] = new MultiLanguageString();
+                    Dictionary<string, string> translations = [];
                     foreach (var language in Localization.GetAllAvailableLanguages())
                     {
                         string textInLang = Localization.FromLanguage(language).Translation.RejectionReasons.GetTranslation(reasonKvp.Value[0]);
-                        response.VisualizationRejectionReasons[reasonKvp.Key].AddTranslation(language, textInLang);
+                        translations[language] = textInLang;
                     }
+                    response.VisualizationRejectionReasons[reasonKvp.Key] = new (translations);
                 }
                 else  // no rejection reasons == valid visualization type
                 {
@@ -288,18 +237,17 @@ namespace PxGraf.Controllers
         public async Task<ActionResult<VisualizationRules>> GetVisualizationRulesAsync([FromBody] VisualizationSettingsRequest rulesQuery)
         {
             _logger.LogDebug("Requesting visualization rules for {RulesQuery} POST: api/creation/visualization-rules", rulesQuery);
-            IReadOnlyCubeMeta tableMeta = await _cachedPxWebConnection.GetCubeMetaCachedAsync(rulesQuery.Query.TableReference);
-            CubeMeta tableMetaCopy = tableMeta.Clone();
-            tableMetaCopy.ApplyEditionFromQuery(rulesQuery.Query);
-
-            // All variables must have atleast one value selected
-            if (!tableMetaCopy.Variables.TrueForAll(v => v.IncludedValues.Count != 0))
+            IReadOnlyMatrixMetadata tableMeta = await _datasource.GetMatrixMetadataCachedAsync(rulesQuery.Query.TableReference);
+            IReadOnlyMatrixMetadata filteredMeta = tableMeta.FilterDimensionValues(rulesQuery.Query);
+            
+            // All dimensions must have atleast one value selected
+            if (!filteredMeta.Dimensions.All(v => v.Values.Count != 0))
             {
-                _logger.LogDebug("visualization-rules result: All variables must have atleast one value selected.");
+                _logger.LogDebug("visualization-rules result: All dimensions must have atleast one value selected.");
                 return new VisualizationRules(false, false);
             }
 
-            DataCube dataCube = await _cachedPxWebConnection.GetDataCubeCachedAsync(rulesQuery.Query.TableReference, tableMetaCopy);
+            Matrix<DecimalDataValue> dataCube = await _datasource.GetMatrixCachedAsync(rulesQuery.Query.TableReference, filteredMeta);
 
             IChartTypeSelector selector = ChartTypeSelector.Selector;
             IReadOnlyList<VisualizationType> validTypes = selector.GetValidChartTypes(rulesQuery.Query, dataCube);
@@ -311,15 +259,15 @@ namespace PxGraf.Controllers
                 return new VisualizationRules(false, false);
             }
 
-            bool manualPivotability = ManualPivotRules.GetManualPivotability(rulesQuery.SelectedVisualization, tableMetaCopy, rulesQuery.Query);
-            bool multiSelVar = IsMultivalueSelectableAllowed(rulesQuery.SelectedVisualization, rulesQuery.Query.VariableQueries.Values);
-            IReadOnlyList<SortingOption> sortingOptions = CubeSorting.Get(tableMetaCopy, rulesQuery);
+            bool manualPivotability = ManualPivotRules.GetManualPivotability(rulesQuery.SelectedVisualization, filteredMeta, rulesQuery.Query);
+            bool multiSelVar = IsMultivalueSelectableAllowed(rulesQuery.SelectedVisualization, rulesQuery.Query.DimensionQueries.Values);
+            IReadOnlyList<SortingOption> sortingOptions = CubeSorting.Get(filteredMeta, rulesQuery);
             VisualizationRules.TypeSpecificVisualizationRules typeSpecificRules = new (rulesQuery.SelectedVisualization);
             VisualizationRules visualizationRules = new (manualPivotability, multiSelVar, typeSpecificRules, sortingOptions);
             _logger.LogDebug("visualization-rules result: {VisualizationRules}", visualizationRules);
             return visualizationRules;
 
-            static bool IsMultivalueSelectableAllowed(VisualizationType type, IEnumerable<VariableQuery> varQueries)
+            static bool IsMultivalueSelectableAllowed(VisualizationType type, IEnumerable<DimensionQuery> varQueries)
             {
                 // MultiselectVariable only allowed for LineChart for now. Will be extended to Table in the future.
                 return (type == VisualizationType.LineChart)
@@ -333,34 +281,31 @@ namespace PxGraf.Controllers
         /// <param name="request"><see cref="ChartRequest"/> object containing the query, visualization settings and selected visualization type.</param>
         /// <returns>
         /// <see cref="VisualizationResponse"/> object that contains the data required for rendering the visualization. 
-        /// If the request is missing values for any variable or the selected visualization type is not valid, "Bad Request" response is returned.
+        /// If the request is missing values for any dimension or the selected visualization type is not valid, "Bad Request" response is returned.
         /// </returns>
         [HttpPost("visualization")]
         public async Task<ActionResult<VisualizationResponse>> GetVisualizationAsync([FromBody] ChartRequest request)
         {
             _logger.LogDebug("Requesting visualization for {Request} POST: api/creation/visualization", request);
-            IReadOnlyCubeMeta readOnlyTableMeta = await _cachedPxWebConnection.GetCubeMetaCachedAsync(request.Query.TableReference);
-            CubeMeta tableMetaCopy = readOnlyTableMeta.Clone();
-            tableMetaCopy.ApplyEditionFromQuery(request.Query);
-            tableMetaCopy.Header.Truncate(Configuration.Current.QueryOptions.MaxHeaderLength);
-
+            IReadOnlyMatrixMetadata completeMeta = await _datasource.GetMatrixMetadataCachedAsync(request.Query.TableReference);
+            IReadOnlyMatrixMetadata filteredMeta = completeMeta.FilterDimensionValues(request.Query);
+            
             // The resulting cube would have volume 0
-            if (tableMetaCopy.Variables.Exists(v => v.IncludedValues.Count == 0))
+            if (filteredMeta.Dimensions.Any(d => d.Values.Count == 0))
             {
-                _logger.LogDebug("visualization result: One or more variables have no included values. {TableMetaCopy}", tableMetaCopy);
+                _logger.LogDebug("visualization result: One or more dimensions have no included values. {FilteredMeta}", filteredMeta);
                 return BadRequest();
             }
 
-            DataCube dataCube = await _cachedPxWebConnection.GetDataCubeCachedAsync(request.Query.TableReference, tableMetaCopy);
-
+            Matrix<DecimalDataValue> matrix = await _datasource.GetMatrixCachedAsync(request.Query.TableReference, filteredMeta);
             IChartTypeSelector selector = ChartTypeSelector.Selector;
 
-            if (selector.GetValidChartTypes(request.Query, dataCube).Contains(request.VisualizationSettings.SelectedVisualization))
+            if (selector.GetValidChartTypes(request.Query, matrix).Contains(request.VisualizationSettings.SelectedVisualization))
             {
                 VisualizationSettings vSettings =
-                    request.VisualizationSettings.ToVisualizationSettings(dataCube.Meta, request.Query);
+                    request.VisualizationSettings.ToVisualizationSettings(filteredMeta, request.Query);
 
-                VisualizationResponse visualizationResponse = PxVisualizerCubeAdapter.BuildVisualizationResponse(dataCube, request.Query, vSettings);
+                VisualizationResponse visualizationResponse = PxVisualizerCubeAdapter.BuildVisualizationResponse(matrix, request.Query, vSettings);
                 _logger.LogDebug("visualization result: {VisualizationResponse}", visualizationResponse);
 
                 return visualizationResponse;

@@ -1,11 +1,12 @@
-﻿using PxGraf.Language;
+﻿
+using Px.Utils.Language;
 
 namespace PxGraf.Models.Queries
 {
     public class ContentComponentEdition
     {
-        public MultiLanguageString UnitEdit { get; set; }
+        public MultilanguageString UnitEdit { get; set; }
 
-        public MultiLanguageString SourceEdit { get; set; }
+        public MultilanguageString SourceEdit { get; set; }
     }
 }
