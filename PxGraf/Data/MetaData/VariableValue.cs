@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
-using PxGraf.Language;
-using PxGraf.Models.Queries;
+using Px.Utils.Language;
 using System.Diagnostics.CodeAnalysis;
 
 namespace PxGraf.Data.MetaData
@@ -8,7 +7,7 @@ namespace PxGraf.Data.MetaData
     /// <summary>
     /// Contais all metadata of one variable value.
     /// </summary>
-    public partial class VariableValue : IReadOnlyVariableValue
+    public partial class VariableValue
     {
         /// <summary>
         /// Unique, language independent identifier for this variable value.
@@ -20,15 +19,13 @@ namespace PxGraf.Data.MetaData
         /// Human readable name in one or more languages.
         /// </summary>
         [JsonProperty("name")]
-        public MultiLanguageString Name { get; set; }
-        IReadOnlyMultiLanguageString IReadOnlyVariableValue.Name => Name;
+        public MultilanguageString Name { get; set; }
 
         /// <summary>
         /// Some arbitrary information about the variable value.
         /// </summary>
         [JsonProperty("note")]
-        public MultiLanguageString Note { get; set; }
-        IReadOnlyMultiLanguageString IReadOnlyVariableValue.Note => Note;
+        public MultilanguageString Note { get; set; }
 
         /// <summary>
         /// True if this variable value represents a sum of values, example "ALL" or somethis simillar.
@@ -48,7 +45,6 @@ namespace PxGraf.Data.MetaData
         [JsonProperty("contentComponent")]
         [AllowNull]
         public ContentComponent ContentComponent { get; set; }
-        IReadOnlyContentComponent IReadOnlyVariableValue.ContentComponent => ContentComponent;
 
         /// <summary>
         /// TBA: feature not yet implemented.
@@ -66,8 +62,8 @@ namespace PxGraf.Data.MetaData
         /// <param name="isSumValue"></param>
         public VariableValue(
             string code,
-            MultiLanguageString name,
-            MultiLanguageString note,
+            MultilanguageString name,
+            MultilanguageString note,
             bool isSumValue)
         {
             Code = code;
@@ -79,53 +75,6 @@ namespace PxGraf.Data.MetaData
         /// <summary>
         /// Default constructor for deserialization.
         /// </summary>
-        public VariableValue()
-        {
-
-        }
-
-        /// <summary>
-        /// Generates a deep copy that can be mutated.
-        /// </summary>
-        public VariableValue Clone()
-        {
-            var newValue = new VariableValue(Code, Name.Clone(), Note?.Clone(), IsSumValue);
-            if (ContentComponent != null)
-            {
-                newValue.ContentComponent = ContentComponent.Clone();
-            }
-            if (VirtualComponent != null)
-            {
-                newValue.VirtualComponent = VirtualComponent.Clone();
-            }
-
-            return newValue;
-        }
-
-        /// <summary>
-        /// Apply meta data editions to this value.
-        /// </summary>
-        /// <param name="valueEdit"></param>
-        public void ApplyEdition(VariableQuery.VariableValueEdition valueEdit)
-        {
-            Name.Edit(valueEdit.NameEdit);
-
-            if (valueEdit.ContentComponent is ContentComponentEdition cce && ContentComponent is ContentComponent cc)
-            {
-                var newUnit = cc.Unit.Clone();
-                newUnit.Edit(cce.UnitEdit);
-
-                var newSource = cc.Source.Clone();
-                newSource.Edit(cce.SourceEdit);
-
-                var newContentComponent = new ContentComponent(
-                    newUnit,
-                    newSource,
-                    cc.NumberOfDecimals,
-                    cc.LastUpdated
-                    );
-                ContentComponent = newContentComponent;
-            }
-        }
+        public VariableValue() { }
     }
 }

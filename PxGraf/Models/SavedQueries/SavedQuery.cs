@@ -12,7 +12,7 @@ namespace PxGraf.Models.SavedQueries
         /// <summary>
         /// The query
         /// </summary>
-        public CubeQuery Query { get; set; }
+        public MatrixQuery Query { get; set; }
 
         /// <summary>
         /// When was this query saved
@@ -43,7 +43,7 @@ namespace PxGraf.Models.SavedQueries
         /// <summary>
         /// Use this for builing the object outside of the serialization.
         /// </summary>
-        public SavedQuery(CubeQuery query, bool archived, VisualizationSettings settings, DateTime creationTime)
+        public SavedQuery(MatrixQuery query, bool archived, VisualizationSettings settings, DateTime creationTime)
         {
             Query = query;
             Archived = archived;

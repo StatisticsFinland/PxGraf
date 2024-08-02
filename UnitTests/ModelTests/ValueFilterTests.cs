@@ -1,20 +1,20 @@
 ﻿using NUnit.Framework;
-using PxGraf.Data.MetaData;
 using System.Collections.Generic;
 using PxGraf.Models.Queries;
 using System.Linq;
+using Px.Utils.Models.Metadata.Dimensions;
 
 namespace UnitTests.ModelTests
 {
     internal class ValueFilterTests
     {
-        private readonly List<IReadOnlyVariableValue> values =
+        private readonly List<IReadOnlyDimensionValue> values =
         [
-            new VariableValue("val0", null, null, false),
-            new VariableValue("val1", null, null, false),
-            new VariableValue("val2", null, null, false),
-            new VariableValue("val3", null, null, false),
-            new VariableValue("val4", null, null, false)
+            new DimensionValue("val0", null),
+            new DimensionValue("val1", null),
+            new DimensionValue("val2", null),
+            new DimensionValue("val3", null),
+            new DimensionValue("val4", null)
         ];
 
         [Test]

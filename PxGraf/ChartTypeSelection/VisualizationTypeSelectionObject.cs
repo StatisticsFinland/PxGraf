@@ -1,9 +1,12 @@
-﻿using PxGraf.Data;
-using PxGraf.Data.MetaData;
-using PxGraf.Enums;
-using PxGraf.Language;
+﻿#nullable enable
+using Px.Utils.Language;
+using Px.Utils.Models.Data.DataValue;
+using Px.Utils.Models.Data;
+using Px.Utils.Models.Metadata.Dimensions;
+using Px.Utils.Models.Metadata.Enums;
+using Px.Utils.Models;
+using PxGraf.Models.Metadata;
 using PxGraf.Models.Queries;
-using PxGraf.Models.SavedQueries;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -35,60 +38,17 @@ namespace PxGraf.ChartTypeSelection
         /// </summary>
         public bool HasNegativeData { get; private set; }
 
-        /// <summary>
-        /// Constructs a type selection object based on the query and the actual cube object. Query is used to gain information about dynamic value filters and selectability.
-        /// Dynamic value filters = number of variable values selected may change over time
-        /// </summary>
-        public static VisualizationTypeSelectionObject FromQueryAndCube(CubeQuery query, DataCube cube)
+        public static VisualizationTypeSelectionObject FromQueryAndMatrix(MatrixQuery query, Matrix<DecimalDataValue> matrix)
         {
-            var varInfos = cube.Meta.Variables.Select(v =>
+            var dimInfos = matrix.Metadata.Dimensions.Select(v =>
             {
-                var varQuery = query.VariableQueries[v.Code];
-                return VariableInfo.FromQueryAndVariable(varQuery, v);
+                DimensionQuery varQuery = query.DimensionQueries[v.Code];
+                return VariableInfo.FromQueryAndDimension(varQuery, v);
             }).ToList();
 
-            var result = new VisualizationTypeSelectionObject(varInfos);
+            VisualizationTypeSelectionObject result = new(dimInfos);
 
-            AppendDataInformationToVTSO(result, cube.Data);
-
-            return result;
-        }
-
-        /// <summary>
-        /// Constructs a type selection object based on the query and an archive cube object. Query is used to gain information about dynamic value filters and selectability.
-        /// Dynamic value filters = number of variable values selected may change over time
-        /// </summary>
-        public static VisualizationTypeSelectionObject FromQueryAndCube(CubeQuery query, ArchiveCube cube)
-        {
-            var varInfos = cube.Meta.Variables.Select(v =>
-            {
-                var varQuery = query.VariableQueries[v.Code];
-                return VariableInfo.FromQueryAndVariable(varQuery, v);
-            }).ToList();
-
-            var result = new VisualizationTypeSelectionObject(varInfos);
-
-            AppendDataInformationToVTSO(result, cube.Data);
-
-            return result;
-        }
-
-        public static VisualizationTypeSelectionObject FromCube(DataCube cube)
-        {
-            var varInfos = cube.Meta.Variables.Select(v => VariableInfo.FromVariable(v)).ToList();
-            var result = new VisualizationTypeSelectionObject(varInfos);
-
-            AppendDataInformationToVTSO(result, cube.Data);
-
-            return result;
-        }
-
-        public static VisualizationTypeSelectionObject FromCube(ArchiveCube cube)
-        {
-            var varInfos = cube.Meta.Variables.Select(v => VariableInfo.FromVariable(v)).ToList();
-            var result = new VisualizationTypeSelectionObject(varInfos);
-
-            AppendDataInformationToVTSO(result, cube.Data);
+            AppendDataInformationToVTSO(result, matrix.Data);
 
             return result;
         }
@@ -116,7 +76,7 @@ namespace PxGraf.ChartTypeSelection
             /// <summary>
             /// Visualization type, bar chart, table, etc.
             /// </summary>
-            public VariableType Type { get; }
+            public DimensionType Type { get; }
 
             /// <summary>
             /// How many values does the variable have
@@ -131,9 +91,7 @@ namespace PxGraf.ChartTypeSelection
             /// <summary>
             /// If the variable has a combination value (sum on other values) this is the identifier
             /// </summary>
-#nullable enable
             public string? CombinationValueCode { get; private set; }
-#nullable disable
 
             /// <summary>
             /// How many different units does the variable have.
@@ -148,27 +106,7 @@ namespace PxGraf.ChartTypeSelection
             /// </summary>
             public bool? IsIrregular { get; private set; }
 
-            public static VariableInfo FromVariable(IReadOnlyVariable variable)
-            {
-                VariableInfo result = new(variable.Code, variable.Type, variable.IncludedValues.Count);
-                if (variable.IncludedValues.FirstOrDefault(val => val.IsSumValue) is VariableValue v)
-                {
-                    result.CombinationValueCode = v.Code;
-                }
-
-                if (variable.Type == VariableType.Content)
-                {
-                    result.NumberOfUnits = GetUniqueUnits(variable.IncludedValues.Select(vv => vv.ContentComponent.Unit));
-                }
-                else if (variable.Type == VariableType.Time)
-                {
-                    result.IsIrregular =
-                    TimeVariableInterval.Irregular == TimeVarIntervalParser.DetermineIntervalFromCodes(variable.IncludedValues.Select(v => v.Code));
-                }
-                return result;
-            }
-
-            public static VariableInfo FromQueryAndVariable(VariableQuery query, IReadOnlyVariable variable)
+            public static VariableInfo FromQueryAndDimension(DimensionQuery query, IReadOnlyDimension dimension)
             {
                 int size;
                 bool filterCanChangeToMultiValue;
@@ -179,51 +117,49 @@ namespace PxGraf.ChartTypeSelection
                 }
                 else
                 {
-                    size = variable.IncludedValues.Count;
-
-                    if (query.ValueFilter is FromFilter || query.ValueFilter is AllFilter)
-                    {
-                        filterCanChangeToMultiValue = true;
-                    }
-                    else
-                    {
-                        filterCanChangeToMultiValue = false;
-                    }
+                    size = dimension.Values.Count;
+                    filterCanChangeToMultiValue = query.ValueFilter is FromFilter || query.ValueFilter is AllFilter; 
                 }
 
-                var result = new VariableInfo(variable.Code, variable.Type, size)
+                VariableInfo result = new VariableInfo(dimension.Code, dimension.Type, size)
                 {
                     FilterCanChangeToMultiValue = filterCanChangeToMultiValue,
                 };
 
-                if (variable.IncludedValues.FirstOrDefault(val => val.IsSumValue) is VariableValue v)
+                string? eliminationCode = dimension.GetEliminationValueCode();
+                if (dimension.Values.FirstOrDefault(val => val.Code == eliminationCode) is IReadOnlyDimensionValue v)
                 {
                     result.CombinationValueCode = v.Code;
                 }
 
-                if (variable.Type == VariableType.Content)
+                if (dimension.Type == DimensionType.Content && dimension is ContentDimension cDim)
                 {
                     if (query.Selectable) result.NumberOfUnits = 1;
                     else
                     {
-                        result.NumberOfUnits = GetUniqueUnits(variable.IncludedValues.Select(vv => vv.ContentComponent.Unit));
+                        // TODO replace with a mapper function once implemented to utils
+                        List<MultilanguageString> units = [];
+                        foreach(ContentDimensionValue cDimVal in cDim.Values)
+                        {
+                            units.Add(cDimVal.Unit);
+                        }
+                        result.NumberOfUnits = GetUniqueUnits(units);
                     }
                 }
-                else if (variable.Type == VariableType.Time)
+                else if (dimension.Type == DimensionType.Time && dimension is TimeDimension timeDim)
                 {
-                    result.IsIrregular =
-                    TimeVariableInterval.Irregular == TimeVarIntervalParser.DetermineIntervalFromCodes(variable.IncludedValues.Select(v => v.Code));
+                    result.IsIrregular = timeDim.Interval == TimeDimensionInterval.Irregular ||
+                    TimeDimensionInterval.Irregular == Data.TimeVarIntervalParser.DetermineIntervalFromCodes(timeDim.Values.Codes);
                 }
-
 
                 return result;
             }
 
-            private static int GetUniqueUnits(IEnumerable<IReadOnlyMultiLanguageString> units)
+            private static int GetUniqueUnits(IEnumerable<MultilanguageString> units)
             {
                 int result = 0;
-                List<IReadOnlyMultiLanguageString> chkd = [];
-                foreach (IReadOnlyMultiLanguageString unit in units)
+                List<MultilanguageString> chkd = [];
+                foreach (MultilanguageString unit in units)
                 {
                     if (!chkd.Contains(unit))
                     {
@@ -234,7 +170,7 @@ namespace PxGraf.ChartTypeSelection
                 return result;
             }
 
-            private VariableInfo(string code, VariableType type, int size)
+            private VariableInfo(string code, DimensionType type, int size)
             {
                 Code = code;
                 Type = type;
@@ -242,34 +178,16 @@ namespace PxGraf.ChartTypeSelection
             }
         }
 
-        private static void AppendDataInformationToVTSO(VisualizationTypeSelectionObject vtso, IEnumerable<DataValue> data)
+        private static void AppendDataInformationToVTSO(VisualizationTypeSelectionObject vtso, DecimalDataValue[] data)
         {
-            foreach (DataValue value in data)
+            foreach (DecimalDataValue value in data)
             {
                 if (vtso.HasActualData && vtso.HasMissingData && vtso.HasNegativeData) break;
 
-                if (value.TryGetValue(out var v))
+                if (value.Type == DataValueType.Exists)
                 {
                     vtso.HasActualData = true;
-                    if (v < 0) vtso.HasNegativeData = true;
-                }
-                else
-                {
-                    vtso.HasMissingData = true;
-                }
-            }
-        }
-
-        private static void AppendDataInformationToVTSO(VisualizationTypeSelectionObject vtso, IEnumerable<double?> data)
-        {
-            foreach (double? value in data)
-            {
-                if (vtso.HasActualData && vtso.HasMissingData && vtso.HasNegativeData) break;
-
-                if (value.HasValue)
-                {
-                    vtso.HasActualData = true;
-                    if (value < 0) vtso.HasNegativeData = true;
+                    if (value.UnsafeValue < 0) vtso.HasNegativeData = true;
                 }
                 else
                 {
@@ -279,3 +197,4 @@ namespace PxGraf.ChartTypeSelection
         }
     }
 }
+#nullable disable

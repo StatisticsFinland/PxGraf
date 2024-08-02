@@ -1,4 +1,5 @@
-﻿using PxGraf.ChartTypeSelection.JsonObjects;
+﻿using Px.Utils.Models.Metadata.Enums;
+using PxGraf.ChartTypeSelection.JsonObjects;
 using PxGraf.Enums;
 using System.Collections.Generic;
 
@@ -39,11 +40,11 @@ namespace PxGraf.ChartTypeSelection.ChartSpecificLimits
             var largestMultiselect = GetLargestMultiselect(input);
             var smallerMultiselect = GetSmallerMultiselect(input);
 
-            if (largestMultiselect != null && largestMultiselect.Type == VariableType.Ordinal)
+            if (largestMultiselect != null && largestMultiselect.Type == DimensionType.Ordinal)
             {
                 yield return BuildRejectionInfo(RejectionReason.ProgressiveNotAllowed, largestMultiselect);
             }
-            if (smallerMultiselect != null && smallerMultiselect.Type == VariableType.Ordinal)
+            if (smallerMultiselect != null && smallerMultiselect.Type == DimensionType.Ordinal)
             {
                 yield return BuildRejectionInfo(RejectionReason.ProgressiveNotAllowed, smallerMultiselect);
             }

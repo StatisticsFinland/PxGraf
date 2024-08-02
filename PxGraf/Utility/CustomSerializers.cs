@@ -1,20 +1,21 @@
 ﻿using Newtonsoft.Json;
-using PxGraf.Language;
+using Px.Utils.Language;
 using System;
 using System.Collections.Generic;
 
 namespace PxGraf.Utility
 {
+    // TODO: Start using this converter for MultilanguageStrings
+
     /// <summary>
     /// JsonConverter for serializing/deserializing multilanguage strings in and out of json.
-    ///
     /// Regards empty translations as nulls.
     /// </summary>
-    public class MultiLanguageStringConverter : JsonConverter
+    public class MultilanguageStringConverter : JsonConverter
     {
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            MultiLanguageString mls = value as MultiLanguageString;
+            MultilanguageString mls = value as MultilanguageString;
             Dictionary<string, string> translations = [];
 
             foreach (string language in mls.Languages)
@@ -35,15 +36,9 @@ namespace PxGraf.Utility
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             Dictionary<string, string> result = serializer.Deserialize<Dictionary<string, string>>(reader);
-
             if (result != null && result.Count > 0)
             {
-                MultiLanguageString mls = new();
-                foreach (var kvp in result)
-                {
-                    mls.AddTranslation(kvp.Key, kvp.Value);
-                }
-                return mls;
+                return new MultilanguageString(result);
             }
             else
             {
@@ -53,7 +48,7 @@ namespace PxGraf.Utility
 
         public override bool CanConvert(Type objectType)
         {
-            return typeof(MultiLanguageString).IsAssignableFrom(objectType);
+            return typeof(MultilanguageString).IsAssignableFrom(objectType);
         }
     }
 }

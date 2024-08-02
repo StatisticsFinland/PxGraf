@@ -24,6 +24,6 @@ namespace PxGraf.Models.Requests
         /// <summary>
         /// The query object for the cube containing the header, reference to the table and the selected values.
         /// </summary>
-        public CubeQuery Query { get; set; }
+        public MatrixQuery Query { get; set; }
     }
 }
