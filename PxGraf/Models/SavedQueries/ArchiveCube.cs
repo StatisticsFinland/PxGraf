@@ -1,6 +1,10 @@
 ﻿using Newtonsoft.Json;
-using PxGraf.Data;
+using Px.Utils.Models;
+using Px.Utils.Models.Data;
+using Px.Utils.Models.Data.DataValue;
 using PxGraf.Data.MetaData;
+using PxGraf.Models.Metadata;
+using PxGraf.Models.Queries;
 using System;
 using System.Collections.Generic;
 
@@ -27,7 +31,7 @@ namespace PxGraf.Models.SavedQueries
         /// Collection of key (variable value code coordinates) value (double or missing code) pairs.
         /// </summary>
         [JsonProperty("data")]
-        public List<double?> Data { get; set; }
+        public List<decimal?> Data { get; set; }
 
         /// <summary>
         /// Notes mapped to the indexes of the data array.
@@ -40,66 +44,78 @@ namespace PxGraf.Models.SavedQueries
         /// </summary>
         public ArchiveCube() { }
 
-        private ArchiveCube(DataCube cube)
+        // TODO move to some static file, the pxweb interface uses the same array
+        //Indexed by DataValueType with offset of one
+        private static readonly string[] MissingValueDotCodes =
+        [
+            "",
+            ".",
+            "..",
+            "...",
+            "....",
+            ".....",
+            "......",
+            "-",
+        ];
+
+        private ArchiveCube(CubeMeta meta, IReadOnlyList<DecimalDataValue> data)
         {
             CreationTime = DateTime.Now;
+            Meta = meta;
 
-            Meta = cube.Meta.Clone();
-
-            List<double?> data = [];
-            Dictionary<int, string> dataNotes = [];
-
-            DataValue[] dataList = cube.Data;
-            int dataLen = dataList.Length;
+            int dataLen = data.Count;
+            Data = [];
+            DataNotes = [];
 
             for (int i = 0; i < dataLen; i++)
             {
-                if (dataList[i].Type == DataValueType.Exist)
+                if (data[i].Type == DataValueType.Exists)
                 {
-                    data.Add(dataList[i].UnsafeValue);
+                    Data.Add(data[i].UnsafeValue);
                 }
                 else
                 {
-                    data.Add(null);
-                    dataNotes[i] = dataList[i].ToMachineReadableString(0);
+                    Data.Add(null);
+                    DataNotes[i] = MissingValueDotCodes[(int)data[i].Type];
                 }
             }
-
-            Data = data;
-            DataNotes = dataNotes;
         }
 
         /// <summary>
         /// Creates a data cube object based on the archive cube.
         /// </summary>
         /// <returns></returns>
-        public DataCube ToDataCube()
+        public Matrix<DecimalDataValue> ToMatrix()
         {
-            DataValue[] newData = new DataValue[Data.Count];
-            int dataLen = Data.Count;
-            for (int i = 0; i < dataLen; i++)
+            DecimalDataValue[] newData = new DecimalDataValue[Data.Count];
+            for (int i = 0; i < newData.Length; i++)
             {
                 if (Data[i].HasValue)
                 {
-                    newData[i] = DataValue.FromRaw(Data[i].Value);
+                    newData[i] = new(Data[i].Value, DataValueType.Exists);
                 }
                 else
                 {
-                    newData[i] = DataValue.FromDotCode(DataNotes[i], DataValueType.Missing);
+                    newData[i] = DataNotes[i] switch
+                    {
+                        "." => new(0, DataValueType.Missing),
+                        ".." => new(0, DataValueType.CanNotRepresent),
+                        "..." => new(0, DataValueType.Confidential),
+                        "...." => new(0, DataValueType.NotAcquired),
+                        "....." => new(0, DataValueType.NotAsked),
+                        "......" => new(0, DataValueType.Empty),
+                        _ => throw new InvalidOperationException($"Can not convert missing value code {DataNotes[i]} to DataValueType")
+                    };
                 }
             }
 
-            return new DataCube(Meta, newData);
+            return new Matrix<DecimalDataValue>(Meta.ToMatrixMetadata(), newData);
         }
 
-        /// <summary>
-        /// Builds an archive cube object based on a data cube.
-        /// </summary>
-        /// <param name="cube"></param>
-        /// <returns></returns>
-        public static ArchiveCube FromDataCube(DataCube cube)
+        public static ArchiveCube FromMatrixAndQuery(Matrix<DecimalDataValue> matrix, MatrixQuery query)
         {
-            return new ArchiveCube(cube);
+            CubeMeta pxGrafMeta = matrix.Metadata.ToQueriedCubeMeta(query);
+            return new ArchiveCube(pxGrafMeta, matrix.Data);
         }
     }
 }

@@ -1,32 +1,25 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Px.Utils.Models.Metadata;
+using Px.Utils.Models.Metadata.ExtensionMethods;
 using PxGraf.Data.MetaData;
+using PxGraf.Datasource;
+using PxGraf.Models.Metadata;
 using PxGraf.Models.Responses;
 using PxGraf.Models.SavedQueries;
-using PxGraf.PxWebInterface;
 using PxGraf.Settings;
 using PxGraf.Utility;
 using System.IO;
 using System.Linq;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace PxGraf.Controllers
 {
-    /// <summary>
-    /// Handles requests for saved query metadata requests.
-    /// </summary>
-    /// <remarks>
-    /// Default constructor.
-    /// </remarks>
-    /// <param name="sqFileInterface">Instance of a <see cref="ISqFileInterface"/> object. Used for interacting with saved queries.</param>
-    /// <param name="cachedPxWebConnection">Instance of a <see cref="ICachedPxWebConnection"/> object. Used to interact with PxWeb API and cache data.</param>
-    /// <param name="logger">Instance of the <see cref="ILogger"/> used for logging API calls.</param>
     [ApiController]
     [Route("api/sq/meta")]
-    public class QueryMetaController(ISqFileInterface sqFileInterface, ICachedPxWebConnection cachedPxWebConnection, ILogger<QueryMetaController> logger) : ControllerBase
+    public class QueryMetaController(ISqFileInterface sqFileInterface, ICachedDatasource cachedDatasource, ILogger<QueryMetaController> logger) : ControllerBase
     {
-        private readonly ICachedPxWebConnection _cachedPxWebConnection = cachedPxWebConnection;
+        private readonly ICachedDatasource _cachedDatasource = cachedDatasource;
         private readonly ISqFileInterface _sqFileInterface = sqFileInterface;
         private readonly ILogger<QueryMetaController> _logger = logger;
 
@@ -45,21 +38,21 @@ namespace PxGraf.Controllers
             if (_sqFileInterface.SavedQueryExists(savedQueryId, Configuration.Current.SavedQueryDirectory))
             {
                 SavedQuery savedQuery = await _sqFileInterface.ReadSavedQueryFromFile(savedQueryId, Configuration.Current.SavedQueryDirectory);
-                IReadOnlyCubeMeta readOnlyTableMeta = await GetCubeMeta(savedQuery, savedQueryId);
-                CubeMeta tableMeta = readOnlyTableMeta.Clone();
-                tableMeta.ApplyEditionFromQuery(savedQuery.Query);
+                IReadOnlyMatrixMetadata meta = await GetMatrixMetadata(savedQuery, savedQueryId);
+                CubeMeta pxGrafMeta = meta.ToQueriedCubeMeta(savedQuery.Query);
 
-                QueryMetaResponse queryMetaResponse = new ()
+                QueryMetaResponse queryMetaResponse = new()
                 {
-                    Header = tableMeta.GetHeaderWithoutTimePlaceholders(),
-                    HeaderWithPlaceholders = tableMeta.Header,
+                    // TODO: convert the header building to use dimensions, so we can skip converting to pxgraf meta. Also helps when the archiveserializer produces matrices directly.
+                    Header = Models.Metadata.MatrixMetadataExtensions.ReplaceTimePlaceholdersInHeader(pxGrafMeta.Header, meta.GetTimeDimension()),
+                    HeaderWithPlaceholders = pxGrafMeta.Header,
                     Archived = savedQuery.Archived,
-                    Selectable = savedQuery.Query.VariableQueries.Any(q => q.Value.Selectable),
+                    Selectable = savedQuery.Query.DimensionQueries.Any(q => q.Value.Selectable),
                     VisualizationType = savedQuery.Settings.VisualizationType,
                     TableId = savedQuery.Query.TableReference.Name,
-                    Description = tableMeta.Note,
+                    Description = pxGrafMeta.Note,
                     TableReference = savedQuery.Query.TableReference,
-                    LastUpdated = tableMeta.GetLastUpdated()
+                    LastUpdated = meta.GetContentDimension().Values.Map(cdv => cdv.LastUpdated).Max().ToString(), // TODO: Make some proper conversion function for pxweb time format strings.
                 };
                 _logger.LogInformation("{SavedQueryId} result: {QueryMetaResponse}", savedQueryId, queryMetaResponse);
                 return queryMetaResponse;
@@ -71,14 +64,14 @@ namespace PxGraf.Controllers
             }
         }
 
-        private async Task<IReadOnlyCubeMeta> GetCubeMeta(SavedQuery savedQuery, string id)
+        private async Task<IReadOnlyMatrixMetadata> GetMatrixMetadata(SavedQuery savedQuery, string id)
         {
             if(savedQuery.Archived)
             {
                 if (_sqFileInterface.ArchiveCubeExists(id, Configuration.Current.ArchiveFileDirectory))
                 {
                     ArchiveCube archiveCube = await _sqFileInterface.ReadArchiveCubeFromFile(id, Configuration.Current.ArchiveFileDirectory);
-                    return archiveCube.Meta;
+                    return archiveCube.Meta.ToMatrixMetadata();
                 }
                 else
                 {
@@ -87,7 +80,8 @@ namespace PxGraf.Controllers
             }
             else
             {
-                return await _cachedPxWebConnection.GetCubeMetaCachedAsync(savedQuery.Query.TableReference);
+                IReadOnlyMatrixMetadata meta = await _cachedDatasource.GetMatrixMetadataCachedAsync(savedQuery.Query.TableReference);
+                return meta.FilterDimensionValues(savedQuery.Query);
             }
         }
     }

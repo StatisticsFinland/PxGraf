@@ -11,7 +11,7 @@ namespace PxGraf.Models.Requests
         /// <summary>
         /// Query object that contains the table reference, header text and variable queries.
         /// </summary>
-        public CubeQuery Query { get; set; }
+        public MatrixQuery Query { get; set; }
         
         /// <summary>
         /// Language for the requested query.
