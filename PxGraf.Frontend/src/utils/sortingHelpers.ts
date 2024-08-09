@@ -1,20 +1,30 @@
-import { ITableListResponse } from '../api/services/table';
+import { IDatabaseGroupHeader, IDatabaseTable } from '../api/services/table';
 import { IVariable } from "types/cubeMeta";
 
-/**
+/** TODO: Update summary
  * Function for sorting tables or databases based on the primary language.
  * @param {ITableListResponse[]} data Table data to be sorted.
  * @param {string} primaryLanguage Primary language for sorting.
  * @returns Sorted table data.
  */
-export const sortTableData = (data: ITableListResponse[], primaryLanguage: string): ITableListResponse[] => {
+export const sortDatabaseGroups = (data: IDatabaseGroupHeader[], primaryLanguage: string): IDatabaseGroupHeader[] => {
     return [...data].sort((a, b) => {
-        const textA = a.text[primaryLanguage] || a.text[a.languages[0]];
-        const textB = b.text[primaryLanguage] || b.text[a.languages[0]];
+        const textA = a.name[primaryLanguage] || a.name[a.languages[0]];
+        const textB = b.name[primaryLanguage] || b.name[a.languages[0]];
 
         return textA.localeCompare(textB, primaryLanguage);
     });
 };
+
+//TODO: Update summary
+export const sortDatabaseTables = (data: IDatabaseTable[], primaryLanguage: string): IDatabaseTable[] => {
+    return [...data].sort((a, b) => {
+        const textA = a.name[primaryLanguage] || a.name[a.languages[0]];
+        const textB = b.name[primaryLanguage] || b.name[a.languages[0]];
+
+        return textA.localeCompare(textB, primaryLanguage);
+    });
+}
 
 /**
  * Function for sorting variables for the variable selection list based on their type.

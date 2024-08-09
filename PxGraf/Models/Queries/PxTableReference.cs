@@ -23,9 +23,9 @@ namespace PxGraf.Models.Queries
         /// <summary>
         /// Converts the file reference to a path.
         /// </summary>
-        public string ToPath()
+        public string ToPath(string separator = "/")
         {
-            return $"{string.Join("/", Hierarchy)}/{Name}";
+            return $"{string.Join(separator, Hierarchy)}{separator}{Name}";
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace PxGraf.Models.Queries
         /// <param name="path">Path to the Px file in the system.</param>
         public PxTableReference(string path)
         {
-            List<string> parts = [.. path.Split(Path.PathSeparator)];
+            List<string> parts = [.. path.Split(Path.DirectorySeparatorChar)];
             Hierarchy = parts[0..^1];
             Name = parts[^1];
         }

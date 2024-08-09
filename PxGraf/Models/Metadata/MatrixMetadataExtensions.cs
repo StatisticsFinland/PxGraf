@@ -57,7 +57,7 @@ namespace PxGraf.Models.Metadata
 
             MultilanguageString header = CreateDefaultHeader(dimensions, query, input.AvailableLanguages)
                 .CopyAndEdit(query.ChartHeaderEdit)
-                .CopyAndEditAll(h => h[..Configuration.Current.QueryOptions.MaxHeaderLength]);
+                .CopyAndEditAll(h => h[..int.Min(Configuration.Current.QueryOptions.MaxHeaderLength, h.Length)]);
             return new(input.AvailableLanguages, header, note, dimensions);
         }
         
@@ -94,7 +94,7 @@ namespace PxGraf.Models.Metadata
             }
 
             MultilanguageString header = CreateDefaultHeader(dimensions, null, input.AvailableLanguages)
-                .CopyAndEditAll(h => h[..Configuration.Current.QueryOptions.MaxHeaderLength]);
+                .CopyAndEditAll(h => h[..int.Min(Configuration.Current.QueryOptions.MaxHeaderLength, h.Length)]);
             return new(input.AvailableLanguages, header, note, dimensions);
         }
 
@@ -222,10 +222,17 @@ namespace PxGraf.Models.Metadata
         /// <summary>
         /// Returns the latest update time from the content dimension values.
         /// </summary>
-        public static DateTime GetLastUpdated(this IReadOnlyMatrixMetadata meta)
+        public static DateTime? GetLastUpdated(this IReadOnlyMatrixMetadata meta)
         {
-            IEnumerable<DateTime> times = meta.GetContentDimension().Values.Map(cdv => cdv.LastUpdated);
-            return times.OrderDescending().First();
+            if (meta.TryGetContentDimension(out ContentDimension cd))
+            {
+                IEnumerable<DateTime> times = cd.Values.Map(cdv => cdv.LastUpdated);
+                return times.OrderDescending().First();
+            }
+            else
+            {
+                return null;
+            }
         }
 
         // TODO documentation

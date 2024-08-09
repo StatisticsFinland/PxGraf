@@ -16,6 +16,11 @@ using System.Linq;
 using System.Net.Http;
 using System.Runtime.Serialization;
 using System;
+using PxGraf.Datasource;
+using PxGraf.Datasource.PxWebInterface;
+using PxGraf.Datasource.DatabaseConnection;
+using PxGraf.Datasource.Cache;
+using PxGraf.Models.Queries;
 
 namespace PxGraf
 {
@@ -86,6 +91,7 @@ namespace PxGraf
             services.AddControllers()
                 .AddNewtonsoftJson(mvcNewtonsoftJsonOptions =>
                 {
+                    mvcNewtonsoftJsonOptions.SerializerSettings.Converters.Add(new MultilanguageStringConverter());
                     mvcNewtonsoftJsonOptions.AllowInputFormatterExceptionMessages = HostEnvironment.IsDevelopment();
                     mvcNewtonsoftJsonOptions.SerializerSettings.ContractResolver = new DefaultContractResolver
                     {
@@ -127,7 +133,24 @@ namespace PxGraf
                 });
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<ISqFileInterface, SqFileInterface>();
-            // TODO: Check from configuration what datasource is being used (api or database) and add that as ICachedDatasource
+            services.AddSingleton<IMultiStateMemoryTaskCache>(provider => new MultiStateMemoryTaskCache(
+                Configuration.Current.CacheOptions.Database.SizeLimit,
+                TimeSpan.FromSeconds(Configuration.Current.CacheOptions.CacheFreshnessCheckInterval)));
+            if (Configuration.Current.LocalFilesystemDatabaseConfig.Enabled)
+            {
+                static string referenceToPathConverter(PxTableReference reference) =>
+                    Path.Join(Configuration.Current.LocalFilesystemDatabaseConfig.DatabaseRootPath, reference.ToPath(Path.DirectorySeparatorChar.ToString()));
+                services.AddSingleton<IFileDatasource>(provider => new LocalFilesystemDatabase(
+                    Configuration.Current.LocalFilesystemDatabaseConfig,
+                    referenceToPathConverter));
+                services.AddSingleton<ICachedDatasource, CachedFileDatasource>();
+            }
+            else
+            {
+                services.AddSingleton<IPxWebConnection, PxWebConnection>();
+                services.AddSingleton<IApiDatasource, PxWebV1ApiInterface>();
+                services.AddSingleton<ICachedDatasource, CachedApiDatasource>();
+            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

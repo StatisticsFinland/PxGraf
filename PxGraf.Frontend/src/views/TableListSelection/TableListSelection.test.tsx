@@ -55,29 +55,29 @@ const setUiContentLanguage = jest.fn();
 const mockTableResult: ITableResult = {
     isLoading: false,
     isError: false,
-    data: [
-        {
-            text: { 'fi': 'foo1-fi', 'en': 'foo1-en', 'sv': 'foo1-sv'},
-            id: 'id1',
-            type: 'l',
-            updated: '1.1.2000',
-            languages: ['fi', 'en', 'sv']
-        },
-        {
-            text: { 'fi': 'foo2-fi', 'en': 'foo2-en'},
-            id: 'id2',
-            type: 'l',
-            updated: '1.1.2000',
-            languages: ['fi', 'en']
-        },
-        {
-            text: { 'fi': 'foo3-fi', 'en': 'foo3-en', 'sv': 'foo3-sv' },
-            id: 'id2',
-            type: 't',
-            updated: '1.1.2000',
-            languages: ['fi', 'en', 'sv']
-        }
-    ]
+    data:
+    {
+        headers: [
+            {
+                name: { 'fi': 'foo1-fi', 'en': 'foo1-en', 'sv': 'foo1-sv' },
+                code: 'id1',
+                languages: ['fi', 'en', 'sv']
+            },
+            {
+                name: { 'fi': 'foo2-fi', 'en': 'foo2-en' },
+                code: 'id2',
+                languages: ['fi', 'en']
+            }
+        ],
+        files: [
+            {
+                name: { 'fi': 'foo3-fi', 'en': 'foo3-en', 'sv': 'foo3-sv' },
+                code: 'id2',
+                lastUpdated: '1.1.2000',
+                languages: ['fi', 'en', 'sv']
+            }
+        ],
+    }
 }
 
 const mockLanguagesResult = ["fi", "en", "sv"];

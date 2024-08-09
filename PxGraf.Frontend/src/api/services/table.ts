@@ -1,7 +1,7 @@
 /* istanbul ignore file */
 
 import ApiClient from "api/client";
-import { useQuery } from "react-query";
+import { useQuery, UseQueryResult } from "react-query";
 import { defaultQueryOptions } from "utils/ApiHelpers";
 import { MultiLanguageString } from "../../types/multiLanguageString";
 
@@ -13,15 +13,22 @@ import { MultiLanguageString } from "../../types/multiLanguageString";
  * @property {MultiLanguageString} text - The description of the table as a multi-language string.
  * @property {string[]} languages - Available languages of the table.
  */
-export interface ITableListResponse {
-    id: string;
-    type?: 't' | 'l';
-    updated?: string;
-    text: MultiLanguageString;
-    languages?: string[];
+export interface IDatabaseGroupContents {
+    headers: IDatabaseGroupHeader[];
+    files: IDatabaseTable[];
 }
 
-/**
+export interface IDatabaseGroupHeader {
+    code: string;
+    name: MultiLanguageString;
+    languages: string[];
+}
+
+export interface IDatabaseTable extends IDatabaseGroupHeader {
+    lastUpdated: string;
+}
+
+/** TODO: Update summary
  * Interface for a table result.
  * @property {boolean} isLoading - Flag to indicate if the data is still loading.
  * @property {boolean} isError - Flag to indicate if an error occurred during loading.
@@ -30,29 +37,22 @@ export interface ITableListResponse {
 export interface ITableResult {
     isLoading: boolean;
     isError: boolean;
-    data: ITableListResponse[];
+    data: IDatabaseGroupContents;
 }
 
-const fetchTable = async (idStack: string[], lang: string): Promise<ITableListResponse[]> => {
+const fetchTable = async (idStack: string[]): Promise<IDatabaseGroupContents> => {
     const client = new ApiClient();
     const path = idStack.join("/");
     const url = "creation/data-bases/" + path;
-    const getParams = {
-        'lang': lang
-    }
 
-    return await client.getAsync(url, getParams);
+    return await client.getAsync(url);
 };
 
-export const useTableQuery = (idStack: string[], lang: string): ITableResult => {
-    // If trying to fetch a database without a language, return empty
-    const fetchFunction = lang ?
-        () => fetchTable(idStack, lang) :
-        () => Promise.resolve([]);
+export const useTableQuery = (idStack: string[]): ITableResult => {
+    const result = useQuery(
+        ["table", idStack],
+        () => fetchTable(idStack),
+        defaultQueryOptions);
 
-    return useQuery(
-        ['table', ...idStack, lang],
-        fetchFunction,
-        defaultQueryOptions,
-    );
+    return result;
 };

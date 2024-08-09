@@ -47,8 +47,9 @@ namespace PxGraf.Controllers
             const string LOGMSG = "Getting the database listing. GET: api/creation/data-bases/{DbPath}";
             _logger.LogDebug(LOGMSG, dbPath);
 
+            string[] hierarchy = dbPath is not null ? dbPath.Split("/") : [];
             // Find databases and tables with all available languages and add them to the response
-            DatabaseGroupContents result = await _datasource.GetGroupContentsCachedAsync(dbPath.Split("/"));
+            DatabaseGroupContents result = await _datasource.GetGroupContentsCachedAsync(hierarchy);
 
             _logger.LogDebug("data-bases/{DbPath} result: {Result}", dbPath, result);
             return result;

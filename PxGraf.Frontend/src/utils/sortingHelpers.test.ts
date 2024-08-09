@@ -1,5 +1,5 @@
-import { ITableListResponse } from '../api/services/table';
-import { sortTableData, sortedVariables } from './sortingHelpers';
+import { IDatabaseTable } from '../api/services/table';
+import { sortDatabaseGroups, sortedVariables } from './sortingHelpers';
 import { IVariable, VariableType } from "types/cubeMeta";
 
 const mockVariables: IVariable[] =
@@ -311,26 +311,23 @@ const mockVariables: IVariable[] =
     }
 ]
 
-const mockTableData: ITableListResponse[] = [
+const mockTableData: IDatabaseTable[] = [
     {
-        id: '0',
-        type: 't',
-        updated: '2024-6-10',
-        text: { en: 'Foo-en', fi: 'Foo-fi' },
+        code: '0',
+        lastUpdated: '2024-6-10',
+        name: { en: 'Foo-en', fi: 'Foo-fi' },
         languages: ['en', 'fi'],
     },
     {
-        id: '1',
-        type: 't',
-        updated: '2021-6-10',
-        text: { en: 'Bar-en', fi: 'Bar-fi' },
+        code: '1',
+        lastUpdated: '2021-6-10',
+        name: { en: 'Bar-en', fi: 'Bar-fi' },
         languages: ['en', 'fi'],
     },
     {
-        id: '2',
-        type: 't',
-        updated: '2021-6-10',
-        text: { fi: 'Baz-fi' },
+        code: '2',
+        lastUpdated: '2021-6-10',
+        name: { fi: 'Baz-fi' },
         languages: ['fi'],
     },
 ];
@@ -350,9 +347,9 @@ describe('Assertion tests', () => {
     });
 
     it('sorts table data by primary or first available language', () => {
-        const sortedData = sortTableData(mockTableData, mockPrimaryLanguage);
+        const sortedData = sortDatabaseGroups(mockTableData, mockPrimaryLanguage);
         const expected = ["1", "2", "0"];
-        const result = sortedData.map((item) => item.id);
+        const result = sortedData.map((item) => item.code);
         expect(result).toEqual(expected);
     });
 });

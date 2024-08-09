@@ -32,7 +32,7 @@ namespace PxGraf.Datasource.DatabaseConnection
         {
             List<PxTableReference> tables = [];
             const string PX_FILE_FILTER = "*.px";
-            string path = Path.Combine(config.DatabaseRootPath, string.Join(Path.PathSeparator, groupHierarcy));
+            string path = Path.Combine(config.DatabaseRootPath, string.Join(Path.DirectorySeparatorChar, groupHierarcy));
             foreach (string pxFile in Directory.EnumerateFiles(path, PX_FILE_FILTER))
             {
                 tables.Add(new PxTableReference(pxFile.Remove(0, config.DatabaseRootPath.Length)));
@@ -49,11 +49,12 @@ namespace PxGraf.Datasource.DatabaseConnection
         {
             List<DatabaseGroupHeader> headers = [];
 
-            string path = Path.Combine(config.DatabaseRootPath, string.Join(Path.PathSeparator, groupHierarcy));
+            string path = Path.Combine(config.DatabaseRootPath, string.Join(Path.DirectorySeparatorChar, groupHierarcy));
             foreach (string directory in Directory.EnumerateDirectories(path))
             {
                 string code = new DirectoryInfo(directory).Name;
                 MultilanguageString alias = GetGroupName(directory);
+                if (!alias.Languages.Any()) continue; // Skip folders without alias folder - they are not valid database groups
                 headers.Add(new DatabaseGroupHeader(code, [.. alias.Languages], alias));
             }
 
@@ -107,6 +108,9 @@ namespace PxGraf.Datasource.DatabaseConnection
         /// <inheritdoc/> 
         public async Task<IReadOnlyMatrixMetadata> GetMatrixMetadataAsync(PxTableReference tableReference)
         {
+            if (!tableReference.Name.EndsWith(".px"))
+                tableReference.Name += ".px";
+
             string path = _referenceToPath(tableReference);
             using Stream readStream = File.OpenRead(path);
             PxFileMetadataReader metadataReader = new();
