@@ -31,7 +31,16 @@ namespace PxGraf.Models.Metadata
                 List<VariableValue> values = [];
                 foreach (IReadOnlyDimensionValue value in dimQuery.ValueFilter.Filter(dimension.Values))
                 {
-                    DimensionQuery.VariableValueEdition valueEdit = dimQuery.ValueEdits[value.Code];
+                    if (dimQuery.ValueEdits.TryGetValue(value.Code, out DimensionQuery.VariableValueEdition? valueEdit))
+                    {
+                        valueEdit = new();
+                        dimQuery.ValueEdits.Add(value.Code, valueEdit);
+                        if (value is ContentDimensionValue)
+                        {
+                            valueEdit.ContentComponent = new();
+                        }
+                    }
+
                     MultilanguageString? valueNote = value.GetValueProperty("VALUENOTE", input.DefaultLanguage);
                     MultilanguageString editedValName = value.Name.CopyAndEdit(valueEdit.NameEdit);
                     VariableValue newValue = new(value.Code, editedValName, valueNote, eliminationCode == value.Code);
@@ -120,7 +129,7 @@ namespace PxGraf.Models.Metadata
                 else
                 {
                     MultilanguageString eliminationName = property.ValueAsMultilanguageString('"', dimension.Name.Languages.First());
-                    return dimension.Values.First(v => v.Name.Equals(eliminationName)).Code;
+                    return dimension.Values.FirstOrDefault(v => v.Name.Equals(eliminationName))?.Code;
                 }
             }
             return null;
