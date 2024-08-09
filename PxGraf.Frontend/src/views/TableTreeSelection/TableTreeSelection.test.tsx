@@ -40,22 +40,23 @@ const setUiContentLanguage = jest.fn();
 const mockTableResult: ITableResult = {
     isLoading: false,
     isError: false,
-    data: [
-        {
-            text: { 'fi': 'foo1', 'en': 'foo1', 'sv': 'foo1'},
-            id: 'id1',
-            type: 't',
-            updated: '1.1.2000',
-            languages: ['fi', 'en', 'sv']
-        },
-        {
-            text: { 'fi': 'foo2', 'en': 'foo2'},
-            id: 'id2',
-            type: 't',
-            updated: '1.1.2000',
-            languages: ['fi', 'en']
-        }
-    ]
+    data: {
+        headers: [],
+        files: [
+            {
+                name: { 'fi': 'foo1', 'en': 'foo1', 'sv': 'foo1' },
+                code: 'id1',
+                lastUpdated: '1.1.2000',
+                languages: ['fi', 'en', 'sv']
+            },
+            {
+                name: { 'fi': 'foo2', 'en': 'foo2' },
+                code: 'id2',
+                lastUpdated: '1.1.2000',
+                languages: ['fi', 'en']
+            }
+        ],
+    }
 }
 
 jest.mock('api/services/table', () => ({

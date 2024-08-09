@@ -1,13 +1,13 @@
 import { Divider, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import FileIcon from '@mui/icons-material/InsertDriveFileOutlined';
-import { ITableListResponse } from "api/services/table";
+import { IDatabaseTable } from "api/services/table";
 import React from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 import { urls } from "Router";
 import { UiLanguageContext } from "contexts/uiLanguageContext";
-import { parseLanguageString } from "../../api/services/languages";
+import { parseLanguageString } from '../../utils/ApiHelpers';
 
 const StyledListItem = styled(ListItem)`
   background-color: #f8f8f8;
@@ -15,7 +15,7 @@ const StyledListItem = styled(ListItem)`
 
 interface ITableItemProps {
     currentPath: string[];
-    item: ITableListResponse;
+    item: IDatabaseTable;
     depth: number;
 }
 
@@ -30,13 +30,13 @@ export const TableItem: React.FC<ITableItemProps> = ({ currentPath, item, depth 
     const { language } = React.useContext(UiLanguageContext);
     const displayLanguage = item.languages.includes(language) ? language : item.languages[0];
 
-    return <React.Fragment key={`${item.id}-key`}>
+    return <React.Fragment key={`${item.code}-key`}>
         <StyledListItem id={currentPath.join('-')}>
             <ListItemButton sx={{ mr: 3, pl: depth * 4 }} component={Link} to={urls.editor(currentPath)}>
                 <ListItemIcon sx={{ minWidth: '32px' }}>
                     <FileIcon />
                 </ListItemIcon>
-                <ListItemText primary={`${item.text[displayLanguage]} ${parseLanguageString(item.languages)}`} secondary={t("tableSelect.updated") + ": " + new Date(item.updated).toLocaleString(language)} />
+                <ListItemText primary={`${item.name[displayLanguage]} ${parseLanguageString(item.languages)}`} secondary={t("tableSelect.updated") + ": " + new Date(item.lastUpdated).toLocaleString(language)} />
             </ListItemButton>
         </StyledListItem>
         <Divider />

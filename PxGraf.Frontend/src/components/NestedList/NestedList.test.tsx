@@ -42,15 +42,6 @@ const mockTableQueryResult = {
     ]
 }
 
-const mockLanguagesResult = ["fi", "en", "sv"];
-
-jest.mock('api/services/languages', () => ({
-    ...jest.requireActual('api/services/languages'),
-    useLanguagesQuery: () => {
-        return mockLanguagesResult;
-    },
-}));
-
 jest.mock('api/services/table', () => ({
     ...jest.requireActual('api/services/table'),
     useTableQuery: () => {

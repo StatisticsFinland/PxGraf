@@ -11,10 +11,9 @@ import { MultiLanguageString } from "../../types/multiLanguageString";
 interface ITableInfoProps {
     path: string;
     item: {
-        id?: string;
-        updated?: string;
-        type?: 't' | 'l';
-        text?: MultiLanguageString;
+        code?: string;
+        lastUpdated?: string;
+        name?: MultiLanguageString;
         languages?: string[];
     };
 }
@@ -22,7 +21,7 @@ interface ITableInfoProps {
 export const TableInfo: React.FC<ITableInfoProps> = ({ path, item }) => {
     const { t } = useTranslation();
     const { language } = React.useContext(UiLanguageContext);
-    const currentPath = [path, item.id];
+    const currentPath = [path, item.code];
     const displayLanguage = item.languages.includes(language) ? language : item.languages[0];
 
     return (
@@ -31,10 +30,10 @@ export const TableInfo: React.FC<ITableInfoProps> = ({ path, item }) => {
                 <ListItemText primary={
                     <>
                         <Typography variant="body1" sx={{ ...spacing(1) }}>
-                            {item.text[displayLanguage]}
+                            {item.name[displayLanguage]}
                         </Typography>
                         <Typography variant="body2" sx={{ ...spacing(1) }}>
-                            {t("tableSelect.updated") + ": " + new Date(item.updated).toLocaleString(language)}
+                            {t("tableSelect.updated") + ": " + new Date(item.lastUpdated).toLocaleString(language)}
                         </Typography>
                     </>
                 } />

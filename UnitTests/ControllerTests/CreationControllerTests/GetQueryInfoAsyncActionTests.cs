@@ -3,6 +3,18 @@ using PxGraf.Language;
 using PxGraf.Settings;
 using UnitTests.Fixtures;
 using NUnit.Framework;
+using PxGraf.Controllers;
+using UnitTests;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Px.Utils.Models.Metadata.Enums;
+using PxGraf.Models.Queries;
+using Microsoft.AspNetCore.Mvc;
+using PxGraf.Models.Responses;
+using PxGraf.Enums;
+using Px.Utils.Language;
+using System.Linq;
+using System;
 
 namespace CreationControllerTests
 {
@@ -19,36 +31,26 @@ namespace CreationControllerTests
             Configuration.Load(configuration);
         }
 
-        // TODO: Fix tests
-        
-        /*
-
-        private static CreationController BuildController(List<VariableParameters> cubeParams, List<VariableParameters> metaParams)
-        {
-            // TODO Fix
-            throw new NotImplementedException();
-        }
-
         [Test]
         public async Task SimpleSuccessTest_Success()
         {
-            List<VariableParameters> cubeParams =
+            List<DimensionParameters> cubeParams =
             [
-                new VariableParameters(DimensionType.Content, 1),
-                new VariableParameters(DimensionType.Time, 10),
-                new VariableParameters(DimensionType.Other, 1),
-                new VariableParameters(DimensionType.Other, 1)
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 10),
+                new DimensionParameters(DimensionType.Other, 1),
+                new DimensionParameters(DimensionType.Other, 1)
             ];
 
-            List<VariableParameters> metaParams =
+            List<DimensionParameters> metaParams =
             [
-                new VariableParameters(DimensionType.Content, 10),
-                new VariableParameters(DimensionType.Time, 10),
-                new VariableParameters(DimensionType.Other, 15),
-                new VariableParameters(DimensionType.Other, 7),
+                new DimensionParameters(DimensionType.Content, 10),
+                new DimensionParameters(DimensionType.Time, 10),
+                new DimensionParameters(DimensionType.Other, 15),
+                new DimensionParameters(DimensionType.Other, 7),
             ];
 
-            CreationController testController = BuildController(cubeParams, metaParams);
+            CreationController testController = TestCreationControllerBuilder.BuildController(cubeParams, metaParams);
             MatrixQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
             ActionResult<QueryInfoResponse> actionResult = await testController.GetQueryInfoAsync(cubeQuery);
 
@@ -58,23 +60,23 @@ namespace CreationControllerTests
         [Test]
         public async Task ValidChartTypesTest_LineChart_HorizontalBarChart_Table()
         {
-            List<VariableParameters> cubeParams =
+            List<DimensionParameters> cubeParams =
             [
-                new VariableParameters(DimensionType.Content, 1),
-                new VariableParameters(DimensionType.Time, 10),
-                new VariableParameters(DimensionType.Other, 1),
-                new VariableParameters(DimensionType.Other, 1)
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 10),
+                new DimensionParameters(DimensionType.Other, 1),
+                new DimensionParameters(DimensionType.Other, 1)
             ];
 
-            List<VariableParameters> metaParams =
+            List<DimensionParameters> metaParams =
             [
-                new VariableParameters(DimensionType.Content, 10),
-                new VariableParameters(DimensionType.Time, 10),
-                new VariableParameters(DimensionType.Other, 15),
-                new VariableParameters(DimensionType.Other, 7),
+                new DimensionParameters(DimensionType.Content, 10),
+                new DimensionParameters(DimensionType.Time, 10),
+                new DimensionParameters(DimensionType.Other, 15),
+                new DimensionParameters(DimensionType.Other, 7),
             ];
 
-            CreationController testController = BuildController(cubeParams, metaParams);
+            CreationController testController = TestCreationControllerBuilder.BuildController(cubeParams, metaParams);
             MatrixQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
             ActionResult<QueryInfoResponse> actionResult = await testController.GetQueryInfoAsync(cubeQuery);
 
@@ -85,23 +87,23 @@ namespace CreationControllerTests
         [Test]
         public async Task SizeTest_450()
         {
-            List<VariableParameters> cubeParams =
+            List<DimensionParameters> cubeParams =
             [
-                new VariableParameters(DimensionType.Content, 1),
-                new VariableParameters(DimensionType.Time, 10),
-                new VariableParameters(DimensionType.Other, 3),
-                new VariableParameters(DimensionType.Other, 15)
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 10),
+                new DimensionParameters(DimensionType.Other, 3),
+                new DimensionParameters(DimensionType.Other, 15)
             ];
 
-            List<VariableParameters> metaParams =
+            List<DimensionParameters> metaParams =
             [
-                new VariableParameters(DimensionType.Content, 10),
-                new VariableParameters(DimensionType.Time, 10),
-                new VariableParameters(DimensionType.Other, 15),
-                new VariableParameters(DimensionType.Other, 70),
+                new DimensionParameters(DimensionType.Content, 10),
+                new DimensionParameters(DimensionType.Time, 10),
+                new DimensionParameters(DimensionType.Other, 15),
+                new DimensionParameters(DimensionType.Other, 70),
             ];
 
-            CreationController testController = BuildController(cubeParams, metaParams);
+            CreationController testController = TestCreationControllerBuilder.BuildController(cubeParams, metaParams);
             MatrixQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
             ActionResult<QueryInfoResponse> actionResult = await testController.GetQueryInfoAsync(cubeQuery);
 
@@ -112,23 +114,23 @@ namespace CreationControllerTests
         [Test]
         public async Task RejectionReasonsTest_8Rejected()
         {
-            List<VariableParameters> cubeParams =
+            List<DimensionParameters> cubeParams =
             [
-                new VariableParameters(DimensionType.Content, 1),
-                new VariableParameters(DimensionType.Time, 10),
-                new VariableParameters(DimensionType.Other, 3),
-                new VariableParameters(DimensionType.Other, 1)
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 10),
+                new DimensionParameters(DimensionType.Other, 3),
+                new DimensionParameters(DimensionType.Other, 1)
             ];
 
-            List<VariableParameters> metaParams =
+            List<DimensionParameters> metaParams =
             [
-                new VariableParameters(DimensionType.Content, 10),
-                new VariableParameters(DimensionType.Time, 10),
-                new VariableParameters(DimensionType.Other, 15),
-                new VariableParameters(DimensionType.Other, 70),
+                new DimensionParameters(DimensionType.Content, 10),
+                new DimensionParameters(DimensionType.Time, 10),
+                new DimensionParameters(DimensionType.Other, 15),
+                new DimensionParameters(DimensionType.Other, 70),
             ];
 
-            CreationController testController = BuildController(cubeParams, metaParams);
+            CreationController testController = TestCreationControllerBuilder.BuildController(cubeParams, metaParams);
             MatrixQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
             ActionResult<QueryInfoResponse> actionResult = await testController.GetQueryInfoAsync(cubeQuery);
 
@@ -150,23 +152,23 @@ namespace CreationControllerTests
         [Test]
         public async Task RejectionReasonsTextTest_MultiLanguageString()
         {
-            List<VariableParameters> cubeParams =
+            List<DimensionParameters> cubeParams =
             [
-                new VariableParameters(DimensionType.Content, 1),
-                new VariableParameters(DimensionType.Time, 10),
-                new VariableParameters(DimensionType.Other, 3),
-                new VariableParameters(DimensionType.Other, 1)
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 10),
+                new DimensionParameters(DimensionType.Other, 3),
+                new DimensionParameters(DimensionType.Other, 1)
             ];
 
-            List<VariableParameters> metaParams =
+            List<DimensionParameters> metaParams =
             [
-                new VariableParameters(DimensionType.Content, 10),
-                new VariableParameters(DimensionType.Time, 10),
-                new VariableParameters(DimensionType.Other, 15),
-                new VariableParameters(DimensionType.Other, 70),
+                new DimensionParameters(DimensionType.Content, 10),
+                new DimensionParameters(DimensionType.Time, 10),
+                new DimensionParameters(DimensionType.Other, 15),
+                new DimensionParameters(DimensionType.Other, 70),
             ];
 
-            CreationController testController = BuildController(cubeParams, metaParams);
+            CreationController testController = TestCreationControllerBuilder.BuildController(cubeParams, metaParams);
             MatrixQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
             ActionResult<QueryInfoResponse> actionResult = await testController.GetQueryInfoAsync(cubeQuery);
 
@@ -179,23 +181,23 @@ namespace CreationControllerTests
         [Test]
         public async Task MaxAndWarningLimits_WarningSmallerThanMax()
         {
-            List<VariableParameters> cubeParams =
+            List<DimensionParameters> cubeParams =
             [
-                new VariableParameters(DimensionType.Content, 1),
-                new VariableParameters(DimensionType.Time, 10),
-                new VariableParameters(DimensionType.Other, 3),
-                new VariableParameters(DimensionType.Other, 1),
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 10),
+                new DimensionParameters(DimensionType.Other, 3),
+                new DimensionParameters(DimensionType.Other, 1),
             ];
 
-            List<VariableParameters> metaParams =
+            List<DimensionParameters> metaParams =
             [
-                new VariableParameters(DimensionType.Content, 10),
-                new VariableParameters(DimensionType.Time, 10),
-                new VariableParameters(DimensionType.Other, 15),
-                new VariableParameters(DimensionType.Other, 70),
+                new DimensionParameters(DimensionType.Content, 10),
+                new DimensionParameters(DimensionType.Time, 10),
+                new DimensionParameters(DimensionType.Other, 15),
+                new DimensionParameters(DimensionType.Other, 70),
             ];
 
-            CreationController testController = BuildController(cubeParams, metaParams);
+            CreationController testController = TestCreationControllerBuilder.BuildController(cubeParams, metaParams);
             MatrixQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
             ActionResult<QueryInfoResponse> actionResult = await testController.GetQueryInfoAsync(cubeQuery);
 
@@ -205,30 +207,29 @@ namespace CreationControllerTests
         [Test]
         public async Task ActualSizeAndMaxLimits_SizeBiggerThanMax()
         {
-            List<VariableParameters> cubeParams =
+            List<DimensionParameters> cubeParams =
             [
-                new VariableParameters(DimensionType.Content, 1),
-                new VariableParameters(DimensionType.Time, 12),
-                new VariableParameters(DimensionType.Other, 10),
-                new VariableParameters(DimensionType.Other, 10),
-                new VariableParameters(DimensionType.Other, 100)
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 12),
+                new DimensionParameters(DimensionType.Other, 10),
+                new DimensionParameters(DimensionType.Other, 10),
+                new DimensionParameters(DimensionType.Other, 100)
             ];
 
-            List<VariableParameters> metaParams =
+            List<DimensionParameters> metaParams =
             [
-                new VariableParameters(DimensionType.Content, 10),
-                new VariableParameters(DimensionType.Time, 10),
-                new VariableParameters(DimensionType.Other, 15),
-                new VariableParameters(DimensionType.Other, 70),
-                new VariableParameters(DimensionType.Other, 70)
+                new DimensionParameters(DimensionType.Content, 10),
+                new DimensionParameters(DimensionType.Time, 10),
+                new DimensionParameters(DimensionType.Other, 15),
+                new DimensionParameters(DimensionType.Other, 70),
+                new DimensionParameters(DimensionType.Other, 70)
             ];
 
-            CreationController testController = BuildController(cubeParams, metaParams);
+            CreationController testController = TestCreationControllerBuilder.BuildController(cubeParams, metaParams);
             MatrixQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
             ActionResult<QueryInfoResponse> actionResult = await testController.GetQueryInfoAsync(cubeQuery);
 
             Assert.That(actionResult.Value.Size, Is.GreaterThan(actionResult.Value.MaximumSupportedSize));
         }
-        */
     }
 }

@@ -3,7 +3,7 @@ import UiLanguageContext from 'contexts/uiLanguageContext';
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { TableItem } from './TableItem';
-import { ITableListResponse } from 'api/services/table';
+import { IDatabaseTable } from 'api/services/table';
 
 jest.mock('react-i18next', () => ({
     ...jest.requireActual('react-i18next'),
@@ -17,11 +17,10 @@ jest.mock('react-i18next', () => ({
     },
 }));
 
-const mockItem: ITableListResponse = {
-    id: 'asd',
-    type: 't',
-    updated: '2021-10-13T14:53:06',
-    text: { 'fi': 'seppo', 'sv': 'seppo-sv' },
+const mockItem: IDatabaseTable = {
+    code: 'asd',
+    lastUpdated: '2021-10-13T14:53:06',
+    name: { 'fi': 'seppo', 'sv': 'seppo-sv' },
     languages: ['fi', 'sv']
 }
 

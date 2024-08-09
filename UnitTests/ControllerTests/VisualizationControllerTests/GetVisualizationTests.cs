@@ -3,7 +3,22 @@ using NUnit.Framework;
 using PxGraf.Language;
 using PxGraf.Settings;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnitTests.Fixtures;
+using Moq;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Px.Utils.Models.Metadata.Enums;
+using PxGraf.Controllers;
+using PxGraf.Models.Queries;
+using PxGraf.Utility;
+using UnitTests;
+using PxGraf.Datasource;
+using PxGraf.Data.MetaData;
+using Px.Utils.Models.Metadata;
+using Px.Utils.Models.Metadata.ExtensionMethods;
+using PxGraf.Models.Responses;
+
 
 namespace ControllerTests
 {
@@ -29,12 +44,12 @@ namespace ControllerTests
         }
 
         // TODO: Fix tests
-        /*
+         /*
         [Test]
         public async Task GetVisualizationTest_Fresh_Data_Is_Returned()
         {
-            Mock<ICachedPxWebConnection> mockCachedPxWebConnection = new();
-            Mock<IVisualizationResponseCache> mockVisualizationResponseCache = new();
+            Mock<ICachedDatasource> mockCachedDatasource = new();
+            Mock<ICachedDatasource> mockVisualizationResponseCache = new();
             Mock<ISqFileInterface> mockSqFileInterface = new();
 
             string testQueryId = "aaa-bbb-111-222-333";
@@ -55,13 +70,13 @@ namespace ControllerTests
                 new DimensionParameters(DimensionType.Other, 7)
             ];
 
-            CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(metaParams);
-            mockCachedPxWebConnection.Setup(x => x.GetCubeMetaCachedAsync(It.IsAny<PxTableReference>()))
+            MatrixMetadata meta = TestDataCubeBuilder.BuildTestMeta(metaParams);
+            mockCachedDatasource.Setup(x => x.GetMatrixMetadataCachedAsync(It.IsAny<PxTableReference>()))
                 .ReturnsAsync(() => meta);
-            mockCachedPxWebConnection.Setup(x => x.BuildDataCubeCachedAsync(It.IsAny<MatrixQuery>()))
+            mockCachedDatasource.Setup(x => x.GetMatrixCachedAsync(It.IsAny<PxTableReference>(), It.IsAny<IReadOnlyMatrixMetadata>()))
                 .ReturnsAsync(() => TestDataCubeBuilder.BuildTestMatrix(cubeParams));
 
-            Variable contetClone = meta.GetContentVariable().Clone();
+            Variable contetClone = meta.GetContentDimension().Clone();
             contetClone.IncludedValues.ForEach(cv => cv.ContentComponent.LastUpdated = "2008-09-01T00:00:00.000Z");
             VisualizationResponse mockResult = new()
             {
@@ -75,10 +90,10 @@ namespace ControllerTests
             mockSqFileInterface.Setup(x => x.ReadSavedQueryFromFile(It.Is<string>(s => s == testQueryId), It.IsAny<string>()))
                 .ReturnsAsync(() => TestDataCubeBuilder.BuildTestSavedQuery(cubeParams, false, new LineChartVisualizationSettings(null, false, null)));
 
-            VisualizationController vController = new(mockSqFileInterface.Object, mockVisualizationResponseCache.Object, mockCachedPxWebConnection.Object, new Mock<ILogger<VisualizationController>>().Object);
+            VisualizationController vController = new(mockSqFileInterface.Object, mockVisualizationResponseCache.Object, mockCachedDatasource.Object, new Mock<ILogger<VisualizationController>>().Object);
             ActionResult<VisualizationResponse> result = await vController.GetVisualization(testQueryId);
 
-            mockCachedPxWebConnection.Verify(x => x.BuildDataCubeCachedAsync(It.IsAny<MatrixQuery>()), Times.Never());
+            mockCachedDatasource.Verify(x => x.BuildDataCubeCachedAsync(It.IsAny<MatrixQuery>()), Times.Never());
             Assert.That(result.Value, Is.InstanceOf<VisualizationResponse>());
         }
 
@@ -253,6 +268,6 @@ namespace ControllerTests
             mockCachedPxWebConnection.Verify(x => x.BuildDataCubeCachedAsync(It.IsAny<MatrixQuery>()), Times.Never());
             Assert.That(result.Result, Is.InstanceOf<BadRequestResult>());
         }
-        */
+         */
     }
 }

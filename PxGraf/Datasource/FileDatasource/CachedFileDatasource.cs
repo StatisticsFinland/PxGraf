@@ -1,4 +1,5 @@
-﻿using Px.Utils.Language;
+﻿using Microsoft.AspNetCore.Routing.Matching;
+using Px.Utils.Language;
 using Px.Utils.Models;
 using Px.Utils.Models.Data.DataValue;
 using Px.Utils.Models.Metadata;
@@ -9,6 +10,7 @@ using PxGraf.Models.Queries;
 using PxGraf.Models.Responses.DatabaseItems;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -37,10 +39,19 @@ namespace PxGraf.Datasource.DatabaseConnection
         private async Task<DatabaseTable> GetTableListingItemAsync(PxTableReference reference)
         {
             IReadOnlyMatrixMetadata meta = await GetMatrixMetadataCachedAsync(reference);
-            string tableId = meta.AdditionalProperties["TABLEID"].ValueAsString('"'); // TODO: Constant for the key somewhere
+            string tableId;
+            if (meta.AdditionalProperties.TryGetValue("TABLEID", out MetaProperty tableIdProperty)) // TODO: Constant for keyword somewhere
+            {
+                tableId = tableIdProperty.ValueAsString('\"');
+            }
+            else
+            {
+                tableId = reference.Name.Split(Path.DirectorySeparatorChar).Last().Split('.').First();
+            }
             List<string> languages = [.. meta.AvailableLanguages];
             MultilanguageString name = meta.AdditionalProperties["DESCRIPTION"].ValueAsMultilanguageString('"', languages[0]); // TODO: same
-            return new(tableId, name, meta.GetLastUpdated(), languages);
+            DateTime lastUpdated = meta.GetLastUpdated() ?? await _datasource.GetLastWriteTimeAsync(reference);
+            return new(tableId, name, lastUpdated, languages);
         }
 
         protected override async Task<MetaCacheHousing> GenerateNewMetaCacheHousingAsync(PxTableReference tableReference)
