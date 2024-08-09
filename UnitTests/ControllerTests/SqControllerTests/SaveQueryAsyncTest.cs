@@ -3,9 +3,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
+using Px.Utils.Models.Metadata;
 using Px.Utils.Models.Metadata.Enums;
 using PxGraf.Controllers;
 using PxGraf.Data.MetaData;
+using PxGraf.Datasource;
 using PxGraf.Datasource.PxWebInterface;
 using PxGraf.Enums;
 using PxGraf.Language;
@@ -35,12 +37,10 @@ namespace ControllerTests
             Configuration.Load(configuration);
         }
 
-        // TODO: Fix tests
-        /*
         [Test]
         public async Task ValidSaveRequestReturnsSaveQueryResponseAndCallsSerializeToFile()
         {
-            Mock<ICachedPxWebConnection> mockCachedPxWebConnection = new();
+            Mock<ICachedDatasource> mockCachedDatasource = new();
             Mock<ISqFileInterface> mockSqFileInterface = new();
             Mock<ILogger<SqController>> mockLogger = new();
 
@@ -60,10 +60,10 @@ namespace ControllerTests
                 new DimensionParameters(DimensionType.Other, 1),
             ];
 
-            mockCachedPxWebConnection.Setup(c => c.GetCubeMetaCachedAsync(It.IsAny<PxTableReference>()))
-                .Returns(Task.Run(() => (IReadOnlyCubeMeta)TestDataCubeBuilder.BuildTestMeta(metaParams)));
+            mockCachedDatasource.Setup(c => c.GetMatrixMetadataCachedAsync(It.IsAny<PxTableReference>()))
+                .Returns(Task.Run(() => (IReadOnlyMatrixMetadata)TestDataCubeBuilder.BuildTestMeta(metaParams)));
 
-            mockCachedPxWebConnection.Setup(c => c.GetDataCubeCachedAsync(It.IsAny<PxTableReference>(), It.IsAny<CubeMeta>()))
+            mockCachedDatasource.Setup(c => c.GetMatrixCachedAsync(It.IsAny<PxTableReference>(), It.IsAny<IReadOnlyMatrixMetadata>()))
                 .Returns(Task.Run(() => TestDataCubeBuilder.BuildTestMatrix(cubeParams)));
 
             mockSqFileInterface.Setup(s => s.SerializeToFile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<SavedQuery>()))
@@ -81,12 +81,11 @@ namespace ControllerTests
                 }
             };
 
-            SqController testController = new(mockCachedPxWebConnection.Object, mockSqFileInterface.Object, mockLogger.Object);
+            SqController testController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, mockLogger.Object);
             ActionResult<SaveQueryResponse> actionResult = await testController.SaveQueryAsync(testInput);
             Assert.That(actionResult.Value, Is.InstanceOf<SaveQueryResponse>());
             mockSqFileInterface.Verify(
                 s => s.SerializeToFile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<SavedQuery>()), Times.Once);
         }
-        */
     }
 }

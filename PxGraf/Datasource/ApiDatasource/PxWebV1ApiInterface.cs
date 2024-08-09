@@ -27,7 +27,7 @@ namespace PxGraf.Datasource.PxWebInterface
     {
         private readonly IPxWebConnection _pxwebConnection = pxwebConnection;
         private readonly ILogger<PxWebV1ApiInterface> _logger = logger;
-        private const string PXWEB_DATETIME_FORMAT = "yyyy'-'MM'-'dd'T'HH'.'mm'.'ss'Z'";
+        private const string PXWEB_DATETIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
         private const string SOURCE_KEY = "SOURCE";
         private const string LIST_ITEM_TYPE = "l";
         private const string TABLE_ITEM_TYPE = "t";
@@ -63,19 +63,43 @@ namespace PxGraf.Datasource.PxWebInterface
                 {
                     if (someLangItems[tableListIndx].Type == LIST_ITEM_TYPE)
                     {
-                        MultilanguageString name = new(langToDbList.ToDictionary(kvp => kvp.Key, kvp => kvp.Value[tableListIndx].Text));
+                        MultilanguageString name = new(langToDbList
+                            .Where(kvp => kvp.Value.ElementAtOrDefault(tableListIndx) != null)
+                            .ToDictionary(
+                                kvp => kvp.Key,
+                                kvp => kvp.Value[tableListIndx].Text
+                        ));
                         headers.Add(new(someLangItems[tableListIndx].Id, [.. langToDbList.Keys], name));
                     }
                     else if (someLangItems[tableListIndx].Type == TABLE_ITEM_TYPE)
                     {
-                        MultilanguageString name = new(langToDbList.ToDictionary(kvp => kvp.Key, kvp => kvp.Value[tableListIndx].Text));
+                        MultilanguageString name = new(langToDbList
+                            .Where(kvp => kvp.Value.ElementAtOrDefault(tableListIndx) != null)
+                            .ToDictionary(
+                                kvp => kvp.Key,
+                                kvp => kvp.Value[tableListIndx].Text
+                        ));
                         // TODO this obscure string to DateTime conversion thing again. See other TODOs for more information.
-                        DateTime lastUpdated = DateTime.ParseExact(someLangItems[tableListIndx].Updated, PXWEB_DATETIME_FORMAT, CultureInfo.InvariantCulture);
+                        DateTime lastUpdated = ParseDateTime(someLangItems[tableListIndx].Updated);
                         tables.Add(new(someLangItems[tableListIndx].Id, name, lastUpdated, [.. langToDbList.Keys]));
                     }
                 }
             }
             return new DatabaseGroupContents(headers, tables);
+        }
+
+        // TODO: Refer to the earlier mentions of the obscure string to DateTime conversion thing.
+        public DateTime ParseDateTime(string dateTimeString)
+        {
+            if (DateTime.TryParseExact(dateTimeString, PXWEB_DATETIME_FORMAT, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out DateTime result))
+            {
+                return result;
+            }
+            else
+            {
+                const string format = PXWEB_DATETIME_FORMAT + "'Z'";
+                return DateTime.ParseExact(dateTimeString, format, CultureInfo.InvariantCulture);
+            }
         }
 
         public DateTime GetLastWriteTime(PxTableReference tableReference)
@@ -352,7 +376,7 @@ namespace PxGraf.Datasource.PxWebInterface
             .Distinct()
             .Single();
 
-            DateTime updated = DateTime.ParseExact(lastUpdatedString, PXWEB_DATETIME_FORMAT, CultureInfo.InvariantCulture);
+            DateTime updated = ParseDateTime(lastUpdatedString);
 
             List<ContentDimensionValue> contentdimensionValues = [];
             foreach (DimensionValue contentDimVal in dimensionBase.Values)

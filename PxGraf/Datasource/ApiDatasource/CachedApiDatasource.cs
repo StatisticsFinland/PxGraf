@@ -28,13 +28,15 @@ namespace PxGraf.Datasource.PxWebInterface
         protected override async Task<MetaCacheHousing> GenerateNewMetaCacheHousingAsync(PxTableReference tableReference)
         {
             IReadOnlyMatrixMetadata meta = await _datasource.GetMatrixMetadataAsync(tableReference);
-            return new MetaCacheHousing(meta.GetLastUpdated(), meta);
+            DateTime lastUpdated = meta.GetLastUpdated() ?? await _datasource.GetLastWriteTimeAsync(tableReference);
+            return new MetaCacheHousing(lastUpdated, meta);
         }
 
         protected override async Task<DataCacheHousing> GenerateNewDataCacheHousingAsync(PxTableReference tableReference, IReadOnlyMatrixMetadata meta)
         {
             Matrix<DecimalDataValue> matrix = await GetMatrixAsync(tableReference, meta);
-            return new DataCacheHousing(meta.GetLastUpdated(), matrix.Data);
+            DateTime lastUpdated = meta.GetLastUpdated() ?? await _datasource.GetLastWriteTimeAsync(tableReference);
+            return new DataCacheHousing(lastUpdated, matrix.Data);
         }
         
         protected override Task<DateTime> GetLastUpdateTimeAsync(PxTableReference tableReference)

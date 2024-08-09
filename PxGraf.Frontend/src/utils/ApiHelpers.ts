@@ -54,6 +54,10 @@ export const defaultQueryOptions = {
     staleTime: 60 * 1000, //1min
 };
 
+export const parseLanguageString = (languages: string[]): string => {
+    return `(${languages.join(", ").toUpperCase()})`;
+}
+
 /* istanbul ignore next */
 export const useDebounceState = (delay: number, ...params) => {
 
