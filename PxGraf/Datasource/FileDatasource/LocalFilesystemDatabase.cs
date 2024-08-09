@@ -96,6 +96,8 @@ namespace PxGraf.Datasource.DatabaseConnection
             )
         {
             string path = _referenceToPath(tableReference);
+            if (!path.EndsWith(".px"))
+                path += ".px";
             DataIndexer indexer = new(completeTableMap, meta);
             Matrix<DecimalDataValue> output = new(meta, new DecimalDataValue[indexer.DataLength]);
             using Stream fileStream = File.OpenRead(path);
