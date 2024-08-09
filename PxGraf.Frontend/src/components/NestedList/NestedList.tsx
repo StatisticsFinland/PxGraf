@@ -5,13 +5,12 @@ import { ListItem, ListItemIcon, ListItemText, Divider, Skeleton, Alert } from '
 
 import UiLanguageContext from 'contexts/uiLanguageContext';
 import styled from 'styled-components';
-import { useTableQuery } from 'api/services/table';
+import { IDatabaseGroupHeader, IDatabaseTable, useTableQuery } from 'api/services/table';
 import { TableItem } from './TableItem';
 import { TableListItem } from './TableListItem';
-import { useLanguagesQuery } from "../../api/services/languages";
 import useHierarchyParams from 'hooks/useHierarchyParams';
 import useScrollToElement from 'hooks/useScrollToElement';
-import { sortTableData } from 'utils/sortingHelpers';
+import { sortDatabaseGroups, sortDatabaseTables } from 'utils/sortingHelpers';
 
 const StyledSkeleton = styled(Skeleton)`
   width: 24px;
@@ -39,13 +38,7 @@ interface INestedListProps {
  */
 export const NestedList: React.FC<INestedListProps> = ({ path, depth }) => {
     const { language } = React.useContext(UiLanguageContext);
-    const databaseLanguages: string[] = useLanguagesQuery();
-    let primaryLanguage;
-    if (databaseLanguages) {
-        primaryLanguage = databaseLanguages.includes(language) ? language : databaseLanguages[0];
-    }
-
-    const { isLoading, isError, data } = useTableQuery(path, primaryLanguage);
+    const { isLoading, isError, data } = useTableQuery(path);
     const { t } = useTranslation();
     
     const tablePath = useHierarchyParams();
@@ -53,11 +46,15 @@ export const NestedList: React.FC<INestedListProps> = ({ path, depth }) => {
     const shouldScroll: boolean = activeId && data && path.length === tablePath.length - 1 && tablePath.join(',').startsWith(path.join(','));
     useScrollToElement(shouldScroll && activeId);
 
-    const sortedData = React.useMemo(() => {
-        if (!data) return null;
+    const sortedGroups: IDatabaseGroupHeader[] = React.useMemo(() => {
+        if (!data?.headers) return null;
+        return sortDatabaseGroups(data.headers, language);
+    }, [data, language]);
 
-        return sortTableData(data, primaryLanguage);
-    }, [data, primaryLanguage, databaseLanguages]);
+    const sortedTables: IDatabaseTable[] = React.useMemo(() => {
+        if (!data?.files) return null;
+        return sortDatabaseTables(data.files, language);
+    }, [data, language]);
 
     if (isLoading) {
         return <React.Fragment key={-1}>
@@ -82,19 +79,27 @@ export const NestedList: React.FC<INestedListProps> = ({ path, depth }) => {
     return (
         <>
             {
-                sortedData ? sortedData.map((item) => {
-                    if (!item.type || item.type === "l") { // DB or subfolder
-                        const initiallyOpen: boolean = sortedData.length < 2 || tablePath.join(',').startsWith([...path, item.id].join(','));
-                        return <TableListItem key={`${item.id}-list-key`} currentPath={[...path, item.id]} item={item} initialOpenState={initiallyOpen} depth={depth ?? 0} />
-                    }
-                    else if (item.type === "t") {
-                        return <TableItem key={`${item.id}-table-key`} currentPath={[...path, item.id]} item={item} depth={depth ?? 0} />
-                    }
-                    else {
-                        return null;
-                    }
-                }) : <ErrorAlert sx={{ pl: depth * 4 }} severity="error">{t("error.contentLoad")}</ErrorAlert>
+                sortedGroups ? sortedGroups.map((item) => (
+                    <TableListItem
+                        key={`${item.code}-list-key`}
+                        currentPath={[...path, item.code]}
+                        item={item}
+                        initialOpenState={sortedGroups.length < 2 || tablePath.join(',').startsWith([...path, item.code].join(','))}
+                        depth={depth ?? 0}
+                    />
+                )) : <ErrorAlert sx={{ pl: depth * 4 }} severity="error">{t("error.contentLoad")}</ErrorAlert>
             }
-        </>);
+            {
+                sortedTables ? sortedTables.map((item) => (
+                    <TableItem
+                        key={`${item.code}-table-key`}
+                        currentPath={[...path, item.code]}
+                        item={item}
+                        depth={depth ?? 0}
+                    />
+                )) : <ErrorAlert sx={{ pl: depth * 4 }} severity="error">{t("error.contentLoad")}</ErrorAlert>
+            }
+        </>
+    );
 }
 export default NestedList;
