@@ -348,3 +348,4 @@ healthchecksdb
 /PxGraf/appsettings.json
 /PxGraf/web.config
 /PxGraf/wwwroot/*
+PxGraf.Frontend/dist/

@@ -1,6 +1,7 @@
-import { fireEvent, render, screen } from '@testing-library/react';
-import { LanguageSelector } from './LanguageSelector';
 import React from 'react';
+import { fireEvent, render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import { LanguageSelector } from './LanguageSelector';
 import UiLanguageContext from 'contexts/uiLanguageContext';
 
 jest.mock('react-i18next', () => ({

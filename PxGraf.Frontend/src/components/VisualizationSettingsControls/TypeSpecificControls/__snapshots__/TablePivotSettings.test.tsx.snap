@@ -6,10 +6,10 @@ exports[`Rendering test renders correctly 1`] = `
     class="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
   >
     <div
-      class="MuiStack-root sc-gEvDqW bZJbke css-m69qwo-MuiStack-root"
+      class="MuiStack-root sc-gJhJTp fVHmQA css-m69qwo-MuiStack-root"
     >
       <ul
-        class="MuiList-root MuiList-padding MuiList-dense MuiList-subheader sc-aYaIB cnEXlN css-p64g7a-MuiList-root"
+        class="MuiList-root MuiList-padding MuiList-dense MuiList-subheader sc-braxZu hJeYPW css-p64g7a-MuiList-root"
       >
         <li
           class="MuiListSubheader-root MuiListSubheader-gutters MuiListSubheader-sticky css-uob957-MuiListSubheader-root"
@@ -54,7 +54,7 @@ exports[`Rendering test renders correctly 1`] = `
         </div>
       </ul>
       <div
-        class="MuiStack-root sc-eqUzNf gAUYPs css-nen11g-MuiStack-root"
+        class="MuiStack-root sc-elDIKY gxeeEO css-nen11g-MuiStack-root"
       >
         <button
           aria-label="tableSettings.up"
@@ -121,7 +121,7 @@ exports[`Rendering test renders correctly 1`] = `
         </button>
       </div>
       <ul
-        class="MuiList-root MuiList-padding MuiList-dense MuiList-subheader sc-aYaIB cnEXlN css-p64g7a-MuiList-root"
+        class="MuiList-root MuiList-padding MuiList-dense MuiList-subheader sc-braxZu hJeYPW css-p64g7a-MuiList-root"
       >
         <li
           class="MuiListSubheader-root MuiListSubheader-gutters MuiListSubheader-sticky css-uob957-MuiListSubheader-root"

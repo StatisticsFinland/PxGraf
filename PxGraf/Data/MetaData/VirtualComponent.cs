@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using System.Diagnostics.CodeAnalysis;
 
 namespace PxGraf.Data.MetaData
 {
+    [ExcludeFromCodeCoverage] // This is a placeholder class without actual use
     public class VirtualComponent(string operator_, List<string> operandCodes)
     {
         public string Operator { get; } = operator_;

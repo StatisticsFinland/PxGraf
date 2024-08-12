@@ -14,6 +14,7 @@ export interface ISelectionState {
     activeSelections: IMenuProps;
     visualization: string;
     multiselect: string;
+    manuallyChanged?: { [key: string]: boolean };
 }
 
 interface ISelectableVariableMenusProps {
@@ -44,22 +45,23 @@ export const getSelections = (
     selectedVisualization: string,
     visualizationSettings: IVisualizationSettings,
     state: ISelectionState,
-    setState: Dispatch<SetStateAction<ISelectionState>>
+    setState: Dispatch<SetStateAction<ISelectionState>>,
 ) => {
     const newState: ISelectionState = {
         activeSelections: {},
         visualization: selectedVisualization,
-        multiselect: visualizationSettings?.multiselectableVariableCode
+        multiselect: visualizationSettings?.multiselectableVariableCode,
+        manuallyChanged: { ...state.manuallyChanged },
     };
-
     selectables.forEach(({ variable, multiselectable }) => {
         const { code } = variable;
-
+        const defaultSelection = visualizationSettings?.defaultSelectableVariableCodes?.[code];
         if (newState.visualization !== state.visualization
             || newState.multiselect !== state.multiselect
             || state.activeSelections[code] == null
-            || state.activeSelections[code].length === 0) {
-            newState.activeSelections[code] = [variable.values[0].code];
+            || state.activeSelections[code].length === 0
+            || !state.manuallyChanged?.[code]) {
+            newState.activeSelections[code] = defaultSelection || [variable.values[0].code];
         } else {
             newState.activeSelections[code] = multiselectable
                 ? state.activeSelections[code]
@@ -78,12 +80,21 @@ export const SelectableVariableMenus: React.FC<ISelectableVariableMenusProps> = 
 
     const selectables = getSelectables(data, visualizationSettings);
     const selections = getSelections(selectables, selectedVisualization, visualizationSettings, selectionState, setSelectionState);
+    const onValueChanged = (newSelections, code) => setSelectionState(prevState => ({
+        ...prevState,
+        activeSelections: {
+            ...prevState.activeSelections,
+            [code]: newSelections[code],
+        },
+        manuallyChanged: {
+            ...prevState.manuallyChanged,
+            [code]: true,
+        },
+    }));
 
     useEffect(() => {
         setSelections(selections);
     }, [selectionState]);
-
-    const onValueChanged = (newSelections) => setSelectionState({ ...selectionState, activeSelections: newSelections as IMenuProps });
 
     return (
         <Stack direction="row" spacing={2}>
@@ -100,7 +111,7 @@ export const SelectableVariableMenus: React.FC<ISelectableVariableMenusProps> = 
                                 [v.variable.code]: typeof value === 'string'
                                     ? value.split(',')
                                     : value
-                            })
+                            }, v.variable.code)
                         }
                     }}
                 />

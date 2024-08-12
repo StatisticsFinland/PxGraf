@@ -11,6 +11,7 @@ import { TableListItem } from './TableListItem';
 import { useLanguagesQuery } from "../../api/services/languages";
 import useHierarchyParams from 'hooks/useHierarchyParams';
 import useScrollToElement from 'hooks/useScrollToElement';
+import { sortTableData } from 'utils/sortingHelpers';
 
 const StyledSkeleton = styled(Skeleton)`
   width: 24px;
@@ -52,6 +53,11 @@ export const NestedList: React.FC<INestedListProps> = ({ path, depth }) => {
     const shouldScroll: boolean = activeId && data && path.length === tablePath.length - 1 && tablePath.join(',').startsWith(path.join(','));
     useScrollToElement(shouldScroll && activeId);
 
+    const sortedData = React.useMemo(() => {
+        if (!data) return null;
+
+        return sortTableData(data, primaryLanguage);
+    }, [data, primaryLanguage, databaseLanguages]);
 
     if (isLoading) {
         return <React.Fragment key={-1}>
@@ -76,9 +82,9 @@ export const NestedList: React.FC<INestedListProps> = ({ path, depth }) => {
     return (
         <>
             {
-                data ? data.map((item) => {
+                sortedData ? sortedData.map((item) => {
                     if (!item.type || item.type === "l") { // DB or subfolder
-                        const initiallyOpen: boolean = data.length < 2 || tablePath.join(',').startsWith([...path, item.id].join(','));
+                        const initiallyOpen: boolean = sortedData.length < 2 || tablePath.join(',').startsWith([...path, item.id].join(','));
                         return <TableListItem key={`${item.id}-list-key`} currentPath={[...path, item.id]} item={item} initialOpenState={initiallyOpen} depth={depth ?? 0} />
                     }
                     else if (item.type === "t") {

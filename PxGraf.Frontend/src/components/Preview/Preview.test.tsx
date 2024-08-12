@@ -1,5 +1,5 @@
 import { render } from "@testing-library/react";
-import React from "react";
+import React from 'react';
 import { FilterType, Query } from "types/query";
 import { IVisualizationSettings } from "types/visualizationSettings";
 import Preview from "./Preview";
@@ -17,6 +17,11 @@ function mockComponentMocker(name) {
         );
     };
 }
+
+jest.mock('envVars', () => ({
+    PxGrafUrl: 'pxGrafUrl.fi/',
+    PublicUrl: 'publicUrl.fi/'
+}));
 
 jest.mock('@statisticsfinland/pxvisualizer', () => {
     const lib = jest.requireActual("@statisticsfinland/pxvisualizer");

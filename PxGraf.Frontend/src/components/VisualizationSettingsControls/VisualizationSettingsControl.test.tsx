@@ -1,4 +1,5 @@
-import React from "react";
+import React from 'react';
+import '@testing-library/jest-dom';
 import { queryByLabelText, render, fireEvent } from '@testing-library/react';
 import { VariableType } from "types/cubeMeta";
 import VisualizationSettingControl from "./VisualizationSettingsControl";

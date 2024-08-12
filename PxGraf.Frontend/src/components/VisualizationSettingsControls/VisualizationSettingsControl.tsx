@@ -1,7 +1,6 @@
 import TablePivotSettings from "./TypeSpecificControls/TablePivotSettings";
 import { MarkerScaler } from "./UtilityComponents/MarkerScaler";
 import { IVisualizationSettings } from "types/visualizationSettings";
-import React from "react";
 import { IVisualizationRules } from "types/visualizationRules";
 import { VisualizationType } from "types/visualizationType";
 import { IVariable, VariableType } from "types/cubeMeta";
@@ -11,6 +10,7 @@ import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 import { VisualizationSettingsSwitch } from "./UtilityComponents/VisualizationSettingsSwitch";
 import SortingSelector from './UtilityComponents/SortingSelector';
+import React from 'react';
 import { MultiselectableSelector } from "./TypeSpecificControls/MultiselectableSelector";
 
 export interface IVisualizationSettingControlProps {

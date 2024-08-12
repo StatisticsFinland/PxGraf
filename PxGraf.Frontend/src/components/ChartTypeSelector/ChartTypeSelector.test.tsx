@@ -1,6 +1,7 @@
+import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { ChartTypeSelector } from './ChartTypeSelector';
-import React from 'react';
+import '@testing-library/jest-dom';
 
 jest.mock('react-i18next', () => ({
     ...jest.requireActual('react-i18next'),
