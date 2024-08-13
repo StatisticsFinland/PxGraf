@@ -5,6 +5,7 @@ using Px.Utils.Models.Data.DataValue;
 using PxGraf.Data.MetaData;
 using PxGraf.Models.Metadata;
 using PxGraf.Models.Queries;
+using PxGraf.Utility;
 using System;
 using System.Collections.Generic;
 
@@ -44,20 +45,6 @@ namespace PxGraf.Models.SavedQueries
         /// </summary>
         public ArchiveCube() { }
 
-        // TODO move to some static file, the pxweb interface uses the same array
-        //Indexed by DataValueType with offset of one
-        private static readonly string[] MissingValueDotCodes =
-        [
-            "",
-            ".",
-            "..",
-            "...",
-            "....",
-            ".....",
-            "......",
-            "-",
-        ];
-
         private ArchiveCube(CubeMeta meta, IReadOnlyList<DecimalDataValue> data)
         {
             CreationTime = DateTime.Now;
@@ -76,7 +63,7 @@ namespace PxGraf.Models.SavedQueries
                 else
                 {
                     Data.Add(null);
-                    DataNotes[i] = MissingValueDotCodes[(int)data[i].Type];
+                    DataNotes[i] = PxSyntaxConstants.MissingValueDotCodes[(int)data[i].Type];
                 }
             }
         }

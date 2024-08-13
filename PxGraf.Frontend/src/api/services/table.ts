@@ -1,7 +1,7 @@
 /* istanbul ignore file */
 
 import ApiClient from "api/client";
-import { useQuery, UseQueryResult } from "react-query";
+import { useQuery } from "react-query";
 import { defaultQueryOptions } from "utils/ApiHelpers";
 import { MultiLanguageString } from "../../types/multiLanguageString";
 
@@ -28,11 +28,11 @@ export interface IDatabaseTable extends IDatabaseGroupHeader {
     lastUpdated: string;
 }
 
-/** TODO: Update summary
+/**
  * Interface for a table result.
  * @property {boolean} isLoading - Flag to indicate if the data is still loading.
  * @property {boolean} isError - Flag to indicate if an error occurred during loading.
- * @property {ITableListResponse[]} data - The table list response data.
+ * @property {IDatabaseGroupContents[]} data - The table list response data.
  */
 export interface ITableResult {
     isLoading: boolean;
