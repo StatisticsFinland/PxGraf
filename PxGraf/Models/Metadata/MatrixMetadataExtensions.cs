@@ -20,12 +20,12 @@ namespace PxGraf.Models.Metadata
     {
         public static CubeMeta ToQueriedCubeMeta(this IReadOnlyMatrixMetadata input, MatrixQuery query)
         {
-            MultilanguageString? note = input.GetMatrixProperty("NOTE");
-            MultilanguageString? topLevelSource = input.GetMatrixProperty("SOURCE");
+            MultilanguageString? note = input.GetMatrixProperty(PxSyntaxConstants.NOTE_KEY);
+            MultilanguageString? topLevelSource = input.GetMatrixProperty(PxSyntaxConstants.SOURCE_KEY);
             List<Variable> dimensions = [];
             foreach (IReadOnlyDimension dimension in input.Dimensions)
             {
-                MultilanguageString? dimensionNote = dimension.GetDimensionProperty("NOTE", input.DefaultLanguage);
+                MultilanguageString? dimensionNote = dimension.GetDimensionProperty(PxSyntaxConstants.NOTE_KEY, input.DefaultLanguage);
                 string? eliminationCode = dimension.GetEliminationValueCode();
                 DimensionQuery dimQuery = query.DimensionQueries[dimension.Code];
                 List<VariableValue> values = [];
@@ -41,8 +41,8 @@ namespace PxGraf.Models.Metadata
                         }
                     }
 
-                    MultilanguageString? valueNote = value.GetValueProperty("VALUENOTE", input.DefaultLanguage);
-                    MultilanguageString? dimensionSource = dimension.GetDimensionProperty("SOURCE", input.DefaultLanguage);
+                    MultilanguageString? valueNote = value.GetValueProperty(PxSyntaxConstants.VALUENOTE_KEY, input.DefaultLanguage);
+                    MultilanguageString? dimensionSource = dimension.GetDimensionProperty(PxSyntaxConstants.SOURCE_KEY, input.DefaultLanguage);
                     MultilanguageString editedValName = value.Name.CopyAndEdit(valueEdit.NameEdit);
                     VariableValue newValue = new(value.Code, editedValName, valueNote, eliminationCode == value.Code);
                     if (dimension.Type == DimensionType.Content)
@@ -60,7 +60,7 @@ namespace PxGraf.Models.Metadata
                             {
                                 throw new MissingMemberException($"Source for content dimension value {value.Code} is missing.");
                             }
-                            string updated = cDimVal.LastUpdated.ToString(); // TODO Convert to pxweb format, make extension method for this.
+                            string updated = PxSyntaxConstants.FormatPxDateTime(cDimVal.LastUpdated);
                             newValue.ContentComponent = new(editedUnit, editedSource, cDimVal.Precision, updated);
                         }
                         else
@@ -83,18 +83,18 @@ namespace PxGraf.Models.Metadata
         // TODO: This has dublication with the above method, combine or make this one obsolete by using MatrixMeta in creation controller.
         public static CubeMeta ToCubeMeta(this IReadOnlyMatrixMetadata input)
         {
-            MultilanguageString? note = input.GetMatrixProperty("NOTE");
-            MultilanguageString? topLevelSource = input.GetMatrixProperty("SOURCE"); // TODO: Source can also be a content dimension value property.
+            MultilanguageString? note = input.GetMatrixProperty(PxSyntaxConstants.NOTE_KEY);
+            MultilanguageString? topLevelSource = input.GetMatrixProperty(PxSyntaxConstants.SOURCE_KEY);
             List<Variable> dimensions = [];
             foreach (IReadOnlyDimension dimension in input.Dimensions)
             {
-                MultilanguageString? dimensionNote = dimension.GetDimensionProperty("NOTE", input.DefaultLanguage);
-                MultilanguageString? dimensionSource = dimension.GetDimensionProperty("SOURCE", input.DefaultLanguage);
+                MultilanguageString? dimensionNote = dimension.GetDimensionProperty(PxSyntaxConstants.NOTE_KEY, input.DefaultLanguage);
+                MultilanguageString? dimensionSource = dimension.GetDimensionProperty(PxSyntaxConstants.SOURCE_KEY, input.DefaultLanguage);
                 string? eliminationCode = dimension.GetEliminationValueCode();
                 List<VariableValue> values = [];
                 foreach (IReadOnlyDimensionValue value in dimension.Values)
                 {
-                    MultilanguageString? valueNote = value.GetValueProperty("VALUENOTE", input.DefaultLanguage);
+                    MultilanguageString? valueNote = value.GetValueProperty(PxSyntaxConstants.VALUENOTE_KEY, input.DefaultLanguage);
                     VariableValue newValue = new(value.Code, value.Name, valueNote, eliminationCode == value.Code);
                     if (dimension.Type == DimensionType.Content)
                     {
@@ -102,7 +102,7 @@ namespace PxGraf.Models.Metadata
                         {
                             MultilanguageString? source = value.GetValueSource(dimensionSource, topLevelSource) ?? 
                                 throw new MissingMemberException($"Source for content dimension value {value.Code} is missing.");
-                            string updated = cDimVal.LastUpdated.ToString(); // TODO Convert to pxweb format, make extension method for this.
+                            string updated = PxSyntaxConstants.FormatPxDateTime(cDimVal.LastUpdated);
                             newValue.ContentComponent = new(cDimVal.Unit, source, cDimVal.Precision, updated);
                         }
                         else
@@ -136,12 +136,12 @@ namespace PxGraf.Models.Metadata
         // TODO move, clean and document
         public static string? GetEliminationValueCode(this IReadOnlyDimension dimension)
         {
-            if (dimension.AdditionalProperties.TryGetValue("ELIMINATION", out MetaProperty? property))
+            if (dimension.AdditionalProperties.TryGetValue(PxSyntaxConstants.ELIMINATION_KEY, out MetaProperty? property))
             {
-                if (property.CanGetStringValue) return property.ValueAsString('"'); //TODO delimeter from config
+                if (property.CanGetStringValue) return property.ValueAsString(PxSyntaxConstants.STRING_DELIMETER);
                 else
                 {
-                    MultilanguageString eliminationName = property.ValueAsMultilanguageString('"', dimension.Name.Languages.First());
+                    MultilanguageString eliminationName = property.ValueAsMultilanguageString(PxSyntaxConstants.STRING_DELIMETER, dimension.Name.Languages.First());
                     return dimension.Values.FirstOrDefault(v => v.Name.Equals(eliminationName))?.Code;
                 }
             }
@@ -365,7 +365,7 @@ namespace PxGraf.Models.Metadata
         {
             if (dimension.AdditionalProperties.TryGetValue(propertyKey, out MetaProperty? prop) && prop.CanGetMultilanguageValue)
             {
-                return prop.ValueAsMultilanguageString('"', defaultLang);
+                return prop.ValueAsMultilanguageString(PxSyntaxConstants.STRING_DELIMETER, defaultLang);
             }
 
             return null;
@@ -375,7 +375,7 @@ namespace PxGraf.Models.Metadata
         {
             if (meta.AdditionalProperties.TryGetValue(propertyKey, out MetaProperty? prop) && prop.CanGetMultilanguageValue)
             {
-                return prop.ValueAsMultilanguageString('"', meta.DefaultLanguage);
+                return prop.ValueAsMultilanguageString(PxSyntaxConstants.STRING_DELIMETER, meta.DefaultLanguage);
             }
 
             return null;
@@ -385,7 +385,7 @@ namespace PxGraf.Models.Metadata
         {
             if (value.AdditionalProperties.TryGetValue(propertyKey, out MetaProperty? prop) && prop.CanGetMultilanguageValue)
             {
-                return prop.ValueAsMultilanguageString('"', defaultLang);
+                return prop.ValueAsMultilanguageString(PxSyntaxConstants.STRING_DELIMETER, defaultLang);
             }
 
             return null;
@@ -393,7 +393,7 @@ namespace PxGraf.Models.Metadata
 
         private static MultilanguageString? GetValueSource(this IReadOnlyDimensionValue value, MultilanguageString? dimensionSource, MultilanguageString? topLevelSource)
         {
-            MultilanguageString? valueSource = value.GetValueProperty("SOURCE", value.Name.Languages.First());
+            MultilanguageString? valueSource = value.GetValueProperty(PxSyntaxConstants.SOURCE_KEY, value.Name.Languages.First());
             if (valueSource != null) return valueSource;
             if (dimensionSource != null) return dimensionSource;
             return topLevelSource;

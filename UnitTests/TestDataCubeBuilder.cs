@@ -9,6 +9,7 @@ using PxGraf.ChartTypeSelection;
 using PxGraf.Models.Queries;
 using PxGraf.Models.Requests;
 using PxGraf.Models.SavedQueries;
+using PxGraf.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,9 +20,7 @@ namespace UnitTests
     {
         public static VisualizationTypeSelectionObject BuildTestVisualizationTypeSelectionObject(List<DimensionParameters> variables, bool negativeData = false)
         {
-            // TODO: Fix
-            throw new NotImplementedException();
-            // return VisualizationTypeSelectionObject.FromQueryAndCube(BuildTestCubeQuery(variables), BuildTestMatrix(variables, negativeData));
+            return VisualizationTypeSelectionObject.FromQueryAndMatrix(BuildTestCubeQuery(variables), BuildTestMatrix(variables, negativeData));
         }
 
         public static MatrixQuery BuildTestCubeQuery(List<DimensionParameters> varParams)
@@ -149,8 +148,49 @@ namespace UnitTests
                 { "en", $"{name}.en" }
             };
 
-            // TODO: implement
-            throw new NotImplementedException();
+            MultilanguageString multilanguageName = new(nameTranslations);
+            List<DimensionValue> values = BuildVariableValues(param);
+            Dictionary<string, MetaProperty> additionalProperties = [];
+            if (param.HasCombinationValue)
+            {
+                additionalProperties.Add(PxSyntaxConstants.ELIMINATION_KEY, new(name, $"\"{values[0].Code}\""));
+            }
+
+            if (param.Type == DimensionType.Time)
+            {
+                TimeDimension timeDimension = new(
+                    name,
+                    multilanguageName,
+                    additionalProperties,
+                    values,
+                    TimeDimensionInterval.Year
+                    );
+                return timeDimension;
+            }
+            else if (param.Type == DimensionType.Content)
+            {
+                List<ContentDimensionValue> contentDimensionValues = [];
+                for (int i = 0; i < values.Count; i++)
+                {
+                    contentDimensionValues.Add((ContentDimensionValue)values[i]);
+                }
+                ContentDimension contentDimension = new(
+                    name,
+                    multilanguageName,
+                    additionalProperties,
+                    contentDimensionValues
+                    );
+                return contentDimension;
+            }
+            Dimension dimension = new(
+                name,
+                multilanguageName,
+                additionalProperties,
+                values,
+                param.Type
+                );
+
+            return dimension;
         }
 
         public static Dimension BuildTestDimension(string name, List<string> valueNames, DimensionType type, int decimals = 0, bool sameUnit = false, bool sameSource = false, bool hasCombinationValue = false)
@@ -167,37 +207,31 @@ namespace UnitTests
         private static List<DimensionValue> BuildVariableValues(DimensionParameters varParam)
         {
             List<DimensionValue> results = [];
-            /*
+            
             for (int i = 0; i < varParam.Size; i++)
             {
-                string name = varParam.Type == VariableType.Time && !varParam.Irregular ? $"{2000 + i}" : $"value-{i}";
+                string name = varParam.Type == DimensionType.Time && !varParam.Irregular ? $"{2000 + i}" : $"value-{i}";
                 Dictionary<string, string> nameTranslations = new()
                 {
                     { "fi", name },
                     { "en", $"{name}.en" }
                 };
-                VariableValue vv = new(name, new MultiLanguageString(nameTranslations), null, varParam.HasCombinationValue && i == 0);
-                if (varParam.Type == PxGraf.Enums.VariableType.Content)
+                if (varParam.Type == DimensionType.Content)
                 {
                     Dictionary<string, string> unitTranslations = new()
                     {
                         { "fi", varParam.SameUnit ? "testUnit" : $"{name}-unit" },
                         { "en", varParam.SameUnit ? "testUnit" : $"{name}-unit.en" }
                     };
-                    Dictionary<string, string> sourceTranslations = new()
-                    {
-                        { "fi", varParam.SameSource ? "testSource" : $"{name}-source" },
-                        { "en", varParam.SameSource ? "testSource" : $"{name}-source.en" }
-                    };
-                    vv.ContentComponent = new ContentComponent(
-                        new MultiLanguageString(unitTranslations),
-                        new MultiLanguageString(sourceTranslations),
-                        varParam.Decimals, "2009-09-01T00:00:00.000Z");
+                    ContentDimensionValue cvv = new(name, new MultilanguageString(nameTranslations), new(unitTranslations), PxSyntaxConstants.ParsePxDateTime("2009-09-01T00:00:00Z"), 1);
+                    results.Add(cvv);
                 }
-                results.Add(vv);
+                else
+                {
+                    DimensionValue vv = new(name, new MultilanguageString(nameTranslations));
+                    results.Add(vv);
+                }
             }
-            */
-            // TODO: implement. Will propably need separate methods for the content dimension values.
             return results;
         }
 
