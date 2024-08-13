@@ -64,7 +64,7 @@ namespace PxGraf.Controllers
         public async Task<ActionResult<CubeMeta>> GetCubeMetaAsync([FromRoute] string tablePath)
         {
             _logger.LogDebug("Requested cube meta for {TablePath} GET: api/creation/cube-meta", tablePath);
-            IReadOnlyMatrixMetadata readOnlyMeta = await _datasource.GetMatrixMetadataCachedAsync(new(tablePath));
+            IReadOnlyMatrixMetadata readOnlyMeta = await _datasource.GetMatrixMetadataCachedAsync(new(tablePath, '/'));
             if (readOnlyMeta == null)
             {
                 _logger.LogWarning("cube-meta result or {TablePath}: null. May result from a dimension without values.", tablePath);
@@ -84,7 +84,7 @@ namespace PxGraf.Controllers
         public async Task<TableMetaValidationResult> ValidateTableMetaData([FromRoute] string tablePath)
         {
             _logger.LogDebug("Validating table metadata for {TablePath} GET: api/creation/validate-table-metadata", tablePath);
-            IReadOnlyMatrixMetadata tableMeta = await _datasource.GetMatrixMetadataCachedAsync(new(tablePath));
+            IReadOnlyMatrixMetadata tableMeta = await _datasource.GetMatrixMetadataCachedAsync(new(tablePath, '/'));
             if (tableMeta is null)
             {
                 return new(

@@ -51,9 +51,11 @@ namespace PxGraf.Models.Queries
         /// Constructor for the file reference with provided path that includes both hierarchy and name.
         /// </summary>
         /// <param name="path">Path to the Px file in the system.</param>
-        public PxTableReference(string path)
+        /// <param name="separator">Optional separator character for the path.</param>
+        public PxTableReference(string path, char? separator = null)
         {
-            List<string> parts = [.. path.Split(Path.DirectorySeparatorChar)];
+            char pathSeparator = separator ?? Path.DirectorySeparatorChar;
+            List<string> parts = [.. path.Split(pathSeparator)];
             Hierarchy = parts[0..^1];
             Name = parts[^1];
         }

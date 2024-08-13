@@ -15,7 +15,7 @@ import EditorDialogs from './EditorDialogs';
 import styled from 'styled-components';
 import { useCubeMetaQuery } from 'api/services/cube-meta';
 import { useDefaultHeaderQuery } from 'api/services/default-header';
-import { useResolveVariableFiltersQuery } from 'api/services/filter-variable';
+import { useResolveVariableFiltersQuery } from 'api/services/filter-dimension';
 import { useVisualizationOptionsQuery } from 'api/services/visualization-rules';
 import { IFetchSavedQueryResponse, useSaveMutation } from 'api/services/queries';
 import { VisualizationType } from 'types/visualizationType';
