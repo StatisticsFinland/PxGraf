@@ -31,7 +31,8 @@ namespace ControllerTests
                 {"pxwebUrl", "http://pxwebtesturl:12345/"},
                 {"pxgrafUrl", "http://pxgraftesturl:8443/PxGraf"},
                 {"savedQueryDirectory", "goesNowhere"},
-                {"archiveFileDirectory", "goesNowhere"}
+                {"archiveFileDirectory", "goesNowhere"},
+                {"LocalFilesystemDatabaseConfig:Encoding", "latin1"}
             };
 
             IConfiguration configuration = new ConfigurationBuilder()

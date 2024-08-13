@@ -123,7 +123,7 @@ namespace PxGraf.ChartTypeSelection
                 yield break;
             }
 
-            if (timeVar.IsIrregular ?? throw new InvalidOperationException("Ragularity was not defined for the time variable"))
+            if (timeVar.IsIrregular ?? throw new InvalidOperationException("Regularity was not defined for the time variable"))
             {
                 if (irregularRange.DimensionNotAllowed) yield return BuildRejectionInfo(RejectionReason.IrregularTimeNotAllowed, timeVar);
                 else if (timeVar.Size < irregularRange.Min) yield return BuildRejectionInfo(RejectionReason.IrregularTimeBelowMin, timeVar.Size, irregularRange.Min, timeVar);

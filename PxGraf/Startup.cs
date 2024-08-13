@@ -134,7 +134,7 @@ namespace PxGraf
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<ISqFileInterface, SqFileInterface>();
             services.AddSingleton<IMultiStateMemoryTaskCache>(provider => new MultiStateMemoryTaskCache(
-                Configuration.Current.CacheOptions.Database.SizeLimit,
+                Configuration.Current.CacheOptions.Database.ItemAmountLimit,
                 TimeSpan.FromSeconds(Configuration.Current.CacheOptions.CacheFreshnessCheckInterval)));
             if (Configuration.Current.LocalFilesystemDatabaseConfig.Enabled)
             {

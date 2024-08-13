@@ -8,6 +8,7 @@ using PxGraf.Datasource.Cache;
 using PxGraf.Models.Metadata;
 using PxGraf.Models.Queries;
 using PxGraf.Models.Responses.DatabaseItems;
+using PxGraf.Utility;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -40,16 +41,16 @@ namespace PxGraf.Datasource.DatabaseConnection
         {
             IReadOnlyMatrixMetadata meta = await GetMatrixMetadataCachedAsync(reference);
             string tableId;
-            if (meta.AdditionalProperties.TryGetValue("TABLEID", out MetaProperty tableIdProperty)) // TODO: Constant for keyword somewhere
+            if (meta.AdditionalProperties.TryGetValue(PxSyntaxConstants.TABLEID_KEY, out MetaProperty tableIdProperty))
             {
-                tableId = tableIdProperty.ValueAsString('\"');
+                tableId = tableIdProperty.ValueAsString(PxSyntaxConstants.STRING_DELIMETER);
             }
             else
             {
-                tableId = reference.Name.Split(Path.DirectorySeparatorChar).Last().Split('.').First();
+                tableId = reference.Name.Split(Path.DirectorySeparatorChar)[^1].Split('.')[0];
             }
             List<string> languages = [.. meta.AvailableLanguages];
-            MultilanguageString name = meta.AdditionalProperties["DESCRIPTION"].ValueAsMultilanguageString('"', languages[0]); // TODO: same
+            MultilanguageString name = meta.AdditionalProperties[PxSyntaxConstants.DESCRIPTION_KEY].ValueAsMultilanguageString(PxSyntaxConstants.STRING_DELIMETER, languages[0]);
             DateTime lastUpdated = meta.GetLastUpdated() ?? await _datasource.GetLastWriteTimeAsync(reference);
             return new(tableId, name, lastUpdated, languages);
         }

@@ -5,8 +5,6 @@ using System.Collections.Generic;
 
 namespace PxGraf.Utility
 {
-    // TODO: Start using this converter for MultilanguageStrings
-
     /// <summary>
     /// JsonConverter for serializing/deserializing multilanguage strings in and out of json.
     /// Regards empty translations as nulls.

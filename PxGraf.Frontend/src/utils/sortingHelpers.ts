@@ -1,13 +1,27 @@
 import { IDatabaseGroupHeader, IDatabaseTable } from '../api/services/table';
 import { IVariable } from "types/cubeMeta";
 
-/** TODO: Update summary
- * Function for sorting tables or databases based on the primary language.
- * @param {ITableListResponse[]} data Table data to be sorted.
+/**
+ * Function for sorting databases based on the primary language.
+ * @param {IDatabaseGroupHeader[]} data Databases or group headers to be sorted.
  * @param {string} primaryLanguage Primary language for sorting.
- * @returns Sorted table data.
+ * @returns Sorted databases or sub group headers.
  */
 export const sortDatabaseGroups = (data: IDatabaseGroupHeader[], primaryLanguage: string): IDatabaseGroupHeader[] => {
+    return sortDatabaseItems(data, primaryLanguage);
+};
+
+/**
+ * Function for sorting tables based on the primary language.
+ * @param {IDatabaseTable[]} data Tables to be sorted.
+ * @param {string} primaryLanguage Primary language for sorting.
+ * @returns Sorted tables.
+ */
+export const sortDatabaseTables = (data: IDatabaseTable[], primaryLanguage: string): IDatabaseTable[] => {
+    return sortDatabaseItems(data, primaryLanguage);
+}
+
+const sortDatabaseItems = <T extends IDatabaseGroupHeader>(data: T[], primaryLanguage: string): T[] => {
     return [...data].sort((a, b) => {
         const textA = a.name[primaryLanguage] || a.name[a.languages[0]];
         const textB = b.name[primaryLanguage] || b.name[a.languages[0]];
@@ -15,16 +29,6 @@ export const sortDatabaseGroups = (data: IDatabaseGroupHeader[], primaryLanguage
         return textA.localeCompare(textB, primaryLanguage);
     });
 };
-
-//TODO: Update summary
-export const sortDatabaseTables = (data: IDatabaseTable[], primaryLanguage: string): IDatabaseTable[] => {
-    return [...data].sort((a, b) => {
-        const textA = a.name[primaryLanguage] || a.name[a.languages[0]];
-        const textB = b.name[primaryLanguage] || b.name[a.languages[0]];
-
-        return textA.localeCompare(textB, primaryLanguage);
-    });
-}
 
 /**
  * Function for sorting variables for the variable selection list based on their type.

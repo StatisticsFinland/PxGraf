@@ -32,8 +32,8 @@ namespace PxGraf.Datasource
         public async Task<DatabaseGroupContents> GetGroupContentsCachedAsync(IReadOnlyList<string> hierarcy)
         {
             string key = GetHierarchyKey(hierarcy);
-            TimeSpan slidingExpiration = TimeSpan.FromMinutes(_cacheOptions.Database.SlidingExpiration);
-            TimeSpan absoluteExpiration = TimeSpan.FromMinutes(_cacheOptions.Database.AbsoluteExpiration);
+            TimeSpan slidingExpiration = TimeSpan.FromMinutes(_cacheOptions.Database.SlidingExpirationMinutes);
+            TimeSpan absoluteExpiration = TimeSpan.FromMinutes(_cacheOptions.Database.AbsoluteExpirationMinutes);
 
             MultiStateMemoryTaskCache.CacheEntryState state = _taskCache.TryGet(key, out Task<DatabaseGroupContents> contentsTask);
             if (state == MultiStateMemoryTaskCache.CacheEntryState.Null)
@@ -47,8 +47,8 @@ namespace PxGraf.Datasource
         public async Task<IReadOnlyMatrixMetadata> GetMatrixMetadataCachedAsync(PxTableReference tableReference)
         {
             string key = GetKeyForTable(tableReference);
-            TimeSpan slidingExpiration = TimeSpan.FromMinutes(_cacheOptions.Meta.SlidingExpiration);
-            TimeSpan absoluteExpiration = TimeSpan.FromMinutes(_cacheOptions.Meta.AbsoluteExpiration);
+            TimeSpan slidingExpiration = TimeSpan.FromMinutes(_cacheOptions.Meta.SlidingExpirationMinutes);
+            TimeSpan absoluteExpiration = TimeSpan.FromMinutes(_cacheOptions.Meta.AbsoluteExpirationMinutes);
             MultiStateMemoryTaskCache.CacheEntryState state = _taskCache.TryGet(key, out Task<MetaCacheHousing> metaTask);
             if (state == MultiStateMemoryTaskCache.CacheEntryState.Null)
             {
@@ -74,8 +74,8 @@ namespace PxGraf.Datasource
         public async Task<Matrix<DecimalDataValue>> GetMatrixCachedAsync(PxTableReference tableReference, IReadOnlyMatrixMetadata metadata)
         {
             CacheValues dataCacheConfig = Configuration.Current.CacheOptions.Data;
-            TimeSpan slidingExpiration = TimeSpan.FromMinutes(dataCacheConfig.SlidingExpiration);
-            TimeSpan absoluteExpiration = TimeSpan.FromMinutes(dataCacheConfig.AbsoluteExpiration);
+            TimeSpan slidingExpiration = TimeSpan.FromMinutes(dataCacheConfig.SlidingExpirationMinutes);
+            TimeSpan absoluteExpiration = TimeSpan.FromMinutes(dataCacheConfig.AbsoluteExpirationMinutes);
 
             string key = GetKeyForMatrixMap(tableReference, metadata);
             MultiStateMemoryTaskCache.CacheEntryState state = _taskCache.TryGet(key, out Task<DataCacheHousing> dataTask);
