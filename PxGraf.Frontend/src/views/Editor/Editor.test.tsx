@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { ICubeMetaResult } from "api/services/cube-meta";
 import { IHeaderResult } from "api/services/default-header";
-import { IFilterVariableResult } from "api/services/filter-variable";
+import { IFilterVariableResult } from "api/services/filter-dimension";
 import { IVisualizationSettingsResult } from "api/services/visualization-rules";
 import { ISaveQueryResult } from "api/services/queries";
 import React from "react";
@@ -70,8 +70,8 @@ jest.mock('api/services/query-info', () => ({
     }
 }));
 
-jest.mock('api/services/filter-variable', () => ({
-    ...jest.requireActual('api/services/filter-variable'),
+jest.mock('api/services/filter-dimension', () => ({
+    ...jest.requireActual('api/services/filter-dimension'),
     useResolveVariableFiltersQuery: () => {
         return mockFilterVariableResult;
     }

@@ -21,7 +21,7 @@ namespace PxGraf.Models.Metadata
         public static CubeMeta ToQueriedCubeMeta(this IReadOnlyMatrixMetadata input, MatrixQuery query)
         {
             MultilanguageString? note = input.GetMatrixProperty("NOTE");
-            MultilanguageString? source = input.GetMatrixProperty("SOURCE"); // TODO: Source can also be a content dimension value property.
+            MultilanguageString? topLevelSource = input.GetMatrixProperty("SOURCE");
             List<Variable> dimensions = [];
             foreach (IReadOnlyDimension dimension in input.Dimensions)
             {
@@ -31,7 +31,7 @@ namespace PxGraf.Models.Metadata
                 List<VariableValue> values = [];
                 foreach (IReadOnlyDimensionValue value in dimQuery.ValueFilter.Filter(dimension.Values))
                 {
-                    if (dimQuery.ValueEdits.TryGetValue(value.Code, out DimensionQuery.VariableValueEdition? valueEdit))
+                    if (!dimQuery.ValueEdits.TryGetValue(value.Code, out DimensionQuery.VariableValueEdition? valueEdit))
                     {
                         valueEdit = new();
                         dimQuery.ValueEdits.Add(value.Code, valueEdit);
@@ -42,6 +42,7 @@ namespace PxGraf.Models.Metadata
                     }
 
                     MultilanguageString? valueNote = value.GetValueProperty("VALUENOTE", input.DefaultLanguage);
+                    MultilanguageString? dimensionSource = dimension.GetDimensionProperty("SOURCE", input.DefaultLanguage);
                     MultilanguageString editedValName = value.Name.CopyAndEdit(valueEdit.NameEdit);
                     VariableValue newValue = new(value.Code, editedValName, valueNote, eliminationCode == value.Code);
                     if (dimension.Type == DimensionType.Content)
@@ -49,13 +50,22 @@ namespace PxGraf.Models.Metadata
                         if (value is ContentDimensionValue cDimVal)
                         {
                             MultilanguageString editedUnit = cDimVal.Unit.CopyAndEdit(valueEdit.ContentComponent.UnitEdit);
-                            MultilanguageString editedSource = source.CopyAndEdit(valueEdit.ContentComponent.SourceEdit); //TODO null handling
+                            MultilanguageString? valueSource = value.GetValueSource(dimensionSource, topLevelSource);
+                            MultilanguageString editedSource;
+                            if (valueSource != null)
+                            {
+                                editedSource = valueSource.CopyAndEdit(valueEdit.ContentComponent.SourceEdit);
+                            }
+                            else
+                            {
+                                throw new MissingMemberException($"Source for content dimension value {value.Code} is missing.");
+                            }
                             string updated = cDimVal.LastUpdated.ToString(); // TODO Convert to pxweb format, make extension method for this.
                             newValue.ContentComponent = new(editedUnit, editedSource, cDimVal.Precision, updated);
                         }
                         else
                         {
-                            throw new Exception(); // TODO better exception
+                            throw new InvalidOperationException($"Content dimension value {value.Code} is not a ContentDimensionValue.");
                         }
                     }
                     values.Add(newValue);
@@ -74,11 +84,12 @@ namespace PxGraf.Models.Metadata
         public static CubeMeta ToCubeMeta(this IReadOnlyMatrixMetadata input)
         {
             MultilanguageString? note = input.GetMatrixProperty("NOTE");
-            MultilanguageString? source = input.GetMatrixProperty("SOURCE"); // TODO: Source can also be a content dimension value property.
+            MultilanguageString? topLevelSource = input.GetMatrixProperty("SOURCE"); // TODO: Source can also be a content dimension value property.
             List<Variable> dimensions = [];
             foreach (IReadOnlyDimension dimension in input.Dimensions)
             {
                 MultilanguageString? dimensionNote = dimension.GetDimensionProperty("NOTE", input.DefaultLanguage);
+                MultilanguageString? dimensionSource = dimension.GetDimensionProperty("SOURCE", input.DefaultLanguage);
                 string? eliminationCode = dimension.GetEliminationValueCode();
                 List<VariableValue> values = [];
                 foreach (IReadOnlyDimensionValue value in dimension.Values)
@@ -89,12 +100,14 @@ namespace PxGraf.Models.Metadata
                     {
                         if (value is ContentDimensionValue cDimVal)
                         {
+                            MultilanguageString? source = value.GetValueSource(dimensionSource, topLevelSource) ?? 
+                                throw new MissingMemberException($"Source for content dimension value {value.Code} is missing.");
                             string updated = cDimVal.LastUpdated.ToString(); // TODO Convert to pxweb format, make extension method for this.
                             newValue.ContentComponent = new(cDimVal.Unit, source, cDimVal.Precision, updated);
                         }
                         else
                         {
-                            throw new Exception(); // TODO better exception
+                            throw new InvalidOperationException($"Content dimension value {value.Code} is not a ContentDimensionValue.");
                         }
                     }
                     values.Add(newValue);
@@ -376,6 +389,14 @@ namespace PxGraf.Models.Metadata
             }
 
             return null;
+        }
+
+        private static MultilanguageString? GetValueSource(this IReadOnlyDimensionValue value, MultilanguageString? dimensionSource, MultilanguageString? topLevelSource)
+        {
+            MultilanguageString? valueSource = value.GetValueProperty("SOURCE", value.Name.Languages.First());
+            if (valueSource != null) return valueSource;
+            if (dimensionSource != null) return dimensionSource;
+            return topLevelSource;
         }
     }
 }
