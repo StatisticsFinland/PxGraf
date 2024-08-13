@@ -221,7 +221,7 @@ namespace PxGraf.Datasource.PxWebInterface
             foreach (var dimensionId in dataResult.Id)
             {
                 JsonStat2.DimensionObj dimension = dataResult.Dimensions[dimensionId];
-                List<string> variableValueCodes = [];
+                List<string> variableValueCodes = new (new string[dimension.Category.Index.Count]);
 
                 foreach (KeyValuePair<string, int> p in dimension.Category.Index)
                 {

@@ -26,7 +26,7 @@ const fetchResolveVariableFilter = async (idStack: string[], variableFilters: { 
         }
     );
 
-    const url = 'creation/filter-variable'
+    const url = 'creation/filter-dimension'
     return await client.postAsync(url, requestBody);
 }
 
@@ -37,7 +37,7 @@ export const useResolveVariableFiltersQuery = (idStack: string[], query: Query):
     }));
 
     return useQuery(
-        ['filter-variable', ...idStack, query],
+        ['filter-dimension', ...idStack, query],
         () => fetchResolveVariableFilter(idStack, varFilters),
         defaultQueryOptions
     );
