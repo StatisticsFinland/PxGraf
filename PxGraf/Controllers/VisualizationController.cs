@@ -37,8 +37,8 @@ namespace PxGraf.Controllers
         private readonly ILogger<VisualizationController> _logger = logger;
 
         private static CacheValues CacheValues => Configuration.Current.CacheOptions.Visualization;
-        private static readonly TimeSpan AbsoluteExpiration = TimeSpan.FromMinutes(CacheValues.AbsoluteExpiration);
-        private static readonly TimeSpan SlidingExpiration = TimeSpan.FromMinutes(CacheValues.SlidingExpiration);
+        private static readonly TimeSpan AbsoluteExpiration = TimeSpan.FromMinutes(CacheValues.AbsoluteExpirationMinutes);
+        private static readonly TimeSpan SlidingExpiration = TimeSpan.FromMinutes(CacheValues.SlidingExpirationMinutes);
         #region ACTIONS
 
         // TODO: document

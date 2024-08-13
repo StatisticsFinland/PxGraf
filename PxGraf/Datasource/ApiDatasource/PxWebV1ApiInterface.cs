@@ -20,6 +20,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using System;
 using PxGraf.Models.Responses.DatabaseItems;
+using PxGraf.Utility;
 
 namespace PxGraf.Datasource.PxWebInterface
 {
@@ -27,10 +28,8 @@ namespace PxGraf.Datasource.PxWebInterface
     {
         private readonly IPxWebConnection _pxwebConnection = pxwebConnection;
         private readonly ILogger<PxWebV1ApiInterface> _logger = logger;
-        private const string PXWEB_DATETIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
-        private const string SOURCE_KEY = "SOURCE";
-        private const string LIST_ITEM_TYPE = "l";
-        private const string TABLE_ITEM_TYPE = "t";
+        public const string LIST_ITEM_TYPE = "l";
+        public const string TABLE_ITEM_TYPE = "t";
 
         public async Task<DatabaseGroupContents> GetDatabaseItemGroup(IReadOnlyList<string> groupHierarcy)
         {
@@ -79,27 +78,12 @@ namespace PxGraf.Datasource.PxWebInterface
                                 kvp => kvp.Key,
                                 kvp => kvp.Value[tableListIndx].Text
                         ));
-                        // TODO this obscure string to DateTime conversion thing again. See other TODOs for more information.
-                        DateTime lastUpdated = ParseDateTime(someLangItems[tableListIndx].Updated);
+                        DateTime lastUpdated = PxSyntaxConstants.ParsePxDateTime(someLangItems[tableListIndx].Updated);
                         tables.Add(new(someLangItems[tableListIndx].Id, name, lastUpdated, [.. langToDbList.Keys]));
                     }
                 }
             }
             return new DatabaseGroupContents(headers, tables);
-        }
-
-        // TODO: Refer to the earlier mentions of the obscure string to DateTime conversion thing.
-        public DateTime ParseDateTime(string dateTimeString)
-        {
-            if (DateTime.TryParseExact(dateTimeString, PXWEB_DATETIME_FORMAT, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out DateTime result))
-            {
-                return result;
-            }
-            else
-            {
-                const string format = PXWEB_DATETIME_FORMAT + "'Z'";
-                return DateTime.ParseExact(dateTimeString, format, CultureInfo.InvariantCulture);
-            }
         }
 
         public DateTime GetLastWriteTime(PxTableReference tableReference)
@@ -112,7 +96,7 @@ namespace PxGraf.Datasource.PxWebInterface
             string defaultLanguage = Configuration.Current.LanguageOptions.Default;
             List<TableListResponseItem> tableListResponseItems = await GetTableItemListingInLangAsync(defaultLanguage, tableReference.Hierarchy);
             string lastUpdatedString = tableListResponseItems.First(t => t.Id == tableReference.Name).Updated;
-            return DateTime.ParseExact(lastUpdatedString, PXWEB_DATETIME_FORMAT, CultureInfo.InvariantCulture);
+            return PxSyntaxConstants.ParsePxDateTime(lastUpdatedString);
         }
 
         public IReadOnlyMatrixMetadata GetMatrixMetadata(PxTableReference tableReference)
@@ -179,20 +163,6 @@ namespace PxGraf.Datasource.PxWebInterface
             throw new NotSupportedException($"Only async methods are supported. Use {nameof(GetMatrixAsync)} instead.");
         }
 
-        //Indexed by DataValueType with offset of one
-        // TODO: Move these to a separate file, there are more of the exact same arrays somewhere.
-        private static readonly string[] MissingValueDotCodes =
-        [
-            "",
-            ".",
-            "..",
-            "...",
-            "....",
-            ".....",
-            "......",
-            "-",
-        ];
-
         public async Task<Matrix<DecimalDataValue>> GetMatrixAsync(PxTableReference tableReference, IReadOnlyMatrixMetadata meta, CancellationToken? cancellationToken = null)
         {
             string language = meta.DefaultLanguage;
@@ -209,7 +179,7 @@ namespace PxGraf.Datasource.PxWebInterface
                 if (values[i] is null)
                 {
                     string statusCode = dataResult.Status?.GetValueOrDefault(i.ToString());
-                    dataValues[i] = new DecimalDataValue(0, (DataValueType)Array.IndexOf(MissingValueDotCodes, statusCode));
+                    dataValues[i] = new DecimalDataValue(0, (DataValueType)Array.IndexOf(PxSyntaxConstants.MissingValueDotCodes, statusCode));
                 }
                 else
                 {
@@ -368,7 +338,7 @@ namespace PxGraf.Datasource.PxWebInterface
                 d => d.Value.Source ?? ""
             ));
 
-            MetaProperty sourceProperty = new(SOURCE_KEY, source);
+            MetaProperty sourceProperty = new(PxSyntaxConstants.SOURCE_KEY, source);
 
             string lastUpdatedString = dataResultsByLanguage.Select(
                 d => d.Value.Updated
@@ -376,9 +346,10 @@ namespace PxGraf.Datasource.PxWebInterface
             .Distinct()
             .Single();
 
-            DateTime updated = ParseDateTime(lastUpdatedString);
+            DateTime updated = PxSyntaxConstants.ParsePxDateTime(lastUpdatedString);
 
             List<ContentDimensionValue> contentdimensionValues = [];
+
             foreach (DimensionValue contentDimVal in dimensionBase.Values)
             {
                 MultilanguageString unit = new(dataResultsByLanguage.ToDictionary(
@@ -391,12 +362,11 @@ namespace PxGraf.Datasource.PxWebInterface
                 )
                 .Distinct()
                 .Single();
-
                 contentdimensionValues.Add(new ContentDimensionValue(contentDimVal.Code, contentDimVal.Name, unit, updated, decimals));
             }
 
             Dictionary<string, MetaProperty> additionalProperties = dimensionBase.AdditionalProperties;
-            additionalProperties[SOURCE_KEY] = sourceProperty; // TODO: source can be either a table property or a content dimension value property, implement it in a way that it is always stored to dimension values when possible.
+            additionalProperties[PxSyntaxConstants.SOURCE_KEY] = sourceProperty; // TODO: source can be either a table property or a content dimension value property, implement it in a way that it is always stored to dimension values when possible.
             // TODO: Also when reading the source property the information in the dimension values must override the table level information.
             return new ContentDimension(dimensionBase.Code, dimensionBase.Name, additionalProperties, contentdimensionValues);
         }
