@@ -7,6 +7,6 @@
         public CacheValues Database { get; set; }
         public CacheValues Table { get; set; }
         public CacheValues Visualization { get; set; }
-        public int CacheFreshnessCheckInterval { get; set; }
+        public int CacheFreshnessCheckIntervalSeconds { get; set; }
     }
 }

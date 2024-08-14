@@ -121,7 +121,7 @@ namespace PxGraf.ChartTypeSelection
                     filterCanChangeToMultiValue = query.ValueFilter is FromFilter || query.ValueFilter is AllFilter; 
                 }
 
-                VariableInfo result = new VariableInfo(dimension.Code, dimension.Type, size)
+                VariableInfo result = new (dimension.Code, dimension.Type, size)
                 {
                     FilterCanChangeToMultiValue = filterCanChangeToMultiValue,
                 };

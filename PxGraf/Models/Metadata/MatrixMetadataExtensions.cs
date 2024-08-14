@@ -18,7 +18,19 @@ namespace PxGraf.Models.Metadata
 {
     public static class MatrixMetadataExtensions
     {
-        public static CubeMeta ToQueriedCubeMeta(this IReadOnlyMatrixMetadata input, MatrixQuery query)
+        /// <summary>
+        /// Converts the given matrix metadata to cube meta object.
+        /// </summary>
+        /// <param name="input"><see cref="IReadOnlyMatrixMetadata"/> object to be converted</param>
+        /// <param name="query">Optional query object to be used for filtering the dimension values</param>
+        /// <returns><see cref="CubeMeta"/> object based on the input object and optional query.</returns>
+        /// <exception cref="MissingMemberException">
+        /// Thrown when the source for a content dimension value is missing.
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// Thrown when a content dimension value is not a <see cref="ContentDimensionValue"/>.
+        /// </exception>
+        public static CubeMeta ToCubeMeta(this IReadOnlyMatrixMetadata input, MatrixQuery? query = null)
         {
             MultilanguageString? note = input.GetMatrixProperty(PxSyntaxConstants.NOTE_KEY);
             MultilanguageString? topLevelSource = input.GetMatrixProperty(PxSyntaxConstants.SOURCE_KEY);
@@ -27,34 +39,41 @@ namespace PxGraf.Models.Metadata
             {
                 MultilanguageString? dimensionNote = dimension.GetDimensionProperty(PxSyntaxConstants.NOTE_KEY, input.DefaultLanguage);
                 string? eliminationCode = dimension.GetEliminationValueCode();
-                DimensionQuery dimQuery = query.DimensionQueries[dimension.Code];
                 List<VariableValue> values = [];
-                foreach (IReadOnlyDimensionValue value in dimQuery.ValueFilter.Filter(dimension.Values))
+                IEnumerable<IReadOnlyDimensionValue> dimensionValues = query != null
+                    ? query.DimensionQueries[dimension.Code].ValueFilter.Filter(dimension.Values)
+                    : dimension.Values;
+                foreach (IReadOnlyDimensionValue value in dimensionValues)
                 {
-                    if (!dimQuery.ValueEdits.TryGetValue(value.Code, out DimensionQuery.VariableValueEdition? valueEdit))
+                    DimensionQuery.VariableValueEdition? valueEdit = null;
+                    if (query != null)
                     {
-                        valueEdit = new();
-                        dimQuery.ValueEdits.Add(value.Code, valueEdit);
-                        if (value is ContentDimensionValue)
+                        DimensionQuery dimQuery = query.DimensionQueries[dimension.Code];
+                        if (!dimQuery.ValueEdits.TryGetValue(value.Code, out valueEdit))
                         {
-                            valueEdit.ContentComponent = new();
+                            valueEdit = new();
+                            dimQuery.ValueEdits.Add(value.Code, valueEdit);
+                            if (value is ContentDimensionValue)
+                            {
+                                valueEdit.ContentComponent = new();
+                            }
                         }
                     }
 
                     MultilanguageString? valueNote = value.GetValueProperty(PxSyntaxConstants.VALUENOTE_KEY, input.DefaultLanguage);
                     MultilanguageString? dimensionSource = dimension.GetDimensionProperty(PxSyntaxConstants.SOURCE_KEY, input.DefaultLanguage);
-                    MultilanguageString editedValName = value.Name.CopyAndEdit(valueEdit.NameEdit);
+                    MultilanguageString editedValName = valueEdit != null ? value.Name.CopyAndEdit(valueEdit.NameEdit) : value.Name;
                     VariableValue newValue = new(value.Code, editedValName, valueNote, eliminationCode == value.Code);
                     if (dimension.Type == DimensionType.Content)
                     {
                         if (value is ContentDimensionValue cDimVal)
                         {
-                            MultilanguageString editedUnit = cDimVal.Unit.CopyAndEdit(valueEdit.ContentComponent.UnitEdit);
+                            MultilanguageString editedUnit = valueEdit != null ? cDimVal.Unit.CopyAndEdit(valueEdit.ContentComponent.UnitEdit) : cDimVal.Unit;
                             MultilanguageString? valueSource = value.GetValueSource(dimensionSource, topLevelSource);
                             MultilanguageString editedSource;
                             if (valueSource != null)
                             {
-                                editedSource = valueSource.CopyAndEdit(valueEdit.ContentComponent.SourceEdit);
+                                editedSource = valueEdit != null ? valueSource.CopyAndEdit(valueEdit.ContentComponent.SourceEdit) : valueSource;
                             }
                             else
                             {
@@ -70,57 +89,23 @@ namespace PxGraf.Models.Metadata
                     }
                     values.Add(newValue);
                 }
-                MultilanguageString editedDimName = dimension.Name.CopyAndEdit(dimQuery.NameEdit);
+                MultilanguageString editedDimName = query != null ? dimension.Name.CopyAndEdit(query.DimensionQueries[dimension.Code].NameEdit) : dimension.Name;
                 dimensions.Add(new(dimension.Code, editedDimName, dimensionNote, dimension.Type, values));
             }
 
-            MultilanguageString header = CreateDefaultHeader(dimensions, query, input.AvailableLanguages)
-                .CopyAndEdit(query.ChartHeaderEdit)
+            MultilanguageString header = HeaderBuildingUtilities.CreateDefaultHeader(input.Dimensions, query, input.AvailableLanguages)
+                .CopyAndEdit(query?.ChartHeaderEdit)
                 .CopyAndEditAll(h => h[..int.Min(Configuration.Current.QueryOptions.MaxHeaderLength, h.Length)]);
-            return new(input.AvailableLanguages, header, note, dimensions);
-        }
-        
-        // TODO: This has dublication with the above method, combine or make this one obsolete by using MatrixMeta in creation controller.
-        public static CubeMeta ToCubeMeta(this IReadOnlyMatrixMetadata input)
-        {
-            MultilanguageString? note = input.GetMatrixProperty(PxSyntaxConstants.NOTE_KEY);
-            MultilanguageString? topLevelSource = input.GetMatrixProperty(PxSyntaxConstants.SOURCE_KEY);
-            List<Variable> dimensions = [];
-            foreach (IReadOnlyDimension dimension in input.Dimensions)
-            {
-                MultilanguageString? dimensionNote = dimension.GetDimensionProperty(PxSyntaxConstants.NOTE_KEY, input.DefaultLanguage);
-                MultilanguageString? dimensionSource = dimension.GetDimensionProperty(PxSyntaxConstants.SOURCE_KEY, input.DefaultLanguage);
-                string? eliminationCode = dimension.GetEliminationValueCode();
-                List<VariableValue> values = [];
-                foreach (IReadOnlyDimensionValue value in dimension.Values)
-                {
-                    MultilanguageString? valueNote = value.GetValueProperty(PxSyntaxConstants.VALUENOTE_KEY, input.DefaultLanguage);
-                    VariableValue newValue = new(value.Code, value.Name, valueNote, eliminationCode == value.Code);
-                    if (dimension.Type == DimensionType.Content)
-                    {
-                        if (value is ContentDimensionValue cDimVal)
-                        {
-                            MultilanguageString? source = value.GetValueSource(dimensionSource, topLevelSource) ?? 
-                                throw new MissingMemberException($"Source for content dimension value {value.Code} is missing.");
-                            string updated = PxSyntaxConstants.FormatPxDateTime(cDimVal.LastUpdated);
-                            newValue.ContentComponent = new(cDimVal.Unit, source, cDimVal.Precision, updated);
-                        }
-                        else
-                        {
-                            throw new InvalidOperationException($"Content dimension value {value.Code} is not a ContentDimensionValue.");
-                        }
-                    }
-                    values.Add(newValue);
-                }
-                dimensions.Add(new(dimension.Code, dimension.Name, dimensionNote, dimension.Type, values));
-            }
-
-            MultilanguageString header = CreateDefaultHeader(dimensions, null, input.AvailableLanguages)
-                .CopyAndEditAll(h => h[..int.Min(Configuration.Current.QueryOptions.MaxHeaderLength, h.Length)]);
+            
             return new(input.AvailableLanguages, header, note, dimensions);
         }
 
-        // TODO clean and document
+        /// <summary>
+        /// Returns the content dimension from the given cube metadata.
+        /// </summary>
+        /// <param name="input"><see cref="IReadOnlyMatrixMetadata"/> object to be used.</param>
+        /// <param name="query">Query object to be used for filtering the dimension values.</param>
+        /// <returns>Content dimension from the given cube metadata.</returns>
         public static IReadOnlyMatrixMetadata FilterDimensionValues(this IReadOnlyMatrixMetadata input, MatrixQuery query)
         {
             List<IDimensionMap> dimensionMaps = [];
@@ -131,21 +116,6 @@ namespace PxGraf.Models.Metadata
                 dimensionMaps.Add(new DimensionMap(dimension.Code, valueCodes));
             }
             return input.GetTransform(new MatrixMap(dimensionMaps));
-        }
-
-        // TODO move, clean and document
-        public static string? GetEliminationValueCode(this IReadOnlyDimension dimension)
-        {
-            if (dimension.AdditionalProperties.TryGetValue(PxSyntaxConstants.ELIMINATION_KEY, out MetaProperty? property))
-            {
-                if (property.CanGetStringValue) return property.ValueAsString(PxSyntaxConstants.STRING_DELIMETER);
-                else
-                {
-                    MultilanguageString eliminationName = property.ValueAsMultilanguageString(PxSyntaxConstants.STRING_DELIMETER, dimension.Name.Languages.First());
-                    return dimension.Values.FirstOrDefault(v => v.Name.Equals(eliminationName))?.Code;
-                }
-            }
-            return null;
         }
 
         /// <summary>
@@ -175,14 +145,6 @@ namespace PxGraf.Models.Metadata
             return cubeMeta.Dimensions
                 .Where(dimension => dimension.Values.Count == 1)
                 .ToList();
-        }
-
-        /// <summary>
-        /// Returns true if dimensions has more than one included value.
-        /// </summary>
-        public static bool IsMultivalue(this IReadOnlyDimension dimension)
-        {
-            return dimension.Values != null && dimension.Values.Count > 1;
         }
 
         /// <summary>
@@ -256,122 +218,14 @@ namespace PxGraf.Models.Metadata
                 return null;
             }
         }
-
-        // TODO documentation
-        private static MultilanguageString CreateDefaultHeader(IReadOnlyList<Variable> dimensions, MatrixQuery? query, IReadOnlyList<string> langs)
-        {
-            Dictionary<string, StringBuilder> langToHeader = [];
-            foreach (string language in langs)
-            {
-                Translation translation = Localization.FromLanguage(language).Translation;
-                langToHeader[language] = new();
-
-                langToHeader.AppendContentDimensionText(dimensions.First(v => v.Type == DimensionType.Content), language);
-                langToHeader.AppendSingleValueDimensionTexts(dimensions, language);
-
-                Variable? timeDim = dimensions.FirstOrDefault(v => v.Type == DimensionType.Time);
-                if (timeDim != null && (!query?.DimensionQueries[timeDim.Code].Selectable ?? false))
-                {
-                    langToHeader[language].AppendTimeValuePlaceholders(translation, timeDim.IncludedValues.Count > 1);
-                }
-
-                List<string> dimensionTexts = dimensions
-                    .Where(v => v.Type != DimensionType.Time && v.IncludedValues.Count > 1)
-                    // We want content dimension appear at the begin [orderBy is stable so otherwise original order is maintained]
-                    .OrderBy(v => v.Type == DimensionType.Content ? 0 : 1)
-                    .Select(v => v.Name[language])
-                    .ToList();
-
-                if (dimensionTexts.Count == 1)
-                {
-                    langToHeader[language].Append($" {translation.TitleVariable} {dimensionTexts.Single()}");
-                }
-                else if (dimensionTexts.Count != 0)
-                {
-                    langToHeader[language].Append($" {translation.TitleVariablePlural} {string.Join(", ", dimensionTexts)}");
-                }
-            }
-
-            return new(langToHeader.ToDictionary(kvp => kvp.Key, kvp => kvp.Value.ToString()));
-        }
-
+        
         /// <summary>
-        /// Takes the header from the cube meta and replaces the [FIRST] and [LAST] placeholders with the first and last time values.
+        /// Returns a property value from the matrix metadata based on the given key.
         /// </summary>
-        // TODO Move and replace
-        public static MultilanguageString ReplaceTimePlaceholdersInHeader(MultilanguageString header, Dimension timeDimension)
-        {
-            if (timeDimension != null)
-            {
-                foreach (string lang in header.Languages)
-                {
-                    string singleLangTitle = header[lang];
-                    singleLangTitle = singleLangTitle.Replace("[FIRST]", timeDimension.Values[0].Name[lang]);
-                    singleLangTitle = singleLangTitle.Replace("[LAST]", timeDimension.Values[^1].Name[lang]);
-                    header = header.CopyAndReplace(lang, singleLangTitle);
-                }
-            }
-            return header;
-        }
-
-        private static void AppendTimeValuePlaceholders(this StringBuilder builder, Translation translation, bool multivalue)
-        {
-            if (builder.Length > 0) builder.Append(' ');
-
-            if (multivalue)
-            {
-                builder.Append(string.Format(translation.HeaderTimeFormats.TimeRange, "[FIRST]", "[LAST]"));
-            }
-            else
-            {
-                builder.Append(string.Format(translation.HeaderTimeFormats.SingleTimeValue, "[FIRST]"));
-            }
-        }
-
-        private static void AppendContentDimensionText(this Dictionary<string, StringBuilder> builders, Variable contentDim, string language)
-        {
-            if (contentDim.IncludedValues.Count == 1)
-            {
-                builders[language].Append(contentDim.IncludedValues[0].Name[language]);
-            }
-            else
-            {
-                builders[language].Append(contentDim.Name[language]);
-            }
-        }
-
-        private static void AppendSingleValueDimensionTexts(this Dictionary<string, StringBuilder> builders, IReadOnlyList<Variable> variables, string language)
-        {
-            IEnumerable<Variable> singleValueVariables = variables
-                .Where(d => d.IncludedValues.Count == 1 && d.Type != DimensionType.Content && d.Type != DimensionType.Time)
-                .Where(singleDim => singleDim.IncludedValues.Count != 0);
-
-            foreach (var singleDim in singleValueVariables)
-            {
-                VariableValue dimensionValue = singleDim.IncludedValues[0];
-                if (!dimensionValue.IsSumValue)
-                {
-                    if (builders[language].Length > 0)
-                    {
-                        builders[language].Append(", ");
-                    }
-
-                    builders[language].Append(dimensionValue.Name[language]);
-                }
-            }
-        }
-
-        private static MultilanguageString? GetDimensionProperty(this IReadOnlyDimension dimension, string propertyKey, string defaultLang)
-        {
-            if (dimension.AdditionalProperties.TryGetValue(propertyKey, out MetaProperty? prop) && prop.CanGetMultilanguageValue)
-            {
-                return prop.ValueAsMultilanguageString(PxSyntaxConstants.STRING_DELIMETER, defaultLang);
-            }
-
-            return null;
-        }
-
-        private static MultilanguageString? GetMatrixProperty(this IReadOnlyMatrixMetadata meta, string propertyKey)
+        /// <param name="meta">Metadata object to be searched.</param>
+        /// <param name="propertyKey">Key of the property to be searched.</param>
+        /// <returns>Property value as a <see cref="MultilanguageString"/> object if it exists, otherwise null.</returns>
+        public static MultilanguageString? GetMatrixProperty(this IReadOnlyMatrixMetadata meta, string propertyKey)
         {
             if (meta.AdditionalProperties.TryGetValue(propertyKey, out MetaProperty? prop) && prop.CanGetMultilanguageValue)
             {
