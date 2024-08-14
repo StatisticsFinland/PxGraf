@@ -141,7 +141,7 @@ namespace PxGraf.Controllers
         {
             _logger.LogDebug("Requesting default header for {Input} POST: api/creation/default-header", input);
             IReadOnlyMatrixMetadata tableMeta = await _datasource.GetMatrixMetadataCachedAsync(input.TableReference);
-            MultilanguageString header = tableMeta.ToQueriedCubeMeta(input).Header;
+            MultilanguageString header = HeaderBuildingUtilities.CreateDefaultHeader(tableMeta.Dimensions, null, tableMeta.AvailableLanguages);
 
             _logger.LogDebug("default-header result: {Header}", header);
             return header;

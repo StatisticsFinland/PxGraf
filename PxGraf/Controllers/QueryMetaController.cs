@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Px.Utils.Language;
 using Px.Utils.Models.Metadata;
 using Px.Utils.Models.Metadata.ExtensionMethods;
 using PxGraf.Data.MetaData;
@@ -39,20 +40,18 @@ namespace PxGraf.Controllers
             {
                 SavedQuery savedQuery = await _sqFileInterface.ReadSavedQueryFromFile(savedQueryId, Configuration.Current.SavedQueryDirectory);
                 IReadOnlyMatrixMetadata meta = await GetMatrixMetadata(savedQuery, savedQueryId);
-                CubeMeta pxGrafMeta = meta.ToQueriedCubeMeta(savedQuery.Query);
-
+                MultilanguageString header = HeaderBuildingUtilities.CreateDefaultHeader(meta.Dimensions, savedQuery.Query, meta.AvailableLanguages);
                 QueryMetaResponse queryMetaResponse = new()
                 {
-                    // TODO: convert the header building to use dimensions, so we can skip converting to pxgraf meta. Also helps when the archiveserializer produces matrices directly.
-                    Header = Models.Metadata.MatrixMetadataExtensions.ReplaceTimePlaceholdersInHeader(pxGrafMeta.Header, meta.GetTimeDimension()),
-                    HeaderWithPlaceholders = pxGrafMeta.Header,
+                    Header = HeaderBuildingUtilities.ReplaceTimePlaceholdersInHeader(header, meta.GetTimeDimension()),
+                    HeaderWithPlaceholders = header,
                     Archived = savedQuery.Archived,
                     Selectable = savedQuery.Query.DimensionQueries.Any(q => q.Value.Selectable),
                     VisualizationType = savedQuery.Settings.VisualizationType,
                     TableId = savedQuery.Query.TableReference.Name,
-                    Description = pxGrafMeta.Note,
+                    Description = meta.GetMatrixProperty(PxSyntaxConstants.NOTE_KEY),
                     TableReference = savedQuery.Query.TableReference,
-                    LastUpdated = meta.GetContentDimension().Values.Map(cdv => cdv.LastUpdated).Max().ToString(), // TODO: Make some proper conversion function for pxweb time format strings.
+                    LastUpdated = meta.GetContentDimension().Values.Map(cdv => cdv.LastUpdated).Max().ToString(),
                 };
                 _logger.LogInformation("{SavedQueryId} result: {QueryMetaResponse}", savedQueryId, queryMetaResponse);
                 return queryMetaResponse;

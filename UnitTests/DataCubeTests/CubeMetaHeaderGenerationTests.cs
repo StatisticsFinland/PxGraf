@@ -39,7 +39,7 @@ namespace DataCubeTests
             cubeMeta.Dimensions[3].Name.CopyAndEdit(new MultilanguageString("fi", "foobar 3"));
 
             string expectedResult = "foobar 1 [FIRST] muuttujina foobar 2, foobar 3";
-            MultilanguageString header = cubeMeta.ToQueriedCubeMeta(cubeQuery).Header;
+            MultilanguageString header = cubeMeta.ToCubeMeta(cubeQuery).Header;
             string result = header["fi"];
 
             Assert.That(result, Is.EqualTo(expectedResult));
@@ -63,7 +63,7 @@ namespace DataCubeTests
             cubeMeta.Dimensions[3].Name.CopyAndEdit(new MultilanguageString("fi", "foobar 3"));
 
             string expectedResult = "foobar 1 [FIRST]-[LAST] muuttujina foobar 2, foobar 3";
-            MultilanguageString header = cubeMeta.ToQueriedCubeMeta(cubeQuery).Header;
+            MultilanguageString header = cubeMeta.ToCubeMeta(cubeQuery).Header;
             string result = header["fi"];
 
             Assert.That(result, Is.EqualTo(expectedResult));
@@ -85,7 +85,7 @@ namespace DataCubeTests
             cubeMeta.Dimensions[^1].Values[0].Name.CopyAndEdit(new MultilanguageString("fi", "foobar 2"));
 
             string expectedResult = "foobar 1, foobar 2 [FIRST]-[LAST]";
-            MultilanguageString header = cubeMeta.ToQueriedCubeMeta(cubeQuery).Header;
+            MultilanguageString header = cubeMeta.ToCubeMeta(cubeQuery).Header;
             string result = header["fi"];
 
             Assert.That(result, Is.EqualTo(expectedResult));
@@ -107,7 +107,7 @@ namespace DataCubeTests
             cubeMeta.Dimensions[^1].Values[0].Name.CopyAndEdit(new MultilanguageString("fi", "foobar 2"));
 
             string expectedResult = "foobar 1 [FIRST]-[LAST] muuttujana variable-2";
-            MultilanguageString header = cubeMeta.ToQueriedCubeMeta(cubeQuery).Header;
+            MultilanguageString header = cubeMeta.ToCubeMeta(cubeQuery).Header;
             string result = header["fi"];
 
             Assert.That(result, Is.EqualTo(expectedResult));
@@ -131,7 +131,7 @@ namespace DataCubeTests
             cubeMeta.Dimensions[3].Values[0].Name.CopyAndEdit(new MultilanguageString("fi", "foobar 3"));
 
             string expectedResult = "foobar 1, foobar 2 [FIRST] muuttujana variable-3";
-            MultilanguageString header = cubeMeta.ToQueriedCubeMeta(cubeQuery).Header;
+            MultilanguageString header = cubeMeta.ToCubeMeta(cubeQuery).Header;
             string result = header["fi"];
 
             Assert.That(result, Is.EqualTo(expectedResult));
@@ -152,7 +152,7 @@ namespace DataCubeTests
             cubeMeta.Dimensions[0].Values[0].Name.CopyAndEdit(new MultilanguageString("fi", "foobar 1"));
 
             string expectedResult = "foobar 1 [FIRST]-[LAST]";
-            MultilanguageString header = cubeMeta.ToQueriedCubeMeta(cubeQuery).Header;
+            MultilanguageString header = cubeMeta.ToCubeMeta(cubeQuery).Header;
             string result = header["fi"];
 
             Assert.That(result, Is.EqualTo(expectedResult));
@@ -176,7 +176,7 @@ namespace DataCubeTests
             cubeMeta.Dimensions[3].Name.CopyAndEdit(new MultilanguageString("fi", "foobar 3"));
 
             string expectedResult = "foobar 1 muuttujina foobar 2, foobar 3";
-            MultilanguageString header = cubeMeta.ToQueriedCubeMeta(cubeQuery).Header;
+            MultilanguageString header = cubeMeta.ToCubeMeta(cubeQuery).Header;
             string result = header["fi"];
 
             Assert.That(result, Is.EqualTo(expectedResult));
@@ -200,7 +200,7 @@ namespace DataCubeTests
             cubeMeta.Dimensions[3].Name.CopyAndEdit(new MultilanguageString("en", "foobar 3.en"));
 
             string expectedResult = "foobar 1.en in [FIRST] to [LAST] by foobar 2.en, foobar 3.en";
-            MultilanguageString header = cubeMeta.ToQueriedCubeMeta(cubeQuery).Header;
+            MultilanguageString header = cubeMeta.ToCubeMeta(cubeQuery).Header;
             string result = header["fi"];
 
             Assert.That(result, Is.EqualTo(expectedResult));

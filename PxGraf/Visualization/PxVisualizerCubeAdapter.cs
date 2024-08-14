@@ -1,4 +1,5 @@
-﻿using Px.Utils.Models;
+﻿using Px.Utils.Language;
+using Px.Utils.Models;
 using Px.Utils.Models.Data.DataValue;
 using Px.Utils.Models.Metadata;
 using Px.Utils.Models.Metadata.ExtensionMethods;
@@ -64,7 +65,7 @@ namespace PxGraf.Visualization
             Matrix<DecimalDataValue> resultMatrix = matrix.GetTransform(finalMap);
             MatrixExtensions.DataAndNotesCollection dataAndNotes = resultMatrix.ExtractDataAndNotes();
             IReadOnlyList<string> timeDimensionCodes = matrix.Metadata.GetTimeDimension().Values.Codes;
-            CubeMeta cubeMeta = matrix.Metadata.ToQueriedCubeMeta(query);
+            MultilanguageString header = HeaderBuildingUtilities.CreateDefaultHeader(matrix.Metadata.Dimensions, query, matrix.Metadata.AvailableLanguages);
 
             return new VisualizationResponse()
             {
@@ -72,11 +73,11 @@ namespace PxGraf.Visualization
                 Data = dataAndNotes.Data,
                 DataNotes = dataAndNotes.Notes,
                 MissingDataInfo = dataAndNotes.MissingValueInfo,
-                MetaData = cubeMeta.Variables,
+                MetaData = matrix.Metadata.Dimensions.Select(d => d.ConvertToVariable()).ToList(),
                 SelectableVariableCodes = layout.SelectableVariableCodes,
                 RowVariableCodes = layout.RowVariableCodes,
                 ColumnVariableCodes = layout.ColumnVariableCodes,
-                Header = Models.Metadata.MatrixMetadataExtensions.ReplaceTimePlaceholdersInHeader(cubeMeta.Header, matrix.Metadata.GetTimeDimension()),
+                Header = HeaderBuildingUtilities.ReplaceTimePlaceholdersInHeader(header, matrix.Metadata.GetTimeDimension()),
                 VisualizationSettings = new()
                 {
                     VisualizationType = settings.VisualizationType,
