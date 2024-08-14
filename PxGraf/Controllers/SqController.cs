@@ -202,7 +202,7 @@ namespace PxGraf.Controllers
                     IReadOnlyList<VisualizationType> validTypes = ChartTypeSelector.Selector.GetValidChartTypes(baseQuery.Query, matrix);
                     if (validTypes.Contains(baseQuery.Settings.VisualizationType))
                     {
-                        SavedQuery savedQuery = new SavedQuery(baseQuery.Query, archived: true, baseQuery.Settings, DateTime.Now);
+                        SavedQuery savedQuery = new (baseQuery.Query, archived: true, baseQuery.Settings, DateTime.Now);
                         await _sqFileInterface.SerializeToFile(queryFileName, Configuration.Current.SavedQueryDirectory, savedQuery);
 
                         string archiveName = $"{newGuid}.sqa";

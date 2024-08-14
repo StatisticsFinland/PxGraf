@@ -45,7 +45,7 @@ namespace PxGraf.Settings
                     Database = configuration.GetSection("CacheOptions:Database").Get<CacheValues>(),
                     Table = configuration.GetSection("CacheOptions:Table").Get<CacheValues>(),
                     Visualization = configuration.GetSection("CacheOptions:Visualization").Get<CacheValues>(),
-                    CacheFreshnessCheckInterval = configuration.GetValue<int>("CacheOptions:CacheFreshnessCheckInterval")
+                    CacheFreshnessCheckIntervalSeconds = configuration.GetValue<int>("CacheOptions:CacheFreshnessCheckIntervalSeconds")
                 },
                 CorsOptions = new()
                 {

@@ -135,7 +135,7 @@ namespace PxGraf
             services.AddSingleton<ISqFileInterface, SqFileInterface>();
             services.AddSingleton<IMultiStateMemoryTaskCache>(provider => new MultiStateMemoryTaskCache(
                 Configuration.Current.CacheOptions.Database.ItemAmountLimit,
-                TimeSpan.FromSeconds(Configuration.Current.CacheOptions.CacheFreshnessCheckInterval)));
+                TimeSpan.FromSeconds(Configuration.Current.CacheOptions.CacheFreshnessCheckIntervalSeconds)));
             if (Configuration.Current.LocalFilesystemDatabaseConfig.Enabled)
             {
                 static string referenceToPathConverter(PxTableReference reference) =>

@@ -17,15 +17,20 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
+using Px.Utils.Models.Metadata.Dimensions;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace PxGraf.Controllers
 {
     /// <summary>
     /// Controller for returning data required for visualizing a saved query
     /// </summary>
+    /// <param name="sqFileInterface">The interface for reading saved queries</param>
+    /// <param name="taskCache">The cache for storing tasks</param>
+    /// <param name="cachedDatasource">The cached datasource</param>
+    /// <param name="logger">The logger interface</param>
     /// <remarks>
     /// Default constructor.
-    //TODO: document the parameters.
     /// </remarks>
     [ApiController]
     [Route("api/sq/visualization")]
@@ -41,7 +46,11 @@ namespace PxGraf.Controllers
         private static readonly TimeSpan SlidingExpiration = TimeSpan.FromMinutes(CacheValues.SlidingExpirationMinutes);
         #region ACTIONS
 
-        // TODO: document
+        /// <summary>
+        /// Get visualization for a saved query
+        /// </summary>
+        /// <param name="sqId">The id of the saved query</param>
+        /// <returns><see cref="VisualizationResponse"/> object containing the properties of the visualization</returns>
         [HttpGet("{sqId}")]
         public async Task<ActionResult<VisualizationResponse>> GetVisualization([FromRoute] string sqId)
         {

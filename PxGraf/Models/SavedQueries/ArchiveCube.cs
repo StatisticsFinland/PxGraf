@@ -101,7 +101,7 @@ namespace PxGraf.Models.SavedQueries
 
         public static ArchiveCube FromMatrixAndQuery(Matrix<DecimalDataValue> matrix, MatrixQuery query)
         {
-            CubeMeta pxGrafMeta = matrix.Metadata.ToQueriedCubeMeta(query);
+            CubeMeta pxGrafMeta = matrix.Metadata.ToCubeMeta(query);
             return new ArchiveCube(pxGrafMeta, matrix.Data);
         }
     }

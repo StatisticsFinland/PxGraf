@@ -73,6 +73,28 @@ namespace PxGraf.Data.MetaData
         }
 
         /// <summary>
+        /// Constrcutor for converting Px.Utils DimensionValue to PxGraf VariableValue.
+        /// </summary>
+        /// <param name="code"></param>
+        /// <param name="name"></param>
+        /// <param name="note"></param>
+        /// <param name="isSumValue"></param>
+        /// <param name="contentComponent"></param>
+        public VariableValue(
+            string code,
+            MultilanguageString name,
+            MultilanguageString note,
+            bool isSumValue,
+            ContentComponent? contentComponent)
+        {
+            Code = code;
+            Name = name;
+            Note = note;
+            IsSumValue = isSumValue;
+            ContentComponent = contentComponent;
+        }
+
+        /// <summary>
         /// Default constructor for deserialization.
         /// </summary>
         public VariableValue() { }
