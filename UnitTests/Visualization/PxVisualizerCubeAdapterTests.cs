@@ -17,6 +17,8 @@ using UnitTests.Fixtures.ResponseFixtures;
 using UnitTests.Fixtures;
 using UnitTests.Utilities;
 using UnitTests;
+using PxGraf.Utility;
+using Newtonsoft.Json.Converters;
 
 namespace Visualization
 {
@@ -370,7 +372,11 @@ namespace Visualization
             Matrix<DecimalDataValue> cube = TestDataCubeBuilder.BuildTestMatrix(cubeParams);
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(cube, savedQuery);
 
-            string normalizedResponse = JsonUtils.NormalizeJsonString(JsonConvert.SerializeObject(result));
+            JsonSerializerSettings jsonSettings = new();
+            jsonSettings.Converters.Add(new MultilanguageStringConverter());
+            jsonSettings.Converters.Add(new StringEnumConverter());
+
+            string normalizedResponse = JsonUtils.NormalizeJsonString(JsonConvert.SerializeObject(result, jsonSettings));
             string expexted = JsonUtils.NormalizeJsonString(VisualizationResponseFixtures.ASCENDING_HORIZONTAL_BARCHART_RESPONSE_FIXTURE);
 
             JsonUtils.AreEqual(expexted, normalizedResponse);
@@ -541,7 +547,11 @@ namespace Visualization
             SavedQuery savedQuery = TestDataCubeBuilder.BuildTestSavedQuery(cubeParams, false, settings);
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(cube, savedQuery);
 
-            string normalizedResponse = JsonUtils.NormalizeJsonString(JsonConvert.SerializeObject(result));
+            JsonSerializerSettings jsonSettings = new();
+            jsonSettings.Converters.Add(new MultilanguageStringConverter());
+            jsonSettings.Converters.Add(new StringEnumConverter());
+
+            string normalizedResponse = JsonUtils.NormalizeJsonString(JsonConvert.SerializeObject(result, jsonSettings));
             string normalizedExpected = JsonUtils.NormalizeJsonString(VisualizationResponseFixtures.LINE_CHART_RESPONSE_FIXTURE_WITH_MISSING_VALUES);
 
             Assert.That(normalizedResponse, Is.EqualTo(normalizedExpected));
@@ -564,7 +574,11 @@ namespace Visualization
             SavedQuery savedQuery = TestDataCubeBuilder.BuildTestSavedQuery(cubeParams, false, settings);
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(cube, savedQuery);
 
-            string normalizedResponse = JsonUtils.NormalizeJsonString(JsonConvert.SerializeObject(result));
+            JsonSerializerSettings jsonSettings = new ();
+            jsonSettings.Converters.Add(new MultilanguageStringConverter());
+            jsonSettings.Converters.Add(new StringEnumConverter());
+
+            string normalizedResponse = JsonUtils.NormalizeJsonString(JsonConvert.SerializeObject(result, jsonSettings));
             string normalizedExpected = JsonUtils.NormalizeJsonString(VisualizationResponseFixtures.LINE_CHART_RESPONSE_FIXTURE);
 
             Assert.That(normalizedResponse, Is.EqualTo(normalizedExpected));
