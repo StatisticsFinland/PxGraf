@@ -170,8 +170,8 @@ namespace UnitTests.Fixtures.ResponseFixtures
             ""Alue""
             ],
             ""Header"": {
-            ""fi"": ""Test Header"",
-            ""en"": ""Test Header.en""
+            ""fi"": ""value-0, value-0, value-0 2000 muuttujana Alue"",
+            ""en"": ""value-0.en, value-0.en, value-0.en 2000.en by Alue.en""
             },
             ""VisualizationSettings"": {
             ""VisualizationType"": ""HorizontalBarChart"",
@@ -529,8 +529,8 @@ namespace UnitTests.Fixtures.ResponseFixtures
             ""Vuosineljännes""
           ],
           ""Header"": {
-            ""fi"": ""Test Header"",
-            ""en"": ""Test Header.en""
+            ""fi"": ""value-0, value-0, value-0 2000-2014 muuttujana Alue"",
+            ""en"": ""value-0.en, value-0.en, value-0.en in 2000.en to 2014.en by Alue.en""
           },
           ""VisualizationSettings"": {
             ""VisualizationType"": ""LineChart"",
@@ -902,8 +902,8 @@ namespace UnitTests.Fixtures.ResponseFixtures
             ""Vuosineljännes""
           ],
           ""Header"": {
-            ""fi"": ""Test Header"",
-            ""en"": ""Test Header.en""
+            ""fi"": ""value-0, value-0, value-0 2000-2014 muuttujana Alue"",
+            ""en"": ""value-0.en, value-0.en, value-0.en in 2000.en to 2014.en by Alue.en""
           },
           ""VisualizationSettings"": {
             ""VisualizationType"": ""LineChart"",
