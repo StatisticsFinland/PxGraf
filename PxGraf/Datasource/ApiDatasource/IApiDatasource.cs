@@ -10,9 +10,16 @@ using System;
 
 namespace PxGraf.Datasource.PxWebInterface
 {
+    /// <summary>
+    /// Interface for accessing data from the PxWeb API.
+    /// </summary>
     public interface IApiDatasource
     {
-        // TODO: documentation
+        /// <summary>
+        /// Asynchronously gets the contents of a database group.
+        /// </summary>
+        /// <param name="groupHierarcy">Path to the group.</param>
+        /// <returns><see cref="DatabaseGroupContents"/> object containing the information of the group.</returns>
         public Task<DatabaseGroupContents> GetDatabaseItemGroup(IReadOnlyList<string> groupHierarcy);
 
         /// <summary>

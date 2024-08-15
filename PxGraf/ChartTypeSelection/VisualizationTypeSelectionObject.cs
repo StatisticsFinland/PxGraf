@@ -9,6 +9,7 @@ using PxGraf.Models.Metadata;
 using PxGraf.Models.Queries;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace PxGraf.ChartTypeSelection
 {

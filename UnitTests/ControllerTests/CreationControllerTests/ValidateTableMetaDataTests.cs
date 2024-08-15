@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using Microsoft.AspNetCore.Mvc;
+using NUnit.Framework;
 using Px.Utils.Models.Metadata.Enums;
 using PxGraf.Controllers;
 using PxGraf.Models.Responses;
@@ -10,15 +11,6 @@ namespace CreationControllerTests
 {
     public class ValidateTableMetaDataTests
     {
-        private CreationController controller;
-        private string tablePath;
-
-        [OneTimeSetUp]
-        public void Setup()
-        {
-            // TODO fix
-        }
-
         [TestCase(DimensionType.Content, DimensionType.Time, true, true, true)]
         [TestCase(DimensionType.Time, DimensionType.Unknown, false, true, true)]
         [TestCase(DimensionType.Content, DimensionType.Unknown, true, false, true)]
@@ -39,10 +31,10 @@ namespace CreationControllerTests
                 new DimensionParameters(secondDimensionType, 1)
             ];
 
-            // TODO: setup step
+            CreationController controller = TestCreationControllerBuilder.BuildController([], dimParams);
 
             // Act
-            TableMetaValidationResult result = await controller.ValidateTableMetaData(tablePath);
+            TableMetaValidationResult result = await controller.ValidateTableMetaData("path/table.px");
 
             // Assert
             Assert.That(result.TableHasContentVariable, Is.EqualTo(hasContentVariable));

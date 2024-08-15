@@ -1,4 +1,5 @@
-﻿using Px.Utils.Language;
+﻿#nullable enable
+using Px.Utils.Language;
 using Px.Utils.Models.Metadata.Dimensions;
 using PxGraf.Language;
 using PxGraf.Models.Queries;
@@ -6,6 +7,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Px.Utils.Models.Metadata.Enums;
+using System.Collections;
+using static PxGraf.Models.Queries.DimensionQuery;
 
 namespace PxGraf.Models.Metadata
 {
@@ -29,8 +32,8 @@ namespace PxGraf.Models.Metadata
                 Translation translation = Localization.FromLanguage(language).Translation;
                 langToHeader[language] = new();
 
-                langToHeader.AppendContentDimensionText(dimensions.First(v => v.Type == DimensionType.Content), language);
-                langToHeader.AppendSingleValueDimensionTexts(dimensions, language);
+                langToHeader.AppendContentDimensionText(dimensions.First(v => v.Type == DimensionType.Content), language, query);
+                langToHeader.AppendSingleValueDimensionTexts(dimensions, language, query);
 
                 IReadOnlyDimension? timeDim = dimensions.FirstOrDefault(v => v.Type == DimensionType.Time);
                 if (timeDim != null && (!query?.DimensionQueries[timeDim.Code].Selectable ?? false))
@@ -40,9 +43,9 @@ namespace PxGraf.Models.Metadata
 
                 List<string> dimensionTexts = dimensions
                     .Where(v => v.Type != DimensionType.Time && v.Values.Count > 1)
-                    // We want content dimension appear at the begin [orderBy is stable so otherwise original order is maintained]
+                    // We want content dimension appear at the beginning [orderBy is stable so otherwise original order is maintained]
                     .OrderBy(v => v.Type == DimensionType.Content ? 0 : 1)
-                    .Select(v => v.Name[language])
+                    .Select(v => GetDimensionNameEditForLanguage(query, v, language))
                     .ToList();
 
                 if (dimensionTexts.Count == 1)
@@ -90,24 +93,23 @@ namespace PxGraf.Models.Metadata
             }
         }
 
-        private static void AppendContentDimensionText(this Dictionary<string, StringBuilder> builders, IReadOnlyDimension contentDim, string language)
+        private static void AppendContentDimensionText(this Dictionary<string, StringBuilder> builders, IReadOnlyDimension contentDim, string language, MatrixQuery? query)
         {
             if (contentDim.Values.Count == 1)
             {
-                builders[language].Append(contentDim.Values[0].Name[language]);
+                builders[language].Append(GetDimensionValueNameEditForLanguage(query, contentDim.Code, contentDim.Values[0], language));
             }
             else
             {
-                builders[language].Append(contentDim.Name[language]);
+                builders[language].Append(GetDimensionNameEditForLanguage(query, contentDim, language));
             }
         }
 
-        private static void AppendSingleValueDimensionTexts(this Dictionary<string, StringBuilder> builders, IReadOnlyList<IReadOnlyDimension> dimensions, string language)
+        private static void AppendSingleValueDimensionTexts(this Dictionary<string, StringBuilder> builders, IReadOnlyList<IReadOnlyDimension> dimensions, string language, MatrixQuery? query)
         {
             IEnumerable<IReadOnlyDimension> singleValueDimensions = dimensions
                 .Where(d => d.Values.Count == 1 && d.Type != DimensionType.Content && d.Type != DimensionType.Time)
                 .Where(singleDim => singleDim.Values.Count != 0);
-
 
             foreach (var singleDim in singleValueDimensions)
             {
@@ -120,8 +122,37 @@ namespace PxGraf.Models.Metadata
                         builders[language].Append(", ");
                     }
 
-                    builders[language].Append(dimensionValue.Name[language]);
+                    builders[language].Append(GetDimensionValueNameEditForLanguage(query, singleDim.Code, dimensionValue, language));
                 }
+            }
+        }
+
+        private static string GetDimensionNameEditForLanguage(MatrixQuery? query, IReadOnlyDimension dimension, string language)
+        {
+            if (query != null && 
+                query.DimensionQueries.TryGetValue(dimension.Code, out DimensionQuery? dq) &&
+                dq.NameEdit != null)
+            {
+                return dq.NameEdit[language];
+            }
+            else
+            {
+                return dimension.Name[language];
+            }
+        }
+
+        private static string GetDimensionValueNameEditForLanguage(MatrixQuery? query, string dimensionCode, IReadOnlyDimensionValue value, string language)
+        {
+            if (query != null &&
+                query.DimensionQueries.TryGetValue(dimensionCode, out DimensionQuery? dq) &&
+                dq.ValueEdits.TryGetValue(value.Code, out VariableValueEdition? dvq) &&
+                dvq.NameEdit != null)
+            {
+                return dvq.NameEdit[language];
+            }
+            else
+            {
+                return value.Name[language];
             }
         }
     }
