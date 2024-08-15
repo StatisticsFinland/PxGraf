@@ -11,12 +11,12 @@ using System.Linq;
 namespace PxGraf.Models.Metadata
 {
     /// <summary>
-    /// TODO: Summary
+    /// Extension methods for <see cref="IReadOnlyDimension"/> objects.
     /// </summary>
     public static class DimensionValueExtensions
     {
         /// <summary>
-        /// TODO: Summary
+        /// Converts the given <see cref="IReadOnlyDimensionValue"/> object to a <see cref="VariableValue"/> object.
         /// </summary>
         /// <param name="input"></param>
         /// <param name="eliminationValueCode"></param>
@@ -29,7 +29,7 @@ namespace PxGraf.Models.Metadata
             if (input is ContentDimensionValue cdv)
             {
                 MultilanguageString? source = input.GetDimensionValueProperty(PxSyntaxConstants.SOURCE_KEY);
-                cc = new ContentComponent(cdv.Unit, source, cdv.Precision, cdv.LastUpdated.ToString());
+                cc = new ContentComponent(cdv.Unit, source, cdv.Precision, PxSyntaxConstants.FormatPxDateTime(cdv.LastUpdated, true));
             }
             return new VariableValue(input.Code, input.Name, valueNote, isSum, cc);
         }

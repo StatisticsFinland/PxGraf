@@ -11,15 +11,15 @@ using System.Linq;
 namespace PxGraf.Models.Metadata
 {
     /// <summary>
-    /// TODO: Summary
+    /// Extension methods for <see cref="IReadOnlyDimension"/> objects.
     /// </summary>
     public static class DimensionExtensions
     {
         /// <summary>
-        /// TODO: Summary
+        /// Converts the given <see cref="IReadOnlyDimension"/> object to a <see cref="Variable"/> object.
         /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
+        /// <param name="input">The <see cref="IReadOnlyDimension"/> object to convert.</param>
+        /// <returns>A <see cref="Variable"/> object created from the given <see cref="IReadOnlyDimension"/> object.</returns>
         public static Variable ConvertToVariable(this IReadOnlyDimension input)
         {
             if (input is not Dimension)
@@ -56,11 +56,11 @@ namespace PxGraf.Models.Metadata
         }
 
         /// <summary>
-        /// TODO: Summary
+        /// Returns the value of the given property key from the dimension if it exists.
         /// </summary>
-        /// <param name="dimension"></param>
-        /// <param name="propertyKey"></param>
-        /// <param name="defaultLang"></param>
+        /// <param name="dimension">The dimension to search the property from.</param>
+        /// <param name="propertyKey">The key of the property to search for.</param>
+        /// <param name="defaultLang">The default language to use if the property is a multilanguage string.</param>
         /// <returns></returns>
         public static MultilanguageString? GetDimensionProperty(this IReadOnlyDimension dimension, string propertyKey, string defaultLang)
         {

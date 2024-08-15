@@ -22,7 +22,7 @@ namespace UnitTests
                 });
 
             dataSource.Setup(ds => ds.GetMatrixCachedAsync(It.IsAny<PxTableReference>(), It.IsAny<MatrixMetadata>()))
-                .ReturnsAsync((PxTableReference tableReference, List<DimensionParameters> parameters) =>
+                .ReturnsAsync((PxTableReference tableReference, MatrixMetadata metadata) =>
                 {
                     return TestDataCubeBuilder.BuildTestMatrix(cubeParams);
                 });

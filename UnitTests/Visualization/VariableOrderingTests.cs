@@ -9,10 +9,12 @@ using PxGraf.Visualization;
 using System.Collections.Generic;
 using System.Linq;
 using UnitTests;
+using PxGraf.Language;
+using UnitTests.Fixtures;
 
 namespace Visualization
 {
-    internal static class VariableOrderingTests
+    internal class VariableOrderingTests
     {
         // This is to make sure that the data order is the same in the two tests below.
         private readonly static IReadOnlyList<double?> expectedData = [
@@ -20,6 +22,11 @@ namespace Visualization
                 3.123, 4.123, 5.123, 12.123, 13.123, 14.123, 21.123, 22.123, 23.123,
                 6.123, 7.123, 8.123, 15.123, 16.123, 17.123, 24.123, 25.123, 26.123
             ];
+
+        public VariableOrderingTests()
+        {
+            Localization.Load(TranslationFixture.DefaultLanguage, TranslationFixture.Translations);
+        }
 
         [Test]
         public static void BuildVisualizationResponseTest_TableOrdering_1_Selectable_ExplicitLayout_For_All()

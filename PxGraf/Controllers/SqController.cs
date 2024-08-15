@@ -30,7 +30,7 @@ namespace PxGraf.Controllers
     /// <remarks>
     /// Default constructor.
     /// </remarks>
-    /// <param name="datasource">Instance of a <see cref="ICachedPxWebConnection"/> object. Used to interact with PxWeb API and cache data.</param>
+    /// <param name="datasource">Instance of a <see cref="ICachedDatasource"/> object. Used to interact with data source and cached data.</param>
     /// <param name="sqFileInterface">Instance of a <see cref="ISqFileInterface"/> object. Used for interacting with saved queries.</param>
     /// <param name="logger"><see cref="ILogger"/> instance used for logging.</param>
     [FeatureGate("CreationAPI")]
@@ -68,6 +68,12 @@ namespace PxGraf.Controllers
                 }
 
                 Matrix<DecimalDataValue> matrix = await _cachedDatasource.GetMatrixCachedAsync(savedQuery.Query.TableReference, filteredMeta);
+                if (matrix == null)
+                {
+                    _logger.LogWarning("Saved query {SavedQueryId} failed to fetch data", savedQueryId);
+                    return BadRequest();
+                }
+
                 IReadOnlyList<VisualizationType> validTypes = ChartTypeSelector.Selector.GetValidChartTypes(savedQuery.Query, matrix);
 
                 if (!validTypes.Contains(savedQuery.Settings.VisualizationType))

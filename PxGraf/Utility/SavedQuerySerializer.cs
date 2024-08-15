@@ -3,11 +3,17 @@ using Newtonsoft.Json.Linq;
 using PxGraf.Models.SavedQueries;
 using PxGraf.Models.SavedQueries.Versions;
 using System;
+using System.Collections.Generic;
 
 namespace PxGraf.Utility
 {
     public class SavedQuerySerializer : JsonConverter
     {
+        private static readonly JsonSerializerSettings _serializerSettings = new()
+        {
+            Converters = new List<JsonConverter> { new MultilanguageStringConverter() }
+        };
+
         public override bool CanConvert(Type objectType)
         {
             return typeof(SavedQuery).IsAssignableFrom(objectType);
@@ -18,10 +24,12 @@ namespace PxGraf.Utility
             JToken obj = JToken.ReadFrom(reader);
             string version = GetPxGrafVersion(obj);
 
+            JsonSerializer customSerializer = JsonSerializer.Create(_serializerSettings);
+
             return version switch
             {
-                "1.0" => obj.ToObject<SavedQueryV10>(serializer).ToSavedQuery(),
-                "1.1" => obj.ToObject<SavedQueryV11>(serializer).ToSavedQuery(),
+                "1.0" => obj.ToObject<SavedQueryV10>(customSerializer).ToSavedQuery(),
+                "1.1" => obj.ToObject<SavedQueryV11>(customSerializer).ToSavedQuery(),
                 _ => throw new NotSupportedException($"Unknown version in saved query ({version})."),
             };
         }

@@ -1,4 +1,5 @@
-﻿using Px.Utils.Language;
+﻿#nullable enable
+using Px.Utils.Language;
 using Px.Utils.Models;
 using Px.Utils.Models.Data;
 using Px.Utils.Models.Data.DataValue;
@@ -38,10 +39,40 @@ namespace UnitTests
             Dictionary<string, DimensionQuery> variableQueries = [];
             for (int i = 0; i < varParams.Count; i++)
             {
-                variableQueries[$"variable-{i}"] = BuildTestVariableQuery(varParams[i]);
+                variableQueries[varParams[i].Name ?? $"variable-{i}"] = BuildTestVariableQuery(varParams[i]);
             }
 
             query.DimensionQueries = variableQueries;
+            return query;
+        }
+
+        public static MatrixQuery ApplyNameEdits(this MatrixQuery query, MatrixMetadata meta, Dictionary<string, MultilanguageString>? dimensionNameEdits = null, Dictionary<string, Dictionary<string, MultilanguageString>>? valueNameEdits = null)
+        {
+            if (dimensionNameEdits != null)
+            {
+                foreach (var dimNameEdit in dimensionNameEdits)
+                {
+                    MultilanguageString originalName = meta.Dimensions.First(d => d.Code == dimNameEdit.Key).Name;
+                    MultilanguageString nameEdit = originalName.CopyAndEdit(dimNameEdit.Value);
+                    query.DimensionQueries[dimNameEdit.Key].NameEdit = nameEdit;
+                }
+            }
+            if (valueNameEdits != null)
+            {
+                foreach (var dimension in valueNameEdits)
+                {
+                    foreach (var value in dimension.Value)
+                    {
+                        MultilanguageString originalName = meta.Dimensions.First(d => d.Code == dimension.Key).Values.First(v => v.Code == value.Key).Name;
+                        MultilanguageString nameEdit = originalName.CopyAndEdit(value.Value);
+                        query.DimensionQueries[dimension.Key].ValueEdits[value.Key] = new()
+                        {
+                            NameEdit = nameEdit
+                        };
+                    }
+                }
+            }
+
             return query;
         }
 
@@ -112,18 +143,6 @@ namespace UnitTests
 
             List<string> languages = ["fi", "en"];
             List<Dimension> variables = BuildTestDimensions(varParams);
-            Dictionary<string, string> headerTranslations = new()
-            {
-                { "fi", "Test Header" },
-                { "en", "Test Header.en" }
-            };
-            MultilanguageString header = new(headerTranslations);
-            Dictionary<string, string> noteTranslations = new()
-            {
-                { "fi", "Test note" },
-                { "en", "Test note.en" }
-            };
-            MultilanguageString note = new(noteTranslations);
             return new MatrixMetadata(languages[0], languages, variables, []);
         }
 
@@ -200,7 +219,7 @@ namespace UnitTests
                 { "fi", name },
                 { "en", $"{name}.en" }
             };
-            // TODO: Implement
+            // TODO: Implement or remove if not needed
             throw new NotImplementedException();
         }
 
@@ -223,7 +242,14 @@ namespace UnitTests
                         { "fi", varParam.SameUnit ? "testUnit" : $"{name}-unit" },
                         { "en", varParam.SameUnit ? "testUnit" : $"{name}-unit.en" }
                     };
-                    ContentDimensionValue cvv = new(name, new MultilanguageString(nameTranslations), new(unitTranslations), PxSyntaxConstants.ParsePxDateTime("2009-09-01T00:00:00Z"), 1);
+                    Dictionary<string, string> sourceTranslations = new()
+                    {
+                        { "fi", varParam.SameSource ? "\"testSource\"" : $"\"{name}-source\"" },
+                        { "en", varParam.SameSource ? "\"testSource\"" : $"\"{name}-source.en\"" }
+                    };
+                    MetaProperty source = new(PxSyntaxConstants.SOURCE_KEY, new MultilanguageString(sourceTranslations));
+                    ContentDimensionValue cvv = new(name, new MultilanguageString(nameTranslations), new(unitTranslations), PxSyntaxConstants.ParsePxDateTime("2009-09-01T00:00:00.000Z"), varParam.Decimals);
+                    cvv.AdditionalProperties[PxSyntaxConstants.SOURCE_KEY] = source;
                     results.Add(cvv);
                 }
                 else
@@ -235,6 +261,7 @@ namespace UnitTests
             return results;
         }
 
+        // TODO: Implement or remove if not needed
         private static List<DimensionValue> BuildDimensionValues(List<string> valueNames, DimensionType type, int decimals, bool sameUnit, bool sameSource, bool hasCombinationValue)
         {
             List<DimensionValue> results = [];

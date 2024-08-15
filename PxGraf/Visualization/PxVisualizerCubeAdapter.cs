@@ -73,7 +73,7 @@ namespace PxGraf.Visualization
                 Data = dataAndNotes.Data,
                 DataNotes = dataAndNotes.Notes,
                 MissingDataInfo = dataAndNotes.MissingValueInfo,
-                MetaData = matrix.Metadata.Dimensions.Select(d => d.ConvertToVariable()).ToList(),
+                MetaData = resultMatrix.Metadata.Dimensions.Select(d => d.ConvertToVariable()).ToList(),
                 SelectableVariableCodes = layout.SelectableVariableCodes,
                 RowVariableCodes = layout.RowVariableCodes,
                 ColumnVariableCodes = layout.ColumnVariableCodes,

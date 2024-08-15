@@ -6,11 +6,12 @@ using PxGraf.Settings;
 using PxGraf.Utility;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace PxGraf.Models.Metadata
 {
     /// <summary>
-    /// TODO: document
+    /// Extension methods for <see cref="CubeMeta"/> objects.
     /// </summary>
     public static class PxGrafMetaExtensions
     {
@@ -40,16 +41,22 @@ namespace PxGraf.Models.Metadata
         }
 
         /// <summary>
-        /// TODO: document
+        /// Returns the default language of the cube.
         /// </summary>
+        /// <param name="pxGrafMeta">The cube metadata.</param>
+        /// <returns>The default language of the cube.</returns>
         public static string GetDefaultLanguage(this CubeMeta pxGrafMeta)
         {
-            return Configuration.Current.LanguageOptions.Default ?? pxGrafMeta.Languages[0];
+            return pxGrafMeta.Languages.Contains(Configuration.Current.LanguageOptions.Default) ? 
+                Configuration.Current.LanguageOptions.Default :
+                pxGrafMeta.Languages[0];
         }
 
         /// <summary>
-        /// TODO: document
+        /// Adds the elimination key to the dimension properties if the dimension value is a sum value.
         /// </summary>
+        /// <param name="dimensionValue">The dimension value to check.</param>
+        /// <param name="dimensionProperties">The dimension properties to add the elimination key to.</param>
         public static void AddEliminationKeyIfSumValue(this VariableValue dimensionValue, Dictionary<string, MetaProperty> dimensionProperties)
         {
             if (dimensionValue.IsSumValue)
