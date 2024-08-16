@@ -1,7 +1,11 @@
-﻿using Px.Utils.Models.Metadata;
+﻿using Px.Utils.Language;
+using Px.Utils.Models.Metadata;
 using Px.Utils.Models.Metadata.Dimensions;
 using Px.Utils.Models.Metadata.Enums;
+using PxGraf.Data;
 using PxGraf.Data.MetaData;
+using PxGraf.Enums;
+using PxGraf.Models.SavedQueries;
 using PxGraf.Settings;
 using PxGraf.Utility;
 using System;
@@ -19,10 +23,19 @@ namespace PxGraf.Models.Metadata
         {
             List<Dimension> dimensions = [];
             Dictionary<string, MetaProperty> matrixProperties = [];
+            if (pxGrafMeta.Note != null)
+            {
+                Dictionary<string, string> note = [];
+                foreach (var lang in pxGrafMeta.Note.Languages)
+                {
+                    note[lang] = $"\"{pxGrafMeta.Note[lang]}\""; // Meta property values must be enclosed
+                }
+                matrixProperties[PxSyntaxConstants.NOTE_KEY] = new(PxSyntaxConstants.NOTE_KEY, new MultilanguageString(note));
+            }
             foreach(Variable dimension in pxGrafMeta.Variables)
             {
                 Dictionary<string, MetaProperty> dimensionProperties = [];
-                if(dimension.Type == DimensionType.Content)
+                if (dimension.Type == DimensionType.Content)
                 {
                     List<ContentDimensionValue> contentDimValues = [];
                     foreach (VariableValue dimValue in dimension.IncludedValues)
@@ -34,6 +47,29 @@ namespace PxGraf.Models.Metadata
                     }
                     dimensions.Add(new ContentDimension(dimension.Code, dimension.Name, dimensionProperties, contentDimValues));
                     matrixProperties[PxSyntaxConstants.SOURCE_KEY] = new(PxSyntaxConstants.SOURCE_KEY, dimension.IncludedValues[0].ContentComponent.Source);
+                }
+                else if (dimension.Type == DimensionType.Time)
+                {
+                    List<DimensionValue> values = [];
+                    foreach (VariableValue dimValue in dimension.IncludedValues)
+                    {
+                        dimValue.AddEliminationKeyIfSumValue(dimensionProperties);
+                        DimensionValue tdv = new(dimValue.Code, dimValue.Name);
+                        values.Add(tdv);
+                    }
+                    TimeDimensionInterval intervals = TimeVarIntervalParser.DetermineIntervalFromCodes(values.Select(v => v.Code).ToList());
+                    dimensions.Add(new TimeDimension(dimension.Code, dimension.Name, dimensionProperties, values, intervals));
+                }
+                else
+                {
+                    List<DimensionValue> values = [];
+                    foreach (VariableValue dimValue in dimension.IncludedValues)
+                    {
+                        dimValue.AddEliminationKeyIfSumValue(dimensionProperties);
+                        DimensionValue dv = new(dimValue.Code, dimValue.Name);
+                        values.Add(dv);
+                    }
+                    dimensions.Add(new Dimension(dimension.Code, dimension.Name, dimensionProperties, values, dimension.Type));
                 }
             }
             string defaultLang = pxGrafMeta.GetDefaultLanguage();

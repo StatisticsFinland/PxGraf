@@ -9,12 +9,14 @@ namespace PxGraf.Utility
     public static class PxSyntaxConstants
     {
         public const string PXWEB_DATETIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.fff";
+        public const string PXWEB_DATETIME_FORMAT_ZULU = "yyyy-MM-dd'T'HH:mm:ss.fffZ";
         public const string SOURCE_KEY = "SOURCE";
         public const string TABLEID_KEY = "TABLEID";
         public const string DESCRIPTION_KEY = "DESCRIPTION";
         public const string NOTE_KEY = "NOTE";
         public const string VALUENOTE_KEY = "VALUENOTE";
         public const string ELIMINATION_KEY = "ELIMINATION";
+        public const string LAST_UPDATED_KEY = "LAST-UPDATED";
         public const char STRING_DELIMETER = '"';
 
         //Indexed by DataValueType with offset of one
@@ -35,17 +37,16 @@ namespace PxGraf.Utility
         /// </summary>
         /// <param name="dateTimeString">String to parse</param>
         /// <returns>DateTime object</returns>
-        /// <remarks>Provided string must be in the <see cref="PXWEB_DATETIME_FORMAT"/> format</remarks>
+        /// <remarks>Provided string must be in the <see cref="PXWEB_DATETIME_FORMAT"/> or <see cref="PXWEB_DATETIME_FORMAT_ZULU"/> format</remarks>
         public static DateTime ParsePxDateTime(string dateTimeString)
         {
-            if (DateTime.TryParseExact(dateTimeString, PXWEB_DATETIME_FORMAT, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out DateTime result))
+            if (dateTimeString.EndsWith('Z'))
             {
-                return result;
+                return DateTime.ParseExact(dateTimeString, PXWEB_DATETIME_FORMAT_ZULU, CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal);
             }
             else
             {
-                const string format = PXWEB_DATETIME_FORMAT + "'Z'";
-                return DateTime.ParseExact(dateTimeString, format, CultureInfo.InvariantCulture);
+                return DateTime.ParseExact(dateTimeString, PXWEB_DATETIME_FORMAT, CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal);
             }
         }
 
@@ -53,13 +54,17 @@ namespace PxGraf.Utility
         /// Formats a DateTime object to a string in the Px datetime format
         /// </summary>
         /// <param name="dateTime">DateTime object to format</param>
-        /// <param name="zuluTime">If true, the time is formatted as Zulu time</param>
         /// <returns>Formatted string</returns>
-        public static string FormatPxDateTime(DateTime dateTime, bool zuluTime = false)
+        public static string FormatPxDateTime(DateTime dateTime)
         {
-            string format = zuluTime ? PXWEB_DATETIME_FORMAT + "'Z'" : PXWEB_DATETIME_FORMAT;
-            return dateTime.ToString(format);
+            if (dateTime.Kind == DateTimeKind.Utc)
+            {
+                return dateTime.ToString(PXWEB_DATETIME_FORMAT_ZULU, CultureInfo.InvariantCulture);
+            }
+            else
+            {
+                return dateTime.ToString(PXWEB_DATETIME_FORMAT, CultureInfo.InvariantCulture);
+            }
         }
     }
-
 }

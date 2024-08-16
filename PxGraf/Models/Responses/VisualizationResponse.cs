@@ -6,6 +6,7 @@ using PxGraf.Models.Queries;
 using System.Collections.Generic;
 using System;
 using PxGraf.Data.MetaData;
+using Microsoft.AspNetCore.Mvc;
 
 namespace PxGraf.Models.Responses
 {
@@ -82,5 +83,10 @@ namespace PxGraf.Models.Responses
         /// Object that contains settings for the PxVisualizer package.
         /// </summary>
         public PxVisualizerSettings VisualizationSettings { get; set; }
+
+        public static implicit operator VisualizationResponse(ActionResult<VisualizationResponse> v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

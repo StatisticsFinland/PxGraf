@@ -11,8 +11,6 @@ using PxGraf.Utility;
 using Px.Utils.Models.Metadata.Enums;
 using System;
 using PxGraf.Settings;
-using System.Text;
-using PxGraf.Language;
 
 namespace PxGraf.Models.Metadata
 {
