@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿#nullable enable
+using Newtonsoft.Json;
 using Px.Utils.Language;
 using System.Diagnostics.CodeAnalysis;
 
