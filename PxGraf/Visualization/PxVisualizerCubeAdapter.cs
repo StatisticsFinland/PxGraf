@@ -65,7 +65,7 @@ namespace PxGraf.Visualization
             Matrix<DecimalDataValue> resultMatrix = matrix.GetTransform(finalMap);
             MatrixExtensions.DataAndNotesCollection dataAndNotes = resultMatrix.ExtractDataAndNotes();
             IReadOnlyList<string> timeDimensionCodes = matrix.Metadata.GetTimeDimension().Values.Codes;
-            MultilanguageString header = HeaderBuildingUtilities.CreateDefaultHeader(matrix.Metadata.Dimensions, query, matrix.Metadata.AvailableLanguages);
+            MultilanguageString header = query.ChartHeaderEdit ?? HeaderBuildingUtilities.CreateDefaultHeader(matrix.Metadata.Dimensions, query, matrix.Metadata.AvailableLanguages);
 
             return new VisualizationResponse()
             {
@@ -73,7 +73,7 @@ namespace PxGraf.Visualization
                 Data = dataAndNotes.Data,
                 DataNotes = dataAndNotes.Notes,
                 MissingDataInfo = dataAndNotes.MissingValueInfo,
-                MetaData = resultMatrix.Metadata.Dimensions.Select(d => d.ConvertToVariable()).ToList(),
+                MetaData = resultMatrix.Metadata.Dimensions.Select(d => d.ConvertToVariable(query.DimensionQueries)).ToList(),
                 SelectableVariableCodes = layout.SelectableVariableCodes,
                 RowVariableCodes = layout.RowVariableCodes,
                 ColumnVariableCodes = layout.ColumnVariableCodes,

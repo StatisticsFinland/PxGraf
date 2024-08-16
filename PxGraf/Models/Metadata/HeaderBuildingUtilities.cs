@@ -129,31 +129,23 @@ namespace PxGraf.Models.Metadata
 
         private static string GetDimensionNameEditForLanguage(MatrixQuery? query, IReadOnlyDimension dimension, string language)
         {
-            if (query != null && 
-                query.DimensionQueries.TryGetValue(dimension.Code, out DimensionQuery? dq) &&
-                dq.NameEdit != null)
+            if (query?.DimensionQueries.TryGetValue(dimension.Code, out DimensionQuery? dq) == true &&
+                dq.NameEdit?.Languages.Contains(language) == true)
             {
                 return dq.NameEdit[language];
             }
-            else
-            {
-                return dimension.Name[language];
-            }
+            return dimension.Name[language];
         }
 
         private static string GetDimensionValueNameEditForLanguage(MatrixQuery? query, string dimensionCode, IReadOnlyDimensionValue value, string language)
         {
-            if (query != null &&
-                query.DimensionQueries.TryGetValue(dimensionCode, out DimensionQuery? dq) &&
-                dq.ValueEdits.TryGetValue(value.Code, out VariableValueEdition? dvq) &&
-                dvq.NameEdit != null)
+            if (query?.DimensionQueries.TryGetValue(dimensionCode, out DimensionQuery? dq) == true &&
+                dq.ValueEdits?.TryGetValue(value.Code, out VariableValueEdition? dvq) == true &&
+                dvq.NameEdit?.Languages.Contains(language) == true)
             {
                 return dvq.NameEdit[language];
             }
-            else
-            {
-                return value.Name[language];
-            }
+            return value.Name[language];
         }
     }
 }

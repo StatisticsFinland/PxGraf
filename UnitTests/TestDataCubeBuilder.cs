@@ -89,13 +89,6 @@ namespace UnitTests
             return new SavedQuery(BuildTestCubeQuery(varParams), archived, settings, DateTime.Now);
         }
 
-        public static ArchiveCube BuildTestArchiveCube(List<DimensionParameters> varParams, bool negativeData = false, bool missingData = false)
-        {
-            // TODO: Fix
-            throw new NotImplementedException();
-            // return ArchiveCube.FromMatrixAndQuery(BuildTestMatrix(varParams, negativeData, missingData));
-        }
-
         public static DimensionQuery BuildTestVariableQuery(DimensionParameters varParams)
         {
             IValueFilter valueFilter;
@@ -130,45 +123,44 @@ namespace UnitTests
             };
         }
 
-        public static Matrix<DecimalDataValue> BuildTestMatrix(List<DimensionParameters> dimParams, bool negativeData = false, bool missingData = false)
+        public static Matrix<DecimalDataValue> BuildTestMatrix(List<DimensionParameters> dimParams, bool negativeData = false, bool missingData = false, string[]? languages = null)
         {
-            IReadOnlyMatrixMetadata meta = BuildTestMeta(dimParams);
+            IReadOnlyMatrixMetadata meta = BuildTestMeta(dimParams, languages);
             int dataSize = meta.Dimensions.Count == 0 ? 0 : meta.Dimensions.Aggregate(1, (acc, var) => acc * var.Values.Count);
             return new Matrix<DecimalDataValue>(meta, BuildTestData(dataSize, negativeData, missingData).ToArray());
         }
 
-        public static MatrixMetadata BuildTestMeta(List<DimensionParameters> varParams)
+        public static MatrixMetadata BuildTestMeta(List<DimensionParameters> varParams, string[]? languages = null)
         {
             if (varParams.Exists(v => v.Size < 1)) return null;
 
-            List<string> languages = ["fi", "en"];
-            List<Dimension> variables = BuildTestDimensions(varParams);
+            languages ??= ["fi", "en"];
+            List<Dimension> variables = BuildTestDimensions(varParams, languages);
             return new MatrixMetadata(languages[0], languages, variables, []);
         }
 
-        private static List<Dimension> BuildTestDimensions(List<DimensionParameters> parameters)
+        private static List<Dimension> BuildTestDimensions(List<DimensionParameters> parameters, string[] languages)
         {
             var results = new List<Dimension>();
             int i = 0;
             foreach (var param in parameters)
             {
-                results.Add(BuildTestDimension(param.Name ?? $"variable-{i++}", param));
+                results.Add(BuildTestDimension(param.Name ?? $"variable-{i++}", param, languages));
             }
 
             return results;
         }
 
-        public static Dimension BuildTestDimension(string name, DimensionParameters param)
+        public static Dimension BuildTestDimension(string name, DimensionParameters param, string[] languages)
         {
             if (param.Size < 1) return null;
-            Dictionary<string, string> nameTranslations = new()
+            Dictionary<string, string> nameTranslations = [];
+            for (int i = 0; i < languages.Length; i++)
             {
-                { "fi", name },
-                { "en", $"{name}.en" }
-            };
-
+                nameTranslations[languages[i]] = GetTextForLanguage(name, languages, i);
+            }
             MultilanguageString multilanguageName = new(nameTranslations);
-            List<DimensionValue> values = BuildVariableValues(param);
+            List<DimensionValue> values = BuildVariableValues(param, languages);
             Dictionary<string, MetaProperty> additionalProperties = [];
             if (param.HasCombinationValue)
             {
@@ -212,41 +204,38 @@ namespace UnitTests
             return dimension;
         }
 
-        public static Dimension BuildTestDimension(string name, List<string> valueNames, DimensionType type, int decimals = 0, bool sameUnit = false, bool sameSource = false, bool hasCombinationValue = false)
+        private static string GetTextForLanguage(string baseText, string[] languages, int index)
         {
-            Dictionary<string, string> nameTranslations = new()
-            {
-                { "fi", name },
-                { "en", $"{name}.en" }
-            };
-            // TODO: Implement or remove if not needed
-            throw new NotImplementedException();
+            return index == 0 ? baseText : $"{baseText}.{languages[index]}";
         }
 
-        private static List<DimensionValue> BuildVariableValues(DimensionParameters varParam)
+        private static List<DimensionValue> BuildVariableValues(DimensionParameters varParam, string[] languages)
         {
             List<DimensionValue> results = [];
             
             for (int i = 0; i < varParam.Size; i++)
             {
                 string name = varParam.Type == DimensionType.Time && !varParam.Irregular ? $"{2000 + i}" : $"value-{i}";
-                Dictionary<string, string> nameTranslations = new()
+                Dictionary<string, string> nameTranslations = [];
+                for (int j = 0; j < languages.Length; j++)
                 {
-                    { "fi", name },
-                    { "en", $"{name}.en" }
-                };
+                    nameTranslations[languages[j]] = GetTextForLanguage(name, languages, j);
+                }
                 if (varParam.Type == DimensionType.Content)
                 {
-                    Dictionary<string, string> unitTranslations = new()
+                    Dictionary<string, string> unitTranslations = [];
+                    for (int k = 0; k < languages.Length; k++)
                     {
-                        { "fi", varParam.SameUnit ? "testUnit" : $"{name}-unit" },
-                        { "en", varParam.SameUnit ? "testUnit" : $"{name}-unit.en" }
-                    };
-                    Dictionary<string, string> sourceTranslations = new()
+                        string langUnit = varParam.SameUnit ? "testUnit" : GetTextForLanguage($"{name}-unit", languages, k);
+                        unitTranslations[languages[k]] = langUnit;
+                    }
+                    Dictionary<string, string> sourceTranslations = [];
+                    for (int k = 0; k < languages.Length; k++)
                     {
-                        { "fi", varParam.SameSource ? "\"testSource\"" : $"\"{name}-source\"" },
-                        { "en", varParam.SameSource ? "\"testSource\"" : $"\"{name}-source.en\"" }
-                    };
+                        string langSource = varParam.SameSource ? "\"testSource\"" : GetTextForLanguage($"\"{name}-source", languages, k) + "\""; // Metaproprety values are stored enclosed
+                        sourceTranslations[languages[k]] = langSource;
+                    }
+
                     MetaProperty source = new(PxSyntaxConstants.SOURCE_KEY, new MultilanguageString(sourceTranslations));
                     ContentDimensionValue cvv = new(name, new MultilanguageString(nameTranslations), new(unitTranslations), PxSyntaxConstants.ParsePxDateTime("2009-09-01T00:00:00.000Z"), varParam.Decimals);
                     cvv.AdditionalProperties[PxSyntaxConstants.SOURCE_KEY] = source;
@@ -258,43 +247,6 @@ namespace UnitTests
                     results.Add(vv);
                 }
             }
-            return results;
-        }
-
-        // TODO: Implement or remove if not needed
-        private static List<DimensionValue> BuildDimensionValues(List<string> valueNames, DimensionType type, int decimals, bool sameUnit, bool sameSource, bool hasCombinationValue)
-        {
-            List<DimensionValue> results = [];
-            /*
-            foreach (var name in valueNames)
-            {
-                Dictionary<string, string> nameTranslations = new()
-                {
-                    { "fi", name },
-                    { "en", $"{name}.en" }
-                };
-                VariableValue vv = new(name, new MultilanguageString(nameTranslations), null, hasCombinationValue && valueNames[0] == name);
-                if (type == DimensionType.Content)
-                {
-                    Dictionary<string, string> unitTranslations = new()
-                    {
-                        { "fi", sameUnit ? "testUnit" : $"{name}-unit" },
-                        { "en", sameUnit ? "testUnit" : $"{name}-unit.en" }
-                    };
-                    Dictionary<string, string> sourceTranslations = new()
-                    {
-                        { "fi", sameSource ? "testSource" : $"{name}-source" },
-                        { "en", sameSource ? "testSource" : $"{name}-source.en" }
-                    };
-                    vv.ContentComponent = new ContentComponent(
-                        new MultilanguageString(unitTranslations),
-                        new MultilanguageString(sourceTranslations),
-                        decimals, "2009-09-01T00:00:00.000Z");
-                }
-                results.Add(vv);
-            }
-            */
-            // TODO: implement. Will propably need separate methods for the content dimension values.
             return results;
         }
 

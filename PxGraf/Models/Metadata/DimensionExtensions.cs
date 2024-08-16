@@ -4,8 +4,10 @@ using Px.Utils.Models.Metadata;
 using Px.Utils.Models.Metadata.Dimensions;
 using Px.Utils.Models.Metadata.ExtensionMethods;
 using PxGraf.Data.MetaData;
+using PxGraf.Models.Queries;
 using PxGraf.Utility;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace PxGraf.Models.Metadata
@@ -19,21 +21,29 @@ namespace PxGraf.Models.Metadata
         /// Converts the given <see cref="IReadOnlyDimension"/> object to a <see cref="Variable"/> object.
         /// </summary>
         /// <param name="input">The <see cref="IReadOnlyDimension"/> object to convert.</param>
+        /// <param name="dimensionQueries">The dimension queries to use for the conversion.</param>"
         /// <returns>A <see cref="Variable"/> object created from the given <see cref="IReadOnlyDimension"/> object.</returns>
-        public static Variable ConvertToVariable(this IReadOnlyDimension input)
+        public static Variable ConvertToVariable(this IReadOnlyDimension input, Dictionary<string, DimensionQuery> dimensionQueries)
         {
             if (input is not Dimension)
             {
                 throw new ArgumentException("Input must be of type Dimension");
             }
 
+            MultilanguageString name = input.Name;
+            if (dimensionQueries.TryGetValue(input.Code, out DimensionQuery? query) &&
+                query.NameEdit != null)
+            {
+                name = query.NameEdit;
+            }
+
             return new(
                 input.Code,
-                input.Name,
+                name,
                 input.GetDimensionProperty(PxSyntaxConstants.NOTE_KEY, input.Name.Languages.First()),
                 input.Type,
                 input.Values.Select(v => v
-                    .ConvertToVariableValue(input.GetEliminationValueCode())).ToList());
+                    .ConvertToVariableValue(input.GetEliminationValueCode(), query)).ToList());
         }
 
         /// <summary>
