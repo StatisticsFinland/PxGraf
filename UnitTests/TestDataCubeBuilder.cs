@@ -7,6 +7,8 @@ using Px.Utils.Models.Metadata;
 using Px.Utils.Models.Metadata.Dimensions;
 using Px.Utils.Models.Metadata.Enums;
 using PxGraf.ChartTypeSelection;
+using PxGraf.Data.MetaData;
+using PxGraf.Models.Metadata;
 using PxGraf.Models.Queries;
 using PxGraf.Models.Requests;
 using PxGraf.Models.SavedQueries;
@@ -14,6 +16,7 @@ using PxGraf.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Linq;
 
 namespace UnitTests
 {
@@ -136,7 +139,16 @@ namespace UnitTests
 
             languages ??= ["fi", "en"];
             List<Dimension> variables = BuildTestDimensions(varParams, languages);
-            return new MatrixMetadata(languages[0], languages, variables, []);
+            Dictionary<string, string> noteTranslation = [];
+            for (int j = 0; j < languages.Length; j++)
+            {
+                noteTranslation[languages[j]] = $"\"{GetTextForLanguage("Test note", languages, j)}\""; // Enclosement required for additional properties
+            }
+            Dictionary<string, MetaProperty> additionalProperties = new()
+            {
+                { PxSyntaxConstants.NOTE_KEY, new MetaProperty(PxSyntaxConstants.NOTE_KEY, new MultilanguageString(noteTranslation)) }
+            };
+            return new MatrixMetadata(languages[0], languages, variables, additionalProperties);
         }
 
         private static List<Dimension> BuildTestDimensions(List<DimensionParameters> parameters, string[] languages)
@@ -202,6 +214,17 @@ namespace UnitTests
                 );
 
             return dimension;
+        }
+
+        public static ArchiveCube BuildTestArchiveCube(List<DimensionParameters> metaParams, string[]? languages = null)
+        {
+            MatrixMetadata meta = BuildTestMeta(metaParams, languages);
+            CubeMeta cubeMeta = meta.ToCubeMeta();
+            return new ArchiveCube()
+            {
+                CreationTime = PxSyntaxConstants.ParsePxDateTime("2024-08-19T14:00:00.000Z"),
+                Meta = cubeMeta,
+            };
         }
 
         private static string GetTextForLanguage(string baseText, string[] languages, int index)

@@ -19,8 +19,9 @@ namespace PxGraf.Models.Metadata
         /// <summary>
         /// Converts the given <see cref="IReadOnlyDimensionValue"/> object to a <see cref="VariableValue"/> object.
         /// </summary>
-        /// <param name="input"></param>
-        /// <param name="eliminationValueCode"></param>
+        /// <param name="input">The dimension value to convert</param>
+        /// <param name="eliminationValueCode">The code of ´the dimension's elimination value.</param>
+        /// <param name="dimensionQuery">Dimension query object that contains the value edits.</param>
         /// <returns></returns>
         public static VariableValue ConvertToVariableValue(this IReadOnlyDimensionValue input, string? eliminationValueCode, DimensionQuery dimensionQuery)
         {
@@ -37,7 +38,7 @@ namespace PxGraf.Models.Metadata
                 MultilanguageString? unit = ccEdited?
                     valueEdit.ContentComponent.UnitEdit :
                     cdv.Unit;
-                cc = new ContentComponent(unit, source, cdv.Precision, PxSyntaxConstants.FormatPxDateTime(cdv.LastUpdated, true));
+                cc = new ContentComponent(unit, source, cdv.Precision, PxSyntaxConstants.FormatPxDateTime(cdv.LastUpdated));
             }
             MultilanguageString name = input.Name;
             if (edited && valueEdit?.NameEdit != null)

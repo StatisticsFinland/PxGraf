@@ -1,10 +1,19 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
+using Px.Utils.Models.Metadata.Enums;
+using PxGraf.Controllers;
+using PxGraf.Enums;
 using PxGraf.Language;
+using PxGraf.Models.Queries;
+using PxGraf.Models.Requests;
+using PxGraf.Models.Responses;
+using PxGraf.Models.SavedQueries;
 using PxGraf.Settings;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using UnitTests;
 using UnitTests.Fixtures;
 
 namespace ControllerTests
@@ -34,8 +43,27 @@ namespace ControllerTests
         [Test]
         public async Task GetQueryMetaTest_ReturnValidMeta()
         {
-            // TODO: write test
-            /*
+            List<DimensionParameters> dimParams =
+            [
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 10),
+                new DimensionParameters(DimensionType.Other, 2),
+                new DimensionParameters(DimensionType.Other, 1)
+            ];
+            Layout layout = new()
+            {
+                RowVariableCodes = [],
+                ColumnVariableCodes = ["variable-1"]
+            };
+            LineChartVisualizationSettings settings = new(layout, false, null);
+            SavedQuery sq = TestDataCubeBuilder.BuildTestSavedQuery(dimParams, false, settings);
+            Dictionary<string, SavedQuery> savedQueries = new()
+            {
+                {"goesNowhere/test", sq}
+            };
+            QueryMetaController controller = TestQueryMetaControllerBuilder.BuildController(savedQueries, Configuration.Current.SavedQueryDirectory, dimParams);
+            ActionResult<QueryMetaResponse> result = await controller.GetQueryMeta("test");
+
             Assert.That(result.Value.Header["fi"], Is.EqualTo("value-0, value-0 2000-2009 muuttujana variable-2"));
             Assert.That(result.Value.HeaderWithPlaceholders["fi"], Is.EqualTo("value-0, value-0 [FIRST]-[LAST] muuttujana variable-2"));
             Assert.That(result.Value.Archived, Is.False);
@@ -48,26 +76,79 @@ namespace ControllerTests
 
             List<string> expectedHierarchy = ["testpath", "to", "test", "file"];
             Assert.That(result.Value.TableReference.Hierarchy, Is.EqualTo(expectedHierarchy));
-            */
         }
 
         [Test]
         public async Task GetQueryMetaTest_ReturnSelectableTrue()
         {
-            // TODO: write test
+            List<DimensionParameters> dimParams =
+            [
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 10),
+                new DimensionParameters(DimensionType.Other, 2) { Selectable = true },
+                new DimensionParameters(DimensionType.Other, 1)
+            ];
+            Layout layout = new()
+            {
+                RowVariableCodes = [],
+                ColumnVariableCodes = [],
+            };
+            LineChartVisualizationSettings settings = new(layout, false, null);
+            SavedQuery sq = TestDataCubeBuilder.BuildTestSavedQuery(dimParams, false, settings);
+            Dictionary<string, SavedQuery> savedQueries = new()
+            {
+                {"goesNowhere/test", sq}
+            };
+            QueryMetaController controller = TestQueryMetaControllerBuilder.BuildController(savedQueries, Configuration.Current.SavedQueryDirectory, dimParams);
+            ActionResult<QueryMetaResponse> result = await controller.GetQueryMeta("test");
+
+            Assert.That(result.Value.Selectable, Is.True);
         }
 
         [Test]
         public async Task GetQueryMetaTest_NotFound()
         {
-            // TODO: write test
+            QueryMetaController controller = TestQueryMetaControllerBuilder.BuildController([], Configuration.Current.SavedQueryDirectory, []);
+            ActionResult<QueryMetaResponse> result = await controller.GetQueryMeta("test");
+            Assert.That(result.Result, Is.InstanceOf<NotFoundResult>());
         }
 
         [Test]
         public async Task GetQueryMetaTest_ArchivedQuery()
         {
-            // TODO: write test
-            /*
+            List<DimensionParameters> dimParams =
+            [
+                new (DimensionType.Content, 1),
+                new (DimensionType.Time, 10),
+                new (DimensionType.Other, 2),
+                new (DimensionType.Other, 1)
+            ];
+            List<DimensionParameters> metaParams =
+            [
+                new (DimensionType.Content, 4),
+                new (DimensionType.Time, 10),
+                new (DimensionType.Other, 3),
+                new (DimensionType.Other, 2)
+            ];
+            Layout layout = new()
+            {
+                RowVariableCodes = [],
+                ColumnVariableCodes = ["variable-1"]
+            };
+            LineChartVisualizationSettings settings = new(layout, false, null);
+            SavedQuery sq = TestDataCubeBuilder.BuildTestSavedQuery(dimParams, true, settings);
+            ArchiveCube archiveCube = TestDataCubeBuilder.BuildTestArchiveCube(metaParams);
+            Dictionary<string, SavedQuery> savedQueries = new()
+            {
+                {"goesNowhere/test", sq}
+            };
+            Dictionary<string, ArchiveCube> archiveCubes = new()
+            {
+                {"goesNowhere/test", archiveCube}
+            };
+            QueryMetaController controller = TestQueryMetaControllerBuilder.BuildController(savedQueries, Configuration.Current.SavedQueryDirectory, dimParams, archiveCubes: archiveCubes);
+            ActionResult<QueryMetaResponse> result = await controller.GetQueryMeta("test");
+
             Assert.That(result.Value.Header["fi"], Is.EqualTo("value-0, value-0 2000-2009 muuttujana variable-2"));
             Assert.That(result.Value.HeaderWithPlaceholders["fi"], Is.EqualTo("value-0, value-0 [FIRST]-[LAST] muuttujana variable-2"));
             Assert.That(result.Value.Archived, Is.True);
@@ -80,19 +161,59 @@ namespace ControllerTests
 
             List<string> expectedHierarchy = ["testpath", "to", "test", "file"];
             Assert.That(result.Value.TableReference.Hierarchy, Is.EqualTo(expectedHierarchy));
-            */
         }
 
         [Test]
         public void GetQueryMetaTest_Table_Not_Found()
         {
-            // TODO: write test
+            List<DimensionParameters> dimParams =
+            [
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 10),
+                new DimensionParameters(DimensionType.Other, 2),
+                new DimensionParameters(DimensionType.Other, 1)
+            ];
+            Layout layout = new()
+            {
+                RowVariableCodes = [],
+                ColumnVariableCodes = ["variable-1"]
+            };
+            LineChartVisualizationSettings settings = new(layout, false, null);
+            SavedQuery sq = TestDataCubeBuilder.BuildTestSavedQuery(dimParams, false, settings);
+            Dictionary<string, SavedQuery> savedQueries = new()
+            {
+                {"goesNowhere/test", sq}
+            };
+            QueryMetaController controller = TestQueryMetaControllerBuilder.BuildController(savedQueries, Configuration.Current.SavedQueryDirectory, []);
+            ActionResult<QueryMetaResponse> result = controller.GetQueryMeta("test").Result;
+            Assert.That(result.Result, Is.TypeOf<NotFoundResult>());
         }
 
         [Test]
         public void GetQueryMetaTest_ArchiveFileNotFound()
         {
-            // TODO: write test
+
+            List<DimensionParameters> dimParams =
+            [
+                new(DimensionType.Content, 1),
+                new(DimensionType.Time, 10),
+                new(DimensionType.Other, 2),
+                new(DimensionType.Other, 1)
+            ];
+            Layout layout = new()
+            {
+                RowVariableCodes = [],
+                ColumnVariableCodes = ["variable-1"]
+            };
+            LineChartVisualizationSettings settings = new(layout, false, null);
+            SavedQuery sq = TestDataCubeBuilder.BuildTestSavedQuery(dimParams, true, settings);
+            Dictionary<string, SavedQuery> savedQueries = new()
+            {
+                {"goesNowhere/test", sq}
+            };
+            QueryMetaController controller = TestQueryMetaControllerBuilder.BuildController(savedQueries, Configuration.Current.SavedQueryDirectory, []);
+            ActionResult<QueryMetaResponse> result = controller.GetQueryMeta("test").Result;
+            Assert.That(result.Result, Is.TypeOf<NotFoundResult>());
         }
     }
 }
