@@ -40,7 +40,13 @@ namespace PxGraf.Controllers
             {
                 SavedQuery savedQuery = await _sqFileInterface.ReadSavedQueryFromFile(savedQueryId, Configuration.Current.SavedQueryDirectory);
                 IReadOnlyMatrixMetadata meta = await GetMatrixMetadata(savedQuery, savedQueryId);
-                MultilanguageString header = HeaderBuildingUtilities.CreateDefaultHeader(meta.Dimensions, savedQuery.Query, meta.AvailableLanguages);
+                if (meta == null)
+                {
+                    _logger.LogWarning("The table for the query {SavedQueryId} was not found.", savedQueryId);
+                    return NotFound();
+                }
+                IReadOnlyMatrixMetadata filteredMeta = meta.FilterDimensionValues(savedQuery.Query);
+                MultilanguageString header = HeaderBuildingUtilities.CreateDefaultHeader(filteredMeta.Dimensions, savedQuery.Query, filteredMeta.AvailableLanguages);
                 QueryMetaResponse queryMetaResponse = new()
                 {
                     Header = HeaderBuildingUtilities.ReplaceTimePlaceholdersInHeader(header, meta.GetTimeDimension()),
@@ -49,9 +55,9 @@ namespace PxGraf.Controllers
                     Selectable = savedQuery.Query.DimensionQueries.Any(q => q.Value.Selectable),
                     VisualizationType = savedQuery.Settings.VisualizationType,
                     TableId = savedQuery.Query.TableReference.Name,
-                    Description = meta.GetMatrixProperty(PxSyntaxConstants.NOTE_KEY),
+                    Description = filteredMeta.GetMatrixProperty(PxSyntaxConstants.NOTE_KEY),
                     TableReference = savedQuery.Query.TableReference,
-                    LastUpdated = meta.GetContentDimension().Values.Map(cdv => cdv.LastUpdated).Max().ToString(),
+                    LastUpdated = PxSyntaxConstants.FormatPxDateTime(filteredMeta.GetContentDimension().Values.Map(cdv => cdv.LastUpdated).Max())
                 };
                 _logger.LogInformation("{SavedQueryId} result: {QueryMetaResponse}", savedQueryId, queryMetaResponse);
                 return queryMetaResponse;
@@ -74,12 +80,13 @@ namespace PxGraf.Controllers
                 }
                 else
                 {
-                    throw new FileNotFoundException($"Could not find .sqa file matching the id {id}");
+                    return null;
                 }
             }
             else
             {
                 IReadOnlyMatrixMetadata meta = await _cachedDatasource.GetMatrixMetadataCachedAsync(savedQuery.Query.TableReference);
+                if (meta == null) return null;
                 return meta.FilterDimensionValues(savedQuery.Query);
             }
         }
