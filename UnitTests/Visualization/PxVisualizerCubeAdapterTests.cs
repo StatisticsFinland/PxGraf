@@ -317,8 +317,9 @@ namespace Visualization
                 new DimensionParameters(DimensionType.Content, 3, name: "Tiedot")
             ];
 
+            string[] langs = ["fi", "en", "sv"];
             SavedQuery savedQuery = JsonConvert.DeserializeObject<SavedQuery>(SavedQueryFixtures.V10_TEST_TABLE_SAVEDQUERY);
-            Matrix<DecimalDataValue> inputCube = TestDataCubeBuilder.BuildTestMatrix(cubeParams);
+            Matrix<DecimalDataValue> inputCube = TestDataCubeBuilder.BuildTestMatrix(cubeParams, languages: langs);
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(inputCube, savedQuery);
 
             string[] expectedSelVarCodes = ["Kuukausi"];
