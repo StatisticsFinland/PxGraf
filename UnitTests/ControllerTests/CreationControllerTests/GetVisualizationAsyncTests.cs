@@ -32,7 +32,10 @@ namespace CreationControllerTests
                 {"pxgrafUrl", "http://pxgraftesturl:8443/PxGraf"},
                 {"savedQueryDirectory", "goesNowhere"},
                 {"archiveFileDirectory", "goesNowhere"},
-                {"LocalFilesystemDatabaseConfig:Encoding", "latin1"}
+                {"LocalFileSystemDatabaseConfig:Encoding", "latin1"},
+                {"CacheOptions:Visualization:SlidingExpirationMinutes", "15" },
+                {"CacheOptions:Visualization:AbsoluteExpirationMinutes", "720" },
+                {"CacheOptions:Visualization:ItemAmountLimit", "1000" }
             };
 
             IConfiguration configuration = new ConfigurationBuilder()
