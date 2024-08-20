@@ -1,16 +1,18 @@
-﻿using Microsoft.Extensions.Logging;
+﻿#nullable enable
+using Microsoft.Extensions.Logging;
 using Moq;
 using Px.Utils.Models.Metadata;
 using PxGraf.Controllers;
 using PxGraf.Datasource;
 using PxGraf.Models.Queries;
+using PxGraf.Models.Responses.DatabaseItems;
 using System.Collections.Generic;
 
 namespace UnitTests
 {
     public static class TestCreationControllerBuilder
     {
-        public static CreationController BuildController(List<DimensionParameters> cubeParams, List<DimensionParameters> metaParams)
+        public static CreationController BuildController(List<DimensionParameters> cubeParams, List<DimensionParameters> metaParams, DatabaseGroupContents? mockContents = null)
         {
             Mock<ICachedDatasource> dataSource = new();
             Mock<ILogger<CreationController>> logger = new();
@@ -25,6 +27,12 @@ namespace UnitTests
                 .ReturnsAsync((PxTableReference tableReference, MatrixMetadata metadata) =>
                 {
                     return TestDataCubeBuilder.BuildTestMatrix(cubeParams);
+                });
+
+            dataSource.Setup(ds => ds.GetGroupContentsCachedAsync(It.IsAny<string[]>()))
+                .ReturnsAsync((string[] hierarchy) =>
+                {
+                    return mockContents;
                 });
 
             return new CreationController(dataSource.Object, logger.Object);
