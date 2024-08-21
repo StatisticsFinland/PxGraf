@@ -248,7 +248,7 @@ namespace PxGraf.Datasource.PxWebInterface
         /// Fetch a list of directories in a database in the given language from the PxWeb server.
         /// </summary>
         private async Task<List<TableListResponseItem>> GetTableItemListingInLangAsync(string lang, IReadOnlyList<string> path)
-        {
+         {
             string joinedPath = string.Join("/", path);
             _logger.LogDebug("PxWeb GET: api/v1/{Lang}/{JoinedPath}/", lang, joinedPath);
             HttpResponseMessage resp = await _pxwebConnection.GetAsync($"api/v1/{lang}/{joinedPath}/");

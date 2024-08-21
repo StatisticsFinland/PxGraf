@@ -14,7 +14,7 @@ namespace PxGraf.Datasource
 {
     public abstract class CachedDatasource(IMultiStateMemoryTaskCache taskCache) : ICachedDatasource
     {
-        protected sealed class MetaCacheHousing(DateTime lastWriteTime, IReadOnlyMatrixMetadata meta)
+        public sealed class MetaCacheHousing(DateTime lastWriteTime, IReadOnlyMatrixMetadata meta)
         {
             public DateTime LastWritetime { get; } = lastWriteTime;
             public IReadOnlyMatrixMetadata Metadata { get; } = meta;
