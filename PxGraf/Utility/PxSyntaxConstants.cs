@@ -17,6 +17,7 @@ namespace PxGraf.Utility
         public const string VALUENOTE_KEY = "VALUENOTE";
         public const string ELIMINATION_KEY = "ELIMINATION";
         public const string LAST_UPDATED_KEY = "LAST-UPDATED";
+        public const string UNIT_KEY = "UNIT";
         public const char STRING_DELIMETER = '"';
 
         //Indexed by DataValueType with offset of one
