@@ -3,12 +3,13 @@ import { TableInfo } from './TableInfo';
 import React from 'react';
 import UiLanguageContext from 'contexts/uiLanguageContext';
 import { MemoryRouter } from 'react-router-dom';
+import { IDatabaseTable } from '../../api/services/table';
 
 const mockPath = 'asd123';
-const mockItem = {
-    id: 'id',
-    updated: '2021-10-13T14:53:06',
-    text: { 'fi': 'text-fi', 'en': 'text-en', 'sv': 'text-sv'},
+const mockItem: IDatabaseTable = {
+    code: 'id',
+    lastUpdated: '2021-10-13T14:53:06',
+    name: { 'fi': 'text-fi', 'en': 'text-en', 'sv': 'text-sv'},
     languages: ['fi', 'en', 'sv'],
 };
 

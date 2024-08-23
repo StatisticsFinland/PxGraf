@@ -25,6 +25,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
+using Newtonsoft.Json;
 
 namespace PxGraf.Controllers
 {
@@ -61,7 +62,7 @@ namespace PxGraf.Controllers
         /// <param name="tablePath">Path to the table</param>
         /// <returns><see cref="CubeMeta"/> object that represents the metadata for the table</returns>
         [HttpGet("cube-meta/{*tablePath}")]
-        public async Task<ActionResult<CubeMeta>> GetCubeMetaAsync([FromRoute] string tablePath)
+        public async Task<ActionResult<IReadOnlyMatrixMetadata>> GetCubeMetaAsync([FromRoute] string tablePath)
         {
             _logger.LogDebug("Requested cube meta for {TablePath} GET: api/creation/cube-meta", tablePath);
             IReadOnlyMatrixMetadata readOnlyMeta = await _datasource.GetMatrixMetadataCachedAsync(new(tablePath, '/'));
@@ -71,8 +72,8 @@ namespace PxGraf.Controllers
                 return BadRequest();
             }
             _logger.LogDebug("cube-meta result {Meta}", readOnlyMeta);
-            // TODO make a serializer for MatrixMetadata and use that here. Needs work on the frontend aswell.
-            return readOnlyMeta.ToCubeMeta();
+            string json = JsonConvert.SerializeObject(readOnlyMeta, new MatrixMetadataConverter());
+            return Content(json, "application/json");
         }
 
         /// <summary>
