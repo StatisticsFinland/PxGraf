@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Box, Stack, Divider, Container, CircularProgress, Alert } from '@mui/material';
 
 import { EditorContext } from 'contexts/editorContext';
-import { getContentLanguages, getDefaultQueries, resolveVariables } from 'utils/editorHelpers';
+import { getDefaultQueries, resolveVariables } from 'utils/editorHelpers';
 import { getValidatedSettings } from 'utils/ChartSettingHelpers';
 import EditorFilterSection from './EditorFilterSection';
 import EditorFooterSection from './EditorFooterSection';
@@ -24,6 +24,7 @@ import { extractCubeQuery, extractQuery } from 'utils/ApiHelpers';
 import { useNavigationContext } from 'contexts/navigationContext';
 import { useValidateTableMetadataQuery, IValidateTableMetaDataResult } from 'api/services/validate-table-metadata';
 import { UiLanguageContext } from 'contexts/uiLanguageContext';
+import { getVariablesFromMatrixMetadata, IVariable } from '../../types/cubeMeta';
 
 //Used to set the width of the variable selection and preview margin in pixels
 const variableSelectionWidth = 450;
@@ -106,7 +107,7 @@ export const Editor = () => {
     );
 
     useEffect(() => {
-        if(path.length) {
+        if (path.length) {
             setTablePath(path);
         }
     }, [path]);
@@ -127,12 +128,12 @@ export const Editor = () => {
 
     const { language, languageTab, setLanguageTab, uiContentLanguage, setUiContentLanguage } = React.useContext(UiLanguageContext);
 
-    const contentLanguages: string[] = React.useMemo(() => {
-        const langs = getContentLanguages(cubeMetaResponse.data);
-        return langs;
-    }, [cubeMetaResponse.data]);
+    const contentLanguages: string[] = cubeMetaResponse.data ? cubeMetaResponse.data.AvailableLanguages : [];
 
     useEffect(() => {
+        if (!contentLanguages || contentLanguages.length == 0) {
+            return;
+        }
         if (contentLanguages.includes(language)) {
             setUiContentLanguage(language);
         }
@@ -143,12 +144,16 @@ export const Editor = () => {
         }
     }, [language, contentLanguages]);
 
+    const variables: IVariable[] = cubeMetaResponse.data?.Dimensions
+        ? getVariablesFromMatrixMetadata(cubeMetaResponse.data)
+        : [];
+
     const modifiedQuery = React.useMemo(() => {
         if (query != null) {
             return query;
         }
-        else if (cubeMetaResponse.data != null) {
-            return getDefaultQueries(cubeMetaResponse.data.variables);
+        else if (variables != null) {
+            return getDefaultQueries(variables);
         }
         else {
             return null;
@@ -163,9 +168,9 @@ export const Editor = () => {
         if (resolvedVariableCodesResponse.data != null) {
             return resolvedVariableCodesResponse.data;
         }
-        else if (cubeMetaResponse.data != null) {
+        else if (variables != null) {
             const varCodesNoVals = {}
-            cubeMetaResponse.data.variables.forEach(v => {
+            variables.forEach(v => {
                 varCodesNoVals[v.code] = [];
             })
             return varCodesNoVals;
@@ -175,8 +180,8 @@ export const Editor = () => {
         }
     }, [resolvedVariableCodesResponse, cubeMetaResponse.data]);
     const resolvedVariables = React.useMemo(() => {
-        if (cubeMetaResponse.data?.variables != null) {
-            return resolveVariables(cubeMetaResponse.data.variables, resolvedVariableCodes);
+        if (cubeMetaResponse.data != null && variables != null) {
+            return resolveVariables(variables, resolvedVariableCodes);
         }
         else {
             return null;
@@ -232,8 +237,8 @@ export const Editor = () => {
             </Container>
         );
     }
-    else if (tableIsInvalid || cubeMetaResponse.isError || !cubeMetaResponse?.data?.variables) {
-        const errorWithCubeMeta = cubeMetaResponse.isError || !cubeMetaResponse?.data?.variables;
+    else if (tableIsInvalid || cubeMetaResponse.isError || !cubeMetaResponse?.data || !variables) {
+        const errorWithCubeMeta = cubeMetaResponse.isError || !cubeMetaResponse?.data || !variables;
         const errorConditionsAndMessages = [
             { condition: tableValidityResponse.isError || (errorWithCubeMeta && tableValidityResponse.data?.allVariablesContainValues), message: t("error.contentLoad") },
             { condition: !tableValidityResponse.data?.tableHasContentVariable, message: t("error.contentVariableMissing") },
@@ -252,7 +257,7 @@ export const Editor = () => {
     return (
         <Stack direction="row">
             <EditorFilterSection
-                variables={cubeMetaResponse.data?.variables}
+                variables={variables}
                 resolvedVariableCodes={resolvedVariableCodes}
                 queries={modifiedQuery}
                 width={variableSelectionWidth}

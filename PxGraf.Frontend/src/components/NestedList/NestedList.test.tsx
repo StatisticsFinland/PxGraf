@@ -3,6 +3,7 @@ import { render } from '@testing-library/react';
 import UiLanguageContext from 'contexts/uiLanguageContext';
 import '@testing-library/jest-dom';
 import { MemoryRouter } from 'react-router-dom';
+import { ITableResult } from '../../api/services/table';
 import NestedList from './NestedList';
 
 jest.mock('react-i18next', () => ({
@@ -21,31 +22,31 @@ jest.mock('envVars', () => ({
     PxGrafUrl: 'pxGrafUrl.fi/',
     PublicUrl: 'publicUrl.fi/'
 }));
-
-const mockTableQueryResult = {
+const mockTableQueryResult: ITableResult = {
     isLoading: false,
     isError: false,
-    data: [
-        {
-            id: 'asd',
-            type: 'l',
-            updated: '2021-10-13T14:53:06',
-            text: { 'fi': 'foo-fi', 'en': 'foo-en', 'sv': 'foo-sv'},
-            languages: ['fi', 'en', 'sv']
-        },
-        {
-            id: 'asd2',
-            type: 't',
-            updated: '2021-11-13T14:53:06',
-            text: { 'fi': 'foo2-fi', 'sv': 'foo2-sv' },
-            languages: ['en', 'sv']
-        },
-        {
-            id: 'id',
-            text: { 'fi': 'foo3-fi', 'en': 'foo3-en' },
-            languages: ['fi', 'en']
-        }
-    ]
+    data: {
+        headers: [
+            {
+                code: 'asd',
+                name: { 'fi': 'foo-fi', 'en': 'foo-en', 'sv': 'foo-sv' },
+                languages: ['fi', 'en', 'sv']
+            },
+            {
+                code: 'id',
+                name: { 'fi': 'foo3-fi', 'en': 'foo3-en' },
+                languages: ['fi', 'en']
+            }
+        ],
+        files: [
+            {
+                code: 'asd2',
+                lastUpdated: '2021-11-13T14:53:06',
+                name: { 'fi': 'foo2-fi', 'sv': 'foo2-sv' },
+                languages: ['en', 'sv']
+            }
+        ]
+    }
 }
 
 jest.mock('api/services/table', () => ({
