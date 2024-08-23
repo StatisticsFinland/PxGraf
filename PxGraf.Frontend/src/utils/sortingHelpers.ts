@@ -1,5 +1,5 @@
 import { IDatabaseGroupHeader, IDatabaseTable } from '../api/services/table';
-import { IVariable } from "types/cubeMeta";
+import { IVariable, VariableType } from "types/cubeMeta";
 
 /**
  * Function for sorting databases based on the primary language.
@@ -45,10 +45,10 @@ export const sortedVariables = (variables: IVariable[]) => {
     const eliminationVariables = [];
     const singleValueVariables = [];
     variables.forEach((variable: IVariable) => {
-        if (variable.type == 'C') {
+        if (variable.type == VariableType.Content) {
             contentVariable = variable;
         }
-        else if (variable.type == 'T') {
+        else if (variable.type == VariableType.Time) {
             timeVariables.push(variable);
         }
         else if (variable.values.filter((vv: { isSum: boolean; }) => vv.isSum).length > 0) {

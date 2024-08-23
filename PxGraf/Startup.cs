@@ -21,6 +21,8 @@ using PxGraf.Datasource.PxWebInterface;
 using PxGraf.Datasource.DatabaseConnection;
 using PxGraf.Datasource.Cache;
 using PxGraf.Models.Queries;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
 
 namespace PxGraf
 {
@@ -92,6 +94,9 @@ namespace PxGraf
                 .AddNewtonsoftJson(mvcNewtonsoftJsonOptions =>
                 {
                     mvcNewtonsoftJsonOptions.SerializerSettings.Converters.Add(new MultilanguageStringConverter());
+                    mvcNewtonsoftJsonOptions.SerializerSettings.Converters.Add(new MatrixMetadataConverter());
+                    mvcNewtonsoftJsonOptions.SerializerSettings.Converters.Add(new DimensionConverter());
+                    mvcNewtonsoftJsonOptions.SerializerSettings.Converters.Add(new DimensionValueConverter());
                     mvcNewtonsoftJsonOptions.AllowInputFormatterExceptionMessages = HostEnvironment.IsDevelopment();
                     mvcNewtonsoftJsonOptions.SerializerSettings.ContractResolver = new DefaultContractResolver
                     {

@@ -57,7 +57,7 @@ const mockTableResult: ITableResult = {
     isError: false,
     data:
     {
-        headers: [
+        headers:  [
             {
                 name: { 'fi': 'foo1-fi', 'en': 'foo1-en', 'sv': 'foo1-sv' },
                 code: 'id1',
@@ -79,16 +79,6 @@ const mockTableResult: ITableResult = {
         ],
     }
 }
-
-const mockLanguagesResult = ["fi", "en", "sv"];
-
-
-jest.mock('api/services/languages', () => ({
-    ...jest.requireActual('api/services/languages'),
-    useLanguagesQuery: () => {
-        return mockLanguagesResult;
-    },
-}));
 
 jest.mock('api/services/table', () => ({
     ...jest.requireActual('api/services/table'),

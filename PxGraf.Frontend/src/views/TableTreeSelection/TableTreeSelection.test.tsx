@@ -72,15 +72,6 @@ jest.mock('api/services/table', () => ({
     },
 }));
 
-const mockLanguagesResult = ["fi", "en", "sv"];
-
-jest.mock('api/services/languages', () => ({
-    ...jest.requireActual('api/services/languages'),
-    useLanguagesQuery: () => {
-        return mockLanguagesResult;
-    },
-}));
-
 describe('Rendering test', () => {
     it('renders correctly', () => {
         const { asFragment } = render(
