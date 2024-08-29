@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { IVariable, VariableType } from 'types/cubeMeta';
+import { IDimension, VariableType } from 'types/cubeMeta';
 import { IVariableEditions } from 'types/query';
 import VariableEditor from './VariableEditor';
 import UiLanguageContext from 'contexts/uiLanguageContext';
@@ -18,32 +18,41 @@ jest.mock('react-i18next', () => ({
     },
 }));
 
-const mockVariable: IVariable = {
-    code: 'foo',
-    name: {
+const mockVariable: IDimension = {
+    Code: 'foo',
+    Name: {
         'fi': 'asd',
         'sv': 'asd',
         'en': 'asd'
     },
-    note: {
-        'fi': 'seppo',
-        'sv': 'seppo',
-        'en': 'seppo'
-    },
-    type: VariableType.Content,
-    values: [
+    Type: VariableType.Content,
+    Values: [
         {
-            code: 'bar',
-            isSum: false,
-            name: {
+            Code: 'bar',
+            Name: {
                 'fi': 'fgfgfg',
                 'sv': 'fgfgfg',
                 'en': 'fgfgfg'
             },
-            note: {
-                'fi': 'fghjfgh',
-                'sv': 'fghjfgh',
-                'en': 'fghjfgh'
+            Virtual: true,
+            Unit: {
+                'fi': 'yksikko',
+                'sv': 'enhet',
+                'en': 'unit'
+            },
+            Precision: 0,
+            LastUpdated: '2021-01-01',
+            AdditionalProperties: {
+                SOURCE: {
+                    KeyWord: 'SOURCE',
+                    CanGetStringValue: false,
+                    CanGetMultilanguageValue: true,
+                    Entries: {
+                        'fi': 'lahde',
+                        'sv': 'kalla',
+                        'en': 'source'
+                    }
+                }
             }
         }
     ]

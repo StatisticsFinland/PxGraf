@@ -1,30 +1,24 @@
 import React from 'react';
 import { render } from "@testing-library/react";
-import { IVariable, VariableType } from "types/cubeMeta";
+import { IDimension, VariableType } from "types/cubeMeta";
 import { FilterType, Query } from "types/query";
 import EditorFilterSection from "./EditorFilterSection";
 import UiLanguageContext from 'contexts/uiLanguageContext';
 
-const mockVariables: IVariable[] = [
+const mockVariables: IDimension[] = [
     {
-        code: 'foo',
-        name: {
+        Code: 'foo',
+        Name: {
             'fi': 'name'
         },
-        note: {
-            'fi': 'note'
-        },
-        type: VariableType.Content,
-        values: [
+        Type: VariableType.Content,
+        Values: [
             {
-                code: 'bar',
-                isSum: false,
-                name: {
+                Code: 'bar',
+                Name: {
                     'fi': 'name'
                 },
-                note: {
-                    'fi': 'note'
-                }
+                Virtual: false
             }
         ]
     }

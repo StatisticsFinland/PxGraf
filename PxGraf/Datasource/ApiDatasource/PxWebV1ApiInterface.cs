@@ -366,8 +366,7 @@ namespace PxGraf.Datasource.PxWebInterface
             }
 
             Dictionary<string, MetaProperty> additionalProperties = dimensionBase.AdditionalProperties;
-            additionalProperties[PxSyntaxConstants.SOURCE_KEY] = sourceProperty; // TODO: source can be either a table property or a content dimension value property, implement it in a way that it is always stored to dimension values when possible.
-            // TODO: Also when reading the source property the information in the dimension values must override the table level information.
+            additionalProperties[PxSyntaxConstants.SOURCE_KEY] = sourceProperty;
             return new ContentDimension(dimensionBase.Code, dimensionBase.Name, additionalProperties, contentdimensionValues);
         }
 

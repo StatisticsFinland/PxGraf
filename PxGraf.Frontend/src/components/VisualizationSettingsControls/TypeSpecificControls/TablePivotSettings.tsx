@@ -9,7 +9,7 @@ import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import { useTranslation } from 'react-i18next';
 import VariableList from '../UtilityComponents/VariableList';
 import { IVisualizationSettingsProps } from '../VisualizationSettingsControl';
-import { IVariable } from 'types/cubeMeta';
+import { IDimension } from 'types/cubeMeta';
 import styled from 'styled-components';
 import { Query } from "types/query";
 
@@ -24,8 +24,8 @@ const IconWrapper = styled(Stack)`
 `;
 
 interface ITableSettingsProps extends IVisualizationSettingsProps {
-    variables: IVariable[]
-    selectableVariables?: IVariable[]
+    variables: IDimension[]
+    selectableVariables?: IDimension[]
     query?: Query
 }
 
@@ -83,12 +83,12 @@ export const TablePivotSettings: React.FC<ITableSettingsProps> = ({ visualizatio
         }
     }
 
-    const getMultiValueVariables = (codes): IVariable[] => {
+    const getMultiValueVariables = (codes): IDimension[] => {
         //Filter multi value variables and variables that are defined with either "from" or "all" value filters. Exclude selectables - except for multivalueseletable variable
         const multiValueVariableCodes = codes
-            .map(c => variables.find(v => v.code === c))
-            .filter(v => variables.filter(v => query[v.code].valueFilter.type === 'from' || query[v.code].valueFilter.type === 'all')?.includes(v) || v.values.length > 1)
-            .filter(v => !selectableVariables?.includes(v) || v.code === visualizationSettings.multiselectableVariableCode);
+            .map(c => variables.find(v => v.Code === c))
+            .filter(v => variables.filter(v => query[v.Code].valueFilter.type === 'from' || query[v.Code].valueFilter.type === 'all')?.includes(v) || v.Values.length > 1)
+            .filter(v => !selectableVariables?.includes(v) || v.Code === visualizationSettings.multiselectableVariableCode);
         return multiValueVariableCodes;
     }
 

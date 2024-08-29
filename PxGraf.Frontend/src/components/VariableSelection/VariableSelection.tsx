@@ -16,12 +16,12 @@ import AllVariableSelection from './FilterComponents/AllVariableSelection';
 import StartingFromVariableSelection from './FilterComponents/StartingFromVariableSelection';
 import TopNVariableSelection from './FilterComponents/TopNVariableSelection';
 import styled from 'styled-components';
-import { IVariable } from 'types/cubeMeta';
+import { IDimension } from 'types/cubeMeta';
 import { FilterType, IVariableQuery } from 'types/query';
 import DefaultSelectableVariableSelection from './DefaultSelectableVariableSelection';
 
 interface IVariableSelectionProps {
-    variable: IVariable
+    variable: IDimension
     resolvedVariableValueCodes: string[]
     query: IVariableQuery
     onQueryChanged: (newVarQuery: IVariableQuery) => void
@@ -80,13 +80,13 @@ export const VariableSelection: React.FC<IVariableSelectionProps> = ({ variable,
 
     switch (query.valueFilter.type) {
         case FilterType.Item:
-            if (query?.valueFilter?.query && variable?.values) {
+            if (query?.valueFilter?.query && variable?.Values) {
                 const stringArray = query.valueFilter.query as string[];
-                selectedValues = stringArray.map(code => variable.values.find(o => o.code === code));
+                selectedValues = stringArray.map(code => variable.Values.find(o => o.Code === code));
             }
             filterComponent =
                 <ManualPickVariableSelection
-                options={variable.values}
+                options={variable.Values}
                 selectedValues={selectedValues}
                 onQueryChanged={handleFilterValueChanged}
                 />
@@ -98,7 +98,7 @@ export const VariableSelection: React.FC<IVariableSelectionProps> = ({ variable,
         case FilterType.From:
             filterComponent =
                 <StartingFromVariableSelection
-                options={variable.values}
+                options={variable.Values}
                 startingCode={query.valueFilter.query as string}
                 onQueryChanged={handleFilterValueChanged}
                 />
@@ -123,13 +123,13 @@ export const VariableSelection: React.FC<IVariableSelectionProps> = ({ variable,
 
             {
                 query.valueFilter.type !== FilterType.Item ? (
-                    <ResultList variableValues={variable.values} resolvedVariableValueCodes={resolvedVariableValueCodes} />
+                    <ResultList variableValues={variable.Values} resolvedVariableValueCodes={resolvedVariableValueCodes} />
                 ) : null
             }
 
             <SelectabilitySwitch onChange={value => onChangeMUIWrapper({ ...query, selectable: value })} selected={query.selectable} />
             {
-                query.selectable && <DefaultSelectableVariableSelection variableCode={variable.code} resolvedVariableValueCodes={resolvedVariableValueCodes} options={variable.values} />
+                query.selectable && <DefaultSelectableVariableSelection variableCode={variable.Code} resolvedVariableValueCodes={resolvedVariableValueCodes} options={variable.Values} />
             }
 
             <Menu open={anchorEl != null} anchorEl={anchorEl} onClose={closeMenu}>

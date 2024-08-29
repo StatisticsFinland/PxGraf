@@ -2,8 +2,8 @@ import {
     FormControl, Select, MenuItem, InputLabel
 } from '@mui/material';
 import React from 'react';
-import { IVariable } from 'types/cubeMeta';
 import { UiLanguageContext } from 'contexts/uiLanguageContext';
+import { IVariable } from '../../types/visualizationResponse';
 
 export interface IValueSelectProps {
     variable: IVariable;

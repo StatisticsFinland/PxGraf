@@ -8,7 +8,6 @@ using Px.Utils.Models.Metadata.Enums;
 using Px.Utils.Models.Metadata;
 using Px.Utils.Models;
 using PxGraf.ChartTypeSelection;
-using PxGraf.Data.MetaData;
 using PxGraf.Data;
 using PxGraf.Datasource;
 using PxGraf.Enums;

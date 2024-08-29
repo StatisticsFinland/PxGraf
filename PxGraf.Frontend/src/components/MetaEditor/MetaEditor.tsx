@@ -9,7 +9,7 @@ import { a11yProps } from 'utils/componentHelpers';
 import styled from 'styled-components';
 import { ICubeQuery } from 'types/query';
 import { MultiLanguageString } from 'types/multiLanguageString';
-import { IVariable } from 'types/cubeMeta';
+import { IDimension } from 'types/cubeMeta';
 import { IHeaderResult } from 'api/services/default-header';
 import InfoBubble from 'components/InfoBubble/InfoBubble';
 import { UiLanguageContext } from 'contexts/uiLanguageContext';
@@ -58,7 +58,7 @@ export interface INewEditMetaEditor {
 
 interface IMetaEditorProps {
     language: string;
-    resolvedVariables: IVariable[];
+    resolvedVariables: IDimension[];
     cubeQuery: ICubeQuery;
     defaultHeaderResponse: IHeaderResult;
     onChange: (newEdit: ICubeQuery) => void;
@@ -109,26 +109,26 @@ export const MetaEditor: React.FC<IMetaEditorProps> = ({
                         <StyledAccordionDetails>
                             <TabsWrapper sx={{ borderColor: 'divider' }}>
                                 <Tabs value={variableTab} onChange={(evt, newTab) => setVariableTab(newTab)}>
-                                    {resolvedVariables.map((variable, index) => <Tab label={variable.name[uiContentLanguage] ?? variable.code} {...a11yProps(index)} key={variable.code} />)}
+                                    {resolvedVariables.map((variable, index) => <Tab label={variable.Name[uiContentLanguage] ?? variable.Code} {...a11yProps(index)} key={variable.Code} />)}
                                 </Tabs>
                             </TabsWrapper>
                             <TabPanelWrapper>
                                 {resolvedVariables.map((variable, index) => {
                                     return (
-                                        <TabPanel selectedValue={variableTab} value={index} key={variable.code}>
+                                        <TabPanel selectedValue={variableTab} value={index} key={variable.Code}>
                                             <VariableEditor
                                                 variable={variable}
                                                 language={language}
-                                                variableEdits={cubeQuery?.variableQueries[variable.code]}
+                                                variableEdits={cubeQuery?.variableQueries[variable.Code]}
                                                 onChange={newEdit => {
                                                     onChange({
                                                         ...cubeQuery,
                                                         variableQueries: {
                                                             ...cubeQuery?.variableQueries,
-                                                            [variable.code]: {
-                                                                ...cubeQuery?.variableQueries[variable.code],
+                                                            [variable.Code]: {
+                                                                ...cubeQuery?.variableQueries[variable.Code],
                                                                 valueEdits: {
-                                                                    ...cubeQuery?.variableQueries[variable.code]?.valueEdits,
+                                                                    ...cubeQuery?.variableQueries[variable.Code]?.valueEdits,
                                                                     ...newEdit.valueEdits
                                                                 }
                                                             }

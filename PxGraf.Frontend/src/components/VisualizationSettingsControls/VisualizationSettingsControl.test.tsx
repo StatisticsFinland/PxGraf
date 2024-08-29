@@ -1,7 +1,7 @@
 import React from 'react';
 import '@testing-library/jest-dom';
 import { queryByLabelText, render, fireEvent } from '@testing-library/react';
-import { VariableType } from "types/cubeMeta";
+import { IDimension, VariableType } from "types/cubeMeta";
 import VisualizationSettingControl from "./VisualizationSettingsControl";
 import { FilterType, Query } from "types/query";
 
@@ -44,90 +44,74 @@ const mockVisualizationSettings = {
     showDataPoints: false
 }
 
-const mockVariables = [
+const mockVariables: IDimension[]  = [
     {
-        code: "foobar1",
-        name: { fi: "foo1", sv: "bar1", en: "foobar1" },
-        note: { fi: "föö1", sv: "bär1", en: "fööbär1" },
-        type: VariableType.OtherClassificatory,
-        values: [
+        Code: "foobar1",
+        Name: { fi: "foo1", sv: "bar1", en: "foobar1" },
+        Type: VariableType.OtherClassificatory,
+        Values: [
             {
-                code: "barfoo1",
-                name: { fi: "fyy1", sv: "bör1", en: "fyybör1" },
-                note: { fi: "fuu1", sv: "baar1", en: "fuubaar1" },
-                isSum: false
+                Code: "barfoo1",
+                Name: { fi: "fyy1", sv: "bör1", en: "fyybör1" },
+                Virtual: false
             },
             {
-                code: "barfoo2",
-                name: { fi: "fyy2", sv: "bör2", en: "fyybör2" },
-                note: { fi: "fuu2", sv: "baar2", en: "fuubaar2" },
-                isSum: false
+                Code: "barfoo2",
+                Name: { fi: "fyy2", sv: "bör2", en: "fyybör2" },
+                Virtual: false
             }
         ],
-        allValuesAmount: 2
     },
     {
-        code: "foobar2",
-        name: { fi: "foo2", sv: "bar2", en: "foobar2" },
-        note: { fi: "föö2", sv: "bär2", en: "fööbär2" },
-        type: VariableType.OtherClassificatory,
-        values: [
+        Code: "foobar2",
+        Name: { fi: "foo2", sv: "bar2", en: "foobar2" },
+        Type: VariableType.OtherClassificatory,
+        Values: [
             {
-                code: "barfoo1",
-                name: { fi: "fyy1", sv: "bör1", en: "fyybör1" },
-                note: { fi: "fuu1", sv: "baar1", en: "fuubaar1" },
-                isSum: false
+                Code: "barfoo1",
+                Name: { fi: "fyy1", sv: "bör1", en: "fyybör1" },
+                Virtual: false
             },
             {
-                code: "barfoo2",
-                name: { fi: "fyy2", sv: "bör2", en: "fyybör2" },
-                note: { fi: "fuu2", sv: "baar2", en: "fuubaar2" },
-                isSum: false
+                Code: "barfoo2",
+                Name: { fi: "fyy2", sv: "bör2", en: "fyybör2" },
+                Virtual: false
             }
         ],
-        allValuesAmount: 2
     },
     {
-        code: "foobar3",
-        name: { fi: "foo3", sv: "bar3", en: "foobar3" },
-        note: { fi: "föö3", sv: "bär3", en: "fööbär3" },
-        type: VariableType.OtherClassificatory,
-        values: [
+        Code: "foobar3",
+        Name: { fi: "foo3", sv: "bar3", en: "foobar3" },
+        Type: VariableType.OtherClassificatory,
+        Values: [
             {
-                code: "barfoo1",
-                name: { fi: "fyy1", sv: "bör1", en: "fyybör1" },
-                note: { fi: "fuu1", sv: "baar1", en: "fuubaar1" },
-                isSum: false
+                Code: "barfoo1",
+                Name: { fi: "fyy1", sv: "bör1", en: "fyybör1" },
+                Virtual: false
             },
             {
-                code: "barfoo2",
-                name: { fi: "fyy2", sv: "bör2", en: "fyybör2" },
-                note: { fi: "fuu2", sv: "baar2", en: "fuubaar2" },
-                isSum: false
+                Code: "barfoo2",
+                Name: { fi: "fyy2", sv: "bör2", en: "fyybör2" },
+                Virtual: false
             }
         ],
-        allValuesAmount: 2
     },
     {
-        code: "foobar4",
-        name: { fi: "foo4", sv: "bar4", en: "foobar4" },
-        note: { fi: "föö4", sv: "bär4", en: "fööbär4" },
-        type: VariableType.OtherClassificatory,
-        values: [
+        Code: "foobar4",
+        Name: { fi: "foo4", sv: "bar4", en: "foobar4" },
+        Type: VariableType.OtherClassificatory,
+        Values: [
             {
-                code: "barfoo1",
-                name: { fi: "fyy1", sv: "bör1", en: "fyybör1" },
-                note: { fi: "fuu1", sv: "baar1", en: "fuubaar1" },
-                isSum: false
+                Code: "barfoo1",
+                Name: { fi: "fyy1", sv: "bör1", en: "fyybör1" },
+                Virtual: false
             },
             {
-                code: "barfoo2",
-                name: { fi: "fyy2", sv: "bör2", en: "fyybör2" },
-                note: { fi: "fuu2", sv: "baar2", en: "fuubaar2" },
-                isSum: false
+                Code: "barfoo2",
+                Name: { fi: "fyy2", sv: "bör2", en: "fyybör2" },
+                Virtual: false
             }
         ],
-        allValuesAmount: 2
     }
 ]
 

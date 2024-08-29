@@ -23,15 +23,6 @@ jest.mock('envVars', () => ({
     PublicUrl: 'publicUrl.fi/'
 }));
 
-jest.mock('api/services/languages', () => ({
-    ...jest.requireActual('api/services/languages'),
-    useLanguagesQuery: () => {
-        return {
-            data: ['fi', 'en', 'sv']
-        }
-    },
-}));
-
 jest.mock('react-router-dom', () => ({
     ...jest.requireActual('react-router-dom'),
     useParams: () => {

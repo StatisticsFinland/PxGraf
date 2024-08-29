@@ -2,11 +2,11 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Stack, List, ListItem, ListItemText, Typography, Skeleton } from '@mui/material';
 import styled from 'styled-components';
-import { IVariableValue } from 'types/cubeMeta';
+import { IDimensionValue } from 'types/cubeMeta';
 import { UiLanguageContext } from 'contexts/uiLanguageContext';
 
 interface IResultListProps {
-    variableValues: IVariableValue[]
+    variableValues: IDimensionValue[]
     resolvedVariableValueCodes: string[]
 }
 
@@ -56,8 +56,8 @@ export const ResultList: React.FC<IResultListProps> = ({ variableValues, resolve
     }
     else {
         const resultTexts = resolvedVariableValueCodes.map(valueCode => {
-            const value = variableValues.find(value => value.code === valueCode);
-            return value?.name[uiContentLanguage] ?? valueCode;
+            const value = variableValues.find(value => value.Code === valueCode);
+            return value?.Name[uiContentLanguage] ?? valueCode;
         });
 
         listContent = resultTexts.map((value) =>
