@@ -24,7 +24,7 @@ interface ITableListItemProps {
 /**
  * Component used for displaying a database or subfolder in @see {@link NestedList} component.
  * @param {string[]} currentPath Path to the item in question in the Px file system.
- * @param {ITableListResponse} item Response object that stores information about the database or subfolder.
+ * @param {IDatabaseGroupHeader} item Response object that stores information about the database or subfolder.
  * @param {boolean} initialOpenState Whether the item should be displayed as opened.
  * @param {number} depth Current browsing depth.
  */

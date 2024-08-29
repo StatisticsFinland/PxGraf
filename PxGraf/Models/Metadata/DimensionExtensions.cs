@@ -22,8 +22,9 @@ namespace PxGraf.Models.Metadata
         /// </summary>
         /// <param name="input">The <see cref="IReadOnlyDimension"/> object to convert.</param>
         /// <param name="dimensionQueries">The dimension queries to use for the conversion.</param>"
+        /// <param name="meta">The matrix metadata to append missing content value information from.</param>
         /// <returns>A <see cref="Variable"/> object created from the given <see cref="IReadOnlyDimension"/> object.</returns>
-        public static Variable ConvertToVariable(this IReadOnlyDimension input, Dictionary<string, DimensionQuery> dimensionQueries)
+        public static Variable ConvertToVariable(this IReadOnlyDimension input, Dictionary<string, DimensionQuery> dimensionQueries, IReadOnlyMatrixMetadata meta)
         {
             if (input is not Dimension)
             {
@@ -43,7 +44,7 @@ namespace PxGraf.Models.Metadata
                 input.GetDimensionProperty(PxSyntaxConstants.NOTE_KEY, input.Name.Languages.First()),
                 input.Type,
                 input.Values.Select(v => v
-                    .ConvertToVariableValue(input.GetEliminationValueCode(), query)).ToList());
+                    .ConvertToVariableValue(input.GetEliminationValueCode(), query, meta)).ToList());
         }
 
         /// <summary>

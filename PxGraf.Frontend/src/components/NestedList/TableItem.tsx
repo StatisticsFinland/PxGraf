@@ -22,7 +22,7 @@ interface ITableItemProps {
 /**
  * Component used for displaying a table in @see {@link NestedList} component.
  * @param {string[]} currentPath Path to the table in the Px file system
- * @param {ITableListResponse} item Response object that stores information about the database or subfolder.
+ * @param {IDatabaseTable} item Response object that stores information about the database or subfolder.
  * @param {number} depth Current browsing depth.
  */
 export const TableItem: React.FC<ITableItemProps> = ({ currentPath, item, depth }) => {

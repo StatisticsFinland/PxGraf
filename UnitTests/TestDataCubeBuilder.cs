@@ -7,8 +7,6 @@ using Px.Utils.Models.Metadata;
 using Px.Utils.Models.Metadata.Dimensions;
 using Px.Utils.Models.Metadata.Enums;
 using PxGraf.ChartTypeSelection;
-using PxGraf.Data.MetaData;
-using PxGraf.Models.Metadata;
 using PxGraf.Models.Queries;
 using PxGraf.Models.Requests;
 using PxGraf.Models.SavedQueries;
@@ -16,7 +14,6 @@ using PxGraf.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Linq;
 
 namespace UnitTests
 {
@@ -219,11 +216,10 @@ namespace UnitTests
         public static ArchiveCube BuildTestArchiveCube(List<DimensionParameters> metaParams, string[]? languages = null)
         {
             MatrixMetadata meta = BuildTestMeta(metaParams, languages);
-            CubeMeta cubeMeta = meta.ToCubeMeta();
             return new ArchiveCube()
             {
                 CreationTime = PxSyntaxConstants.ParsePxDateTime("2024-08-19T14:00:00.000Z"),
-                Meta = cubeMeta,
+                Meta = meta
             };
         }
 
