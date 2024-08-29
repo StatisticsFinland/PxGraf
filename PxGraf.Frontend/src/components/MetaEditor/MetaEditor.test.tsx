@@ -2,7 +2,7 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import { IHeaderResult } from 'api/services/default-header';
 import '@testing-library/jest-dom';
-import { IVariable, VariableType } from 'types/cubeMeta';
+import { IDimension, VariableType } from 'types/cubeMeta';
 import { ICubeQuery } from 'types/query';
 import MetaEditor from './MetaEditor';
 import UiLanguageContext from 'contexts/uiLanguageContext';
@@ -27,59 +27,81 @@ const availableUiLanguages = ['fi', 'en', 'sv'];
 const uiContentLanguage = 'fi';
 const setUiContentLanguage = jest.fn();
 
-const mockVariables: IVariable[] = [{
-        code: 'foo',
-        name: {
+const mockVariables: IDimension[] = [{
+        Code:'foo',
+        Name: {
             'fi': 'asd',
             'sv': 'asd',
             'en': 'asd'
         },
-        note: {
-            'fi': 'seppo',
-            'sv': 'seppo',
-            'en': 'seppo'
-        },
-        type: VariableType.Content,
-        values: [
+        Type: VariableType.Content,
+        Values: [
             {
-                code: 'bar',
-                isSum: false,
-                name: {
+                Code:'bar',
+                Name: {
                     'fi': 'fgfgfg',
                     'sv': 'fgfgfg',
                     'en': 'fgfgfg'
                 },
-                note: {
-                    'fi': 'fghjfgh',
-                    'sv': 'fghjfgh',
-                    'en': 'fghjfgh'
+                Virtual: false,
+                Unit: {
+                    'fi': 'yksikko',
+                    'sv': 'enhet',
+                    'en': 'unit'
+                },
+                Precision: 0,
+                LastUpdated: '2021-01-01',
+                AdditionalProperties: {
+                    SOURCE: {
+                        KeyWord: 'SOURCE',
+                        CanGetStringValue: false,
+                        CanGetMultilanguageValue: true,
+                        Entries: {
+                            'fi': 'lahde',
+                            'sv': 'kalla',
+                            'en': 'source'
+                        }
+                    }
                 }
             }
         ]
     },
     {
-        code: 'foo2',
-        name: {
+        Code:'foo2',
+        Name: {
             'fi': null,
             'sv': null,
             'en': null
         },
-        note: {
-            'fi': 'seppo2',
-            'sv': 'seppo2',
-            'en': 'seppo2'
-        },
-        type: VariableType.Content,
-        values: [
+        Type: VariableType.Content,
+        Values: [
             {
-                code: 'bar2',
-                isSum: false,
-                name: {
+                Code:'bar2',
+                Name: {
                     'fi': null,
                     'sv': null,
                     'en': null,
                 },
-                note: null
+                Virtual: false,
+                Unit: {
+                    'fi': 'yksikko',
+                    'sv': 'enhet',
+                    'en': 'unit'
+                },
+                Precision: 0,
+                LastUpdated: '2021-01-01',
+                AdditionalProperties: {
+                    SOURCE: {
+                        KeyWord: 'SOURCE',
+                        CanGetStringValue: false,
+                        CanGetMultilanguageValue: true,
+                        Entries: {
+                            'fi': 'lahde',
+                            'sv': 'kalla',
+                            'en': 'source'
+                        }
+                    }
+                }
             }
             ]
     }

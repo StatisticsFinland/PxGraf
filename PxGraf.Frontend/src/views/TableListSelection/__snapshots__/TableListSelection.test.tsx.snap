@@ -25,11 +25,6 @@ exports[`Rendering test renders correctly 1`] = `
             >
               foo1-fi
             </p>
-            <p
-              class="MuiTypography-root MuiTypography-body2 css-1wjvmi0-MuiTypography-root"
-            >
-              1.1.2000
-            </p>
           </span>
         </div>
         <span
@@ -55,11 +50,6 @@ exports[`Rendering test renders correctly 1`] = `
               class="MuiTypography-root MuiTypography-body1 css-x61gb3-MuiTypography-root"
             >
               foo2-fi
-            </p>
-            <p
-              class="MuiTypography-root MuiTypography-body2 css-1wjvmi0-MuiTypography-root"
-            >
-              1.1.2000
             </p>
           </span>
         </div>

@@ -7,7 +7,6 @@ using PxGraf.Data.MetaData;
 using PxGraf.Models.Queries;
 using PxGraf.Utility;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace PxGraf.Models.Metadata
@@ -49,17 +48,14 @@ namespace PxGraf.Models.Metadata
             return new VariableValue(input.Code, name, valueNote, isSum, cc);
         }
 
-        private static MultilanguageString? GetDimensionValueProperty(this IReadOnlyDimensionValue value, string propertyKey)
-        {
-            if (value.AdditionalProperties.TryGetValue(propertyKey, out MetaProperty? prop) && prop.CanGetMultilanguageValue)
-            {
-                return prop.ValueAsMultilanguageString(PxSyntaxConstants.STRING_DELIMETER, value.Name.Languages.First());
-            }
-
-            return null;
-        }
-
-        private static MultilanguageString? GetDimensionValueSource(this ContentDimensionValue value, IReadOnlyMatrixMetadata meta)
+        /// <summary>
+        /// Returns the source of the given content dimension value if it exists.
+        /// If the value has no source, the source of the dimension or the table is returned.
+        /// </summary>
+        /// <param name="value">Dimension value to get the source from.</param>
+        /// <param name="meta">Complete matrix metadata object.</param>
+        /// <returns>Source of the given content dimension value if it exists, otherwise the source of the dimension or the table.</returns>
+        public static MultilanguageString? GetDimensionValueSource(this ContentDimensionValue value, IReadOnlyMatrixMetadata meta)
         {
             MultilanguageString? valueSource = value.GetDimensionValueProperty(PxSyntaxConstants.SOURCE_KEY);
             if (valueSource is not null)
@@ -77,5 +73,16 @@ namespace PxGraf.Models.Metadata
 
             return null;
         }
+
+        private static MultilanguageString? GetDimensionValueProperty(this IReadOnlyDimensionValue value, string propertyKey)
+        {
+            if (value.AdditionalProperties.TryGetValue(propertyKey, out MetaProperty? prop) && prop.CanGetMultilanguageValue)
+            {
+                return prop.ValueAsMultilanguageString(PxSyntaxConstants.STRING_DELIMETER, value.Name.Languages.First());
+            }
+
+            return null;
+        }
     }
 }
+#nullable disable
