@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Px.Utils.Language;
+using PxGraf.Utility;
 using System.Collections.Generic;
 
 namespace PxGraf.Models.Queries
@@ -15,6 +16,7 @@ namespace PxGraf.Models.Queries
         /// </summary>
         public PxTableReference TableReference { get; set; }
 
+        [JsonConverter(typeof(MultilanguageStringConverter))]
         /// <summary>
         /// Header text of the query / visualization.
         /// </summary>

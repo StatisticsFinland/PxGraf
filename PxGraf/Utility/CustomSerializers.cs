@@ -4,9 +4,12 @@ using Px.Utils.Language;
 using Px.Utils.Models.Metadata;
 using Px.Utils.Models.Metadata.Dimensions;
 using Px.Utils.Models.Metadata.Enums;
+using PxGraf.Data;
+using PxGraf.Data.MetaData;
+using PxGraf.Models.Metadata;
 using System;
 using System.Collections.Generic;
-using PxGraf.Utility;
+using System.Linq;
 
 namespace PxGraf.Utility
 {
@@ -22,7 +25,7 @@ namespace PxGraf.Utility
 
             foreach (string language in value.Languages)
             {
-                translations[language] = value[language];
+                translations[language] = value[language].Trim(PxSyntaxConstants.STRING_DELIMETER);
             }
 
             if (translations.Count > 0)
@@ -62,14 +65,15 @@ namespace PxGraf.Utility
             }
 
             JObject jsonObject = JObject.Load(reader);
-            MatrixMetadata matrixMetadata = new(
-                jsonObject["DefaultLanguage"].Value<string>(),
-                jsonObject["AvailableLanguages"].ToObject<List<string>>(),
-                jsonObject["Dimensions"].ToObject<List<Dimension>>(),
-                jsonObject["AdditionalProperties"].ToObject<Dictionary<string, MetaProperty>>()
-            );
-
-            return matrixMetadata;
+            try
+            {
+                return jsonObject.ToObject<MatrixMetadata>(serializer);
+            }
+            catch // If reading old archive files, metadata is provided as CubeMeta
+            {
+                CubeMeta cubeMeta = jsonObject.ToObject<CubeMeta>(serializer);
+                return cubeMeta.ToMatrixMetadata();
+            }
         }
 
         public override void WriteJson(JsonWriter writer, IReadOnlyMatrixMetadata value, JsonSerializer serializer)
@@ -106,7 +110,7 @@ namespace PxGraf.Utility
     public class DimensionConverter : JsonConverter<Dimension>
     {
         private readonly JsonConverter<MultilanguageString> _multiLanguageStringConverter = new MultilanguageStringConverter();
-        private readonly JsonConverter<DimensionValue> _dimensionConverter = new DimensionValueConverter();
+        private readonly JsonConverter<DimensionValue> _valueConverter = new DimensionValueConverter();
         private readonly JsonConverter<MetaProperty> _metaPropertyConverter = new MetaPropertyConverter();
 
         public override Dimension ReadJson(JsonReader reader, Type objectType, Dimension existingValue, bool hasExistingValue, JsonSerializer serializer)
@@ -116,16 +120,15 @@ namespace PxGraf.Utility
                 return null;
             }
 
-            JObject jsonObject = JObject.Load(reader);
-            Dimension dimension = new(
-                jsonObject["Code"].Value<string>(),
-                jsonObject["Name"].ToObject<MultilanguageString>(),
-                jsonObject["AdditionalProperties"].ToObject<Dictionary<string, MetaProperty>>(),
-                jsonObject["Values"].ToObject<List<DimensionValue>>(),
-                jsonObject["Type"].Value<DimensionType>()
-            );
+            JObject jsonObject = JObject.Load(reader); 
+            DimensionType dimensionType = jsonObject["DimensionType"].Value<DimensionType>();
 
-            return dimension;
+            return dimensionType switch
+            {
+                DimensionType.Time => jsonObject.ToObject<TimeDimension>(serializer),
+                DimensionType.Content => jsonObject.ToObject<ContentDimension>(serializer),
+                _ => jsonObject.ToObject<Dimension>(serializer),
+            };
         }
 
         public override void WriteJson(JsonWriter writer, Dimension value, JsonSerializer serializer)
@@ -151,7 +154,7 @@ namespace PxGraf.Utility
             writer.WriteStartArray();
             foreach (IReadOnlyDimensionValue dimensionValue in value.Values)
             {
-                _dimensionConverter.WriteJson(writer, dimensionValue, serializer);
+                _valueConverter.WriteJson(writer, dimensionValue, serializer);
             }
             writer.WriteEndArray();
 
@@ -163,6 +166,12 @@ namespace PxGraf.Utility
             {        
                 writer.WritePropertyName("Note");
                 _multiLanguageStringConverter.WriteJson(writer, noteValue, serializer);
+            }
+
+            if (value is TimeDimension timeDimension)
+            {
+                writer.WritePropertyName("Interval");
+                writer.WriteValue(timeDimension.Interval);
             }
 
             writer.WriteEndObject();
@@ -182,18 +191,15 @@ namespace PxGraf.Utility
             }
 
             JObject jsonObject = JObject.Load(reader);
-            DimensionValue dimensionValue = new(
-                jsonObject["Code"].Value<string>(),
-                jsonObject["Name"].ToObject<MultilanguageString>(),
-                jsonObject["Virtual"].Value<bool>()
-            );
-            Dictionary<string, MetaProperty> additionalProperties = jsonObject["AdditionalProperties"].ToObject<Dictionary<string, MetaProperty>>();
-            foreach (var kvp in additionalProperties)
-            {
-                dimensionValue.AdditionalProperties[kvp.Key] = kvp.Value;
-            }
 
-            return dimensionValue;
+            if (jsonObject["Unit"] != null && jsonObject["LastUpdated"] != null && jsonObject["Precision"] != null)
+            {
+                return jsonObject.ToObject<ContentDimensionValue>(serializer);
+            }
+            else
+            {
+                return jsonObject.ToObject<DimensionValue>(serializer);
+            }
         }
 
         public override void WriteJson(JsonWriter writer, DimensionValue value, JsonSerializer serializer)
@@ -216,7 +222,17 @@ namespace PxGraf.Utility
             writer.WriteEndObject();
 
             writer.WritePropertyName("Virtual");
-            writer.WriteValue(value.Virtual);
+            writer.WriteValue(value.Virtual); 
+            
+            if (value is ContentDimensionValue contentDimensionValue)
+            {
+                writer.WritePropertyName("Unit");
+                _multiLanguageStringConverter.WriteJson(writer, contentDimensionValue.Unit, serializer);
+                writer.WritePropertyName("LastUpdated");
+                writer.WriteValue(contentDimensionValue.LastUpdated);
+                writer.WritePropertyName("Precision");
+                writer.WriteValue(contentDimensionValue.Precision);
+            }
 
             writer.WriteEndObject();
         }
@@ -269,6 +285,11 @@ namespace PxGraf.Utility
             {
                 writer.WriteValue(rawString);
             }
+
+            writer.WritePropertyName("CanGetStringValue");
+            writer.WriteValue(value.CanGetStringValue);
+            writer.WritePropertyName("CanGetMultilanguageValue");
+            writer.WriteValue(value.CanGetMultilanguageValue);
 
             writer.WriteEndObject();
         }

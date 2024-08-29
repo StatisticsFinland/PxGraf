@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using PxGraf.Models.SavedQueries;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading.Tasks;
@@ -14,6 +15,14 @@ namespace PxGraf.Utility
     public class SqFileInterface : ISqFileInterface
     {
         private readonly static LockByKey lockScope = new(StringComparer.OrdinalIgnoreCase);
+
+        private static readonly JsonSerializerSettings _serializerSettings = new()
+        {
+            Converters = new List<JsonConverter>
+           {
+               new MultilanguageStringConverter(),
+           }
+        };
 
         /// <summary>
         /// Returns true if a saved query file with the given sq id exists withing the specified saved query file location.
@@ -101,7 +110,7 @@ namespace PxGraf.Utility
             System.IO.Directory.CreateDirectory(filePath); //If the directory does not exist, create it.
             using StreamWriter outputFile = new(Path.Combine(filePath, fileName));
             using JsonTextWriter jsonWriter = new(outputFile);
-            JsonSerializer ser = new();
+            JsonSerializer ser = JsonSerializer.Create(_serializerSettings);
             ser.Serialize(jsonWriter, input);
             jsonWriter.Flush();
         }

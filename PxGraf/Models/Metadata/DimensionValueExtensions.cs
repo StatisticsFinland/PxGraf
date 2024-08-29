@@ -23,8 +23,9 @@ namespace PxGraf.Models.Metadata
         /// <param name="input">The dimension value to convert</param>
         /// <param name="eliminationValueCode">The code of ´the dimension's elimination value.</param>
         /// <param name="dimensionQuery">Dimension query object that contains the value edits.</param>
+        /// <param name="meta">The matrix metadata to append missing content value information from.</param>
         /// <returns></returns>
-        public static VariableValue ConvertToVariableValue(this IReadOnlyDimensionValue input, string? eliminationValueCode, DimensionQuery dimensionQuery)
+        public static VariableValue ConvertToVariableValue(this IReadOnlyDimensionValue input, string? eliminationValueCode, DimensionQuery dimensionQuery, IReadOnlyMatrixMetadata meta)
         {
             bool isSum = input.Code == eliminationValueCode;
             ContentComponent? cc = null;
@@ -32,11 +33,10 @@ namespace PxGraf.Models.Metadata
             bool edited = dimensionQuery.ValueEdits.TryGetValue(input.Code, out DimensionQuery.VariableValueEdition? valueEdit);
             if (input is ContentDimensionValue cdv)
             {
-                bool ccEdited = edited && valueEdit?.ContentComponent != null;
-                MultilanguageString? source = ccEdited ? 
-                    valueEdit.ContentComponent.SourceEdit : 
-                    input.GetDimensionValueProperty(PxSyntaxConstants.SOURCE_KEY);
-                MultilanguageString? unit = ccEdited?
+                MultilanguageString? source = valueEdit?.ContentComponent.SourceEdit != null ?
+                    valueEdit.ContentComponent.SourceEdit :
+                    cdv.GetDimensionValueSource(meta);
+                MultilanguageString? unit = valueEdit?.ContentComponent.UnitEdit != null ?
                     valueEdit.ContentComponent.UnitEdit :
                     cdv.Unit;
                 cc = new ContentComponent(unit, source, cdv.Precision, PxSyntaxConstants.FormatPxDateTime(cdv.LastUpdated));
@@ -54,6 +54,25 @@ namespace PxGraf.Models.Metadata
             if (value.AdditionalProperties.TryGetValue(propertyKey, out MetaProperty? prop) && prop.CanGetMultilanguageValue)
             {
                 return prop.ValueAsMultilanguageString(PxSyntaxConstants.STRING_DELIMETER, value.Name.Languages.First());
+            }
+
+            return null;
+        }
+
+        private static MultilanguageString? GetDimensionValueSource(this ContentDimensionValue value, IReadOnlyMatrixMetadata meta)
+        {
+            MultilanguageString? valueSource = value.GetDimensionValueProperty(PxSyntaxConstants.SOURCE_KEY);
+            if (valueSource is not null)
+            {
+                return valueSource;
+            }
+            else if (meta.Dimensions.First(d => d.Values.Contains(value)).AdditionalProperties.TryGetValue(PxSyntaxConstants.SOURCE_KEY, out MetaProperty? prop) && prop.CanGetMultilanguageValue)
+            {
+                return prop.ValueAsMultilanguageString(PxSyntaxConstants.STRING_DELIMETER, value.Name.Languages.First());
+            }
+            else if (meta.AdditionalProperties.TryGetValue(PxSyntaxConstants.SOURCE_KEY, out MetaProperty? tableProp) && tableProp.CanGetMultilanguageValue)
+            {
+                return tableProp.ValueAsMultilanguageString(PxSyntaxConstants.STRING_DELIMETER, value.Name.Languages.First());
             }
 
             return null;

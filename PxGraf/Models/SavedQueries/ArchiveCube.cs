@@ -2,6 +2,7 @@
 using Px.Utils.Models;
 using Px.Utils.Models.Data;
 using Px.Utils.Models.Data.DataValue;
+using Px.Utils.Models.Metadata;
 using PxGraf.Data.MetaData;
 using PxGraf.Models.Metadata;
 using PxGraf.Models.Queries;
@@ -26,7 +27,8 @@ namespace PxGraf.Models.SavedQueries
         /// Contains all metadata of this cube.
         /// </summary>
         [JsonProperty("meta")]
-        public CubeMeta Meta { get; set; }
+        [JsonConverter(typeof(MatrixMetadataConverter))]
+        public IReadOnlyMatrixMetadata Meta { get; set; }
 
         /// <summary>
         /// Collection of key (variable value code coordinates) value (double or missing code) pairs.
@@ -45,7 +47,7 @@ namespace PxGraf.Models.SavedQueries
         /// </summary>
         public ArchiveCube() { }
 
-        private ArchiveCube(CubeMeta meta, IReadOnlyList<DecimalDataValue> data)
+        private ArchiveCube(IReadOnlyMatrixMetadata meta, IReadOnlyList<DecimalDataValue> data)
         {
             CreationTime = DateTime.Now;
             Meta = meta;
@@ -96,13 +98,13 @@ namespace PxGraf.Models.SavedQueries
                 }
             }
 
-            return new Matrix<DecimalDataValue>(Meta.ToMatrixMetadata(), newData);
+            return new Matrix<DecimalDataValue>(Meta, newData);
         }
 
         public static ArchiveCube FromMatrixAndQuery(Matrix<DecimalDataValue> matrix, MatrixQuery query)
         {
-            CubeMeta pxGrafMeta = matrix.Metadata.ToCubeMeta(query);
-            return new ArchiveCube(pxGrafMeta, matrix.Data);
+            IReadOnlyMatrixMetadata queriedMeta = matrix.Metadata.FilterDimensionValues(query);
+            return new ArchiveCube(queriedMeta, matrix.Data);
         }
     }
 }

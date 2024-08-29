@@ -4,106 +4,22 @@ using Px.Utils.Models.Metadata.Dimensions;
 using Px.Utils.Models.Metadata.ExtensionMethods;
 using Px.Utils.Models.Metadata;
 using System.Linq;
-using PxGraf.Data.MetaData;
 using PxGraf.Models.Queries;
 using System.Collections.Generic;
 using PxGraf.Utility;
 using Px.Utils.Models.Metadata.Enums;
 using System;
-using PxGraf.Settings;
 
 namespace PxGraf.Models.Metadata
 {
     public static class MatrixMetadataExtensions
     {
         /// <summary>
-        /// Converts the given matrix metadata to cube meta object.
-        /// </summary>
-        /// <param name="input"><see cref="IReadOnlyMatrixMetadata"/> object to be converted</param>
-        /// <param name="query">Optional query object to be used for filtering the dimension values</param>
-        /// <returns><see cref="CubeMeta"/> object based on the input object and optional query.</returns>
-        /// <exception cref="MissingMemberException">
-        /// Thrown when the source for a content dimension value is missing.
-        /// </exception>
-        /// <exception cref="InvalidOperationException">
-        /// Thrown when a content dimension value is not a <see cref="ContentDimensionValue"/>.
-        /// </exception>
-        public static CubeMeta ToCubeMeta(this IReadOnlyMatrixMetadata input, MatrixQuery? query = null)
-        {
-            MultilanguageString? note = input.GetMatrixProperty(PxSyntaxConstants.NOTE_KEY);
-            MultilanguageString? topLevelSource = input.GetMatrixProperty(PxSyntaxConstants.SOURCE_KEY);
-            List<Variable> dimensions = [];
-            foreach (IReadOnlyDimension dimension in input.Dimensions)
-            {
-                MultilanguageString? dimensionNote = dimension.GetDimensionProperty(PxSyntaxConstants.NOTE_KEY, input.DefaultLanguage);
-                string? eliminationCode = dimension.GetEliminationValueCode();
-                List<VariableValue> values = [];
-                IEnumerable<IReadOnlyDimensionValue> dimensionValues = query != null
-                    ? query.DimensionQueries[dimension.Code].ValueFilter.Filter(dimension.Values)
-                    : dimension.Values;
-                foreach (IReadOnlyDimensionValue value in dimensionValues)
-                {
-                    DimensionQuery.VariableValueEdition? valueEdit = null;
-                    if (query != null)
-                    {
-                        DimensionQuery dimQuery = query.DimensionQueries[dimension.Code];
-                        if (!dimQuery.ValueEdits.TryGetValue(value.Code, out valueEdit))
-                        {
-                            valueEdit = new();
-                            dimQuery.ValueEdits.Add(value.Code, valueEdit);
-                            if (value is ContentDimensionValue)
-                            {
-                                valueEdit.ContentComponent = new();
-                            }
-                        }
-                    }
-
-                    MultilanguageString? valueNote = value.GetValueProperty(PxSyntaxConstants.VALUENOTE_KEY, input.DefaultLanguage);
-                    MultilanguageString? dimensionSource = dimension.GetDimensionProperty(PxSyntaxConstants.SOURCE_KEY, input.DefaultLanguage);
-                    MultilanguageString editedValName = valueEdit != null ? value.Name.CopyAndEdit(valueEdit.NameEdit) : value.Name;
-                    VariableValue newValue = new(value.Code, editedValName, valueNote, eliminationCode == value.Code);
-                    if (dimension.Type == DimensionType.Content)
-                    {
-                        if (value is ContentDimensionValue cDimVal)
-                        {
-                            MultilanguageString editedUnit = valueEdit != null ? cDimVal.Unit.CopyAndEdit(valueEdit.ContentComponent.UnitEdit) : cDimVal.Unit;
-                            MultilanguageString? valueSource = value.GetValueSource(dimensionSource, topLevelSource);
-                            MultilanguageString editedSource;
-                            if (valueSource != null)
-                            {
-                                editedSource = valueEdit != null ? valueSource.CopyAndEdit(valueEdit.ContentComponent.SourceEdit) : valueSource;
-                            }
-                            else
-                            {
-                                throw new MissingMemberException($"Source for content dimension value {value.Code} is missing.");
-                            }
-                            string updated = PxSyntaxConstants.FormatPxDateTime(cDimVal.LastUpdated);
-                            newValue.ContentComponent = new(editedUnit, editedSource, cDimVal.Precision, updated);
-                        }
-                        else
-                        {
-                            throw new InvalidOperationException($"Content dimension value {value.Code} is not a ContentDimensionValue.");
-                        }
-                    }
-                    values.Add(newValue);
-                }
-                MultilanguageString editedDimName = query != null ? dimension.Name.CopyAndEdit(query.DimensionQueries[dimension.Code].NameEdit) : dimension.Name;
-                dimensions.Add(new(dimension.Code, editedDimName, dimensionNote, dimension.Type, values));
-            }
-
-            MultilanguageString header = HeaderBuildingUtilities.CreateDefaultHeader(input.Dimensions, query, input.AvailableLanguages)
-                .CopyAndEdit(query?.ChartHeaderEdit)
-                .CopyAndEditAll(h => h[..int.Min(Configuration.Current.QueryOptions.MaxHeaderLength, h.Length)]);
-            
-            return new(input.AvailableLanguages, header, note, dimensions);
-        }
-
-        /// <summary>
-        /// Returns the content dimension from the given cube metadata.
+        /// Filters the dimension values of the given cube metadata based on the given query.
         /// </summary>
         /// <param name="input"><see cref="IReadOnlyMatrixMetadata"/> object to be used.</param>
         /// <param name="query">Query object to be used for filtering the dimension values.</param>
-        /// <returns>Content dimension from the given cube metadata.</returns>
+        /// <returns><see cref="IReadOnlyMatrixMetadata"/> object with dimensions filtered by query</returns>
         public static IReadOnlyMatrixMetadata FilterDimensionValues(this IReadOnlyMatrixMetadata input, MatrixQuery query)
         {
             List<IDimensionMap> dimensionMaps = [];

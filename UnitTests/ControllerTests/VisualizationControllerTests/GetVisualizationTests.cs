@@ -12,12 +12,13 @@ using PxGraf.Controllers;
 using PxGraf.Models.Queries;
 using UnitTests;
 using PxGraf.Datasource;
-using PxGraf.Data.MetaData;
 using Px.Utils.Models.Metadata;
 using PxGraf.Models.Responses;
 using PxGraf.Models.Metadata;
 using PxGraf.Datasource.Cache;
-
+using System.Linq;
+using Px.Utils.Models.Metadata.Dimensions;
+using PxGraf.Utility;
 
 namespace ControllerTests
 {
@@ -70,13 +71,30 @@ namespace ControllerTests
             ];
 
             MatrixMetadata meta = TestDataCubeBuilder.BuildTestMeta(metaParams);
-            CubeMeta cubeMeta = meta.ToCubeMeta();
-            ContentComponent contentClone = cubeMeta.Variables.Find(v => v.Type == DimensionType.Content).IncludedValues[0].ContentComponent.Clone();
-            contentClone.LastUpdated = "2008-09-01T00:00:00.000Z";
-            cubeMeta.Variables.Find(v => v.Type == DimensionType.Content).IncludedValues[0].ContentComponent = contentClone;
+            ContentDimensionValue cdv = meta.Dimensions.Find(v => v.Type == DimensionType.Content).Values[0] as ContentDimensionValue;
+            ContentDimensionValue newCdv = new(
+                cdv.Code,
+                cdv.Name,
+                cdv.Unit,
+                PxSyntaxConstants.ParsePxDateTime("2008-09-01T00:00:00.000Z"),
+                cdv.Precision,
+                cdv.Virtual);
+            foreach (var prop in cdv.AdditionalProperties)
+            {
+                newCdv.AdditionalProperties.Add(prop.Key, prop.Value);
+            }
+            ContentDimension contentDimension = meta.Dimensions.Find(v => v.Type == DimensionType.Content) as ContentDimension;
+            meta.Dimensions[meta.Dimensions.IndexOf(contentDimension)] =
+                new ContentDimension(
+                    contentDimension.Code,
+                    contentDimension.Name,
+                    contentDimension.AdditionalProperties,
+                    new ContentValueList([cdv]));
+
+            MatrixQuery query = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
             VisualizationResponse mockResponse = new()
             {
-                MetaData = cubeMeta.Variables
+                MetaData = meta.Dimensions.Select(d => d.ConvertToVariable(query.DimensionQueries, meta)).ToList()
             };
 
             VisualizationController vController = TestVisualizationControllerBuilder.BuildController(
@@ -117,12 +135,29 @@ namespace ControllerTests
             ];
 
             MatrixMetadata meta = TestDataCubeBuilder.BuildTestMeta(metaParams);
-            CubeMeta cubeMeta = meta.ToCubeMeta();
-            ContentComponent contentClone = cubeMeta.Variables.Find(v => v.Type == DimensionType.Content).IncludedValues[0].ContentComponent.Clone();
-            contentClone.LastUpdated = "2008-09-01T00:00:00.000Z";
+            ContentDimensionValue cdv = meta.Dimensions.Find(v => v.Type == DimensionType.Content).Values[0] as ContentDimensionValue;
+            ContentDimensionValue newCdv = new(
+                cdv.Code,
+                cdv.Name,
+                cdv.Unit,
+                PxSyntaxConstants.ParsePxDateTime("2008-09-01T00:00:00.000Z"),
+                cdv.Precision,
+                cdv.Virtual);
+            foreach (var prop in cdv.AdditionalProperties)
+            {
+                newCdv.AdditionalProperties.Add(prop.Key, prop.Value);
+            }
+            ContentDimension contentDimension = meta.Dimensions.Find(v => v.Type == DimensionType.Content) as ContentDimension;
+            meta.Dimensions[meta.Dimensions.IndexOf(contentDimension)] =
+                new ContentDimension(
+                    contentDimension.Code,
+                    contentDimension.Name,
+                    contentDimension.AdditionalProperties,
+                    new ContentValueList([cdv]));
+            MatrixQuery query = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
             VisualizationResponse mockResponse = new()
             {
-                MetaData = cubeMeta.Variables
+                MetaData = meta.Dimensions.Select(d => d.ConvertToVariable(query.DimensionQueries, meta)).ToList()
             };
 
             VisualizationController vController = TestVisualizationControllerBuilder.BuildController(
@@ -163,12 +198,29 @@ namespace ControllerTests
             ];
 
             MatrixMetadata meta = TestDataCubeBuilder.BuildTestMeta(metaParams);
-            CubeMeta cubeMeta = meta.ToCubeMeta();
-            ContentComponent contentClone = cubeMeta.Variables.Find(v => v.Type == DimensionType.Content).IncludedValues[0].ContentComponent.Clone();
-            contentClone.LastUpdated = "2008-09-01T00:00:00.000Z";
+            ContentDimensionValue cdv = meta.Dimensions.Find(v => v.Type == DimensionType.Content).Values[0] as ContentDimensionValue;
+            ContentDimensionValue newCdv = new(
+                cdv.Code,
+                cdv.Name,
+                cdv.Unit,
+                PxSyntaxConstants.ParsePxDateTime("2008-09-01T00:00:00.000Z"),
+                cdv.Precision,
+                cdv.Virtual);
+            foreach (var prop in cdv.AdditionalProperties)
+            {
+                newCdv.AdditionalProperties.Add(prop.Key, prop.Value);
+            }
+            ContentDimension contentDimension = meta.Dimensions.Find(v => v.Type == DimensionType.Content) as ContentDimension;
+            meta.Dimensions[meta.Dimensions.IndexOf(contentDimension)] =
+                new ContentDimension(
+                    contentDimension.Code,
+                    contentDimension.Name,
+                    contentDimension.AdditionalProperties,
+                    new ContentValueList([cdv]));
+            MatrixQuery query = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
             VisualizationResponse mockResponse = new()
             {
-                MetaData = cubeMeta.Variables
+                MetaData = meta.Dimensions.Select(d => d.ConvertToVariable(query.DimensionQueries, meta)).ToList()
             };
 
             VisualizationController vController = TestVisualizationControllerBuilder.BuildController(

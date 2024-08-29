@@ -4,8 +4,6 @@ using Px.Utils.Models.Metadata.Dimensions;
 using Px.Utils.Models.Metadata.Enums;
 using PxGraf.Data;
 using PxGraf.Data.MetaData;
-using PxGraf.Enums;
-using PxGraf.Models.SavedQueries;
 using PxGraf.Settings;
 using PxGraf.Utility;
 using System;
