@@ -132,7 +132,7 @@ namespace PxGraf.Models.Metadata
                 return null;
             }
         }
-        
+
         /// <summary>
         /// Returns a property value from the matrix metadata based on the given key.
         /// </summary>
@@ -147,24 +147,6 @@ namespace PxGraf.Models.Metadata
             }
 
             return null;
-        }
-
-        private static MultilanguageString? GetValueProperty(this IReadOnlyDimensionValue value, string propertyKey, string defaultLang)
-        {
-            if (value.AdditionalProperties.TryGetValue(propertyKey, out MetaProperty? prop) && prop.CanGetMultilanguageValue)
-            {
-                return prop.ValueAsMultilanguageString(PxSyntaxConstants.STRING_DELIMETER, defaultLang);
-            }
-
-            return null;
-        }
-
-        private static MultilanguageString? GetValueSource(this IReadOnlyDimensionValue value, MultilanguageString? dimensionSource, MultilanguageString? topLevelSource)
-        {
-            MultilanguageString? valueSource = value.GetValueProperty(PxSyntaxConstants.SOURCE_KEY, value.Name.Languages.First());
-            if (valueSource != null) return valueSource;
-            if (dimensionSource != null) return dimensionSource;
-            return topLevelSource;
         }
     }
 }

@@ -1,314 +1,280 @@
 import React from 'react';
 import { render } from "@testing-library/react";
-import { IVariable, VariableType } from "types/cubeMeta";
+import { IDimension, VariableType } from "types/cubeMeta";
 import { FilterType, Query } from "types/query";
 import VariableSelectionList from "./VariableSelectionList";
 import UiLanguageContext from 'contexts/uiLanguageContext';
 
-const mockVariables: IVariable[] =
+const mockVariables: IDimension[] =
     [
         {
-            code: "FoobarManual",
-            name: {
+            Code: "FoobarManual",
+            Name: {
                 fi: "FoobarManualFi",
                 sv: "FoobarManualSv",
                 en: "FoobarManualEn"
             },
-            type: VariableType.OtherClassificatory,
-            note: null,
-            values: [
+            Type: VariableType.OtherClassificatory,
+            Values: [
                 {
-                    code: "eka",
-                    name: {
+                    Code: "eka",
+                    Name: {
                         fi: "ekaFi",
                         sv: "ekaSv",
                         en: "ekaEn"
                     },
-                    note: null,
-                    isSum: false,
-                    contentComponent: null
+                    Virtual: false
                 },
                 {
-                    code: "toka",
-                    name: {
+                    Code: "toka",
+                    Name: {
                         fi: "tokaFi",
                         sv: "tokaSv",
                         en: "tokaEn"
                     },
-                    note: null,
-                    isSum: false,
-                    contentComponent: null
+                    Virtual: false
                 },
                 {
-                    code: "peruna",
-                    name: {
+                    Code: "peruna",
+                    Name: {
                         fi: "perunaFi",
                         sv: "perunaSv",
                         en: "perunaEn"
                     },
-                    note: null,
-                    isSum: false,
-                    contentComponent: null
+                    Virtual: false
                 }
             ]
         },
         {
-            code: "Vuosi",
-            name: {
+            Code: "Vuosi",
+            Name: {
                 fi: "Vuosi",
                 sv: "År",
                 en: "Year"
             },
-            type: VariableType.Time,
-            note: null,
-            values: [
+            Type: VariableType.Time,
+            Values: [
                 {
-                    code: "2018",
-                    name: {
+                    Code: "2018",
+                    Name: {
                         fi: "2018",
                         sv: "2018",
                         en: "2018"
                     },
-                    note: null,
-                    isSum: false,
-                    contentComponent: null
+                    Virtual: false
                 },
                 {
-                    code: "2019",
-                    name: {
+                    Code: "2019",
+                    Name: {
                         fi: "2019",
                         sv: "2019",
                         en: "2019"
                     },
-                    note: null,
-                    isSum: false,
-                    contentComponent: null
+                    Virtual: false
                 },
                 {
-                    code: "2020",
-                    name: {
+                    Code: "2020",
+                    Name: {
                         fi: "2020",
                         sv: "2020",
                         en: "2020"
                     },
-                    note: null,
-                    isSum: false,
-                    contentComponent: null
+                    Virtual: false
                 },
                 {
-                    code: "2021",
-                    name: {
+                    Code: "2021",
+                    Name: {
                         fi: "2021*",
                         sv: "2021*",
                         en: "2021*"
                     },
-                    note: null,
-                    isSum: false,
-                    contentComponent: null
+                    Virtual: false
                 }
             ]
         },
         {
-            code: "FoobarFrom",
-            name: {
+            Code: "FoobarFrom",
+            Name: {
                 fi: "FoobarFromFi",
                 sv: "FoobarFromSv",
                 en: "FoobarFromEn"
             },
-            type: VariableType.OtherClassificatory,
-            note: null,
-            values: [
+            Type: VariableType.OtherClassificatory,
+            Values: [
                 {
-                    code: "aaa",
-                    name: {
+                    Code: "aaa",
+                    Name: {
                         fi: "aaaFi",
                         sv: "aaaSv",
                         en: "aaaEn"
                     },
-                    note: null,
-                    isSum: false,
-                    contentComponent: null
+                    Virtual: false
                 },
                 {
-                    code: "bbb",
-                    name: {
+                    Code: "bbb",
+                    Name: {
                         fi: "bbbFi",
                         sv: "bbbSv",
                         en: "bbbEn"
                     },
-                    note: null,
-                    isSum: false,
-                    contentComponent: null
+                    Virtual: false
                 },
                 {
-                    code: "ccc",
-                    name: {
+                    Code: "ccc",
+                    Name: {
                         fi: "cccFi",
                         sv: "cccSv",
                         en: "cccEn"
                     },
-                    note: null,
-                    isSum: false,
-                    contentComponent: null
+                    Virtual: false
                 },
                 {
-                    code: "ddd",
-                    name: {
+                    Code: "ddd",
+                    Name: {
                         fi: "dddFi",
                         sv: "dddSv",
                         en: "dddEn"
                     },
-                    note: null,
-                    isSum: false,
-                    contentComponent: null
+                    Virtual: false
                 }
             ]
         },
         {
-            code: "FoobarAll",
-            name: {
+            Code: "FoobarAll",
+            Name: {
                 fi: "FoobarAllFi",
                 sv: "FoobarAllSv",
                 en: "FoobarAllEn"
             },
-            type: VariableType.OtherClassificatory,
-            note: null,
-            values: [
+            Type: VariableType.OtherClassificatory,
+            Values: [
                 {
-                    code: "xxx",
-                    name: {
+                    Code: "xxx",
+                    Name: {
                         fi: "xxxFi",
                         sv: "xxxSv",
                         en: "xxxEn"
                     },
-                    note: null,
-                    isSum: false,
-                    contentComponent: null
+                    Virtual: false
                 },
                 {
-                    code: "yyy",
-                    name: {
+                    Code: "yyy",
+                    Name: {
                         fi: "yyyFi",
                         sv: "yyySv",
                         en: "yyyEn"
                     },
-                    note: null,
-                    isSum: false,
-                    contentComponent: null
+                    Virtual: false
                 },
                 {
-                    code: "zzz",
-                    name: {
+                    Code: "zzz",
+                    Name: {
                         fi: "zzzFi",
                         sv: "zzzSv",
                         en: "zzzEn"
                     },
-                    note: null,
-                    isSum: false,
-                    contentComponent: null
+                    Virtual: false
                 }
             ]
         },
         {
-            code: "FoobarContent",
-            name: {
+            Code: "FoobarContent",
+            Name: {
                 fi: "AnalyysimuuttujaFi",
                 sv: "ContentVariableSv",
                 en: "ContentVariableEn"
             },
-            type: VariableType.Content,
-            note: null,
-            values: [
+            Type: VariableType.Content,
+            Values: [
                 {
-                    code: "eka",
-                    name: {
+                    Code: "eka",
+                    Name: {
                         fi: "ekaFi",
                         sv: "ekaSv",
                         en: "ekaEn"
                     },
-                    note: null,
-                    isSum: false,
-                    contentComponent: null
+                    Virtual: false
                 }
             ]
         },
         {
-            code: "FoobarElimination",
-            name: {
+            Code: "FoobarElimination",
+            Name: {
                 fi: "EliminointiMuuttujaFi",
                 sv: "EliminationVariableEn",
                 en: "EliminationVariableEn"
             },
-            type: VariableType.OtherClassificatory,
-            note: null,
-            values: [
+            Type: VariableType.OtherClassificatory,
+            AdditionalProperties: {
+                ELIMINATION: {
+                    KeyWord: "ELIMINATION",
+                    CanGetStringValue: false,
+                    CanGetMultilanguageValue: true,
+                    Entries: {
+                        fi: "sum",
+                        sv: "sum",
+                        en: "sum"
+                    }
+                }
+            },
+            Values: [
                 {
-                    code: "sum",
-                    name: {
+                    Code: "sum",
+                    Name: {
                         fi: "sumFi",
                         sv: "sumSv",
                         en: "sumEn"
                     },
-                    note: null,
-                    isSum: true,
-                    contentComponent: null
+                    Virtual: false
                 },
                 {
-                    code: "val",
-                    name: {
+                    Code: "val",
+                    Name: {
                         fi: "valFi",
                         sv: "valSv",
                         en: "valEn"
                     },
-                    note: null,
-                    isSum: true,
-                    contentComponent: null
+                    Virtual: false
                 }
             ]
         },
         {
-            code: "FoobarSingle",
-            name: {
+            Code: "FoobarSingle",
+            Name: {
                 fi: "YksikkömuuttujaFi",
                 sv: "SingleValueVariableSv",
                 en: "SingleValueVariableEn"
             },
-            type: VariableType.OtherClassificatory,
-            note: null,
-            values: [
+            Type: VariableType.OtherClassificatory,
+            Values: [
                 {
-                    code: "single",
-                    name: {
+                    Code: "single",
+                    Name: {
                         fi: "singleFi",
                         sv: "singleSv",
                         en: "singleEn"
                     },
-                    note: null,
-                    isSum: false,
-                    contentComponent: null
+                    Virtual: false
                 }
             ]
         },
         {
-            code: "FoobarMissingValueName",
-            name: {
+            Code: "FoobarMissingValueName",
+            Name: {
                 fi: "NimetönArvoMuuttujaFi",
                 sv: "NamelessValueVariableSv",
                 en: "NamelessValueVariableEn"
             },
-            type: VariableType.OtherClassificatory,
-            note: null,
-            values: [
+            Type: VariableType.OtherClassificatory,
+            Values: [
                 {
-                    code: "missingName",
-                    name: {
+                    Code: "missingName",
+                    Name: {
                         fi: null,
                         sv: null,
                         en: null
                     },
-                    note: null,
-                    isSum: false,
-                    contentComponent: null
+                    Virtual: false
                 }
             ]
         }

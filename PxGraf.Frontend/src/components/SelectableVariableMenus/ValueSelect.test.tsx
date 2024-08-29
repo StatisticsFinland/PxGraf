@@ -4,6 +4,7 @@ import { IValueSelectProps, ValueSelect } from './ValueSelect';
 import '@testing-library/jest-dom';
 import { VariableType } from 'types/cubeMeta';
 import UiLanguageContext from 'contexts/uiLanguageContext';
+import { IVariable } from '../../types/visualizationResponse';
 
 const mockFunction = jest.fn((value: string) => {
     return;
@@ -17,7 +18,7 @@ const availableUiLanguages = ['fi', 'en', 'sv'];
 const uiContentLanguage = 'fi';
 const setUiContentLanguage = jest.fn();
 
-const mockVariable = 
+const mockVariable: IVariable = 
     {
         code: "foobar1",
         name: { fi: "foo1", sv: "bar1", en: "foobar1" },

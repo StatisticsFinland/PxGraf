@@ -101,3 +101,4 @@ namespace PxGraf.Data.MetaData
         public VariableValue() { }
     }
 }
+#nullable disable

@@ -4,15 +4,16 @@ import { Stack, Paper } from '@mui/material';
 import { UiLanguageContext } from 'contexts/uiLanguageContext';
 import EditorField from './Editorfield';
 import styled from 'styled-components';
-import { IVariableValue } from 'types/cubeMeta';
+import { IDimensionValue } from 'types/cubeMeta';
 import { IVariableValueEditions } from 'types/query';
+import { getAdditionalProperty } from '../../utils/metadataUtils';
 
 const EditorFieldWrapper = styled(Stack)`
   padding: 16px;
 `;
 
 interface IContentVariableValueEditorProps {
-    variableValue: IVariableValue;
+    variableValue: IDimensionValue;
     language: string;
     valueEdits: IVariableValueEditions;
     onChange: (newEdit: IVariableValueEditions) => void;
@@ -27,8 +28,8 @@ export const ContentVariableValueEditor: React.FC<IContentVariableValueEditorPro
         <Paper variant="outlined">
             <EditorFieldWrapper spacing={2}>
                 <EditorField
-                    label={t("editMetadata.valueName") + ": " + variableValue.name[uiContentLanguage]}
-                    defaultValue={variableValue.name[language]}
+                    label={t("editMetadata.valueName") + ": " + variableValue.Name[uiContentLanguage]}
+                    defaultValue={variableValue.Name[language]}
                     editValue={valueEdits?.nameEdit?.[language]}
                     onChange={newValue => {
                         const newValueEdit: IVariableValueEditions = {
@@ -43,7 +44,7 @@ export const ContentVariableValueEditor: React.FC<IContentVariableValueEditorPro
                 />
                 <EditorField
                     label={t("editMetadata.unit")}
-                    defaultValue={variableValue?.contentComponent?.unit[language] ?? ''}
+                    defaultValue={variableValue?.Unit[language] ?? ''}
                     editValue={valueEdits?.contentComponent?.unitEdit?.[language]}
                     onChange={newValue => {
                         const newValueEdit: IVariableValueEditions = {
@@ -61,7 +62,7 @@ export const ContentVariableValueEditor: React.FC<IContentVariableValueEditorPro
                 />
                 <EditorField
                     label={t("editMetadata.source")}
-                    defaultValue={variableValue?.contentComponent?.source[language] ?? ''}
+                    defaultValue={getAdditionalProperty("SOURCE", variableValue?.AdditionalProperties)[language] ?? ''}
                     editValue={valueEdits?.contentComponent?.sourceEdit?.[language]}
                     onChange={newValue => {
                         const newValueEdit: IVariableValueEditions = {

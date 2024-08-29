@@ -1,7 +1,7 @@
 import React from 'react';
 import '@testing-library/jest-dom';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { IVariableValue } from 'types/cubeMeta';
+import { IDimensionValue } from 'types/cubeMeta';
 import { IVariableValueEditions } from 'types/query';
 import ContentVariableValueEditor from './ContentVariableValueEditor';
 import UiLanguageContext from 'contexts/uiLanguageContext';
@@ -26,33 +26,34 @@ const availableUiLanguages = ['fi', 'en', 'sv'];
 const uiContentLanguage = 'fi';
 const setUiContentLanguage = jest.fn();
 
-const mockVariableValue: IVariableValue = {
-    contentComponent: {
-        lastUpdated: '1.1.2000',
-        numberOfDecimals: 5,
-        source: {
-            'fi': 'xcv',
-            'sv': 'xcv',
-            'en': 'xcv'
-        },
-        unit: {
-            'fi': 'qwe',
-            'sv': 'qwe',
-            'en': 'qwe'
+const mockVariableValue: IDimensionValue = {
+    LastUpdated: '1.1.2000',
+    Precision: 5,
+    AdditionalProperties:
+    {
+        SOURCE: {
+            KeyWord: 'SOURCE',
+            CanGetMultilanguageValue: true,
+            CanGetStringValue: false,
+            Entries: {
+                'fi': 'xcv',
+                'sv': 'xcv',
+                'en': 'xcv'
+            }
         }
     },
-    code: 'foo',
-    isSum: false,
-    name: {
+    Unit: {
+        'fi': 'qwe',
+        'sv': 'qwe',
+        'en': 'qwe'
+    },
+    Code: 'foo',
+    Name: {
         'fi': 'asd',
         'sv': 'asd',
         'en': 'asd'
     },
-    note: {
-        'fi': 'seppo',
-        'sv': 'seppo',
-        'en': 'seppo'
-    }
+    Virtual: false
 }
 const mockLang = 'fi';
 const mockFunction = jest.fn();

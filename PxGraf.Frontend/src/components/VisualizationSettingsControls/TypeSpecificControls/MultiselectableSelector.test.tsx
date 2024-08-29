@@ -2,55 +2,48 @@ import React from 'react';
 import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
 import { MultiselectableSelector } from './MultiselectableSelector';
-import { IVariable, VariableType } from "types/cubeMeta";
+import { IDimension, VariableType } from "types/cubeMeta";
 import { IVisualizationSettings } from '../../../types/visualizationSettings';
 
-const mockVariables: IVariable[] = [
+const mockVariables: IDimension[] = [
 	{
-		code: 'cVar',
-		name: { fi: 'cVarName' },
-		note: { fi: 'cVarNote' },
-		type: VariableType.Content,
-		values: [
+		Code: 'cVar',
+		Name: { fi: 'cVarName' },
+		Type: VariableType.Content,
+		Values: [
 			{
-				code: 'cVal',
-				name: { fi: 'cValName' },
-				note: { fi: 'cValNote' },
-				isSum: false
+				Code: 'cVal',
+				Name: { fi: 'cValName' },
+				Virtual: false
 			}
 		]
 	},
 	{
-		code: 'tVar',
-		name: { fi: 'tVarName' },
-		note: { fi: 'tVarNote' },
-		type: VariableType.Time,
-		values: [
+		Code: 'tVar',
+		Name: { fi: 'tVarName' },
+		Type: VariableType.Time,
+		Values: [
 			{
-				code: 'tVal',
-				name: { fi: 'tValName' },
-				note: { fi: 'tValNote' },
-				isSum: false
+				Code: 'tVal',
+				Name: { fi: 'tValName' },
+				Virtual: false
 			}
 		]
 	},
 	{
-		code: 'msVar',
-		name: { fi: 'msVarAName' },
-		note: { fi: 'msVarANote' },
-		type: VariableType.OtherClassificatory,
-		values: [
+		Code: 'msVar',
+		Name: { fi: 'msVarAName' },
+		Type: VariableType.OtherClassificatory,
+		Values: [
 			{
-				code: 'msVal1',
-				name: { fi: 'msVal1Name' },
-				note: { fi: 'msVal1Note' },
-				isSum: false
+				Code: 'msVal1',
+				Name: { fi: 'msVal1Name' },
+				Virtual: false
 			},
 			{
-				code: 'msVal2',
-				name: { fi: 'msVal2Name' },
-				note: { fi: 'msVal2Note' },
-				isSum: false
+				Code: 'msVal2',
+				Name: { fi: 'msVal2Name' },
+				Virtual: false
 			}
 		]
 	}

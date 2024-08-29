@@ -1,5 +1,7 @@
 import { IDatabaseGroupHeader, IDatabaseTable } from '../api/services/table';
-import { IVariable, VariableType } from "types/cubeMeta";
+import { IDimension, IDimensionValue, VariableType } from "types/cubeMeta";
+import { getAdditionalProperty } from './metadataUtils';
+import { MultiLanguageString } from '../types/multiLanguageString';
 
 /**
  * Function for sorting databases based on the primary language.
@@ -32,29 +34,28 @@ const sortDatabaseItems = <T extends IDatabaseGroupHeader>(data: T[], primaryLan
 
 /**
  * Function for sorting variables for the variable selection list based on their type.
- * @param {IVariable[]} variables  Variables to be sorted.
+ * @param {IDimension[]} variables  Variables to be sorted.
  * @returns A sorted list of variables.
  */
-export const sortedVariables = (variables: IVariable[]) => {
-
+export const sortedVariables = (variables: IDimension[]): IDimension[] => {
     //Create a new array for sorted variables and store variables based on their type
     const sortedVariables = [];
-    let contentVariable: IVariable;
+    let contentVariable: IDimension;
     const timeVariables = [];
     const otherVariables = [];
     const eliminationVariables = [];
     const singleValueVariables = [];
-    variables.forEach((variable: IVariable) => {
-        if (variable.type == VariableType.Content) {
+    variables.forEach((variable: IDimension) => {
+        if (variable.Type == VariableType.Content) {
             contentVariable = variable;
         }
-        else if (variable.type == VariableType.Time) {
+        else if (variable.Type == VariableType.Time) {
             timeVariables.push(variable);
         }
-        else if (variable.values.filter((vv: { isSum: boolean; }) => vv.isSum).length > 0) {
+        else if (variable.Values.filter(vv => getValueIsSumValue(vv, variable)).length > 0) {
             eliminationVariables.push(variable);
         }
-        else if (variable.values.length === 1) {
+        else if (variable.Values.length === 1) {
             singleValueVariables.push(variable);
         }
         else {
@@ -72,4 +73,10 @@ export const sortedVariables = (variables: IVariable[]) => {
     sortedVariables.push(...singleValueVariables);
 
     return sortedVariables;
+}
+
+function getValueIsSumValue(value: IDimensionValue, dimension: IDimension): boolean {
+    const eliminationCode: string = getAdditionalProperty("ELIMINATION", dimension.AdditionalProperties) as string;
+    if (eliminationCode) return eliminationCode === value.Code;
+    else return false;
 }

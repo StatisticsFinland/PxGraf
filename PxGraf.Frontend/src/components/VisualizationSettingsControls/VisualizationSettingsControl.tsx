@@ -3,7 +3,7 @@ import { MarkerScaler } from "./UtilityComponents/MarkerScaler";
 import { IVisualizationSettings } from "types/visualizationSettings";
 import { IVisualizationRules } from "types/visualizationRules";
 import { VisualizationType } from "types/visualizationType";
-import { IVariable, VariableType } from "types/cubeMeta";
+import { IDimension, VariableType } from "types/cubeMeta";
 import { Query } from "types/query";
 import InfoBubble from "components/InfoBubble/InfoBubble";
 import { useTranslation } from "react-i18next";
@@ -18,7 +18,7 @@ export interface IVisualizationSettingControlProps {
     visualizationSettings: IVisualizationSettings,
     visualizationRules: IVisualizationRules,
     settingsChangedHandler: SettingsChangedHandler,
-    variables: IVariable[],
+    variables: IDimension[],
     variableQuery: Query,
 }
 
@@ -54,8 +54,8 @@ export const VisualizationSettingControl: React.FC<IVisualizationSettingControlP
     const showDataPoints: boolean = visualizationRules.visualizationTypeSpecificRules.allowShowingDataPoints;
 
     const { t } = useTranslation();
-    const selectableVariables: IVariable[] = variables.filter(v => variableQuery[v.code].selectable);
-    const selectableVariablesExcludingContent: IVariable[] = selectableVariables?.filter(fv => fv.type !== VariableType.Content);
+    const selectableVariables: IDimension[] = variables.filter(v => variableQuery[v.Code].selectable);
+    const selectableVariablesExcludingContent: IDimension[] = selectableVariables?.filter(fv => fv.Type !== VariableType.Content);
     const showMultiselectableSelector: boolean = visualizationRules.multiselectVariableAllowed && selectableVariablesExcludingContent.length > 0;
 
     return (

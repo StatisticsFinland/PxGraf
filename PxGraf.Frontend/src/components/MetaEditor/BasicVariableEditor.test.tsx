@@ -1,6 +1,6 @@
 import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { IVariable, VariableType } from 'types/cubeMeta';
+import { IDimension, VariableType } from 'types/cubeMeta';
 import { IVariableEditions } from 'types/query';
 import BasicVariableEditor from './BasicVariableEditor';
 import '@testing-library/jest-dom';
@@ -26,33 +26,23 @@ const availableUiLanguages = ['fi', 'en', 'sv'];
 const uiContentLanguage = 'fi';
 const setUiContentLanguage = jest.fn();
 
-const mockVariable: IVariable = {
-    code: 'foo',
-    name: {
+const mockVariable: IDimension = {
+    Code: 'foo',
+    Name: {
         'fi': 'asd',
         'sv': 'asd',
         'en': 'asd'
     },
-    note: {
-        'fi': 'seppo',
-        'sv': 'seppo',
-        'en': 'seppo'
-    },
-    type: VariableType.Content,
-    values: [
+    Type: VariableType.Content,
+    Values: [
         {
-            code: 'bar',
-            isSum: false,
-            name: {
+            Code: 'bar',
+            Name: {
                 'fi': 'fgfgfg',
                 'sv': 'fgfgfg',
                 'en': 'fgfgfg'
             },
-            note: {
-                'fi': 'fghjfgh',
-                'sv': 'fghjfgh',
-                'en': 'fghjfgh'
-            }
+            Virtual: false
         }
     ]
 }

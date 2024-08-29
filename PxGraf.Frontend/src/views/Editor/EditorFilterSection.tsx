@@ -3,11 +3,11 @@ import React from 'react';
 import { Box } from '@mui/material';
 import { EditorContext } from 'contexts/editorContext';
 import styled from 'styled-components';
-import { IVariable } from 'types/cubeMeta';
+import { IDimension } from 'types/cubeMeta';
 import { Query } from 'types/query';
 
 interface EditorFilterSectionProps {
-    variables: IVariable[],
+    variables: IDimension[],
     resolvedVariableCodes: { [key: string]: string[] }
     queries: Query
     width?: number
@@ -35,7 +35,7 @@ const SelectorWrapper = styled(Box)<{width: number, $maxWidthPercentage: number}
 
 /**
  * Component for the filter section in the editor. Contains @see {@link VariableSelectionList} for each variable for filtering values and defining selectable variables.
- * @param {IVariable[]} variables Variables available for the table.
+ * @param {IDimension[]} variables Variables available for the table.
  * @param {{[key:string]: string[]}} resolvedVariableCodes Codes for the resolved variable values.
  * @param {Query} queries Object that contains variable queries
  * @param {number} width Width of the variable filter section
