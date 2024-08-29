@@ -1,5 +1,5 @@
 /* istanbul ignore file */
-
+import { TTimeVariableInterval } from "@statisticsfinland/pxvisualizer";
 import { MultiLanguageString } from "./multiLanguageString";
 
 /**
@@ -17,7 +17,11 @@ export interface IMatrixMetadata {
 }
 
 /**
- * TODO: Summary
+ * Interface for a metadata property of a cube, dimension or value.
+ * @property {string} KeyWord - The keyword of the property.
+ * @property {boolean} CanGetStringValue - Flag to indicate if the property can be represented as a string.
+ * @property {boolean} CanGetMultilanguageValue - Flag to indicate if the property can be represented as a multi language string.
+ * @property {MultiLanguageString | string} Entries - The multi language or string value of the property.
  */
 export interface IMetaProperty {
     KeyWord: string,
@@ -28,11 +32,12 @@ export interface IMetaProperty {
 
 /**
  * Interface for dimnension properties. Each variable defines a dimension in a cube.
- * @property {string} code - The code of the variable.
- * @property {VariableType} type - The type of the variable.
- * @property {MultiLanguageString} name - The multi language name of the variable.
+ * @property {string} Code - The code of the variable.
+ * @property {MultiLanguageString} Name - The multi language name of the variable.
  * @property {{ [key: string]: IMetaProperty }} additionalProperties - Optional dictionary for additional metadata properties
- * @property {IVariableValue[]} values - List of values associated with this variable.
+ * @property {IDimensionValue[]} Values - List of values associated with this variable.
+ * @property {VariableType} Type - The type of the variable.
+ * @property {Interval} Interval - The interval of time variable if applicable.
  */
 export interface IDimension {
     Code: string,
@@ -40,6 +45,7 @@ export interface IDimension {
     AdditionalProperties?: { [key: string]: IMetaProperty },
     Values: IDimensionValue[]
     Type: VariableType,
+    Interval?: TTimeVariableInterval 
 }
 
 /**
@@ -69,6 +75,9 @@ export interface IDimensionValue {
     Name: MultiLanguageString,
     Virtual: boolean
     AdditionalProperties?: { [key: string]: IMetaProperty },
+    Unit?: MultiLanguageString,
+    LastUpdated?: string,
+    Precision?: number,
 }
 
 /**
@@ -139,13 +148,15 @@ export function getVariablesFromMatrixMetadata(meta: IMatrixMetadata): IVariable
 
 export function convertDimensionValueToVariableValue(value: IDimensionValue, meta: IMatrixMetadata): IVariableValue {
     const dimension: IDimension = meta.Dimensions.find(d => d.Values.find(v => v.Code === value.Code));
+    const dimensionSource: MultiLanguageString = getAdditionalProperty("SOURCE", dimension.AdditionalProperties) as MultiLanguageString;
+    const tableSource: MultiLanguageString = getAdditionalProperty("SOURCE", meta.AdditionalProperties) as MultiLanguageString;
     const contentComponent = (): IContentComponent | null => {
         if (dimension.Type === VariableType.Content) {
             return {
-                unit: getAdditionalProperty("UNIT", value.AdditionalProperties) as MultiLanguageString,
-                source: getAdditionalProperty("SOURCE", value.AdditionalProperties) as MultiLanguageString,
-                numberOfDecimals: parseInt(getAdditionalProperty("PRECISION", value.AdditionalProperties, true) as string),
-                lastUpdated: getAdditionalProperty("LAST-UPDATED", value.AdditionalProperties, true) as string
+                unit: value.Unit,
+                source: findSourceForValue(value, dimensionSource, tableSource),
+                numberOfDecimals: value.Precision,
+                lastUpdated: value.LastUpdated
             }
         }
         else return null;
@@ -157,6 +168,13 @@ export function convertDimensionValueToVariableValue(value: IDimensionValue, met
         isSum: getValueIsSumValue(value, dimension),
         contentComponent: contentComponent()
     }
+}
+
+function findSourceForValue(value: IDimensionValue, dimensionSource: MultiLanguageString, tableSource: MultiLanguageString): MultiLanguageString {
+    const valueSource = getAdditionalProperty("SOURCE", value.AdditionalProperties) as MultiLanguageString;
+    if (valueSource) return valueSource;
+    else if (dimensionSource) return dimensionSource;
+    else return tableSource;
 }
 
 export function getValueIsSumValue(value: IDimensionValue, dimension: IDimension): boolean {

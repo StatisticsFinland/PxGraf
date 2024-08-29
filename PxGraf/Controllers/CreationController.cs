@@ -60,7 +60,7 @@ namespace PxGraf.Controllers
         /// Returns all metadata from the table
         /// </summary>
         /// <param name="tablePath">Path to the table</param>
-        /// <returns><see cref="CubeMeta"/> object that represents the metadata for the table</returns>
+        /// <returns>Serialized json of <see cref="IReadOnlyMatrixMetadata"/> that contains the metadata of the cube</returns>
         [HttpGet("cube-meta/{*tablePath}")]
         public async Task<ActionResult<IReadOnlyMatrixMetadata>> GetCubeMetaAsync([FromRoute] string tablePath)
         {
