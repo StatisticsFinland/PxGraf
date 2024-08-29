@@ -1,12 +1,12 @@
 import React from 'react';
 import { FormControl, Select, InputLabel, MenuItem} from '@mui/material';
 import { IVisualizationSettingsProps } from '../VisualizationSettingsControl';
-import { IVariable } from "types/cubeMeta";
+import { IDimension } from "types/cubeMeta";
 import { UiLanguageContext } from 'contexts/uiLanguageContext';
 import { useTranslation } from 'react-i18next';
 
 interface MultiselectableSelectorProps extends IVisualizationSettingsProps {
-    variables: IVariable[]
+    variables: IDimension[]
 }
 
 export const MultiselectableSelector: React.FC<MultiselectableSelectorProps> = ({ settingsChangedHandler, visualizationSettings, variables  }) => {
@@ -29,7 +29,7 @@ export const MultiselectableSelector: React.FC<MultiselectableSelectorProps> = (
                 })}
             >
                 <MenuItem value={"noMultiselectable"}>{t("chartSettings.noMultiselectable")}</MenuItem>
-                {variables.map(v => { return <MenuItem key={"key" + v.code} value={v.code}>{v.name[language] ?? v.name[languageTab] ?? v.code}</MenuItem> })}
+                {variables.map(v => { return <MenuItem key={"key" + v.Code} value={v.Code}>{v.Name[language] ?? v.Name[languageTab] ?? v.Code}</MenuItem> })}
             </Select>
         </FormControl>
     )

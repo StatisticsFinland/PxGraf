@@ -5,7 +5,7 @@ import { Stack } from '@mui/material';
 import { ContentVariableEditor } from './ContentVariableEditor';
 import { BasicVariableEditor } from './BasicVariableEditor';
 import styled from 'styled-components';
-import { IVariable, VariableType } from 'types/cubeMeta';
+import { IDimension, VariableType } from 'types/cubeMeta';
 import { IVariableEditions } from 'types/query';
 
 const ContentWrapper = styled(Stack)`
@@ -17,7 +17,7 @@ const StyledEm = styled.em`
 `;
 
 interface IVariableEditorProps {
-    variable: IVariable;
+    variable: IDimension;
     language: string;
     variableEdits: IVariableEditions;
     onChange: (newEdit: IVariableEditions) => void;
@@ -26,14 +26,14 @@ interface IVariableEditorProps {
 export const VariableEditor: React.FC<IVariableEditorProps> = ({ variable, language, variableEdits, onChange }) => {
     const { t } = useTranslation();
 
-    if (variable.values?.length === 0) {
+    if (variable.Values?.length === 0) {
         return (
             <ContentWrapper spacing={2}>
                 <StyledEm>{t("editMetadata.noVariableValuesSelected")}</StyledEm>
             </ContentWrapper>
         );
     }
-    else if (variable.type === VariableType.Content) {
+    else if (variable.Type === VariableType.Content) {
         return <ContentVariableEditor
             variable={variable}
             language={language}

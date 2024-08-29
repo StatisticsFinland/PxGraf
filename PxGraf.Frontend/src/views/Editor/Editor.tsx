@@ -24,7 +24,7 @@ import { extractCubeQuery, extractQuery } from 'utils/ApiHelpers';
 import { useNavigationContext } from 'contexts/navigationContext';
 import { useValidateTableMetadataQuery, IValidateTableMetaDataResult } from 'api/services/validate-table-metadata';
 import { UiLanguageContext } from 'contexts/uiLanguageContext';
-import { getVariablesFromMatrixMetadata, IVariable } from '../../types/cubeMeta';
+import { IDimension } from '../../types/cubeMeta';
 
 //Used to set the width of the variable selection and preview margin in pixels
 const variableSelectionWidth = 450;
@@ -144,16 +144,14 @@ export const Editor = () => {
         }
     }, [language, contentLanguages]);
 
-    const variables: IVariable[] = cubeMetaResponse.data?.Dimensions
-        ? getVariablesFromMatrixMetadata(cubeMetaResponse.data)
-        : [];
+    const dimensions: IDimension[] = cubeMetaResponse.data?.Dimensions ?? [];
 
     const modifiedQuery = React.useMemo(() => {
         if (query != null) {
             return query;
         }
-        else if (variables != null) {
-            return getDefaultQueries(variables);
+        else if (dimensions != null) {
+            return getDefaultQueries(dimensions);
         }
         else {
             return null;
@@ -168,10 +166,10 @@ export const Editor = () => {
         if (resolvedVariableCodesResponse.data != null) {
             return resolvedVariableCodesResponse.data;
         }
-        else if (variables != null) {
+        else if (dimensions != null) {
             const varCodesNoVals = {}
-            variables.forEach(v => {
-                varCodesNoVals[v.code] = [];
+            dimensions.forEach(v => {
+                varCodesNoVals[v.Code] = [];
             })
             return varCodesNoVals;
         }
@@ -180,8 +178,8 @@ export const Editor = () => {
         }
     }, [resolvedVariableCodesResponse, cubeMetaResponse.data]);
     const resolvedVariables = React.useMemo(() => {
-        if (cubeMetaResponse.data != null && variables != null) {
-            return resolveVariables(variables, resolvedVariableCodes);
+        if (cubeMetaResponse.data != null && dimensions != null) {
+            return resolveVariables(dimensions, resolvedVariableCodes);
         }
         else {
             return null;
@@ -237,8 +235,8 @@ export const Editor = () => {
             </Container>
         );
     }
-    else if (tableIsInvalid || cubeMetaResponse.isError || !cubeMetaResponse?.data || !variables) {
-        const errorWithCubeMeta = cubeMetaResponse.isError || !cubeMetaResponse?.data || !variables;
+    else if (tableIsInvalid || cubeMetaResponse.isError || !cubeMetaResponse?.data || !dimensions) {
+        const errorWithCubeMeta = cubeMetaResponse.isError || !cubeMetaResponse?.data || !dimensions;
         const errorConditionsAndMessages = [
             { condition: tableValidityResponse.isError || (errorWithCubeMeta && tableValidityResponse.data?.allVariablesContainValues), message: t("error.contentLoad") },
             { condition: !tableValidityResponse.data?.tableHasContentVariable, message: t("error.contentVariableMissing") },
@@ -257,7 +255,7 @@ export const Editor = () => {
     return (
         <Stack direction="row">
             <EditorFilterSection
-                variables={variables}
+                variables={dimensions}
                 resolvedVariableCodes={resolvedVariableCodes}
                 queries={modifiedQuery}
                 width={variableSelectionWidth}

@@ -3,7 +3,7 @@ import EditorMetaSection from "./EditorMetaSection";
 import { render } from "@testing-library/react";
 import { IHeaderResult } from "api/services/default-header";
 import { IVisualizationSettingsResult } from "api/services/visualization-rules";
-import { IVariable, VariableType } from "types/cubeMeta";
+import { IDimension, VariableType } from "types/cubeMeta";
 import { FilterType, IQueryInfo, Query } from "types/query";
 import { IVisualizationSettings } from "types/visualizationSettings";
 import { VisualizationType } from "types/visualizationType";
@@ -18,91 +18,137 @@ const headerResultMock: IHeaderResult = {
     }
 }
 
-const mockVariables: IVariable[] = [
+const mockVariables: IDimension[] = [
     {
-        code: 'foo',
-        name: {
+        Code: 'foo',
+        Name: {
             'fi': 'foofi',
             'sv': 'foosv',
             'en': 'fooen'
         },
-        note: {
-            'fi': 'foonotefi',
-            'sv': 'foonotesv',
-            'en': 'foonoteen'
-        },
-        type: VariableType.Content,
-        values: [
+        Type: VariableType.Content,
+        Values: [
             {
-                code: 'fooval1',
-                isSum: false,
-                name: {
+                Code: 'fooval1',
+                Name: {
                     'fi': 'fgfgfg1',
                     'sv': 'fgfgfg1',
                     'en': 'fgfgfg1'
                 },
-                note: {
-                    'fi': 'fghjfgh1',
-                    'sv': 'fghjfgh1',
-                    'en': 'fghjfgh1'
+                Virtual: false,
+                Unit: {
+                    'fi': 'yksikko',
+                    'sv': 'enhet',
+                    'en': 'unit'
+                },
+                Precision: 0,
+                LastUpdated: '2021-01-01',
+                AdditionalProperties: {
+                    SOURCE: {
+                        KeyWord: 'SOURCE',
+                        CanGetStringValue: false,
+                        CanGetMultilanguageValue: true,
+                        Entries: {
+                            'fi': 'lahde',
+                            'sv': 'kalla',
+                            'en': 'source'
+                        }
+                    }
                 }
             },
             {
-                code: 'fooval2',
-                isSum: false,
-                name: {
+                Code: 'fooval2',
+                Name: {
                     'fi': 'fgfgfg2',
                     'sv': 'fgfgfg2',
                     'en': 'fgfgfg2'
                 },
-                note: {
-                    'fi': 'fghjfgh2',
-                    'sv': 'fghjfgh2',
-                    'en': 'fghjfgh2'
+                Virtual: false,
+                Unit: {
+                    'fi': 'prosenttia',
+                    'sv': 'procent',
+                    'en': 'percent'
+                },
+                Precision: 1,
+                LastUpdated: '2022-01-01',
+                AdditionalProperties: {
+                    SOURCE: {
+                        KeyWord: 'SOURCE',
+                        CanGetStringValue: false,
+                        CanGetMultilanguageValue: true,
+                        Entries: {
+                            'fi': 'lahde',
+                            'sv': 'kalla',
+                            'en': 'source'
+                        }
+                    }
                 }
             }
         ]
     },
     {
-        code: 'bar',
-        name: {
+        Code: 'bar',
+        Name: {
             'fi': 'barfi',
             'sv': 'barsv',
             'en': 'baren'
         },
-        note: {
-            'fi': 'barnotefi',
-            'sv': 'barnotesv',
-            'en': 'barnoteen'
-        },
-        type: VariableType.Content,
-        values: [
+        Type: VariableType.Content,
+        Values: [
             {
-                code: 'barval1',
-                isSum: false,
-                name: {
+                Code: 'barval1',
+                Name: {
                     'fi': 'fgfgfg1',
                     'sv': 'fgfgfg1',
                     'en': 'fgfgfg1'
                 },
-                note: {
-                    'fi': 'fghjfgh1',
-                    'sv': 'fghjfgh1',
-                    'en': 'fghjfgh1'
+                Virtual: false,
+                Unit: {
+                    'fi': 'yksikko',
+                    'sv': 'enhet',
+                    'en': 'unit'
+                },
+                Precision: 0,
+                LastUpdated: '2021-01-01',
+                AdditionalProperties: {
+                    SOURCE: {
+                        KeyWord: 'SOURCE',
+                        CanGetStringValue: false,
+                        CanGetMultilanguageValue: true,
+                        Entries: {
+                            'fi': 'lahde',
+                            'sv': 'kalla',
+                            'en': 'source'
+                        }
+                    }
                 }
             },
             {
-                code: 'barval2',
-                isSum: false,
-                name: {
+                Code: 'barval2',
+                Name: {
                     'fi': 'fgfgfg2',
                     'sv': 'fgfgfg2',
                     'en': 'fgfgfg2'
                 },
-                note: {
-                    'fi': 'fghjfgh2',
-                    'sv': 'fghjfgh2',
-                    'en': 'fghjfgh2'
+                Virtual: false,
+                Unit: {
+                    'fi': 'prosenttia',
+                    'sv': 'procent',
+                    'en': 'percent'
+                },
+                Precision: 1,
+                LastUpdated: '2022-01-01',
+                AdditionalProperties: {
+                    SOURCE: {
+                        KeyWord: 'SOURCE',
+                        CanGetStringValue: false,
+                        CanGetMultilanguageValue: true,
+                        Entries: {
+                            'fi': 'lahde',
+                            'sv': 'kalla',
+                            'en': 'source'
+                        }
+                    }
                 }
             }
         ]

@@ -2,7 +2,7 @@ import React from 'react';
 import { Typography, Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import VariableSelection from './VariableSelection';
-import { IVariable } from 'types/cubeMeta';
+import { IDimension } from 'types/cubeMeta';
 import { Query } from 'types/query';
 import InfoBubble from 'components/InfoBubble/InfoBubble';
 import { useTranslation } from 'react-i18next';
@@ -12,7 +12,7 @@ import { UiLanguageContext } from 'contexts/uiLanguageContext';
 import { sortedVariables } from 'utils/sortingHelpers';
 
 interface VariableSelectionListProps {
-    variables: IVariable[],
+    variables: IDimension[],
     resolvedVariableCodes: { [key: string]: string[] },
     query: Query,
     onQueryChanged: (newQuery: Query) => void
@@ -36,7 +36,7 @@ const StyledAccordion = styled(Accordion)`
 
 /**
  * Component for defining variable filters and selectable variables in @see {@link Editor}.
- * @param {IVariable[]} variables Variables for the table in question.
+ * @param {IDimension[]} variables Variables for the table in question.
  * @param {{ [key: string]: string[] }} resolvedVariableCodes Resolved variable value codes.
  * @param {Query} query Variable queries.
  * @param {(newQuery: Query) => void} onQueryChanged Callback function for when a variable query is edited.
@@ -68,19 +68,19 @@ export const VariableSelectionList: React.FC<VariableSelectionListProps> = ({ va
             </TitleWrapper>
             {sortedVariables(variables).map(variable => {
                 return (
-                    <StyledAccordion key={variable.code} defaultExpanded={true}>
+                    <StyledAccordion key={variable.Code} defaultExpanded={true}>
                         <AccordionSummary
                             expandIcon={<ExpandMoreIcon />}
                             aria-controls="panel1a-content"
                         >
-                            <Typography variant="h2"><b>{variable.name[uiContentLanguage] ?? variable.code} {selectedValues(variable.code)}/{variable.values.length}</b></Typography>
+                            <Typography variant="h2"><b>{variable.Name[uiContentLanguage] ?? variable.Code} {selectedValues(variable.Code)}/{variable.Values.length}</b></Typography>
                         </AccordionSummary>
                         <StyledAccordionDetails>
                             <VariableSelection
                                 variable={variable}
-                                resolvedVariableValueCodes={resolvedVariableCodes?.[variable.code]}
-                                query={query[variable.code]}
-                                onQueryChanged={newQuery => onQueryChanged({ ...query, [variable.code]: newQuery })}
+                                resolvedVariableValueCodes={resolvedVariableCodes?.[variable.Code]}
+                                query={query[variable.Code]}
+                                onQueryChanged={newQuery => onQueryChanged({ ...query, [variable.Code]: newQuery })}
                             />
                         </StyledAccordionDetails>
                     </StyledAccordion>

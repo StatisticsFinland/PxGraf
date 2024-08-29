@@ -1,10 +1,10 @@
-import { IVariable } from "types/cubeMeta";
+import { IDimension } from "types/cubeMeta";
 import { Query } from "types/query";
 import { ISortingOption } from "types/visualizationRules";
 import { IVisualizationSettings } from "types/visualizationSettings";
 import { VisualizationType } from "types/visualizationType";
 
-export function getValidatedSettings(currentSettings: IVisualizationSettings, selectedVisualization: VisualizationType, sortingOptions: ISortingOption[], variables: IVariable[], query: Query): IVisualizationSettings {
+export function getValidatedSettings(currentSettings: IVisualizationSettings, selectedVisualization: VisualizationType, sortingOptions: ISortingOption[], variables: IDimension[], query: Query): IVisualizationSettings {
     switch (selectedVisualization) {
         case VisualizationType.Table:
             return getTableValidatedSettings(currentSettings, variables, query);
@@ -96,11 +96,11 @@ function getScatterPlotValidatedSettings(currentSettings: IVisualizationSettings
     };
 }
 
-function getTableValidatedSettings(currentSettings: IVisualizationSettings, variables: IVariable[], query: Query) {
+function getTableValidatedSettings(currentSettings: IVisualizationSettings, variables: IDimension[], query: Query) {
     //Get multivalue variables that are not selectable, excluding multiselectable and sort them by the amount of values
-    const sortedMultivalueVariableCodes: string[] = variables.filter(v => v.values.length > 1)
-        .filter(v => !query[v.code]?.selectable && currentSettings?.multiselectableVariableCode != v.code)
-        .sort((v1, v2) => v1.values.length - v2.values.length).map(v => v.code);
+    const sortedMultivalueVariableCodes: string[] = variables.filter(v => v.Values.length > 1)
+        .filter(v => !query[v.Code]?.selectable && currentSettings?.multiselectableVariableCode != v.Code)
+        .sort((v1, v2) => v1.Values.length - v2.Values.length).map(v => v.Code);
  
     const currentRowVariableCodes = currentSettings?.rowVariableCodes ?? [];
     const currentColumnVariableCodes = currentSettings?.columnVariableCodes ?? [];
@@ -120,7 +120,7 @@ function getTableValidatedSettings(currentSettings: IVisualizationSettings, vari
     const newColumnVariableCodes = newVariableCodes.splice(0, columnVariablesCount);
     const newRowVariableCodes = newVariableCodes;
     //Add remaining (single value and selectable) variables to rows
-    newRowVariableCodes.push(...variables.filter(v => !sortedMultivalueVariableCodes.includes(v.code)).map(v => v.code));
+    newRowVariableCodes.push(...variables.filter(v => !sortedMultivalueVariableCodes.includes(v.Code)).map(v => v.Code));
 
     return {
         rowVariableCodes: rowVariableCodes.concat(newRowVariableCodes),
