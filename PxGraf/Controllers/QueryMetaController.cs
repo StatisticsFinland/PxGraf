@@ -76,7 +76,7 @@ namespace PxGraf.Controllers
                 if (_sqFileInterface.ArchiveCubeExists(id, Configuration.Current.ArchiveFileDirectory))
                 {
                     ArchiveCube archiveCube = await _sqFileInterface.ReadArchiveCubeFromFile(id, Configuration.Current.ArchiveFileDirectory);
-                    return archiveCube.Meta.ToMatrixMetadata();
+                    return archiveCube.Meta;
                 }
                 else
                 {

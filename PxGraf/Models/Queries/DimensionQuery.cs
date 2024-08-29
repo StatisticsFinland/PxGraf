@@ -1,6 +1,8 @@
 ﻿using Px.Utils.Language;
+using PxGraf.Utility;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Serialization;
 
 namespace PxGraf.Models.Queries
 {
@@ -12,6 +14,7 @@ namespace PxGraf.Models.Queries
         /// <summary>
         /// Name of the variable in available languages.
         /// </summary>
+        [JsonConverter(typeof(MultilanguageStringConverter))]
         public MultilanguageString NameEdit { get; set; }
 
         /// <summary>
@@ -30,6 +33,7 @@ namespace PxGraf.Models.Queries
 
         public class VariableValueEdition
         {
+            [JsonConverter(typeof(MultilanguageStringConverter))]
             public MultilanguageString NameEdit { get; set; }
 
             [AllowNull]
