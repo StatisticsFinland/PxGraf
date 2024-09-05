@@ -1,5 +1,6 @@
-import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
+import { fireEvent, render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
 import HeaderEditor from './HeaderEditor';
 
 jest.mock('react-i18next', () => ({

@@ -1,7 +1,8 @@
+import React from 'react';
 import { render } from '@testing-library/react';
 import { ITableResult } from 'api/services/table';
 import UiLanguageContext from 'contexts/uiLanguageContext';
-import React from 'react';
+import '@testing-library/jest-dom';
 import { MemoryRouter } from 'react-router-dom';
 import TableTreeSelection from './TableTreeSelection';
 import { NavigationProvider } from 'contexts/navigationContext';
@@ -16,6 +17,11 @@ jest.mock('react-i18next', () => ({
             },
         };
     },
+}));
+
+jest.mock('envVars', () => ({
+    PxGrafUrl: 'pxGrafUrl.fi/',
+    PublicUrl: 'publicUrl.fi/'
 }));
 
 jest.mock('react-router-dom', () => ({

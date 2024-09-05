@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavigationProvider, useNavigationContext } from "contexts/navigationContext";
 import { act, fireEvent, render } from '@testing-library/react';
-
+import '@testing-library/jest-dom';
 
 const TestComponent = () => {
     const { tablePath, setTablePath } = useNavigationContext();

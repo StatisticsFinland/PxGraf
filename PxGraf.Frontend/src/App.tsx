@@ -1,5 +1,6 @@
 /* istanbul ignore file */
 
+import React from 'react';
 import {
   QueryClient,
   QueryClientProvider,
@@ -15,7 +16,6 @@ import { Router } from "Router";
 
 import './i18n';
 import styled from 'styled-components';
-import React from 'react';
 import { NavigationProvider } from 'contexts/navigationContext';
 import theme from 'styles/materialTheme';
 

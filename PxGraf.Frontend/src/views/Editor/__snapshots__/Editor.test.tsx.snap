@@ -6,10 +6,10 @@ exports[`Rendering test renders correctly 1`] = `
   class="MuiStack-root css-m69qwo-MuiStack-root"
 >
   <div
-    class="sc-eDPFhE jIBRWI MuiBox-root css-ve9ogo"
+    class="sc-eJgwjL gwNfXU MuiBox-root css-ve9ogo"
   >
     <div
-      class="sc-jEABJj hSGNkz"
+      class="sc-jzjKHc hOhaiK"
     >
       <p
         class="MuiTypography-root MuiTypography-body2 css-r40f8v-MuiTypography-root"
@@ -18,7 +18,7 @@ exports[`Rendering test renders correctly 1`] = `
       </p>
       <button
         aria-label="tooltip.open: variableSelect.title"
-        class="sc-dAlxHm fwoaFd"
+        class="sc-dkjaqt fTFHez"
         id="mainContent"
       >
         <svg
@@ -35,7 +35,7 @@ exports[`Rendering test renders correctly 1`] = `
       </button>
     </div>
     <div
-      class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiAccordion-root MuiAccordion-rounded Mui-expanded MuiAccordion-gutters sc-dLNtp bNRjTc css-1086bdv-MuiPaper-root-MuiAccordion-root"
+      class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiAccordion-root MuiAccordion-rounded Mui-expanded MuiAccordion-gutters sc-tOkKi diPSiL css-1086bdv-MuiPaper-root-MuiAccordion-root"
     >
       <div
         aria-controls="panel1a-content"
@@ -87,13 +87,13 @@ exports[`Rendering test renders correctly 1`] = `
               role="region"
             >
               <div
-                class="MuiAccordionDetails-root sc-cPiJYC cioqXd css-15v22id-MuiAccordionDetails-root"
+                class="MuiAccordionDetails-root sc-czgmHJ kLUNZd css-15v22id-MuiAccordionDetails-root"
               >
                 <div
-                  class="MuiStack-root sc-kpDprT CSeuz css-1sazv7p-MuiStack-root"
+                  class="MuiStack-root sc-kkmypM kJaLMI css-1sazv7p-MuiStack-root"
                 >
                   <div
-                    class="MuiStack-root sc-dhKdPU Ncddr css-m69qwo-MuiStack-root"
+                    class="MuiStack-root sc-dnaUSb dlJuVl css-m69qwo-MuiStack-root"
                   >
                     <span
                       aria-label="variableSelect.openMenu"
@@ -118,7 +118,7 @@ exports[`Rendering test renders correctly 1`] = `
                       />
                     </span>
                     <div
-                      class="MuiAutocomplete-root MuiAutocomplete-hasPopupIcon sc-iGgVNO iLroeS css-1tw9w9k-MuiAutocomplete-root"
+                      class="MuiAutocomplete-root MuiAutocomplete-hasPopupIcon sc-iKTcqh jsvyIL css-1x6bjyf-MuiAutocomplete-root"
                     >
                       <div
                         class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-wb57ya-MuiFormControl-root-MuiTextField-root"
@@ -158,6 +158,6 @@ exports[`Rendering test renders correctly 1`] = `
                               type="button"
                             >
                               <svg
-                                aria-hidden="tru...
+                                aria-hidden="t...
 </DocumentFragment>
 `;

@@ -46,8 +46,9 @@
       "SortingOptions": {
         "Ascending": "Nouseva",
         "Descending": "Laskeva",
-        "NoSorting": "Ei lajittelua",
-        "Sum": "Summa"
+        "NoSorting": "Lähdedatan mukainen järjestys",
+        "Sum": "Summa",
+        "NoSortingReversed": "Lähdedatalle käänteinen järjestys"
       },
       "MissingData": {
         "Missing": "Tieto on puuttuva",
@@ -113,8 +114,9 @@
       "SortingOptions": {
         "Ascending": "Ascending",
         "Descending": "Descending",
-        "NoSorting": "No sorting",
-        "Sum": "Sum"
+        "NoSorting": "Order is the same as in source data",
+        "Sum": "Sum",
+        "NoSortingReversed": "Order is reversed from source data"
       },
       "MissingData": {
         "Missing": "Missing",
@@ -180,8 +182,9 @@
       "SortingOptions": {
         "Ascending": "Ascending.sv",
         "Descending": "Descending.sv",
-        "NoSorting": "no_sorting.sv",
-        "Sum": "Sum.sv"
+        "NoSorting": "Samma ordning som i källdata",
+        "Sum": "Sum.sv",
+        "NoSortingReversed": "Omvänd ordning jämfört med källdata"
       },
       "MissingData": {
         "Missing": "Uppgift saknas",

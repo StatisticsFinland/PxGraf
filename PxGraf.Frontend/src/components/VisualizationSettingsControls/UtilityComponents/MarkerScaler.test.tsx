@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react';
+import '@testing-library/jest-dom';
 import { render, screen, fireEvent } from '@testing-library/react';
 import MarkerScaler from "./MarkerScaler";
-
 
 jest.mock('react-i18next', () => ({
     ...jest.requireActual('react-i18next'),

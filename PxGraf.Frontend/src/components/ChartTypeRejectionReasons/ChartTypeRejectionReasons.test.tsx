@@ -1,6 +1,7 @@
+import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import UiLanguageContext from 'contexts/uiLanguageContext';
-import React from 'react';
+import '@testing-library/jest-dom';
 import ChartTypeRejectionReasons from './ChartTypeRejectionReasons';
 
 jest.mock('react-i18next', () => ({

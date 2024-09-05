@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace PxGraf.Utility
 {
+    [ExcludeFromCodeCoverage] // Unable to find a good way to test a fifo mutex
     public class LockByKey(IEqualityComparer<string> keyComparer)
     {
         private sealed class LockInfo {
