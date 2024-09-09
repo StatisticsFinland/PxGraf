@@ -27,7 +27,14 @@ namespace PxGraf.Datasource.DatabaseConnection
             List<PxTableReference> tableReferences = await _datasource.GetTablesAsync(hierarcy);
             IEnumerable<Task<DatabaseTable>> tableTasks = tableReferences.Select(GetTableListingItemAsync);
             List<DatabaseTable> tables = [];
-            foreach (Task<DatabaseTable> tableTask in tableTasks) tables.Add(await tableTask);
+            foreach (Task<DatabaseTable> tableTask in tableTasks)
+            {
+                DatabaseTable table = await tableTask;
+                if (table != null)
+                {
+                    tables.Add(table);
+                }
+            }
             return new DatabaseGroupContents(headers, tables);
         }
 
@@ -39,7 +46,17 @@ namespace PxGraf.Datasource.DatabaseConnection
 
         private async Task<DatabaseTable> GetTableListingItemAsync(PxTableReference reference)
         {
-            IReadOnlyMatrixMetadata meta = await GetMatrixMetadataCachedAsync(reference);
+            IReadOnlyMatrixMetadata meta;
+            DateTime lastUpdated;
+            try
+            {
+                meta = await GetMatrixMetadataCachedAsync(reference);
+                lastUpdated = meta.GetLastUpdated() ?? await _datasource.GetLastWriteTimeAsync(reference);
+            }
+            catch
+            {
+                return null;
+            }
             string tableId;
             if (meta.AdditionalProperties.TryGetValue(PxSyntaxConstants.TABLEID_KEY, out MetaProperty tableIdProperty))
             {
@@ -51,7 +68,6 @@ namespace PxGraf.Datasource.DatabaseConnection
             }
             List<string> languages = [.. meta.AvailableLanguages];
             MultilanguageString name = meta.AdditionalProperties[PxSyntaxConstants.DESCRIPTION_KEY].ValueAsMultilanguageString(PxSyntaxConstants.STRING_DELIMETER, languages[0]);
-            DateTime lastUpdated = meta.GetLastUpdated() ?? await _datasource.GetLastWriteTimeAsync(reference);
             return new(tableId, name, lastUpdated, languages);
         }
 
