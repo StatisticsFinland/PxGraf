@@ -35,6 +35,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{6CD3
 		.github\scripts\check_version_changes.sh = .github\scripts\check_version_changes.sh
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tools", "PxGraf.Tools\Tools.csproj", "{1A42D4F9-F35B-47CE-82AE-AA9ED63F3333}"
+	ProjectSection(ProjectDependencies) = postProject
+		{34F3D4F9-A121-4610-925C-C65005D12940} = {34F3D4F9-A121-4610-925C-C65005D12940}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
