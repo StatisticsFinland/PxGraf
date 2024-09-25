@@ -1,0 +1,50 @@
+name: dependabot Version Increment
+
+run-name: ${{ format('dependabot Version Increment for PR {0}', github.event.pull_request.number) }}
+
+on:
+  pull_request:
+    branches:
+      - 'dev'
+
+jobs:
+ dependabot_version_increment:
+    # COMMENTED OUT FOR TESTING if: ${{ github.actor == 'dependabot[bot]' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install jq
+        run: sudo apt-get install -y jq
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '21.x'
+
+      - name: Get current version number from dev branch
+        run: |
+          git fetch origin dev
+          git checkout origin/main -- package.json
+          echo "CURRENT_VERSION=$(jq -r '.version' package.json)" >> $GITHUB_ENV
+
+      - name: Get version number from PR branch
+        run: |
+          PR_VERSION=$(jq -r '.version' package.json)
+          echo "PR_VERSION=$PR_VERSION" >> $GITHUB_ENV
+
+      - name: Compare and increment version number
+        run: |
+          if [ "$CURRENT_VERSION" = "$PR_VERSION" ]; then
+            npm version patch --no-git-tag-version
+            git config --global user.name "github-actions[bot]"
+            git config --global user.email "github-actions[bot]@users.noreply.github.com"
+            git add package.json
+            git commit -m "Version bump from $PR_VERSION to $(jq -r '.version' package.json)"
+            git push origin HEAD:${{ github.event.pull_request.head.ref }}
+          fi
