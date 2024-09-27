@@ -27,16 +27,18 @@ jobs:
         with:
           node-version: '21.x'
 
+      - name: Get version number from PR branch
+        run: |
+          PR_VERSION=$(jq -r '.version' PxGraf.Frontend/package.json)
+          echo "PR_VERSION=$PR_VERSION" >> $GITHUB_ENV
+          echo "Version in PR branch is $PR_VERSION"
+
       - name: Get current version number from dev branch
         run: |
           git fetch origin dev
           git checkout origin/dev -- PxGraf.Frontend/package.json
           echo "CURRENT_VERSION=$(jq -r '.version' PxGraf.Frontend/package.json)" >> $GITHUB_ENV
-
-      - name: Get version number from PR branch
-        run: |
-          PR_VERSION=$(jq -r '.version' PxGraf.Frontend/package.json)
-          echo "PR_VERSION=$PR_VERSION" >> $GITHUB_ENV
+          echo "Current dev version is $CURRENT_VERSION"
 
       - name: Compare and increment version number
         run: |
@@ -47,4 +49,6 @@ jobs:
             git add PxGraf.Frontend/package.json
             git commit -m "Version bump from $PR_VERSION to $(jq -r '.version' PxGraf.Frontend/package.json)"
             git push origin HEAD:${{ github.event.pull_request.head.ref }}
+          else
+            echo "Version number in PR branch is already up-to-date. No action taken."
           fi
