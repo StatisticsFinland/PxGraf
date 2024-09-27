@@ -41,7 +41,7 @@ jobs:
       - name: Compare and increment version number
         run: |
           if [ "$CURRENT_VERSION" = "$PR_VERSION" ]; then
-            npm version patch --no-git-tag-version
+            npm version patch --no-git-tag-version --prefix PxGraf.Frontend
             git config --global user.name "github-actions[bot]"
             git config --global user.email "github-actions[bot]@users.noreply.github.com"
             git add PxGraf.Frontend/package.json
