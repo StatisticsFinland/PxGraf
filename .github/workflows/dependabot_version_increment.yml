@@ -38,7 +38,7 @@ jobs:
       - name: Check changed files
         id: changed-files
         run: |
-          CHANGED_FILES=$(jq -r '.files[].path' pr_details.json)
+          CHANGED_FILES=$(jq -r '.files[].path' pr_details.json | paste -sd "," -)
           echo "CHANGED_FILES=$CHANGED_FILES" >> $GITHUB_ENV
           echo "Changed files: $CHANGED_FILES"
 
@@ -54,7 +54,8 @@ jobs:
         run: |
           git fetch origin dev
           git checkout origin/dev -- PxGraf.Frontend/package.json
-          echo "CURRENT_VERSION=$(jq -r '.version' PxGraf.Frontend/package.json)" >> $GITHUB_ENV
+          CURRENT_VERSION=$(jq -r '.version' PxGraf.Frontend/package.json)
+          echo "CURRENT_VERSION=$CURRENT_VERSION" >> $GITHUB_ENV
           echo "Current dev version is $CURRENT_VERSION"
 
       - name: Compare and increment frontend version number
