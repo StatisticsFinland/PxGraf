@@ -42,15 +42,33 @@ jobs:
           echo "CHANGED_FILES=$CHANGED_FILES" >> $GITHUB_ENV
           echo "Changed files: $CHANGED_FILES"
 
+      - name: Check if frontend package.json changed
+        id: check-frontend
+        run: |
+          if [[ ",$CHANGED_FILES," == *"PxGraf.Frontend/package.json"* ]]; then
+            echo "FRONTEND_CHANGED=true" >> $GITHUB_ENV
+          else
+            echo "FRONTEND_CHANGED=false" >> $GITHUB_ENV
+          fi
+
+      - name: Check if backend csproj changed
+        id: check-backend
+        run: |
+          if [[ ",$CHANGED_FILES," == *"PxGraf/PxGraf.csproj"* ]]; then
+            echo "BACKEND_CHANGED=true" >> $GITHUB_ENV
+          else
+            echo "BACKEND_CHANGED=false" >> $GITHUB_ENV
+          fi
+
       - name: Get frontend version number from PR branch
-        if: contains(steps.changed-files.outputs.CHANGED_FILES, 'PxGraf.Frontend/package.json')
+        if: env.FRONTEND_CHANGED == 'true'
         run: |
           PR_VERSION=$(jq -r '.version' PxGraf.Frontend/package.json)
           echo "PR_VERSION=$PR_VERSION" >> $GITHUB_ENV
           echo "Version in PR branch is $PR_VERSION"
 
       - name: Get current frontend version number from dev branch
-        if: contains(steps.changed-files.outputs.CHANGED_FILES, 'PxGraf.Frontend/package.json')
+        if: env.FRONTEND_CHANGED == 'true'
         run: |
           git fetch origin dev
           git checkout origin/dev -- PxGraf.Frontend/package.json
@@ -59,7 +77,7 @@ jobs:
           echo "Current dev version is $CURRENT_VERSION"
 
       - name: Compare and increment frontend version number
-        if: contains(steps.changed-files.outputs.CHANGED_FILES, 'PxGraf.Frontend/package.json')
+        if: env.FRONTEND_CHANGED == 'true'
         run: |
           if [ "$CURRENT_VERSION" = "$PR_VERSION" ]; then
             npm version patch --no-git-tag-version --prefix PxGraf.Frontend
@@ -73,7 +91,7 @@ jobs:
           fi
 
       - name: Get current backend version number from dev branch
-        if: contains(steps.changed-files.outputs.CHANGED_FILES, 'PxGraf.csproj')
+        if: env.BACKEND_CHANGED == 'true'
         run: |
           git fetch origin dev
           git checkout origin/dev -- PxGraf/PxGraf.csproj
@@ -82,7 +100,7 @@ jobs:
           echo "Current dev version is $CURRENT_VERSION"
 
       - name: Compare and increment backend version number
-        if: contains(steps.changed-files.outputs.CHANGED_FILES, 'PxGraf.csproj')
+        if: env.BACKEND_CHANGED == 'true'
         run: |
           PR_VERSION=$(grep '<VersionPrefix>' PxGraf/PxGraf.csproj | sed 's/.*<VersionPrefix>\(.*\)<\/VersionPrefix>.*/\1/')
           if [ "$CURRENT_VERSION" = "$PR_VERSION" ]; then
