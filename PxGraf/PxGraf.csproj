@@ -12,6 +12,7 @@
     <FileVersion>3.0.16.0</FileVersion>
 	<SpaRoot>..\PxGraf.Frontend</SpaRoot>
 	<Configurations>Debug;Release;Test</Configurations>
+	<Description>Mock change, remove after testing</Description>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
