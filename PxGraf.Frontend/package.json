@@ -23,7 +23,6 @@
     "web-vitals": "^4.0.1"
   },
   "scripts": {
-    "start": "vite",
     "build": "tsc && vite build",
     "serve": "vite preview",
     "test": "jest -c jest.config.ts",
