@@ -41,8 +41,6 @@ jobs:
           CHANGED_FILES=$(jq -r '.files[].path' pr_details.json)
           echo "CHANGED_FILES=$CHANGED_FILES" >> $GITHUB_ENV
           echo "Changed files: $CHANGED_FILES"
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Get frontend version number from PR branch
         if: contains(steps.changed-files.outputs.CHANGED_FILES, 'PxGraf.Frontend/package.json')
