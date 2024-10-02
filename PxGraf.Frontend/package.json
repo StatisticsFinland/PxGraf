@@ -23,6 +23,7 @@
     "web-vitals": "^4.0.1"
   },
   "scripts": {
+    "mockchange": "vite",
     "start": "vite",
     "build": "tsc && vite build",
     "serve": "vite preview",
