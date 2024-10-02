@@ -27,10 +27,18 @@ jobs:
         with:
           node-version: '21.x'
 
+      - name: Fetch PR details
+        id: pr-details
+        run: |
+          gh pr view ${{ github.event.pull_request.number }} --json files > pr_details.json
+          cat pr_details.json
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Check changed files
         id: changed-files
         run: |
-          CHANGED_FILES=$(jq -r '.pull_request.changed_files' <(gh pr view ${{ github.event.pull_request.number }} --json changedFiles))
+          CHANGED_FILES=$(jq -r '.files[].path' pr_details.json)
           echo "CHANGED_FILES=$CHANGED_FILES" >> $GITHUB_ENV
           echo "Changed files: $CHANGED_FILES"
         env:
