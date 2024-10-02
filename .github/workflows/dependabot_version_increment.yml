@@ -9,7 +9,7 @@ on:
 
 jobs:
  dependabot_version_increment:
-    if: ${{ github.actor == 'dependabot[bot]' }}
+    # TEST if: ${{ github.actor == 'dependabot[bot]' }}
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -27,20 +27,29 @@ jobs:
         with:
           node-version: '21.x'
 
-      - name: Get version number from PR branch
+      - name: Check changed files
+        id: changed-files
+        run: |
+          CHANGED_FILES=$(jq -r '.pull_request.changed_files' <(gh pr view ${{ github.event.pull_request.number }} --json changedFiles))
+          echo "CHANGED_FILES=$CHANGED_FILES" >> $GITHUB_ENV
+
+      - name: Get frontend version number from PR branch
+        if: contains(steps.changed-files.outputs.CHANGED_FILES, 'PxGraf.Frontend/package.json')
         run: |
           PR_VERSION=$(jq -r '.version' PxGraf.Frontend/package.json)
           echo "PR_VERSION=$PR_VERSION" >> $GITHUB_ENV
           echo "Version in PR branch is $PR_VERSION"
 
-      - name: Get current version number from dev branch
+      - name: Get current frontend version number from dev branch
+        if: contains(steps.changed-files.outputs.CHANGED_FILES, 'PxGraf.Frontend/package.json')
         run: |
           git fetch origin dev
           git checkout origin/dev -- PxGraf.Frontend/package.json
           echo "CURRENT_VERSION=$(jq -r '.version' PxGraf.Frontend/package.json)" >> $GITHUB_ENV
           echo "Current dev version is $CURRENT_VERSION"
 
-      - name: Compare and increment version number
+      - name: Compare and increment frontend version number
+        if: contains(steps.changed-files.outputs.CHANGED_FILES, 'PxGraf.Frontend/package.json')
         run: |
           if [ "$CURRENT_VERSION" = "$PR_VERSION" ]; then
             npm version patch --no-git-tag-version --prefix PxGraf.Frontend
@@ -48,6 +57,31 @@ jobs:
             git config --global user.email "github-actions[bot]@users.noreply.github.com"
             git add PxGraf.Frontend/package.json
             git commit -m "Version bump from $PR_VERSION to $(jq -r '.version' PxGraf.Frontend/package.json)"
+            git push origin HEAD:${{ github.event.pull_request.head.ref }}
+          else
+            echo "Frontend version number in PR branch is already up-to-date. No action taken."
+          fi
+
+      - name: Get current backend version number from dev branch
+        if: contains(steps.changed-files.outputs.CHANGED_FILES, 'PxGraf.csproj')
+        run: |
+          git fetch origin dev
+          git checkout origin/dev -- PxGraf/PxGraf.csproj
+          CURRENT_VERSION=$(grep '<VersionPrefix>' PxGraf/PxGraf.csproj | sed 's/.*<VersionPrefix>\(.*\)<\/VersionPrefix>.*/\1/')
+          echo "CURRENT_VERSION=$CURRENT_VERSION" >> $GITHUB_ENV
+          echo "Current dev version is $CURRENT_VERSION"
+
+      - name: Compare and increment backend version number
+        if: contains(steps.changed-files.outputs.CHANGED_FILES, 'PxGraf.csproj')
+        run: |
+          PR_VERSION=$(grep '<VersionPrefix>' PxGraf/PxGraf.csproj | sed 's/.*<VersionPrefix>\(.*\)<\/VersionPrefix>.*/\1/')
+          if [ "$CURRENT_VERSION" = "$PR_VERSION" ]; then
+            NEW_VERSION=$(echo $PR_VERSION | awk -F. -v OFS=. '{$NF++;print}')
+            sed -i "s/<VersionPrefix>$PR_VERSION<\/VersionPrefix>/<VersionPrefix>$NEW_VERSION<\/VersionPrefix>/" PxGraf/PxGraf.csproj
+            git config --global user.name "github-actions[bot]"
+            git config --global user.email "github-actions[bot]@users.noreply.github.com"
+            git add PxGraf/PxGraf.csproj
+            git commit -m "Version bump from $PR_VERSION to $NEW_VERSION"
             git push origin HEAD:${{ github.event.pull_request.head.ref }}
           else
             echo "Version number in PR branch is already up-to-date. No action taken."
