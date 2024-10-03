@@ -1,6 +1,7 @@
-﻿using PxGraf.ChartTypeSelection.ChartSpecificLimits;
+﻿using Px.Utils.Models.Data.DataValue;
+using Px.Utils.Models;
+using PxGraf.ChartTypeSelection.ChartSpecificLimits;
 using PxGraf.ChartTypeSelection.JsonObjects;
-using PxGraf.Data;
 using PxGraf.Enums;
 using PxGraf.Models.Queries;
 using PxGraf.Models.SavedQueries;
@@ -138,12 +139,12 @@ namespace PxGraf.ChartTypeSelection
             ];
         }
 
-        public IReadOnlyList<VisualizationType> GetValidChartTypes(DataCube cube)
+        public IReadOnlyList<VisualizationType> GetValidChartTypes(MatrixQuery query, Matrix<DecimalDataValue> matrix)
         {
             List<VisualizationType> validTypes = [];
             foreach (ChartRulesCheck check in AllLimitChecks)
             {
-                if (check.CheckValidity(VisualizationTypeSelectionObject.FromCube(cube)).Count == 0)
+                if (check.CheckValidity(VisualizationTypeSelectionObject.FromQueryAndMatrix(query, matrix)).Count == 0)
                 {
                     validTypes.Add(check.Type);
                 }
@@ -152,40 +153,12 @@ namespace PxGraf.ChartTypeSelection
             return validTypes;
         }
 
-        public IReadOnlyList<VisualizationType> GetValidChartTypes(CubeQuery query, DataCube cube)
-        {
-            List<VisualizationType> validTypes = [];
-            foreach (ChartRulesCheck check in AllLimitChecks)
-            {
-                if (check.CheckValidity(VisualizationTypeSelectionObject.FromQueryAndCube(query, cube)).Count == 0)
-                {
-                    validTypes.Add(check.Type);
-                }
-            }
-
-            return validTypes;
-        }
-
-        public IReadOnlyList<VisualizationType> GetValidChartTypes(CubeQuery query, ArchiveCube cube)
-        {
-            List<VisualizationType> validTypes = [];
-            foreach (ChartRulesCheck check in AllLimitChecks)
-            {
-                if (check.CheckValidity(VisualizationTypeSelectionObject.FromQueryAndCube(query, cube)).Count == 0)
-                {
-                    validTypes.Add(check.Type);
-                }
-            }
-
-            return validTypes;
-        }
-
-        public IReadOnlyDictionary<VisualizationType, IReadOnlyList<ChartRejectionInfo>> GetRejectionReasons(CubeQuery query, DataCube cube)
+        public IReadOnlyDictionary<VisualizationType, IReadOnlyList<ChartRejectionInfo>> GetRejectionReasons(MatrixQuery query, Matrix<DecimalDataValue> matrix)
         {
             Dictionary<VisualizationType, IReadOnlyList<ChartRejectionInfo>> rejectionReasons = [];
             foreach (ChartRulesCheck check in AllLimitChecks)
             {
-                rejectionReasons[check.Type] = check.CheckValidity(VisualizationTypeSelectionObject.FromQueryAndCube(query, cube));
+                rejectionReasons[check.Type] = check.CheckValidity(VisualizationTypeSelectionObject.FromQueryAndMatrix(query, matrix));
             }
 
             return rejectionReasons;

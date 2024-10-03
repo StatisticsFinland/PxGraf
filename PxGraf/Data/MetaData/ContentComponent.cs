@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json;
-using PxGraf.Language;
+using Px.Utils.Language;
 using PxGraf.Utility;
 
 namespace PxGraf.Data.MetaData
@@ -7,13 +7,11 @@ namespace PxGraf.Data.MetaData
     /// <summary>
     /// Contains information spesific to variables that are of the content type.
     /// </summary>
-    public class ContentComponent : IReadOnlyContentComponent
+    public class ContentComponent
     {
-        public MultiLanguageString Unit { get; set; }
-        IReadOnlyMultiLanguageString IReadOnlyContentComponent.Unit => Unit;
+        public MultilanguageString Unit { get; set; }
 
-        public MultiLanguageString Source { get; set; }
-        IReadOnlyMultiLanguageString IReadOnlyContentComponent.Source => Source;
+        public MultilanguageString Source { get; set; }
 
         public int NumberOfDecimals { get; set; }
 
@@ -23,14 +21,14 @@ namespace PxGraf.Data.MetaData
         public string LastUpdated { get; set; }
 
         public ContentComponent(
-            IReadOnlyMultiLanguageString unit,
-            IReadOnlyMultiLanguageString source,
+            MultilanguageString unit,
+            MultilanguageString source,
             int numberOfDecimals,
             string lastUpdated
             )
         {
-            Unit = unit.Clone();
-            Source = source.Clone();
+            Unit = unit;
+            Source = source;
             NumberOfDecimals = numberOfDecimals;
             LastUpdated = lastUpdated;
         }
@@ -49,7 +47,7 @@ namespace PxGraf.Data.MetaData
         /// <returns></returns>
         public ContentComponent Clone()
         {
-            return new ContentComponent(Unit.Clone(), Source.Clone(), NumberOfDecimals, LastUpdated);
+            return new ContentComponent(Unit, Source, NumberOfDecimals, LastUpdated);
         }
     }
 }

@@ -1,5 +1,5 @@
-﻿using PxGraf.Data.MetaData;
-using PxGraf.Enums;
+﻿using Px.Utils.Models.Metadata.Enums;
+using PxGraf.Data.MetaData;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,36 +23,6 @@ namespace PxGraf.Data
 
         [GeneratedRegex("^[12][0-9]{3}$")]
         private static partial Regex AnnualValuesRegex();
-
-        public class TimeVariableInformation(TimeVariableInterval interval, DateTime? startingPoint)
-        {
-            public TimeVariableInterval Interval { get; } = interval;
-            public DateTime? StartingPoint { get; } = startingPoint;
-        }
-
-        /// <summary>
-        /// Returns a time variable interval based on the cube meta.
-        /// </summary>
-        public static TimeVariableInformation Parse(IReadOnlyCubeMeta meta)
-        {
-            IEnumerable<TimeVariableInterval> intervals = meta.Variables
-                .Where(v => v.Type == VariableType.Time)
-                .Select(v => DetermineIntervalFromCodes(v.IncludedValues.Select(val => val.Code)));
-
-            TimeVariableInterval interval = intervals.Min();
-            if (interval == TimeVariableInterval.Irregular)
-            {
-                return new TimeVariableInformation(interval, null);
-            }
-            else
-            {
-                DateTime? startingPoint = meta.Variables
-                    .Where(v => v.Type == VariableType.Time)
-                    .Select(v => DetermineTimeVarStartingPointFromCode(v.IncludedValues[0].Code))
-                    .Min();
-                return new TimeVariableInformation(interval, startingPoint);
-            }
-        }
 
         /// <summary>
         /// This function determines the time series starting point from the first code in the time variable.
@@ -97,37 +67,37 @@ namespace PxGraf.Data
         /// This function determines the time series interval from the codes in the time variable.
         /// This is a separate function for unit testing purposes.
         /// </summary>
-        public static TimeVariableInterval DetermineIntervalFromCodes(IEnumerable<string> valueCodes)
+        public static TimeDimensionInterval DetermineIntervalFromCodes(IEnumerable<string> valueCodes)
         {
-            if (valueCodes is null || !valueCodes.Any()) return TimeVariableInterval.Irregular;
+            if (valueCodes is null || !valueCodes.Any()) return TimeDimensionInterval.Irregular;
 
             if (WeeklyValuesRegex().IsMatch(valueCodes.First()) && Validate(valueCodes, code => new WeeklyTimeStamp(code)))
             {
-                return TimeVariableInterval.Week;
+                return TimeDimensionInterval.Week;
             }
 
             if (MonthlyValuesRegex().IsMatch(valueCodes.First()) && Validate(valueCodes, code => new MonthlyTimeStamp(code)))
             {
-                return TimeVariableInterval.Month;
+                return TimeDimensionInterval.Month;
             }
 
             if (QuarterlyValuesRegex().IsMatch(valueCodes.First()) && Validate(valueCodes, code => new QuarterlyTimeStamp(code)))
             {
-                return TimeVariableInterval.Quarter;
+                return TimeDimensionInterval.Quarter;
             }
 
 
             if (BiAnnualValuesRegex().IsMatch(valueCodes.First()) && Validate(valueCodes, code => new BiAnnualTimeStamp(code)))
             {
-                return TimeVariableInterval.HalfYear;
+                return TimeDimensionInterval.HalfYear;
             }
 
             if (AnnualValuesRegex().IsMatch(valueCodes.First()) && Validate(valueCodes, code => new AnnualTimeStamp(code)))
             {
-                return TimeVariableInterval.Year;
+                return TimeDimensionInterval.Year;
             }
 
-            return TimeVariableInterval.Irregular;
+            return TimeDimensionInterval.Irregular;
         }
 
         private static bool Validate(IEnumerable<string> timeVarValueCodes, Func<string, IterableTimeStamp> iteratorBuilder)

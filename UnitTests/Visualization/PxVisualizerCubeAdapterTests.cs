@@ -1,6 +1,9 @@
-﻿using Newtonsoft.Json;
-using NUnit.Framework;
-using PxGraf.Data;
+﻿using NUnit.Framework;
+using Newtonsoft.Json;
+using Px.Utils.Language;
+using Px.Utils.Models.Data.DataValue;
+using Px.Utils.Models.Metadata.Enums;
+using Px.Utils.Models;
 using PxGraf.Enums;
 using PxGraf.Language;
 using PxGraf.Models.Queries;
@@ -10,11 +13,10 @@ using PxGraf.Models.SavedQueries;
 using PxGraf.Visualization;
 using System.Collections.Generic;
 using System.Linq;
-using UnitTests.Fixtures;
 using UnitTests.Fixtures.ResponseFixtures;
-using UnitTests.TestDummies;
-using UnitTests.TestDummies.DummyQueries;
+using UnitTests.Fixtures;
 using UnitTests.Utilities;
+using UnitTests;
 
 namespace Visualization
 {
@@ -28,12 +30,12 @@ namespace Visualization
         [Test]
         public static void BuildVisualizationResponseTest_VariableOrderChangedMetadataChanged()
         {
-            List<VariableParameters> varParams =
+            List<DimensionParameters> varParams =
             [
-                new VariableParameters(VariableType.Content, 1),
-                new VariableParameters(VariableType.OtherClassificatory, 3),
-                new VariableParameters(VariableType.OtherClassificatory, 3) { Selectable = true },
-                new VariableParameters(VariableType.Time, 3),
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Other, 3),
+                new DimensionParameters(DimensionType.Other, 3) { Selectable = true },
+                new DimensionParameters(DimensionType.Time, 3),
             ];
 
             VisualizationCreationSettings creationSettings = new()
@@ -41,9 +43,9 @@ namespace Visualization
                 SelectedVisualization = VisualizationType.LineChart
             };
 
-            DataCube inputCube = TestDataCubeBuilder.BuildTestDataCube(varParams);
+            Matrix<DecimalDataValue> inputCube = TestDataCubeBuilder.BuildTestMatrix(varParams);
             SavedQuery inputQuery = TestDataCubeBuilder.BuildTestSavedQuery(varParams, false, creationSettings, inputCube);
-            VisualizationSettings settings = creationSettings.ToVisualizationSettings(inputCube.Meta, inputQuery.Query);
+            VisualizationSettings settings = creationSettings.ToVisualizationSettings(inputCube.Metadata, inputQuery.Query);
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(inputCube, inputQuery.Query, settings);
             
             List<string> expected = ["variable-0", "variable-2", "variable-1", "variable-3"];
@@ -53,12 +55,12 @@ namespace Visualization
         [Test]
         public static void BuildVisualizationResponseTest_OneSelecableCausesVarOrderChange()
         {
-            List<VariableParameters> varParams =
+            List<DimensionParameters> varParams =
             [
-                new VariableParameters(VariableType.Content, 1),
-                new VariableParameters(VariableType.OtherClassificatory, 3),
-                new VariableParameters(VariableType.OtherClassificatory, 3) { Selectable = true },
-                new VariableParameters(VariableType.Time, 3),
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Other, 3),
+                new DimensionParameters(DimensionType.Other, 3) { Selectable = true },
+                new DimensionParameters(DimensionType.Time, 3),
             ];
 
             VisualizationCreationSettings creationSettings = new()
@@ -66,9 +68,9 @@ namespace Visualization
                 SelectedVisualization = VisualizationType.LineChart
             };
 
-            DataCube inputCube = TestDataCubeBuilder.BuildTestDataCube(varParams);
+            Matrix<DecimalDataValue> inputCube = TestDataCubeBuilder.BuildTestMatrix(varParams);
             SavedQuery inputQuery = TestDataCubeBuilder.BuildTestSavedQuery(varParams, false, creationSettings, inputCube);
-            VisualizationSettings settings = creationSettings.ToVisualizationSettings(inputCube.Meta, inputQuery.Query);
+            VisualizationSettings settings = creationSettings.ToVisualizationSettings(inputCube.Metadata, inputQuery.Query);
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(inputCube, inputQuery.Query, settings);
 
             IReadOnlyList<double?> expectedData = [
@@ -82,12 +84,12 @@ namespace Visualization
         [Test]
         public static void BuildVisualizationResponseTest_PercentHorizontalBarChart()
         {
-            List<VariableParameters> varParams =
+            List<DimensionParameters> varParams =
             [
-                new VariableParameters(VariableType.Content, 1),
-                new VariableParameters(VariableType.Time, 3) { Selectable = true },
-                new VariableParameters(VariableType.OtherClassificatory, 3),
-                new VariableParameters(VariableType.OtherClassificatory, 3)
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 3) { Selectable = true },
+                new DimensionParameters(DimensionType.Other, 3),
+                new DimensionParameters(DimensionType.Other, 3)
             ];
 
             VisualizationCreationSettings creationSettings = new()
@@ -95,9 +97,9 @@ namespace Visualization
                 SelectedVisualization = VisualizationType.PercentHorizontalBarChart
             };
 
-            DataCube inputCube = TestDataCubeBuilder.BuildTestDataCube(varParams);
+            Matrix<DecimalDataValue> inputCube = TestDataCubeBuilder.BuildTestMatrix(varParams);
             SavedQuery inputQuery = TestDataCubeBuilder.BuildTestSavedQuery(varParams, false, creationSettings, inputCube);
-            VisualizationSettings settings = creationSettings.ToVisualizationSettings(inputCube.Meta, inputQuery.Query);
+            VisualizationSettings settings = creationSettings.ToVisualizationSettings(inputCube.Metadata, inputQuery.Query);
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(inputCube, inputQuery.Query, settings);
 
             IReadOnlyList<double?> expectedData = [
@@ -112,12 +114,12 @@ namespace Visualization
         [Test]
         public static void BuildVisualizationResponseTest_PercentVerticalBarChart()
         {
-            List<VariableParameters> varParams =
+            List<DimensionParameters> varParams =
             [
-                new VariableParameters(VariableType.Content, 1),
-                new VariableParameters(VariableType.Time, 5),
-                new VariableParameters(VariableType.OtherClassificatory, 3)  { Selectable = true },
-                new VariableParameters(VariableType.OtherClassificatory, 3)
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 5),
+                new DimensionParameters(DimensionType.Other, 3)  { Selectable = true },
+                new DimensionParameters(DimensionType.Other, 3)
             ];
 
             VisualizationCreationSettings creationSettings = new()
@@ -125,9 +127,9 @@ namespace Visualization
                 SelectedVisualization = VisualizationType.PercentVerticalBarChart
             };
 
-            DataCube inputCube = TestDataCubeBuilder.BuildTestDataCube(varParams);
+            Matrix<DecimalDataValue> inputCube = TestDataCubeBuilder.BuildTestMatrix(varParams);
             SavedQuery inputQuery = TestDataCubeBuilder.BuildTestSavedQuery(varParams, false, creationSettings, inputCube);
-            VisualizationSettings settings = creationSettings.ToVisualizationSettings(inputCube.Meta, inputQuery.Query);
+            VisualizationSettings settings = creationSettings.ToVisualizationSettings(inputCube.Metadata, inputQuery.Query);
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(inputCube, inputQuery.Query, settings);
 
             IReadOnlyList<double?> expectedData = [
@@ -148,13 +150,13 @@ namespace Visualization
         [Test]
         public static void BuildVisualizationResponseTest_MultipleSelectableVarsAndPivot()
         {
-            List<VariableParameters> varParams =
+            List<DimensionParameters> varParams =
             [
-                new VariableParameters(VariableType.Content, 1),
-                new VariableParameters(VariableType.OtherClassificatory, 2),
-                new VariableParameters(VariableType.OtherClassificatory, 2) { Selectable = true },
-                new VariableParameters(VariableType.OtherClassificatory, 4),
-                new VariableParameters(VariableType.Time, 4) { Selectable = true },
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Other, 2),
+                new DimensionParameters(DimensionType.Other, 2) { Selectable = true },
+                new DimensionParameters(DimensionType.Other, 4),
+                new DimensionParameters(DimensionType.Time, 4) { Selectable = true },
             ];
 
             VisualizationCreationSettings creationSettings = new()
@@ -163,9 +165,9 @@ namespace Visualization
                 PivotRequested = true
             };
 
-            DataCube inputCube = TestDataCubeBuilder.BuildTestDataCube(varParams);
+            Matrix<DecimalDataValue> inputCube = TestDataCubeBuilder.BuildTestMatrix(varParams);
             SavedQuery inputQuery = TestDataCubeBuilder.BuildTestSavedQuery(varParams, false, creationSettings, inputCube);
-            VisualizationSettings settings = creationSettings.ToVisualizationSettings(inputCube.Meta, inputQuery.Query);
+            VisualizationSettings settings = creationSettings.ToVisualizationSettings(inputCube.Metadata, inputQuery.Query);
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(inputCube, inputQuery.Query, settings);
 
             IReadOnlyList<double?> expectedData = [
@@ -185,13 +187,13 @@ namespace Visualization
         [Test]
         public static void BuildVisualizationResponseTest_ChangeVarOrder()
         {
-            List<VariableParameters> varParams =
+            List<DimensionParameters> varParams =
             [
-                new VariableParameters(VariableType.Content, 1),
-                new VariableParameters(VariableType.OtherClassificatory, 2),
-                new VariableParameters(VariableType.OtherClassificatory, 5),
-                new VariableParameters(VariableType.OtherClassificatory, 2) { Selectable = true },
-                new VariableParameters(VariableType.Time, 1)
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Other, 2),
+                new DimensionParameters(DimensionType.Other, 5),
+                new DimensionParameters(DimensionType.Other, 2) { Selectable = true },
+                new DimensionParameters(DimensionType.Time, 1)
             ];
 
             VisualizationCreationSettings creationSettings = new()
@@ -200,9 +202,9 @@ namespace Visualization
                 PivotRequested = true
             };
 
-            DataCube inputCube = TestDataCubeBuilder.BuildTestDataCube(varParams);
+            Matrix<DecimalDataValue> inputCube = TestDataCubeBuilder.BuildTestMatrix(varParams);
             SavedQuery inputQuery = TestDataCubeBuilder.BuildTestSavedQuery(varParams, false, creationSettings, inputCube);
-            VisualizationSettings settings = creationSettings.ToVisualizationSettings(inputCube.Meta, inputQuery.Query);
+            VisualizationSettings settings = creationSettings.ToVisualizationSettings(inputCube.Metadata, inputQuery.Query);
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(inputCube, inputQuery.Query, settings);
 
             IReadOnlyList<double?> expectedData = [
@@ -218,18 +220,18 @@ namespace Visualization
         [Test]
         public void BuildVisualizationResponseTest_FromDeserializedSavedQuery1__V1_1()
         {
-            List<VariableParameters> cubeParams =
+            List<DimensionParameters> cubeParams =
             [
-                new VariableParameters(VariableType.Time, 3, name: "Kuukausi"),
-                new VariableParameters(VariableType.OtherClassificatory, 2, name: "Ilmoittava lentoasema"),
-                new VariableParameters(VariableType.OtherClassificatory, 1, name: "Lennon tyyppi"),
-                new VariableParameters(VariableType.OtherClassificatory, 1, name: "Saapuneet/lähteneet"),
-                new VariableParameters(VariableType.OtherClassificatory, 1, name: "Toinen lentoasema"),
-                new VariableParameters(VariableType.Content, 1, name: "Tiedot"),
+                new DimensionParameters(DimensionType.Time, 3, name: "Kuukausi"),
+                new DimensionParameters(DimensionType.Other, 2, name: "Ilmoittava lentoasema"),
+                new DimensionParameters(DimensionType.Other, 1, name: "Lennon tyyppi"),
+                new DimensionParameters(DimensionType.Other, 1, name: "Saapuneet/lähteneet"),
+                new DimensionParameters(DimensionType.Other, 1, name: "Toinen lentoasema"),
+                new DimensionParameters(DimensionType.Content, 1, name: "Tiedot"),
             ];
 
             SavedQuery savedQuery = JsonConvert.DeserializeObject<SavedQuery>(SavedQueryFixtures.V1_1_TEST_SAVEDQUERY1);
-            DataCube inputCube = TestDataCubeBuilder.BuildTestDataCube(cubeParams);
+            Matrix<DecimalDataValue> inputCube = TestDataCubeBuilder.BuildTestMatrix(cubeParams);
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(inputCube, savedQuery);
 
             Assert.That(result.VisualizationSettings.VisualizationType, Is.EqualTo(VisualizationType.GroupVerticalBarChart));
@@ -242,17 +244,17 @@ namespace Visualization
         [Test]
         public void BuildVisualizationResponseTest_FromDeserializedSavedQuery2__V1_1()
         {
-            List<VariableParameters> cubeParams =
+            List<DimensionParameters> cubeParams =
             [
-                new VariableParameters(VariableType.Time, 2, name: "Vuosi"),
-                new VariableParameters(VariableType.OtherClassificatory, 2, name: "Syntymävaltio"),
-                new VariableParameters(VariableType.OtherClassificatory, 1, name: "Adoptiotyyppi"),
-                new VariableParameters(VariableType.OtherClassificatory, 1, name: "Ikä"),
-                new VariableParameters(VariableType.Content, 1, name: "Tiedot"),
+                new DimensionParameters(DimensionType.Time, 2, name: "Vuosi"),
+                new DimensionParameters(DimensionType.Other, 2, name: "Syntymävaltio"),
+                new DimensionParameters(DimensionType.Other, 1, name: "Adoptiotyyppi"),
+                new DimensionParameters(DimensionType.Other, 1, name: "Ikä"),
+                new DimensionParameters(DimensionType.Content, 1, name: "Tiedot"),
             ];
 
             SavedQuery savedQuery = JsonConvert.DeserializeObject<SavedQuery>(SavedQueryFixtures.V1_1_TEST_SAVEDQUERY2);
-            DataCube inputCube = TestDataCubeBuilder.BuildTestDataCube(cubeParams);
+            Matrix<DecimalDataValue> inputCube = TestDataCubeBuilder.BuildTestMatrix(cubeParams);
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(inputCube, savedQuery);
 
             Assert.That(result.VisualizationSettings.VisualizationType, Is.EqualTo(VisualizationType.GroupHorizontalBarChart));
@@ -265,14 +267,14 @@ namespace Visualization
         [Test]
         public void BuildVisualizationResponseTest_FromDeserializedSavedQuery3__V1_1()
         {
-            List<VariableParameters> cubeParams =
+            List<DimensionParameters> cubeParams =
             [
-                new VariableParameters(VariableType.Content, 1, name: "Joukkoviestimet"),
-                new VariableParameters(VariableType.Time, 10, name: "Vuosi")
+                new DimensionParameters(DimensionType.Content, 1, name: "Joukkoviestimet"),
+                new DimensionParameters(DimensionType.Time, 10, name: "Vuosi")
             ];
 
             SavedQuery savedQuery = JsonConvert.DeserializeObject<SavedQuery>(SavedQueryFixtures.V1_1_TEST_SAVEDQUERY3);
-            DataCube inputCube = TestDataCubeBuilder.BuildTestDataCube(cubeParams);
+            Matrix<DecimalDataValue> inputCube = TestDataCubeBuilder.BuildTestMatrix(cubeParams);
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(inputCube, savedQuery);
 
             Assert.That(result.VisualizationSettings.VisualizationType, Is.EqualTo(VisualizationType.LineChart));
@@ -283,14 +285,14 @@ namespace Visualization
         [Test]
         public void BuildVisualizationResponseTest_FromDeserializedTableSavedQuery__V11()
         {
-            List<VariableParameters> cubeParams =
+            List<DimensionParameters> cubeParams =
             [
-                new VariableParameters(VariableType.Content, 5, name: "Joukkoviestimet"),
-                new VariableParameters(VariableType.Time, 5, name: "Vuosi")
+                new DimensionParameters(DimensionType.Content, 5, name: "Joukkoviestimet"),
+                new DimensionParameters(DimensionType.Time, 5, name: "Vuosi")
             ];
 
             SavedQuery savedQuery = JsonConvert.DeserializeObject<SavedQuery>(SavedQueryFixtures.V11_TEST_TABLE_SAVEDQUERY);
-            DataCube inputCube = TestDataCubeBuilder.BuildTestDataCube(cubeParams);
+            Matrix<DecimalDataValue> inputCube = TestDataCubeBuilder.BuildTestMatrix(cubeParams);
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(inputCube, savedQuery);
 
             Assert.That(result.VisualizationSettings.VisualizationType, Is.EqualTo(VisualizationType.Table));
@@ -303,18 +305,18 @@ namespace Visualization
         [Test]
         public void BuildVisualizationResponseTest_FromDeserializedTableSavedQuery__V10()
         {
-            List<VariableParameters> cubeParams =
+            List<DimensionParameters> cubeParams =
             [
-                new VariableParameters(VariableType.Time, 2, name: "Kuukausi"),
-                new VariableParameters(VariableType.OtherClassificatory, 5, name: "Ilmoittava lentoasema"),
-                new VariableParameters(VariableType.OtherClassificatory, 1, name: "Lennon tyyppi"),
-                new VariableParameters(VariableType.OtherClassificatory, 5, name: "Saapuneet/lähteneet"),
-                new VariableParameters(VariableType.OtherClassificatory, 2, name: "Toinen lentoasema"),
-                new VariableParameters(VariableType.Content, 3, name: "Tiedot")
+                new DimensionParameters(DimensionType.Time, 2, name: "Kuukausi"),
+                new DimensionParameters(DimensionType.Other, 5, name: "Ilmoittava lentoasema"),
+                new DimensionParameters(DimensionType.Other, 1, name: "Lennon tyyppi"),
+                new DimensionParameters(DimensionType.Other, 5, name: "Saapuneet/lähteneet"),
+                new DimensionParameters(DimensionType.Other, 2, name: "Toinen lentoasema"),
+                new DimensionParameters(DimensionType.Content, 3, name: "Tiedot")
             ];
 
             SavedQuery savedQuery = JsonConvert.DeserializeObject<SavedQuery>(SavedQueryFixtures.V10_TEST_TABLE_SAVEDQUERY);
-            DataCube inputCube = TestDataCubeBuilder.BuildTestDataCube(cubeParams);
+            Matrix<DecimalDataValue> inputCube = TestDataCubeBuilder.BuildTestMatrix(cubeParams);
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(inputCube, savedQuery);
 
             string[] expectedSelVarCodes = ["Kuukausi"];
@@ -330,18 +332,18 @@ namespace Visualization
         [Test]
         public void BuildVisualizationResponseTest_FromDeserializedSavedQuery1__V1_0()
         {
-            List<VariableParameters> cubeParams =
+            List<DimensionParameters> cubeParams =
             [
-                new VariableParameters(VariableType.Time, 3, name: "Vuosi"),
-                new VariableParameters(VariableType.OtherClassificatory, 2, name: "Syntymävaltio"),
-                new VariableParameters(VariableType.OtherClassificatory, 1, name: "Adoptiotyyppi"),
-                new VariableParameters(VariableType.OtherClassificatory, 1, name: "Ikä"),
-                new VariableParameters(VariableType.OtherClassificatory, 1, name: "Sukupuoli"),
-                new VariableParameters(VariableType.Content, 1, name: "Tiedot")
+                new DimensionParameters(DimensionType.Time, 3, name: "Vuosi"),
+                new DimensionParameters(DimensionType.Other, 2, name: "Syntymävaltio"),
+                new DimensionParameters(DimensionType.Other, 1, name: "Adoptiotyyppi"),
+                new DimensionParameters(DimensionType.Other, 1, name: "Ikä"),
+                new DimensionParameters(DimensionType.Other, 1, name: "Sukupuoli"),
+                new DimensionParameters(DimensionType.Content, 1, name: "Tiedot")
             ];
 
             SavedQuery savedQuery = JsonConvert.DeserializeObject<SavedQuery>(SavedQueryFixtures.V1_0_TEST_SAVEDQUERY1);
-            DataCube inputCube = TestDataCubeBuilder.BuildTestDataCube(cubeParams);
+            Matrix<DecimalDataValue> inputCube = TestDataCubeBuilder.BuildTestMatrix(cubeParams);
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(inputCube, savedQuery);
 
             Assert.That(result.VisualizationSettings.VisualizationType, Is.EqualTo(VisualizationType.GroupVerticalBarChart));
@@ -356,16 +358,16 @@ namespace Visualization
         public void ResponseTestFromSavedQuery_HORIZONTALBAR_SORTED_ASCENDING()
         {
             SavedQuery savedQuery = JsonConvert.DeserializeObject<SavedQuery>(SavedQueryFixtures.HORIZONTALBAR_SORTED_ASCENDING);
-            List<VariableParameters> cubeParams =
+            List<DimensionParameters> cubeParams =
             [
-                new VariableParameters(VariableType.Geological, 3, name: "Alue"),
-                new VariableParameters(VariableType.Time, 1, name: "Vuosineljännes"),
-                new VariableParameters(VariableType.Ordinal, 1, name: "Huoneluku"),
-                new VariableParameters(VariableType.OtherClassificatory, 1, name: "Rahoitusmuoto"),
-                new VariableParameters(VariableType.Content, 1, name: "Tiedot"),
+                new DimensionParameters(DimensionType.Geographical, 3, name: "Alue"),
+                new DimensionParameters(DimensionType.Time, 1, name: "Vuosineljännes"),
+                new DimensionParameters(DimensionType.Ordinal, 1, name: "Huoneluku"),
+                new DimensionParameters(DimensionType.Other, 1, name: "Rahoitusmuoto"),
+                new DimensionParameters(DimensionType.Content, 1, name: "Tiedot"),
             ];
 
-            DataCube cube = TestDataCubeBuilder.BuildTestDataCube(cubeParams);
+            Matrix<DecimalDataValue> cube = TestDataCubeBuilder.BuildTestMatrix(cubeParams);
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(cube, savedQuery);
 
             string normalizedResponse = JsonUtils.NormalizeJsonString(JsonConvert.SerializeObject(result));
@@ -377,11 +379,11 @@ namespace Visualization
         [Test]
         public static void BuildVisualizationResponseTest_DataNotes_isEmpty()
         {
-            List<VariableParameters> varParams =
+            List<DimensionParameters> varParams =
             [
-                new VariableParameters(VariableType.Content, 1),
-                new VariableParameters(VariableType.OtherClassificatory, 3),
-                new VariableParameters(VariableType.Time, 9),
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Other, 3),
+                new DimensionParameters(DimensionType.Time, 9),
             ];
 
             VisualizationCreationSettings creationSettings = new()
@@ -389,12 +391,12 @@ namespace Visualization
                 SelectedVisualization = VisualizationType.PercentHorizontalBarChart
             };
 
-            DataCube inputCube = TestDataCubeBuilder.BuildTestDataCube(varParams, missingData: true);
+            Matrix<DecimalDataValue> inputCube = TestDataCubeBuilder.BuildTestMatrix(varParams, missingData: true);
             SavedQuery inputQuery = TestDataCubeBuilder.BuildTestSavedQuery(varParams, false, creationSettings, inputCube);
-            VisualizationSettings settings = creationSettings.ToVisualizationSettings(inputCube.Meta, inputQuery.Query);
+            VisualizationSettings settings = creationSettings.ToVisualizationSettings(inputCube.Metadata, inputQuery.Query);
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(inputCube, inputQuery.Query, settings);
 
-            IReadOnlyDictionary<int, IReadOnlyMultiLanguageString> dataNotes = result.DataNotes;
+            IReadOnlyDictionary<int, MultilanguageString> dataNotes = result.DataNotes;
 
             Assert.That(dataNotes, Is.Empty);
         }
@@ -402,10 +404,10 @@ namespace Visualization
         [Test]
         public void BuildVisualizationResponseTest_MissingDataInfo__Table()
         {
-            List<VariableParameters> cubeParams =
+            List<DimensionParameters> cubeParams =
             [
-                new VariableParameters(VariableType.Content, 3),
-                new VariableParameters(VariableType.Time, 5)
+                new DimensionParameters(DimensionType.Content, 3),
+                new DimensionParameters(DimensionType.Time, 5)
             ];
 
             VisualizationCreationSettings creationSettings = new()
@@ -415,7 +417,7 @@ namespace Visualization
                 ColumnVariableCodes = ["variable-1"]
             };
 
-            DataCube inputCube = TestDataCubeBuilder.BuildTestDataCube(cubeParams, missingData: true);
+            Matrix<DecimalDataValue> inputCube = TestDataCubeBuilder.BuildTestMatrix(cubeParams, missingData: true);
             SavedQuery inputQuery = TestDataCubeBuilder.BuildTestSavedQuery(cubeParams, false, creationSettings, inputCube);
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(inputCube, inputQuery);
 
@@ -439,11 +441,11 @@ namespace Visualization
         [Test]
         public static void BuildVisualizationResponseTest_MissingDataInfo__BarChart()
         {
-            List<VariableParameters> varParams =
+            List<DimensionParameters> varParams =
             [
-                new VariableParameters(VariableType.Content, 1),
-                new VariableParameters(VariableType.OtherClassificatory, 3),
-                new VariableParameters(VariableType.Time, 9),
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Other, 3),
+                new DimensionParameters(DimensionType.Time, 9),
             ];
 
             VisualizationCreationSettings creationSettings = new()
@@ -451,9 +453,9 @@ namespace Visualization
                 SelectedVisualization = VisualizationType.PercentHorizontalBarChart
             };
 
-            DataCube inputCube = TestDataCubeBuilder.BuildTestDataCube(varParams, missingData: true);
+            Matrix<DecimalDataValue> inputCube = TestDataCubeBuilder.BuildTestMatrix(varParams, missingData: true);
             SavedQuery inputQuery = TestDataCubeBuilder.BuildTestSavedQuery(varParams, false, creationSettings, inputCube);
-            VisualizationSettings settings = creationSettings.ToVisualizationSettings(inputCube.Meta, inputQuery.Query);
+            VisualizationSettings settings = creationSettings.ToVisualizationSettings(inputCube.Metadata, inputQuery.Query);
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(inputCube, inputQuery.Query, settings);
 
             IReadOnlyList<double?> expectedData = [
@@ -482,13 +484,13 @@ namespace Visualization
         [Test]
         public static void BuildVisualizationResponseTest_ChangeVarOrder_withMissingData()
         {
-            List<VariableParameters> varParams =
+            List<DimensionParameters> varParams =
             [
-                new VariableParameters(VariableType.Content, 1),
-                new VariableParameters(VariableType.OtherClassificatory, 2),
-                new VariableParameters(VariableType.OtherClassificatory, 5),
-                new VariableParameters(VariableType.OtherClassificatory, 2) { Selectable = true },
-                new VariableParameters(VariableType.Time, 1)
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Other, 2),
+                new DimensionParameters(DimensionType.Other, 5),
+                new DimensionParameters(DimensionType.Other, 2) { Selectable = true },
+                new DimensionParameters(DimensionType.Time, 1)
             ];
 
             VisualizationCreationSettings creationSettings = new()
@@ -497,9 +499,9 @@ namespace Visualization
                 PivotRequested = true
             };
 
-            DataCube inputCube = TestDataCubeBuilder.BuildTestDataCube(varParams, missingData: true);
+            Matrix<DecimalDataValue> inputCube = TestDataCubeBuilder.BuildTestMatrix(varParams, missingData: true);
             SavedQuery inputQuery = TestDataCubeBuilder.BuildTestSavedQuery(varParams, false, creationSettings, inputCube);
-            VisualizationSettings settings = creationSettings.ToVisualizationSettings(inputCube.Meta, inputQuery.Query);
+            VisualizationSettings settings = creationSettings.ToVisualizationSettings(inputCube.Metadata, inputQuery.Query);
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(inputCube, inputQuery.Query, settings);
 
             IReadOnlyList<double?> expectedData = [
@@ -525,16 +527,16 @@ namespace Visualization
         [Test]
         public void ResponseSerializationTest_WithMissing_Returned()
         {
-            List<VariableParameters> cubeParams =
+            List<DimensionParameters> cubeParams =
             [
-                new VariableParameters(VariableType.Geological, 3, name: "Alue"),
-                new VariableParameters(VariableType.Ordinal, 1, name: "Huoneluku"),
-                new VariableParameters(VariableType.Time, 15, name: "Vuosineljännes"),
-                new VariableParameters(VariableType.OtherClassificatory, 1, name: "Rahoitusmuoto"),
-                new VariableParameters(VariableType.Content, 1, name: "Tiedot"),
+                new DimensionParameters(DimensionType.Geographical, 3, name: "Alue"),
+                new DimensionParameters(DimensionType.Ordinal, 1, name: "Huoneluku"),
+                new DimensionParameters(DimensionType.Time, 15, name: "Vuosineljännes"),
+                new DimensionParameters(DimensionType.Other, 1, name: "Rahoitusmuoto"),
+                new DimensionParameters(DimensionType.Content, 1, name: "Tiedot"),
             ];
 
-            DataCube cube = TestDataCubeBuilder.BuildTestDataCube(cubeParams, missingData: true);
+            Matrix<DecimalDataValue> cube = TestDataCubeBuilder.BuildTestMatrix(cubeParams, missingData: true);
             LineChartVisualizationSettings settings = new(new Layout(["Alue"], ["Vuosineljännes"]), false, null);
             SavedQuery savedQuery = TestDataCubeBuilder.BuildTestSavedQuery(cubeParams, false, settings);
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(cube, savedQuery);
@@ -548,16 +550,16 @@ namespace Visualization
         [Test]
         public void ResponseSerializationTest_Returnd()
         {
-            List<VariableParameters> cubeParams =
+            List<DimensionParameters> cubeParams =
             [
-                new VariableParameters(VariableType.Geological, 3, name: "Alue"),
-                new VariableParameters(VariableType.Ordinal, 1, name: "Huoneluku"),
-                new VariableParameters(VariableType.Time, 15, name: "Vuosineljännes"),
-                new VariableParameters(VariableType.OtherClassificatory, 1, name: "Rahoitusmuoto"),
-                new VariableParameters(VariableType.Content, 1, name: "Tiedot"),
+                new DimensionParameters(DimensionType.Geographical, 3, name: "Alue"),
+                new DimensionParameters(DimensionType.Ordinal, 1, name: "Huoneluku"),
+                new DimensionParameters(DimensionType.Time, 15, name: "Vuosineljännes"),
+                new DimensionParameters(DimensionType.Other, 1, name: "Rahoitusmuoto"),
+                new DimensionParameters(DimensionType.Content, 1, name: "Tiedot"),
             ];
 
-            DataCube cube = TestDataCubeBuilder.BuildTestDataCube(cubeParams);
+            Matrix<DecimalDataValue> cube = TestDataCubeBuilder.BuildTestMatrix(cubeParams);
             LineChartVisualizationSettings settings = new(new Layout(["Alue"], ["Vuosineljännes"]), false, null);
             SavedQuery savedQuery = TestDataCubeBuilder.BuildTestSavedQuery(cubeParams, false, settings);
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(cube, savedQuery);

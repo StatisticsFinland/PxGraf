@@ -1,11 +1,11 @@
 ﻿using NUnit.Framework;
+using Px.Utils.Models.Metadata.Enums;
 using PxGraf.ChartTypeSelection;
 using PxGraf.ChartTypeSelection.ChartSpecificLimits;
 using PxGraf.ChartTypeSelection.JsonObjects;
 using PxGraf.Enums;
 using System.Collections.Generic;
-using UnitTests.TestDummies;
-using UnitTests.TestDummies.DummyQueries;
+using UnitTests;
 
 namespace ChartTypeSelectionTests
 {
@@ -27,7 +27,7 @@ namespace ChartTypeSelectionTests
         [Test]
         public void NoData_ContentRequired()
         {
-            List<VariableParameters> dimension = [];
+            List<DimensionParameters> dimension = [];
 
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
             ScatterPlotCheck check = new(Limits.ScatterPlotLimits);
@@ -42,9 +42,9 @@ namespace ChartTypeSelectionTests
         [Test]
         public void ValidDataWithContentOnly_NotEnoughMultiselections()
         {
-            List<VariableParameters> dimension =
+            List<DimensionParameters> dimension =
             [
-                new VariableParameters(VariableType.Content, 2),
+                new DimensionParameters(DimensionType.Content, 2),
             ];
 
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
@@ -60,10 +60,10 @@ namespace ChartTypeSelectionTests
         [Test]
         public void ValidDataWith2Multiselect_Pass()
         {
-            List<VariableParameters> dimension =
+            List<DimensionParameters> dimension =
             [
-                new VariableParameters(VariableType.Content, 2),
-                new VariableParameters(VariableType.Unknown, 4)
+                new DimensionParameters(DimensionType.Content, 2),
+                new DimensionParameters(DimensionType.Unknown, 4)
             ];
 
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
@@ -83,9 +83,9 @@ namespace ChartTypeSelectionTests
         [Test]
         public void NoContent_ContentRequired()
         {
-            List<VariableParameters> dimension =
+            List<DimensionParameters> dimension =
             [
-                new VariableParameters(VariableType.Unknown, 4)
+                new DimensionParameters(DimensionType.Unknown, 4)
             ];
 
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
@@ -101,10 +101,10 @@ namespace ChartTypeSelectionTests
         [Test]
         public void ContentHasOne_ContentBelowMin()
         {
-            List<VariableParameters> dimension =
+            List<DimensionParameters> dimension =
             [
-                new VariableParameters(VariableType.Content, 1),
-                new VariableParameters(VariableType.Unknown, 4)
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Unknown, 4)
             ];
 
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
@@ -120,10 +120,10 @@ namespace ChartTypeSelectionTests
         [Test]
         public void ContentHasThree_ContentOverMax()
         {
-            List<VariableParameters> dimension =
+            List<DimensionParameters> dimension =
             [
-                new VariableParameters(VariableType.Content, 3),
-                new VariableParameters(VariableType.Unknown, 4)
+                new DimensionParameters(DimensionType.Content, 3),
+                new DimensionParameters(DimensionType.Unknown, 4)
             ];
 
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
@@ -139,10 +139,10 @@ namespace ChartTypeSelectionTests
         [Test]
         public void FirstMultiselectHAs1000_FirstMultiselectOverMax()
         {
-            List<VariableParameters> dimension =
+            List<DimensionParameters> dimension =
             [
-                new VariableParameters(VariableType.Content, 2),
-                new VariableParameters(VariableType.Unknown, 1000)
+                new DimensionParameters(DimensionType.Content, 2),
+                new DimensionParameters(DimensionType.Unknown, 1000)
             ];
 
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);

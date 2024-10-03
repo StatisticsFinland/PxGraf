@@ -8,9 +8,9 @@ namespace PxGraf.Models.Requests
     public class SaveQueryParams
     {
         /// <summary>
-        /// <see cref="CubeQuery"/> object that contains the query parameters.
+        /// <see cref="MatrixQuery"/> object that contains the query parameters.
         /// </summary>
-        public CubeQuery Query { get; set; }
+        public MatrixQuery Query { get; set; }
 
         /// <summary>
         /// <see cref="VisualizationCreationSettings"/> object containing settings for the visualization.

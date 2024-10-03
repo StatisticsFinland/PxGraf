@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 using NUnit.Framework;
-using PxGraf.PxWebInterface.SerializationModels;
+using PxGraf.Datasource.PxWebInterface.SerializationModels;
 using UnitTests.PxWebInterfaceTests.Fixtures;
 
 namespace PxWebInterfaceTests

@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 using NUnit.Framework;
-using PxGraf.Language;
+using Px.Utils.Language;
 using PxGraf.Utility;
 
 namespace SerializerTests
@@ -10,11 +10,11 @@ namespace SerializerTests
         [Test]
         public void MultiLanguageStringConverter_EmptyTranslation_IsSerializedToNull()
         {
-            MultiLanguageString mls = new();
+            MultilanguageString mls = new([]);
 
             var settings = new JsonSerializerSettings
             {
-                Converters = { new MultiLanguageStringConverter() }
+                Converters = { new MultilanguageStringConverter() }
             };
             var serialized = JsonConvert.SerializeObject(mls, settings);
 
@@ -26,10 +26,10 @@ namespace SerializerTests
         {
             var settings = new JsonSerializerSettings
             {
-                Converters = { new MultiLanguageStringConverter() }
+                Converters = { new MultilanguageStringConverter() }
             };
 
-            var deserialized = JsonConvert.DeserializeObject<MultiLanguageString>("null", settings);
+            var deserialized = JsonConvert.DeserializeObject<MultilanguageString>("null", settings);
 
             Assert.That(deserialized, Is.Null);
         }

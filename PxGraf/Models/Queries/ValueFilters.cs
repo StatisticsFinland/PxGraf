@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json;
-using PxGraf.Data.MetaData;
+using Px.Utils.Models.Metadata.Dimensions;
 using PxGraf.Utility;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,19 +10,19 @@ namespace PxGraf.Models.Queries
     /// Base class for filtering values of a variable.
     /// </summary>
     [JsonConverter(typeof(ValueFilterJsonConverter))]
-    public abstract class ValueFilter
+    public interface IValueFilter
     {
-        public abstract IEnumerable<IReadOnlyVariableValue> Filter(IReadOnlyList<IReadOnlyVariableValue> values);
+        public abstract IEnumerable<IReadOnlyDimensionValue> Filter(IReadOnlyList<IReadOnlyDimensionValue> values);
     }
 
     /// <summary>
     /// Filter that selects the last N values.
     /// </summary>
-    public class TopFilter(int count) : ValueFilter
+    public class TopFilter(int count) : IValueFilter
     {
         public int Count { get; set; } = count;
 
-        public override IEnumerable<IReadOnlyVariableValue> Filter(IReadOnlyList<IReadOnlyVariableValue> values)
+        public IEnumerable<IReadOnlyDimensionValue> Filter(IReadOnlyList<IReadOnlyDimensionValue> values)
         {
             return values.Skip(values.Count - Count);
         }
@@ -31,11 +31,11 @@ namespace PxGraf.Models.Queries
     /// <summary>
     /// Filter that selects values starting from a specific value.
     /// </summary>
-    public class FromFilter(string code) : ValueFilter
+    public class FromFilter(string code) : IValueFilter
     {
         public string Code { get; set; } = code;
 
-        public override IEnumerable<IReadOnlyVariableValue> Filter(IReadOnlyList<IReadOnlyVariableValue> values)
+        public IEnumerable<IReadOnlyDimensionValue> Filter(IReadOnlyList<IReadOnlyDimensionValue> values)
         {
             int index = values.ToList().FindIndex(value => value.Code == Code);
             if (index >= 0)
@@ -44,7 +44,7 @@ namespace PxGraf.Models.Queries
             }
             else
             {
-                return Enumerable.Empty<VariableValue>();
+                return Enumerable.Empty<DimensionValue>();
             }
         }
     }
@@ -52,9 +52,9 @@ namespace PxGraf.Models.Queries
     /// <summary>
     /// Filter that selects all values.
     /// </summary>
-    public class AllFilter : ValueFilter
+    public class AllFilter : IValueFilter
     {
-        public override IEnumerable<IReadOnlyVariableValue> Filter(IReadOnlyList<IReadOnlyVariableValue> values)
+        public IEnumerable<IReadOnlyDimensionValue> Filter(IReadOnlyList<IReadOnlyDimensionValue> values)
         {
             return values;
         }
@@ -63,11 +63,11 @@ namespace PxGraf.Models.Queries
     /// <summary>
     /// Filter that allows user to pick specific values manually.
     /// </summary>
-    public class ItemFilter(List<string> codes) : ValueFilter
+    public class ItemFilter(List<string> codes) : IValueFilter
     {
         public List<string> Codes { get; set; } = codes;
 
-        public override IEnumerable<IReadOnlyVariableValue> Filter(IReadOnlyList<IReadOnlyVariableValue> values)
+        public IEnumerable<IReadOnlyDimensionValue> Filter(IReadOnlyList<IReadOnlyDimensionValue> values)
         {
             return values.Where(value => Codes.Contains(value.Code));
         }

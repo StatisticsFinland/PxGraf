@@ -6,19 +6,16 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.FeatureManagement;
 using Microsoft.OpenApi.Models;
-using Newtonsoft.Json.Serialization;
 using NLog.Extensions.Logging;
-using PxGraf.Caching;
-using PxGraf.PxWebInterface;
-using PxGraf.PxWebInterface.Caching;
+using Newtonsoft.Json.Serialization;
 using PxGraf.Settings;
 using PxGraf.Utility;
-using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Runtime.Serialization;
+using System;
 
 namespace PxGraf
 {
@@ -129,11 +126,8 @@ namespace PxGraf
                     UseDefaultCredentials = true
                 });
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddSingleton<PxWebInterface.IPxWebApiInterface, PxWebInterface.PxWebV1ApiInterface>();
             services.AddSingleton<ISqFileInterface, SqFileInterface>();
-            services.AddSingleton<ICachedPxWebConnection, CachedPxWebConnection>();
-            services.AddSingleton<IVisualizationResponseCache, VisualizationResponseCache>();
-            services.AddSingleton<IPxWebApiResponseCache, PxWebApiResponseCache>();
+            // TODO: Check from configuration what datasource is being used (api or database) and add that as ICachedDatasource
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

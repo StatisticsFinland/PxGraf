@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
+using Px.Utils.Models.Metadata;
 using PxGraf.Data;
-using PxGraf.Data.MetaData;
 using PxGraf.Enums;
 using PxGraf.Models.Queries;
 using PxGraf.Models.SavedQueries;
@@ -51,10 +51,10 @@ namespace PxGraf.Models.Requests
         /// <param name="savedQuery">Object that represents the saved query.</param>
         /// <param name="meta">Metadata of the cube subject for visualization.</param>
         /// <returns>Converted settings in <see cref="VisualizationCreationSettings"/> format.</returns>
-        public static VisualizationCreationSettings FromVisualizationSettings(SavedQuery savedQuery, IReadOnlyCubeMeta meta)
+        public static VisualizationCreationSettings FromVisualizationSettings(SavedQuery savedQuery, IReadOnlyMatrixMetadata meta)
         {
             VisualizationSettings settings = savedQuery.Settings;
-            CubeQuery query = savedQuery.Query;
+            MatrixQuery query = savedQuery.Query;
             Layout layout = LayoutRules.GetPivotBasedLayout(settings.VisualizationType, meta, query);
 
             bool? pivotRequested;
@@ -95,7 +95,7 @@ namespace PxGraf.Models.Requests
         /// <param name="meta">Metadata for the cube that's subject to the visualization.</param>
         /// <param name="query">Object that contains query settings for the cube.</param>
         /// <returns><see cref="VisualizationSettings"/> object with the converted settings.</returns>
-        public VisualizationSettings ToVisualizationSettings(IReadOnlyCubeMeta meta, CubeQuery query)
+        public VisualizationSettings ToVisualizationSettings(IReadOnlyMatrixMetadata meta, MatrixQuery query)
         {
             switch (SelectedVisualization)
             {

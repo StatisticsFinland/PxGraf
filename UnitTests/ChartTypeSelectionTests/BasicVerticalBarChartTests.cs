@@ -1,12 +1,12 @@
 ﻿using NUnit.Framework;
-using PxGraf.ChartTypeSelection;
+using Px.Utils.Models.Metadata.Enums;
 using PxGraf.ChartTypeSelection.ChartSpecificLimits;
 using PxGraf.ChartTypeSelection.JsonObjects;
+using PxGraf.ChartTypeSelection;
 using PxGraf.Enums;
 using PxGraf.Models.Queries;
 using System.Collections.Generic;
-using UnitTests.TestDummies;
-using UnitTests.TestDummies.DummyQueries;
+using UnitTests;
 
 namespace ChartTypeSelectionTests
 {
@@ -28,7 +28,7 @@ namespace ChartTypeSelectionTests
         [Test]
         public void NoDataTest()
         {
-            List<VariableParameters> dimension = [];
+            List<DimensionParameters> dimension = [];
 
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
             VerticalBarChartCheck check = new(Limits.VerticalBarChartLimits);
@@ -43,10 +43,10 @@ namespace ChartTypeSelectionTests
         [Test]
         public void ValidWithTimeTest()
         {
-            List<VariableParameters> dimension =
+            List<DimensionParameters> dimension =
             [
-                new VariableParameters(VariableType.Content, 1),
-                new VariableParameters(VariableType.Time, 20),
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 20),
             ];
 
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
@@ -66,11 +66,11 @@ namespace ChartTypeSelectionTests
         [Test]
         public void ValidWithClassifierTest()
         {
-            List<VariableParameters> dimension =
+            List<DimensionParameters> dimension =
             [
-                new VariableParameters(VariableType.Content, 1),
-                new VariableParameters(VariableType.Time, 1),
-                new VariableParameters(VariableType.Ordinal, 20),
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 1),
+                new DimensionParameters(DimensionType.Ordinal, 20),
             ];
 
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
@@ -86,10 +86,10 @@ namespace ChartTypeSelectionTests
         [Test]
         public void NoMultiselectsTest()
         {
-            List<VariableParameters> dimension =
+            List<DimensionParameters> dimension =
             [
-                new VariableParameters(VariableType.Content, 1),
-                new VariableParameters(VariableType.Time, 1),
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 1),
             ];
 
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
@@ -105,11 +105,11 @@ namespace ChartTypeSelectionTests
         [Test]
         public void TwoMultiselectsTest()
         {
-            List<VariableParameters> dimension =
+            List<DimensionParameters> dimension =
             [
-                new VariableParameters(VariableType.Content, 1),
-                new VariableParameters(VariableType.Time, 5),
-                new VariableParameters(VariableType.Unknown, 5)
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 5),
+                new DimensionParameters(DimensionType.Unknown, 5)
             ];
 
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
@@ -125,10 +125,10 @@ namespace ChartTypeSelectionTests
         [Test]
         public void NoContentTest()
         {
-            List<VariableParameters> dimension =
+            List<DimensionParameters> dimension =
             [
-                new VariableParameters(VariableType.Time, 5),
-                new VariableParameters(VariableType.Unknown, 1)
+                new DimensionParameters(DimensionType.Time, 5),
+                new DimensionParameters(DimensionType.Unknown, 1)
             ];
 
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
@@ -144,10 +144,10 @@ namespace ChartTypeSelectionTests
         [Test]
         public void MultipleContentStillNoTimeOrProgressiveTest()
         {
-            List<VariableParameters> dimension =
+            List<DimensionParameters> dimension =
             [
-                new VariableParameters(VariableType.Content, 3) { SameUnit = true },
-                new VariableParameters(VariableType.Time, 1)
+                new DimensionParameters(DimensionType.Content, 3) { SameUnit = true },
+                new DimensionParameters(DimensionType.Time, 1)
             ];
 
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
@@ -163,11 +163,11 @@ namespace ChartTypeSelectionTests
         [Test]
         public void NoTimeOrProgressiveTest()
         {
-            List<VariableParameters> dimension =
+            List<DimensionParameters> dimension =
             [
-                new VariableParameters(VariableType.Content, 1),
-                new VariableParameters(VariableType.Time, 1),
-                new VariableParameters(VariableType.Unknown, 4)
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 1),
+                new DimensionParameters(DimensionType.Unknown, 4)
             ];
 
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
@@ -183,10 +183,10 @@ namespace ChartTypeSelectionTests
         [Test]
         public void TooManyTimeValuesTest()
         {
-            List<VariableParameters> dimension =
+            List<DimensionParameters> dimension =
             [
-                new VariableParameters(VariableType.Content, 1),
-                new VariableParameters(VariableType.Time, 2000),
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 2000),
             ];
 
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
@@ -202,11 +202,11 @@ namespace ChartTypeSelectionTests
         [Test]
         public void TooManyProgressiveValuesTest()
         {
-            List<VariableParameters> dimension =
+            List<DimensionParameters> dimension =
             [
-                new VariableParameters(VariableType.Content, 1),
-                new VariableParameters(VariableType.Time, 1),
-                new VariableParameters(VariableType.Ordinal, 2000),
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 1),
+                new DimensionParameters(DimensionType.Ordinal, 2000),
             ];
 
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
@@ -222,10 +222,10 @@ namespace ChartTypeSelectionTests
         [Test]
         public void TooManyIrregularTimeVariableValuesTest()
         {
-            List<VariableParameters> dimension =
+            List<DimensionParameters> dimension =
             [
-                new VariableParameters(VariableType.Content, 1),
-                new VariableParameters(VariableType.Time, 11) { Irregular = true}
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 11) { Irregular = true}
             ];
 
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
@@ -241,10 +241,10 @@ namespace ChartTypeSelectionTests
         [Test]
         public void IrregularTimeVariableValuesTest_Pass()
         {
-            List<VariableParameters> dimension =
+            List<DimensionParameters> dimension =
             [
-                new VariableParameters(VariableType.Content, 1),
-                new VariableParameters(VariableType.Time, 10) { Irregular = true}
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 10) { Irregular = true}
             ];
 
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
@@ -259,12 +259,12 @@ namespace ChartTypeSelectionTests
         [Test]
         public void SelectablePassTest()
         {
-            List<VariableParameters> dimension =
+            List<DimensionParameters> dimension =
             [
-                new VariableParameters(VariableType.Content, 1),
-                new VariableParameters(VariableType.Time, 10),
-                new VariableParameters(VariableType.OtherClassificatory, 10),
-                new VariableParameters(VariableType.OtherClassificatory, 10),
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 10),
+                new DimensionParameters(DimensionType.Other, 10),
+                new DimensionParameters(DimensionType.Other, 10),
             ];
 
             SanityCheck();
