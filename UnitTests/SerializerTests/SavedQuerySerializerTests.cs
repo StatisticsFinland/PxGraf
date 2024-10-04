@@ -11,10 +11,54 @@ namespace SerializerTests
 {
     internal class SavedQuerySerializerTests
     {
-        private readonly static string testSavedQuery = "{\"Query\":{\"TableReference\":{\"Name\":\"table.px\",\"Hierarchy\":[\"StatFin\",\"kivih\"]},\"ChartHeaderEdit\":null,\"VariableQueries\":{\"Vuosi\":{\"NameEdit\":null,\"ValueEdits\":{},\"ValueFilter\":{\"type\":\"all\"},\"VirtualValueDefinitions\":null,\"Selectable\":false},\"Tiedot\":{\"NameEdit\":null,\"ValueEdits\":{},\"ValueFilter\":{\"type\":\"item\",\"query\":[\"kulutus_t\"]},\"VirtualValueDefinitions\":null,\"Selectable\":false}}},\"CreationTime\":\"2022-12-16T14:19:11.4380637+02:00\",\"Archived\":false,\"Settings\":{\"CutYAxis\":false,\"MultiselectableVariableCode\":null,\"SelectedVisualization\":\"LineChart\",\"DefaultSelectableVariableCodes\":null}}";
+        private readonly static string testSavedQuery = @"{
+            ""Query"": {
+                ""TableReference"": {
+                    ""Name"": ""table.px"",
+                    ""Hierarchy"": [
+                        ""StatFin"",
+                        ""kivih""
+                    ]
+                },
+                ""ChartHeaderEdit"": null,
+                ""VariableQueries"": {
+                    ""Vuosi"": {
+                        ""NameEdit"": null,
+                        ""ValueEdits"": {},
+                        ""ValueFilter"": {
+                            ""type"": ""all""
+                        },
+                        ""VirtualValueDefinitions"": null,
+                        ""Selectable"": false
+                    },
+                    ""Tiedot"": {
+                        ""NameEdit"": null,
+                        ""ValueEdits"": {},
+                        ""ValueFilter"": {
+                            ""type"": ""item"",
+                            ""query"": [
+                                ""kulutus_t""
+                            ]
+                        },
+                        ""VirtualValueDefinitions"": null,
+                        ""Selectable"": false
+                    }
+                }
+            },
+            ""CreationTime"": ""2022-12-16T14:19:11.4380637+02:00"",
+            ""Archived"": false,
+            ""Settings"": {
+                ""CutYAxis"": false,
+                ""MultiselectableVariableCode"": null,
+                ""SelectedVisualization"": ""LineChart"",
+                ""DefaultSelectableVariableCodes"": null
+            }
+        }";
+
         private readonly JsonSerializerOptions options = new()
         {
-            Converters = { new SavedQuerySerializer() }
+            Converters = { new SavedQuerySerializer(), new DateTimeSerializer() },
+            AllowTrailingCommas = true
         };
 
         [Test]
@@ -39,11 +83,11 @@ namespace SerializerTests
             string testJson = @"{
                     ""Version"":""1.0"",
 		            ""Query"":{},
-		            ""CreationTime"": ""023-04-24T14:36:18.7550813+03:00"",
+		            ""CreationTime"": ""2023-04-24T14:36:18.7550813+03:00"",
 		            ""Archived"":true,
                     ""Settings"":{
                         ""SelectedVisualization"":""Table"", 
-                        ""PivotRequested"":""True"",
+                        ""PivotRequested"":true,
                         ""RowVariableCodes"":[],
                         ""ColumnVariableCodes"":[
                             ""Vuosi"",
@@ -54,9 +98,9 @@ namespace SerializerTests
                     }
                 }";
 
-            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(testJson);
+            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(testJson, options);
 
-            Assert.That(savedQuery.CreationTime, Is.EqualTo(DateTime.Parse("023-04-24T14:36:18.7550813+03:00", CultureInfo.InvariantCulture)));
+            Assert.That(savedQuery.CreationTime, Is.EqualTo(ConvertDateTime("2023-04-24T14:36:18.7550813+03:00")));
             Assert.That(savedQuery.Settings.VisualizationType, Is.EqualTo(VisualizationType.Table));
             Assert.That(savedQuery.Archived, Is.True);
             Assert.That(savedQuery.Settings.Layout.ColumnVariableCodes.Count, Is.EqualTo(3));
@@ -70,11 +114,11 @@ namespace SerializerTests
             string testJson = @"{
                     ""Version"":""1.0"",
 		            ""Query"":{},
-		            ""CreationTime"": ""023-04-24T14:36:18.7550813+03:00"",
+		            ""CreationTime"": ""2023-04-24T14:36:18.7550813+03:00"",
 		            ""Archived"":true,
                     ""Settings"":{
                         ""SelectedVisualization"":""Table"", 
-                        ""PivotRequested"":""True"",
+                        ""PivotRequested"":true,
                         ""RowVariableCodes"":[],
                         ""ColumnVariableCodes"":[
                             ""Vuosi"",
@@ -85,9 +129,9 @@ namespace SerializerTests
                     }
                 }";
 
-            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(testJson);
+            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(testJson, options);
 
-            Assert.That(savedQuery.CreationTime, Is.EqualTo(DateTime.Parse("023-04-24T14:36:18.7550813+03:00", CultureInfo.InvariantCulture)));
+            Assert.That(savedQuery.CreationTime, Is.EqualTo(ConvertDateTime("2023-04-24T14:36:18.7550813+03:00")));
             Assert.That(savedQuery.Settings.VisualizationType, Is.EqualTo(VisualizationType.Table));
             Assert.That(savedQuery.Archived, Is.True);
             Assert.That(savedQuery.Settings.Layout.ColumnVariableCodes.Count, Is.EqualTo(3));
@@ -101,7 +145,7 @@ namespace SerializerTests
             string testJson = @"{
                     ""Version"":""1.1"",
 		            ""Query"":{},
-		            ""CreationTime"": ""023-04-24T14:36:18.7550813+03:00"",
+		            ""CreationTime"": ""2023-04-24T14:36:18.7550813+03:00"",
 		            ""Archived"":true,
                     ""Settings"":{
                       ""MatchXLabelsToEnd"":false,
@@ -119,9 +163,9 @@ namespace SerializerTests
                    },
                 }";
 
-            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(testJson);
+            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(testJson, options);
 
-            Assert.That(savedQuery.CreationTime, Is.EqualTo(DateTime.Parse("023-04-24T14:36:18.7550813+03:00", CultureInfo.InvariantCulture)));
+            Assert.That(savedQuery.CreationTime, Is.EqualTo(ConvertDateTime("2023-04-24T14:36:18.7550813+03:00")));
             Assert.That(savedQuery.Settings.VisualizationType, Is.EqualTo(VisualizationType.GroupVerticalBarChart));
             Assert.That(savedQuery.Archived, Is.True);
             Assert.That(savedQuery.Settings.Layout.RowVariableCodes.Count, Is.EqualTo(1));
@@ -138,7 +182,7 @@ namespace SerializerTests
             string testJson = @"{
                     ""Version"":""1.1"",
 		            ""Query"":{},
-		            ""CreationTime"": ""023-04-24T14:36:18.7550813+03:00"",
+		            ""CreationTime"": ""2023-04-24T14:36:18.7550813+03:00"",
 		            ""Archived"":true,
                     ""Settings"":{
                       ""MatchXLabelsToEnd"":false,
@@ -156,9 +200,9 @@ namespace SerializerTests
                    },
                 }";
 
-            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(testJson);
+            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(testJson, options);
 
-            Assert.That(savedQuery.CreationTime, Is.EqualTo(DateTime.Parse("023-04-24T14:36:18.7550813+03:00", CultureInfo.InvariantCulture)));
+            Assert.That(savedQuery.CreationTime, Is.EqualTo(ConvertDateTime("2023-04-24T14:36:18.7550813+03:00")));
             Assert.That(savedQuery.Settings.VisualizationType, Is.EqualTo(VisualizationType.GroupVerticalBarChart));
             Assert.That(savedQuery.Archived, Is.True);
             Assert.That(savedQuery.Settings.Layout.RowVariableCodes.Count, Is.EqualTo(1));
@@ -175,7 +219,7 @@ namespace SerializerTests
             string testJson = @"{
                     ""Version"":""1.1"",
 		            ""Query"":{},
-		            ""CreationTime"": ""023-04-24T14:36:18.7550813+03:00"",
+		            ""CreationTime"": ""2023-04-24T14:36:18.7550813+03:00"",
 		            ""Archived"":true,
                     ""Settings"":{
                       ""MatchXLabelsToEnd"":false,
@@ -193,9 +237,9 @@ namespace SerializerTests
                    },
                 }";
 
-            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(testJson);
+            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(testJson, options);
 
-            Assert.That(savedQuery.CreationTime, Is.EqualTo(DateTime.Parse("023-04-24T14:36:18.7550813+03:00", CultureInfo.InvariantCulture)));
+            Assert.That(savedQuery.CreationTime, Is.EqualTo(ConvertDateTime("2023-04-24T14:36:18.7550813+03:00")));
             Assert.That(savedQuery.Settings.VisualizationType, Is.EqualTo(VisualizationType.GroupVerticalBarChart));
             Assert.That(savedQuery.Archived, Is.True);
             Assert.That(savedQuery.Settings.Layout.RowVariableCodes.Count, Is.EqualTo(1));
@@ -210,11 +254,11 @@ namespace SerializerTests
         {
             string testJson = @"{
 		            ""Query"":{},
-		            ""CreationTime"": ""023-04-24T14:36:18.7550813+03:00"",
+		            ""CreationTime"": ""2023-04-24T14:36:18.7550813+03:00"",
 		            ""Archived"":true,
                     ""Settings"":{
                         ""SelectedVisualization"":""Table"", 
-                        ""PivotRequested"":""True"",
+                        ""PivotRequested"":true,
                         ""RowVariableCodes"":[],
                         ""ColumnVariableCodes"":[
                             ""Vuosi"",
@@ -224,9 +268,9 @@ namespace SerializerTests
                     }
                 }";
 
-            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(testJson);
+            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(testJson, options);
 
-            Assert.That(savedQuery.CreationTime, Is.EqualTo(DateTime.Parse("023-04-24T14:36:18.7550813+03:00", CultureInfo.InvariantCulture)));
+            Assert.That(savedQuery.CreationTime, Is.EqualTo(ConvertDateTime("2023-04-24T14:36:18.7550813+03:00")));
             Assert.That(savedQuery.Settings.VisualizationType, Is.EqualTo(VisualizationType.Table));
             Assert.That(savedQuery.Archived, Is.True);
             Assert.That(savedQuery.Settings.Layout.ColumnVariableCodes.Count, Is.EqualTo(3));
@@ -234,17 +278,18 @@ namespace SerializerTests
         }
 
         [Test]
+
         public void DeserializeSavedQuery__UnknownVersion__ThrowsNotSupportedException()
         {
             string testJson = @"{
 		            ""Query"":{},
-		            ""CreationTime"": ""023-04-24T14:36:18.7550813+03:00"",
+		            ""CreationTime"": ""2023-04-24T14:36:18.7550813+03:00"",
 		            ""Archived"":true,
                     ""Version"":""123.123"",
                     ""Settings"":{""SelectedVisualization"":""Table"" }
                 }";
 
-            Assert.Throws<NotSupportedException>(() => JsonSerializer.Deserialize<SavedQuery>(testJson));
+            Assert.Throws<NotSupportedException>(() => JsonSerializer.Deserialize<SavedQuery>(testJson, options));
         }
 
         [Test]
@@ -252,11 +297,11 @@ namespace SerializerTests
         {
             string testJson = @"{
 		            ""Query"":{},
-		            ""CreationTime"": ""023-04-24T14:36:18.7550813+03:00"",
+		            ""CreationTime"": ""2023-04-24T14:36:18.7550813+03:00"",
 		            ""Archived"":true,
                     ""Settings"":{
                         ""SelectedVisualization"":""Table"", 
-                        ""PivotRequested"":""True"",
+                        ""PivotRequested"":true,
                         ""RowVariableCodes"":[],
                         ""ColumnVariableCodes"":[
                             ""Vuosi"",
@@ -266,15 +311,20 @@ namespace SerializerTests
                     }
                 }";
 
-            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(testJson);
+            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(testJson, options);
 
-            Assert.That(savedQuery.CreationTime, Is.EqualTo(DateTime.Parse("023-04-24T14:36:18.7550813+03:00", CultureInfo.InvariantCulture)));
+            Assert.That(savedQuery.CreationTime, Is.EqualTo(ConvertDateTime("2023-04-24T14:36:18.7550813+03:00")));
             Assert.That(savedQuery.Settings.VisualizationType, Is.EqualTo(VisualizationType.Table));
             Assert.That(savedQuery.Archived, Is.True);
             Assert.That((bool)savedQuery.LegacyProperties["PivotRequested"], Is.True);
             Assert.That(savedQuery.Settings.Layout.RowVariableCodes.Count, Is.EqualTo(0));
             Assert.That(savedQuery.Settings.Layout.ColumnVariableCodes.Count, Is.EqualTo(3));
             Assert.That(savedQuery.Version, Is.EqualTo("1.0"));
+        }
+
+        private static DateTime ConvertDateTime(string input)
+        {
+            return DateTime.ParseExact(input, PxSyntaxConstants.SQ_DATETIME_FORMAT, CultureInfo.InvariantCulture, DateTimeStyles.None);
         }
     }
 }
