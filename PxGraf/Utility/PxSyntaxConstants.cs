@@ -19,6 +19,7 @@ namespace PxGraf.Utility
         public const string LAST_UPDATED_KEY = "LAST-UPDATED";
         public const string UNIT_KEY = "UNIT";
         public const char STRING_DELIMETER = '"';
+        public const string SQ_DATETIME_FORMAT = "yyyy-MM-ddTHH:mm:ss.fffffffK";
 
         //Indexed by DataValueType with offset of one
         public static readonly string[] MissingValueDotCodes =
