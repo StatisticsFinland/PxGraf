@@ -59,20 +59,20 @@ namespace PxGraf.Data.MetaData
         /// <param name="name"></param>
         /// <param name="note"></param>
         /// <param name="type"></param>
-        /// <param name="includedValues"></param>
+        /// <param name="vals"></param>
         public Variable(
             string code,
             MultilanguageString name,
             MultilanguageString note,
             DimensionType type,
-            List<VariableValue> includedValues
+            List<VariableValue> vals
             )
         {
             Code = code;
             Name = name;
             Note = note;
             Type = type;
-            IncludedValues = includedValues;
+            IncludedValues = vals;
         }
 
         /// <summary>

@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Routing.Matching;
+﻿#nullable enable
 using Px.Utils.Language;
 using Px.Utils.Models;
 using Px.Utils.Models.Data.DataValue;
 using Px.Utils.Models.Metadata;
-using Px.Utils.Models.Metadata.ExtensionMethods;
+using Px.Utils.Models.Metadata.MetaProperties;
 using PxGraf.Datasource.Cache;
+using PxGraf.Datasource.DatabaseConnection;
 using PxGraf.Models.Metadata;
 using PxGraf.Models.Queries;
 using PxGraf.Models.Responses.DatabaseItems;
@@ -15,9 +16,9 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PxGraf.Datasource.DatabaseConnection
+namespace PxGraf.Datasource.FileDatasource
 {
-    public sealed class CachedFileDatasource(IFileDatasource datasource, IMultiStateMemoryTaskCache taskCache) : CachedDatasource(taskCache) 
+    public sealed class CachedFileDatasource(IFileDatasource datasource, IMultiStateMemoryTaskCache taskCache) : CachedDatasource(taskCache)
     {
         private readonly IFileDatasource _datasource = datasource;
 
@@ -41,33 +42,25 @@ namespace PxGraf.Datasource.DatabaseConnection
         public override async Task<Matrix<DecimalDataValue>> GetMatrixAsync(PxTableReference tableReference, IReadOnlyMatrixMetadata metadata)
         {
             IReadOnlyMatrixMetadata completeTableMeta = await GetMatrixMetadataCachedAsync(tableReference);
-            return await _datasource.GetMatrixAsync(tableReference, metadata, completeTableMeta); 
+            return await _datasource.GetMatrixAsync(tableReference, metadata, completeTableMeta);
         }
 
         private async Task<DatabaseTable> GetTableListingItemAsync(PxTableReference reference)
         {
-            IReadOnlyMatrixMetadata meta;
-            DateTime lastUpdated;
-            try
-            {
-                meta = await GetMatrixMetadataCachedAsync(reference);
-                lastUpdated = meta.GetLastUpdated() ?? await _datasource.GetLastWriteTimeAsync(reference);
-            }
-            catch
-            {
-                return null;
-            }
-            string tableId;
-            if (meta.AdditionalProperties.TryGetValue(PxSyntaxConstants.TABLEID_KEY, out MetaProperty tableIdProperty))
-            {
-                tableId = tableIdProperty.ValueAsString(PxSyntaxConstants.STRING_DELIMETER);
-            }
-            else
-            {
-                tableId = reference.Name.Split(Path.DirectorySeparatorChar)[^1].Split('.')[0];
-            }
+            IReadOnlyMatrixMetadata meta = await GetMatrixMetadataCachedAsync(reference);
+            DateTime lastUpdated = meta.GetLastUpdated() ?? await _datasource.GetLastWriteTimeAsync(reference);
+            string tableId = meta.AdditionalProperties.TryGetValue(PxSyntaxConstants.TABLEID_KEY, out MetaProperty? tableIdProperty) &&
+                tableIdProperty is StringProperty stringIdProp ? stringIdProp.Value : reference.Name.Split(Path.DirectorySeparatorChar)[^1].Split('.')[0];
+
             List<string> languages = [.. meta.AvailableLanguages];
-            MultilanguageString name = meta.AdditionalProperties[PxSyntaxConstants.DESCRIPTION_KEY].ValueAsMultilanguageString(PxSyntaxConstants.STRING_DELIMETER, languages[0]);
+            if (meta.AdditionalProperties.TryGetValue(PxSyntaxConstants.DESCRIPTION_KEY, out MetaProperty? descriptionProperty))
+            {
+                if (descriptionProperty is StringProperty sProp) return new(tableId, new(languages[0], sProp.Value), lastUpdated, languages);
+                else if (descriptionProperty is MultilanguageStringProperty mlsProp) return new(tableId, mlsProp.Value, lastUpdated, languages);
+            }
+
+            // If no description is found, use the table id as the name
+            MultilanguageString name = new(languages.ToDictionary(lang => lang, lang => tableId));
             return new(tableId, name, lastUpdated, languages);
         }
 
@@ -91,3 +84,4 @@ namespace PxGraf.Datasource.DatabaseConnection
         }
     }
 }
+#nullable disable

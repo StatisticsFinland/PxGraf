@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Px.Utils.Language;
-using PxGraf.Utility;
+using Px.Utils.Serializers.Json;
 using System.Collections.Generic;
 
 namespace PxGraf.Models.Queries

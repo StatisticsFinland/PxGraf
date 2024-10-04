@@ -21,6 +21,7 @@ using System.Threading;
 using System;
 using PxGraf.Models.Responses.DatabaseItems;
 using PxGraf.Utility;
+using Px.Utils.Models.Metadata.MetaProperties;
 
 namespace PxGraf.Datasource.PxWebInterface
 {
@@ -338,7 +339,7 @@ namespace PxGraf.Datasource.PxWebInterface
                 d => d.Value.Source ?? ""
             ));
 
-            MetaProperty sourceProperty = new(PxSyntaxConstants.SOURCE_KEY, source);
+            MetaProperty sourceProperty = new MultilanguageStringProperty(source);
 
             string lastUpdatedString = dataResultsByLanguage.Select(
                 d => d.Value.Updated

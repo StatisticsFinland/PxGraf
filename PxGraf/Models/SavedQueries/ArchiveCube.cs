@@ -3,7 +3,6 @@ using Px.Utils.Models;
 using Px.Utils.Models.Data;
 using Px.Utils.Models.Data.DataValue;
 using Px.Utils.Models.Metadata;
-using PxGraf.Data.MetaData;
 using PxGraf.Models.Metadata;
 using PxGraf.Models.Queries;
 using PxGraf.Utility;
@@ -27,7 +26,6 @@ namespace PxGraf.Models.SavedQueries
         /// Contains all metadata of this cube.
         /// </summary>
         [JsonProperty("meta")]
-        [JsonConverter(typeof(MatrixMetadataConverter))]
         public IReadOnlyMatrixMetadata Meta { get; set; }
 
         /// <summary>
