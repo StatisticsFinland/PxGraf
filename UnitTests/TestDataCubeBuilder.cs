@@ -6,6 +6,7 @@ using Px.Utils.Models.Data.DataValue;
 using Px.Utils.Models.Metadata;
 using Px.Utils.Models.Metadata.Dimensions;
 using Px.Utils.Models.Metadata.Enums;
+using Px.Utils.Models.Metadata.MetaProperties;
 using PxGraf.ChartTypeSelection;
 using PxGraf.Models.Queries;
 using PxGraf.Models.Requests;
@@ -143,7 +144,7 @@ namespace UnitTests
             }
             Dictionary<string, MetaProperty> additionalProperties = new()
             {
-                { PxSyntaxConstants.NOTE_KEY, new MetaProperty(PxSyntaxConstants.NOTE_KEY, new MultilanguageString(noteTranslation)) }
+                { PxSyntaxConstants.NOTE_KEY, new MultilanguageStringProperty(new MultilanguageString(noteTranslation)) }
             };
             return new MatrixMetadata(languages[0], languages, variables, additionalProperties);
         }
@@ -173,7 +174,7 @@ namespace UnitTests
             Dictionary<string, MetaProperty> additionalProperties = [];
             if (param.HasCombinationValue)
             {
-                additionalProperties.Add(PxSyntaxConstants.ELIMINATION_KEY, new(name, $"\"{values[0].Code}\""));
+                additionalProperties.Add(name, new StringProperty($"\"{values[0].Code}\""));
             }
 
             if (param.Type == DimensionType.Time)
@@ -255,7 +256,7 @@ namespace UnitTests
                         sourceTranslations[languages[k]] = langSource;
                     }
 
-                    MetaProperty source = new(PxSyntaxConstants.SOURCE_KEY, new MultilanguageString(sourceTranslations));
+                    MultilanguageStringProperty source = new(new MultilanguageString(sourceTranslations));
                     ContentDimensionValue cvv = new(name, new MultilanguageString(nameTranslations), new(unitTranslations), PxSyntaxConstants.ParsePxDateTime("2009-09-01T00:00:00.000Z"), varParam.Decimals);
                     cvv.AdditionalProperties[PxSyntaxConstants.SOURCE_KEY] = source;
                     results.Add(cvv);
