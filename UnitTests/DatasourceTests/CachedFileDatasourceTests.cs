@@ -22,6 +22,7 @@ using Px.Utils.Models;
 using Px.Utils.Models.Data.DataValue;
 using System.Threading;
 using PxGraf.Datasource.FileDatasource;
+using Px.Utils.Models.Metadata.MetaProperties;
 
 namespace UnitTests.DatasourceTests
 {
@@ -104,10 +105,10 @@ namespace UnitTests.DatasourceTests
             // Arrange
             MatrixMetadata table1Meta = TestDataCubeBuilder.BuildTestMeta(_tableParams, [.._languages]);
             MatrixMetadata table2Meta = TestDataCubeBuilder.BuildTestMeta(_tableParams, [.._languages]);
-            MetaProperty table1IDProperty = new(PxSyntaxConstants.TABLEID_KEY, "\"table1-id\"");
+            StringProperty table1IDProperty = new("\"table1-id\"");
             table1Meta.AdditionalProperties[PxSyntaxConstants.TABLEID_KEY] = table1IDProperty; // Adds TABLE_ID property for table1
-            table1Meta.AdditionalProperties[PxSyntaxConstants.DESCRIPTION_KEY] = new (PxSyntaxConstants.DESCRIPTION_KEY, new MultilanguageString(_table1Name));
-            table2Meta.AdditionalProperties[PxSyntaxConstants.DESCRIPTION_KEY] = new (PxSyntaxConstants.DESCRIPTION_KEY, new MultilanguageString(_table2Name));
+            table1Meta.AdditionalProperties[PxSyntaxConstants.DESCRIPTION_KEY] = new MultilanguageStringProperty(new MultilanguageString(_table1Name));
+            table2Meta.AdditionalProperties[PxSyntaxConstants.DESCRIPTION_KEY] = new MultilanguageStringProperty(new MultilanguageString(_table2Name));
             Dictionary<PxTableReference, IReadOnlyMatrixMetadata> metadataResponses = new()
             {
                 [_fileReferences[0]] = table1Meta,
@@ -138,7 +139,7 @@ namespace UnitTests.DatasourceTests
         {
             // Arrange
             MatrixMetadata table1Meta = TestDataCubeBuilder.BuildTestMeta(_tableParams, [.. _languages]);
-            table1Meta.AdditionalProperties[PxSyntaxConstants.DESCRIPTION_KEY] = new(PxSyntaxConstants.DESCRIPTION_KEY, new MultilanguageString(_table1Name));
+            table1Meta.AdditionalProperties[PxSyntaxConstants.DESCRIPTION_KEY] = new MultilanguageStringProperty(new MultilanguageString(_table1Name));
             Dictionary<PxTableReference, IReadOnlyMatrixMetadata> metadataResponses = new()
             {
                 [_fileReferences[0]] = table1Meta,
