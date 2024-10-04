@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using PxGraf.Utility;
 using Px.Utils.Models.Metadata.Enums;
 using System;
+using Px.Utils.Models.Metadata.MetaProperties;
 
 namespace PxGraf.Models.Metadata
 {
@@ -133,12 +134,10 @@ namespace PxGraf.Models.Metadata
         /// <param name="meta">Metadata object to be searched.</param>
         /// <param name="propertyKey">Key of the property to be searched.</param>
         /// <returns>Property value as a <see cref="MultilanguageString"/> object if it exists, otherwise null.</returns>
-        public static MultilanguageString? GetMatrixProperty(this IReadOnlyMatrixMetadata meta, string propertyKey)
+        public static MultilanguageString? GetMatrixMultilanguageProperty(this IReadOnlyMatrixMetadata meta, string propertyKey)
         {
-            if (meta.AdditionalProperties.TryGetValue(propertyKey, out MetaProperty? prop) && prop.CanGetMultilanguageValue)
-            {
-                return prop.ValueAsMultilanguageString(PxSyntaxConstants.STRING_DELIMETER, meta.DefaultLanguage);
-            }
+            if (meta.AdditionalProperties.TryGetValue(propertyKey, out MetaProperty? prop) &&
+                prop is MultilanguageStringProperty mlsProp) return mlsProp.Value;
 
             return null;
         }

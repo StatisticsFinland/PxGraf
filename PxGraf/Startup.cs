@@ -23,6 +23,8 @@ using PxGraf.Datasource.Cache;
 using PxGraf.Models.Queries;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
+using PxGraf.Datasource.FileDatasource;
+using Px.Utils.Serializers.Json;
 
 namespace PxGraf
 {
@@ -89,27 +91,11 @@ namespace PxGraf
 #pragma warning restore S5122
             });
             services.AddMemoryCache();
-
-            services.AddControllers()
-                .AddNewtonsoftJson(mvcNewtonsoftJsonOptions =>
-                {
-                    mvcNewtonsoftJsonOptions.SerializerSettings.Converters.Add(new MultilanguageStringConverter());
-                    mvcNewtonsoftJsonOptions.SerializerSettings.Converters.Add(new MatrixMetadataConverter());
-                    mvcNewtonsoftJsonOptions.SerializerSettings.Converters.Add(new DimensionConverter());
-                    mvcNewtonsoftJsonOptions.SerializerSettings.Converters.Add(new DimensionValueConverter());
-                    mvcNewtonsoftJsonOptions.AllowInputFormatterExceptionMessages = HostEnvironment.IsDevelopment();
-                    mvcNewtonsoftJsonOptions.SerializerSettings.ContractResolver = new DefaultContractResolver
-                    {
-                        NamingStrategy = new CamelCaseNamingStrategy()
-                    };
-
-                    //We have global error handler but for some reason serialization errors don't end up there
-                    //...until we throw in error handler...
-                    mvcNewtonsoftJsonOptions.SerializerSettings.Error += (sender, args) =>
-                    {
-                        throw new SerializationException("Serialization failed", args.ErrorContext.Error);
-                    };
-                });
+            services.AddControllers().AddJsonOptions(options =>
+            {
+                options.AllowInputFormatterExceptionMessages = HostEnvironment.IsDevelopment();
+                options.JsonSerializerOptions.PropertyNamingPolicy = null;
+            });
 
             services.AddMvc(c =>
                 c.Conventions.Add(new ApiExplorerConventions())

@@ -24,7 +24,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
-using Newtonsoft.Json;
+using System.Text.Json;
 
 namespace PxGraf.Controllers
 {
@@ -71,7 +71,7 @@ namespace PxGraf.Controllers
                 return BadRequest();
             }
             _logger.LogDebug("cube-meta result {Meta}", readOnlyMeta);
-            string json = JsonConvert.SerializeObject(readOnlyMeta, new MatrixMetadataConverter());
+            string json = JsonSerializer.Serialize(readOnlyMeta);
             return Content(json, "application/json");
         }
 

@@ -14,26 +14,26 @@ namespace PxGraf.Data.MetaData
         /// Unique, language independent identifier for this variable value.
         /// </summary>
         [JsonProperty("code")]
-        public string Code { get; set; }
+        public string? Code { get; set; }
 
         /// <summary>
         /// Human readable name in one or more languages.
         /// </summary>
         [JsonProperty("name")]
-        public MultilanguageString Name { get; set; }
+        public MultilanguageString? Name { get; set; }
 
         /// <summary>
         /// Some arbitrary information about the variable value.
         /// </summary>
         [JsonProperty("note")]
-        public MultilanguageString Note { get; set; }
+        public MultilanguageString? Note { get; set; }
 
         /// <summary>
         /// True if this variable value represents a sum of values, example "ALL" or somethis simillar.
         /// Called "elimination value" in pxweb.
         /// </summary>
         [JsonProperty("isSum")]
-        public bool IsSumValue { get; set; }
+        public bool IsSumValue { get; set; } = false;
 
         /// <summary>
         /// Contains properties that only content type variables have.
@@ -45,14 +45,14 @@ namespace PxGraf.Data.MetaData
         /// </summary>
         [JsonProperty("contentComponent")]
         [AllowNull]
-        public ContentComponent ContentComponent { get; set; }
+        public ContentComponent? ContentComponent { get; set; }
 
         /// <summary>
         /// TBA: feature not yet implemented.
         /// </summary>
         [JsonIgnore]
         [AllowNull]
-        public VirtualComponent VirtualComponent { get; set; }
+        public VirtualComponent? VirtualComponent { get; set; }
 
         /// <summary>
         /// Default constructor
@@ -64,7 +64,7 @@ namespace PxGraf.Data.MetaData
         public VariableValue(
             string code,
             MultilanguageString name,
-            MultilanguageString note,
+            MultilanguageString? note,
             bool isSumValue)
         {
             Code = code;
@@ -84,7 +84,7 @@ namespace PxGraf.Data.MetaData
         public VariableValue(
             string code,
             MultilanguageString name,
-            MultilanguageString note,
+            MultilanguageString? note,
             bool isSumValue,
             ContentComponent? contentComponent)
         {

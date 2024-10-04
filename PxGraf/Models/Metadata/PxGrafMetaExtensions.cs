@@ -2,6 +2,7 @@
 using Px.Utils.Models.Metadata;
 using Px.Utils.Models.Metadata.Dimensions;
 using Px.Utils.Models.Metadata.Enums;
+using Px.Utils.Models.Metadata.MetaProperties;
 using PxGraf.Data;
 using PxGraf.Data.MetaData;
 using PxGraf.Settings;
@@ -28,9 +29,9 @@ namespace PxGraf.Models.Metadata
                 {
                     note[lang] = $"\"{pxGrafMeta.Note[lang]}\""; // Meta property values must be enclosed
                 }
-                matrixProperties[PxSyntaxConstants.NOTE_KEY] = new(PxSyntaxConstants.NOTE_KEY, new MultilanguageString(note));
+                matrixProperties[PxSyntaxConstants.NOTE_KEY] = new MultilanguageStringProperty(new(note));
             }
-            foreach(Variable dimension in pxGrafMeta.Variables)
+            foreach (Variable dimension in pxGrafMeta.Variables)
             {
                 Dictionary<string, MetaProperty> dimensionProperties = [];
                 if (dimension.Type == DimensionType.Content)
@@ -44,7 +45,7 @@ namespace PxGraf.Models.Metadata
                         contentDimValues.Add(cdv);
                     }
                     dimensions.Add(new ContentDimension(dimension.Code, dimension.Name, dimensionProperties, contentDimValues));
-                    matrixProperties[PxSyntaxConstants.SOURCE_KEY] = new(PxSyntaxConstants.SOURCE_KEY, dimension.IncludedValues[0].ContentComponent.Source);
+                    matrixProperties[PxSyntaxConstants.SOURCE_KEY] = new MultilanguageStringProperty(dimension.IncludedValues[0].ContentComponent.Source);
                 }
                 else if (dimension.Type == DimensionType.Time)
                 {
@@ -95,7 +96,7 @@ namespace PxGraf.Models.Metadata
         {
             if (dimensionValue.IsSumValue)
             {
-                dimensionProperties[PxSyntaxConstants.ELIMINATION_KEY] = new MetaProperty(PxSyntaxConstants.ELIMINATION_KEY, dimensionValue.Code);
+                dimensionProperties[PxSyntaxConstants.ELIMINATION_KEY] = new StringProperty(dimensionValue.Code);
             }
         }
     }

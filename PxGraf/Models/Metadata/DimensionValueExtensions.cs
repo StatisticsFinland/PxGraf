@@ -1,13 +1,12 @@
 ﻿#nullable enable
 using Px.Utils.Language;
-using Px.Utils.Models.Metadata;
 using Px.Utils.Models.Metadata.Dimensions;
 using Px.Utils.Models.Metadata.ExtensionMethods;
+using Px.Utils.Models.Metadata.MetaProperties;
+using Px.Utils.Models.Metadata;
 using PxGraf.Data.MetaData;
 using PxGraf.Models.Queries;
 using PxGraf.Utility;
-using System;
-using System.Linq;
 
 namespace PxGraf.Models.Metadata
 {
@@ -24,26 +23,23 @@ namespace PxGraf.Models.Metadata
         /// <param name="dimensionQuery">Dimension query object that contains the value edits.</param>
         /// <param name="meta">The matrix metadata to append missing content value information from.</param>
         /// <returns></returns>
-        public static VariableValue ConvertToVariableValue(this IReadOnlyDimensionValue input, string? eliminationValueCode, DimensionQuery dimensionQuery, IReadOnlyMatrixMetadata meta)
+        public static VariableValue ConvertToVariableValue(this IReadOnlyDimensionValue input, string? eliminationValueCode, DimensionQuery? dimensionQuery, IReadOnlyMatrixMetadata meta)
         {
             bool isSum = input.Code == eliminationValueCode;
             ContentComponent? cc = null;
-            MultilanguageString? valueNote = input.GetDimensionValueProperty(PxSyntaxConstants.VALUENOTE_KEY);
-            bool edited = dimensionQuery.ValueEdits.TryGetValue(input.Code, out DimensionQuery.VariableValueEdition? valueEdit);
+            MultilanguageString? valueNote = input.GetDimensionValueMultilanguageProperty(PxSyntaxConstants.VALUENOTE_KEY);
+
+            DimensionQuery.VariableValueEdition? valueEdits = null;
+            dimensionQuery?.ValueEdits.TryGetValue(input.Code, out valueEdits);
+
+            MultilanguageString name = valueEdits?.NameEdit is null ? input.Name : input.Name.CopyAndEdit(valueEdits.NameEdit);
             if (input is ContentDimensionValue cdv)
             {
-                MultilanguageString? source = valueEdit?.ContentComponent.SourceEdit != null ?
-                    valueEdit.ContentComponent.SourceEdit :
-                    cdv.GetDimensionValueSource(meta);
-                MultilanguageString? unit = valueEdit?.ContentComponent.UnitEdit != null ?
-                    valueEdit.ContentComponent.UnitEdit :
-                    cdv.Unit;
+                MultilanguageString? source = valueEdits?.ContentComponent.SourceEdit is null
+                    ? cdv.GetSource(meta) : cdv.GetSource(meta)?.CopyAndEdit(valueEdits.ContentComponent.SourceEdit);
+                MultilanguageString? unit = valueEdits?.ContentComponent.UnitEdit is null ?
+                    cdv.Unit : cdv.Unit.CopyAndEdit(valueEdits.ContentComponent.UnitEdit);
                 cc = new ContentComponent(unit, source, cdv.Precision, PxSyntaxConstants.FormatPxDateTime(cdv.LastUpdated));
-            }
-            MultilanguageString name = input.Name;
-            if (edited && valueEdit?.NameEdit != null)
-            {
-                name = valueEdit.NameEdit;
             }
             return new VariableValue(input.Code, name, valueNote, isSum, cc);
         }
@@ -55,33 +51,26 @@ namespace PxGraf.Models.Metadata
         /// <param name="value">Dimension value to get the source from.</param>
         /// <param name="meta">Complete matrix metadata object.</param>
         /// <returns>Source of the given content dimension value if it exists, otherwise the source of the dimension or the table.</returns>
-        public static MultilanguageString? GetDimensionValueSource(this ContentDimensionValue value, IReadOnlyMatrixMetadata meta)
+        private static MultilanguageString? GetSource(this ContentDimensionValue value, IReadOnlyMatrixMetadata meta)
         {
-            MultilanguageString? valueSource = value.GetDimensionValueProperty(PxSyntaxConstants.SOURCE_KEY);
-            if (valueSource is not null)
-            {
-                return valueSource;
-            }
-            else if (meta.Dimensions.First(d => d.Values.Contains(value)).AdditionalProperties.TryGetValue(PxSyntaxConstants.SOURCE_KEY, out MetaProperty? prop) && prop.CanGetMultilanguageValue)
-            {
-                return prop.ValueAsMultilanguageString(PxSyntaxConstants.STRING_DELIMETER, value.Name.Languages.First());
-            }
-            else if (meta.AdditionalProperties.TryGetValue(PxSyntaxConstants.SOURCE_KEY, out MetaProperty? tableProp) && tableProp.CanGetMultilanguageValue)
-            {
-                return tableProp.ValueAsMultilanguageString(PxSyntaxConstants.STRING_DELIMETER, value.Name.Languages.First());
-            }
+            // Primary use source information from the content dimension value.
+            MultilanguageString? valueSource = value.GetDimensionValueMultilanguageProperty(PxSyntaxConstants.SOURCE_KEY);
+            if (valueSource is not null) return valueSource;
+            // If the value has no source, use the source of the content dimension.
+            else if (meta.GetContentDimension().AdditionalProperties.TryGetValue(PxSyntaxConstants.SOURCE_KEY, out MetaProperty? prop) &&
+                prop is MultilanguageStringProperty dimMlsp) return dimMlsp.Value;
+            // If the dimension has no source, use the source of the table.
+            else if (meta.AdditionalProperties.TryGetValue(PxSyntaxConstants.SOURCE_KEY, out MetaProperty? tableProp) &&
+                tableProp is MultilanguageStringProperty tableMlsp) return tableMlsp.Value;
 
             return null;
         }
 
-        private static MultilanguageString? GetDimensionValueProperty(this IReadOnlyDimensionValue value, string propertyKey)
+        private static MultilanguageString? GetDimensionValueMultilanguageProperty(this IReadOnlyDimensionValue value, string propertyKey)
         {
-            if (value.AdditionalProperties.TryGetValue(propertyKey, out MetaProperty? prop) && prop.CanGetMultilanguageValue)
-            {
-                return prop.ValueAsMultilanguageString(PxSyntaxConstants.STRING_DELIMETER, value.Name.Languages.First());
-            }
-
-            return null;
+            if (value.AdditionalProperties.TryGetValue(propertyKey, out MetaProperty? prop) &&
+                prop is MultilanguageStringProperty mlsProp) return mlsProp.Value;
+            else return null;
         }
     }
 }

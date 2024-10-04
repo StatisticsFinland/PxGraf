@@ -3,6 +3,7 @@ using Px.Utils.Language;
 using Px.Utils.Models.Metadata;
 using Px.Utils.Models.Metadata.Dimensions;
 using Px.Utils.Models.Metadata.ExtensionMethods;
+using Px.Utils.Models.Metadata.MetaProperties;
 using PxGraf.Data.MetaData;
 using PxGraf.Models.Queries;
 using PxGraf.Utility;
@@ -39,11 +40,11 @@ namespace PxGraf.Models.Metadata
             }
 
             return new(
-                input.Code,
-                name,
-                input.GetDimensionProperty(PxSyntaxConstants.NOTE_KEY, input.Name.Languages.First()),
-                input.Type,
-                input.Values.Select(v => v
+                code: input.Code,
+                name: name,
+                note: input.GetMultilanguageDimensionProperty(PxSyntaxConstants.NOTE_KEY),
+                type: input.Type,
+                vals: input.Values.Select(v => v
                     .ConvertToVariableValue(input.GetEliminationValueCode(), query, meta)).ToList());
         }
 
@@ -56,11 +57,10 @@ namespace PxGraf.Models.Metadata
         {
             if (dimension.AdditionalProperties.TryGetValue(PxSyntaxConstants.ELIMINATION_KEY, out MetaProperty? property))
             {
-                if (property.CanGetStringValue) return property.ValueAsString(PxSyntaxConstants.STRING_DELIMETER);
-                else
+                if (property is StringProperty sProp) return sProp.Value;
+                else if (property is MultilanguageStringProperty mlsProp)
                 {
-                    MultilanguageString eliminationName = property.ValueAsMultilanguageString(PxSyntaxConstants.STRING_DELIMETER, dimension.Name.Languages.First());
-                    return dimension.Values.FirstOrDefault(v => v.Name.Equals(eliminationName))?.Code;
+                    return dimension.Values.FirstOrDefault(v => v.Name.Equals(mlsProp.Value))?.Code;
                 }
             }
             return null;
@@ -71,16 +71,12 @@ namespace PxGraf.Models.Metadata
         /// </summary>
         /// <param name="dimension">The dimension to search the property from.</param>
         /// <param name="propertyKey">The key of the property to search for.</param>
-        /// <param name="defaultLang">The default language to use if the property is a multilanguage string.</param>
         /// <returns></returns>
-        public static MultilanguageString? GetDimensionProperty(this IReadOnlyDimension dimension, string propertyKey, string defaultLang)
+        public static MultilanguageString? GetMultilanguageDimensionProperty(this IReadOnlyDimension dimension, string propertyKey)
         {
-            if (dimension.AdditionalProperties.TryGetValue(propertyKey, out MetaProperty? prop) && prop.CanGetMultilanguageValue)
-            {
-                return prop.ValueAsMultilanguageString(PxSyntaxConstants.STRING_DELIMETER, defaultLang);
-            }
-
-            return null;
+            if (dimension.AdditionalProperties.TryGetValue(propertyKey, out MetaProperty? prop) &&
+                prop is MultilanguageStringProperty mlsProp) return mlsProp.Value;
+            else return null;
         }
     }
 }
