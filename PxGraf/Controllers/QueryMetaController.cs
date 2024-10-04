@@ -3,14 +3,12 @@ using Microsoft.Extensions.Logging;
 using Px.Utils.Language;
 using Px.Utils.Models.Metadata;
 using Px.Utils.Models.Metadata.ExtensionMethods;
-using PxGraf.Data.MetaData;
 using PxGraf.Datasource;
 using PxGraf.Models.Metadata;
 using PxGraf.Models.Responses;
 using PxGraf.Models.SavedQueries;
 using PxGraf.Settings;
 using PxGraf.Utility;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -55,7 +53,7 @@ namespace PxGraf.Controllers
                     Selectable = savedQuery.Query.DimensionQueries.Any(q => q.Value.Selectable),
                     VisualizationType = savedQuery.Settings.VisualizationType,
                     TableId = savedQuery.Query.TableReference.Name,
-                    Description = filteredMeta.GetMatrixProperty(PxSyntaxConstants.NOTE_KEY),
+                    Description = filteredMeta.GetMatrixMultilanguageProperty(PxSyntaxConstants.NOTE_KEY),
                     TableReference = savedQuery.Query.TableReference,
                     LastUpdated = PxSyntaxConstants.FormatPxDateTime(filteredMeta.GetContentDimension().Values.Map(cdv => cdv.LastUpdated).Max())
                 };
