@@ -374,7 +374,6 @@ namespace Visualization
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(cube, savedQuery);
 
             JsonSerializerSettings jsonSettings = new();
-            jsonSettings.Converters.Add(new MultilanguageStringConverter());
             jsonSettings.Converters.Add(new StringEnumConverter());
 
             string normalizedResponse = JsonUtils.NormalizeJsonString(JsonConvert.SerializeObject(result, jsonSettings));
@@ -549,7 +548,6 @@ namespace Visualization
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(cube, savedQuery);
 
             JsonSerializerSettings jsonSettings = new();
-            jsonSettings.Converters.Add(new MultilanguageStringConverter());
             jsonSettings.Converters.Add(new StringEnumConverter());
 
             string normalizedResponse = JsonUtils.NormalizeJsonString(JsonConvert.SerializeObject(result, jsonSettings));
@@ -576,7 +574,6 @@ namespace Visualization
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(cube, savedQuery);
 
             JsonSerializerSettings jsonSettings = new ();
-            jsonSettings.Converters.Add(new MultilanguageStringConverter());
             jsonSettings.Converters.Add(new StringEnumConverter());
 
             string normalizedResponse = JsonUtils.NormalizeJsonString(JsonConvert.SerializeObject(result, jsonSettings));

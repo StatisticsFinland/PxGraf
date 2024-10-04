@@ -1,29 +1,34 @@
-﻿using Newtonsoft.Json;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using PxGraf.Enums;
 using PxGraf.Models.SavedQueries;
 using PxGraf.Utility;
 using System;
 using System.Globalization;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace SerializerTests
 {
     internal class SavedQuerySerializerTests
     {
         private readonly static string testSavedQuery = "{\"Query\":{\"TableReference\":{\"Name\":\"table.px\",\"Hierarchy\":[\"StatFin\",\"kivih\"]},\"ChartHeaderEdit\":null,\"VariableQueries\":{\"Vuosi\":{\"NameEdit\":null,\"ValueEdits\":{},\"ValueFilter\":{\"type\":\"all\"},\"VirtualValueDefinitions\":null,\"Selectable\":false},\"Tiedot\":{\"NameEdit\":null,\"ValueEdits\":{},\"ValueFilter\":{\"type\":\"item\",\"query\":[\"kulutus_t\"]},\"VirtualValueDefinitions\":null,\"Selectable\":false}}},\"CreationTime\":\"2022-12-16T14:19:11.4380637+02:00\",\"Archived\":false,\"Settings\":{\"CutYAxis\":false,\"MultiselectableVariableCode\":null,\"SelectedVisualization\":\"LineChart\",\"DefaultSelectableVariableCodes\":null}}";
+        private readonly JsonSerializerOptions options = new()
+        {
+            Converters = { new SavedQuerySerializer() }
+        };
 
         [Test]
         public void SavedQueryDeserializationTest_Success()
         {
-            SavedQuery query = JsonConvert.DeserializeObject<SavedQuery>(testSavedQuery);
+            SavedQuery query = JsonSerializer.Deserialize<SavedQuery>(testSavedQuery, options);
             Assert.That(query.Settings.VisualizationType, Is.EqualTo(VisualizationType.LineChart));
         }
 
         [Test]
         public void SavedQuerySerializationTest_Success()
         {
-            SavedQuery query = JsonConvert.DeserializeObject<SavedQuery>(testSavedQuery);
-            var serializedString = JsonConvert.SerializeObject(query);
+            SavedQuery query = JsonSerializer.Deserialize<SavedQuery>(testSavedQuery, options);
+            string serializedString = JsonSerializer.Serialize(query, options);
             Assert.That(serializedString.Contains(query.Version));
             Assert.That(serializedString.Contains(ChartTypeEnumConverter.ToJsonString(query.Settings.VisualizationType)));
         }
@@ -49,7 +54,7 @@ namespace SerializerTests
                     }
                 }";
 
-            SavedQuery savedQuery = JsonConvert.DeserializeObject<SavedQuery>(testJson);
+            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(testJson);
 
             Assert.That(savedQuery.CreationTime, Is.EqualTo(DateTime.Parse("023-04-24T14:36:18.7550813+03:00", CultureInfo.InvariantCulture)));
             Assert.That(savedQuery.Settings.VisualizationType, Is.EqualTo(VisualizationType.Table));
@@ -80,7 +85,7 @@ namespace SerializerTests
                     }
                 }";
 
-            SavedQuery savedQuery = JsonConvert.DeserializeObject<SavedQuery>(testJson);
+            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(testJson);
 
             Assert.That(savedQuery.CreationTime, Is.EqualTo(DateTime.Parse("023-04-24T14:36:18.7550813+03:00", CultureInfo.InvariantCulture)));
             Assert.That(savedQuery.Settings.VisualizationType, Is.EqualTo(VisualizationType.Table));
@@ -114,7 +119,7 @@ namespace SerializerTests
                    },
                 }";
 
-            SavedQuery savedQuery = JsonConvert.DeserializeObject<SavedQuery>(testJson);
+            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(testJson);
 
             Assert.That(savedQuery.CreationTime, Is.EqualTo(DateTime.Parse("023-04-24T14:36:18.7550813+03:00", CultureInfo.InvariantCulture)));
             Assert.That(savedQuery.Settings.VisualizationType, Is.EqualTo(VisualizationType.GroupVerticalBarChart));
@@ -151,7 +156,7 @@ namespace SerializerTests
                    },
                 }";
 
-            SavedQuery savedQuery = JsonConvert.DeserializeObject<SavedQuery>(testJson);
+            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(testJson);
 
             Assert.That(savedQuery.CreationTime, Is.EqualTo(DateTime.Parse("023-04-24T14:36:18.7550813+03:00", CultureInfo.InvariantCulture)));
             Assert.That(savedQuery.Settings.VisualizationType, Is.EqualTo(VisualizationType.GroupVerticalBarChart));
@@ -188,7 +193,7 @@ namespace SerializerTests
                    },
                 }";
 
-            SavedQuery savedQuery = JsonConvert.DeserializeObject<SavedQuery>(testJson);
+            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(testJson);
 
             Assert.That(savedQuery.CreationTime, Is.EqualTo(DateTime.Parse("023-04-24T14:36:18.7550813+03:00", CultureInfo.InvariantCulture)));
             Assert.That(savedQuery.Settings.VisualizationType, Is.EqualTo(VisualizationType.GroupVerticalBarChart));
@@ -219,7 +224,7 @@ namespace SerializerTests
                     }
                 }";
 
-            SavedQuery savedQuery = JsonConvert.DeserializeObject<SavedQuery>(testJson);
+            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(testJson);
 
             Assert.That(savedQuery.CreationTime, Is.EqualTo(DateTime.Parse("023-04-24T14:36:18.7550813+03:00", CultureInfo.InvariantCulture)));
             Assert.That(savedQuery.Settings.VisualizationType, Is.EqualTo(VisualizationType.Table));
@@ -239,7 +244,7 @@ namespace SerializerTests
                     ""Settings"":{""SelectedVisualization"":""Table"" }
                 }";
 
-            Assert.Throws<NotSupportedException>(() => JsonConvert.DeserializeObject<SavedQuery>(testJson));
+            Assert.Throws<NotSupportedException>(() => JsonSerializer.Deserialize<SavedQuery>(testJson));
         }
 
         [Test]
@@ -261,7 +266,7 @@ namespace SerializerTests
                     }
                 }";
 
-            SavedQuery savedQuery = JsonConvert.DeserializeObject<SavedQuery>(testJson);
+            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(testJson);
 
             Assert.That(savedQuery.CreationTime, Is.EqualTo(DateTime.Parse("023-04-24T14:36:18.7550813+03:00", CultureInfo.InvariantCulture)));
             Assert.That(savedQuery.Settings.VisualizationType, Is.EqualTo(VisualizationType.Table));

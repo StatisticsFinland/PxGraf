@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
 using PxGraf.Models.SavedQueries;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading.Tasks;
@@ -16,13 +15,7 @@ namespace PxGraf.Utility
     {
         private readonly static LockByKey lockScope = new(StringComparer.OrdinalIgnoreCase);
 
-        private static readonly JsonSerializerSettings _serializerSettings = new()
-        {
-            Converters = new List<JsonConverter>
-           {
-               new MultilanguageStringConverter(),
-           }
-        };
+        private static readonly JsonSerializerSettings _serializerSettings = new();
 
         /// <summary>
         /// Returns true if a saved query file with the given sq id exists withing the specified saved query file location.
