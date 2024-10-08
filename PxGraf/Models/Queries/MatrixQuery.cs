@@ -1,7 +1,7 @@
-﻿using Newtonsoft.Json;
-using Px.Utils.Language;
+﻿using Px.Utils.Language;
 using Px.Utils.Serializers.Json;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace PxGraf.Models.Queries
 {
@@ -25,7 +25,7 @@ namespace PxGraf.Models.Queries
         /// <summary>
         /// Dimension.Code to DimensionQuery
         /// </summary>
-        [JsonProperty("variableQueries")] // legacy name, do not change or all the old queries break.
+        [JsonPropertyName("variableQueries")] // legacy name, do not change or all the old queries break.
         public Dictionary<string, DimensionQuery> DimensionQueries { get; set; }
     }
 }

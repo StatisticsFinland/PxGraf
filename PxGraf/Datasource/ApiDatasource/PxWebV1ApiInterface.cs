@@ -1,16 +1,18 @@
 ﻿using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using Px.Utils.Language;
 using Px.Utils.Models.Data.DataValue;
 using Px.Utils.Models.Data;
 using Px.Utils.Models.Metadata.Dimensions;
 using Px.Utils.Models.Metadata.Enums;
+using Px.Utils.Models.Metadata.MetaProperties;
 using Px.Utils.Models.Metadata;
 using Px.Utils.Models;
 using PxGraf.Datasource.PxWebInterface.SerializationModels;
 using PxGraf.Exceptions;
 using PxGraf.Models.Queries;
+using PxGraf.Models.Responses.DatabaseItems;
 using PxGraf.Settings;
+using PxGraf.Utility;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
@@ -19,9 +21,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Threading;
 using System;
-using PxGraf.Models.Responses.DatabaseItems;
-using PxGraf.Utility;
-using Px.Utils.Models.Metadata.MetaProperties;
+using System.Text.Json;
 
 namespace PxGraf.Datasource.PxWebInterface
 {
@@ -236,7 +236,7 @@ namespace PxGraf.Datasource.PxWebInterface
             {
                 string json = await resp.Content.ReadAsStringAsync();
                 _logger.LogDebug("PxWeb: api/v1/{Lang}/ result: {Json}", lang, json);
-                return JsonConvert.DeserializeObject<List<DataBaseListResponseItem>>(json);
+                return JsonSerializer.Deserialize<List<DataBaseListResponseItem>>(json);
             }
             else
             {
@@ -257,7 +257,7 @@ namespace PxGraf.Datasource.PxWebInterface
             {
                 string json = await resp.Content.ReadAsStringAsync();
                 _logger.LogDebug("PxWeb: api/v1/{Lang}/{JoinedPath}/ result: {Json}", lang, joinedPath, json);
-                return JsonConvert.DeserializeObject<List<TableListResponseItem>>(json);
+                return JsonSerializer.Deserialize<List<TableListResponseItem>>(json);
             }
             else
             {
@@ -426,7 +426,7 @@ namespace PxGraf.Datasource.PxWebInterface
             if (resp.IsSuccessStatusCode)
             {
                 _logger.LogDebug("PxWeb: api/v1/{Lang}/{TableRefPath} result: {ContentString}", lang, tableRefPath, contentString);
-                return JsonConvert.DeserializeObject<PxMetaResponse>(contentString);
+                return JsonSerializer.Deserialize<PxMetaResponse>(contentString);
             }
             else if (resp.StatusCode == System.Net.HttpStatusCode.BadRequest)
             {
@@ -448,12 +448,12 @@ namespace PxGraf.Datasource.PxWebInterface
         {
             string tableRefPath = pxTableRef.ToPath();
             _logger.LogDebug("PxWeb POST: api/v1/{Lang}/{TableRefPath} with query: {Query}", lang, tableRefPath, query);
-            var resp = await _pxwebConnection.PostAsync($"api/v1/{lang}/{tableRefPath}", JsonConvert.SerializeObject(query));
+            HttpResponseMessage resp = await _pxwebConnection.PostAsync($"api/v1/{lang}/{tableRefPath}", JsonSerializer.Serialize(query));
             if (resp.IsSuccessStatusCode)
             {
                 string json = await resp.Content.ReadAsStringAsync();
                 _logger.LogDebug("PxWeb: api/v1/{Lang}/{TableRefPath} result: {Json}", lang, tableRefPath, json);
-                return JsonConvert.DeserializeObject<ResponseType>(json);
+                return JsonSerializer.Deserialize<ResponseType>(json);
             }
             else
             {

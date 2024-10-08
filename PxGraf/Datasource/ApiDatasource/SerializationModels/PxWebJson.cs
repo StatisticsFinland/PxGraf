@@ -1,46 +1,42 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Text.Json.Serialization;
 
-namespace PxGraf.Datasource.PxWebInterface.SerializationModels
+namespace PxGraf.Datasource.ApiDatasource.SerializationModels
 {
     public class PxWebJson
     {
-        [JsonProperty("columns")]
+        [JsonPropertyName("columns")]
         public Column[] Columns { get; set; }
 
-        [JsonProperty("data")]
+        [JsonPropertyName("data")]
         public DataEntry[] Data { get; set; }
 
         public class Column
         {
-            [JsonProperty("code")]
+            [JsonPropertyName("code")]
             public string Code { get; set; }
 
-            [JsonProperty("text")]
+            [JsonPropertyName("text")]
             public string Text { get; set; }
 
-            [JsonProperty("type")]
+            [JsonPropertyName("type")]
             public string Type { get; set; }
 
-            [JsonProperty("unit")]
+            [JsonPropertyName("unit")]
             public string Unit { get; set; }
 
-            [JsonProperty("comment")]
+            [JsonPropertyName("comment")]
             public string Comment { get; set; }
         }
 
         public class DataEntry
         {
-            [JsonProperty("key")]
+            [JsonPropertyName("key")]
             public string[] Key { get; set; }
 
-            [JsonProperty("values")]
+            [JsonPropertyName("values")]
             public double[] Value { get; set; }
 
-            [JsonProperty("comment")]
+            [JsonPropertyName("comment")]
             public string[] Comment { get; set; }
         }
     }

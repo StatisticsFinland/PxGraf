@@ -1,6 +1,6 @@
-﻿using Newtonsoft.Json;
-using Px.Utils.Language;
+﻿using Px.Utils.Language;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace PxGraf.Data.MetaData
 {

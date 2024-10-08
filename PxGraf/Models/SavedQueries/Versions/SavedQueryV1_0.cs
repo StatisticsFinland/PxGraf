@@ -1,9 +1,9 @@
-﻿using Newtonsoft.Json;
-using PxGraf.Enums;
+﻿using PxGraf.Enums;
 using PxGraf.Models.Queries;
-using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text.Json.Serialization;
+using System;
 
 namespace PxGraf.Models.SavedQueries.Versions
 {
@@ -11,33 +11,41 @@ namespace PxGraf.Models.SavedQueries.Versions
     {
         public MatrixQuery Query { get; set; }
 
+        [JsonConverter(typeof(DateTimeConverter))]
         public DateTime CreationTime { get; set; }
 
         public VisualizationSettingsV10 Settings { get; set; }
 
         public bool Archived { get; set; }
 
-        [JsonObject(ItemNullValueHandling = NullValueHandling.Ignore)]
         public class VisualizationSettingsV10
         {
+            [JsonConverter(typeof(JsonStringEnumConverter))]
             public VisualizationType SelectedVisualization { get; set; }
 
             public IReadOnlyList<string> RowVariableCodes { get; set; }
 
             public IReadOnlyList<string> ColumnVariableCodes { get; set; }
 
+            [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
             public bool? CutYAxis { get; set; } = false;
 
+            [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
             public int? MarkerSize { get; set; }
 
+            [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
             public string MultiselectableVariableCode { get; set; }
 
+            [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
             public bool? MatchXLabelsToEnd { get; set; }
 
+            [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
             public int? XLabelInterval { get; set; }
 
+            [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
             public bool? PivotRequested { get; set; }
 
+            [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
             public string Sorting { get; set; }
 
             public Dictionary<string, List<string>> DefaultSelectableVariableCodes { get; set; }

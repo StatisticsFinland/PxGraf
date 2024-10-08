@@ -1,8 +1,8 @@
-﻿using Newtonsoft.Json;
-using Px.Utils.Language;
+﻿using Px.Utils.Language;
 using Px.Utils.Models.Metadata.Enums;
 using PxGraf.Utility;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace PxGraf.Data.MetaData
 {
@@ -14,19 +14,19 @@ namespace PxGraf.Data.MetaData
         /// <summary>
         /// Unique, language independent identifier for this variable.
         /// </summary>
-        [JsonProperty("code")]
+        [JsonPropertyName("code")]
         public string Code { get; private set; }
 
         /// <summary>
         /// Name of the variable in multiple languages.
         /// </summary>
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public MultilanguageString Name { get; private set; }
 
         /// <summary>
         /// Some arbitrary information about the variable.
         /// </summary>
-        [JsonProperty("note")]
+        [JsonPropertyName("note")]
         public MultilanguageString Note { get; private set; }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace PxGraf.Data.MetaData
         /// <summary>
         /// Convers types to human readable form.
         /// </summary>
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public string JsonType
         {
             get => DimenionTypesEnumConverter.ToString(Type);
@@ -49,7 +49,7 @@ namespace PxGraf.Data.MetaData
         /// Values currently included in this variable.
         /// Can be a subset of the original set of variable values.
         /// </summary>
-        [JsonProperty("values")]
+        [JsonPropertyName("values")]
         public List<VariableValue> IncludedValues { get; private set; }
 
         /// <summary>

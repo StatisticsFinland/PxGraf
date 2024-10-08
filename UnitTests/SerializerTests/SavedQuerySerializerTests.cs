@@ -5,7 +5,6 @@ using PxGraf.Utility;
 using System;
 using System.Globalization;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace SerializerTests
 {
@@ -57,7 +56,6 @@ namespace SerializerTests
 
         private readonly JsonSerializerOptions options = new()
         {
-            Converters = { new SavedQuerySerializer(), new DateTimeSerializer() },
             AllowTrailingCommas = true
         };
 
