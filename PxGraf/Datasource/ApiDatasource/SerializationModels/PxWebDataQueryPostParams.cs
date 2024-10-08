@@ -1,36 +1,36 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace PxGraf.Datasource.PxWebInterface.SerializationModels
 {
     public class PxWebDataQueryPostParams
     {
-        [JsonProperty("query")]
+        [JsonPropertyName("query")]
         public VariableQuery[] Query { get; set; }
 
-        [JsonProperty("response")]
+        [JsonPropertyName("response")]
         public ResponseInfo Response { get; set; }
 
         public class VariableQuery
         {
-            [JsonProperty("code")]
+            [JsonPropertyName("code")]
             public string Code { get; set; }
 
-            [JsonProperty("selection")]
+            [JsonPropertyName("selection")]
             public Selection Selectrion { get; set; }
 
             public class Selection
             {
-                [JsonProperty("filter")]
+                [JsonPropertyName("filter")]
                 public string Filter { get; set; }
 
-                [JsonProperty("values")]
+                [JsonPropertyName("values")]
                 public string[] Values { get; set; }
             }
         }
 
         public class ResponseInfo
         {
-            [JsonProperty("format")]
+            [JsonPropertyName("format")]
             public string Format { get; set; }
         }
     }

@@ -1,9 +1,8 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 
 namespace PxGraf.Language
 {
@@ -41,16 +40,7 @@ namespace PxGraf.Language
             var json = File.ReadAllText(configPath);
 
             //Strict json deserialization
-            LocalizationConfig config = JsonConvert.DeserializeObject<LocalizationConfig>(
-                json,
-                new JsonSerializerSettings()
-                {
-                    //Ensures json does include every property to avoid missing translations
-                    ContractResolver = new RequireObjectPropertiesContractResolver(),
-                    //Ensures that json does not have any unused extra fields to avoid carrying non-used translations around
-                    MissingMemberHandling = MissingMemberHandling.Error,
-                }
-            );
+            LocalizationConfig config = JsonSerializer.Deserialize<LocalizationConfig>(json);
             Load(config.DefaultLanguage, config.Translations);
         }
 
@@ -67,20 +57,6 @@ namespace PxGraf.Language
         {
             public string DefaultLanguage { get; } = "en";
             public Dictionary<string, Translation> Translations { get; } = [];
-        }
-
-        /// <summary>
-        /// This contract resolver requires every object field by default.
-        /// Individual properties can be still marked as optional with: [JsonProperty(Required = Required.Default)]
-        /// </summary>
-        private sealed class RequireObjectPropertiesContractResolver : DefaultContractResolver
-        {
-            protected override JsonObjectContract CreateObjectContract(System.Type objectType)
-            {
-                var contract = base.CreateObjectContract(objectType);
-                contract.ItemRequired = Required.Always;
-                return contract;
-            }
         }
     }
 }

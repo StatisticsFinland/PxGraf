@@ -1,7 +1,7 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
+using System;
 
 namespace PxGraf.Models.Queries
 {
@@ -18,10 +18,7 @@ namespace PxGraf.Models.Queries
         }
 
         [JsonConstructor]
-        public Layout()
-        {
-
-        }
+        public Layout() { }
 
         public override bool Equals(object obj)
         {
@@ -29,7 +26,7 @@ namespace PxGraf.Models.Queries
             {
                 return false;
             }
-                        
+
             return this.RowVariableCodes.SequenceEqual(other.RowVariableCodes) &&
                    this.ColumnVariableCodes.SequenceEqual(other.ColumnVariableCodes);
         }

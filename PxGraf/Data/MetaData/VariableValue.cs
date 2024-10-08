@@ -1,7 +1,7 @@
 ﻿#nullable enable
-using Newtonsoft.Json;
 using Px.Utils.Language;
 using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Serialization;
 
 namespace PxGraf.Data.MetaData
 {
@@ -13,26 +13,26 @@ namespace PxGraf.Data.MetaData
         /// <summary>
         /// Unique, language independent identifier for this variable value.
         /// </summary>
-        [JsonProperty("code")]
+        [JsonPropertyName("code")]
         public string? Code { get; set; }
 
         /// <summary>
         /// Human readable name in one or more languages.
         /// </summary>
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public MultilanguageString? Name { get; set; }
 
         /// <summary>
         /// Some arbitrary information about the variable value.
         /// </summary>
-        [JsonProperty("note")]
+        [JsonPropertyName("note")]
         public MultilanguageString? Note { get; set; }
 
         /// <summary>
         /// True if this variable value represents a sum of values, example "ALL" or somethis simillar.
         /// Called "elimination value" in pxweb.
         /// </summary>
-        [JsonProperty("isSum")]
+        [JsonPropertyName("isSum")]
         public bool IsSumValue { get; set; } = false;
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace PxGraf.Data.MetaData
         /// so building a working class hierarchy and using it via typecasting
         /// requires too much effort with very little benefits.
         /// </summary>
-        [JsonProperty("contentComponent")]
+        [JsonPropertyName("contentComponent")]
         [AllowNull]
         public ContentComponent? ContentComponent { get; set; }
 

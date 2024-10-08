@@ -1,8 +1,8 @@
-﻿using Newtonsoft.Json;
-using Px.Utils.Models.Metadata.Dimensions;
-using PxGraf.Utility;
+﻿using Px.Utils.Models.Metadata.Dimensions;
+using PxGraf.Utility.CustomJsonConverters;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 
 namespace PxGraf.Models.Queries
 {

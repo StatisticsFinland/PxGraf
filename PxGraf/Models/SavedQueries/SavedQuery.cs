@@ -1,13 +1,13 @@
-﻿using Newtonsoft.Json;
-using PxGraf.Models.Queries;
-using PxGraf.Utility;
+﻿using PxGraf.Models.Queries;
+using PxGraf.Utility.CustomJsonConverters;
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace PxGraf.Models.SavedQueries
 {
-    [JsonConverter(typeof(SavedQuerySerializer))]
-    public class SavedQuery
+    [JsonConverter(typeof(SavedQueryConverter))]
+    public sealed class SavedQuery
     {
         /// <summary>
         /// The query
@@ -17,6 +17,7 @@ namespace PxGraf.Models.SavedQueries
         /// <summary>
         /// When was this query saved
         /// </summary>
+        [JsonConverter(typeof(DateTimeConverter))]
         public DateTime CreationTime { get; set; }
 
         /// <summary>

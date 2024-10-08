@@ -1,15 +1,15 @@
-﻿using Newtonsoft.Json;
-using Px.Utils.Models.Metadata;
+﻿using Px.Utils.Models.Metadata;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace PxGraf.Datasource.PxWebInterface.SerializationModels
 {
     public class PxMetaResponse : IMatrixMap
     {
-        [JsonProperty("title")]
+        [JsonPropertyName("title")]
         public string Title { get; set; }
 
-        [JsonProperty("variables")]
+        [JsonPropertyName("variables")]
         public Variable[] Variables { get; set; }
 
         [JsonIgnore]
@@ -17,22 +17,22 @@ namespace PxGraf.Datasource.PxWebInterface.SerializationModels
 
         public class Variable : IDimensionMap
         {
-            [JsonProperty("code")]
+            [JsonPropertyName("code")]
             public string Code { get; set; }
 
-            [JsonProperty("text")]
+            [JsonPropertyName("text")]
             public string Text { get; set; }
 
-            [JsonProperty("values")]
+            [JsonPropertyName("values")]
             public string[] Values { get; set; }
 
-            [JsonProperty("valueTexts")]
+            [JsonPropertyName("valueTexts")]
             public string[] ValueTexts { get; set; }
 
-            [JsonProperty("elimination")]
+            [JsonPropertyName("elimination")]
             public bool Elimination { get; set; }
 
-            [JsonProperty("time")]
+            [JsonPropertyName("time")]
             public bool Time { get; set; }
 
             [JsonIgnore]

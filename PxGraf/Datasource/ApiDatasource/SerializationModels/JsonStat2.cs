@@ -1,89 +1,89 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace PxGraf.Datasource.PxWebInterface.SerializationModels
 {
     public class JsonStat2
     {
-        [JsonProperty("class")]
+        [JsonPropertyName("class")]
         public string Class { get; set; }
 
-        [JsonProperty("label")]
+        [JsonPropertyName("label")]
         public string Label { get; set; }
 
-        [JsonProperty("source")]
+        [JsonPropertyName("source")]
         public string Source { get; set; }
 
-        [JsonProperty("updated")]
+        [JsonPropertyName("updated")]
         public string Updated { get; set; }
 
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string[] Id { get; set; }
 
-        [JsonProperty("size")]
+        [JsonPropertyName("size")]
         public int[] Size { get; set; }
 
-        [JsonProperty("dimension")]
+        [JsonPropertyName("dimension")]
         public Dictionary<string, DimensionObj> Dimensions { get; set; }
 
-        [JsonProperty("value")]
+        [JsonPropertyName("value")]
         public decimal?[] Value { get; set; }
 
-        [JsonProperty("status")]
+        [JsonPropertyName("status")]
         public Dictionary<string, string> Status { get; set; }
 
-        [JsonProperty("role")]
+        [JsonPropertyName("role")]
         public RoleObj Role { get; set; }
 
-        [JsonProperty("version")]
+        [JsonPropertyName("version")]
         public string Version { get; set; }
 
-        [JsonProperty("extension")]
+        [JsonPropertyName("extension")]
         public dynamic Extension { get; set; }
 
         public class DimensionObj
         {
-            [JsonProperty("label")]
+            [JsonPropertyName("label")]
             public string Label { get; set; }
 
-            [JsonProperty("category")]
+            [JsonPropertyName("category")]
             public CategoryObj Category { get; set; }
 
-            [JsonProperty("link")]
+            [JsonPropertyName("link")]
             public LinkObj Link { get; set; }
 
             public class CategoryObj
             {
-                [JsonProperty("index")]
+                [JsonPropertyName("index")]
                 public Dictionary<string, int> Index { get; set; }
 
-                [JsonProperty("label")]
+                [JsonPropertyName("label")]
                 public Dictionary<string, string> Label { get; set; }
 
                 /// <summary>
                 /// From value code to UnitObj
                 /// </summary>
-                [JsonProperty("unit")]
+                [JsonPropertyName("unit")]
                 public Dictionary<string, UnitObj> Unit { get; set; }
 
                 public class UnitObj
                 {
-                    [JsonProperty("base")]
+                    [JsonPropertyName("base")]
                     public string Base { get; set; }
 
-                    [JsonProperty("decimals")]
+                    [JsonPropertyName("decimals")]
                     public int Decimals { get; set; }
                 }
             }
 
             public class LinkObj
             {
-                [JsonProperty("describedby")]
+                [JsonPropertyName("describedby")]
                 public List<DescribedByObj> DescribedBy { get; set; }
 
                 public class DescribedByObj
                 {
-                    [JsonProperty("extension")]
+                    [JsonPropertyName("extension")]
                     public Dictionary<string, string> Extension { get; set; }
                 }
             }
@@ -91,13 +91,13 @@ namespace PxGraf.Datasource.PxWebInterface.SerializationModels
 
         public class RoleObj
         {
-            [JsonProperty("time")]
+            [JsonPropertyName("time")]
             public string[] Time { get; set; }
 
-            [JsonProperty("metric")]
+            [JsonPropertyName("metric")]
             public string[] Metric { get; set; }
 
-            [JsonProperty("geo")]
+            [JsonPropertyName("geo")]
             public string[] Geo { get; set; }
         }
     }

@@ -1,7 +1,9 @@
 ﻿using PxGraf.Enums;
 using PxGraf.Models.Queries;
+using PxGraf.Utility.CustomJsonConverters;
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace PxGraf.Models.SavedQueries.Versions
 {
@@ -9,6 +11,7 @@ namespace PxGraf.Models.SavedQueries.Versions
     {
         public MatrixQuery Query { get; set; }
 
+        [JsonConverter(typeof(DateTimeConverter))]
         public DateTime CreationTime { get; set; }
 
         public VisualizationSettingsV11 Settings { get; set; }
@@ -17,25 +20,67 @@ namespace PxGraf.Models.SavedQueries.Versions
 
         public class VisualizationSettingsV11
         {
+            [JsonConverter(typeof(JsonStringEnumConverter))]
             public VisualizationType VisualizationType { get; set; }
 
+            [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
             public bool? CutYAxis { get; set; } = false;
 
+            [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
             public int? MarkerSize { get; set; }
 
+            [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
             public string MultiselectableVariableCode { get; set; }
 
+            [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
             public bool? MatchXLabelsToEnd { get; set; }
 
+            [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
             public int? XLabelInterval { get; set; }
 
+            [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
             public string Sorting { get; set; }
 
+            [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
             public Dictionary<string, List<string>> DefaultSelectableVariableCodes { get; set; }
 
             public Layout Layout { get; set; }
+
+            [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
             public bool? ShowDataPoints { get; set; } = false;
+
+            [JsonConstructor]
+            public VisualizationSettingsV11() { }
+
+            public VisualizationSettingsV11(VisualizationSettings inputSettings)
+            {
+                VisualizationType = inputSettings.VisualizationType;
+                Layout = inputSettings.Layout;
+                CutYAxis = inputSettings.CutYAxis;
+                MarkerSize = inputSettings.MarkerSize;
+                MultiselectableVariableCode = inputSettings.MultiselectableVariableCode;
+                MatchXLabelsToEnd = inputSettings.MatchXLabelsToEnd;
+                XLabelInterval = inputSettings.XLabelInterval;
+                Sorting = inputSettings.Sorting;
+                DefaultSelectableVariableCodes = inputSettings.DefaultSelectableVariableCodes;
+                ShowDataPoints = inputSettings.ShowDataPoints;
+            }
         }
+
+        #region Constructors
+
+        [JsonConstructor]
+        public SavedQueryV11() { }
+
+        public SavedQueryV11(SavedQuery inputQuery)
+        {
+            Query = inputQuery.Query;
+            CreationTime = inputQuery.CreationTime;
+            Archived = inputQuery.Archived;
+            Settings = new(inputQuery.Settings); 
+        }
+
+        #endregion
 
         #region Methods for converting to SavedQuery
 
