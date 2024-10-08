@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-using Px.Utils.Language;
-using PxGraf.Utility;
+﻿using Px.Utils.Language;
 
 namespace PxGraf.Data.MetaData
 {
@@ -8,16 +6,13 @@ namespace PxGraf.Data.MetaData
     /// Contains information spesific to variables that are of the content type.
     /// </summary>
     public class ContentComponent
-    {
+    { 
         public MultilanguageString Unit { get; set; }
 
         public MultilanguageString Source { get; set; }
 
         public int NumberOfDecimals { get; set; }
 
-        // Force JsonConverter to keep LastUpdated as a string when reading json. By default
-        // these ISO 8601 formatted strings would be typed as DateTimes.
-        [JsonConverter(typeof(ForceStringConverter))]
         public string LastUpdated { get; set; }
 
         public ContentComponent(

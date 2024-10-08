@@ -3,9 +3,9 @@ using System.Text.Json;
 using System;
 using System.Text.Json.Serialization;
 
-namespace PxGraf.Utility
+namespace PxGraf.Utility.CustomJsonConverters
 {
-    public class DateTimeSerializer : JsonConverter<DateTime>
+    public class DateTimeConverter : JsonConverter<DateTime>
     {
         public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {

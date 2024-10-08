@@ -1,11 +1,9 @@
-﻿using Newtonsoft.Json;
-using PxGraf.Data;
+﻿using PxGraf.Data;
 using PxGraf.Enums;
 using System.Collections.Generic;
 
 namespace PxGraf.Models.Queries
 {
-    [JsonObject(ItemNullValueHandling = NullValueHandling.Ignore)]
     public abstract class VisualizationSettings(Layout layout, Dictionary<string, List<string>> defaultSelectableVariableCodes)
     {
         /// <summary>
