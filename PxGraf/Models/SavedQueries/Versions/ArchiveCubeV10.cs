@@ -49,6 +49,8 @@ namespace PxGraf.Models.SavedQueries.Versions
 
         public ArchiveCube ToArchiveCube()
         {
+            throw new NotImplementedException();
+            /*
             return new ArchiveCube
             {
                 CreationTime = CreationTime,
@@ -57,6 +59,7 @@ namespace PxGraf.Models.SavedQueries.Versions
                 DataNotes = DataNotes,
                 Version = "1.0"
             };
+            */
         }
     }
 }
