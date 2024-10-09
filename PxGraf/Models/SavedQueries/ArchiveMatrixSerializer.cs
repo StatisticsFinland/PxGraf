@@ -1,26 +1,41 @@
-﻿using Newtonsoft.Json;
-using Px.Utils.Models;
-using Px.Utils.Models.Data.DataValue;
+﻿using System.Text.Json.Serialization;
+using System.Text.Json;
+using PxGraf.Models.SavedQueries.Versions;
 using System;
 
 namespace PxGraf.Models.SavedQueries
 {
-    public class ArchiveMatrixSerializer : JsonConverter
+    public class ArchiveMatrixSerializer : JsonConverter<ArchiveCube>
     {
         public override bool CanConvert(Type objectType)
         {
-            return typeof(Matrix<DecimalDataValue>).IsAssignableFrom(objectType);
+            return typeof(ArchiveCube).IsAssignableFrom(objectType);
         }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        public override ArchiveCube Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            throw new NotImplementedException();
+            JsonDocument jdoc = JsonDocument.ParseValue(ref reader);
+            string version = "1.0"; // Default version
 
+            if (jdoc.RootElement.TryGetProperty(nameof(ArchiveCube.Version), out JsonElement versionElement))
+            {
+                version = versionElement.GetString() ?? "1.0";
+            }
+
+            return version switch
+            {
+                "1.1" => JsonSerializer.Deserialize<ArchiveCubeV11>(jdoc.RootElement.GetRawText(), options)?.ToArchiveCube()
+                    ?? throw new JsonException("Failed to deserialize SavedQueryV11."),
+                "1.0" => JsonSerializer.Deserialize<ArchiveCubeV10>(jdoc.RootElement.GetRawText(), options)?.ToArchiveCube()
+                    ?? throw new JsonException("Failed to deserialize SavedQueryV10."),
+                _ => throw new NotSupportedException($"Unknown version in saved query ({version})."),
+            };
         }
 
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        public override void Write(Utf8JsonWriter writer, ArchiveCube value, JsonSerializerOptions options)
         {
-            throw new NotImplementedException();
+            ArchiveCubeV11 v11 = new(value);
+            JsonSerializer.Serialize(writer, v11, options);
         }
     }
 }
