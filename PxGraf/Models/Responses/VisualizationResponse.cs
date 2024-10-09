@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using Px.Utils.Language;
+﻿using Px.Utils.Language;
 using Px.Utils.Models.Metadata.Enums;
 using PxGraf.Enums;
 using PxGraf.Models.Queries;
@@ -7,6 +6,7 @@ using System.Collections.Generic;
 using System;
 using PxGraf.Data.MetaData;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json.Serialization;
 
 namespace PxGraf.Models.Responses
 {
@@ -18,18 +18,24 @@ namespace PxGraf.Models.Responses
         /// <summary>
         /// Information about the visualization settings to be used by the PxVisualizer package.
         /// </summary>
-        [JsonObject(ItemNullValueHandling = NullValueHandling.Ignore)]
         public sealed class PxVisualizerSettings
         {
+            [JsonConverter(typeof(JsonStringEnumConverter))]
             public VisualizationType VisualizationType { get; set; }
             public Dictionary<string, List<string>> DefaultSelectableVariableCodes { get; set; }
             public string MultiselectableVariableCode { get; set; }
             public TimeDimensionInterval TimeVariableIntervals { get; set; }
+            [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
             public DateTime? TimeSeriesStartingPoint { get; set; }
+            [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
             public bool? CutValueAxis { get; set; }
+            [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
             public int? MarkerSize { get; set; }
+            [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
             public bool? ShowLastLabel { get; set; }
+            [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
             public string Sorting { get; set; }
+            [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
             public bool? ShowDataPoints { get; set; }
         }
 
