@@ -252,7 +252,7 @@ namespace UnitTests
                     Dictionary<string, string> sourceTranslations = [];
                     for (int k = 0; k < languages.Length; k++)
                     {
-                        string langSource = varParam.SameSource ? "\"testSource\"" : GetTextForLanguage($"\"{name}-source", languages, k) + "\""; // Metaproprety values are stored enclosed
+                        string langSource = varParam.SameSource ? "testSource" : GetTextForLanguage($"{name}-source", languages, k) + ""; // Metaproprety values are stored enclosed
                         sourceTranslations[languages[k]] = langSource;
                     }
 
