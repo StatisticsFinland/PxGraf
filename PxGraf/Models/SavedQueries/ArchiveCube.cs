@@ -1,11 +1,9 @@
 ﻿using Px.Utils.Language;
 using Px.Utils.Models;
-using Px.Utils.Models.Data;
 using Px.Utils.Models.Data.DataValue;
 using Px.Utils.Models.Metadata;
 using PxGraf.Models.Metadata;
 using PxGraf.Models.Queries;
-using PxGraf.Utility;
 using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
@@ -50,28 +48,11 @@ namespace PxGraf.Models.SavedQueries
 
         private ArchiveCube(IReadOnlyMatrixMetadata meta, IReadOnlyList<DecimalDataValue> data)
         {
-            throw new NotImplementedException();
-            /*
             CreationTime = DateTime.Now;
             Meta = meta;
 
-            int dataLen = data.Count;
-            Data = [];
+            Data = [.. data];
             DataNotes = [];
-
-            for (int i = 0; i < dataLen; i++)
-            {
-                if (data[i].Type == DataValueType.Exists)
-                {
-                    Data.Add(data[i].UnsafeValue);
-                }
-                else
-                {
-                    Data.Add(null);
-                    DataNotes[i] = PxSyntaxConstants.MissingValueDotCodes[(int)data[i].Type];
-                }
-            }
-            */
         }
 
         /// <summary>
@@ -80,32 +61,7 @@ namespace PxGraf.Models.SavedQueries
         /// <returns></returns>
         public Matrix<DecimalDataValue> ToMatrix()
         {
-            throw new NotImplementedException();
-            /*
-            DecimalDataValue[] newData = new DecimalDataValue[Data.Count];
-            for (int i = 0; i < newData.Length; i++)
-            {
-                if (Data[i].HasValue)
-                {
-                    newData[i] = new(Data[i].Value, DataValueType.Exists);
-                }
-                else
-                {
-                    newData[i] = DataNotes[i] switch
-                    {
-                        "." => new(0, DataValueType.Missing),
-                        ".." => new(0, DataValueType.CanNotRepresent),
-                        "..." => new(0, DataValueType.Confidential),
-                        "...." => new(0, DataValueType.NotAcquired),
-                        "....." => new(0, DataValueType.NotAsked),
-                        "......" => new(0, DataValueType.Empty),
-                        _ => throw new InvalidOperationException($"Can not convert missing value code {DataNotes[i]} to DataValueType")
-                    };
-                }
-            }
-
-            return new Matrix<DecimalDataValue>(Meta, newData);
-            */
+            return new Matrix<DecimalDataValue>(Meta, [..Data]);
         }
 
         public static ArchiveCube FromMatrixAndQuery(Matrix<DecimalDataValue> matrix, MatrixQuery query)

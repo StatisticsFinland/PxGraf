@@ -1,6 +1,7 @@
 ﻿using Px.Utils.Language;
 using Px.Utils.Models.Data;
 using Px.Utils.Models.Data.DataValue;
+using PxGraf.Data.MetaData;
 using PxGraf.Models.SavedQueries.Versions;
 using System;
 using System.Collections.Generic;
@@ -13,15 +14,12 @@ namespace PxGraf.Utility.CustomJsonConverters
     {
         public override ArchiveCubeV10 Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            throw new NotImplementedException();
-             /*
             JsonDocument jsonDocument = JsonDocument.ParseValue(ref reader);
             DateTime creationTime = jsonDocument.RootElement.GetProperty(nameof(ArchiveCubeV10.CreationTime)).GetDateTime();
             CubeMeta meta = JsonSerializer.Deserialize<CubeMeta>(jsonDocument.RootElement.GetProperty(nameof(ArchiveCubeV10.Meta)).GetRawText());
             Dictionary<int, string> dataNotes = JsonSerializer.Deserialize<Dictionary<int, string>>(jsonDocument.RootElement.GetProperty(nameof(ArchiveCubeV10.DataNotes)));
             List<DecimalDataValue> values = ConvertData(JsonSerializer.Deserialize<List<decimal?>>(jsonDocument.RootElement.GetProperty(nameof(ArchiveCubeV10.Data)).GetRawText()), dataNotes);
-            string[] languages = 
-            return new ArchiveCubeV10(creationTime, meta, values, ConvertDataNotes(dataNotes));*/
+            return new ArchiveCubeV10(creationTime, meta, values, ConvertDataNotes(dataNotes, meta.Languages));
         }
 
         public override void Write(Utf8JsonWriter writer, ArchiveCubeV10 value, JsonSerializerOptions options)
@@ -52,17 +50,23 @@ namespace PxGraf.Utility.CustomJsonConverters
             return result;
         }
 
-        private static Dictionary<int, MultilanguageString> ConvertDataNotes(Dictionary<int, string> dataNotes)
+        private static Dictionary<int, MultilanguageString> ConvertDataNotes(Dictionary<int, string> dataNotes, IReadOnlyList<string> languages)
         {
-            throw new NotImplementedException();
-
-            /*
             Dictionary<int, MultilanguageString> result = [];
             foreach (KeyValuePair<int, string> note in dataNotes)
             {
-                result.Add(note.Key, new MultilanguageString(note.Value));
+                if (note.Value == string.Empty)
+                {
+                    continue;
+                }
+                Dictionary<string, string> translations = [];
+                foreach (string language in languages)
+                {
+                    translations.Add(language, note.Value);
+                }
+                result.Add(note.Key, new MultilanguageString(translations));
             }
-            return result;*/
+            return result;
         }
     }
 }
