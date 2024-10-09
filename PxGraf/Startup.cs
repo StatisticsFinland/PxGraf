@@ -7,24 +7,19 @@ using Microsoft.Extensions.Logging;
 using Microsoft.FeatureManagement;
 using Microsoft.OpenApi.Models;
 using NLog.Extensions.Logging;
-using Newtonsoft.Json.Serialization;
 using PxGraf.Settings;
 using PxGraf.Utility;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Runtime.Serialization;
 using System;
 using PxGraf.Datasource;
 using PxGraf.Datasource.PxWebInterface;
 using PxGraf.Datasource.DatabaseConnection;
 using PxGraf.Datasource.Cache;
 using PxGraf.Models.Queries;
-using System.Text.Json.Serialization;
-using System.Collections.Generic;
 using PxGraf.Datasource.FileDatasource;
-using Px.Utils.Serializers.Json;
 
 namespace PxGraf
 {
