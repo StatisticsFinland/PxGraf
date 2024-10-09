@@ -1,6 +1,7 @@
-﻿using Newtonsoft.Json;
-using NUnit.Framework;
-using System.Text.RegularExpressions;
+﻿using NUnit.Framework;
+using Newtonsoft.Json;
+using System.Collections.Generic;
+using System;
 
 namespace UnitTests.Utilities
 {
@@ -8,17 +9,34 @@ namespace UnitTests.Utilities
     {
         public static void AreEqual(object expected, object actual)
         {
-            var expectedJson = JsonConvert.SerializeObject(expected);
-            var actualJson = JsonConvert.SerializeObject(actual);
+            string expectedJson = NormalizeJsonString(JsonConvert.SerializeObject(expected));
+            string actualJson = NormalizeJsonString(JsonConvert.SerializeObject(actual));
             Assert.That(actualJson, Is.EqualTo(expectedJson));
         }
 
-        [GeneratedRegex("\\s")]
-        private static partial Regex MyRegex();
+        public static void JsonStringsAreEqual(string expectedJson, string actualJson)
+        {
+            Assert.That(NormalizeJsonString(actualJson), Is.EqualTo(NormalizeJsonString(expectedJson)));
+        }
 
         public static string NormalizeJsonString(string json)
         {
-            return MyRegex().Replace(json, "");
+            char[] whiteSpace = [' ', '\n', '\r', '\t'];
+            List<char> newStr = [];
+            bool inString = false;
+            for (int i = 0; i < json.Length; i++)
+            {
+                if(json[i] == '"')
+                {
+                    inString = !inString;
+                }
+
+                if (inString || Array.IndexOf(whiteSpace, json[i]) < 0)
+                {
+                    newStr.Add(json[i]);
+                }
+            }
+            return new(newStr.ToArray());
         }
     }
 }
