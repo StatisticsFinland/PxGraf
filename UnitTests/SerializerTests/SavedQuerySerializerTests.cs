@@ -6,7 +6,7 @@ using System;
 using System.Globalization;
 using System.Text.Json;
 
-namespace SerializerTests
+namespace UnitTests.SerializerTests
 {
     internal class SavedQuerySerializerTests
     {
@@ -71,7 +71,7 @@ namespace SerializerTests
         {
             SavedQuery query = JsonSerializer.Deserialize<SavedQuery>(testSavedQuery, options);
             string serializedString = JsonSerializer.Serialize(query, options);
-            Assert.That(serializedString.Contains(query.Version));
+            Assert.That(serializedString.Contains("1.1"));
             Assert.That(serializedString.Contains(ChartTypeEnumConverter.ToJsonString(query.Settings.VisualizationType)));
         }
 

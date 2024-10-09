@@ -20,7 +20,9 @@ namespace PxGraf.Utility.CustomJsonConverters
 
         public class ValueFilterJsonModel
         {
+            [JsonPropertyName("type")]
             public FilterType Type { get; set; }
+            [JsonPropertyName("query")]
             public JsonElement Query { get; set; }
         }
 

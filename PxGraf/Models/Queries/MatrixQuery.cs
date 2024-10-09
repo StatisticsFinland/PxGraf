@@ -16,16 +16,16 @@ namespace PxGraf.Models.Queries
         /// </summary>
         public PxTableReference TableReference { get; set; }
 
-        [JsonConverter(typeof(MultilanguageStringConverter))]
         /// <summary>
         /// Header text of the query / visualization.
         /// </summary>
+        [JsonConverter(typeof(MultilanguageStringConverter))]
         public MultilanguageString ChartHeaderEdit { get; set; }
 
         /// <summary>
         /// Dimension.Code to DimensionQuery
         /// </summary>
-        [JsonPropertyName("variableQueries")] // legacy name, do not change or all the old queries break.
+        [JsonPropertyName("VariableQueries")] // legacy name, do not change or all the old queries break.
         public Dictionary<string, DimensionQuery> DimensionQueries { get; set; }
     }
 }

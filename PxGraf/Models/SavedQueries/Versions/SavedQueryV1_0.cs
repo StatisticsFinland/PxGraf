@@ -1,7 +1,7 @@
 ﻿using PxGraf.Enums;
 using PxGraf.Models.Queries;
+using PxGraf.Utility.CustomJsonConverters;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Text.Json.Serialization;
 using System;
 
@@ -11,7 +11,7 @@ namespace PxGraf.Models.SavedQueries.Versions
     {
         public MatrixQuery Query { get; set; }
 
-        [JsonConverter(typeof(DateTimeConverter))]
+        [JsonConverter(typeof(DateTimeJsonConverter))]
         public DateTime CreationTime { get; set; }
 
         public VisualizationSettingsV10 Settings { get; set; }

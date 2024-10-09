@@ -11,12 +11,15 @@ namespace PxGraf.Models.SavedQueries.Versions
     {
         public MatrixQuery Query { get; set; }
 
-        [JsonConverter(typeof(DateTimeConverter))]
+        [JsonConverter(typeof(DateTimeJsonConverter))]
         public DateTime CreationTime { get; set; }
 
         public VisualizationSettingsV11 Settings { get; set; }
 
         public bool Archived { get; set; }
+
+        [JsonInclude]
+        public readonly string Version = "1.1";
 
         public class VisualizationSettingsV11
         {
