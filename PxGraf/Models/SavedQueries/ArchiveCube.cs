@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using Px.Utils.Language;
 using Px.Utils.Models;
 using Px.Utils.Models.Data;
 using Px.Utils.Models.Data.DataValue;
@@ -8,37 +8,40 @@ using PxGraf.Models.Queries;
 using PxGraf.Utility;
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace PxGraf.Models.SavedQueries
 {
     /// <summary>
     /// Used for serializing DataCube objects to a file.
     /// </summary>
+    [JsonConverter(typeof(ArchiveMatrixSerializer))]
     public class ArchiveCube
     {
         /// <summary>
         /// When this archive object was originally created.
         /// </summary>
-        [JsonProperty("creationTime")]
         public DateTime CreationTime { get; set; }
 
         /// <summary>
         /// Contains all metadata of this cube.
         /// </summary>
-        [JsonProperty("meta")]
         public IReadOnlyMatrixMetadata Meta { get; set; }
 
         /// <summary>
         /// Collection of key (variable value code coordinates) value (double or missing code) pairs.
         /// </summary>
-        [JsonProperty("data")]
-        public List<decimal?> Data { get; set; }
+        public List<DecimalDataValue> Data { get; set; }
 
         /// <summary>
         /// Notes mapped to the indexes of the data array.
         /// </summary>
-        [JsonProperty("dataNotes")]
-        public Dictionary<int, string> DataNotes { get; set; }
+        public Dictionary<int, MultilanguageString> DataNotes { get; set; }
+
+        /// <summary>
+        /// Verison of the archive cube.
+        /// </summary>
+        public string Version { get; set; }
 
         /// <summary>
         /// Parameterles constructor for json deserialization.

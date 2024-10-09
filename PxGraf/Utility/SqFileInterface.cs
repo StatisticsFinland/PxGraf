@@ -1,5 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json;
 using PxGraf.Models.SavedQueries;
+using PxGraf.Utility.CustomJsonConverters;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
@@ -15,7 +16,10 @@ namespace PxGraf.Utility
     {
         private readonly static LockByKey lockScope = new(StringComparer.OrdinalIgnoreCase);
 
-        private static readonly JsonSerializerSettings _serializerSettings = new();
+        private static readonly JsonSerializerOptions _serializerOptions = new()
+        {
+            Converters = { new SavedQueryConverter() }
+        };
 
         /// <summary>
         /// Returns true if a saved query file with the given sq id exists withing the specified saved query file location.
@@ -79,7 +83,8 @@ namespace PxGraf.Utility
         private static async Task<T> ReadJsonObjectFromFileImpl<T>(string path)
         {
             var respdata = await File.ReadAllTextAsync(path);
-            return JsonConvert.DeserializeObject<T>(respdata);
+            return JsonSerializer.Deserialize<T>(respdata, _serializerOptions)
+                ?? throw new JsonException($"Failed to deserialize object from {path}");
         }
 
         /// <summary>
@@ -100,12 +105,10 @@ namespace PxGraf.Utility
 
         private static void SerializeToFileImpl(string fileName, string filePath, object input)
         {
-            System.IO.Directory.CreateDirectory(filePath); //If the directory does not exist, create it.
-            using StreamWriter outputFile = new(Path.Combine(filePath, fileName));
-            using JsonTextWriter jsonWriter = new(outputFile);
-            JsonSerializer ser = JsonSerializer.Create(_serializerSettings);
-            ser.Serialize(jsonWriter, input);
-            jsonWriter.Flush();
+            Directory.CreateDirectory(filePath); //If the directory does not exist, create it.
+            using FileStream createStream = File.Create(Path.Combine(filePath, fileName));
+            JsonSerializer.Serialize(createStream, input, _serializerOptions);
+            createStream.Flush();
         }
     }
 }
