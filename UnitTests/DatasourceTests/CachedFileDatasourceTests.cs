@@ -38,15 +38,15 @@ namespace UnitTests.DatasourceTests
         ];
         private readonly Dictionary<string, string> _table1Name = new()
         {
-            ["fi"] = "\"Table1\"",
-            ["en"] = "\"Table1.en\"",
-            ["sv"] = "\"Table1.sv\""
+            ["fi"] = "Table1",
+            ["en"] = "Table1.en",
+            ["sv"] = "Table1.sv"
         };
         private readonly Dictionary<string, string> _table2Name = new()
         {
-            ["fi"] = "\"Table2\"",
-            ["en"] = "\"Table2.en\"",
-            ["sv"] = "\"Table2.sv\""
+            ["fi"] = "Table2",
+            ["en"] = "Table2.en",
+            ["sv"] = "Table2.sv"
         };
         private readonly DateTime _lastUpdated = new(2009, 9, 1, 0, 0, 0, DateTimeKind.Local);
         private readonly List<DimensionParameters> _tableParams =
@@ -105,7 +105,7 @@ namespace UnitTests.DatasourceTests
             // Arrange
             MatrixMetadata table1Meta = TestDataCubeBuilder.BuildTestMeta(_tableParams, [.._languages]);
             MatrixMetadata table2Meta = TestDataCubeBuilder.BuildTestMeta(_tableParams, [.._languages]);
-            StringProperty table1IDProperty = new("\"table1-id\"");
+            StringProperty table1IDProperty = new("table1-id");
             table1Meta.AdditionalProperties[PxSyntaxConstants.TABLEID_KEY] = table1IDProperty; // Adds TABLE_ID property for table1
             table1Meta.AdditionalProperties[PxSyntaxConstants.DESCRIPTION_KEY] = new MultilanguageStringProperty(new MultilanguageString(_table1Name));
             table2Meta.AdditionalProperties[PxSyntaxConstants.DESCRIPTION_KEY] = new MultilanguageStringProperty(new MultilanguageString(_table2Name));

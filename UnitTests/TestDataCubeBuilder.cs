@@ -140,7 +140,7 @@ namespace UnitTests
             Dictionary<string, string> noteTranslation = [];
             for (int j = 0; j < languages.Length; j++)
             {
-                noteTranslation[languages[j]] = $"\"{GetTextForLanguage("Test note", languages, j)}\""; // Enclosement required for additional properties
+                noteTranslation[languages[j]] = $"{GetTextForLanguage("Test note", languages, j)}";
             }
             Dictionary<string, MetaProperty> additionalProperties = new()
             {
