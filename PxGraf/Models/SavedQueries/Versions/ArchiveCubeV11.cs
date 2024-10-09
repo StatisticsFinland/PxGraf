@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System;
 using Px.Utils.Models.Data.DataValue;
 using Px.Utils.Language;
+using System.Text.Json.Serialization;
+using PxGraf.Utility.CustomJsonConverters;
 
 namespace PxGraf.Models.SavedQueries.Versions
 {
@@ -16,6 +18,7 @@ namespace PxGraf.Models.SavedQueries.Versions
         /// <summary>
         /// Contains all metadata of this cube.
         /// </summary>
+        [JsonConverter(typeof(MatrixMetadataReadonlyInterfaceConverter))]
         public IReadOnlyMatrixMetadata Meta { get; set; }
 
         /// <summary>
