@@ -7,7 +7,6 @@ using Px.Utils.Models.Data.DataValue;
 using PxGraf.Utility.CustomJsonConverters;
 using Px.Utils.Language;
 
-// TODO: Convert missing data information and data to DecimalDataValue format
 namespace PxGraf.Models.SavedQueries.Versions
 {
     [JsonConverter(typeof(ArchiveCubeV10ReadOnlyConverter))]
@@ -49,17 +48,14 @@ namespace PxGraf.Models.SavedQueries.Versions
 
         public ArchiveCube ToArchiveCube()
         {
-            throw new NotImplementedException();
-            /*
             return new ArchiveCube
             {
                 CreationTime = CreationTime,
                 Meta = Meta.ToMatrixMetadata(),
-                Data = ConvertData(),
+                Data = Data,
                 DataNotes = DataNotes,
                 Version = "1.0"
             };
-            */
         }
     }
 }
