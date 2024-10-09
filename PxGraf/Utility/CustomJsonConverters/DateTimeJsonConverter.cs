@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace PxGraf.Utility.CustomJsonConverters
 {
-    public class DateTimeConverter : JsonConverter<DateTime>
+    public class DateTimeJsonConverter : JsonConverter<DateTime>
     {
         public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
