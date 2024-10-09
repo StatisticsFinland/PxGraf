@@ -17,7 +17,7 @@ namespace PxGraf.Models.SavedQueries
         /// <summary>
         /// When was this query saved
         /// </summary>
-        [JsonConverter(typeof(DateTimeConverter))]
+        [JsonConverter(typeof(DateTimeJsonConverter))]
         public DateTime CreationTime { get; set; }
 
         /// <summary>
