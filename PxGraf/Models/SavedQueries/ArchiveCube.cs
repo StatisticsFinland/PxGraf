@@ -50,6 +50,8 @@ namespace PxGraf.Models.SavedQueries
 
         private ArchiveCube(IReadOnlyMatrixMetadata meta, IReadOnlyList<DecimalDataValue> data)
         {
+            throw new NotImplementedException();
+            /*
             CreationTime = DateTime.Now;
             Meta = meta;
 
@@ -69,6 +71,7 @@ namespace PxGraf.Models.SavedQueries
                     DataNotes[i] = PxSyntaxConstants.MissingValueDotCodes[(int)data[i].Type];
                 }
             }
+            */
         }
 
         /// <summary>
@@ -77,6 +80,8 @@ namespace PxGraf.Models.SavedQueries
         /// <returns></returns>
         public Matrix<DecimalDataValue> ToMatrix()
         {
+            throw new NotImplementedException();
+            /*
             DecimalDataValue[] newData = new DecimalDataValue[Data.Count];
             for (int i = 0; i < newData.Length; i++)
             {
@@ -100,6 +105,7 @@ namespace PxGraf.Models.SavedQueries
             }
 
             return new Matrix<DecimalDataValue>(Meta, newData);
+            */
         }
 
         public static ArchiveCube FromMatrixAndQuery(Matrix<DecimalDataValue> matrix, MatrixQuery query)
