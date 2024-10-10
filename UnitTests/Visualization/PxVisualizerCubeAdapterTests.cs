@@ -16,11 +16,9 @@ using System.Linq;
 using UnitTests.Fixtures.ResponseFixtures;
 using UnitTests.Fixtures;
 using UnitTests.Utilities;
-using UnitTests;
-using PxGraf.Utility;
 using Newtonsoft.Json.Converters;
 
-namespace Visualization
+namespace UnitTests.Visualization
 {
     internal class PxVisualizerCubeAdapterTests
     {
@@ -49,7 +47,7 @@ namespace Visualization
             SavedQuery inputQuery = TestDataCubeBuilder.BuildTestSavedQuery(varParams, false, creationSettings, inputCube);
             VisualizationSettings settings = creationSettings.ToVisualizationSettings(inputCube.Metadata, inputQuery.Query);
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(inputCube, inputQuery.Query, settings);
-            
+
             List<string> expected = ["variable-0", "variable-2", "variable-1", "variable-3"];
             Assert.That(result.MetaData.Select(v => v.Code), Is.EqualTo(expected));
         }
@@ -573,7 +571,7 @@ namespace Visualization
             SavedQuery savedQuery = TestDataCubeBuilder.BuildTestSavedQuery(cubeParams, false, settings);
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(cube, savedQuery);
 
-            JsonSerializerSettings jsonSettings = new ();
+            JsonSerializerSettings jsonSettings = new();
             jsonSettings.Converters.Add(new StringEnumConverter());
 
             string normalizedResponse = JsonUtils.NormalizeJsonString(JsonConvert.SerializeObject(result, jsonSettings));
