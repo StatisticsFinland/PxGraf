@@ -1,0 +1,116 @@
+name: dependabot Version Increment
+
+run-name: ${{ format('dependabot Version Increment for PR {0}', github.event.pull_request.number) }}
+
+on:
+  pull_request:
+    branches:
+      - 'dev'
+
+jobs:
+ dependabot_version_increment:
+    if: ${{ github.actor == 'dependabot[bot]' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install jq
+        run: sudo apt-get install -y jq
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '21.x'
+
+      - name: Fetch PR details
+        id: pr-details
+        run: |
+          gh pr view ${{ github.event.pull_request.number }} --json files > pr_details.json
+          cat pr_details.json
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check changed files
+        id: changed-files
+        run: |
+          CHANGED_FILES=$(jq -r '.files[].path' pr_details.json | paste -sd "," -)
+          echo "CHANGED_FILES=$CHANGED_FILES" >> $GITHUB_ENV
+          echo "Changed files: $CHANGED_FILES"
+
+      - name: Check if frontend package.json changed
+        id: check-frontend
+        run: |
+          if [[ ",$CHANGED_FILES," == *"PxGraf.Frontend/package.json"* ]]; then
+            echo "FRONTEND_CHANGED=true" >> $GITHUB_ENV
+          else
+            echo "FRONTEND_CHANGED=false" >> $GITHUB_ENV
+          fi
+
+      - name: Check if backend csproj changed
+        id: check-backend
+        run: |
+          if [[ ",$CHANGED_FILES," == *"PxGraf/PxGraf.csproj"* ]]; then
+            echo "BACKEND_CHANGED=true" >> $GITHUB_ENV
+          else
+            echo "BACKEND_CHANGED=false" >> $GITHUB_ENV
+          fi
+
+      - name: Get frontend version number from PR branch
+        if: env.FRONTEND_CHANGED == 'true'
+        run: |
+          PR_VERSION=$(jq -r '.version' PxGraf.Frontend/package.json)
+          echo "PR_VERSION=$PR_VERSION" >> $GITHUB_ENV
+          echo "Version in PR branch is $PR_VERSION"
+
+      - name: Get current frontend version number from dev branch
+        if: env.FRONTEND_CHANGED == 'true'
+        run: |
+          git fetch origin dev
+          git checkout origin/dev -- PxGraf.Frontend/package.json
+          CURRENT_VERSION=$(jq -r '.version' PxGraf.Frontend/package.json)
+          echo "CURRENT_VERSION=$CURRENT_VERSION" >> $GITHUB_ENV
+          echo "Current dev version is $CURRENT_VERSION"
+
+      - name: Compare and increment frontend version number
+        if: env.FRONTEND_CHANGED == 'true'
+        run: |
+          if [ "$CURRENT_VERSION" = "$PR_VERSION" ]; then
+            npm version patch --no-git-tag-version --prefix PxGraf.Frontend
+            git config --global user.name "github-actions[bot]"
+            git config --global user.email "github-actions[bot]@users.noreply.github.com"
+            git add PxGraf.Frontend/package.json
+            git commit -m "Frontend version bump from $PR_VERSION to $(jq -r '.version' PxGraf.Frontend/package.json)"
+            git push origin HEAD:${{ github.event.pull_request.head.ref }}
+          else
+            echo "Frontend version number in PR branch is already up-to-date. No action taken."
+          fi
+
+      - name: Get current backend version number from dev branch
+        if: env.BACKEND_CHANGED == 'true'
+        run: |
+          git fetch origin dev
+          git checkout origin/dev -- PxGraf/PxGraf.csproj
+          CURRENT_VERSION=$(grep '<VersionPrefix>' PxGraf/PxGraf.csproj | sed 's/.*<VersionPrefix>\(.*\)<\/VersionPrefix>.*/\1/')
+          echo "CURRENT_VERSION=$CURRENT_VERSION" >> $GITHUB_ENV
+          echo "Current dev version is $CURRENT_VERSION"
+
+      - name: Compare and increment backend version number
+        if: env.BACKEND_CHANGED == 'true'
+        run: |
+          PR_VERSION=$(grep '<VersionPrefix>' PxGraf/PxGraf.csproj | sed 's/.*<VersionPrefix>\(.*\)<\/VersionPrefix>.*/\1/')
+          if [ "$CURRENT_VERSION" = "$PR_VERSION" ]; then
+            NEW_VERSION=$(echo $PR_VERSION | awk -F. -v OFS=. '{$NF++;print}')
+            sed -i "s/<VersionPrefix>$PR_VERSION<\/VersionPrefix>/<VersionPrefix>$NEW_VERSION<\/VersionPrefix>/" PxGraf/PxGraf.csproj
+            git config --global user.name "github-actions[bot]"
+            git config --global user.email "github-actions[bot]@users.noreply.github.com"
+            git add PxGraf/PxGraf.csproj
+            git commit -m "Backend version bump from $PR_VERSION to $NEW_VERSION"
+            git push origin HEAD:${{ github.event.pull_request.head.ref }}
+          else
+            echo "Version number in PR branch is already up-to-date. No action taken."
+          fi

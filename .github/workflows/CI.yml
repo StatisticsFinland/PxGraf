@@ -36,7 +36,7 @@ jobs:
           fetch-depth: 0
 
       - name: Check project versions
-        if: ${{ github.event_name == 'pull_request' }} && ${{ github.ref == 'refs/heads/dev' }}
+        if: ${{ github.event_name == 'pull_request' && github.ref == 'refs/heads/dev' && github.actor != 'dependabot[bot]' }}
         run: bash .github/scripts/check_version_changes.sh
 
       - name: Install Node.js

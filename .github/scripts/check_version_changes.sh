@@ -32,18 +32,24 @@ smallerOrEqual() {
     return 0
 }
 
+fail_pipeline=false
+
 if ! git diff --quiet origin/dev HEAD PxGraf; then
     if smallerOrEqual $backendVersionNumber $backendVersionInDev
 	then
-        echo "##vso[task.logissue type=error]Backend version number needs to be updated."
-        echo "##vso[task.complete result=Failed;]"
+        echo "Backend version number needs to be updated."
+        fail_pipeline=true
 	fi
 fi
 
 if ! git diff --quiet origin/dev HEAD PxGraf.Frontend; then
     if smallerOrEqual $frontendVersionNumber $frontendVersionInDev
     then 
-        echo "##vso[task.logissue type=error]Frontend version number needs to be updated."
-        echo "##vso[task.complete result=Failed;]"
+        echo "Frontend version number needs to be updated."
+        fail_pipeline=true
 	fi
+fi
+
+if [ "$fail_pipeline" = true ]; then
+    exit 1
 fi

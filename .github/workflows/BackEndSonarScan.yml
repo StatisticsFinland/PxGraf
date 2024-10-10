@@ -14,6 +14,7 @@ on:
 
 jobs:
  sonar_backend:
+    if: ${{ github.actor != 'dependabot[bot]' }}
     runs-on: windows-latest
     # Note: for inexplicable reasons, the SonarScanner does not work on Ubuntu-latest, so we have to use Windows-latest
 
