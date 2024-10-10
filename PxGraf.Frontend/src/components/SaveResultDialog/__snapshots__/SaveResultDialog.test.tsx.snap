@@ -52,7 +52,7 @@ exports[`Error rendering test renders error correctly when open 1`] = `
               saveResultDialog.id
             </label>
             <div
-              class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd sc-braxZu cRMNbQ css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root"
+              class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd sc-blHHSb esXhDc css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root"
             >
               <input
                 aria-invalid="false"
@@ -184,7 +184,7 @@ exports[`Rendering test renders correctly when open 1`] = `
               saveResultDialog.id
             </label>
             <div
-              class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd sc-braxZu cRMNbQ css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root"
+              class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd sc-blHHSb esXhDc css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root"
             >
               <input
                 aria-invalid="false"
