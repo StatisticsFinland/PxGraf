@@ -3,19 +3,19 @@
 exports[`Rendering test renders correctly 1`] = `
 <DocumentFragment>
   <div
-    class="MuiStack-root sc-dsLQwm jXDjny css-nen11g-MuiStack-root"
+    class="MuiStack-root sc-dntaoT LFIDv css-nen11g-MuiStack-root"
   >
     <div
-      class="sc-gnpbhQ cyrhYC"
+      class="sc-ghWlax KtJLg"
     >
       <p
-        class="MuiTypography-root MuiTypography-body2 sc-iKTcqh bDscMW css-r40f8v-MuiTypography-root"
+        class="MuiTypography-root MuiTypography-body2 sc-ivxoEo cLVPd css-r40f8v-MuiTypography-root"
       >
         general.uiLanguage
       </p>
       <button
         aria-label="tooltip.open: general.uiLanguage"
-        class="sc-gJhJTp klTgQR"
+        class="sc-gtLWhw dwjhoM"
       >
         <svg
           aria-hidden="true"
@@ -35,12 +35,12 @@ exports[`Rendering test renders correctly 1`] = `
     >
       <a
         aria-label="general.uiLanguage: lang.fi"
-        class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeSmall MuiButton-textSizeSmall MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeSmall MuiButton-textSizeSmall MuiButton-colorPrimary sc-la-DxNn iBMMFn css-1knaqv7-MuiButtonBase-root-MuiButton-root"
+        class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeSmall MuiButton-textSizeSmall MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeSmall MuiButton-textSizeSmall MuiButton-colorPrimary sc-kLhKbu iGPExR css-1knaqv7-MuiButtonBase-root-MuiButton-root"
         href="#"
         tabindex="0"
       >
         <p
-          class="MuiTypography-root MuiTypography-body1 sc-braxZu gKxBYx css-ahj2mt-MuiTypography-root"
+          class="MuiTypography-root MuiTypography-body1 sc-blHHSb kNJqdB css-ahj2mt-MuiTypography-root"
         >
           FI
         </p>
@@ -50,7 +50,7 @@ exports[`Rendering test renders correctly 1`] = `
       </a>
       <a
         aria-label="general.uiLanguage: lang.en"
-        class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeSmall MuiButton-textSizeSmall MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeSmall MuiButton-textSizeSmall MuiButton-colorPrimary sc-la-DxNn iBMMFn css-1knaqv7-MuiButtonBase-root-MuiButton-root"
+        class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeSmall MuiButton-textSizeSmall MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeSmall MuiButton-textSizeSmall MuiButton-colorPrimary sc-kLhKbu iGPExR css-1knaqv7-MuiButtonBase-root-MuiButton-root"
         href="#"
         tabindex="0"
       >
@@ -65,7 +65,7 @@ exports[`Rendering test renders correctly 1`] = `
       </a>
       <a
         aria-label="general.uiLanguage: lang.sv"
-        class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeSmall MuiButton-textSizeSmall MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeSmall MuiButton-textSizeSmall MuiButton-colorPrimary sc-la-DxNn iBMMFn css-1knaqv7-MuiButtonBase-root-MuiButton-root"
+        class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeSmall MuiButton-textSizeSmall MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeSmall MuiButton-textSizeSmall MuiButton-colorPrimary sc-kLhKbu iGPExR css-1knaqv7-MuiButtonBase-root-MuiButton-root"
         href="#"
         tabindex="0"
       >

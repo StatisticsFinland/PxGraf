@@ -3,11 +3,11 @@
 exports[`Rendering test renders correctly 1`] = `
 <DocumentFragment>
   <div
-  class="sc-dsLQwm kCPZSl"
+  class="sc-dntaoT fhmwcw"
 >
   <button
     aria-label="tooltip.open: tooltip.visualizationSize"
-    class="sc-braxZu jCpbQg"
+    class="sc-blHHSb fOYbXc"
   >
     <svg
       aria-hidden="true"
@@ -130,7 +130,7 @@ exports[`Rendering test renders correctly 1`] = `
   class="MuiStack-root css-pl8gqh-MuiStack-root"
 />
   <div
-  class="sc-iKTcqh fFcPlC tk-table"
+  class="sc-ivxoEo kXcJeN tk-table"
 >
   <pre
     data-testid="Chart"

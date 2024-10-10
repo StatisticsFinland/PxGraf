@@ -3,10 +3,10 @@
 exports[`Rendering test renders correctly 1`] = `
 <DocumentFragment>
   <div
-    class="MuiStack-root sc-kkmypM kJaLMI css-1sazv7p-MuiStack-root"
+    class="MuiStack-root sc-keTIit fXyEBW css-1sazv7p-MuiStack-root"
   >
     <div
-      class="MuiStack-root sc-dnaUSb dlJuVl css-m69qwo-MuiStack-root"
+      class="MuiStack-root sc-dstKZu fpWexs css-m69qwo-MuiStack-root"
     >
       <span
         aria-label="variableSelect.openMenu"
@@ -31,7 +31,7 @@ exports[`Rendering test renders correctly 1`] = `
         />
       </span>
       <div
-        class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root sc-iCZwEW hwqTJh css-wb57ya-MuiFormControl-root-MuiTextField-root"
+        class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root sc-ixGGxD hvkBss css-wb57ya-MuiFormControl-root-MuiTextField-root"
       >
         <label
           class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeMedium MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeMedium MuiInputLabel-outlined css-1jy569b-MuiFormLabel-root-MuiInputLabel-root"
@@ -69,7 +69,7 @@ exports[`Rendering test renders correctly 1`] = `
       </div>
     </div>
     <div
-      class="MuiStack-root sc-dsLQwm bQNaJd css-nen11g-MuiStack-root"
+      class="MuiStack-root sc-dntaoT eQwKBU css-nen11g-MuiStack-root"
     >
       <p
         class="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
@@ -77,10 +77,10 @@ exports[`Rendering test renders correctly 1`] = `
         general.results:
       </p>
       <ul
-        class="MuiList-root MuiList-padding MuiList-dense sc-braxZu kZeA-dF css-1f8gdww-MuiList-root"
+        class="MuiList-root MuiList-padding MuiList-dense sc-blHHSb ckywJh css-1f8gdww-MuiList-root"
       >
         <li
-          class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding sc-gJhJTp iUWrBn css-6lnq02-MuiListItem-root"
+          class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding sc-gtLWhw iKRme css-6lnq02-MuiListItem-root"
         >
           <div
             class="MuiListItemText-root MuiListItemText-dense css-tlelie-MuiListItemText-root"
@@ -93,7 +93,7 @@ exports[`Rendering test renders correctly 1`] = `
           </div>
         </li>
         <li
-          class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding sc-gJhJTp iUWrBn css-6lnq02-MuiListItem-root"
+          class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding sc-gtLWhw iKRme css-6lnq02-MuiListItem-root"
         >
           <div
             class="MuiListItemText-root MuiListItemText-dense css-tlelie-MuiListItemText-root"
@@ -106,7 +106,7 @@ exports[`Rendering test renders correctly 1`] = `
           </div>
         </li>
         <li
-          class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding sc-gJhJTp iUWrBn css-6lnq02-MuiListItem-root"
+          class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding sc-gtLWhw iKRme css-6lnq02-MuiListItem-root"
         >
           <div
             class="MuiListItemText-root MuiListItemText-dense css-tlelie-MuiListItemText-root"
@@ -119,7 +119,7 @@ exports[`Rendering test renders correctly 1`] = `
           </div>
         </li>
         <li
-          class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding sc-gJhJTp iUWrBn css-6lnq02-MuiListItem-root"
+          class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding sc-gtLWhw iKRme css-6lnq02-MuiListItem-root"
         >
           <div
             class="MuiListItemText-root MuiListItemText-dense css-tlelie-MuiListItemText-root"
