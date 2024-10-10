@@ -89,10 +89,5 @@ namespace PxGraf.Models.Responses
         /// Object that contains settings for the PxVisualizer package.
         /// </summary>
         public PxVisualizerSettings VisualizationSettings { get; set; }
-
-        public static implicit operator VisualizationResponse(ActionResult<VisualizationResponse> v)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
