@@ -33,16 +33,16 @@ namespace PxGraf.Data.MetaData
         /// Type of the variable, examples: content, time, geological, ordinal...
         /// </summary>
         [JsonIgnore]
-        public DimensionType Type { get; set; } // Public set for incremental building
+        public DimensionType DimensionType { get; set; } // Public set for incremental building
 
         /// <summary>
         /// Convers types to human readable form.
         /// </summary>
         [JsonPropertyName("type")]
-        public string JsonType
+        public string Type
         {
-            get => DimenionTypesEnumConverter.ToString(Type);
-            set => Type = DimenionTypesEnumConverter.ToEnum(value);
+            get => DimenionTypesEnumConverter.ToString(DimensionType);
+            set => DimensionType = DimenionTypesEnumConverter.ToEnum(value);
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace PxGraf.Data.MetaData
         /// Can be a subset of the original set of variable values.
         /// </summary>
         [JsonPropertyName("values")]
-        public List<VariableValue> IncludedValues { get; private set; }
+        public List<VariableValue> Values { get; private set; }
 
         /// <summary>
         /// Default constructor.
@@ -59,20 +59,20 @@ namespace PxGraf.Data.MetaData
         /// <param name="name"></param>
         /// <param name="note"></param>
         /// <param name="type"></param>
-        /// <param name="vals"></param>
+        /// <param name="values"></param>
         public Variable(
             string code,
             MultilanguageString name,
             MultilanguageString note,
             DimensionType type,
-            List<VariableValue> vals
+            List<VariableValue> values
             )
         {
             Code = code;
             Name = name;
             Note = note;
-            Type = type;
-            IncludedValues = vals;
+            DimensionType = type;
+            Values = values;
         }
 
         /// <summary>
@@ -84,14 +84,14 @@ namespace PxGraf.Data.MetaData
             MultilanguageString name,
             MultilanguageString note,
             string type,
-            List<VariableValue> includedValues
+            List<VariableValue> values
             )
         {
             Code = code;
             Name = name;
             Note = note;
-            JsonType = type;
-            IncludedValues = includedValues;
+            Type = type;
+            Values = values;
         }
     }
 }

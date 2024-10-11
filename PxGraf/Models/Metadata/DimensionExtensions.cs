@@ -44,7 +44,7 @@ namespace PxGraf.Models.Metadata
                 name: name,
                 note: input.GetMultilanguageDimensionProperty(PxSyntaxConstants.NOTE_KEY),
                 type: input.Type,
-                vals: input.Values.Select(v => v
+                values: input.Values.Select(v => v
                     .ConvertToVariableValue(input.GetEliminationValueCode(), query, meta)).ToList());
         }
 

@@ -5,6 +5,7 @@ using PxGraf.Data.MetaData;
 using PxGraf.Models.SavedQueries.Versions;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -15,10 +16,17 @@ namespace PxGraf.Utility.CustomJsonConverters
         public override ArchiveCubeV10 Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             JsonDocument jsonDocument = JsonDocument.ParseValue(ref reader);
-            DateTime creationTime = jsonDocument.RootElement.GetProperty(nameof(ArchiveCubeV10.CreationTime)).GetDateTime();
-            CubeMeta meta = JsonSerializer.Deserialize<CubeMeta>(jsonDocument.RootElement.GetProperty(nameof(ArchiveCubeV10.Meta)).GetRawText());
-            Dictionary<int, string> dataNotes = JsonSerializer.Deserialize<Dictionary<int, string>>(jsonDocument.RootElement.GetProperty(nameof(ArchiveCubeV10.DataNotes)));
-            List<DecimalDataValue> values = ConvertData(JsonSerializer.Deserialize<List<decimal?>>(jsonDocument.RootElement.GetProperty(nameof(ArchiveCubeV10.Data)).GetRawText()), dataNotes);
+            JsonElement root = jsonDocument.RootElement;
+
+            JsonElement GetPropertyCaseInsensitive(JsonElement element, string propertyName)
+            {
+                return element.EnumerateObject().FirstOrDefault(prop => string.Equals(prop.Name, propertyName, StringComparison.OrdinalIgnoreCase)).Value;
+            }
+
+            DateTime creationTime = GetPropertyCaseInsensitive(root, nameof(ArchiveCubeV10.CreationTime)).GetDateTime();
+            CubeMeta meta = JsonSerializer.Deserialize<CubeMeta>(GetPropertyCaseInsensitive(root, nameof(ArchiveCubeV10.Meta)).GetRawText(), options);
+            Dictionary<int, string> dataNotes = JsonSerializer.Deserialize<Dictionary<int, string>>(GetPropertyCaseInsensitive(root, nameof(ArchiveCubeV10.DataNotes)), options);
+            List<DecimalDataValue> values = ConvertData(JsonSerializer.Deserialize<List<decimal?>>(GetPropertyCaseInsensitive(root, nameof(ArchiveCubeV10.Data)).GetRawText(), options), dataNotes);
             return new ArchiveCubeV10(creationTime, meta, values, ConvertDataNotes(dataNotes, meta.Languages));
         }
 

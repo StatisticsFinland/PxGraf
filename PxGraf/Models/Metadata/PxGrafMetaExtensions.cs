@@ -9,6 +9,7 @@ using PxGraf.Settings;
 using PxGraf.Utility;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace PxGraf.Models.Metadata
@@ -34,23 +35,23 @@ namespace PxGraf.Models.Metadata
             foreach (Variable dimension in pxGrafMeta.Variables)
             {
                 Dictionary<string, MetaProperty> dimensionProperties = [];
-                if (dimension.Type == DimensionType.Content)
+                if (dimension.DimensionType == DimensionType.Content)
                 {
                     List<ContentDimensionValue> contentDimValues = [];
-                    foreach (VariableValue dimValue in dimension.IncludedValues)
+                    foreach (VariableValue dimValue in dimension.Values)
                     {
                         dimValue.AddEliminationKeyIfSumValue(dimensionProperties);
-                        DateTime lastUpdate = PxSyntaxConstants.ParsePxDateTime(dimValue.ContentComponent.LastUpdated);
+                        DateTime lastUpdate = PxSyntaxConstants.ParseSqDateTime(dimValue.ContentComponent.LastUpdated);
                         ContentDimensionValue cdv = new(dimValue.Code, dimValue.Name, dimValue.ContentComponent.Unit, lastUpdate, dimValue.ContentComponent.NumberOfDecimals);
                         contentDimValues.Add(cdv);
                     }
                     dimensions.Add(new ContentDimension(dimension.Code, dimension.Name, dimensionProperties, contentDimValues));
-                    matrixProperties[PxSyntaxConstants.SOURCE_KEY] = new MultilanguageStringProperty(dimension.IncludedValues[0].ContentComponent.Source);
+                    matrixProperties[PxSyntaxConstants.SOURCE_KEY] = new MultilanguageStringProperty(dimension.Values[0].ContentComponent.Source);
                 }
-                else if (dimension.Type == DimensionType.Time)
+                else if (dimension.DimensionType == DimensionType.Time)
                 {
                     List<DimensionValue> values = [];
-                    foreach (VariableValue dimValue in dimension.IncludedValues)
+                    foreach (VariableValue dimValue in dimension.Values)
                     {
                         dimValue.AddEliminationKeyIfSumValue(dimensionProperties);
                         DimensionValue tdv = new(dimValue.Code, dimValue.Name);
@@ -62,13 +63,13 @@ namespace PxGraf.Models.Metadata
                 else
                 {
                     List<DimensionValue> values = [];
-                    foreach (VariableValue dimValue in dimension.IncludedValues)
+                    foreach (VariableValue dimValue in dimension.Values)
                     {
                         dimValue.AddEliminationKeyIfSumValue(dimensionProperties);
                         DimensionValue dv = new(dimValue.Code, dimValue.Name);
                         values.Add(dv);
                     }
-                    dimensions.Add(new Dimension(dimension.Code, dimension.Name, dimensionProperties, values, dimension.Type));
+                    dimensions.Add(new Dimension(dimension.Code, dimension.Name, dimensionProperties, values, dimension.DimensionType));
                 }
             }
             string defaultLang = pxGrafMeta.GetDefaultLanguage();
