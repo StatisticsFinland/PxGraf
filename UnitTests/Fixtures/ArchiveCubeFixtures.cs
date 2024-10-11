@@ -1,6 +1,6 @@
 ﻿namespace UnitTests.Fixtures
 {
-    internal class ArchiveCubeFixtures
+    internal static class ArchiveCubeFixtures
     {
         internal const string ARCHIVE_CUBE_V11 = @"
         {
@@ -160,11 +160,11 @@
                         ""type"": ""T"",
                         ""values"": [
                             {
-                                ""code"": ""var-0-value-0"",
+                                ""code"": ""variable-0-value-0"",
                                 ""name"": {
-                                    ""fi"": ""var-0-value-0.fi"",
-                                    ""sv"": ""var-0-value-0.sv"",
-                                    ""en"": ""var-0-value-0.en""
+                                    ""fi"": ""variable-0-value-0.fi"",
+                                    ""sv"": ""variable-0-value-0.sv"",
+                                    ""en"": ""variable-0-value-0.en""
                                 },
                                 ""note"": null,
                                 ""isSum"": false,
@@ -183,77 +183,77 @@
                         ""type"": ""G"",
                         ""values"": [
                             {
-                                ""code"": ""var-1-value-0"",
+                                ""code"": ""variable-1-value-0"",
                                 ""name"": {
-                                    ""fi"": ""var-1-value-0.fi"",
-                                    ""sv"": ""var-1-value-0.sv"",
-                                    ""en"": ""var-1-value-0.en""
+                                    ""fi"": ""variable-1-value-0.fi"",
+                                    ""sv"": ""variable-1-value-0.sv"",
+                                    ""en"": ""variable-1-value-0.en""
                                 },
                                 ""note"": null,
                                 ""isSum"": false,
                                 ""contentComponent"": null
                             },
                             {
-                                ""code"": ""var-1-value-1"",
+                                ""code"": ""variable-1-value-1"",
                                 ""name"": {
-                                    ""fi"": ""var-1-value-1.fi"",
-                                    ""sv"": ""var-1-value-1.sv"",
-                                    ""en"": ""var-1-value-1.en""
+                                    ""fi"": ""variable-1-value-1.fi"",
+                                    ""sv"": ""variable-1-value-1.sv"",
+                                    ""en"": ""variable-1-value-1.en""
                                 },
                                 ""note"": null,
                                 ""isSum"": false,
                                 ""contentComponent"": null
                             },
                             {
-                                ""code"": ""var-1-value-2"",
+                                ""code"": ""variable-1-value-2"",
                                 ""name"": {
-                                    ""fi"": ""var-1-value-2.fi"",
-                                    ""sv"": ""var-1-value-2.sv"",
-                                    ""en"": ""var-1-value-2.en""
+                                    ""fi"": ""variable-1-value-2.fi"",
+                                    ""sv"": ""variable-1-value-2.sv"",
+                                    ""en"": ""variable-1-value-2.en""
                                 },
                                 ""note"": null,
                                 ""isSum"": false,
                                 ""contentComponent"": null
                             },
                             {
-                                ""code"": ""var-1-value-3"",
+                                ""code"": ""variable-1-value-3"",
                                 ""name"": {
-                                    ""fi"": ""var-1-value-3.fi"",
-                                    ""sv"": ""var-1-value-3.sv"",
-                                    ""en"": ""var-1-value-3.en""
+                                    ""fi"": ""variable-1-value-3.fi"",
+                                    ""sv"": ""variable-1-value-3.sv"",
+                                    ""en"": ""variable-1-value-3.en""
                                 },
                                 ""note"": null,
                                 ""isSum"": false,
                                 ""contentComponent"": null
                             },
                             {
-                                ""code"": ""var-1-value-4"",
+                                ""code"": ""variable-1-value-4"",
                                 ""name"": {
-                                    ""fi"": ""var-1-value-4.fi"",
-                                    ""sv"": ""var-1-value-4.sv"",
-                                    ""en"": ""var-1-value-4.en""
+                                    ""fi"": ""variable-1-value-4.fi"",
+                                    ""sv"": ""variable-1-value-4.sv"",
+                                    ""en"": ""variable-1-value-4.en""
                                 },
                                 ""note"": null,
                                 ""isSum"": false,
                                 ""contentComponent"": null
                             },
                             {
-                                ""code"": ""var-1-value-5"",
+                                ""code"": ""variable-1-value-5"",
                                 ""name"": {
-                                    ""fi"": ""var-1-value-5.fi"",
-                                    ""sv"": ""var-1-value-5.sv"",
-                                    ""en"": ""var-1-value-5.en""
+                                    ""fi"": ""variable-1-value-5.fi"",
+                                    ""sv"": ""variable-1-value-5.sv"",
+                                    ""en"": ""variable-1-value-5.en""
                                 },
                                 ""note"": null,
                                 ""isSum"": false,
                                 ""contentComponent"": null
                             },
                             {
-                                ""code"": ""var-1-value-6"",
+                                ""code"": ""variable-1-value-6"",
                                 ""name"": {
-                                    ""fi"": ""var-1-value-6.fi"",
-                                    ""sv"": ""var-1-value-6.sv"",
-                                    ""en"": ""var-1-value-6.en""
+                                    ""fi"": ""variable-1-value-6.fi"",
+                                    ""sv"": ""variable-1-value-6.sv"",
+                                    ""en"": ""variable-1-value-6.en""
                                 },
                                 ""note"": null,
                                 ""isSum"": false,
@@ -272,11 +272,11 @@
                         ""type"": ""F"",
                         ""values"": [
                             {
-                                ""code"": ""var-2-value-0"",
+                                ""code"": ""variable-2-value-0"",
                                 ""name"": {
-                                    ""fi"": ""var-2-value-0.fi"",
-                                    ""sv"": ""var-2-value-0.sv"",
-                                    ""en"": ""var-2-value-0.en""
+                                    ""fi"": ""variable-2-value-0.fi"",
+                                    ""sv"": ""variable-2-value-0.sv"",
+                                    ""en"": ""variable-2-value-0.en""
                                 },
                                 ""note"": null,
                                 ""isSum"": true,

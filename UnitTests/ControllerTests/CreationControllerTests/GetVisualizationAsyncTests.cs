@@ -85,9 +85,9 @@ namespace CreationControllerTests
 
             // Act
             ActionResult<VisualizationResponse> initialResult = await testController.GetVisualizationAsync(chartRequest);
-            ContentComponent contentClone = initialResult.Value.MetaData.First(d => d.Type == DimensionType.Content).IncludedValues[0].ContentComponent.Clone();
+            ContentComponent contentClone = initialResult.Value.MetaData.First(d => d.DimensionType == DimensionType.Content).Values[0].ContentComponent.Clone();
             contentClone.LastUpdated = "2008-09-01T00:00:00.000Z";
-            initialResult.Value.MetaData.First(d => d.Type == DimensionType.Content).IncludedValues[0].ContentComponent = contentClone;
+            initialResult.Value.MetaData.First(d => d.DimensionType == DimensionType.Content).Values[0].ContentComponent = contentClone;
             ActionResult<VisualizationResponse> freshResult = await testController.GetVisualizationAsync(chartRequest);
 
             // Assert

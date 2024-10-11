@@ -108,7 +108,7 @@ namespace PxGraf.Controllers
                 DateTime dbTableDate = meta.GetContentDimension().Values
                     .Map(vv => vv.LastUpdated).Max();
                 DateTime cachedTableDate = cachedResp.MetaData
-                    .Single(v => v.Type == DimensionType.Content).IncludedValues
+                    .Single(v => v.DimensionType == DimensionType.Content).Values
                     .Select(vv => DateTime.Parse(vv.ContentComponent.LastUpdated, CultureInfo.InvariantCulture))
                     .Max();
 
