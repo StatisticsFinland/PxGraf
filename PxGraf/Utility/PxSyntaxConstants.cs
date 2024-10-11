@@ -20,6 +20,7 @@ namespace PxGraf.Utility
         public const string UNIT_KEY = "UNIT";
         public const char STRING_DELIMETER = '"';
         public const string SQ_DATETIME_FORMAT = "yyyy-MM-ddTHH:mm:ss.fffffffK";
+        public const string SQA_DATETIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
 
         //Indexed by DataValueType with offset of one
         public static readonly string[] MissingValueDotCodes =
@@ -49,6 +50,24 @@ namespace PxGraf.Utility
             else
             {
                 return DateTime.ParseExact(dateTimeString, PXWEB_DATETIME_FORMAT, CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal);
+            }
+        }
+
+        /// <summary> 
+        /// Parses a string in SQ or SQA datetime format to a DateTime object
+        /// </summary>
+        /// <param name="dateTimeString">String to parse</param>
+        /// <returns>DateTime object</returns>
+        /// <remarks>Provided string must be in the <see cref="SQ_DATETIME_FORMAT"/> or <see cref="SQA_DATETIME_FORMAT"/> format</remarks>
+        public static DateTime ParseSqDateTime(string dateTimeString)
+        {
+            if (DateTime.TryParseExact(dateTimeString, SQ_DATETIME_FORMAT, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime dateTime))
+            {
+                return dateTime;
+            }
+            else
+            {
+                return DateTime.ParseExact(dateTimeString, SQA_DATETIME_FORMAT, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
             }
         }
 
