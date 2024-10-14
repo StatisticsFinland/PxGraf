@@ -20,7 +20,7 @@ namespace PxGraf.Utility.CustomJsonConverters
                 {
                     return dateTime;
                 }
-                else if (DateTime.TryParseExact(dateTimeString, PxSyntaxConstants.DATETIME_FORMAT_NO_MS_Z, CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out dateTime))
+                else if (DateTime.TryParseExact(dateTimeString, PxSyntaxConstants.DATETIME_FORMAT_NO_MS_TS_ZERO, CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out dateTime))
                 {
                     return dateTime;
                 }
