@@ -72,7 +72,7 @@
                             }
                         }
                     },
-                    ""CreationTime"": ""2023-05-16T15:04:12.0948951+03:00"",
+                    ""CreationTime"": ""2023-05-16T15:04:12+03:00"",
                     ""Settings"": {
                         ""VisualizationType"": ""GroupVerticalBarChart"",
                         ""CutYAxis"": false,
@@ -158,7 +158,7 @@
                             }
                         }
                     },
-                    ""CreationTime"": ""2023-05-16T17:13:33.2211177+03:00"",
+                    ""CreationTime"": ""2023-05-16T17:13:33+03:00"",
                     ""Settings"": {
                         ""VisualizationType"": ""GroupVerticalBarChart"",
                         ""CutYAxis"": false,
@@ -170,5 +170,142 @@
                     ""Archived"": false,
                     ""Version"": ""1.1""
                 }";
+
+        public static string V1_0_TABLETEST1_SER_DESER_EXPECTED_OUTPUT = @"{
+                ""Query"": {
+                    ""TableReference"": {
+                        ""Name"": ""table.px"",
+                        ""Hierarchy"": [
+                            ""foo"",
+                            ""bar""
+                        ]
+                    },
+                    ""ChartHeaderEdit"": {
+                        ""fi"": ""v10 sq header-fi"",
+                        ""sv"": ""v10 sq header-en"",
+                        ""en"": ""v10 sq header-sv""
+                    },
+                    ""VariableQueries"": {
+                        ""Kuukausi"": {
+                            ""NameEdit"": {},
+                            ""ValueEdits"": {},
+                            ""ValueFilter"": {
+                                ""type"": ""all""
+                            },
+                            ""VirtualValueDefinitions"": [],
+                            ""Selectable"": true
+                        },
+                        ""Ilmoittava lentoasema"": {
+                            ""NameEdit"": {},
+                            ""ValueEdits"": {},
+                            ""ValueFilter"": {
+                                ""type"": ""item"",
+                                ""query"": [
+                                    ""SSS"",
+                                    ""EFHK"",
+                                    ""EFET"",
+                                    ""EFIV"",
+                                    ""EFJO""
+                                ]
+                            },
+                            ""VirtualValueDefinitions"": [],
+                            ""Selectable"": false
+                        },
+                        ""Lennon tyyppi"": {
+                            ""NameEdit"": {},
+                            ""ValueEdits"": {},
+                            ""ValueFilter"": {
+                                ""type"": ""item"",
+                                ""query"": [
+                                    ""SSS""
+                                ]
+                            },
+                            ""VirtualValueDefinitions"": [],
+                            ""Selectable"": false
+                        },
+                        ""Saapuneet/lähteneet"": {
+                            ""NameEdit"": {},
+                            ""ValueEdits"": {},
+                            ""ValueFilter"": {
+                                ""type"": ""item"",
+                                ""query"": [
+                                    ""SSS""
+                                ]
+                            },
+                            ""VirtualValueDefinitions"": [],
+                            ""Selectable"": false
+                        },
+                        ""Toinen lentoasema"": {
+                            ""NameEdit"": {},
+                            ""ValueEdits"": {},
+                            ""ValueFilter"": {
+                                ""type"": ""item"",
+                                ""query"": [
+                                    ""SSS""
+                                ]
+                            },
+                            ""VirtualValueDefinitions"": [],
+                            ""Selectable"": false
+                        },
+                        ""Tiedot"": {
+                            ""NameEdit"": {},
+                            ""ValueEdits"": {
+                                ""matkustajat"": {
+                                    ""NameEdit"": null,
+                                    ""ContentComponent"": {
+                                        ""UnitEdit"": {},
+                                        ""SourceEdit"": {
+                                            ""fi"": ""PxGraf-fi"",
+                                            ""sv"": ""PxGraf-sv"",
+                                            ""en"": ""PxGraf-en""
+                                        }
+                                    }
+                                },
+                                ""rahti"": {
+                                    ""NameEdit"": null,
+                                    ""ContentComponent"": {
+                                        ""UnitEdit"": {},
+                                        ""SourceEdit"": {
+                                            ""fi"": ""PxGraf-fi"",
+                                            ""sv"": ""PxGraf-sv"",
+                                            ""en"": ""PxGraf-en""
+                                        }
+                                    }
+                                }
+                            },
+                            ""ValueFilter"": {
+                                ""type"": ""item"",
+                                ""query"": [
+                                    ""matkustajat"",
+                                    ""rahti""
+                                ]
+                            },
+                            ""VirtualValueDefinitions"": [],
+                            ""Selectable"": false
+                        }
+                    }
+                },
+                ""CreationTime"": ""2022-04-19T09:12:40+03:00"",
+                ""Settings"": {
+                    ""VisualizationType"": ""Table"",
+                    ""CutYAxis"": false,
+                    ""DefaultSelectableVariableCodes"": {},
+                    ""Layout"": {
+                        ""RowVariableCodes"": [
+                            ""Kuukausi"",
+                            ""Ilmoittava lentoasema"",
+                            ""Lennon tyyppi"",
+                            ""Saapuneet/lähteneet""
+                        ],
+                        ""ColumnVariableCodes"": [
+                            ""Toinen lentoasema"",
+                            ""Tiedot""
+                        ]
+                    },
+                    ""ShowDataPoints"": false
+                },
+                ""Archived"": false,
+                ""Version"": ""1.1""
+            }";
     }
 }

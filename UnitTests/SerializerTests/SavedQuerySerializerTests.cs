@@ -366,15 +366,16 @@ namespace UnitTests.SerializerTests
         {
             // Serialize
             SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(SavedQueryFixtures.V10_TEST_TABLE_SAVEDQUERY, options);
-            Assert.That(savedQuery.Version, Is.EqualTo("1.1"));
+            Assert.That(savedQuery.Version, Is.EqualTo("1.0"));
             Assert.That(savedQuery.Query.DimensionQueries.Count, Is.EqualTo(6));
-            Assert.That(savedQuery.Settings.VisualizationType, Is.EqualTo(VisualizationType.GroupVerticalBarChart));
+            Assert.That(savedQuery.Settings.VisualizationType, Is.EqualTo(VisualizationType.Table));
+            Assert.That(savedQuery.Settings.Layout.RowVariableCodes.Count, Is.EqualTo(4));
+            Assert.That(savedQuery.Settings.Layout.ColumnVariableCodes.Count, Is.EqualTo(2));
 
             // Deserialize
             string serializedString = JsonSerializer.Serialize(savedQuery, options);
-            File.WriteAllText("../../../V10TableSQTest.json", serializedString);
             JsonUtils.JsonStringsAreEqual(
-                SavedQuerySerializerExpectedOutputFixtures.V1_1_TEST_SAVEDQUERY1_SER_DESER_EXPECTED_OUTPUT,
+                SavedQuerySerializerExpectedOutputFixtures.V1_0_TABLETEST1_SER_DESER_EXPECTED_OUTPUT,
                 serializedString);
         }
 

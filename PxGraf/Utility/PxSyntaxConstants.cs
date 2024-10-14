@@ -21,7 +21,7 @@ namespace PxGraf.Utility
         public const char STRING_DELIMETER = '"';
         public const string DATETIME_FORMAT_WITH_MS = "yyyy-MM-dd'T'HH:mm:ss.fffffffK";
         public const string DATETIME_FORMAT_NO_MS = "yyyy-MM-dd'T'HH:mm:ssK";
-        public const string DATETIME_FORMAT_NO_MS_Z = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+        public const string DATETIME_FORMAT_NO_MS_TS_ZERO = "yyyy-MM-dd'T'HH:mm:ss'Z'";
 
         //Indexed by DataValueType with offset of one
         public static readonly string[] MissingValueDotCodes =
@@ -59,7 +59,7 @@ namespace PxGraf.Utility
         /// </summary>
         /// <param name="dateTimeString">String to parse</param>
         /// <returns>DateTime object</returns>
-        /// <remarks>Provided string must be in the <see cref="DATETIME_FORMAT_WITH_MS"/> or <see cref="DATETIME_FORMAT_NO_MS_Z"/> format</remarks>
+        /// <remarks>Provided string must be in the <see cref="DATETIME_FORMAT_WITH_MS"/> or <see cref="DATETIME_FORMAT_NO_MS_TS_ZERO"/> format</remarks>
         public static DateTime ParseSqDateTime(string dateTimeString)
         {
             if (DateTime.TryParseExact(dateTimeString, DATETIME_FORMAT_WITH_MS, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime dateTime))
@@ -68,7 +68,7 @@ namespace PxGraf.Utility
             }
             else
             {
-                return DateTime.ParseExact(dateTimeString, DATETIME_FORMAT_NO_MS_Z, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
+                return DateTime.ParseExact(dateTimeString, DATETIME_FORMAT_NO_MS_TS_ZERO, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
             }
         }
 
