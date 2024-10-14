@@ -20,6 +20,7 @@ using PxGraf.Datasource.DatabaseConnection;
 using PxGraf.Datasource.Cache;
 using PxGraf.Models.Queries;
 using PxGraf.Datasource.FileDatasource;
+using PxGraf.Datasource.ApiDatasource;
 
 namespace PxGraf
 {
@@ -89,7 +90,9 @@ namespace PxGraf
             services.AddControllers().AddJsonOptions(options =>
             {
                 options.AllowInputFormatterExceptionMessages = HostEnvironment.IsDevelopment();
-                options.JsonSerializerOptions.PropertyNamingPolicy = null;
+                options.JsonSerializerOptions.PropertyNamingPolicy = GlobalJsonConverterOptions.Default.PropertyNamingPolicy;
+                options.JsonSerializerOptions.PropertyNameCaseInsensitive = GlobalJsonConverterOptions.Default.PropertyNameCaseInsensitive;
+                options.JsonSerializerOptions.AllowTrailingCommas = GlobalJsonConverterOptions.Default.AllowTrailingCommas;
             });
 
             services.AddMvc(c =>

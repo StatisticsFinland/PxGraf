@@ -95,11 +95,15 @@ namespace PxGraf.Controllers
             }
             else
             {
+#nullable enable
+                IReadOnlyDimension? contDim = tableMeta.Dimensions.FirstOrDefault(v => v.Type == DimensionType.Content); 
+                IReadOnlyDimension? timeDim = tableMeta.Dimensions.FirstOrDefault(v => v.Type == DimensionType.Time);
                 return new(
-                    tableMeta.Dimensions.Any(v => v.Type == DimensionType.Content),
-                    tableMeta.Dimensions.Any(v => v.Type == DimensionType.Time),
+                    contDim is not null && contDim.Values.Count > 0,
+                    timeDim is not null && timeDim.Values.Count > 0,
                     tableMeta.Dimensions.All(v => v.Values.Count > 0)
                 );
+#nullable disable
             }
         }
 

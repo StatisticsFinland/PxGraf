@@ -4,28 +4,29 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using Px.Utils.Language;
-using Px.Utils.Models;
 using Px.Utils.Models.Data.DataValue;
-using Px.Utils.Models.Metadata;
 using Px.Utils.Models.Metadata.Dimensions;
 using Px.Utils.Models.Metadata.Enums;
+using Px.Utils.Models.Metadata;
+using Px.Utils.Models;
 using PxGraf.Datasource.PxWebInterface;
 using PxGraf.Models.Queries;
 using PxGraf.Models.Responses.DatabaseItems;
 using PxGraf.Settings;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
+using System.Net;
 using System.Threading.Tasks;
+using System;
 using UnitTests.Fixtures;
+using PxGraf.Datasource.ApiDatasource;
 
 namespace UnitTests.DatasourceTests
 {
     internal class PxWebV1ApiInterfaceTests
     {
-        private IConfiguration _configuration;
+        private IConfiguration? _configuration;
 
         [OneTimeSetUp]
         public void DoSetup()

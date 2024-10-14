@@ -7,7 +7,9 @@ using Px.Utils.Models.Metadata.Enums;
 using Px.Utils.Models.Metadata.MetaProperties;
 using Px.Utils.Models.Metadata;
 using Px.Utils.Models;
+using PxGraf.Datasource.ApiDatasource.SerializationModels;
 using PxGraf.Datasource.PxWebInterface.SerializationModels;
+using PxGraf.Datasource.PxWebInterface;
 using PxGraf.Exceptions;
 using PxGraf.Models.Queries;
 using PxGraf.Models.Responses.DatabaseItems;
@@ -18,12 +20,12 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Net.Http;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Threading;
 using System;
-using System.Text.Json;
 
-namespace PxGraf.Datasource.PxWebInterface
+namespace PxGraf.Datasource.ApiDatasource
 {
     public class PxWebV1ApiInterface(IPxWebConnection pxwebConnection, ILogger<PxWebV1ApiInterface> logger) : IApiDatasource
     {
@@ -192,7 +194,7 @@ namespace PxGraf.Datasource.PxWebInterface
             foreach (var dimensionId in dataResult.Id)
             {
                 JsonStat2.DimensionObj dimension = dataResult.Dimensions[dimensionId];
-                List<string> variableValueCodes = new (new string[dimension.Category.Index.Count]);
+                List<string> variableValueCodes = new(new string[dimension.Category.Index.Count]);
 
                 foreach (KeyValuePair<string, int> p in dimension.Category.Index)
                 {
@@ -236,7 +238,7 @@ namespace PxGraf.Datasource.PxWebInterface
             {
                 string json = await resp.Content.ReadAsStringAsync();
                 _logger.LogDebug("PxWeb: api/v1/{Lang}/ result: {Json}", lang, json);
-                return JsonSerializer.Deserialize<List<DataBaseListResponseItem>>(json);
+                return JsonSerializer.Deserialize<List<DataBaseListResponseItem>>(json, GlobalJsonConverterOptions.Default);
             }
             else
             {
@@ -249,7 +251,7 @@ namespace PxGraf.Datasource.PxWebInterface
         /// Fetch a list of directories in a database in the given language from the PxWeb server.
         /// </summary>
         private async Task<List<TableListResponseItem>> GetTableItemListingInLangAsync(string lang, IReadOnlyList<string> path)
-         {
+        {
             string joinedPath = string.Join("/", path);
             _logger.LogDebug("PxWeb GET: api/v1/{Lang}/{JoinedPath}/", lang, joinedPath);
             HttpResponseMessage resp = await _pxwebConnection.GetAsync($"api/v1/{lang}/{joinedPath}/");
@@ -257,7 +259,7 @@ namespace PxGraf.Datasource.PxWebInterface
             {
                 string json = await resp.Content.ReadAsStringAsync();
                 _logger.LogDebug("PxWeb: api/v1/{Lang}/{JoinedPath}/ result: {Json}", lang, joinedPath, json);
-                return JsonSerializer.Deserialize<List<TableListResponseItem>>(json);
+                return JsonSerializer.Deserialize<List<TableListResponseItem>>(json, GlobalJsonConverterOptions.Default);
             }
             else
             {
@@ -426,7 +428,7 @@ namespace PxGraf.Datasource.PxWebInterface
             if (resp.IsSuccessStatusCode)
             {
                 _logger.LogDebug("PxWeb: api/v1/{Lang}/{TableRefPath} result: {ContentString}", lang, tableRefPath, contentString);
-                return JsonSerializer.Deserialize<PxMetaResponse>(contentString);
+                return JsonSerializer.Deserialize<PxMetaResponse>(contentString, GlobalJsonConverterOptions.Default);
             }
             else if (resp.StatusCode == System.Net.HttpStatusCode.BadRequest)
             {
@@ -453,7 +455,7 @@ namespace PxGraf.Datasource.PxWebInterface
             {
                 string json = await resp.Content.ReadAsStringAsync();
                 _logger.LogDebug("PxWeb: api/v1/{Lang}/{TableRefPath} result: {Json}", lang, tableRefPath, json);
-                return JsonSerializer.Deserialize<ResponseType>(json);
+                return JsonSerializer.Deserialize<ResponseType>(json, GlobalJsonConverterOptions.Default);
             }
             else
             {
