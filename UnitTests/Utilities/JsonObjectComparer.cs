@@ -1,7 +1,8 @@
 ﻿using NUnit.Framework;
-using Newtonsoft.Json;
 using System.Collections.Generic;
 using System;
+using PxGraf.Settings;
+using System.Text.Json;
 
 namespace UnitTests.Utilities
 {
@@ -9,8 +10,8 @@ namespace UnitTests.Utilities
     {
         public static void AreEqual(object expected, object actual)
         {
-            string expectedJson = NormalizeJsonString(JsonConvert.SerializeObject(expected));
-            string actualJson = NormalizeJsonString(JsonConvert.SerializeObject(actual));
+            string expectedJson = NormalizeJsonString(JsonSerializer.Serialize(expected, GlobalJsonConverterOptions.Default));
+            string actualJson = NormalizeJsonString(JsonSerializer.Serialize(actual, GlobalJsonConverterOptions.Default));
             Assert.That(actualJson, Is.EqualTo(expectedJson));
         }
 

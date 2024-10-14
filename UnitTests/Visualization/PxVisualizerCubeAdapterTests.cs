@@ -358,7 +358,7 @@ namespace UnitTests.Visualization
         [Test]
         public void ResponseTestFromSavedQuery_HORIZONTALBAR_SORTED_ASCENDING()
         {
-            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(SavedQueryFixtures.HORIZONTALBAR_SORTED_ASCENDING);
+            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(SavedQueryFixtures.HORIZONTALBAR_SORTED_ASCENDING, GlobalJsonConverterOptions.Default);
             List<DimensionParameters> cubeParams =
             [
                 new DimensionParameters(DimensionType.Geographical, 3, name: "Alue"),
@@ -371,7 +371,7 @@ namespace UnitTests.Visualization
             Matrix<DecimalDataValue> cube = TestDataCubeBuilder.BuildTestMatrix(cubeParams);
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(cube, savedQuery);
 
-            string normalizedResponse = JsonUtils.NormalizeJsonString(JsonSerializer.Serialize(result));
+            string normalizedResponse = JsonUtils.NormalizeJsonString(JsonSerializer.Serialize(result, GlobalJsonConverterOptions.Default));
             string expexted = JsonUtils.NormalizeJsonString(VisualizationResponseFixtures.ASCENDING_HORIZONTAL_BARCHART_RESPONSE_FIXTURE);
 
             JsonUtils.AreEqual(expexted, normalizedResponse);

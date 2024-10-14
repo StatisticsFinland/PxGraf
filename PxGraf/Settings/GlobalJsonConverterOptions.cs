@@ -8,7 +8,8 @@ namespace PxGraf.Settings
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             PropertyNameCaseInsensitive = true,
-            AllowTrailingCommas = true
+            AllowTrailingCommas = true,
+            Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
         };
     }
 }
