@@ -4,7 +4,11 @@ using PxGraf.Models.SavedQueries;
 using PxGraf.Utility;
 using System;
 using System.Globalization;
+using System.IO;
+using System.Text.Encodings.Web;
 using System.Text.Json;
+using UnitTests.Fixtures;
+using UnitTests.Utilities;
 
 namespace UnitTests.SerializerTests
 {
@@ -54,9 +58,11 @@ namespace UnitTests.SerializerTests
             }
         }";
 
-        private readonly JsonSerializerOptions options = new()
+        private readonly static JsonSerializerOptions options = new()
         {
-            AllowTrailingCommas = true
+            AllowTrailingCommas = true,
+            PropertyNameCaseInsensitive = true,
+            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
         };
 
         [Test]
@@ -276,7 +282,6 @@ namespace UnitTests.SerializerTests
         }
 
         [Test]
-
         public void DeserializeSavedQuery__UnknownVersion__ThrowsNotSupportedException()
         {
             string testJson = @"{
@@ -320,9 +325,64 @@ namespace UnitTests.SerializerTests
             Assert.That(savedQuery.Version, Is.EqualTo("1.0"));
         }
 
+        #region Fixture tests
+
+        [Test]
+        public void DeserializeAndSerializeV10SQTest()
+        {
+            // Serialize
+            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(SavedQueryFixtures.V1_0_TEST_SAVEDQUERY1, options);
+            Assert.That(savedQuery.Version, Is.EqualTo("1.0"));
+            Assert.That(savedQuery.Query.DimensionQueries.Count, Is.EqualTo(6));
+            string pivotKey = "PivotRequested";
+            Assert.That(savedQuery.LegacyProperties.ContainsKey(pivotKey) && (bool)(savedQuery.LegacyProperties[pivotKey]));
+            Assert.That(savedQuery.Settings.VisualizationType, Is.EqualTo(VisualizationType.GroupVerticalBarChart));
+
+            // Deserialize
+            string serializedString = JsonSerializer.Serialize(savedQuery, options);
+            JsonUtils.JsonStringsAreEqual(
+                SavedQuerySerializerExpectedOutputFixtures.V1_0_TEST_SAVEDQUERY1_SER_DESER_EXPECTED_OUTPUT,
+                serializedString);
+        }
+
+        [Test]
+        public void DeserializeAndSerializeV11SQTest()
+        {
+            // Serialize
+            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(SavedQueryFixtures.V1_1_TEST_SAVEDQUERY1, options);
+            Assert.That(savedQuery.Version, Is.EqualTo("1.1"));
+            Assert.That(savedQuery.Query.DimensionQueries.Count, Is.EqualTo(6));
+            Assert.That(savedQuery.Settings.VisualizationType, Is.EqualTo(VisualizationType.GroupVerticalBarChart));
+
+            // Deserialize
+            string serializedString = JsonSerializer.Serialize(savedQuery, options);
+            JsonUtils.JsonStringsAreEqual(
+                SavedQuerySerializerExpectedOutputFixtures.V1_1_TEST_SAVEDQUERY1_SER_DESER_EXPECTED_OUTPUT,
+                serializedString);
+        }
+
+        [Test]
+        public void DeserializeAndSerializeV10TableSQTest()
+        {
+            // Serialize
+            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(SavedQueryFixtures.V10_TEST_TABLE_SAVEDQUERY, options);
+            Assert.That(savedQuery.Version, Is.EqualTo("1.1"));
+            Assert.That(savedQuery.Query.DimensionQueries.Count, Is.EqualTo(6));
+            Assert.That(savedQuery.Settings.VisualizationType, Is.EqualTo(VisualizationType.GroupVerticalBarChart));
+
+            // Deserialize
+            string serializedString = JsonSerializer.Serialize(savedQuery, options);
+            File.WriteAllText("../../../V10TableSQTest.json", serializedString);
+            JsonUtils.JsonStringsAreEqual(
+                SavedQuerySerializerExpectedOutputFixtures.V1_1_TEST_SAVEDQUERY1_SER_DESER_EXPECTED_OUTPUT,
+                serializedString);
+        }
+
+        #endregion
+
         private static DateTime ConvertDateTime(string input)
         {
-            return DateTime.ParseExact(input, PxSyntaxConstants.SQ_DATETIME_FORMAT, CultureInfo.InvariantCulture, DateTimeStyles.None);
+            return DateTime.ParseExact(input, PxSyntaxConstants.DATETIME_FORMAT_WITH_MS, CultureInfo.InvariantCulture, DateTimeStyles.None);
         }
     }
 }

@@ -60,7 +60,7 @@ namespace PxGraf.Utility.CustomJsonConverters
             {
                 case FilterType.Item:
                     {
-                        List<string> codesList = filterWrapper.Query.Deserialize<List<string>>();
+                        List<string> codesList = filterWrapper.Query.Deserialize<List<string>>(options);
                         return new ItemFilter(codesList);
                     }
                 case FilterType.All:
@@ -69,12 +69,12 @@ namespace PxGraf.Utility.CustomJsonConverters
                     }
                 case FilterType.From:
                     {
-                        string fromCode = filterWrapper.Query.Deserialize<string>();
+                        string fromCode = filterWrapper.Query.Deserialize<string>(options);
                         return new FromFilter(fromCode);
                     }
                 case FilterType.Top:
                     {
-                        int topCount = filterWrapper.Query.Deserialize<int>();
+                        int topCount = filterWrapper.Query.Deserialize<int>(options);
                         return new TopFilter(topCount);
                     }
                 default: throw new UnknownFilterTypeException("Unknown filter type: " + filterWrapper.Type);
