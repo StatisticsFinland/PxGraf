@@ -108,8 +108,7 @@ namespace PxGraf.Models.Metadata
         private static void AppendSingleValueDimensionTexts(this Dictionary<string, StringBuilder> builders, IReadOnlyList<IReadOnlyDimension> dimensions, string language, MatrixQuery? query)
         {
             IEnumerable<IReadOnlyDimension> singleValueDimensions = dimensions
-                .Where(d => d.Values.Count == 1 && d.Type != DimensionType.Content && d.Type != DimensionType.Time)
-                .Where(singleDim => singleDim.Values.Count != 0);
+                .Where(d => d.Values.Count == 1 && d.Type != DimensionType.Content && d.Type != DimensionType.Time);
 
             foreach (var singleDim in singleValueDimensions)
             {

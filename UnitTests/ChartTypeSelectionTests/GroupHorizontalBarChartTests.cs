@@ -1,13 +1,12 @@
 ﻿using NUnit.Framework;
 using Px.Utils.Models.Metadata.Enums;
-using PxGraf.ChartTypeSelection;
 using PxGraf.ChartTypeSelection.ChartSpecificLimits;
 using PxGraf.ChartTypeSelection.JsonObjects;
+using PxGraf.ChartTypeSelection;
 using PxGraf.Enums;
 using System.Collections.Generic;
-using UnitTests;
 
-namespace ChartTypeSelectionTests
+namespace UnitTests.ChartTypeSelectionTests
 {
     [TestFixture]
     class GroupHorizontalBarChartTests

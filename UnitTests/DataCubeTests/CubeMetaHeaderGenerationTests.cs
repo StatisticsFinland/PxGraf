@@ -181,14 +181,16 @@ namespace DataCubeTests
 
             Dictionary<string, Dictionary<string, MultilanguageString>> valueNameEdits = new()
             {
-                ["variable-0"] = new() { ["value-0"] = new("fi", "foobar 1") }
+                ["variable-0"] = new() { ["value-0"] = new("fi", "contval 0") },
+                ["variable-1"] = new() { ["2000"] = new("fi", "timeval 0") },
+                ["variable-2"] = new() { ["value-0"] = new("fi", "otherval 0") }
             };
 
             MatrixQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(metaParams);
             MatrixMetadata cubeMeta = TestDataCubeBuilder.BuildTestMeta(metaParams);
             cubeQuery.ApplyNameEdits(cubeMeta, valueNameEdits: valueNameEdits);
 
-            string expectedResult = "foobar 1 [FIRST]-[LAST]";
+            string expectedResult = "contval 0 [FIRST]-[LAST]";
             MultilanguageString header = HeaderBuildingUtilities.CreateDefaultHeader(cubeMeta.Dimensions, cubeQuery, _languages);
             string result = header["fi"];
 
