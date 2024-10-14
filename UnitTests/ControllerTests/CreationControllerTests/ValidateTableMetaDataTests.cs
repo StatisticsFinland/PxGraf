@@ -4,9 +4,8 @@ using PxGraf.Controllers;
 using PxGraf.Models.Responses;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using UnitTests;
 
-namespace CreationControllerTests
+namespace UnitTests.ControllerTests.CreationControllerTests
 {
     public class ValidateTableMetaDataTests
     {
@@ -14,8 +13,8 @@ namespace CreationControllerTests
         [TestCase(DimensionType.Time, DimensionType.Unknown, false, true, true)]
         [TestCase(DimensionType.Content, DimensionType.Unknown, true, false, true)]
         [TestCase(DimensionType.Unknown, DimensionType.Unknown, false, false, true)]
-        [TestCase(DimensionType.Content, DimensionType.Time, false, false, false, 0)]
-        public async Task ValidateTableMetaData_ReturnsExpectedResult (
+        [TestCase(DimensionType.Content, DimensionType.Time, false, true, false, 0)]
+        public async Task ValidateTableMetaData_ReturnsExpectedResult(
             DimensionType firstDimensionType,
             DimensionType secondDimensionType,
             bool hasContentVariable,

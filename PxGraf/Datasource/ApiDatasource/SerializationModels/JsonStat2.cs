@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace PxGraf.Datasource.PxWebInterface.SerializationModels
+namespace PxGraf.Datasource.ApiDatasource.SerializationModels
 {
     public class JsonStat2
     {

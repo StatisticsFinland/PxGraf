@@ -1,17 +1,18 @@
-﻿using Newtonsoft.Json;
-using NUnit.Framework;
+﻿using NUnit.Framework;
+using PxGraf.Datasource.ApiDatasource.SerializationModels;
 using PxGraf.Datasource.PxWebInterface.SerializationModels;
+using System.Text.Json;
 using UnitTests.PxWebInterfaceTests.Fixtures;
 
-namespace PxWebInterfaceTests
+namespace UnitTests.PxWebInterfaceTests
 {
     internal static class ModelExtensionsTests
     {
         [Test]
         public static void VarHasOrdinalScaleTypeTest_Fi()
         {
-            JsonStat2 jsonStat = JsonConvert.DeserializeObject<JsonStat2>(JsonStat2Fixtures.TEST_JSONSTAT2_FI);
-            
+            JsonStat2 jsonStat = JsonSerializer.Deserialize<JsonStat2>(JsonStat2Fixtures.TEST_JSONSTAT2_FI);
+
             Assert.That(jsonStat.VarHasOrdinalScaleType("Vuosi"), Is.False, "Var: Vuosi");
             Assert.That(jsonStat.VarHasOrdinalScaleType("Tiedot"), Is.False, "Var: Tiedot");
             Assert.That(jsonStat.VarHasOrdinalScaleType("Maakunta"), Is.False, "Var: Maakunta");
@@ -22,7 +23,7 @@ namespace PxWebInterfaceTests
         [Test]
         public static void VarHasOrdinalScaleTypeTest_Sv()
         {
-            JsonStat2 jsonStat = JsonConvert.DeserializeObject<JsonStat2>(JsonStat2Fixtures.TEST_JSONSTAT2_SV);
+            JsonStat2 jsonStat = JsonSerializer.Deserialize<JsonStat2>(JsonStat2Fixtures.TEST_JSONSTAT2_SV);
 
             Assert.That(jsonStat.VarHasOrdinalScaleType("Vuosi"), Is.False, "Var: Vuosi");
             Assert.That(jsonStat.VarHasOrdinalScaleType("Tiedot"), Is.False, "Var: Tiedot");
@@ -34,7 +35,7 @@ namespace PxWebInterfaceTests
         [Test]
         public static void VarHasOrdinalScaleTypeTest_En()
         {
-            JsonStat2 jsonStat = JsonConvert.DeserializeObject<JsonStat2>(JsonStat2Fixtures.TEST_JSONSTAT2_EN);
+            JsonStat2 jsonStat = JsonSerializer.Deserialize<JsonStat2>(JsonStat2Fixtures.TEST_JSONSTAT2_EN);
 
             Assert.That(jsonStat.VarHasOrdinalScaleType("Vuosi"), Is.False, "Var: Vuosi");
             Assert.That(jsonStat.VarHasOrdinalScaleType("Tiedot"), Is.False, "Var: Tiedot");
@@ -46,7 +47,7 @@ namespace PxWebInterfaceTests
         [Test]
         public static void IsSumValueTest_Fi()
         {
-            PxMetaResponse pxMetaResponse = JsonConvert.DeserializeObject<PxMetaResponse>(PxMetaResponseFixture.TEST_META_FI);
+            PxMetaResponse pxMetaResponse = JsonSerializer.Deserialize<PxMetaResponse>(PxMetaResponseFixture.TEST_META_FI);
 
             Assert.That(pxMetaResponse.Variables[0].IsSumValue(0), Is.False, $"Var: {pxMetaResponse.Variables[0].Code} Value: {pxMetaResponse.Variables[0].Values[0]}");
             Assert.That(pxMetaResponse.Variables[1].IsSumValue(0), Is.False, $"Var: {pxMetaResponse.Variables[1].Code} Value: {pxMetaResponse.Variables[1].Values[0]}");
@@ -58,7 +59,7 @@ namespace PxWebInterfaceTests
         [Test]
         public static void IsSumValueTest_Sv()
         {
-            PxMetaResponse pxMetaResponse = JsonConvert.DeserializeObject<PxMetaResponse>(PxMetaResponseFixture.TEST_META_SV);
+            PxMetaResponse pxMetaResponse = JsonSerializer.Deserialize<PxMetaResponse>(PxMetaResponseFixture.TEST_META_SV);
 
             Assert.That(pxMetaResponse.Variables[0].IsSumValue(0), Is.False, $"Var: {pxMetaResponse.Variables[0].Code} Value: {pxMetaResponse.Variables[0].Values[0]}");
             Assert.That(pxMetaResponse.Variables[1].IsSumValue(0), Is.False, $"Var: {pxMetaResponse.Variables[1].Code} Value: {pxMetaResponse.Variables[1].Values[0]}");
@@ -70,7 +71,7 @@ namespace PxWebInterfaceTests
         [Test]
         public static void IsSumValueTest_En()
         {
-            PxMetaResponse pxMetaResponse = JsonConvert.DeserializeObject<PxMetaResponse>(PxMetaResponseFixture.TEST_META_EN);
+            PxMetaResponse pxMetaResponse = JsonSerializer.Deserialize<PxMetaResponse>(PxMetaResponseFixture.TEST_META_EN);
 
             Assert.That(pxMetaResponse.Variables[0].IsSumValue(0), Is.False, $"Var: {pxMetaResponse.Variables[0].Code} Value: {pxMetaResponse.Variables[0].Values[0]}");
             Assert.That(pxMetaResponse.Variables[1].IsSumValue(0), Is.False, $"Var: {pxMetaResponse.Variables[1].Code} Value: {pxMetaResponse.Variables[1].Values[0]}");

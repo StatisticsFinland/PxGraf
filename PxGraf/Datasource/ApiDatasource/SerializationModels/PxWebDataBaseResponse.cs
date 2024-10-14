@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace PxGraf.Datasource.PxWebInterface.SerializationModels
+﻿namespace PxGraf.Datasource.ApiDatasource.SerializationModels
 {
     public class DataBaseListingBase
     {

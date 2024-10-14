@@ -134,8 +134,6 @@ namespace UnitTests
 
         public static MatrixMetadata BuildTestMeta(List<DimensionParameters> varParams, string[]? languages = null)
         {
-            if (varParams.Exists(v => v.Size < 1)) throw new ArgumentException("Dimension size must be at least 1");
-
             languages ??= ["fi", "en"];
             List<Dimension> variables = BuildTestDimensions(varParams, languages);
             Dictionary<string, string> noteTranslation = [];
@@ -164,7 +162,6 @@ namespace UnitTests
 
         public static Dimension BuildTestDimension(string name, DimensionParameters param, string[] languages)
         {
-            if (param.Size < 1) throw new ArgumentException("Each test dimension must have atleast one value.");
             Dictionary<string, string> nameTranslations = [];
             for (int i = 0; i < languages.Length; i++)
             {
@@ -175,7 +172,7 @@ namespace UnitTests
             Dictionary<string, MetaProperty> additionalProperties = [];
             if (param.HasCombinationValue)
             {
-                additionalProperties.Add("ELIMINATION", new StringProperty($"{values[0].Code}"));
+                additionalProperties.Add(PxSyntaxConstants.ELIMINATION_KEY, new StringProperty($"{values[0].Code}"));
             }
 
             if (param.Type == DimensionType.Time)
