@@ -14,19 +14,16 @@ namespace PxGraf.Data.MetaData
         /// <summary>
         /// Unique, language independent identifier for this variable.
         /// </summary>
-        [JsonPropertyName("code")]
         public string Code { get; private set; }
 
         /// <summary>
         /// Name of the variable in multiple languages.
         /// </summary>
-        [JsonPropertyName("name")]
         public MultilanguageString Name { get; private set; }
 
         /// <summary>
         /// Some arbitrary information about the variable.
         /// </summary>
-        [JsonPropertyName("note")]
         public MultilanguageString Note { get; private set; }
 
         /// <summary>
@@ -49,7 +46,6 @@ namespace PxGraf.Data.MetaData
         /// Values currently included in this variable.
         /// Can be a subset of the original set of variable values.
         /// </summary>
-        [JsonPropertyName("values")]
         public List<VariableValue> Values { get; private set; }
 
         /// <summary>
