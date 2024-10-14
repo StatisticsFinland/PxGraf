@@ -22,19 +22,30 @@ namespace PxGraf.Models.Responses
         {
             [JsonConverter(typeof(JsonStringEnumConverter))]
             public VisualizationType VisualizationType { get; set; }
+
+            [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
             public Dictionary<string, List<string>> DefaultSelectableVariableCodes { get; set; }
+            
+            [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
             public string MultiselectableVariableCode { get; set; }
+
             public TimeDimensionInterval TimeVariableIntervals { get; set; }
+
             [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
             public DateTime? TimeSeriesStartingPoint { get; set; }
+            
             [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
             public bool? CutValueAxis { get; set; }
+
             [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
             public int? MarkerSize { get; set; }
+
             [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
             public bool? ShowLastLabel { get; set; }
+
             [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
             public string Sorting { get; set; }
+
             [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
             public bool? ShowDataPoints { get; set; }
         }

@@ -48,6 +48,7 @@ namespace PxGraf.Models.SavedQueries.Versions
             [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
             public string Sorting { get; set; }
 
+            [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
             public Dictionary<string, List<string>> DefaultSelectableVariableCodes { get; set; }
         }
 

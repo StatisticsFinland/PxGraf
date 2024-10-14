@@ -100,16 +100,16 @@
                     ""note"": null,
                     ""isSum"": false,
                     ""contentComponent"": {
-                    ""Unit"": {
+                    ""unit"": {
                         ""fi"": ""value-0-unit"",
                         ""en"": ""value-0-unit.en""
                     },
-                    ""Source"": {
+                    ""source"": {
                         ""fi"": ""value-0-source"",
                         ""en"": ""value-0-source.en""
                     },
-                    ""NumberOfDecimals"": 0,
-                    ""LastUpdated"": ""2009-09-01T00:00:00.000Z""
+                    ""numberOfDecimals"": 0,
+                    ""lastUpdated"": ""2009-09-01T00:00:00.000Z""
                     }
                 }
                 ]
@@ -670,16 +670,16 @@
                   ""note"": null,
                   ""isSum"": false,
                   ""contentComponent"": {
-                    ""Unit"": {
+                    ""unit"": {
                       ""fi"": ""value-0-unit"",
                       ""en"": ""value-0-unit.en""
                     },
-                    ""Source"": {
+                    ""source"": {
                       ""fi"": ""value-0-source"",
                       ""en"": ""value-0-source.en""
                     },
-                    ""NumberOfDecimals"": 0,
-                    ""LastUpdated"": ""2009-09-01T00:00:00.000Z""
+                    ""numberOfDecimals"": 0,
+                    ""lastUpdated"": ""2009-09-01T00:00:00.000Z""
                   }
                 }
               ]
