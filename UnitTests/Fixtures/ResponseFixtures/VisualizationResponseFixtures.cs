@@ -1,32 +1,24 @@
-﻿using PxGraf.Data.MetaData;
-using PxGraf.Enums;
-using PxGraf.Language;
-using PxGraf.Models.Queries;
-using PxGraf.Models.Responses;
-using System;
-using System.Collections.Generic;
-
-namespace UnitTests.Fixtures.ResponseFixtures
+﻿namespace UnitTests.Fixtures.ResponseFixtures
 {
     internal static class VisualizationResponseFixtures
     {
         public const string ASCENDING_HORIZONTAL_BARCHART_RESPONSE_FIXTURE = /*lang=json, strict*/ @"
         {
-            ""TableReference"": {
-            ""Name"": ""table.px"",
-            ""Hierarchy"": [
+            ""tableReference"": {
+            ""name"": ""table.px"",
+            ""hierarchy"": [
                 ""foo"",
                 ""bar""
             ]
             },
-            ""Data"": [
+            ""data"": [
             0.123,
             1.123,
             2.123
             ],
-            ""DataNotes"": {},
-            ""MissingDataInfo"": {},
-            ""MetaData"": [
+            ""dataNotes"": {},
+            ""missingDataInfo"": {},
+            ""metaData"": [
             {
                 ""code"": ""Vuosineljännes"",
                 ""name"": {
@@ -164,37 +156,37 @@ namespace UnitTests.Fixtures.ResponseFixtures
                 ]
             }
             ],
-            ""SelectableVariableCodes"": [],
-            ""RowVariableCodes"": [],
-            ""ColumnVariableCodes"": [
+            ""selectableVariableCodes"": [],
+            ""rowVariableCodes"": [],
+            ""columnVariableCodes"": [
             ""Alue""
             ],
-            ""Header"": {
+            ""header"": {
             ""fi"": ""value-0, value-0, value-0 2000 muuttujana Alue"",
             ""en"": ""value-0.en, value-0.en, value-0.en 2000.en by Alue.en""
             },
-            ""VisualizationSettings"": {
-            ""VisualizationType"": ""HorizontalBarChart"",
-            ""TimeVariableIntervals"": ""Year"",
-            ""TimeSeriesStartingPoint"": ""2000-01-01T00:00:00Z"",
-            ""CutValueAxis"": false,
-            ""Sorting"": ""ascending"",
-            ""ShowDataPoints"": false
+            ""visualizationSettings"": {
+            ""visualizationType"": ""HorizontalBarChart"",
+            ""timeVariableIntervals"": ""Year"",
+            ""timeSeriesStartingPoint"": ""2000-01-01T00:00:00Z"",
+            ""cutValueAxis"": false,
+            ""sorting"": ""ascending"",
+            ""showDataPoints"": false
             }
         }";
 
         public const string LINE_CHART_RESPONSE_FIXTURE = /*lang=json,strict*/ @"
         {
-          ""TableReference"": {
-            ""Name"": ""TestPxFile.px"",
-            ""Hierarchy"": [
+          ""tableReference"": {
+            ""name"": ""TestPxFile.px"",
+            ""hierarchy"": [
               ""testpath"",
               ""to"",
               ""test"",
               ""file""
             ]
           },
-          ""Data"": [
+          ""data"": [
             0.123,
             1.123,
             2.123,
@@ -241,9 +233,9 @@ namespace UnitTests.Fixtures.ResponseFixtures
             43.123,
             44.123
           ],
-          ""DataNotes"": {},
-          ""MissingDataInfo"": {},
-          ""MetaData"": [
+          ""dataNotes"": {},
+          ""missingDataInfo"": {},
+          ""metaData"": [
             {
               ""code"": ""Huoneluku"",
               ""name"": {
@@ -304,16 +296,16 @@ namespace UnitTests.Fixtures.ResponseFixtures
                   ""note"": null,
                   ""isSum"": false,
                   ""contentComponent"": {
-                    ""Unit"": {
+                    ""unit"": {
                       ""fi"": ""value-0-unit"",
                       ""en"": ""value-0-unit.en""
                     },
-                    ""Source"": {
+                    ""source"": {
                       ""fi"": ""value-0-source"",
                       ""en"": ""value-0-source.en""
                     },
-                    ""NumberOfDecimals"": 0,
-                    ""LastUpdated"": ""2009-09-01T00:00:00.000Z""
+                    ""numberOfDecimals"": 0,
+                    ""lastUpdated"": ""2009-09-01T00:00:00.000Z""
                   }
                 }
               ]
@@ -521,37 +513,38 @@ namespace UnitTests.Fixtures.ResponseFixtures
               ]
             }
           ],
-          ""SelectableVariableCodes"": [],
-          ""RowVariableCodes"": [
+          ""selectableVariableCodes"": [],
+          ""rowVariableCodes"": [
             ""Alue""
           ],
-          ""ColumnVariableCodes"": [
+          ""columnVariableCodes"": [
             ""Vuosineljännes""
           ],
-          ""Header"": {
+          ""header"": {
             ""fi"": ""value-0, value-0, value-0 2000-2014 muuttujana Alue"",
             ""en"": ""value-0.en, value-0.en, value-0.en in 2000.en to 2014.en by Alue.en""
           },
-          ""VisualizationSettings"": {
-            ""VisualizationType"": ""LineChart"",
-            ""TimeVariableIntervals"": ""Year"",
-            ""TimeSeriesStartingPoint"": ""2000-01-01T00:00:00Z"",
-            ""CutValueAxis"": false,
-            ""ShowDataPoints"": false
+          ""visualizationSettings"": {
+            ""visualizationType"": ""LineChart"",
+            ""timeVariableIntervals"": ""Year"",
+            ""timeSeriesStartingPoint"": ""2000-01-01T00:00:00Z"",
+            ""cutValueAxis"": false,
+            ""showDataPoints"": false
           }
         }";
+
         public const string LINE_CHART_RESPONSE_FIXTURE_WITH_MISSING_VALUES = /*lang=json,strict*/ @"
         {
-          ""TableReference"": {
-            ""Name"": ""TestPxFile.px"",
-            ""Hierarchy"": [
+          ""tableReference"": {
+            ""name"": ""TestPxFile.px"",
+            ""hierarchy"": [
               ""testpath"",
               ""to"",
               ""test"",
               ""file""
             ]
           },
-          ""Data"": [
+          ""data"": [
             null,
             1.123,
             2.123,
@@ -598,8 +591,8 @@ namespace UnitTests.Fixtures.ResponseFixtures
             43.123,
             44.123
           ],
-          ""DataNotes"": {},
-          ""MissingDataInfo"": {
+          ""dataNotes"": {},
+          ""missingDataInfo"": {
             ""0"": 1,
             ""3"": 2,
             ""6"": 3,
@@ -616,7 +609,7 @@ namespace UnitTests.Fixtures.ResponseFixtures
             ""39"": 7,
             ""42"": 1
           },
-          ""MetaData"": [
+          ""metaData"": [
             {
               ""code"": ""Huoneluku"",
               ""name"": {
@@ -894,23 +887,23 @@ namespace UnitTests.Fixtures.ResponseFixtures
               ]
             }
           ],
-          ""SelectableVariableCodes"": [],
-          ""RowVariableCodes"": [
+          ""selectableVariableCodes"": [],
+          ""rowVariableCodes"": [
             ""Alue""
           ],
-          ""ColumnVariableCodes"": [
+          ""columnVariableCodes"": [
             ""Vuosineljännes""
           ],
-          ""Header"": {
+          ""header"": {
             ""fi"": ""value-0, value-0, value-0 2000-2014 muuttujana Alue"",
             ""en"": ""value-0.en, value-0.en, value-0.en in 2000.en to 2014.en by Alue.en""
           },
-          ""VisualizationSettings"": {
-            ""VisualizationType"": ""LineChart"",
-            ""TimeVariableIntervals"": ""Year"",
-            ""TimeSeriesStartingPoint"": ""2000-01-01T00:00:00Z"",
-            ""CutValueAxis"": false,
-            ""ShowDataPoints"": false
+          ""visualizationSettings"": {
+            ""visualizationType"": ""LineChart"",
+            ""timeVariableIntervals"": ""Year"",
+            ""timeSeriesStartingPoint"": ""2000-01-01T00:00:00Z"",
+            ""cutValueAxis"": false,
+            ""showDataPoints"": false
           }
         }";
     }

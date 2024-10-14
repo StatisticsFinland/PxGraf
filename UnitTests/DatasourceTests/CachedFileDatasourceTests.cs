@@ -2,34 +2,34 @@
 using Microsoft.Extensions.Configuration;
 using Moq;
 using NUnit.Framework;
-using Px.Utils.Models.Metadata;
+using Px.Utils.Language;
+using Px.Utils.Models.Data.DataValue;
 using Px.Utils.Models.Metadata.Enums;
+using Px.Utils.Models.Metadata.MetaProperties;
+using Px.Utils.Models.Metadata;
+using Px.Utils.Models;
 using PxGraf.Datasource.Cache;
 using PxGraf.Datasource.DatabaseConnection;
+using PxGraf.Datasource.FileDatasource;
+using PxGraf.Datasource;
+using PxGraf.Models.Metadata;
 using PxGraf.Models.Queries;
 using PxGraf.Models.Responses.DatabaseItems;
 using PxGraf.Settings;
 using PxGraf.Utility;
-using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using UnitTests.Fixtures;
-using PxGraf.Datasource;
-using PxGraf.Models.Metadata;
 using System.Linq;
-using Px.Utils.Language;
-using Px.Utils.Models;
-using Px.Utils.Models.Data.DataValue;
+using System.Threading.Tasks;
 using System.Threading;
-using PxGraf.Datasource.FileDatasource;
-using Px.Utils.Models.Metadata.MetaProperties;
+using System;
+using UnitTests.Fixtures;
 
 namespace UnitTests.DatasourceTests
 {
     public class CachedFileDatasourceTests
     {
         private readonly List<string> _languages = ["fi", "en", "sv"];
-        private IConfiguration _configuration;
+        private IConfiguration? _configuration;
 
         private readonly List<PxTableReference> _fileReferences =
         [
@@ -168,7 +168,7 @@ namespace UnitTests.DatasourceTests
             datasource.Setup(d => d.GetMatrixMetadataAsync(It.IsAny<PxTableReference>()))
                 .Returns((PxTableReference reference) => Task.FromResult(metadataResponses[reference]));
             datasource.Setup(d => d.GetMatrixAsync(It.IsAny<PxTableReference>(), It.IsAny<IReadOnlyMatrixMetadata>(), It.IsAny<IMatrixMap>(), It.IsAny<CancellationToken?>()))
-                .Returns((PxTableReference reference, IReadOnlyMatrixMetadata meta, IMatrixMap map, CancellationToken? cancellationToken = null) =>
+                .Returns((PxTableReference reference, IReadOnlyMatrixMetadata meta, IMatrixMap map, CancellationToken? cancellationToken) =>
                 {
                     return Task.FromResult(expectedData);
                 });
@@ -185,7 +185,8 @@ namespace UnitTests.DatasourceTests
                 {
                     PxTableReference reference = new(key, '-');
                     IReadOnlyMatrixMetadata meta = metadataResponses[metadataResponses.Keys.First(k => k.Name == reference.Name)];
-                    value = Task.FromResult(new CachedDatasource.MetaCacheHousing((DateTime)meta.GetLastUpdated(), meta));
+                    DateTime lastUpdated = meta.GetLastUpdated() ?? throw new ArgumentException("Failed to get lastWriteTime, the test should fail.");
+                    value = Task.FromResult(new CachedDatasource.MetaCacheHousing(lastUpdated, meta));
                     return MultiStateMemoryTaskCache.CacheEntryState.Null;
                 });
 

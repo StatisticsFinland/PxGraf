@@ -1,5 +1,4 @@
 ﻿using NUnit.Framework;
-using Newtonsoft.Json;
 using Px.Utils.Language;
 using Px.Utils.Models.Data.DataValue;
 using Px.Utils.Models.Metadata.Enums;
@@ -16,7 +15,8 @@ using System.Linq;
 using UnitTests.Fixtures.ResponseFixtures;
 using UnitTests.Fixtures;
 using UnitTests.Utilities;
-using Newtonsoft.Json.Converters;
+using System.Text.Json;
+using PxGraf.Settings;
 
 namespace UnitTests.Visualization
 {
@@ -230,7 +230,7 @@ namespace UnitTests.Visualization
                 new DimensionParameters(DimensionType.Content, 1, name: "Tiedot"),
             ];
 
-            SavedQuery savedQuery = JsonConvert.DeserializeObject<SavedQuery>(SavedQueryFixtures.V1_1_TEST_SAVEDQUERY1);
+            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(SavedQueryFixtures.V1_1_TEST_SAVEDQUERY1);
             Matrix<DecimalDataValue> inputCube = TestDataCubeBuilder.BuildTestMatrix(cubeParams);
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(inputCube, savedQuery);
 
@@ -253,7 +253,7 @@ namespace UnitTests.Visualization
                 new DimensionParameters(DimensionType.Content, 1, name: "Tiedot"),
             ];
 
-            SavedQuery savedQuery = JsonConvert.DeserializeObject<SavedQuery>(SavedQueryFixtures.V1_1_TEST_SAVEDQUERY2);
+            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(SavedQueryFixtures.V1_1_TEST_SAVEDQUERY2);
             Matrix<DecimalDataValue> inputCube = TestDataCubeBuilder.BuildTestMatrix(cubeParams);
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(inputCube, savedQuery);
 
@@ -273,7 +273,7 @@ namespace UnitTests.Visualization
                 new DimensionParameters(DimensionType.Time, 10, name: "Vuosi")
             ];
 
-            SavedQuery savedQuery = JsonConvert.DeserializeObject<SavedQuery>(SavedQueryFixtures.V1_1_TEST_SAVEDQUERY3);
+            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(SavedQueryFixtures.V1_1_TEST_SAVEDQUERY3);
             Matrix<DecimalDataValue> inputCube = TestDataCubeBuilder.BuildTestMatrix(cubeParams);
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(inputCube, savedQuery);
 
@@ -291,7 +291,7 @@ namespace UnitTests.Visualization
                 new DimensionParameters(DimensionType.Time, 5, name: "Vuosi")
             ];
 
-            SavedQuery savedQuery = JsonConvert.DeserializeObject<SavedQuery>(SavedQueryFixtures.V11_TEST_TABLE_SAVEDQUERY);
+            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(SavedQueryFixtures.V11_TEST_TABLE_SAVEDQUERY);
             Matrix<DecimalDataValue> inputCube = TestDataCubeBuilder.BuildTestMatrix(cubeParams);
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(inputCube, savedQuery);
 
@@ -316,7 +316,7 @@ namespace UnitTests.Visualization
             ];
 
             string[] langs = ["fi", "en", "sv"];
-            SavedQuery savedQuery = JsonConvert.DeserializeObject<SavedQuery>(SavedQueryFixtures.V10_TEST_TABLE_SAVEDQUERY);
+            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(SavedQueryFixtures.V10_TEST_TABLE_SAVEDQUERY, GlobalJsonConverterOptions.Default);
             Matrix<DecimalDataValue> inputCube = TestDataCubeBuilder.BuildTestMatrix(cubeParams, languages: langs);
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(inputCube, savedQuery);
 
@@ -343,7 +343,7 @@ namespace UnitTests.Visualization
                 new DimensionParameters(DimensionType.Content, 1, name: "Tiedot")
             ];
 
-            SavedQuery savedQuery = JsonConvert.DeserializeObject<SavedQuery>(SavedQueryFixtures.V1_0_TEST_SAVEDQUERY1);
+            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(SavedQueryFixtures.V1_0_TEST_SAVEDQUERY1);
             Matrix<DecimalDataValue> inputCube = TestDataCubeBuilder.BuildTestMatrix(cubeParams);
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(inputCube, savedQuery);
 
@@ -358,7 +358,7 @@ namespace UnitTests.Visualization
         [Test]
         public void ResponseTestFromSavedQuery_HORIZONTALBAR_SORTED_ASCENDING()
         {
-            SavedQuery savedQuery = JsonConvert.DeserializeObject<SavedQuery>(SavedQueryFixtures.HORIZONTALBAR_SORTED_ASCENDING);
+            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(SavedQueryFixtures.HORIZONTALBAR_SORTED_ASCENDING);
             List<DimensionParameters> cubeParams =
             [
                 new DimensionParameters(DimensionType.Geographical, 3, name: "Alue"),
@@ -371,10 +371,7 @@ namespace UnitTests.Visualization
             Matrix<DecimalDataValue> cube = TestDataCubeBuilder.BuildTestMatrix(cubeParams);
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(cube, savedQuery);
 
-            JsonSerializerSettings jsonSettings = new();
-            jsonSettings.Converters.Add(new StringEnumConverter());
-
-            string normalizedResponse = JsonUtils.NormalizeJsonString(JsonConvert.SerializeObject(result, jsonSettings));
+            string normalizedResponse = JsonUtils.NormalizeJsonString(JsonSerializer.Serialize(result));
             string expexted = JsonUtils.NormalizeJsonString(VisualizationResponseFixtures.ASCENDING_HORIZONTAL_BARCHART_RESPONSE_FIXTURE);
 
             JsonUtils.AreEqual(expexted, normalizedResponse);
@@ -545,10 +542,7 @@ namespace UnitTests.Visualization
             SavedQuery savedQuery = TestDataCubeBuilder.BuildTestSavedQuery(cubeParams, false, settings);
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(cube, savedQuery);
 
-            JsonSerializerSettings jsonSettings = new();
-            jsonSettings.Converters.Add(new StringEnumConverter());
-
-            string normalizedResponse = JsonUtils.NormalizeJsonString(JsonConvert.SerializeObject(result, jsonSettings));
+            string normalizedResponse = JsonUtils.NormalizeJsonString(JsonSerializer.Serialize(result, GlobalJsonConverterOptions.Default));
             string normalizedExpected = JsonUtils.NormalizeJsonString(VisualizationResponseFixtures.LINE_CHART_RESPONSE_FIXTURE_WITH_MISSING_VALUES);
 
             Assert.That(normalizedResponse, Is.EqualTo(normalizedExpected));
@@ -571,10 +565,7 @@ namespace UnitTests.Visualization
             SavedQuery savedQuery = TestDataCubeBuilder.BuildTestSavedQuery(cubeParams, false, settings);
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(cube, savedQuery);
 
-            JsonSerializerSettings jsonSettings = new();
-            jsonSettings.Converters.Add(new StringEnumConverter());
-
-            string normalizedResponse = JsonUtils.NormalizeJsonString(JsonConvert.SerializeObject(result, jsonSettings));
+            string normalizedResponse = JsonUtils.NormalizeJsonString(JsonSerializer.Serialize(result, GlobalJsonConverterOptions.Default));
             string normalizedExpected = JsonUtils.NormalizeJsonString(VisualizationResponseFixtures.LINE_CHART_RESPONSE_FIXTURE);
 
             Assert.That(normalizedResponse, Is.EqualTo(normalizedExpected));
