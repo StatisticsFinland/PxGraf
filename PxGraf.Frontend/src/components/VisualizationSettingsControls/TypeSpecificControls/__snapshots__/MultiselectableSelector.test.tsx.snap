@@ -13,7 +13,7 @@ exports[`Rendering test renders correctly 1`] = `
       chartSettings.multiSelectVariable
     </label>
     <div
-      class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl  css-1l9f323-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root"
+      class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl css-1l9f323-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root"
     >
       <div
         aria-controls=":r0:"

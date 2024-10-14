@@ -13,7 +13,7 @@ exports[`Rendering test renders correctly 1`] = `
       foo1
     </label>
     <div
-      class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl  css-1yk1gt9-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root"
+      class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl css-1yk1gt9-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root"
     >
       <div
         aria-controls=":r0:"

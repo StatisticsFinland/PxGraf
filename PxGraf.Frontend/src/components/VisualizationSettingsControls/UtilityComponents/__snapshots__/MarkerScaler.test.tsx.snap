@@ -3,7 +3,7 @@
 exports[`Rendering test renders correctly 1`] = `
 <DocumentFragment>
   <div
-    class="MuiStack-root sc-braxZu MhTIp css-m69qwo-MuiStack-root"
+    class="MuiStack-root sc-blHHSb fLhfRt css-m69qwo-MuiStack-root"
   >
     <div
       class="MuiBox-root css-0"
@@ -15,7 +15,7 @@ exports[`Rendering test renders correctly 1`] = `
         chartSettings.markerScale
       </p>
       <span
-        class="MuiSlider-root MuiSlider-marked MuiSlider-colorPrimary MuiSlider-sizeMedium sc-gJhJTp evpvpa css-ltlhnc-MuiSlider-root"
+        class="MuiSlider-root MuiSlider-marked MuiSlider-colorPrimary MuiSlider-sizeMedium sc-gtLWhw cHkVLn css-ltlhnc-MuiSlider-root"
       >
         <span
           class="MuiSlider-rail css-7o8aqz-MuiSlider-rail"
