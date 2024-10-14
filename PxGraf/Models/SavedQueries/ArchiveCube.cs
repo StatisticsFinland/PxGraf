@@ -30,6 +30,7 @@ namespace PxGraf.Models.SavedQueries
         /// <summary>
         /// Collection of key (variable value code coordinates) value (double or missing code) pairs.
         /// </summary>
+        [JsonConverter(typeof(DecimalDataValueListConverter))]
         public List<DecimalDataValue> Data { get; set; }
 
         /// <summary>

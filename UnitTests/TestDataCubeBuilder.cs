@@ -215,10 +215,13 @@ namespace UnitTests
         public static ArchiveCube BuildTestArchiveCube(List<DimensionParameters> metaParams, string[]? languages = null)
         {
             MatrixMetadata meta = BuildTestMeta(metaParams, languages);
+            List<DecimalDataValue> data = BuildTestData(meta.Dimensions.Aggregate(1, (acc, var) => acc * var.Values.Count)).ToList();
+
             return new ArchiveCube()
             {
                 CreationTime = PxSyntaxConstants.ParsePxDateTime("2024-08-19T14:00:00.000Z"),
-                Meta = meta
+                Meta = meta,
+                Data = data
             };
         }
 
