@@ -19,8 +19,9 @@ namespace PxGraf.Utility
         public const string LAST_UPDATED_KEY = "LAST-UPDATED";
         public const string UNIT_KEY = "UNIT";
         public const char STRING_DELIMETER = '"';
-        public const string SQ_DATETIME_FORMAT = "yyyy-MM-ddTHH:mm:ss.fffffffK";
-        public const string SQA_DATETIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+        public const string DATETIME_FORMAT_WITH_MS = "yyyy-MM-dd'T'HH:mm:ss.fffffffK";
+        public const string DATETIME_FORMAT_NO_MS = "yyyy-MM-dd'T'HH:mm:ssK";
+        public const string DATETIME_FORMAT_NO_MS_Z = "yyyy-MM-dd'T'HH:mm:ss'Z'";
 
         //Indexed by DataValueType with offset of one
         public static readonly string[] MissingValueDotCodes =
@@ -58,16 +59,16 @@ namespace PxGraf.Utility
         /// </summary>
         /// <param name="dateTimeString">String to parse</param>
         /// <returns>DateTime object</returns>
-        /// <remarks>Provided string must be in the <see cref="SQ_DATETIME_FORMAT"/> or <see cref="SQA_DATETIME_FORMAT"/> format</remarks>
+        /// <remarks>Provided string must be in the <see cref="DATETIME_FORMAT_WITH_MS"/> or <see cref="DATETIME_FORMAT_NO_MS_Z"/> format</remarks>
         public static DateTime ParseSqDateTime(string dateTimeString)
         {
-            if (DateTime.TryParseExact(dateTimeString, SQ_DATETIME_FORMAT, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime dateTime))
+            if (DateTime.TryParseExact(dateTimeString, DATETIME_FORMAT_WITH_MS, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime dateTime))
             {
                 return dateTime;
             }
             else
             {
-                return DateTime.ParseExact(dateTimeString, SQA_DATETIME_FORMAT, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
+                return DateTime.ParseExact(dateTimeString, DATETIME_FORMAT_NO_MS_Z, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
             }
         }
 
