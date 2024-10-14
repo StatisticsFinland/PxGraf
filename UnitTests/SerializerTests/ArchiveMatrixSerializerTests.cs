@@ -9,9 +9,10 @@ using System.Text.Json;
 using UnitTests.Fixtures;
 using UnitTests.Utilities;
 using PxGraf.Settings;
-using Px.Utils.Models.Data.DataValue;
 using Px.Utils.Language;
 using System.Linq;
+using Px.Utils.Models.Data;
+using Px.Utils.Models.Data.DataValue;
 
 namespace UnitTests.SerializerTests
 {
@@ -56,6 +57,9 @@ namespace UnitTests.SerializerTests
             ];
             
             ArchiveCube archiveCube = TestDataCubeBuilder.BuildTestArchiveCube(metaParams);
+            DecimalDataValue missingValue = new(0, DataValueType.Missing);
+            archiveCube.Data[1] = missingValue;
+
             
             // Act
             string actual = JsonSerializer.Serialize(archiveCube, _jsonOptions);
@@ -76,6 +80,8 @@ namespace UnitTests.SerializerTests
             ];
             ArchiveCube expected = TestDataCubeBuilder.BuildTestArchiveCube(metaParams);
             expected.Version = "1.1";
+            DecimalDataValue missingValue = new(0, DataValueType.Missing);
+            expected.Data[1] = missingValue;
 
             // Act
             ArchiveCube actual = JsonSerializer.Deserialize<ArchiveCube>(ArchiveCubeFixtures.ARCHIVE_CUBE_V11, _jsonOptions);
@@ -89,15 +95,15 @@ namespace UnitTests.SerializerTests
         {
             List<DecimalDataValue> expectedData =
             [
-                new (173.0m, Px.Utils.Models.Data.DataValueType.Exists),
-                new (0, Px.Utils.Models.Data.DataValueType.Missing),
-                new (0.0m, Px.Utils.Models.Data.DataValueType.Exists),
-                new (0.0m, Px.Utils.Models.Data.DataValueType.Exists),
-                new (0.0m, Px.Utils.Models.Data.DataValueType.Exists),
-                new (0.0m, Px.Utils.Models.Data.DataValueType.Exists),
-                new (1.0m, Px.Utils.Models.Data.DataValueType.Exists)
+                new (173.0m, DataValueType.Exists),
+                new (0, DataValueType.Missing),
+                new (0.0m, DataValueType.Exists),
+                new (0.0m, DataValueType.Exists),
+                new (0.0m, DataValueType.Exists),
+                new (0.0m, DataValueType.Exists),
+                new (1.0m, DataValueType.Exists)
             ];
-            Dictionary<int, MultilanguageString> expectedDataNotes = new Dictionary<int, MultilanguageString>
+            Dictionary<int, MultilanguageString> expectedDataNotes = new()
             {
                 { 1, new MultilanguageString(new Dictionary<string, string> { { "fi", "..." }, { "en", "..." }, { "sv", "..." } })}
             };
