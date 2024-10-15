@@ -45,7 +45,7 @@ namespace PxGraf.Utility.CustomJsonConverters
                 }
             }
 
-            return result;
+            throw new JsonException("Expected EndArray token.");
         }
 
         public override void Write(Utf8JsonWriter writer, List<DecimalDataValue> value, JsonSerializerOptions options)
