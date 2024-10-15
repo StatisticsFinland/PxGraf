@@ -3,8 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace PxGraf.Language
 {
-    [JsonUnmappedMemberHandling(JsonUnmappedMemberHandling.Disallow)]
-    [JsonConverter(typeof(RequireObjectPropertiesReadOnlyConverter<Translation>))]
+    [JsonConverter(typeof(RequireObjectPropertiesReadOnlyConverter<HeaderTimeFormatsTranslation>))]
     public class HeaderTimeFormatsTranslation
     {
         public string SingleTimeValue { get; set; }

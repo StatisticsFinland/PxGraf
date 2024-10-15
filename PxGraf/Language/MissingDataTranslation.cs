@@ -3,8 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace PxGraf.Language
 {
-    [JsonUnmappedMemberHandling(JsonUnmappedMemberHandling.Disallow)]
-    [JsonConverter(typeof(RequireObjectPropertiesReadOnlyConverter<Translation>))]
+    [JsonConverter(typeof(RequireObjectPropertiesReadOnlyConverter<MissingDataTranslation>))]
     public class MissingDataTranslation
     {
         public string Missing { get; set; }

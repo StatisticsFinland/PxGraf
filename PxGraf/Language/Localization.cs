@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using PxGraf.Settings;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -40,7 +41,7 @@ namespace PxGraf.Language
             var json = File.ReadAllText(configPath);
 
             //Strict json deserialization
-            LocalizationConfig config = JsonSerializer.Deserialize<LocalizationConfig>(json);
+            LocalizationConfig config = JsonSerializer.Deserialize<LocalizationConfig>(json, GlobalJsonConverterOptions.Default);
             Load(config.DefaultLanguage, config.Translations);
         }
 
@@ -53,10 +54,10 @@ namespace PxGraf.Language
             defaultLocalization = localizations[defaultLang];
         }
 
-        private sealed class LocalizationConfig
+        public sealed class LocalizationConfig
         {
-            public string DefaultLanguage { get; } = "en";
-            public Dictionary<string, Translation> Translations { get; } = [];
+            public string DefaultLanguage { get; set; } = "en";
+            public Dictionary<string, Translation> Translations { get; set; } = [];
         }
     }
 }

@@ -1,15 +1,14 @@
 ﻿#nullable enable
 using Px.Utils.Language;
-using Px.Utils.Models.Metadata;
 using Px.Utils.Models.Metadata.Dimensions;
-using Px.Utils.Models.Metadata.ExtensionMethods;
 using Px.Utils.Models.Metadata.MetaProperties;
+using Px.Utils.Models.Metadata;
 using PxGraf.Data.MetaData;
 using PxGraf.Models.Queries;
 using PxGraf.Utility;
-using System;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace PxGraf.Models.Metadata
 {
