@@ -3,9 +3,10 @@ import { render } from '@testing-library/react';
 import { IHeaderResult } from 'api/services/default-header';
 import '@testing-library/jest-dom';
 import { IDimension, VariableType } from 'types/cubeMeta';
-import { ICubeQuery } from 'types/query';
+import { ICubeQuery, Query, FilterType } from 'types/query';
 import MetaEditor from './MetaEditor';
 import UiLanguageContext from 'contexts/uiLanguageContext';
+import { EditorContext, EditorProvider } from 'contexts/editorContext';
 
 jest.mock('react-i18next', () => ({
     ...jest.requireActual('react-i18next'),
@@ -121,7 +122,7 @@ const defaultHeaderResponseMock: IHeaderResult = {
     }
 }
 
-const cubeQueryMock: ICubeQuery = {
+const mockCubeQuery: ICubeQuery = {
     chartHeaderEdit: {
         'fi': 'foo',
         'sv': 'foo',
@@ -149,11 +150,47 @@ const cubeQueryMock: ICubeQuery = {
     }
 };
 
+const mockQuery: Query = {
+    foo: {
+        valueFilter: {
+            type: FilterType.Item,
+            query: ['bar']
+        },
+        selectable: true,
+        virtualValueDefinitions: null
+    }
+};
+
+const defaultSelectables = { foo: ['2018'] };
+const setDefaultSelectables = jest.fn();
+const cubeQuery = null;
+const setCubeQuery = jest.fn();
+const query = null;
+const setQuery = jest.fn();
+const saveDialogOpen = false;
+const setSaveDialogOpen = jest.fn();
+const selectedVisualizationUserInput = null;
+const setSelectedVisualizationUserInput = jest.fn();
+const visualizationSettingsUserInput = null;
+const setVisualizationSettingsUserInput = jest.fn();
+
 describe('Rendering test', () => {
     it('renders correctly', () => {
         const { asFragment } = render(
             <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
-                <MetaEditor resolvedVariables={mockVariables} cubeQuery={cubeQueryMock} defaultHeaderResponse={defaultHeaderResponseMock} isMetaAccordionOpen={isMetaAccordionOpenMock} language={mockLang} onChange={mockFunction} onMetaAccordionOpenChange={mockFunction} />
+                <EditorContext.Provider value={{ cubeQuery, setCubeQuery, query, setQuery, saveDialogOpen, setSaveDialogOpen, selectedVisualizationUserInput, setSelectedVisualizationUserInput, visualizationSettingsUserInput, setVisualizationSettingsUserInput, defaultSelectables, setDefaultSelectables }}>
+                    <EditorProvider>
+                        <MetaEditor
+                            resolvedVariables={mockVariables}
+                            cubeQuery={mockCubeQuery}
+                            defaultHeaderResponse={defaultHeaderResponseMock}
+                            isMetaAccordionOpen={isMetaAccordionOpenMock}
+                            language={mockLang}
+                            onChange={mockFunction}
+                            onMetaAccordionOpenChange={mockFunction}
+                        />
+                    </EditorProvider>
+                </EditorContext.Provider>
             </UiLanguageContext.Provider>
         );
         expect(asFragment()).toMatchSnapshot();
