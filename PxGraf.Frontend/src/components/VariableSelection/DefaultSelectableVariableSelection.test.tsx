@@ -2,6 +2,8 @@ import React from 'react';
 import { render } from "@testing-library/react";
 import { IDimensionValue } from "../../types/cubeMeta";
 import DefaultSelectableVariableSelection from "./DefaultSelectableVariableSelection";
+import UiLanguageContext from '../../contexts/uiLanguageContext';
+import { EditorContext } from 'contexts/editorContext';
 
 const mockVariableValues: IDimensionValue[] = [
     {
@@ -44,6 +46,27 @@ const mockVariableValues: IDimensionValue[] = [
 
 const mockResolvedCodes: string[] = ['2018', '2019'];
 
+const setLanguage = jest.fn();
+const language = 'fi';
+const setLanguageTab = jest.fn();
+const languageTab = 'fi';
+const availableUiLanguages = ['fi', 'en', 'sv'];
+const uiContentLanguage = 'fi';
+const setUiContentLanguage = jest.fn();
+
+const defaultSelectables = { foo: ['2018'] };
+const setDefaultSelectables = jest.fn();
+const cubeQuery = null;
+const setCubeQuery = jest.fn();
+const query = null;
+const setQuery = jest.fn();
+const saveDialogOpen = false;
+const setSaveDialogOpen = jest.fn();
+const selectedVisualizationUserInput = null;
+const setSelectedVisualizationUserInput = jest.fn();
+const visualizationSettingsUserInput = null;
+const setVisualizationSettingsUserInput = jest.fn();
+
 jest.mock('react-i18next', () => ({
     ...jest.requireActual('react-i18next'),
     useTranslation: () => {
@@ -57,12 +80,31 @@ jest.mock('react-i18next', () => ({
 }));
 
 describe('Rendering test', () => {
-    it('renders correctly', () => {
-        const { asFragment } = render(<DefaultSelectableVariableSelection
-            options={mockVariableValues}
-            resolvedVariableValueCodes={mockResolvedCodes}
-            variableCode={'foo'}
-        ></DefaultSelectableVariableSelection>);
+    it('renders correctly with default selectable', () => {
+        const { asFragment } = render(
+            <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
+                <EditorContext.Provider value={{ cubeQuery, setCubeQuery, query, setQuery, saveDialogOpen, setSaveDialogOpen, selectedVisualizationUserInput, setSelectedVisualizationUserInput, visualizationSettingsUserInput, setVisualizationSettingsUserInput, defaultSelectables, setDefaultSelectables }}>
+                    <DefaultSelectableVariableSelection
+                        options={mockVariableValues}
+                        resolvedVariableValueCodes={mockResolvedCodes}
+                        variableCode={'foo'}
+                    />
+                </EditorContext.Provider>
+            </UiLanguageContext.Provider>);
+        expect(asFragment()).toMatchSnapshot();
+    });
+
+    it('renders correctly without default selectable', () => {
+        const { asFragment } = render(
+            <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
+                <EditorContext.Provider value={{ cubeQuery, setCubeQuery, query, setQuery, saveDialogOpen, setSaveDialogOpen, selectedVisualizationUserInput, setSelectedVisualizationUserInput, visualizationSettingsUserInput, setVisualizationSettingsUserInput, defaultSelectables: {}, setDefaultSelectables }}>
+                    <DefaultSelectableVariableSelection
+                        options={mockVariableValues}
+                        resolvedVariableValueCodes={mockResolvedCodes}
+                        variableCode={'foo'}
+                    />
+                </EditorContext.Provider>
+            </UiLanguageContext.Provider>);
         expect(asFragment()).toMatchSnapshot();
     });
 });
