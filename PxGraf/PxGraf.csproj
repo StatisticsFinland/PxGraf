@@ -7,9 +7,7 @@
     <AssemblyName>PxGraf</AssemblyName>
     <UserSecretsId>5fefcbdc-e04e-4475-9927-aab412b027ff</UserSecretsId>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <VersionPrefix>3.0.30</VersionPrefix>
-    <AssemblyVersion>3.0.30.0</AssemblyVersion>
-    <FileVersion>3.0.30.0</FileVersion>
+    <VersionPrefix>4.0.0</VersionPrefix>
 	<SpaRoot>..\PxGraf.Frontend</SpaRoot>
 	<Configurations>Debug;Release;Test</Configurations>
   </PropertyGroup>
