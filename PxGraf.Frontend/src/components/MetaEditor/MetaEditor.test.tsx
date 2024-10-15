@@ -150,17 +150,6 @@ const mockCubeQuery: ICubeQuery = {
     }
 };
 
-const mockQuery: Query = {
-    foo: {
-        valueFilter: {
-            type: FilterType.Item,
-            query: ['bar']
-        },
-        selectable: true,
-        virtualValueDefinitions: null
-    }
-};
-
 const defaultSelectables = { foo: ['2018'] };
 const setDefaultSelectables = jest.fn();
 const cubeQuery = null;
