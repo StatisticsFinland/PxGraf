@@ -329,11 +329,31 @@ describe('Rendering test', () => {
         );
         expect(asFragment()).toMatchSnapshot();
     });
+
+    it('renders correctly when cubeMetaResponse is loading', () => {
+        mockCubeMetaResult.data = null;
+        mockCubeMetaResult.isLoading = true;
+        const { asFragment } = render(
+            <QueryClientProvider client={queryClient}>
+                <NavigationProvider>
+                    <HashRouter>
+                        <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
+                            <Editor />
+                        </UiLanguageContext.Provider>
+                    </HashRouter>
+                </NavigationProvider>
+            </QueryClientProvider>
+        );
+        expect(asFragment()).toMatchSnapshot();
+    
+    });
 });
 
 describe('Assertion tests', () => {
     it('renders errorContainer with correct message when tableValidityResponse is invalid', () => {
         mockResult = mockInvalidTableValidationResult;
+        mockCubeMetaResult.isError = true;
+        mockCubeMetaResult.isLoading = false;
         render(
             <QueryClientProvider client={queryClient}>
                 <NavigationProvider>
