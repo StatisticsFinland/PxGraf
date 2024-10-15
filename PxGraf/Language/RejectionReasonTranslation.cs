@@ -5,8 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace PxGraf.Language
 {
-    [JsonUnmappedMemberHandling(JsonUnmappedMemberHandling.Disallow)]
-    [JsonConverter(typeof(RequireObjectPropertiesReadOnlyConverter<Translation>))]
+    [JsonConverter(typeof(RequireObjectPropertiesReadOnlyConverter<RejectionReasonTranslation>))]
     public class RejectionReasonTranslation
     {
         public string TimeRequired { get; set; }

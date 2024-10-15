@@ -49,6 +49,10 @@ namespace PxGraf
             {
                 logger.LogCritical(ex, "A file system error occurred during startup");
             }
+            catch (InvalidOperationException ex)
+            {
+                throw new InvalidOperationException("An error occurred while parsing the translation file", ex);
+            }
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.

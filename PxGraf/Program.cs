@@ -20,13 +20,6 @@ namespace PxGraf
 
             try
             {
-                _ = new ConfigurationBuilder()
-                    .SetBasePath(Directory.GetCurrentDirectory())
-                    .AddEnvironmentVariables()
-                    .AddJsonFile("appsettings.json")
-                    .AddJsonFile($"appsettings.Development.json", optional: true, reloadOnChange: true)
-                    .Build();
-
                 logger.Info("Starting host");
                 CreateHostBuilder(args).Build().Run();
             }

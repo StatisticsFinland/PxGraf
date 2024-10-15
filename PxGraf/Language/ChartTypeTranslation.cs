@@ -4,8 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace PxGraf.Language
 {
-    [JsonUnmappedMemberHandling(JsonUnmappedMemberHandling.Disallow)]
-    [JsonConverter(typeof(RequireObjectPropertiesReadOnlyConverter<Translation>))]
+    [JsonConverter(typeof(RequireObjectPropertiesReadOnlyConverter<ChartTypeTranslation>))]
     public class ChartTypeTranslation
     {
         public string VerticalBar { get; set; }

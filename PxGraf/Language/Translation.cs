@@ -3,7 +3,6 @@ using System.Text.Json.Serialization;
 
 namespace PxGraf.Language
 {
-    [JsonUnmappedMemberHandling(JsonUnmappedMemberHandling.Disallow)]
     [JsonConverter(typeof(RequireObjectPropertiesReadOnlyConverter<Translation>))]
     public class Translation
     {

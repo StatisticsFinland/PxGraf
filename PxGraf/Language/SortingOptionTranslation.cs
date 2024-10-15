@@ -3,8 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace PxGraf.Language
 {
-    [JsonUnmappedMemberHandling(JsonUnmappedMemberHandling.Disallow)]
-    [JsonConverter(typeof(RequireObjectPropertiesReadOnlyConverter<Translation>))]
+    [JsonConverter(typeof(RequireObjectPropertiesReadOnlyConverter<SortingOptionTranslation>))]
     public class SortingOptionTranslation
     {
         public string Ascending { get; set; }
