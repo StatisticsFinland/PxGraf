@@ -41,7 +41,7 @@ namespace PxGraf.Models.Metadata
                     foreach (VariableValue dimValue in dimension.Values)
                     {
                         dimValue.AddEliminationKeyIfSumValue(dimensionProperties);
-                        DateTime lastUpdate = PxSyntaxConstants.ParseSqDateTime(dimValue.ContentComponent.LastUpdated);
+                        DateTime lastUpdate = PxSyntaxConstants.ParseDateTime(dimValue.ContentComponent.LastUpdated);
                         ContentDimensionValue cdv = new(dimValue.Code, dimValue.Name, dimValue.ContentComponent.Unit, lastUpdate, dimValue.ContentComponent.NumberOfDecimals);
                         contentDimValues.Add(cdv);
                     }

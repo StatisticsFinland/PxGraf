@@ -75,7 +75,7 @@ namespace UnitTests.ControllerTests.VisualizationControllerTests
                 cdv.Code,
                 cdv.Name,
                 cdv.Unit,
-                PxSyntaxConstants.ParsePxDateTime("2008-09-01T00:00:00.000Z"),
+                PxSyntaxConstants.ParseDateTime("2008-09-01T00:00:00.000Z"),
                 cdv.Precision);
             foreach (var prop in cdv.AdditionalProperties)
             {
@@ -138,7 +138,7 @@ namespace UnitTests.ControllerTests.VisualizationControllerTests
                 cdv.Code,
                 cdv.Name,
                 cdv.Unit,
-                PxSyntaxConstants.ParsePxDateTime("2008-09-01T00:00:00.000Z"),
+                PxSyntaxConstants.ParseDateTime("2008-09-01T00:00:00.000Z"),
                 cdv.Precision);
             foreach (var prop in cdv.AdditionalProperties)
             {
@@ -200,7 +200,7 @@ namespace UnitTests.ControllerTests.VisualizationControllerTests
                 cdv.Code,
                 cdv.Name,
                 cdv.Unit,
-                PxSyntaxConstants.ParsePxDateTime("2008-09-01T00:00:00.000Z"),
+                PxSyntaxConstants.ParseDateTime("2008-09-01T00:00:00.000Z"),
                 cdv.Precision);
             foreach (var prop in cdv.AdditionalProperties)
             {

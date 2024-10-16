@@ -60,7 +60,7 @@ namespace UnitTests.ControllerTests.CreationControllerTests
                 ["en"] = "table2.en"
             };
 
-            DateTime lastUpdated = PxSyntaxConstants.ParsePxDateTime("2021-01-01T00:00:00.000Z");
+            DateTime lastUpdated = PxSyntaxConstants.ParseDateTime("2021-01-01T00:00:00.000Z");
 
             List<DatabaseTable> expectedTables =
             [

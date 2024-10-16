@@ -1,5 +1,4 @@
 ﻿#nullable enable
-using NUnit.Framework;
 using Px.Utils.Language;
 using Px.Utils.Models;
 using Px.Utils.Models.Data;
@@ -219,7 +218,7 @@ namespace UnitTests
 
             return new ArchiveCube()
             {
-                CreationTime = PxSyntaxConstants.ParsePxDateTime("2024-08-19T14:00:00.000Z"),
+                CreationTime = PxSyntaxConstants.ParseDateTime("2024-08-19T14:00:00.000Z"),
                 Meta = meta,
                 Data = data
             };
@@ -258,7 +257,7 @@ namespace UnitTests
                     }
 
                     MultilanguageStringProperty source = new(new MultilanguageString(sourceTranslations));
-                    ContentDimensionValue cdv = new(name, new MultilanguageString(nameTranslations), new(unitTranslations), PxSyntaxConstants.ParsePxDateTime("2009-09-01T00:00:00.000Z"), varParam.Decimals);
+                    ContentDimensionValue cdv = new(name, new MultilanguageString(nameTranslations), new(unitTranslations), PxSyntaxConstants.ParseDateTime("2009-09-01T00:00:00.000Z"), varParam.Decimals);
                     cdv.AdditionalProperties[PxSyntaxConstants.SOURCE_KEY] = source;
                     results.Add(cdv);
                 }
