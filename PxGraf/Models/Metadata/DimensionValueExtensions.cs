@@ -51,9 +51,9 @@ namespace PxGraf.Models.Metadata
         /// <param name="value">Dimension value to get the source from.</param>
         /// <param name="meta">Complete matrix metadata object.</param>
         /// <returns>Source of the given content dimension value if it exists, otherwise the source of the dimension or the table.</returns>
-        private static MultilanguageString? GetSource(this ContentDimensionValue value, IReadOnlyMatrixMetadata meta)
+        public static MultilanguageString? GetSource(this ContentDimensionValue value, IReadOnlyMatrixMetadata meta)
         {
-            // Primary use source information from the content dimension value.
+            // Primarily use source information from the content dimension value.
             MultilanguageString? valueSource = value.GetDimensionValueMultilanguageProperty(PxSyntaxConstants.SOURCE_KEY);
             if (valueSource is not null) return valueSource;
             // If the value has no source, use the source of the content dimension.

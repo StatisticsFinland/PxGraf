@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from "@testing-library/react";
-import { IDimension, VariableType } from "types/cubeMeta";
+import { EMetaPropertyType, IDimension, EDimensionType } from "types/cubeMeta";
 import { FilterType, Query } from "types/query";
 import VariableSelectionList from "./VariableSelectionList";
 import UiLanguageContext from 'contexts/uiLanguageContext';
@@ -14,7 +14,7 @@ const mockVariables: IDimension[] =
                 sv: "FoobarManualSv",
                 en: "FoobarManualEn"
             },
-            Type: VariableType.OtherClassificatory,
+            Type: EDimensionType.Other,
             Values: [
                 {
                     Code: "eka",
@@ -23,7 +23,7 @@ const mockVariables: IDimension[] =
                         sv: "ekaSv",
                         en: "ekaEn"
                     },
-                    Virtual: false
+                    IsVirtual: false
                 },
                 {
                     Code: "toka",
@@ -32,7 +32,7 @@ const mockVariables: IDimension[] =
                         sv: "tokaSv",
                         en: "tokaEn"
                     },
-                    Virtual: false
+                    IsVirtual: false
                 },
                 {
                     Code: "peruna",
@@ -41,7 +41,7 @@ const mockVariables: IDimension[] =
                         sv: "perunaSv",
                         en: "perunaEn"
                     },
-                    Virtual: false
+                    IsVirtual: false
                 }
             ]
         },
@@ -52,7 +52,7 @@ const mockVariables: IDimension[] =
                 sv: "År",
                 en: "Year"
             },
-            Type: VariableType.Time,
+            Type: EDimensionType.Time,
             Values: [
                 {
                     Code: "2018",
@@ -61,7 +61,7 @@ const mockVariables: IDimension[] =
                         sv: "2018",
                         en: "2018"
                     },
-                    Virtual: false
+                    IsVirtual: false
                 },
                 {
                     Code: "2019",
@@ -70,7 +70,7 @@ const mockVariables: IDimension[] =
                         sv: "2019",
                         en: "2019"
                     },
-                    Virtual: false
+                    IsVirtual: false
                 },
                 {
                     Code: "2020",
@@ -79,7 +79,7 @@ const mockVariables: IDimension[] =
                         sv: "2020",
                         en: "2020"
                     },
-                    Virtual: false
+                    IsVirtual: false
                 },
                 {
                     Code: "2021",
@@ -88,7 +88,7 @@ const mockVariables: IDimension[] =
                         sv: "2021*",
                         en: "2021*"
                     },
-                    Virtual: false
+                    IsVirtual: false
                 }
             ]
         },
@@ -99,7 +99,7 @@ const mockVariables: IDimension[] =
                 sv: "FoobarFromSv",
                 en: "FoobarFromEn"
             },
-            Type: VariableType.OtherClassificatory,
+            Type: EDimensionType.Other,
             Values: [
                 {
                     Code: "aaa",
@@ -108,7 +108,7 @@ const mockVariables: IDimension[] =
                         sv: "aaaSv",
                         en: "aaaEn"
                     },
-                    Virtual: false
+                    IsVirtual: false
                 },
                 {
                     Code: "bbb",
@@ -117,7 +117,7 @@ const mockVariables: IDimension[] =
                         sv: "bbbSv",
                         en: "bbbEn"
                     },
-                    Virtual: false
+                    IsVirtual: false
                 },
                 {
                     Code: "ccc",
@@ -126,7 +126,7 @@ const mockVariables: IDimension[] =
                         sv: "cccSv",
                         en: "cccEn"
                     },
-                    Virtual: false
+                    IsVirtual: false
                 },
                 {
                     Code: "ddd",
@@ -135,7 +135,7 @@ const mockVariables: IDimension[] =
                         sv: "dddSv",
                         en: "dddEn"
                     },
-                    Virtual: false
+                    IsVirtual: false
                 }
             ]
         },
@@ -146,7 +146,7 @@ const mockVariables: IDimension[] =
                 sv: "FoobarAllSv",
                 en: "FoobarAllEn"
             },
-            Type: VariableType.OtherClassificatory,
+            Type: EDimensionType.Other,
             Values: [
                 {
                     Code: "xxx",
@@ -155,7 +155,7 @@ const mockVariables: IDimension[] =
                         sv: "xxxSv",
                         en: "xxxEn"
                     },
-                    Virtual: false
+                    IsVirtual: false
                 },
                 {
                     Code: "yyy",
@@ -164,7 +164,7 @@ const mockVariables: IDimension[] =
                         sv: "yyySv",
                         en: "yyyEn"
                     },
-                    Virtual: false
+                    IsVirtual: false
                 },
                 {
                     Code: "zzz",
@@ -173,7 +173,7 @@ const mockVariables: IDimension[] =
                         sv: "zzzSv",
                         en: "zzzEn"
                     },
-                    Virtual: false
+                    IsVirtual: false
                 }
             ]
         },
@@ -184,7 +184,7 @@ const mockVariables: IDimension[] =
                 sv: "ContentVariableSv",
                 en: "ContentVariableEn"
             },
-            Type: VariableType.Content,
+            Type: EDimensionType.Content,
             Values: [
                 {
                     Code: "eka",
@@ -193,7 +193,7 @@ const mockVariables: IDimension[] =
                         sv: "ekaSv",
                         en: "ekaEn"
                     },
-                    Virtual: false
+                    IsVirtual: false
                 }
             ]
         },
@@ -204,13 +204,11 @@ const mockVariables: IDimension[] =
                 sv: "EliminationVariableEn",
                 en: "EliminationVariableEn"
             },
-            Type: VariableType.OtherClassificatory,
+            Type: EDimensionType.Other,
             AdditionalProperties: {
                 ELIMINATION: {
-                    KeyWord: "ELIMINATION",
-                    CanGetStringValue: false,
-                    CanGetMultilanguageValue: true,
-                    Entries: {
+                    Type: EMetaPropertyType.MultilanguageText,
+                    Value: {
                         fi: "sum",
                         sv: "sum",
                         en: "sum"
@@ -225,7 +223,7 @@ const mockVariables: IDimension[] =
                         sv: "sumSv",
                         en: "sumEn"
                     },
-                    Virtual: false
+                    IsVirtual: false
                 },
                 {
                     Code: "val",
@@ -234,7 +232,7 @@ const mockVariables: IDimension[] =
                         sv: "valSv",
                         en: "valEn"
                     },
-                    Virtual: false
+                    IsVirtual: false
                 }
             ]
         },
@@ -245,7 +243,7 @@ const mockVariables: IDimension[] =
                 sv: "SingleValueVariableSv",
                 en: "SingleValueVariableEn"
             },
-            Type: VariableType.OtherClassificatory,
+            Type: EDimensionType.Other,
             Values: [
                 {
                     Code: "single",
@@ -254,7 +252,7 @@ const mockVariables: IDimension[] =
                         sv: "singleSv",
                         en: "singleEn"
                     },
-                    Virtual: false
+                    IsVirtual: false
                 }
             ]
         },
@@ -265,7 +263,7 @@ const mockVariables: IDimension[] =
                 sv: "NamelessValueVariableSv",
                 en: "NamelessValueVariableEn"
             },
-            Type: VariableType.OtherClassificatory,
+            Type: EDimensionType.Other,
             Values: [
                 {
                     Code: "missingName",
@@ -274,7 +272,7 @@ const mockVariables: IDimension[] =
                         sv: null,
                         en: null
                     },
-                    Virtual: false
+                    IsVirtual: false
                 }
             ]
         }

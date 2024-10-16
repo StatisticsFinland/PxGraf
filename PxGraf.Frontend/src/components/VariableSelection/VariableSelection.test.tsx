@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from "@testing-library/react";
-import { IDimension, VariableType } from "types/cubeMeta";
+import { IDimension, EDimensionType } from "types/cubeMeta";
 import { FilterType, IVariableQuery } from "types/query";
 import VariableSelection from "./VariableSelection";
 import UiLanguageContext from "contexts/uiLanguageContext";
@@ -13,7 +13,7 @@ const mockVariable: IDimension =
         sv: "År",
         en: "Year"
     },
-    Type: VariableType.Time,
+    Type: EDimensionType.Time,
     Values: [
         {
             Code: "2018",
@@ -22,7 +22,7 @@ const mockVariable: IDimension =
                 sv: "2018",
                 en: "2018"
             },
-            Virtual: false
+            IsVirtual: false
         },
         {
             Code: "2019",
@@ -31,7 +31,7 @@ const mockVariable: IDimension =
                 sv: "2019",
                 en: "2019"
             },
-            Virtual: false
+            IsVirtual: false
         },
         {
             Code: "2020",
@@ -40,7 +40,7 @@ const mockVariable: IDimension =
                 sv: "2020",
                 en: "2020"
             },
-            Virtual: false
+            IsVirtual: false
         },
         {
             Code: "2021",
@@ -49,7 +49,7 @@ const mockVariable: IDimension =
                 sv: "2021*",
                 en: "2021*"
             },
-            Virtual: false
+            IsVirtual: false
         }
     ]
 }

@@ -1,18 +1,14 @@
-import { IMetaProperty } from "../types/cubeMeta";
-import { getAdditionalProperty } from "./metadataUtils";
+import { EMetaPropertyType, IMetaProperty } from "../types/cubeMeta";
+import { getAdditionalPropertyValue } from "./metadataUtils";
 
 const mockProperties: { [key: string]: IMetaProperty } = {
     MOCKPROPERTY_A: {
-        KeyWord: 'MOCKPROPERTY_A',
-        CanGetStringValue: true,
-        CanGetMultilanguageValue: false,
-        Entries: 'Mock property A value'
+        Type: EMetaPropertyType.Text,
+        Value: 'Mock property A value'
     },
     MOCKPROPERTY_B: {
-        KeyWord: 'MOCKPROPERTY_B',
-        CanGetStringValue: false,
-        CanGetMultilanguageValue: true,
-        Entries: {
+        Type: EMetaPropertyType.MultilanguageText,
+        Value: {
             fi: 'Mock property B value in Finnish',
             sv: 'Mock property B value in Swedish',
             en: 'Mock property B value in English'
@@ -22,12 +18,12 @@ const mockProperties: { [key: string]: IMetaProperty } = {
 
 describe('getAdditionalProperty tests', () => {
     it('Should return the correct property value as string', () => {
-        const propertyValue = getAdditionalProperty('MOCKPROPERTY_A', mockProperties, true);
+        const propertyValue = getAdditionalPropertyValue('MOCKPROPERTY_A', mockProperties);
         expect(propertyValue).toBe('Mock property A value');
     });
 
     it('Should return the correct property value as multilanguage string', () => {
-        const propertyValue = getAdditionalProperty('MOCKPROPERTY_B', mockProperties);
+        const propertyValue = getAdditionalPropertyValue('MOCKPROPERTY_B', mockProperties);
         expect(propertyValue).toEqual({
             fi: 'Mock property B value in Finnish',
             sv: 'Mock property B value in Swedish',
@@ -36,7 +32,7 @@ describe('getAdditionalProperty tests', () => {
     });
 
     it('Should return null when property is not found', () => {
-        const propertyValue = getAdditionalProperty('foo', mockProperties);
+        const propertyValue = getAdditionalPropertyValue('foo', mockProperties);
         expect(propertyValue).toBeNull();
     });
 });

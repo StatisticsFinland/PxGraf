@@ -2,7 +2,7 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import { IValueSelectProps, ValueSelect } from './ValueSelect';
 import '@testing-library/jest-dom';
-import { VariableType } from 'types/cubeMeta';
+import { EDimensionType } from 'types/cubeMeta';
 import UiLanguageContext from 'contexts/uiLanguageContext';
 import { IVariable } from '../../types/visualizationResponse';
 
@@ -23,7 +23,7 @@ const mockVariable: IVariable =
         code: "foobar1",
         name: { fi: "foo1", sv: "bar1", en: "foobar1" },
         note: { fi: "föö1", sv: "bär1", en: "fööbär1" },
-        type: VariableType.OtherClassificatory,
+        type: EDimensionType.Other,
         values: [
             {
                 code: "barfoo1",

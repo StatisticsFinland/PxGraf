@@ -3,7 +3,7 @@ import { MarkerScaler } from "./UtilityComponents/MarkerScaler";
 import { IVisualizationSettings } from "types/visualizationSettings";
 import { IVisualizationRules } from "types/visualizationRules";
 import { VisualizationType } from "types/visualizationType";
-import { IDimension, VariableType } from "types/cubeMeta";
+import { IDimension, EDimensionType } from "types/cubeMeta";
 import { Query } from "types/query";
 import InfoBubble from "components/InfoBubble/InfoBubble";
 import { useTranslation } from "react-i18next";
@@ -55,7 +55,7 @@ export const VisualizationSettingControl: React.FC<IVisualizationSettingControlP
 
     const { t } = useTranslation();
     const selectableVariables: IDimension[] = variables.filter(v => variableQuery[v.Code].selectable);
-    const selectableVariablesExcludingContent: IDimension[] = selectableVariables?.filter(fv => fv.Type !== VariableType.Content);
+    const selectableVariablesExcludingContent: IDimension[] = selectableVariables?.filter(fv => fv.Type !== EDimensionType.Content);
     const showMultiselectableSelector: boolean = visualizationRules.multiselectVariableAllowed && selectableVariablesExcludingContent.length > 0;
 
     return (

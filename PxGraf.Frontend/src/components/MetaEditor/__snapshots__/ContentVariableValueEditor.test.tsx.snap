@@ -100,7 +100,7 @@ exports[`Rendering test renders correctly 1`] = `
             class="MuiInputBase-input MuiOutlinedInput-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
             id=":r2:"
             type="text"
-            value="xcv"
+            value="lahde"
           />
           <fieldset
             aria-hidden="true"

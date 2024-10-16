@@ -1,7 +1,7 @@
 import React from 'react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { TablePivotSettings } from "./TablePivotSettings";
-import { IDimension, VariableType } from "types/cubeMeta";
+import { IDimension, EDimensionType } from "types/cubeMeta";
 import UiLanguageContext from 'contexts/uiLanguageContext';
 import { Query, FilterType } from "types/query";
 import '@testing-library/jest-dom';
@@ -40,80 +40,80 @@ const mockVariables: IDimension[] = [
     {
         Code: "foobar1",
         Name: { fi: "foo1", sv: "bar1", en: "foobar1" },
-        Type: VariableType.OtherClassificatory,
+        Type: EDimensionType.Other,
         Values: [
             {
                 Code: "barfoo1",
                 Name: { fi: "fyy1", sv: "bör1", en: "fyybör1" },
-                Virtual: false
+                IsVirtual: false
             },
             {
                 Code: "barfoo2",
                 Name: { fi: "fyy2", sv: "bör2", en: "fyybör2" },
-                Virtual: false
+                IsVirtual: false
             }
         ]
     },
     {
         Code: "foobar2",
         Name: { fi: "foo2", sv: "bar2", en: "foobar2" },
-        Type: VariableType.OtherClassificatory,
+        Type: EDimensionType.Other,
         Values: [
             {
                 Code: "barfoo1",
                 Name: { fi: "fyy1", sv: "bör1", en: "fyybör1" },
-                Virtual: false
+                IsVirtual: false
             },
             {
                 Code: "barfoo2",
                 Name: { fi: "fyy2", sv: "bör2", en: "fyybör2" },
-                Virtual: false
+                IsVirtual: false
             }
         ]
     },
     {
         Code: "foobar3",
         Name: { fi: "foo3", sv: "bar3", en: "foobar3" },
-        Type: VariableType.OtherClassificatory,
+        Type: EDimensionType.Other,
         Values: [
             {
                 Code: "barfoo1",
                 Name: { fi: "fyy1", sv: "bör1", en: "fyybör1" },
-                Virtual: false
+                IsVirtual: false
             },
             {
                 Code: "barfoo2",
                 Name: { fi: "fyy2", sv: "bör2", en: "fyybör2" },
-                Virtual: false
+                IsVirtual: false
             }
         ]
     },
     {
         Code: "foobar4",
         Name: { fi: "foo4", sv: "bar4", en: "foobar4" },
-        Type: VariableType.OtherClassificatory,
+        Type: EDimensionType.Other,
         Values: [
             {
                 Code: "barfoo1",
                 Name: { fi: "fyy1", sv: "bör1", en: "fyybör1" },
-                Virtual: false
+                IsVirtual: false
             },
             {
                 Code: "barfoo2",
                 Name: { fi: "fyy2", sv: "bör2", en: "fyybör2" },
-                Virtual: false
+                IsVirtual: false
             }
         ]
     },
     {
         Code: "foobar5",
         Name: { fi: "foo5", sv: "bar5", en: "foobar5" },
-        Type: VariableType.OtherClassificatory,
+        Type: EDimensionType.Other,
         Values: [
             {
                 Code: "barfoo1",
                 Name: { fi: "fyy1", sv: "bör1", en: "fyybör1" },
-                Virtual: false
+                IsVirtual: false
             }
         ]
     }

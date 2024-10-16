@@ -1,7 +1,7 @@
 import React from 'react';
 import '@testing-library/jest-dom';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { IDimensionValue } from 'types/cubeMeta';
+import { EMetaPropertyType, IDimensionValue } from 'types/cubeMeta';
 import { IVariableValueEditions } from 'types/query';
 import ContentVariableValueEditor from './ContentVariableValueEditor';
 import UiLanguageContext from 'contexts/uiLanguageContext';
@@ -32,13 +32,11 @@ const mockVariableValue: IDimensionValue = {
     AdditionalProperties:
     {
         SOURCE: {
-            KeyWord: 'SOURCE',
-            CanGetMultilanguageValue: true,
-            CanGetStringValue: false,
-            Entries: {
-                'fi': 'xcv',
-                'sv': 'xcv',
-                'en': 'xcv'
+            Type: EMetaPropertyType.MultilanguageText,
+            Value: {
+                'fi': 'lahde',
+                'sv': 'kalla',
+                'en': 'source'
             }
         }
     },
@@ -53,7 +51,7 @@ const mockVariableValue: IDimensionValue = {
         'sv': 'asd',
         'en': 'asd'
     },
-    Virtual: false
+    IsVirtual: false
 }
 const mockLang = 'fi';
 const mockFunction = jest.fn();

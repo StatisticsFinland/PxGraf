@@ -17,17 +17,25 @@ export interface IMatrixMetadata {
 }
 
 /**
+ * Enumeration for metadata property types.
+ */
+export enum EMetaPropertyType {
+    Text = 'Text',
+    MultilanguageText = 'MultilanguageText',
+    Numeric = 'Numeric',
+    Boolean = 'Boolean',
+    TextArray = 'TextArray',
+    MultilanguageTextArray = 'MultilanguageTextArray'
+}
+
+/**
  * Interface for a metadata property of a cube, dimension or value.
- * @property {string} KeyWord - The keyword of the property.
- * @property {boolean} CanGetStringValue - Flag to indicate if the property can be represented as a string.
- * @property {boolean} CanGetMultilanguageValue - Flag to indicate if the property can be represented as a multi language string.
- * @property {MultiLanguageString | string} Entries - The multi language or string value of the property.
+ * @property {MetaPropertyType} Type - The type of the property.
+ * @property {MultiLanguageString | string | boolean | number | MultiLanguageString[] | string[]} Value - The value of the property.
  */
 export interface IMetaProperty {
-    KeyWord: string,
-    CanGetStringValue: boolean,
-    CanGetMultilanguageValue: boolean,
-    Entries: MultiLanguageString | string
+    Type: EMetaPropertyType,
+    Value: MultiLanguageString | string | boolean | number | MultiLanguageString[] | string[]
 }
 
 /**
@@ -44,7 +52,7 @@ export interface IDimension {
     Name: MultiLanguageString,
     AdditionalProperties?: { [key: string]: IMetaProperty },
     Values: IDimensionValue[]
-    Type: VariableType,
+    Type: EDimensionType,
     Interval?: TTimeVariableInterval 
 }
 
@@ -57,7 +65,7 @@ export interface IDimension {
 export interface IDimensionValue {
     Code: string,
     Name: MultiLanguageString,
-    Virtual: boolean
+    IsVirtual: boolean
     AdditionalProperties?: { [key: string]: IMetaProperty },
     Unit?: MultiLanguageString,
     LastUpdated?: string,
@@ -67,11 +75,12 @@ export interface IDimensionValue {
 /**
  * Enumeration for variable types.
  */
-export enum VariableType {
-    Unknown = 'N',
-    Time = 'T',
-    Ordinal = 'P',
-    Geographical = 'G',
-    Content = 'C',
-    OtherClassificatory = 'F',
+export enum EDimensionType {
+    Time = 'Time',
+    Content = 'Content',
+    Geographical = 'Geographical',
+    Ordinal = 'Ordinal',
+    Nominal = 'Nominal',
+    Other = 'Other',
+    Unknow = 'Unknown'
 }

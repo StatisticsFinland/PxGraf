@@ -1,4 +1,4 @@
-import { IDimension, VariableType } from "types/cubeMeta";
+import { IDimension, EDimensionType } from "types/cubeMeta";
 import { FilterType, Query } from "types/query";
 import { ISortingOption } from "types/visualizationRules";
 import { IVisualizationSettings } from "types/visualizationSettings";
@@ -43,14 +43,14 @@ const mockVariables: IDimension[] = [
         Name: {
             'fi': 'nimi'
         },
-        Type: VariableType.Content,
+        Type: EDimensionType.Content,
         Values: [
             {
                 Code: 'foo',
                 Name: {
                     'fi': 'nimi'
                 },
-                Virtual: false
+                IsVirtual: false
             }
         ]
     }
@@ -62,21 +62,21 @@ const mockTableTwoVariables: IDimension[] = [
         Name: {
             'fi': 'nimi'
         },
-        Type: VariableType.Content,
+        Type: EDimensionType.Content,
         Values: [
             {
                 Code: 'foo',
                 Name: {
                     'fi': 'nimi'
                 },
-                Virtual: false
+                IsVirtual: false
             },
             {
                 Code: 'bar',
                 Name: {
                     'fi': 'toinennimi'
                 },
-                Virtual: false
+                IsVirtual: false
             }
         ]
     },
@@ -85,28 +85,28 @@ const mockTableTwoVariables: IDimension[] = [
         Name: {
             'fi': 'toinennimi'
         },
-        Type: VariableType.Content,
+        Type: EDimensionType.Content,
         Values: [
             {
                 Code: 'bar',
                 Name: {
                     'fi': 'toinennimi'
                 },
-                Virtual: false
+                IsVirtual: false
             },
             {
                 Code: 'lorem',
                 Name: {
                     'fi': 'kolmasnimi'
                 },
-                Virtual: false
+                IsVirtual: false
             },
             {
                 Code: 'ipsum',
                 Name: {
                     'fi': 'neljasnimi'
                 },
-                Virtual: false
+                IsVirtual: false
             }
         ]
     }
@@ -118,21 +118,21 @@ const mockTableThreeVariables: IDimension[] = [
         Name: {
             'fi': 'nimi'
         },
-        Type: VariableType.Content,
+        Type: EDimensionType.Content,
         Values: [
             {
                 Code: 'foo',
                 Name: {
                     'fi': 'nimi'
                 },
-                Virtual: false
+                IsVirtual: false
             },
             {
                 Code: 'bar',
                 Name: {
                     'fi': 'jokunimi'
                 },
-                Virtual: false
+                IsVirtual: false
             }
         ]
     },
@@ -141,28 +141,28 @@ const mockTableThreeVariables: IDimension[] = [
         Name: {
             'fi': 'toinennimi'
         },
-        Type: VariableType.Content,
+        Type: EDimensionType.Content,
         Values: [
             {
                 Code: 'bar',
                 Name: {
                     'fi': 'toinennimi'
                 },
-                Virtual: false
+                IsVirtual: false
             },
             {
                 Code: 'lorem',
                 Name: {
                     'fi': 'kolmasnimi'
                 },
-                Virtual: false
+                IsVirtual: false
             },
             {
                 Code: 'ipsum',
                 Name: {
                     'fi': 'neljasnimi'
                 },
-                Virtual: false
+                IsVirtual: false
             }
         ]
     },
@@ -171,21 +171,21 @@ const mockTableThreeVariables: IDimension[] = [
         Name: {
             'fi': 'kolmasnimi'
         },
-        Type: VariableType.Content,
+        Type: EDimensionType.Content,
         Values: [
             {
                 Code: 'foobar',
                 Name: {
                     'fi': 'nimi'
                 },
-                Virtual: false
+                IsVirtual: false
             },
             {
                 Code: 'loremipsum',
                 Name: {
                     'fi': 'toinennimi'
                 },
-                Virtual: false
+                IsVirtual: false
             }
         ]
     }
@@ -197,21 +197,21 @@ const mockTableFourVariables: IDimension[] = [
         Name: {
             'fi': 'nimi'
         },
-        Type: VariableType.Content,
+        Type: EDimensionType.Content,
         Values: [
             {
                 Code: 'foo',
                 Name: {
                     'fi': 'nimi'
                 },
-                Virtual: false
+                IsVirtual: false
             },
             {
                 Code: 'bar',
                 Name: {
                     'fi': 'jokunimi'
                 },
-                Virtual: false
+                IsVirtual: false
             }
         ]
     },
@@ -220,28 +220,28 @@ const mockTableFourVariables: IDimension[] = [
         Name: {
             'fi': 'toinennimi'
         },
-        Type: VariableType.Content,
+        Type: EDimensionType.Content,
         Values: [
             {
                 Code: 'bar',
                 Name: {
                     'fi': 'toinennimi'
                 },
-                Virtual: false
+                IsVirtual: false
             },
             {
                 Code: 'lorem',
                 Name: {
                     'fi': 'kolmasnimi'
                 },
-                Virtual: false
+                IsVirtual: false
             },
             {
                 Code: 'ipsum',
                 Name: {
                     'fi': 'neljasnimi'
                 },
-                Virtual: false
+                IsVirtual: false
             }
         ]
     },
@@ -250,21 +250,21 @@ const mockTableFourVariables: IDimension[] = [
         Name: {
             'fi': 'kolmasnimi'
         },
-        Type: VariableType.Content,
+        Type: EDimensionType.Content,
         Values: [
             {
                 Code: 'foobar',
                 Name: {
                     'fi': 'nimi'
                 },
-                Virtual: false
+                IsVirtual: false
             },
             {
                 Code: 'loremipsum',
                 Name: {
                     'fi': 'toinennimi'
                 },
-                Virtual: false
+                IsVirtual: false
             }
         ]
     },
@@ -273,14 +273,14 @@ const mockTableFourVariables: IDimension[] = [
         Name: {
             'fi': 'neljasnimi'
         },
-        Type: VariableType.Content,
+        Type: EDimensionType.Content,
         Values: [
             {
                 Code: 'barfoo',
                 Name: {
                     'fi': 'nimi'
                 },
-                Virtual: false
+                IsVirtual: false
             }
         ]
     }

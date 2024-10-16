@@ -2,48 +2,48 @@ import React from 'react';
 import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
 import { MultiselectableSelector } from './MultiselectableSelector';
-import { IDimension, VariableType } from "types/cubeMeta";
+import { IDimension, EDimensionType } from "types/cubeMeta";
 import { IVisualizationSettings } from '../../../types/visualizationSettings';
 
 const mockVariables: IDimension[] = [
 	{
 		Code: 'cVar',
 		Name: { fi: 'cVarName' },
-		Type: VariableType.Content,
+		Type: EDimensionType.Content,
 		Values: [
 			{
 				Code: 'cVal',
 				Name: { fi: 'cValName' },
-				Virtual: false
+				IsVirtual: false
 			}
 		]
 	},
 	{
 		Code: 'tVar',
 		Name: { fi: 'tVarName' },
-		Type: VariableType.Time,
+		Type: EDimensionType.Time,
 		Values: [
 			{
 				Code: 'tVal',
 				Name: { fi: 'tValName' },
-				Virtual: false
+				IsVirtual: false
 			}
 		]
 	},
 	{
 		Code: 'msVar',
 		Name: { fi: 'msVarAName' },
-		Type: VariableType.OtherClassificatory,
+		Type: EDimensionType.Other,
 		Values: [
 			{
 				Code: 'msVal1',
 				Name: { fi: 'msVal1Name' },
-				Virtual: false
+				IsVirtual: false
 			},
 			{
 				Code: 'msVal2',
 				Name: { fi: 'msVal2Name' },
-				Virtual: false
+				IsVirtual: false
 			}
 		]
 	}

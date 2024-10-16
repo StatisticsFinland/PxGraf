@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { useTheme } from '@mui/material/styles';
 import { UiLanguageContext } from 'contexts/uiLanguageContext';
-import { sortedVariables } from 'utils/sortingHelpers';
+import { sortedDimensions } from 'utils/sortingHelpers';
 
 interface VariableSelectionListProps {
     variables: IDimension[],
@@ -66,7 +66,7 @@ export const VariableSelectionList: React.FC<VariableSelectionListProps> = ({ va
                 <Typography variant="body2" sx={{ color: theme.palette.text.secondary }}>{t('variableSelect.title')}</Typography>
                 <InfoBubble info={infoContent} ariaLabel={t('variableSelect.title')} id="mainContent" />
             </TitleWrapper>
-            {sortedVariables(variables).map(variable => {
+            {sortedDimensions(variables).map(variable => {
                 return (
                     <StyledAccordion key={variable.Code} defaultExpanded={true}>
                         <AccordionSummary
