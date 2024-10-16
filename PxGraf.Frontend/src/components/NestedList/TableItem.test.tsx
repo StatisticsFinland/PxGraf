@@ -69,4 +69,27 @@ describe('Assertion tests', () => {
         expect(name).toBeInTheDocument();
         expect(lastUpdate).toBeInTheDocument();
     });
-})
+
+    it('renders MUI alert when error property is true', async () => {
+        const mockErrorItem: IDatabaseTable = {
+            code: 'error',
+            lastUpdated: null,
+            name: { 'fi': 'error', 'sv': 'error-sv' },
+            languages: ['fi', 'sv'],
+            error: true
+        };
+
+        const { findByRole, findByText } = render(
+            <MemoryRouter>
+                <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
+                    <TableItem currentPath={mockPath} item={mockErrorItem} depth={mockDepth}  />
+                </UiLanguageContext.Provider>
+            </MemoryRouter>
+        );
+
+        const alert = await findByRole('alert');
+        const alertHeader = await findByText("error");
+        expect(alert).toBeInTheDocument();
+        expect(alertHeader).toBeInTheDocument();
+    });
+});

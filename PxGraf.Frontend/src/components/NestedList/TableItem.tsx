@@ -1,4 +1,4 @@
-import { Divider, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
+import { Alert, AlertTitle, Divider, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import FileIcon from '@mui/icons-material/InsertDriveFileOutlined';
 import { IDatabaseTable } from "api/services/table";
 import React from 'react';
@@ -11,6 +11,10 @@ import { parseLanguageString } from '../../utils/ApiHelpers';
 
 const StyledListItem = styled(ListItem)`
   background-color: #f8f8f8;
+`;
+
+const ErrorAlert = styled(Alert)`
+  width: 100%;
 `;
 
 interface ITableItemProps {
@@ -33,10 +37,19 @@ export const TableItem: React.FC<ITableItemProps> = ({ currentPath, item, depth 
     return <React.Fragment key={`${item.code}-key`}>
         <StyledListItem id={currentPath.join('-')}>
             <ListItemButton sx={{ mr: 3, pl: depth * 4 }} component={Link} to={urls.editor(currentPath)}>
-                <ListItemIcon sx={{ minWidth: '32px' }}>
-                    <FileIcon />
-                </ListItemIcon>
-                <ListItemText primary={`${item.name[displayLanguage]} ${parseLanguageString(item.languages)}`} secondary={t("tableSelect.updated") + ": " + new Date(item.lastUpdated).toLocaleString(language)} />
+                {item.error ?
+                    <ErrorAlert sx={{ pl: depth * 4 }} severity="warning">
+                        <AlertTitle>{`${item.name[displayLanguage] ?? item.code}`}</AlertTitle>
+                        {t("error.contentVariableMissing")}
+                    </ErrorAlert>
+                    :
+                    <React.Fragment>
+                        <ListItemIcon sx={{ minWidth: '32px' }}>
+                            <FileIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={`${item.name[displayLanguage]} ${parseLanguageString(item.languages)}`} secondary={t("tableSelect.updated") + ": " + new Date(item.lastUpdated).toLocaleString(language)} />
+                    </React.Fragment>
+                }
             </ListItemButton>
         </StyledListItem>
         <Divider />
