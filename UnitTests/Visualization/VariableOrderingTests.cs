@@ -8,13 +8,14 @@ using PxGraf.Models.SavedQueries;
 using PxGraf.Visualization;
 using System.Collections.Generic;
 using System.Linq;
-using UnitTests;
 using PxGraf.Language;
 using UnitTests.Fixtures;
+using Microsoft.Extensions.Configuration;
+using PxGraf.Settings;
 
-namespace Visualization
+namespace UnitTests.Visualization
 {
-    internal class VariableOrderingTests
+    public class VariableOrderingTests
     {
         // This is to make sure that the data order is the same in the two tests below.
         private readonly static IReadOnlyList<double?> expectedData = [
@@ -23,9 +24,15 @@ namespace Visualization
                 6.123, 7.123, 8.123, 15.123, 16.123, 17.123, 24.123, 25.123, 26.123
             ];
 
-        public VariableOrderingTests()
+        [OneTimeSetUp]
+        public void DoSetup()
         {
             Localization.Load(TranslationFixture.DefaultLanguage, TranslationFixture.Translations);
+
+            IConfiguration configuration = new ConfigurationBuilder()
+                .AddInMemoryCollection(TestInMemoryConfiguration.Get())
+                .Build();
+            Configuration.Load(configuration);
         }
 
         [Test]

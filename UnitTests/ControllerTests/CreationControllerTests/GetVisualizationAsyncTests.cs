@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
-using Px.Utils.Models.Metadata.Dimensions;
 using Px.Utils.Models.Metadata.Enums;
 using PxGraf.Controllers;
 using PxGraf.Data.MetaData;
@@ -14,10 +12,9 @@ using PxGraf.Settings;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using UnitTests;
 using UnitTests.Fixtures;
 
-namespace CreationControllerTests
+namespace UnitTests.ControllerTests.CreationControllerTests
 {
     internal class GetVisualizationAsyncTests
     {

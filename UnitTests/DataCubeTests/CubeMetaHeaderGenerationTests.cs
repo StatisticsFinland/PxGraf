@@ -6,10 +6,9 @@ using PxGraf.Language;
 using PxGraf.Models.Metadata;
 using PxGraf.Models.Queries;
 using System.Collections.Generic;
-using UnitTests;
 using UnitTests.Fixtures;
 
-namespace DataCubeTests
+namespace UnitTests.DataCubeTests
 {
     internal class MatrixMetadataHeaderGenerationTests
     {

@@ -264,14 +264,14 @@ namespace PxGraf.ChartTypeSelection
         /// <returns></returns>
         protected abstract int GetPriority(RejectionReason reason);
 
-        protected VisualizationTypeSelectionObject.VariableInfo GetLargestMultiselect(VisualizationTypeSelectionObject input)
+        protected static VisualizationTypeSelectionObject.VariableInfo GetLargestMultiselect(VisualizationTypeSelectionObject input)
         {
             var multiselects = GetSortedMultiselects(input.Variables);
             return multiselects != null && multiselects.Count != 0 ? multiselects[0] : null;
 
         }
 
-        protected VisualizationTypeSelectionObject.VariableInfo GetSmallerMultiselect(VisualizationTypeSelectionObject input)
+        protected static VisualizationTypeSelectionObject.VariableInfo GetSmallerMultiselect(VisualizationTypeSelectionObject input)
         {
             var multiselects = GetSortedMultiselects(input.Variables);
             return multiselects != null && multiselects.Count > 1 ? multiselects[1] : null;
@@ -282,7 +282,7 @@ namespace PxGraf.ChartTypeSelection
         /// If the query contains neither time or progressive dimensions, returns null.
         /// </summary>
         /// <returns></returns>
-        protected VisualizationTypeSelectionObject.VariableInfo GetTimeOrLargestOrdinal(IEnumerable<VisualizationTypeSelectionObject.VariableInfo> variables)
+        protected static VisualizationTypeSelectionObject.VariableInfo GetTimeOrLargestOrdinal(IEnumerable<VisualizationTypeSelectionObject.VariableInfo> variables)
         {
             var multiselects = GetSortedMultiselects(variables); //OBS: multiselects are sorted here so First() can be used!
             if (multiselects.Find(v => v.Type == DimensionType.Time) is VisualizationTypeSelectionObject.VariableInfo tv) return tv;
@@ -304,7 +304,7 @@ namespace PxGraf.ChartTypeSelection
         /// <param name="reasonPriorityList">List where RejectionReasons are in order</param>
         /// <param name="reason"></param>
         /// <returns></returns>
-        protected int GetPriorityIndex(IList<RejectionReason> reasonPriorityList, RejectionReason reason)
+        protected static int GetPriorityIndex(IList<RejectionReason> reasonPriorityList, RejectionReason reason)
         {
             var index = reasonPriorityList.IndexOf(reason);
             if (index >= 0)

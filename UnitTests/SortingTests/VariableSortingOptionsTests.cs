@@ -10,9 +10,8 @@ using PxGraf.Models.Responses;
 using System.Collections.Generic;
 using System.Linq;
 using UnitTests.Fixtures;
-using UnitTests;
 
-namespace SortingTests
+namespace UnitTests.SortingTests
 {
     internal class VariableSortingOptionsTests
     {

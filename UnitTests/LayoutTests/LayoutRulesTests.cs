@@ -4,9 +4,8 @@ using Px.Utils.Models.Metadata;
 using PxGraf.Data;
 using PxGraf.Models.Queries;
 using System.Collections.Generic;
-using UnitTests;
 
-namespace LayoutTests
+namespace UnitTests.LayoutTests
 {
     internal static class LayoutRulesTests
     {

@@ -98,7 +98,7 @@ namespace UnitTests.MatrixMetadataTests
             dimension.AdditionalProperties.Add(PxSyntaxConstants.ELIMINATION_KEY, new MultilanguageStringProperty(new(eliminationValueName)));
             dimension.Values.Add(new ContentDimensionValue("value0-code", new MultilanguageString(eliminationValueName), new([]), DateTime.MinValue, 0));
             // Act
-            string eliminationValueCode = dimension.GetEliminationValueCode();
+            string? eliminationValueCode = dimension.GetEliminationValueCode();
 
             // Assert
             Assert.That(eliminationValueCode, Is.Not.Null);

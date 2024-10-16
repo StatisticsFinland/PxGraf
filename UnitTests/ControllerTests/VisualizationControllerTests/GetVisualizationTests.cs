@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Mvc;
 using Px.Utils.Models.Metadata.Enums;
 using PxGraf.Controllers;
 using PxGraf.Models.Queries;
-using UnitTests;
 using PxGraf.Datasource;
 using Px.Utils.Models.Metadata;
 using PxGraf.Models.Responses;
@@ -20,7 +19,7 @@ using System.Linq;
 using Px.Utils.Models.Metadata.Dimensions;
 using PxGraf.Utility;
 
-namespace ControllerTests
+namespace UnitTests.ControllerTests.VisualizationControllerTests
 {
     internal class GetVisualizationTests
     {

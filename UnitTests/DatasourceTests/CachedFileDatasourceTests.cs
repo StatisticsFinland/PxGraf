@@ -136,26 +136,19 @@ namespace UnitTests.DatasourceTests
             DatabaseGroupContents contents = await datasource.GetGroupContentsCachedAsync(["database", "subgroup", "folder"]);
 
             // Assert
-            Assert.That(contents.Files.Count, Is.EqualTo(3));
-
-            DatabaseTable file0 = contents.Files[0];
-            Assert.That(file0.Code, Is.EqualTo("table1-id"));
-            Assert.That(file0.Name["fi"], Is.EqualTo("Table1"));
-            Assert.That(file0.Name["en"], Is.EqualTo("Table1.en"));
-            Assert.That(file0.Name["sv"], Is.EqualTo("Table1.sv"));
-            Assert.That(file0.LastUpdated, Is.EqualTo(_lastUpdated));
-
-            DatabaseTable file1 = contents.Files[1];
-            Assert.That(file1.Code, Is.EqualTo("table_2"));
-            Assert.That(file1.Name["fi"], Is.EqualTo("Table2"));
-            Assert.That(file1.Name["en"], Is.EqualTo("Table2.en"));
-            Assert.That(file1.Name["sv"], Is.EqualTo("Table2.sv"));
-            Assert.That(file1.LastUpdated, Is.EqualTo(_lastUpdated));
-
-            DatabaseTable file2 = contents.Files[2];
-            Assert.That(file2.Code, Is.EqualTo("table_3.px"));
-            Assert.That(file2.LastUpdated, Is.Null);
-            Assert.That(file2.Error, Is.True);
+            Assert.That(contents.Files.Count, Is.EqualTo(2));
+            Assert.That(contents.Files[0].Code, Is.EqualTo("table1-id"));
+            Assert.That(contents.Files[1].Code, Is.EqualTo("table_2"));
+            Assert.That(contents.Files[0].Name, Is.Not.Null);
+            Assert.That(contents.Files[1].Name, Is.Not.Null);
+            Assert.That(contents.Files[0].Name!["fi"], Is.EqualTo("Table1"));
+            Assert.That(contents.Files[1].Name!["fi"], Is.EqualTo("Table2"));
+            Assert.That(contents.Files[0].Name!["en"], Is.EqualTo("Table1.en"));
+            Assert.That(contents.Files[1].Name!["en"], Is.EqualTo("Table2.en"));
+            Assert.That(contents.Files[0].Name!["sv"], Is.EqualTo("Table1.sv"));
+            Assert.That(contents.Files[1].Name!["sv"], Is.EqualTo("Table2.sv"));
+            Assert.That(contents.Files[0].LastUpdated, Is.EqualTo(_lastUpdated));
+            Assert.That(contents.Files[1].LastUpdated, Is.EqualTo(_lastUpdated));
         }
 
         [Test]

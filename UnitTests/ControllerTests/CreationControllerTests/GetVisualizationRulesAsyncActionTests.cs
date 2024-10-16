@@ -12,10 +12,9 @@ using PxGraf.Settings;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using UnitTests;
 using UnitTests.Fixtures;
 
-namespace CreationControllerTests
+namespace UnitTests.ControllerTests.CreationControllerTests
 {
     internal class GetVisualizationRulesAsyncActionTests
     {
