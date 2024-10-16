@@ -1,6 +1,5 @@
 ﻿using PxGraf.Enums;
 using PxGraf.Models.Queries;
-using PxGraf.Utility.CustomJsonConverters;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using System;
@@ -9,15 +8,7 @@ namespace PxGraf.Models.SavedQueries.Versions
 {
     public class SavedQueryV10 : VersionedSavedQuery
     {
-        public MatrixQuery Query { get; set; }
-
-        [JsonConverter(typeof(DateTimeJsonConverter))]
-        public DateTime CreationTime { get; set; }
-
         public VisualizationSettingsV10 Settings { get; set; }
-
-        public bool Archived { get; set; }
-
         public class VisualizationSettingsV10
         {
             [JsonConverter(typeof(JsonStringEnumConverter))]
