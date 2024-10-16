@@ -1,6 +1,7 @@
 ﻿using PxGraf.Enums;
 using PxGraf.Models.Queries;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace PxGraf.Models.Requests
 {
@@ -12,13 +13,13 @@ namespace PxGraf.Models.Requests
         /// <summary>
         /// The visualization type selected for the visualization.
         /// </summary>
-        [Required]
+        [JsonRequired]
         public VisualizationType SelectedVisualization { get; set; }
 
         /// <summary>
         /// True if the user has manually pivoted the table.
         /// </summary>
-        [Required]
+        [JsonRequired]
         public bool PivotRequested { get; set; }
 
         /// <summary>

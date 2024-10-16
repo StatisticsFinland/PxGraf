@@ -18,7 +18,7 @@ namespace PxGraf.Models.Requests
         /// <summary>
         /// Currently selected visualization type. (various charts, table, text)
         /// </summary>    
-        [Required]
+        [JsonRequired]
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public VisualizationType SelectedVisualization { get; set; }
 

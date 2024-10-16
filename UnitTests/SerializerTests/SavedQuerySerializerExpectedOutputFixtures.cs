@@ -3,6 +3,18 @@
     internal static class SavedQuerySerializerExpectedOutputFixtures
     {
         public static string V1_1_TEST_SAVEDQUERY1_SER_DESER_EXPECTED_OUTPUT = @"{
+                    ""Settings"": {
+                        ""VisualizationType"": ""GroupVerticalBarChart"",
+                        ""CutYAxis"": false,
+                        ""MatchXLabelsToEnd"": false,
+                        ""XLabelInterval"": 1,
+                        ""Layout"": {
+                            ""RowVariableCodes"": [""Kuukausi""],
+                            ""ColumnVariableCodes"": [""Ilmoittava lentoasema""]
+                        },
+                        ""ShowDataPoints"": false
+                    },
+                    ""Version"": ""1.1"",
                     ""Query"": {
                         ""TableReference"": {
                             ""Name"": ""table.px"",
@@ -73,22 +85,19 @@
                         }
                     },
                     ""CreationTime"": ""2023-05-16T15:04:12+03:00"",
+                    ""Archived"": false
+                }";
+
+        public static string V1_0_TEST_SAVEDQUERY1_SER_DESER_EXPECTED_OUTPUT = @"{
                     ""Settings"": {
                         ""VisualizationType"": ""GroupVerticalBarChart"",
                         ""CutYAxis"": false,
                         ""MatchXLabelsToEnd"": false,
                         ""XLabelInterval"": 1,
-                        ""Layout"": {
-                            ""RowVariableCodes"": [""Kuukausi""],
-                            ""ColumnVariableCodes"": [""Ilmoittava lentoasema""]
-                        },
+                        ""Layout"": null,
                         ""ShowDataPoints"": false
                     },
-                    ""Archived"": false,
-                    ""Version"": ""1.1""
-                }";
-
-        public static string V1_0_TEST_SAVEDQUERY1_SER_DESER_EXPECTED_OUTPUT = @"{
+                    ""Version"": ""1.1"",
                     ""Query"": {
                         ""TableReference"": {
                             ""Name"": ""table.px"",
@@ -159,19 +168,29 @@
                         }
                     },
                     ""CreationTime"": ""2023-05-16T17:13:33+03:00"",
-                    ""Settings"": {
-                        ""VisualizationType"": ""GroupVerticalBarChart"",
-                        ""CutYAxis"": false,
-                        ""MatchXLabelsToEnd"": false,
-                        ""XLabelInterval"": 1,
-                        ""Layout"": null,
-                        ""ShowDataPoints"": false
-                    },
-                    ""Archived"": false,
-                    ""Version"": ""1.1""
+                    ""Archived"": false
                 }";
 
         public static string V1_0_TABLETEST1_SER_DESER_EXPECTED_OUTPUT = @"{
+                ""Settings"": {
+                    ""VisualizationType"": ""Table"",
+                    ""CutYAxis"": false,
+                    ""DefaultSelectableVariableCodes"": {},
+                    ""Layout"": {
+                        ""RowVariableCodes"": [
+                            ""Kuukausi"",
+                            ""Ilmoittava lentoasema"",
+                            ""Lennon tyyppi"",
+                            ""Saapuneet/lähteneet""
+                        ],
+                        ""ColumnVariableCodes"": [
+                            ""Toinen lentoasema"",
+                            ""Tiedot""
+                        ]
+                    },
+                    ""ShowDataPoints"": false
+                },
+                ""Version"": ""1.1"",
                 ""Query"": {
                     ""TableReference"": {
                         ""Name"": ""table.px"",
@@ -286,26 +305,7 @@
                     }
                 },
                 ""CreationTime"": ""2022-04-19T09:12:40+03:00"",
-                ""Settings"": {
-                    ""VisualizationType"": ""Table"",
-                    ""CutYAxis"": false,
-                    ""DefaultSelectableVariableCodes"": {},
-                    ""Layout"": {
-                        ""RowVariableCodes"": [
-                            ""Kuukausi"",
-                            ""Ilmoittava lentoasema"",
-                            ""Lennon tyyppi"",
-                            ""Saapuneet/lähteneet""
-                        ],
-                        ""ColumnVariableCodes"": [
-                            ""Toinen lentoasema"",
-                            ""Tiedot""
-                        ]
-                    },
-                    ""ShowDataPoints"": false
-                },
-                ""Archived"": false,
-                ""Version"": ""1.1""
+                ""Archived"": false
             }";
     }
 }
