@@ -1,5 +1,5 @@
 /* istanbul ignore file */
-import { VariableType } from "./cubeMeta";
+import { EDimensionType } from "./cubeMeta";
 import { MultiLanguageString } from "./multiLanguageString";
 
 /**
@@ -14,7 +14,7 @@ export interface IVariable {
     code: string,
     name: MultiLanguageString,
     note: MultiLanguageString,
-    type: VariableType,
+    type: EDimensionType,
     values: IVariableValue[]
 }
 

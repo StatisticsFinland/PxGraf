@@ -141,6 +141,22 @@ namespace PxGraf.Models.Metadata
 
             return null;
         }
+
+        /// <summary>
+        /// Ensures that source property exists for all content dimension values in the given metadata.
+        /// Prioritises the source property of the content dimension value over the source property of the dimension and the table.
+        /// </summary>
+        /// <param name="meta">Metadata boject to be processed.</param>
+        /// <exception cref="InvalidOperationException">Thrown if source property is not found from metadata.</exception>
+        public static void AssignSourceToContentDimensionValues(this IReadOnlyMatrixMetadata meta)
+        {
+            foreach (ContentDimensionValue cdv in meta.GetContentDimension().Values)
+            {
+                MultilanguageString? source = cdv.GetSource(meta) ?? throw new InvalidOperationException("Source property not found from metadata.");
+                MultilanguageStringProperty sourceProperty = new (source);
+                cdv.AdditionalProperties.Add(PxSyntaxConstants.SOURCE_KEY, sourceProperty);
+            }
+        }
     }
 }
 #nullable disable

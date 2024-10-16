@@ -4,7 +4,7 @@ import { Stack } from '@mui/material';
 import { ContentVariableEditor } from './ContentVariableEditor';
 import { BasicVariableEditor } from './BasicVariableEditor';
 import styled from 'styled-components';
-import { IDimension, VariableType } from 'types/cubeMeta';
+import { IDimension, EDimensionType } from 'types/cubeMeta';
 import { IVariableEditions } from 'types/query';
 
 const ContentWrapper = styled(Stack)`
@@ -32,7 +32,7 @@ export const VariableEditor: React.FC<IVariableEditorProps> = ({ variable, langu
             </ContentWrapper>
         );
     }
-    else if (variable.Type === VariableType.Content) {
+    else if (variable.Type === EDimensionType.Content) {
         return <ContentVariableEditor
             variable={variable}
             language={language}

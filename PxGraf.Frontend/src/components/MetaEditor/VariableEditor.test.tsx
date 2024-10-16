@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { IDimension, VariableType } from 'types/cubeMeta';
+import { EMetaPropertyType, IDimension, EDimensionType } from 'types/cubeMeta';
 import { IVariableEditions } from 'types/query';
 import VariableEditor from './VariableEditor';
 import UiLanguageContext from 'contexts/uiLanguageContext';
@@ -25,7 +25,7 @@ const mockVariable: IDimension = {
         'sv': 'asd',
         'en': 'asd'
     },
-    Type: VariableType.Content,
+    Type: EDimensionType.Content,
     Values: [
         {
             Code: 'bar',
@@ -34,7 +34,7 @@ const mockVariable: IDimension = {
                 'sv': 'fgfgfg',
                 'en': 'fgfgfg'
             },
-            Virtual: true,
+            IsVirtual: true,
             Unit: {
                 'fi': 'yksikko',
                 'sv': 'enhet',
@@ -44,10 +44,8 @@ const mockVariable: IDimension = {
             LastUpdated: '2021-01-01',
             AdditionalProperties: {
                 SOURCE: {
-                    KeyWord: 'SOURCE',
-                    CanGetStringValue: false,
-                    CanGetMultilanguageValue: true,
-                    Entries: {
+                    Type: EMetaPropertyType.MultilanguageText,
+                    Value: {
                         'fi': 'lahde',
                         'sv': 'kalla',
                         'en': 'source'

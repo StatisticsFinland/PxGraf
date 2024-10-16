@@ -1,6 +1,6 @@
 import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { IDimension, VariableType } from 'types/cubeMeta';
+import { IDimension, EDimensionType } from 'types/cubeMeta';
 import { IVariableEditions } from 'types/query';
 import BasicVariableEditor from './BasicVariableEditor';
 import '@testing-library/jest-dom';
@@ -33,7 +33,7 @@ const mockVariable: IDimension = {
         'sv': 'asd',
         'en': 'asd'
     },
-    Type: VariableType.Content,
+    Type: EDimensionType.Content,
     Values: [
         {
             Code: 'bar',
@@ -42,7 +42,7 @@ const mockVariable: IDimension = {
                 'sv': 'fgfgfg',
                 'en': 'fgfgfg'
             },
-            Virtual: false
+            IsVirtual: false
         }
     ]
 }

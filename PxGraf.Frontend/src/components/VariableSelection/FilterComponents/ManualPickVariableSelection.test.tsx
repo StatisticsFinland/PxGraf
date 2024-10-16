@@ -12,7 +12,7 @@ const mockVariableValues: IDimensionValue[] = [
             sv: "2018",
             en: "2018"
         },
-        Virtual: false,
+        IsVirtual: false,
     },
     {
         Code: "2019",
@@ -21,7 +21,7 @@ const mockVariableValues: IDimensionValue[] = [
             sv: "2019",
             en: "2019"
         },
-        Virtual: false,
+        IsVirtual: false,
     },
     {
         Code: "2020",
@@ -30,7 +30,7 @@ const mockVariableValues: IDimensionValue[] = [
             sv: "2020",
             en: "2020"
         },
-        Virtual: false,
+        IsVirtual: false,
     },
     {
         Code: "2021",
@@ -39,7 +39,7 @@ const mockVariableValues: IDimensionValue[] = [
             sv: "2021*",
             en: "2021*"
         },
-        Virtual: false,
+        IsVirtual: false,
     }
 ];
 

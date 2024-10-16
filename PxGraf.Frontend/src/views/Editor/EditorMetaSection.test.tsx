@@ -3,7 +3,7 @@ import EditorMetaSection from "./EditorMetaSection";
 import { render } from "@testing-library/react";
 import { IHeaderResult } from "api/services/default-header";
 import { IVisualizationSettingsResult } from "api/services/visualization-rules";
-import { IDimension, VariableType } from "types/cubeMeta";
+import { EMetaPropertyType, IDimension, EDimensionType } from "types/cubeMeta";
 import { FilterType, IQueryInfo, Query } from "types/query";
 import { IVisualizationSettings } from "types/visualizationSettings";
 import { VisualizationType } from "types/visualizationType";
@@ -26,7 +26,7 @@ const mockVariables: IDimension[] = [
             'sv': 'foosv',
             'en': 'fooen'
         },
-        Type: VariableType.Content,
+        Type: EDimensionType.Content,
         Values: [
             {
                 Code: 'fooval1',
@@ -35,7 +35,7 @@ const mockVariables: IDimension[] = [
                     'sv': 'fgfgfg1',
                     'en': 'fgfgfg1'
                 },
-                Virtual: false,
+                IsVirtual: false,
                 Unit: {
                     'fi': 'yksikko',
                     'sv': 'enhet',
@@ -45,10 +45,8 @@ const mockVariables: IDimension[] = [
                 LastUpdated: '2021-01-01',
                 AdditionalProperties: {
                     SOURCE: {
-                        KeyWord: 'SOURCE',
-                        CanGetStringValue: false,
-                        CanGetMultilanguageValue: true,
-                        Entries: {
+                        Type: EMetaPropertyType.MultilanguageText,
+                        Value: {
                             'fi': 'lahde',
                             'sv': 'kalla',
                             'en': 'source'
@@ -63,7 +61,7 @@ const mockVariables: IDimension[] = [
                     'sv': 'fgfgfg2',
                     'en': 'fgfgfg2'
                 },
-                Virtual: false,
+                IsVirtual: false,
                 Unit: {
                     'fi': 'prosenttia',
                     'sv': 'procent',
@@ -73,10 +71,8 @@ const mockVariables: IDimension[] = [
                 LastUpdated: '2022-01-01',
                 AdditionalProperties: {
                     SOURCE: {
-                        KeyWord: 'SOURCE',
-                        CanGetStringValue: false,
-                        CanGetMultilanguageValue: true,
-                        Entries: {
+                        Type: EMetaPropertyType.MultilanguageText,
+                        Value: {
                             'fi': 'lahde',
                             'sv': 'kalla',
                             'en': 'source'
@@ -93,7 +89,7 @@ const mockVariables: IDimension[] = [
             'sv': 'barsv',
             'en': 'baren'
         },
-        Type: VariableType.Content,
+        Type: EDimensionType.Content,
         Values: [
             {
                 Code: 'barval1',
@@ -102,7 +98,7 @@ const mockVariables: IDimension[] = [
                     'sv': 'fgfgfg1',
                     'en': 'fgfgfg1'
                 },
-                Virtual: false,
+                IsVirtual: false,
                 Unit: {
                     'fi': 'yksikko',
                     'sv': 'enhet',
@@ -112,10 +108,8 @@ const mockVariables: IDimension[] = [
                 LastUpdated: '2021-01-01',
                 AdditionalProperties: {
                     SOURCE: {
-                        KeyWord: 'SOURCE',
-                        CanGetStringValue: false,
-                        CanGetMultilanguageValue: true,
-                        Entries: {
+                        Type: EMetaPropertyType.MultilanguageText,
+                        Value: {
                             'fi': 'lahde',
                             'sv': 'kalla',
                             'en': 'source'
@@ -130,7 +124,7 @@ const mockVariables: IDimension[] = [
                     'sv': 'fgfgfg2',
                     'en': 'fgfgfg2'
                 },
-                Virtual: false,
+                IsVirtual: false,
                 Unit: {
                     'fi': 'prosenttia',
                     'sv': 'procent',
@@ -140,10 +134,8 @@ const mockVariables: IDimension[] = [
                 LastUpdated: '2022-01-01',
                 AdditionalProperties: {
                     SOURCE: {
-                        KeyWord: 'SOURCE',
-                        CanGetStringValue: false,
-                        CanGetMultilanguageValue: true,
-                        Entries: {
+                        Type: EMetaPropertyType.MultilanguageText,
+                        Value: {
                             'fi': 'lahde',
                             'sv': 'kalla',
                             'en': 'source'

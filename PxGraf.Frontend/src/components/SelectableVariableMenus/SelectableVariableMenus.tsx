@@ -3,7 +3,7 @@ import { ValueSelect } from './ValueSelect';
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { ISelectabilityInfo } from 'components/Preview/Preview';
 import { IQueryVisualizationResponse } from '@statisticsfinland/pxvisualizer';
-import { VariableType } from 'types/cubeMeta';
+import { EDimensionType } from 'types/cubeMeta';
 import { IVisualizationSettings } from 'types/visualizationSettings';
 
 export interface IMenuProps {
@@ -31,7 +31,7 @@ export const getSelectables = (data: IQueryVisualizationResponse, visualizationS
 
     return selectableVariableCodes.map((code: string) => {
         const metaDataItem = metaData.find(item => item.code === code);
-        const variable = { ...metaDataItem, type: VariableType[metaDataItem.type] };
+        const variable = { ...metaDataItem, type: EDimensionType[metaDataItem.type] };
 
         return {
             variable,

@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from "@testing-library/react";
-import { IDimension, VariableType } from "types/cubeMeta";
+import { IDimension, EDimensionType } from "types/cubeMeta";
 import { FilterType, Query } from "types/query";
 import EditorFilterSection from "./EditorFilterSection";
 import UiLanguageContext from 'contexts/uiLanguageContext';
@@ -11,14 +11,14 @@ const mockVariables: IDimension[] = [
         Name: {
             'fi': 'name'
         },
-        Type: VariableType.Content,
+        Type: EDimensionType.Content,
         Values: [
             {
                 Code: 'bar',
                 Name: {
                     'fi': 'name'
                 },
-                Virtual: false
+                IsVirtual: false
             }
         ]
     }

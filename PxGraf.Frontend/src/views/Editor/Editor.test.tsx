@@ -5,7 +5,7 @@ import { IHeaderResult } from "api/services/default-header";
 import { IFilterVariableResult } from "api/services/filter-dimension";
 import { IVisualizationSettingsResult } from "api/services/visualization-rules";
 import { ISaveQueryResult } from "api/services/queries";
-import { VariableType } from "types/cubeMeta";
+import { EDimensionType } from "types/cubeMeta";
 import Editor from "./Editor";
 import { IQueryInfoResult } from "api/services/query-info";
 import { HashRouter } from "react-router-dom";
@@ -266,14 +266,14 @@ const mockCubeMetaResult: ICubeMetaResult = {
                 Name: {
                     'fi': 'variableName'
                 },
-                Type: VariableType.Content,
+                Type: EDimensionType.Content,
                 Values: [
                     {
                         Code: 'variableValueCode',
                         Name: {
                             'fi': 'variableValueName'
                         },
-                        Virtual: false,
+                        IsVirtual: false,
                         AdditionalProperties: {},
                     }
                 ],

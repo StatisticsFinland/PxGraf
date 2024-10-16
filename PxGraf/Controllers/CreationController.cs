@@ -70,8 +70,10 @@ namespace PxGraf.Controllers
                 _logger.LogWarning("cube-meta result or {TablePath}: null. May result from a dimension without values.", tablePath);
                 return BadRequest();
             }
-            _logger.LogDebug("cube-meta result {Meta}", readOnlyMeta);
-            string json = JsonSerializer.Serialize(readOnlyMeta);
+            MatrixMetadata metadataClone = readOnlyMeta.GetTransform(readOnlyMeta);
+            metadataClone.AssignSourceToContentDimensionValues();
+            _logger.LogDebug("cube-meta result {Meta}", metadataClone);
+            string json = JsonSerializer.Serialize(metadataClone);
             return Content(json, "application/json");
         }
 
