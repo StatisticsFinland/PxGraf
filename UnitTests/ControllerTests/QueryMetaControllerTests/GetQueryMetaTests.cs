@@ -7,16 +7,14 @@ using PxGraf.Controllers;
 using PxGraf.Enums;
 using PxGraf.Language;
 using PxGraf.Models.Queries;
-using PxGraf.Models.Requests;
 using PxGraf.Models.Responses;
 using PxGraf.Models.SavedQueries;
 using PxGraf.Settings;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using UnitTests;
 using UnitTests.Fixtures;
 
-namespace ControllerTests
+namespace UnitTests.ControllerTests.QueryMetaControllerTests
 {
     internal class GetQueryMetaTests
     {

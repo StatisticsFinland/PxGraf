@@ -7,9 +7,9 @@ namespace PxGraf.Models.SavedQueries
 {
     public class ArchiveMatrixSerializer : JsonConverter<ArchiveCube>
     {
-        public override bool CanConvert(Type objectType)
+        public override bool CanConvert(Type typeToConvert)
         {
-            return typeof(ArchiveCube).IsAssignableFrom(objectType);
+            return typeof(ArchiveCube).IsAssignableFrom(typeToConvert);
         }
 
         public override ArchiveCube Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)

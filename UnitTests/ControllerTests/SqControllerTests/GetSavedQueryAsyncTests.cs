@@ -14,10 +14,9 @@ using PxGraf.Settings;
 using PxGraf.Utility;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using UnitTests;
 using UnitTests.Fixtures;
 
-namespace ControllerTests
+namespace UnitTests.ControllerTests.SqControllerTests
 {
     internal class GetSavedQueryAsyncTests
     {

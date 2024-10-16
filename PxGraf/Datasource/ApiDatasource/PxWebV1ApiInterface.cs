@@ -89,7 +89,7 @@ namespace PxGraf.Datasource.ApiDatasource
             return new DatabaseGroupContents(headers, tables);
         }
 
-        public DateTime GetLastWriteTime(PxTableReference tableReference)
+        public static DateTime GetLastWriteTime(PxTableReference tableReference)
         {
             throw new NotSupportedException($"Only async methods are supported. Use {nameof(GetLastWriteTimeAsync)} instead.");
         }
@@ -102,7 +102,7 @@ namespace PxGraf.Datasource.ApiDatasource
             return PxSyntaxConstants.ParsePxDateTime(lastUpdatedString);
         }
 
-        public IReadOnlyMatrixMetadata GetMatrixMetadata(PxTableReference tableReference)
+        public static IReadOnlyMatrixMetadata GetMatrixMetadata(PxTableReference tableReference)
         {
             throw new NotSupportedException($"Only async methods are supported. Use {nameof(GetMatrixMetadataAsync)} instead.");
         }
@@ -161,7 +161,7 @@ namespace PxGraf.Datasource.ApiDatasource
             return new MatrixMetadata(defaultLang, langOptions, dimensions, []);
         }
 
-        public Matrix<DecimalDataValue> GetMatrix(PxTableReference tableReference, IReadOnlyMatrixMetadata meta)
+        public static Matrix<DecimalDataValue> GetMatrix(PxTableReference tableReference, IReadOnlyMatrixMetadata meta)
         {
             throw new NotSupportedException($"Only async methods are supported. Use {nameof(GetMatrixAsync)} instead.");
         }

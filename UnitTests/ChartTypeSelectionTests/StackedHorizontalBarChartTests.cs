@@ -7,10 +7,10 @@ using PxGraf.Enums;
 using System.Collections.Generic;
 using UnitTests;
 
-namespace ChartTypeSelectionTests
+namespace UnitTests.ChartTypeSelectionTests
 {
     [TestFixture]
-    class StackedHorizontalBarChartTests
+    public class StackedHorizontalBarChartTests
     {
         private IChartSelectionLimits Limits { get; set; }
 

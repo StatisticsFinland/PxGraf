@@ -5,12 +5,11 @@ using PxGraf.ChartTypeSelection.JsonObjects;
 using PxGraf.ChartTypeSelection;
 using PxGraf.Enums;
 using System.Collections.Generic;
-using UnitTests;
 
-namespace ChartTypeSelectionTests
+namespace UnitTests.ChartTypeSelectionTests
 {
     [TestFixture]
-    class StackedVerticalBarChartTests
+    public class StackedVerticalBarChartTests
     {
         private IChartSelectionLimits Limits { get; set; }
 

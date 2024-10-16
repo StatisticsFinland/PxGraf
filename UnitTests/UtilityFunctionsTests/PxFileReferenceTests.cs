@@ -2,7 +2,7 @@
 using PxGraf.Models.Queries;
 using System.Collections.Generic;
 
-namespace UtilityFunctionsTests
+namespace UnitTests.UtilityFunctionsTests
 {
     internal class PxFileReferenceTests
     {
