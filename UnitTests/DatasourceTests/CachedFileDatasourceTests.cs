@@ -126,12 +126,14 @@ namespace UnitTests.DatasourceTests
             Assert.That(contents.Files.Count, Is.EqualTo(2));
             Assert.That(contents.Files[0].Code, Is.EqualTo("table1-id"));
             Assert.That(contents.Files[1].Code, Is.EqualTo("table_2"));
-            Assert.That(contents.Files[0].Name["fi"], Is.EqualTo("Table1"));
-            Assert.That(contents.Files[1].Name["fi"], Is.EqualTo("Table2"));
-            Assert.That(contents.Files[0].Name["en"], Is.EqualTo("Table1.en"));
-            Assert.That(contents.Files[1].Name["en"], Is.EqualTo("Table2.en"));
-            Assert.That(contents.Files[0].Name["sv"], Is.EqualTo("Table1.sv"));
-            Assert.That(contents.Files[1].Name["sv"], Is.EqualTo("Table2.sv"));
+            Assert.That(contents.Files[0].Name, Is.Not.Null);
+            Assert.That(contents.Files[1].Name, Is.Not.Null);
+            Assert.That(contents.Files[0].Name!["fi"], Is.EqualTo("Table1"));
+            Assert.That(contents.Files[1].Name!["fi"], Is.EqualTo("Table2"));
+            Assert.That(contents.Files[0].Name!["en"], Is.EqualTo("Table1.en"));
+            Assert.That(contents.Files[1].Name!["en"], Is.EqualTo("Table2.en"));
+            Assert.That(contents.Files[0].Name!["sv"], Is.EqualTo("Table1.sv"));
+            Assert.That(contents.Files[1].Name!["sv"], Is.EqualTo("Table2.sv"));
             Assert.That(contents.Files[0].LastUpdated, Is.EqualTo(_lastUpdated));
             Assert.That(contents.Files[1].LastUpdated, Is.EqualTo(_lastUpdated));
         }

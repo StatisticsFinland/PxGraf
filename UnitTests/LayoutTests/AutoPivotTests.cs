@@ -3,11 +3,10 @@ using Px.Utils.Models.Metadata.Enums;
 using Px.Utils.Models.Metadata;
 using PxGraf.Data;
 using System.Collections.Generic;
-using UnitTests;
 
-namespace LayoutTests
+namespace UnitTests.LayoutTests
 {
-    class AutoPivotTests
+    public class AutoPivotTests
     {
         [Test]
         public void BasicVertical1()

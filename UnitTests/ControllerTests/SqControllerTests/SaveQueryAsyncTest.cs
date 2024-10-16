@@ -6,9 +6,7 @@ using NUnit.Framework;
 using Px.Utils.Models.Metadata;
 using Px.Utils.Models.Metadata.Enums;
 using PxGraf.Controllers;
-using PxGraf.Data.MetaData;
 using PxGraf.Datasource;
-using PxGraf.Datasource.PxWebInterface;
 using PxGraf.Enums;
 using PxGraf.Language;
 using PxGraf.Models.Queries;
@@ -19,10 +17,9 @@ using PxGraf.Settings;
 using PxGraf.Utility;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using UnitTests;
 using UnitTests.Fixtures;
 
-namespace ControllerTests
+namespace UnitTests.ControllerTests.SqControllerTests
 {
     internal class SaveQueryAsyncTest
     {

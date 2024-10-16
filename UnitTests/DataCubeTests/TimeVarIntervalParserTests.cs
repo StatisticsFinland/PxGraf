@@ -1,14 +1,10 @@
 ﻿using NUnit.Framework;
-using Px.Utils.Models.Metadata;
 using Px.Utils.Models.Metadata.Enums;
 using PxGraf.Data;
-using PxGraf.Data.MetaData;
-using PxGraf.Enums;
 using System;
 using System.Collections.Generic;
-using UnitTests;
 
-namespace DataCubeTests
+namespace UnitTests.DataCubeTests
 {
     internal class TimeVarIntervalParserTests
     {

@@ -4,11 +4,10 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Px.Utils.Language;
 using PxGraf.Controllers;
-using UnitTests;
 using System;
 using PxGraf.Utility;
 
-namespace CreationControllerTests
+namespace UnitTests.ControllerTests.CreationControllerTests
 {
     public class GetDataBaseListingTests
     {

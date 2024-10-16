@@ -101,20 +101,20 @@ namespace UnitTests.DatasourceTests
 
             Assert.That(dbContent.Headers.Count, Is.EqualTo(0));
             Assert.That(dbContent.Files.Count, Is.EqualTo(1));
-            Assert.That(dbContent.Files[0].Name["en"], Is.EqualTo("FooBarEn"));
-            Assert.That(dbContent.Files[0].Name["fi"], Is.EqualTo("FooBarFi"));
-            Assert.That(dbContent.Files[0].Name["sv"], Is.EqualTo("FooBarSv"));
+            Assert.That(dbContent.Files[0].Name, Is.Not.Null);
+            Assert.That(dbContent.Files[0].Name!["en"], Is.EqualTo("FooBarEn"));
+            Assert.That(dbContent.Files[0].Name!["fi"], Is.EqualTo("FooBarFi"));
+            Assert.That(dbContent.Files[0].Name!["sv"], Is.EqualTo("FooBarSv"));
         }
 
         [Test]
         public void GetLastWriteTime_ReturnsNotSupported()
         {
             // Arrange
-            PxWebV1ApiInterface objectUnderTest = CreateInterface();
             PxTableReference tableReference = new("mock/table/reference/", '/');
 
             // Act & Assert
-            Assert.Throws<NotSupportedException>(() => objectUnderTest.GetLastWriteTime(tableReference));
+            Assert.Throws<NotSupportedException>(() => PxWebV1ApiInterface.GetLastWriteTime(tableReference));
         }
 
         [Test]
@@ -142,11 +142,10 @@ namespace UnitTests.DatasourceTests
         public void GetMatrixMetadata_ReturnsNotSupported()
         {
             // Arrange
-            PxWebV1ApiInterface objectUnderTest = CreateInterface();
             PxTableReference tableReference = new("mock/table/reference");
 
             // Act & Assert
-            Assert.Throws<NotSupportedException>(() => objectUnderTest.GetMatrixMetadata(tableReference));
+            Assert.Throws<NotSupportedException>(() => PxWebV1ApiInterface.GetMatrixMetadata(tableReference));
         }
 
         [Test]
@@ -251,12 +250,11 @@ namespace UnitTests.DatasourceTests
                 new(DimensionType.Other, 1),
                 new(DimensionType.Other, 1),
             ];
-            PxWebV1ApiInterface objectUnderTest = CreateInterface();
             PxTableReference tableReference = new("mock/table/reference");
             MatrixMetadata meta = TestDataCubeBuilder.BuildTestMeta(varParams);
 
             // Act & Assert
-            Assert.Throws<NotSupportedException>(() => objectUnderTest.GetMatrix(tableReference, meta));
+            Assert.Throws<NotSupportedException>(() => PxWebV1ApiInterface.GetMatrix(tableReference, meta));
         }
 
         [Test]

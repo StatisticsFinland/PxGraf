@@ -4,7 +4,6 @@ using PxGraf.Settings;
 using UnitTests.Fixtures;
 using NUnit.Framework;
 using PxGraf.Controllers;
-using UnitTests;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Px.Utils.Models.Metadata.Enums;
@@ -16,7 +15,7 @@ using Px.Utils.Language;
 using System.Linq;
 using System;
 
-namespace CreationControllerTests
+namespace UnitTests.ControllerTests.CreationControllerTests
 {
     internal class GetQueryInfoAsyncActionTests
     {

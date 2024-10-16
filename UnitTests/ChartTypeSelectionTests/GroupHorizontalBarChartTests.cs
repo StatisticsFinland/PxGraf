@@ -9,7 +9,7 @@ using System.Collections.Generic;
 namespace UnitTests.ChartTypeSelectionTests
 {
     [TestFixture]
-    class GroupHorizontalBarChartTests
+    public class GroupHorizontalBarChartTests
     {
         private IChartSelectionLimits Limits { get; set; }
 

@@ -6,12 +6,11 @@ using PxGraf.ChartTypeSelection;
 using PxGraf.Enums;
 using PxGraf.Models.Queries;
 using System.Collections.Generic;
-using UnitTests;
 
-namespace ChartTypeSelectionTests
+namespace UnitTests.ChartTypeSelectionTests
 {
     [TestFixture]
-    class BasicVerticalBarChartTests
+    public class BasicVerticalBarChartTests
     {
         private IChartSelectionLimits Limits { get; set; }
 
