@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using System;
+using System.Collections.Generic;
 
 namespace PxGraf.Utility
 {
@@ -9,7 +10,7 @@ namespace PxGraf.Utility
     public static class PxSyntaxConstants
     {
         public const string PXWEB_DATETIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.fff";
-        public const string PXWEB_DATETIME_FORMAT_ZULU = "yyyy-MM-dd'T'HH:mm:ss.fffZ";
+        public const string PXWEB_DATETIME_FORMAT_TS_ZERO = "yyyy-MM-dd'T'HH:mm:ss.fffZ";
         public const string SOURCE_KEY = "SOURCE";
         public const string TABLEID_KEY = "TABLEID";
         public const string DESCRIPTION_KEY = "DESCRIPTION";
@@ -36,40 +37,30 @@ namespace PxGraf.Utility
             "-",
         ];
 
-        /// <summary>
-        /// Parses a string in the Px datetime format to a DateTime object
-        /// </summary>
-        /// <param name="dateTimeString">String to parse</param>
-        /// <returns>DateTime object</returns>
-        /// <remarks>Provided string must be in the <see cref="PXWEB_DATETIME_FORMAT"/> or <see cref="PXWEB_DATETIME_FORMAT_ZULU"/> format</remarks>
-        public static DateTime ParsePxDateTime(string dateTimeString)
-        {
-            if (dateTimeString.EndsWith('Z'))
-            {
-                return DateTime.ParseExact(dateTimeString, PXWEB_DATETIME_FORMAT_ZULU, CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal);
-            }
-            else
-            {
-                return DateTime.ParseExact(dateTimeString, PXWEB_DATETIME_FORMAT, CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal);
-            }
-        }
-
         /// <summary> 
-        /// Parses a string in SQ or SQA datetime format to a DateTime object
+        /// Tries to parse a string to a DateTime object using several different formats.
         /// </summary>
         /// <param name="dateTimeString">String to parse</param>
         /// <returns>DateTime object</returns>
-        /// <remarks>Provided string must be in the <see cref="DATETIME_FORMAT_WITH_MS"/> or <see cref="DATETIME_FORMAT_NO_MS_TS_ZERO"/> format</remarks>
-        public static DateTime ParseSqDateTime(string dateTimeString)
+        public static DateTime ParseDateTime(string dateTimeString)
         {
-            if (DateTime.TryParseExact(dateTimeString, DATETIME_FORMAT_WITH_MS, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime dateTime))
+            List<(string, DateTimeStyles)> dateTimeFormats = [
+                (DATETIME_FORMAT_WITH_MS, DateTimeStyles.None),
+                (DATETIME_FORMAT_NO_MS, DateTimeStyles.None),
+                (PXWEB_DATETIME_FORMAT, DateTimeStyles.None),
+                (DATETIME_FORMAT_NO_MS_TS_ZERO, DateTimeStyles.AssumeUniversal),
+                (PXWEB_DATETIME_FORMAT_TS_ZERO, DateTimeStyles.AssumeUniversal),
+                ];
+
+            foreach ((string, DateTimeStyles) format in dateTimeFormats)
             {
-                return dateTime;
+                if (DateTime.TryParseExact(dateTimeString, format.Item1, CultureInfo.InvariantCulture, format.Item2, out DateTime dateTime))
+                {
+                    return dateTime;
+                }
             }
-            else
-            {
-                return DateTime.ParseExact(dateTimeString, DATETIME_FORMAT_NO_MS_TS_ZERO, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
-            }
+
+            return DateTime.Parse(dateTimeString, CultureInfo.InvariantCulture);
         }
 
         /// <summary>
@@ -81,7 +72,7 @@ namespace PxGraf.Utility
         {
             if (dateTime.Kind == DateTimeKind.Utc)
             {
-                return dateTime.ToString(PXWEB_DATETIME_FORMAT_ZULU, CultureInfo.InvariantCulture);
+                return dateTime.ToString(PXWEB_DATETIME_FORMAT_TS_ZERO, CultureInfo.InvariantCulture);
             }
             else
             {

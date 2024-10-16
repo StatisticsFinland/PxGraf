@@ -81,7 +81,7 @@ namespace PxGraf.Datasource.ApiDatasource
                                 kvp => kvp.Key,
                                 kvp => kvp.Value[tableListIndx].Text
                         ));
-                        DateTime lastUpdated = PxSyntaxConstants.ParsePxDateTime(someLangItems[tableListIndx].Updated);
+                        DateTime lastUpdated = PxSyntaxConstants.ParseDateTime(someLangItems[tableListIndx].Updated);
                         tables.Add(new(someLangItems[tableListIndx].Id, name, lastUpdated, [.. langToDbList.Keys]));
                     }
                 }
@@ -99,7 +99,7 @@ namespace PxGraf.Datasource.ApiDatasource
             string defaultLanguage = Configuration.Current.LanguageOptions.Default;
             List<TableListResponseItem> tableListResponseItems = await GetTableItemListingInLangAsync(defaultLanguage, tableReference.Hierarchy);
             string lastUpdatedString = tableListResponseItems.First(t => t.Id == tableReference.Name).Updated;
-            return PxSyntaxConstants.ParsePxDateTime(lastUpdatedString);
+            return PxSyntaxConstants.ParseDateTime(lastUpdatedString);
         }
 
         public static IReadOnlyMatrixMetadata GetMatrixMetadata(PxTableReference tableReference)
@@ -349,7 +349,7 @@ namespace PxGraf.Datasource.ApiDatasource
             .Distinct()
             .Single();
 
-            DateTime updated = PxSyntaxConstants.ParsePxDateTime(lastUpdatedString);
+            DateTime updated = PxSyntaxConstants.ParseDateTime(lastUpdatedString);
 
             List<ContentDimensionValue> contentdimensionValues = [];
 
