@@ -110,15 +110,6 @@ namespace PxGraf.Models.Metadata
         }
 
         /// <summary>
-        /// If all content dimensionvalues have the same unit, returns that unit in the given language.
-        /// </summary>
-        public static string GetUnambiguousUnitsInLang(this IReadOnlyMatrixMetadata meta, string lang)
-        {
-            IEnumerable<string> units = meta.GetContentDimension().Values.Map(v => v.Unit[lang]);
-            return UtilityFunctions.UnambiguousOrDefault(units);
-        }
-
-        /// <summary>
         /// Returns the latest update time from the content dimension values.
         /// </summary>
         public static DateTime? GetLastUpdated(this IReadOnlyMatrixMetadata meta)
@@ -157,7 +148,7 @@ namespace PxGraf.Models.Metadata
             {
                 MultilanguageString? source = cdv.GetSource(meta) ?? throw new InvalidOperationException("Source property not found from metadata.");
                 MultilanguageStringProperty sourceProperty = new (source);
-                cdv.AdditionalProperties.Add(PxSyntaxConstants.SOURCE_KEY, sourceProperty);
+                cdv.AdditionalProperties.TryAdd(PxSyntaxConstants.SOURCE_KEY, sourceProperty);
             }
         }
     }
