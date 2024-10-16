@@ -1,4 +1,5 @@
 ﻿#nullable enable
+using Microsoft.Extensions.Logging;
 using Px.Utils.Language;
 using Px.Utils.Models;
 using Px.Utils.Models.Data.DataValue;
@@ -18,9 +19,10 @@ using System.Threading.Tasks;
 
 namespace PxGraf.Datasource.FileDatasource
 {
-    public sealed class CachedFileDatasource(IFileDatasource datasource, IMultiStateMemoryTaskCache taskCache) : CachedDatasource(taskCache)
+    public sealed class CachedFileDatasource(IFileDatasource datasource, IMultiStateMemoryTaskCache taskCache, ILogger<CachedFileDatasource> logger) : CachedDatasource(taskCache)
     {
         private readonly IFileDatasource _datasource = datasource;
+        private readonly ILogger<CachedFileDatasource> _logger = logger;
 
         protected override async Task<DatabaseGroupContents> GetGroupContentsAsync(IReadOnlyList<string> hierarcy)
         {
@@ -47,21 +49,29 @@ namespace PxGraf.Datasource.FileDatasource
 
         private async Task<DatabaseTable> GetTableListingItemAsync(PxTableReference reference)
         {
-            IReadOnlyMatrixMetadata meta = await GetMatrixMetadataCachedAsync(reference);
-            DateTime lastUpdated = meta.GetLastUpdated() ?? await _datasource.GetLastWriteTimeAsync(reference);
-            string tableId = meta.AdditionalProperties.TryGetValue(PxSyntaxConstants.TABLEID_KEY, out MetaProperty? tableIdProperty) &&
-                tableIdProperty is StringProperty stringIdProp ? stringIdProp.Value : reference.Name.Split(Path.DirectorySeparatorChar)[^1].Split('.')[0];
-
-            List<string> languages = [.. meta.AvailableLanguages];
-            if (meta.AdditionalProperties.TryGetValue(PxSyntaxConstants.DESCRIPTION_KEY, out MetaProperty? descriptionProperty))
+            try
             {
-                if (descriptionProperty is StringProperty sProp) return new(tableId, new(languages[0], sProp.Value), lastUpdated, languages);
-                else if (descriptionProperty is MultilanguageStringProperty mlsProp) return new(tableId, mlsProp.Value, lastUpdated, languages);
-            }
+                IReadOnlyMatrixMetadata meta = await GetMatrixMetadataCachedAsync(reference);
+                DateTime? lastUpdated = meta.GetLastUpdated();
+                string tableId = meta.AdditionalProperties.TryGetValue(PxSyntaxConstants.TABLEID_KEY, out MetaProperty? tableIdProperty) &&
+                    tableIdProperty is StringProperty stringIdProp ? stringIdProp.Value : reference.Name.Split(Path.DirectorySeparatorChar)[^1].Split('.')[0];
 
-            // If no description is found, use the table id as the name
-            MultilanguageString name = new(languages.ToDictionary(lang => lang, lang => tableId));
-            return new(tableId, name, lastUpdated, languages);
+                List<string> languages = [.. meta.AvailableLanguages];
+                MultilanguageString name = new(languages.ToDictionary(lang => lang, lang => tableId));
+                if (meta.AdditionalProperties.TryGetValue(PxSyntaxConstants.DESCRIPTION_KEY, out MetaProperty? descriptionProperty))
+                {
+                    if (descriptionProperty is StringProperty sProp) name = new(languages[0], sProp.Value);
+                    else if (descriptionProperty is MultilanguageStringProperty mlsProp) name = mlsProp.Value;
+                }
+
+                if (lastUpdated is not null) return new(tableId, name, (DateTime)lastUpdated, languages);
+                else return DatabaseTable.FromError(tableId, name, languages);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Failed to get table listing item for {Reference}", reference);
+                return DatabaseTable.FromError(reference.Name, null, []);
+            }
         }
 
         protected override async Task<MetaCacheHousing> GenerateNewMetaCacheHousingAsync(PxTableReference tableReference)

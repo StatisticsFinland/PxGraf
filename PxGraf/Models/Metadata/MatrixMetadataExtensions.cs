@@ -123,9 +123,12 @@ namespace PxGraf.Models.Metadata
         /// </summary>
         public static DateTime? GetLastUpdated(this IReadOnlyMatrixMetadata meta)
         {
-            ContentDimension cd = meta.GetContentDimension();
-            IEnumerable<DateTime> times = cd.Values.Map(cdv => cdv.LastUpdated);
-            return times.OrderDescending().First();
+            if(meta.TryGetContentDimension(out ContentDimension? cd))
+            {
+                IEnumerable<DateTime> times = cd.Values.Map(cdv => cdv.LastUpdated);
+                return times.OrderDescending().First();
+            }
+            return null;
         }
 
         /// <summary>

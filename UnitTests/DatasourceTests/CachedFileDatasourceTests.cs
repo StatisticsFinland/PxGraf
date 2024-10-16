@@ -23,6 +23,8 @@ using System.Threading.Tasks;
 using System.Threading;
 using System;
 using UnitTests.Fixtures;
+using Castle.Core.Logging;
+using Microsoft.Extensions.Logging;
 
 namespace UnitTests.DatasourceTests
 {
@@ -162,6 +164,7 @@ namespace UnitTests.DatasourceTests
         {
             Mock<IFileDatasource> datasource = new ();
             Mock<IMultiStateMemoryTaskCache> taskCache = new ();
+            Mock<ILogger<CachedFileDatasource>> logger = new();
 
             datasource.Setup(d => d.GetGroupHeadersAsync(It.IsAny<IReadOnlyList<string>>())).ReturnsAsync(headers);
             datasource.Setup(d => d.GetTablesAsync(It.IsAny<IReadOnlyList<string>>())).ReturnsAsync(fileReferences);
@@ -190,7 +193,7 @@ namespace UnitTests.DatasourceTests
                     return MultiStateMemoryTaskCache.CacheEntryState.Null;
                 });
 
-            return new CachedFileDatasource(datasource.Object, taskCache.Object);
+            return new CachedFileDatasource(datasource.Object, taskCache.Object, logger.Object);
         }
     }
 }
