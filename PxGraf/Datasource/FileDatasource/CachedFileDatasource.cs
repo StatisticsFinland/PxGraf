@@ -10,6 +10,7 @@ using PxGraf.Datasource.DatabaseConnection;
 using PxGraf.Models.Metadata;
 using PxGraf.Models.Queries;
 using PxGraf.Models.Responses.DatabaseItems;
+using PxGraf.Settings;
 using PxGraf.Utility;
 using System;
 using System.Collections.Generic;
@@ -70,7 +71,8 @@ namespace PxGraf.Datasource.FileDatasource
             catch (Exception e)
             {
                 _logger.LogError(e, "Failed to get table listing item for {Reference}", reference);
-                return DatabaseTable.FromError(reference.Name, null, []);
+                MultilanguageString name = new(Configuration.Current.LanguageOptions.Available.ToDictionary(lang => lang, lang => reference.Name));
+                return DatabaseTable.FromError(reference.Name, name, []);
             }
         }
 

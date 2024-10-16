@@ -10,7 +10,7 @@ namespace PxGraf.Models.Responses.DatabaseItems
     {
         public string Code { get; private set; }
 
-        public MultilanguageString? Name { get; private set; }
+        public MultilanguageString Name { get; private set; }
 
         public DateTime? LastUpdated { get; private set; }
 
@@ -27,7 +27,7 @@ namespace PxGraf.Models.Responses.DatabaseItems
             Languages = languages;
         }
 
-        private DatabaseTable(string code, MultilanguageString? name, List<string> languages)
+        private DatabaseTable(string code, MultilanguageString name, List<string> languages)
         {
             Code = code;
             Name = name;
@@ -35,7 +35,7 @@ namespace PxGraf.Models.Responses.DatabaseItems
             Error = true;
         }
 
-        public static DatabaseTable FromError(string code, MultilanguageString? name, List<string> languages)
+        public static DatabaseTable FromError(string code, MultilanguageString name, List<string> languages)
         {
             return new DatabaseTable(code, name, languages);
         }

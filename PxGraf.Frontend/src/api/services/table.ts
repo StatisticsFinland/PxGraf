@@ -25,7 +25,8 @@ export interface IDatabaseGroupHeader {
 }
 
 export interface IDatabaseTable extends IDatabaseGroupHeader {
-    lastUpdated: string;
+    lastUpdated: string | null;
+    error?: boolean;
 }
 
 /**
