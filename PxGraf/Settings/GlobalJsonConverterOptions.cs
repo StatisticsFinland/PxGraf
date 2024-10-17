@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using PxGraf.Utility.CustomJsonConverters;
+using System.Text.Json;
 
 namespace PxGraf.Settings
 {
@@ -9,7 +10,8 @@ namespace PxGraf.Settings
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             PropertyNameCaseInsensitive = true,
             AllowTrailingCommas = true,
-            Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+            Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+            Converters = { new DateTimeJsonConverter() }
         };
     }
 }

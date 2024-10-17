@@ -45,8 +45,8 @@ namespace PxGraf.Utility
         public static DateTime ParseDateTime(string dateTimeString)
         {
             List<(string, DateTimeStyles)> dateTimeFormats = [
-                (DATETIME_FORMAT_WITH_MS, DateTimeStyles.None),
-                (DATETIME_FORMAT_NO_MS, DateTimeStyles.None),
+                (DATETIME_FORMAT_WITH_MS, DateTimeStyles.AdjustToUniversal),
+                (DATETIME_FORMAT_NO_MS, DateTimeStyles.AdjustToUniversal),
                 (PXWEB_DATETIME_FORMAT, DateTimeStyles.None),
                 (DATETIME_FORMAT_NO_MS_TS_ZERO, DateTimeStyles.AssumeUniversal),
                 (PXWEB_DATETIME_FORMAT_TS_ZERO, DateTimeStyles.AssumeUniversal),

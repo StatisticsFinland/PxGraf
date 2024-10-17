@@ -103,7 +103,7 @@ namespace UnitTests.SerializerTests
 
             SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(testJson, options);
 
-            Assert.That(savedQuery.CreationTime, Is.EqualTo(ConvertDateTime("2023-04-24T14:36:18.7550813+03:00")));
+            Assert.That(savedQuery.CreationTime, Is.EqualTo(PxSyntaxConstants.ParseDateTime("2023-04-24T14:36:18.7550813+03:00")));
             Assert.That(savedQuery.Settings.VisualizationType, Is.EqualTo(VisualizationType.Table));
             Assert.That(savedQuery.Archived, Is.True);
             Assert.That(savedQuery.Settings.Layout.ColumnVariableCodes.Count, Is.EqualTo(3));
@@ -134,7 +134,7 @@ namespace UnitTests.SerializerTests
 
             SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(testJson, options);
 
-            Assert.That(savedQuery.CreationTime, Is.EqualTo(ConvertDateTime("2023-04-24T14:36:18.7550813+03:00")));
+            Assert.That(savedQuery.CreationTime, Is.EqualTo(PxSyntaxConstants.ParseDateTime("2023-04-24T14:36:18.7550813+03:00")));
             Assert.That(savedQuery.Settings.VisualizationType, Is.EqualTo(VisualizationType.Table));
             Assert.That(savedQuery.Archived, Is.True);
             Assert.That(savedQuery.Settings.Layout.ColumnVariableCodes.Count, Is.EqualTo(3));
@@ -168,7 +168,7 @@ namespace UnitTests.SerializerTests
 
             SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(testJson, options);
 
-            Assert.That(savedQuery.CreationTime, Is.EqualTo(ConvertDateTime("2023-04-24T14:36:18.7550813+03:00")));
+            Assert.That(savedQuery.CreationTime, Is.EqualTo(PxSyntaxConstants.ParseDateTime("2023-04-24T14:36:18.7550813+03:00")));
             Assert.That(savedQuery.Settings.VisualizationType, Is.EqualTo(VisualizationType.GroupVerticalBarChart));
             Assert.That(savedQuery.Archived, Is.True);
             Assert.That(savedQuery.Settings.Layout.RowVariableCodes.Count, Is.EqualTo(1));
@@ -205,7 +205,7 @@ namespace UnitTests.SerializerTests
 
             SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(testJson, options);
 
-            Assert.That(savedQuery.CreationTime, Is.EqualTo(ConvertDateTime("2023-04-24T14:36:18.7550813+03:00")));
+            Assert.That(savedQuery.CreationTime, Is.EqualTo(PxSyntaxConstants.ParseDateTime("2023-04-24T14:36:18.7550813+03:00")));
             Assert.That(savedQuery.Settings.VisualizationType, Is.EqualTo(VisualizationType.GroupVerticalBarChart));
             Assert.That(savedQuery.Archived, Is.True);
             Assert.That(savedQuery.Settings.Layout.RowVariableCodes.Count, Is.EqualTo(1));
@@ -242,7 +242,7 @@ namespace UnitTests.SerializerTests
 
             SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(testJson, options);
 
-            Assert.That(savedQuery.CreationTime, Is.EqualTo(ConvertDateTime("2023-04-24T14:36:18.7550813+03:00")));
+            Assert.That(savedQuery.CreationTime, Is.EqualTo(PxSyntaxConstants.ParseDateTime("2023-04-24T14:36:18.7550813+03:00")));
             Assert.That(savedQuery.Settings.VisualizationType, Is.EqualTo(VisualizationType.GroupVerticalBarChart));
             Assert.That(savedQuery.Archived, Is.True);
             Assert.That(savedQuery.Settings.Layout.RowVariableCodes.Count, Is.EqualTo(1));
@@ -273,7 +273,7 @@ namespace UnitTests.SerializerTests
 
             SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(testJson, options);
 
-            Assert.That(savedQuery.CreationTime, Is.EqualTo(ConvertDateTime("2023-04-24T14:36:18.7550813+03:00")));
+            Assert.That(savedQuery.CreationTime, Is.EqualTo(PxSyntaxConstants.ParseDateTime("2023-04-24T14:36:18.7550813+03:00")));
             Assert.That(savedQuery.Settings.VisualizationType, Is.EqualTo(VisualizationType.Table));
             Assert.That(savedQuery.Archived, Is.True);
             Assert.That(savedQuery.Settings.Layout.ColumnVariableCodes.Count, Is.EqualTo(3));
@@ -315,7 +315,7 @@ namespace UnitTests.SerializerTests
 
             SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(testJson, options);
 
-            Assert.That(savedQuery.CreationTime, Is.EqualTo(ConvertDateTime("2023-04-24T14:36:18.7550813+03:00")));
+            Assert.That(savedQuery.CreationTime, Is.EqualTo(PxSyntaxConstants.ParseDateTime("2023-04-24T14:36:18.7550813+03:00")));
             Assert.That(savedQuery.Settings.VisualizationType, Is.EqualTo(VisualizationType.Table));
             Assert.That(savedQuery.Archived, Is.True);
             Assert.That((bool)savedQuery.LegacyProperties["PivotRequested"], Is.True);
@@ -379,10 +379,5 @@ namespace UnitTests.SerializerTests
         }
 
         #endregion
-
-        private static DateTime ConvertDateTime(string input)
-        {
-            return DateTime.ParseExact(input, PxSyntaxConstants.DATETIME_FORMAT_WITH_MS, CultureInfo.InvariantCulture, DateTimeStyles.None);
-        }
     }
 }
