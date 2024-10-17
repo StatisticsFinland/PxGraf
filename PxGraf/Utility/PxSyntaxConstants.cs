@@ -68,16 +68,7 @@ namespace PxGraf.Utility
         /// </summary>
         /// <param name="dateTime">DateTime object to format</param>
         /// <returns>Formatted string</returns>
-        public static string FormatPxDateTime(DateTime dateTime)
-        {
-            if (dateTime.Kind == DateTimeKind.Utc)
-            {
-                return dateTime.ToString(PXWEB_DATETIME_FORMAT_TS_ZERO, CultureInfo.InvariantCulture);
-            }
-            else
-            {
-                return dateTime.ToString(PXWEB_DATETIME_FORMAT, CultureInfo.InvariantCulture);
-            }
-        }
+        public static string FormatPxDateTime(DateTime dateTime) =>
+            dateTime.ToUniversalTime().ToString(DATETIME_FORMAT_NO_MS_TS_ZERO, CultureInfo.InvariantCulture);
     }
 }

@@ -12,15 +12,15 @@ namespace PxGraf.Utility.CustomJsonConverters
             if (reader.TokenType == JsonTokenType.String)
             {
                 string dateTimeString = reader.GetString();
-                if (DateTime.TryParseExact(dateTimeString, PxSyntaxConstants.DATETIME_FORMAT_WITH_MS, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime dateTime))
+                if (DateTime.TryParseExact(dateTimeString, PxSyntaxConstants.DATETIME_FORMAT_WITH_MS, CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out DateTime dateTime))
                 {
                     return dateTime;
                 }
-                else if (DateTime.TryParseExact(dateTimeString, PxSyntaxConstants.DATETIME_FORMAT_NO_MS, CultureInfo.InvariantCulture, DateTimeStyles.None, out dateTime))
+                else if (DateTime.TryParseExact(dateTimeString, PxSyntaxConstants.DATETIME_FORMAT_NO_MS, CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out dateTime))
                 {
                     return dateTime;
                 }
-                else if (DateTime.TryParseExact(dateTimeString, PxSyntaxConstants.DATETIME_FORMAT_NO_MS_TS_ZERO, CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out dateTime))
+                else if (DateTime.TryParseExact(dateTimeString, PxSyntaxConstants.DATETIME_FORMAT_NO_MS_TS_ZERO, CultureInfo.InvariantCulture, DateTimeStyles.None, out dateTime))
                 {
                     return dateTime;
                 }
@@ -30,7 +30,8 @@ namespace PxGraf.Utility.CustomJsonConverters
 
         public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
         {
-            writer.WriteStringValue(value.ToString(PxSyntaxConstants.DATETIME_FORMAT_NO_MS, CultureInfo.InvariantCulture));
+            if(value.Kind is not DateTimeKind.Utc) value = value.ToUniversalTime();
+            writer.WriteStringValue(value.ToString(PxSyntaxConstants.DATETIME_FORMAT_NO_MS_TS_ZERO, CultureInfo.InvariantCulture));
         }
     }
 }

@@ -53,7 +53,7 @@ namespace UnitTests.DatasourceTests
             ["sv"] = "Table2.sv"
         };
 
-        private readonly DateTime _lastUpdated = new(2009, 9, 1, 0, 0, 0, DateTimeKind.Local);
+        private readonly DateTime _lastUpdated = new(2009, 9, 1, 0, 0, 0, DateTimeKind.Utc);
         private readonly List<DimensionParameters> _tableParams =
         [
             new(DimensionType.Content, 1),

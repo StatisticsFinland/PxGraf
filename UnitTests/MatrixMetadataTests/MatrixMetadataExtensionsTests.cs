@@ -157,7 +157,7 @@ namespace UnitTests.MatrixMetadataTests
             DateTime? result = _input.GetLastUpdated();
 
             // Assert
-            Assert.That(result.Equals(new DateTime(2009, 9, 1, 0, 0, 0, DateTimeKind.Unspecified)));
+            Assert.That(result, Is.EqualTo(new DateTime(2009, 9, 1, 0, 0, 0, DateTimeKind.Utc)));
         }
 
         [Test]

@@ -13,6 +13,7 @@ namespace PxGraf.Models.SavedQueries.Versions
         /// <summary>
         /// When this archive object was originally created.
         /// </summary>
+        [JsonConverter(typeof(DateTimeJsonConverter))]
         public DateTime CreationTime { get; set; }
 
         /// <summary>
