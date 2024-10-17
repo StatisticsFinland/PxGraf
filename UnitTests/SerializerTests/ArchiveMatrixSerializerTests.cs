@@ -18,16 +18,10 @@ namespace UnitTests.SerializerTests
 {
     public class ArchiveMatrixSerializerTests
     {
-        private JsonSerializerOptions _jsonOptions;
 
         [SetUp]
         public void Setup()
         {
-            _jsonOptions = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true,
-            };
-
             Localization.Load(TranslationFixture.DefaultLanguage, TranslationFixture.Translations);
 
             Dictionary<string, string> inMemorySettings = new()
@@ -62,10 +56,10 @@ namespace UnitTests.SerializerTests
 
             
             // Act
-            string actual = JsonSerializer.Serialize(archiveCube, _jsonOptions);
+            string actual = JsonSerializer.Serialize(archiveCube, GlobalJsonConverterOptions.Default);
 
             // Assert
-            JsonUtils.JsonStringsAreEqual(ArchiveCubeFixtures.ARCHIVE_CUBE_V11, actual);
+            JsonUtils.JsonStringsAreEqual(ArchiveCubeFixtures.EXPECTED_ARCHIVE_CUBE_V11, actual);
         }
 
         [Test]
@@ -84,7 +78,7 @@ namespace UnitTests.SerializerTests
             expected.Data[1] = missingValue;
 
             // Act
-            ArchiveCube actual = JsonSerializer.Deserialize<ArchiveCube>(ArchiveCubeFixtures.ARCHIVE_CUBE_V11, _jsonOptions);
+            ArchiveCube actual = JsonSerializer.Deserialize<ArchiveCube>(ArchiveCubeFixtures.ARCHIVE_CUBE_V11, GlobalJsonConverterOptions.Default);
 
             // Assert
             JsonUtils.AreEqual(expected, actual);
@@ -110,7 +104,7 @@ namespace UnitTests.SerializerTests
             string[] expectedLanguages = ["fi", "en", "sv"];
 
             // Act
-            ArchiveCube actual = JsonSerializer.Deserialize<ArchiveCube>(ArchiveCubeFixtures.ARCHIVE_CUBE_V10, _jsonOptions);
+            ArchiveCube actual = JsonSerializer.Deserialize<ArchiveCube>(ArchiveCubeFixtures.ARCHIVE_CUBE_V10, GlobalJsonConverterOptions.Default);
 
             // Assert
             Assert.That((actual.Version).Equals("1.0"));

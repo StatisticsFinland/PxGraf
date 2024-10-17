@@ -84,7 +84,7 @@
                             }
                         }
                     },
-                    ""CreationTime"": ""2023-05-16T15:04:12+03:00"",
+                    ""CreationTime"": ""2023-05-16T12:04:12Z"",
                     ""Archived"": false
                 }";
 
@@ -167,7 +167,7 @@
                             }
                         }
                     },
-                    ""CreationTime"": ""2023-05-16T17:13:33+03:00"",
+                    ""CreationTime"": ""2023-05-16T14:13:33Z"",
                     ""Archived"": false
                 }";
 
@@ -304,7 +304,7 @@
                         }
                     }
                 },
-                ""CreationTime"": ""2022-04-19T09:12:40+03:00"",
+                ""CreationTime"": ""2022-04-19T06:12:40Z"",
                 ""Archived"": false
             }";
     }

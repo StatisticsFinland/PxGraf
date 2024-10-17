@@ -44,17 +44,17 @@ namespace PxGraf.Utility
         /// <returns>DateTime object</returns>
         public static DateTime ParseDateTime(string dateTimeString)
         {
-            List<(string, DateTimeStyles)> dateTimeFormats = [
-                (DATETIME_FORMAT_WITH_MS, DateTimeStyles.AdjustToUniversal),
-                (DATETIME_FORMAT_NO_MS, DateTimeStyles.AdjustToUniversal),
-                (PXWEB_DATETIME_FORMAT, DateTimeStyles.None),
-                (DATETIME_FORMAT_NO_MS_TS_ZERO, DateTimeStyles.AssumeUniversal),
-                (PXWEB_DATETIME_FORMAT_TS_ZERO, DateTimeStyles.AssumeUniversal),
+            List<string> dateTimeFormats = [
+                DATETIME_FORMAT_WITH_MS,
+                DATETIME_FORMAT_NO_MS,
+                PXWEB_DATETIME_FORMAT,
+                DATETIME_FORMAT_NO_MS_TS_ZERO,
+                PXWEB_DATETIME_FORMAT_TS_ZERO,
                 ];
 
-            foreach ((string, DateTimeStyles) format in dateTimeFormats)
+            foreach (string format in dateTimeFormats)
             {
-                if (DateTime.TryParseExact(dateTimeString, format.Item1, CultureInfo.InvariantCulture, format.Item2, out DateTime dateTime))
+                if (DateTime.TryParseExact(dateTimeString, format, CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out DateTime dateTime))
                 {
                     return dateTime;
                 }

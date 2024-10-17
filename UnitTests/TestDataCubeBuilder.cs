@@ -257,7 +257,12 @@ namespace UnitTests
                     }
 
                     MultilanguageStringProperty source = new(new MultilanguageString(sourceTranslations));
-                    ContentDimensionValue cdv = new(name, new MultilanguageString(nameTranslations), new(unitTranslations), PxSyntaxConstants.ParseDateTime("2009-09-01T00:00:00.000Z"), varParam.Decimals);
+                    ContentDimensionValue cdv = new(
+                        name, 
+                        new MultilanguageString(nameTranslations),
+                        new(unitTranslations),
+                        PxSyntaxConstants.ParseDateTime("2009-09-01T00:00:00.000Z"), 
+                        varParam.Decimals);
                     cdv.AdditionalProperties[PxSyntaxConstants.SOURCE_KEY] = source;
                     results.Add(cdv);
                 }

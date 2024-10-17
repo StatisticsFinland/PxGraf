@@ -2,6 +2,141 @@
 {
     internal static class ArchiveCubeFixtures
     {
+        internal const string EXPECTED_ARCHIVE_CUBE_V11 = @"
+        {
+            ""creationTime"": ""2024-08-19T14:00:00Z"",
+            ""meta"": {
+                ""defaultLanguage"": ""fi"",
+                ""availableLanguages"": [""fi"", ""en""],
+                ""dimensions"": [
+                    {
+                        ""type"": ""Content"",
+                        ""code"": ""variable-0"",
+                        ""name"": {
+                            ""fi"": ""variable-0"",
+                            ""en"": ""variable-0.en""
+                        },
+                        ""values"": [
+                            {
+                                ""unit"": {
+                                    ""fi"": ""value-0-unit"",
+                                    ""en"": ""value-0-unit.en""
+                                },
+                                ""lastUpdated"": ""2009-09-01T00:00:00Z"",
+                                ""precision"": 0,
+                                ""code"": ""value-0"",
+                                ""name"": {
+                                    ""fi"": ""value-0"",
+                                    ""en"": ""value-0.en""
+                                },
+                                ""additionalProperties"": {
+                                    ""SOURCE"": {
+                                        ""type"": ""MultilanguageText"",
+                                        ""value"": {
+                                            ""fi"": ""value-0-source"",
+                                            ""en"": ""value-0-source.en""
+                                        }
+                                    }
+                                },
+                                ""isVirtual"": false
+                            }
+                        ],
+                        ""additionalProperties"": {}
+                    },
+                    {
+                        ""type"": ""Time"",
+                        ""code"": ""variable-1"",
+                        ""name"": {
+                            ""fi"": ""variable-1"",
+                            ""en"": ""variable-1.en""
+                        },
+                        ""interval"": ""Year"",
+                        ""values"": [
+                            {
+                                ""code"": ""2000"",
+                                ""name"": {
+                                    ""fi"": ""2000"",
+                                    ""en"": ""2000.en""
+                                },
+                                ""additionalProperties"": {},
+                                ""isVirtual"": false
+                            },
+                            {
+                                ""code"": ""2001"",
+                                ""name"": {
+                                    ""fi"": ""2001"",
+                                    ""en"": ""2001.en""
+                                },
+                                ""additionalProperties"": {},
+                                ""isVirtual"": false
+                            },
+                            {
+                                ""code"": ""2002"",
+                                ""name"": {
+                                    ""fi"": ""2002"",
+                                    ""en"": ""2002.en""
+                                },
+                                ""additionalProperties"": {},
+                                ""isVirtual"": false
+                            },
+                            {
+                                ""code"": ""2003"",
+                                ""name"": {
+                                    ""fi"": ""2003"",
+                                    ""en"": ""2003.en""
+                                },
+                                ""additionalProperties"": {},
+                                ""isVirtual"": false
+                            }
+                        ],
+                        ""additionalProperties"": {}
+                    },
+                    {
+                        ""type"": ""Other"",
+                        ""code"": ""variable-2"",
+                        ""name"": {
+                            ""fi"": ""variable-2"",
+                            ""en"": ""variable-2.en""
+                        },
+                        ""values"": [
+                            {
+                                ""code"": ""value-0"",
+                                ""name"": {
+                                    ""fi"": ""value-0"",
+                                    ""en"": ""value-0.en""
+                                },
+                                ""additionalProperties"": {},
+                                ""isVirtual"": false
+                            },
+                            {
+                                ""code"": ""value-1"",
+                                ""name"": {
+                                    ""fi"": ""value-1"",
+                                    ""en"": ""value-1.en""
+                                },
+                                ""additionalProperties"": {},
+                                ""isVirtual"": false
+                            }
+                        ],
+                        ""additionalProperties"": {}
+                    }
+                ],
+                ""additionalProperties"": {
+                    ""NOTE"": {
+                        ""type"": ""MultilanguageText"",
+                        ""value"": {
+                            ""fi"": ""Test note"",
+                            ""en"": ""Test note.en""
+                        }
+                    }
+                }
+            },
+            ""data"":[ 0.123, ""."", 2.123, 3.123, 4.123, 5.123, 6.123, 7.123],
+            ""dataNotes"": null,
+            ""version"": ""1.1""
+        }
+        ";
+
         internal const string ARCHIVE_CUBE_V11 = @"
         {
             ""CreationTime"": ""2024-08-19T14:00:00Z"",
@@ -136,6 +271,7 @@
             ""Version"": ""1.1""
         }
         ";
+
 
         public const string ARCHIVE_CUBE_V10 = @"
         {
