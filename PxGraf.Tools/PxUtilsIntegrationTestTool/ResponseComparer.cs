@@ -98,14 +98,14 @@ namespace Tools.PxUtilsIntegrationTestTool
 
             if (pxUtilsResponse != pxWebApiResponse &&
                 CompareDeserializedObjects(pxUtils, pxWebApi, responseToken) > 0 &&
-                DifferenceControls(query, pxUtilsResponse, pxWebApiResponse, responseToken))
+                DifferenceControls(query, pxUtilsPath, pxWebApiPath, responseToken))
             {
                 return false;
             }
 
             if (pxUtilsResponse != pxWebOldResponse &&
                 CompareDeserializedObjects(pxUtils, pxWebOld, responseToken) > 0 &&
-                DifferenceControls(query, pxUtilsResponse, pxWebOldResponse, responseToken))
+                DifferenceControls(query, pxUtilsPath, pxWebOldPath, responseToken))
             {
                 return false;
             }

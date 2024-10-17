@@ -83,7 +83,7 @@ namespace Tools.PxUtilsIntegrationTestTool
             using HttpResponseMessage response = await client.GetAsync(url);
             if (!response.IsSuccessStatusCode)
             {
-                Console.WriteLine("Failed to get query meta.");
+                Console.WriteLine($"Failed to get query meta with status code {response.StatusCode}");
                 return (null, response.StatusCode.ToString());
             }
             string responseBody = await response.Content.ReadAsStringAsync();
@@ -97,7 +97,7 @@ namespace Tools.PxUtilsIntegrationTestTool
             using HttpResponseMessage response = await client.GetAsync(url);
             if (!response.IsSuccessStatusCode)
             {
-                Console.WriteLine("Failed to get query visualization.");
+                Console.WriteLine($"Failed to get query visualization with status code {response.StatusCode}");
                 return (null, response.StatusCode.ToString());
             }
             string responseBody = await response.Content.ReadAsStringAsync();
@@ -111,7 +111,7 @@ namespace Tools.PxUtilsIntegrationTestTool
             using HttpResponseMessage response = await client.GetAsync(url);
             if (!response.IsSuccessStatusCode)
             {
-                Console.WriteLine("Failed to get saved query.");
+                Console.WriteLine($"Failed to get saved query with status code {response.StatusCode}");
                 return (null, response.StatusCode.ToString());
             }
             string responseBody = await response.Content.ReadAsStringAsync();
