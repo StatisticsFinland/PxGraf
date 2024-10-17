@@ -4,7 +4,7 @@ import { Stack } from '@mui/material';
 import { UiLanguageContext } from 'contexts/uiLanguageContext';
 import { EditorField } from './Editorfield';
 import styled from 'styled-components';
-import { IVariable } from 'types/cubeMeta';
+import { IDimension } from 'types/cubeMeta';
 import { IVariableEditions } from 'types/query';
 
 const EditorFieldWrapper = styled(Stack)`
@@ -12,7 +12,7 @@ const EditorFieldWrapper = styled(Stack)`
 `;
 
 interface IBasicVariableEditorProps {
-    variable: IVariable;
+    variable: IDimension;
     language: string;
     variableEdits: IVariableEditions;
     onChange: (newEdit: IVariableEditions) => void;
@@ -24,22 +24,22 @@ export const BasicVariableEditor: React.FC<IBasicVariableEditorProps> = ({ varia
 
     return (
         <EditorFieldWrapper spacing={2}>
-            {variable.values.map(variableValue => {
+            {variable.Values.map(value => {
                 return (
                     <EditorField
-                        label={t("editMetadata.valueName") + ": " + variableValue.name[uiContentLanguage]}
-                        key={variableValue.code}
-                        defaultValue={variableValue.name[language]}
-                        editValue={variableEdits?.valueEdits[variableValue.code]?.nameEdit?.[language]}
+                        label={t("editMetadata.valueName") + ": " + value.Name[uiContentLanguage]}
+                        key={value.Code}
+                        defaultValue={value.Name[language]}
+                        editValue={variableEdits?.valueEdits[value.Code]?.nameEdit?.[language]}
                         onChange={newValue => {
                             const newVariableEdit = {
                                 ...variableEdits,
                                 valueEdits: {
                                     ...variableEdits?.valueEdits,
-                                    [variableValue.code]: {
-                                        ...variableEdits?.valueEdits[variableValue.code],
+                                    [value.Code]: {
+                                        ...variableEdits?.valueEdits[value.Code],
                                         nameEdit: {
-                                            ...variableEdits?.valueEdits[variableValue.code]?.nameEdit,
+                                            ...variableEdits?.valueEdits[value.Code]?.nameEdit,
                                             [language]: newValue
                                         }
                                     }

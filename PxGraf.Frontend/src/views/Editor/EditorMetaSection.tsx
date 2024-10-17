@@ -10,7 +10,7 @@ import { a11yProps } from 'utils/componentHelpers';
 import TabPanel from 'components/TabPanel/TabPanel';
 import VisualizationSettingControl from 'components/VisualizationSettingsControls/VisualizationSettingsControl';
 import styled from 'styled-components';
-import { IVariable } from 'types/cubeMeta';
+import { IDimension } from 'types/cubeMeta';
 import { IHeaderResult } from 'api/services/default-header';
 import { VisualizationType } from 'types/visualizationType';
 import { IVisualizationSettings } from 'types/visualizationSettings';
@@ -89,7 +89,7 @@ interface IEditorMetaSectionProps {
     defaultHeaderResponse: IHeaderResult;
     selectedVisualization: VisualizationType;
     settings: IVisualizationSettings;
-    resolvedVariables: IVariable[];
+    resolvedVariables: IDimension[];
     variableQuery: Query;
     visualizationRulesResponse: IVisualizationSettingsResult;
     queryInfo: IQueryInfo;
@@ -107,7 +107,7 @@ const TitleWrapper = styled.div`
  * @param {IHeaderResult} defaultHeaderResponse Default header retrieved for the table.
  * @param {VisualizationType} selectedVisualization Currently selected visualization type.
  * @param {IVisualizationSettings} settings Visualization settings.
- * @param {IVariable[]} resolvedVariables: Resolved variable codes.
+ * @param {IDimension[]} resolvedVariables: Resolved variable codes.
  * @param {IVisualizationSettingsResult} visualizationRulesResponse Response object for rules based on the selected visualization type.
  * @param {IQueryInfo} queryInfo Information about the query.
  */

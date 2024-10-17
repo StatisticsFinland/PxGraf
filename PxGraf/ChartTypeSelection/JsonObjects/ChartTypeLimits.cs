@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-
-namespace PxGraf.ChartTypeSelection.JsonObjects
+﻿namespace PxGraf.ChartTypeSelection.JsonObjects
 {
     /// <summary>
     /// Limits that determine if a specific chart type can be drawn from the data.
@@ -33,7 +31,6 @@ namespace PxGraf.ChartTypeSelection.JsonObjects
         /// <summary>
         /// Set the limits for time dimension size, example format: "1-999"
         /// </summary>
-        [JsonProperty(nameof(TimeSelection))]
         public string TimeSelection
         {
             get => TimeRange.ToString();
@@ -48,7 +45,6 @@ namespace PxGraf.ChartTypeSelection.JsonObjects
         /// <summary>
         /// , example format: "1-999"
         /// </summary>
-        [JsonProperty(nameof(IrregularTimeSelection))]
         public string IrregularTimeSelection
         {
             get => IrregularTimeRange.ToString();
@@ -63,7 +59,6 @@ namespace PxGraf.ChartTypeSelection.JsonObjects
         /// <summary>
         /// Set the limits for content dimension size, example format: "1-999"
         /// </summary>
-        [JsonProperty(nameof(ContentSelection))]
         public string ContentSelection
         {
             get => ContentRange.ToString();
@@ -78,7 +73,6 @@ namespace PxGraf.ChartTypeSelection.JsonObjects
         /// <summary>
         /// Set the limits for unique units in content dimension, example format: "1-999"
         /// </summary>
-        [JsonProperty(nameof(ContentUnitSelection))]
         public string ContentUnitSelection
         {
             get => ContentUnitRange.ToString();
@@ -93,7 +87,6 @@ namespace PxGraf.ChartTypeSelection.JsonObjects
         /// <summary>
         /// Set the limits for the first classifier dimension size, example format: "1-999"
         /// </summary>
-        [JsonProperty(nameof(FirstMultiselect))]
         public string FirstMultiselect
         {
             get => FirstMultiselectRange.ToString();
@@ -108,7 +101,6 @@ namespace PxGraf.ChartTypeSelection.JsonObjects
         /// <summary>
         /// Set the limits for the second classifier dimension size, example format: "1-999"
         /// </summary>
-        [JsonProperty(nameof(SecondMultiselect))]
         public string SecondMultiselect
         {
             get => SecondMultiselectRange.ToString();
@@ -123,7 +115,6 @@ namespace PxGraf.ChartTypeSelection.JsonObjects
         /// <summary>
         /// Set the limits for the size of all of the multiselect dimensions after the first two, example format: "1-999"
         /// </summary>
-        [JsonProperty(nameof(AdditionalMultiselectDimensions))]
         public string AdditionalMultiselectDimensions
         {
             get => AdditionalMultiselectDimensionsRange.ToString();
@@ -138,7 +129,6 @@ namespace PxGraf.ChartTypeSelection.JsonObjects
         /// <summary>
         /// The limits for the product of number of selections in first and second classifier dimension, example format: "1-999"
         /// </summary>
-        [JsonProperty(nameof(ProductOfMultiselects))]
         public string ProductOfMultiselects
         {
             get => ProductOfMultiselectsRange.ToString();

@@ -1,4 +1,4 @@
-import { IVariable, VariableType } from "types/cubeMeta";
+import { IDimension, EDimensionType } from "types/cubeMeta";
 import { FilterType, Query } from "types/query";
 import { ISortingOption } from "types/visualizationRules";
 import { IVisualizationSettings } from "types/visualizationSettings";
@@ -35,345 +35,252 @@ const mockSortingOptions: ISortingOption[] = [
     },
 ];
 
-const mockZeroVariables: IVariable[] = [];
+const mockZeroVariables: IDimension[] = [];
 
-const mockVariables: IVariable[] = [
+const mockVariables: IDimension[] = [
     {
-        code: 'foo',
-        name: {
+        Code: 'foo',
+        Name: {
             'fi': 'nimi'
         },
-        note: {
-            'fi': 'nootti'
-        },
-        type: VariableType.Content,
-        values: [
+        Type: EDimensionType.Content,
+        Values: [
             {
-                code: 'foo',
-                isSum: false,
-                name: {
+                Code: 'foo',
+                Name: {
                     'fi': 'nimi'
                 },
-                note: {
-                    'fi': 'nootti'
-                }
+                IsVirtual: false
             }
         ]
     }
 ];
 
-const mockTableTwoVariables: IVariable[] = [
+const mockTableTwoVariables: IDimension[] = [
     {
-        code: 'foo',
-        name: {
+        Code: 'foo',
+        Name: {
             'fi': 'nimi'
         },
-        note: {
-            'fi': 'nootti'
-        },
-        type: VariableType.Content,
-        values: [
+        Type: EDimensionType.Content,
+        Values: [
             {
-                code: 'foo',
-                isSum: false,
-                name: {
+                Code: 'foo',
+                Name: {
                     'fi': 'nimi'
                 },
-                note: {
-                    'fi': 'nootti'
-                }
+                IsVirtual: false
             },
             {
-                code: 'bar',
-                isSum: false,
-                name: {
+                Code: 'bar',
+                Name: {
                     'fi': 'toinennimi'
                 },
-                note: {
-                    'fi': 'toinennootti'
-                }
+                IsVirtual: false
             }
         ]
     },
     {
-        code: 'bar',
-        name: {
+        Code: 'bar',
+        Name: {
             'fi': 'toinennimi'
         },
-        note: {
-            'fi': 'toinennootti'
-        },
-        type: VariableType.Content,
-        values: [
+        Type: EDimensionType.Content,
+        Values: [
             {
-                code: 'bar',
-                isSum: false,
-                name: {
+                Code: 'bar',
+                Name: {
                     'fi': 'toinennimi'
                 },
-                note: {
-                    'fi': 'toinennootti'
-                }
+                IsVirtual: false
             },
             {
-                code: 'lorem',
-                isSum: false,
-                name: {
+                Code: 'lorem',
+                Name: {
                     'fi': 'kolmasnimi'
                 },
-                note: {
-                    'fi': 'kolmasnootti'
-                }
+                IsVirtual: false
             },
             {
-                code: 'ipsum',
-                isSum: false,
-                name: {
+                Code: 'ipsum',
+                Name: {
                     'fi': 'neljasnimi'
                 },
-                note: {
-                    'fi': 'neljasnootti'
-                }
+                IsVirtual: false
             }
         ]
     }
 ];
 
-const mockTableThreeVariables: IVariable[] = [
+const mockTableThreeVariables: IDimension[] = [
     {
-        code: 'foo',
-        name: {
+        Code: 'foo',
+        Name: {
             'fi': 'nimi'
         },
-        note: {
-            'fi': 'nootti'
-        },
-        type: VariableType.Content,
-        values: [
+        Type: EDimensionType.Content,
+        Values: [
             {
-                code: 'foo',
-                isSum: false,
-                name: {
+                Code: 'foo',
+                Name: {
                     'fi': 'nimi'
                 },
-                note: {
-                    'fi': 'nootti'
-                }
+                IsVirtual: false
             },
             {
-                code: 'bar',
-                isSum: false,
-                name: {
+                Code: 'bar',
+                Name: {
                     'fi': 'jokunimi'
                 },
-                note: {
-                    'fi': 'jokunootti'
-                }
+                IsVirtual: false
             }
         ]
     },
     {
-        code: 'bar',
-        name: {
+        Code: 'bar',
+        Name: {
             'fi': 'toinennimi'
         },
-        note: {
-            'fi': 'toinennootti'
-        },
-        type: VariableType.Content,
-        values: [
+        Type: EDimensionType.Content,
+        Values: [
             {
-                code: 'bar',
-                isSum: false,
-                name: {
+                Code: 'bar',
+                Name: {
                     'fi': 'toinennimi'
                 },
-                note: {
-                    'fi': 'toinennootti'
-                }
+                IsVirtual: false
             },
             {
-                code: 'lorem',
-                isSum: false,
-                name: {
+                Code: 'lorem',
+                Name: {
                     'fi': 'kolmasnimi'
                 },
-                note: {
-                    'fi': 'kolmasnootti'
-                }
+                IsVirtual: false
             },
             {
-                code: 'ipsum',
-                isSum: false,
-                name: {
+                Code: 'ipsum',
+                Name: {
                     'fi': 'neljasnimi'
                 },
-                note: {
-                    'fi': 'neljasnootti'
-                }
+                IsVirtual: false
             }
         ]
     },
     {
-        code: 'baz',
-        name: {
+        Code: 'baz',
+        Name: {
             'fi': 'kolmasnimi'
         },
-        note: {
-            'fi': 'kolmasnootti'
-        },
-        type: VariableType.Content,
-        values: [
+        Type: EDimensionType.Content,
+        Values: [
             {
-                code: 'foobar',
-                isSum: false,
-                name: {
+                Code: 'foobar',
+                Name: {
                     'fi': 'nimi'
                 },
-                note: {
-                    'fi': 'nootti'
-                }
+                IsVirtual: false
             },
             {
-                code: 'loremipsum',
-                isSum: false,
-                name: {
+                Code: 'loremipsum',
+                Name: {
                     'fi': 'toinennimi'
                 },
-                note: {
-                    'fi': 'toinennootti'
-                }
+                IsVirtual: false
             }
         ]
     }
 ];
 
-const mockTableFourVariables: IVariable[] = [
+const mockTableFourVariables: IDimension[] = [
     {
-        code: 'foo',
-        name: {
+        Code: 'foo',
+        Name: {
             'fi': 'nimi'
         },
-        note: {
-            'fi': 'nootti'
-        },
-        type: VariableType.Content,
-        values: [
+        Type: EDimensionType.Content,
+        Values: [
             {
-                code: 'foo',
-                isSum: false,
-                name: {
+                Code: 'foo',
+                Name: {
                     'fi': 'nimi'
                 },
-                note: {
-                    'fi': 'nootti'
-                }
+                IsVirtual: false
             },
             {
-                code: 'bar',
-                isSum: false,
-                name: {
+                Code: 'bar',
+                Name: {
                     'fi': 'jokunimi'
                 },
-                note: {
-                    'fi': 'jokunootti'
-                }
+                IsVirtual: false
             }
         ]
     },
     {
-        code: 'bar',
-        name: {
+        Code: 'bar',
+        Name: {
             'fi': 'toinennimi'
         },
-        note: {
-            'fi': 'toinennootti'
-        },
-        type: VariableType.Content,
-        values: [
+        Type: EDimensionType.Content,
+        Values: [
             {
-                code: 'bar',
-                isSum: false,
-                name: {
+                Code: 'bar',
+                Name: {
                     'fi': 'toinennimi'
                 },
-                note: {
-                    'fi': 'toinennootti'
-                }
+                IsVirtual: false
             },
             {
-                code: 'lorem',
-                isSum: false,
-                name: {
+                Code: 'lorem',
+                Name: {
                     'fi': 'kolmasnimi'
                 },
-                note: {
-                    'fi': 'kolmasnootti'
-                }
+                IsVirtual: false
             },
             {
-                code: 'ipsum',
-                isSum: false,
-                name: {
+                Code: 'ipsum',
+                Name: {
                     'fi': 'neljasnimi'
                 },
-                note: {
-                    'fi': 'neljasnootti'
-                }
+                IsVirtual: false
             }
         ]
     },
     {
-        code: 'baz',
-        name: {
+        Code: 'baz',
+        Name: {
             'fi': 'kolmasnimi'
         },
-        note: {
-            'fi': 'kolmasnootti'
-        },
-        type: VariableType.Content,
-        values: [
+        Type: EDimensionType.Content,
+        Values: [
             {
-                code: 'foobar',
-                isSum: false,
-                name: {
+                Code: 'foobar',
+                Name: {
                     'fi': 'nimi'
                 },
-                note: {
-                    'fi': 'nootti'
-                }
+                IsVirtual: false
             },
             {
-                code: 'loremipsum',
-                isSum: false,
-                name: {
+                Code: 'loremipsum',
+                Name: {
                     'fi': 'toinennimi'
                 },
-                note: {
-                    'fi': 'toinennootti'
-                }
+                IsVirtual: false
             }
         ]
     },
     {
-        code: 'foobar',
-        name: {
+        Code: 'foobar',
+        Name: {
             'fi': 'neljasnimi'
         },
-        note: {
-            'fi': 'neljasnootti'
-        },
-        type: VariableType.Content,
-        values: [
+        Type: EDimensionType.Content,
+        Values: [
             {
-                code: 'barfoo',
-                isSum: false,
-                name: {
+                Code: 'barfoo',
+                Name: {
                     'fi': 'nimi'
                 },
-                note: {
-                    'fi': 'nootti'
-                }
+                IsVirtual: false
             }
         ]
     }

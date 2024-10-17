@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { IVariable, VariableType } from 'types/cubeMeta';
+import { EMetaPropertyType, IDimension, EDimensionType } from 'types/cubeMeta';
 import { IVariableEditions } from 'types/query';
 import { ContentVariableEditor } from './ContentVariableEditor';
 import UiLanguageContext from 'contexts/uiLanguageContext';
@@ -26,32 +26,39 @@ const availableUiLanguages = ['fi', 'en', 'sv'];
 const uiContentLanguage = 'fi';
 const setUiContentLanguage = jest.fn();
 
-const mockVariable: IVariable = {
-    code: 'foo',
-    name: {
+const mockVariable: IDimension = {
+    Code: 'foo',
+    Name: {
         'fi': 'asd',
         'sv': 'asd',
         'en': 'asd'
     },
-    note: {
-        'fi': 'seppo',
-        'sv': 'seppo',
-        'en': 'seppo'
-    },
-    type: VariableType.Content,
-    values: [
+    Type: EDimensionType.Content,
+    Values: [
         {
-            code: 'bar',
-            isSum: false,
-            name: {
+            Code: 'bar',
+            Name: {
                 'fi': 'fgfgfg',
                 'sv': 'fgfgfg',
                 'en': 'fgfgfg'
             },
-            note: {
-                'fi': 'fghjfgh',
-                'sv': 'fghjfgh',
-                'en': 'fghjfgh'
+            IsVirtual: false,
+            Unit: {
+                'fi': 'yksikko',
+                'sv': 'enhet',
+                'en': 'unit'
+            },
+            Precision: 0,
+            LastUpdated: '2021-01-01',
+            AdditionalProperties: {
+                SOURCE: {
+                    Type: EMetaPropertyType.MultilanguageText,
+                    Value: {
+                        'fi': 'lahde',
+                        'sv': 'kalla',
+                        'en': 'source'
+                    }
+                }
             }
         }
     ]

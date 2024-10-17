@@ -1,5 +1,5 @@
-﻿using PxGraf.Enums;
-using PxGraf.Language;
+﻿using Px.Utils.Language;
+using PxGraf.Enums;
 using System.Collections.Generic;
 
 namespace PxGraf.Models.Responses
@@ -67,7 +67,7 @@ namespace PxGraf.Models.Responses
     /// </remarks>
     /// <param name="code">Value code for the sorting option.</param>
     /// <param name="description">Display name for the sorting option.</param>
-    public class SortingOption(string code, IReadOnlyMultiLanguageString description)
+    public class SortingOption(string code, MultilanguageString description)
     {
         /// <summary>
         /// Identifying code for the sorting option.
@@ -77,6 +77,6 @@ namespace PxGraf.Models.Responses
         /// <summary>
         /// Display name for the sorting option.
         /// </summary>
-        public IReadOnlyMultiLanguageString Description { get; } = description;
+        public MultilanguageString Description { get; } = description;
     }
 }

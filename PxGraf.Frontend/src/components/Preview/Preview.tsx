@@ -5,12 +5,11 @@ import styled from 'styled-components';
 import React from 'react';
 import { ICubeQuery, Query } from 'types/query';
 import { IVisualizationSettings } from 'types/visualizationSettings';
-import { IVariable } from 'types/cubeMeta';
 import { useVisualizationQuery } from 'api/services/visualization';
 import { Chart } from '@statisticsfinland/pxvisualizer';
-
 import useSelections from 'components/SelectableVariableMenus/hooks/useSelections';
 import InfoBubble from 'components/InfoBubble/InfoBubble';
+import { IVariable } from '../../types/visualizationResponse';
 
 export interface ISelectabilityInfo {
     variable: IVariable;

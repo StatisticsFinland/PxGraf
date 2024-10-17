@@ -1,5 +1,9 @@
-﻿namespace PxGraf.Language
+﻿using PxGraf.Utility.CustomJsonConverters;
+using System.Text.Json.Serialization;
+
+namespace PxGraf.Language
 {
+    [JsonConverter(typeof(RequireObjectPropertiesReadOnlyConverter<MissingDataTranslation>))]
     public class MissingDataTranslation
     {
         public string Missing { get; set; }

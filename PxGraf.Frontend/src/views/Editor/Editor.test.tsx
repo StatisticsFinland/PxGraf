@@ -2,10 +2,10 @@ import React from 'react';
 import { render, screen } from "@testing-library/react";
 import { ICubeMetaResult } from "api/services/cube-meta";
 import { IHeaderResult } from "api/services/default-header";
-import { IFilterVariableResult } from "api/services/filter-variable";
+import { IFilterVariableResult } from "api/services/filter-dimension";
 import { IVisualizationSettingsResult } from "api/services/visualization-rules";
 import { ISaveQueryResult } from "api/services/queries";
-import { VariableType } from "types/cubeMeta";
+import { EDimensionType } from "types/cubeMeta";
 import Editor from "./Editor";
 import { IQueryInfoResult } from "api/services/query-info";
 import { HashRouter } from "react-router-dom";
@@ -75,8 +75,8 @@ jest.mock('api/services/query-info', () => ({
     }
 }));
 
-jest.mock('api/services/filter-variable', () => ({
-    ...jest.requireActual('api/services/filter-variable'),
+jest.mock('api/services/filter-dimension', () => ({
+    ...jest.requireActual('api/services/filter-dimension'),
     useResolveVariableFiltersQuery: () => {
         return mockFilterVariableResult;
     }
@@ -257,35 +257,27 @@ const mockCubeMetaResult: ICubeMetaResult = {
     isLoading: false,
     isError: false,
     data: {
-        header: {
-            'fi': 'header'
-        },
-        languages: ['fi'],
-        note: {
-            'fi': 'note'
-        },
-        variables: [
+        DefaultLanguage: 'fi',
+        AvailableLanguages: ['fi'],
+        AdditionalProperties: {},
+        Dimensions: [
             {
-                code: 'code',
-                name: {
+                Code: 'code',
+                Name: {
                     'fi': 'variableName'
                 },
-                note: {
-                    'fi': 'variableNote'
-                },
-                type: VariableType.Content,
-                values: [
+                Type: EDimensionType.Content,
+                Values: [
                     {
-                        code: 'variableValueCode',
-                        isSum: false,
-                        name: {
+                        Code: 'variableValueCode',
+                        Name: {
                             'fi': 'variableValueName'
                         },
-                        note: {
-                            'fi': 'variableValueNote'
-                        }
+                        IsVirtual: false,
+                        AdditionalProperties: {},
                     }
-                ]
+                ],
+                AdditionalProperties: {}
             }
         ]
     }
@@ -337,11 +329,31 @@ describe('Rendering test', () => {
         );
         expect(asFragment()).toMatchSnapshot();
     });
+
+    it('renders correctly when cubeMetaResponse is loading', () => {
+        mockCubeMetaResult.data = null;
+        mockCubeMetaResult.isLoading = true;
+        const { asFragment } = render(
+            <QueryClientProvider client={queryClient}>
+                <NavigationProvider>
+                    <HashRouter>
+                        <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
+                            <Editor />
+                        </UiLanguageContext.Provider>
+                    </HashRouter>
+                </NavigationProvider>
+            </QueryClientProvider>
+        );
+        expect(asFragment()).toMatchSnapshot();
+    
+    });
 });
 
 describe('Assertion tests', () => {
     it('renders errorContainer with correct message when tableValidityResponse is invalid', () => {
         mockResult = mockInvalidTableValidationResult;
+        mockCubeMetaResult.isError = true;
+        mockCubeMetaResult.isLoading = false;
         render(
             <QueryClientProvider client={queryClient}>
                 <NavigationProvider>

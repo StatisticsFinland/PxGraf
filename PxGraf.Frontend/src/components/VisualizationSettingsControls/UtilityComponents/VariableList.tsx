@@ -2,7 +2,7 @@ import { List, ListItemButton, ListItemText, ListSubheader } from '@mui/material
 
 import React from 'react';
 import { UiLanguageContext } from 'contexts/uiLanguageContext';
-import { IVariable } from 'types/cubeMeta';
+import { IDimension } from 'types/cubeMeta';
 import styled from 'styled-components';
 
 const StyledList = styled(List)`
@@ -15,14 +15,14 @@ const StyledList = styled(List)`
 
 interface VariableListProps {
     title: string,
-    variables: IVariable[],
+    variables: IDimension[],
     selectedVariableCode: string,
     selectedChangedHandler: (newCode: string) => void,
 }
 
-const variableNameAndValues = (variable, uiContentLanguage): string => {
-    const name: string = variable.name[uiContentLanguage] ?? variable.code;
-    const values: string = variable.values.length;
+const variableNameAndValues = (variable: IDimension, uiContentLanguage: string): string => {
+    const name: string = variable.Name[uiContentLanguage] ?? variable.Code;
+    const values: number = variable.Values.length;
     return name + " " + values;
 };
 
@@ -37,9 +37,9 @@ export const VariableList: React.FC<VariableListProps> = ({ title, variables, se
             {variables.map(v => {
                 return (
                     <ListItemButton
-                        key={"var-" + v.code}
-                        onClick={() => selectedChangedHandler(v.code)}
-                        selected={selectedVariableCode === v.code}>
+                        key={"var-" + v.Code}
+                        onClick={() => selectedChangedHandler(v.Code)}
+                        selected={selectedVariableCode === v.Code}>
                         <ListItemText primary={variableNameAndValues(v, uiContentLanguage)} />
                     </ListItemButton>
                 );

@@ -3,7 +3,7 @@
 exports[`Rendering test renders correctly 1`] = `
 <DocumentFragment>
   <div
-    class="MuiContainer-root MuiContainer-maxWidthMd sc-gFtjaa jCFGXo css-xdmu94-MuiContainer-root"
+    class="MuiContainer-root MuiContainer-maxWidthMd sc-ikngxL epXKmY css-xdmu94-MuiContainer-root"
   >
     <ul
       class="MuiList-root MuiList-padding css-822hb5-MuiList-root"
@@ -24,11 +24,6 @@ exports[`Rendering test renders correctly 1`] = `
               class="MuiTypography-root MuiTypography-body1 css-x61gb3-MuiTypography-root"
             >
               foo1-fi
-            </p>
-            <p
-              class="MuiTypography-root MuiTypography-body2 css-1wjvmi0-MuiTypography-root"
-            >
-              1.1.2000
             </p>
           </span>
         </div>
@@ -55,11 +50,6 @@ exports[`Rendering test renders correctly 1`] = `
               class="MuiTypography-root MuiTypography-body1 css-x61gb3-MuiTypography-root"
             >
               foo2-fi
-            </p>
-            <p
-              class="MuiTypography-root MuiTypography-body2 css-1wjvmi0-MuiTypography-root"
-            >
-              1.1.2000
             </p>
           </span>
         </div>

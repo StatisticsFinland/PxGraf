@@ -1,19 +1,20 @@
 ﻿using NUnit.Framework;
-using PxGraf.Data.MetaData;
-using PxGraf.Enums;
+using Px.Utils.Language;
+using Px.Utils.Models.Metadata;
+using Px.Utils.Models.Metadata.Enums;
 using PxGraf.Language;
+using PxGraf.Models.Metadata;
 using PxGraf.Models.Queries;
-using PxGraf.Utility;
 using System.Collections.Generic;
 using UnitTests.Fixtures;
-using UnitTests.TestDummies;
-using UnitTests.TestDummies.DummyQueries;
 
-namespace DataCubeTests
+namespace UnitTests.DataCubeTests
 {
-    internal class CubeMetaHeaderGenerationTests
+    internal class MatrixMetadataHeaderGenerationTests
     {
-        public CubeMetaHeaderGenerationTests()
+        private readonly string[] _languages = [ "fi", "en" ];
+
+        public MatrixMetadataHeaderGenerationTests()
         {
             Localization.Load(TranslationFixture.DefaultLanguage, TranslationFixture.Translations);
         }
@@ -21,22 +22,32 @@ namespace DataCubeTests
         [Test]
         public void CreateDefaultChartHeader_1TimeVar_ReturnsCorrectHeader()
         {
-            List<VariableParameters> metaParams =
+            List<DimensionParameters> metaParams =
             [
-                new (VariableType.Content, 1),
-                new (VariableType.Time, 1),
-                new (VariableType.OtherClassificatory, 4),
-                new (VariableType.OtherClassificatory, 2)
+                new (DimensionType.Content, 1),
+                new (DimensionType.Time, 1),
+                new (DimensionType.Other, 4),
+                new (DimensionType.Other, 2)
             ];
 
-            CubeQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(metaParams);
-            CubeMeta cubeMeta = TestDataCubeBuilder.BuildTestMeta(metaParams);
-            cubeMeta.Variables[0].IncludedValues[0].Name.Edit(new MultiLanguageString("fi", "foobar 1"));
-            cubeMeta.Variables[2].Name.Edit(new MultiLanguageString("fi", "foobar 2"));
-            cubeMeta.Variables[3].Name.Edit(new MultiLanguageString("fi", "foobar 3"));
+            Dictionary<string, MultilanguageString> dimensionNameEdits = new()
+            {
+                ["variable-2"] = new("fi", "foobar 2"),
+                ["variable-3"] = new("fi", "foobar 3")
+            };
+
+            Dictionary<string, Dictionary<string, MultilanguageString>> valueNameEdits = new()
+            {
+                ["variable-0"] = new() { ["value-0"] = new("fi", "foobar 1") }
+            };
+
+            MatrixQuery query = TestDataCubeBuilder.BuildTestCubeQuery(metaParams);
+            MatrixMetadata meta = TestDataCubeBuilder.BuildTestMeta(metaParams);
+            query.ApplyNameEdits(meta, dimensionNameEdits, valueNameEdits);
 
             string expectedResult = "foobar 1 [FIRST] muuttujina foobar 2, foobar 3";
-            cubeMeta.CreateDefaultChartHeader(cubeQuery).TryGetLanguage("fi", out string result);
+            MultilanguageString header = HeaderBuildingUtilities.CreateDefaultHeader(meta.Dimensions, query, _languages);
+            string result = header["fi"];
 
             Assert.That(result, Is.EqualTo(expectedResult));
         }
@@ -44,22 +55,32 @@ namespace DataCubeTests
         [Test]
         public void CreateDefaultChartHeader_MultipleTimeVars_ReturnsCorrectHeader()
         {
-            List<VariableParameters> metaParams =
+            List<DimensionParameters> metaParams =
             [
-                new (VariableType.Content, 1),
-                new (VariableType.Time, 10),
-                new (VariableType.OtherClassificatory, 4),
-                new (VariableType.OtherClassificatory, 2)
+                new (DimensionType.Content, 1),
+                new (DimensionType.Time, 10),
+                new (DimensionType.Other, 4),
+                new (DimensionType.Other, 2)
             ];
 
-            CubeQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(metaParams);
-            CubeMeta cubeMeta = TestDataCubeBuilder.BuildTestMeta(metaParams);
-            cubeMeta.Variables[0].IncludedValues[0].Name.Edit(new MultiLanguageString("fi", "foobar 1"));
-            cubeMeta.Variables[2].Name.Edit(new MultiLanguageString("fi", "foobar 2"));
-            cubeMeta.Variables[3].Name.Edit(new MultiLanguageString("fi", "foobar 3"));
+            Dictionary<string, MultilanguageString> dimensionNameEdits = new()
+            {
+                ["variable-2"] = new("fi", "foobar 2"),
+                ["variable-3"] = new("fi", "foobar 3")
+            };
+
+            Dictionary<string, Dictionary<string, MultilanguageString>> valueNameEdits = new()
+            {
+                ["variable-0"] = new() { ["value-0"] = new("fi", "foobar 1") }
+            };
+
+            MatrixQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(metaParams);
+            MatrixMetadata cubeMeta = TestDataCubeBuilder.BuildTestMeta(metaParams);
+            cubeQuery.ApplyNameEdits(cubeMeta, dimensionNameEdits, valueNameEdits);
 
             string expectedResult = "foobar 1 [FIRST]-[LAST] muuttujina foobar 2, foobar 3";
-            cubeMeta.CreateDefaultChartHeader(cubeQuery).TryGetLanguage("fi", out string result);
+            MultilanguageString header = HeaderBuildingUtilities.CreateDefaultHeader(cubeMeta.Dimensions, cubeQuery, _languages);
+            string result = header["fi"];
 
             Assert.That(result, Is.EqualTo(expectedResult));
         }
@@ -67,20 +88,26 @@ namespace DataCubeTests
         [Test]
         public void CreateDefaultChartHeader_1ContentVar1Value_ReturnsCorrectHeader()
         {
-            List<VariableParameters> metaParams =
+            List<DimensionParameters> metaParams =
             [
-                new (VariableType.Content, 1),
-                new (VariableType.Time, 5),
-                new (VariableType.OtherClassificatory, 1)
+                new (DimensionType.Content, 1),
+                new (DimensionType.Time, 5),
+                new (DimensionType.Other, 1)
             ];
 
-            CubeQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(metaParams);
-            CubeMeta cubeMeta = TestDataCubeBuilder.BuildTestMeta(metaParams);
-            cubeMeta.Variables[0].IncludedValues[0].Name.Edit(new MultiLanguageString("fi", "foobar 1"));
-            cubeMeta.Variables[^1].IncludedValues[0].Name.Edit(new MultiLanguageString("fi", "foobar 2"));
+            Dictionary<string, Dictionary<string, MultilanguageString>> valueNameEdits = new()
+            {
+                ["variable-0"] = new() { ["value-0"] = new("fi", "foobar 1") },
+                ["variable-2"] = new() { ["value-0"] = new("fi", "foobar 2") }
+            };
+
+            MatrixQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(metaParams);
+            MatrixMetadata cubeMeta = TestDataCubeBuilder.BuildTestMeta(metaParams);
+            cubeQuery.ApplyNameEdits(cubeMeta, valueNameEdits: valueNameEdits);
 
             string expectedResult = "foobar 1, foobar 2 [FIRST]-[LAST]";
-            cubeMeta.CreateDefaultChartHeader(cubeQuery).TryGetLanguage("fi", out string result);
+            MultilanguageString header = HeaderBuildingUtilities.CreateDefaultHeader(cubeMeta.Dimensions, cubeQuery, _languages);
+            string result = header["fi"];
 
             Assert.That(result, Is.EqualTo(expectedResult));
         }
@@ -88,20 +115,26 @@ namespace DataCubeTests
         [Test]
         public void CreateDefaultChartHeader_1ContentVarMultipleValues_ReturnsCorrectHeader()
         {
-            List<VariableParameters> metaParams =
+            List<DimensionParameters> metaParams =
             [
-                new (VariableType.Content, 1),
-                new (VariableType.Time, 5),
-                new (VariableType.OtherClassificatory, 4)
+                new (DimensionType.Content, 1),
+                new (DimensionType.Time, 5),
+                new (DimensionType.Other, 4)
             ];
 
-            CubeQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(metaParams);
-            CubeMeta cubeMeta = TestDataCubeBuilder.BuildTestMeta(metaParams);
-            cubeMeta.Variables[0].IncludedValues[0].Name.Edit(new MultiLanguageString("fi", "foobar 1"));
-            cubeMeta.Variables[^1].IncludedValues[0].Name.Edit(new MultiLanguageString("fi", "foobar 2"));
+            Dictionary<string, Dictionary<string, MultilanguageString>> valueNameEdits = new()
+            {
+                ["variable-0"] = new() { ["value-0"] = new("fi", "foobar 1") },
+                ["variable-2"] = new() { ["value-0"] = new("fi", "foobar 2") }
+            };
+
+            MatrixQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(metaParams);
+            MatrixMetadata cubeMeta = TestDataCubeBuilder.BuildTestMeta(metaParams);
+            cubeQuery.ApplyNameEdits(cubeMeta, valueNameEdits: valueNameEdits);
 
             string expectedResult = "foobar 1 [FIRST]-[LAST] muuttujana variable-2";
-            cubeMeta.CreateDefaultChartHeader(cubeQuery).TryGetLanguage("fi", out string result);
+            MultilanguageString header = HeaderBuildingUtilities.CreateDefaultHeader(cubeMeta.Dimensions, cubeQuery, _languages);
+            string result = header["fi"];
 
             Assert.That(result, Is.EqualTo(expectedResult));
         }
@@ -109,22 +142,28 @@ namespace DataCubeTests
         [Test]
         public void CreateDefaultChartHeader_1TimeVarMultipleValues_ReturnsCorrectHeader()
         {
-            List<VariableParameters> metaParams =
+            List<DimensionParameters> metaParams =
             [
-                new (VariableType.Content, 1),
-                new (VariableType.Time, 1),
-                new (VariableType.OtherClassificatory, 1),
-                new (VariableType.OtherClassificatory, 4),
+                new (DimensionType.Content, 1),
+                new (DimensionType.Time, 1),
+                new (DimensionType.Other, 1),
+                new (DimensionType.Other, 4),
             ];
 
-            CubeQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(metaParams);
-            CubeMeta cubeMeta = TestDataCubeBuilder.BuildTestMeta(metaParams);
-            cubeMeta.Variables[0].IncludedValues[0].Name.Edit(new MultiLanguageString("fi", "foobar 1"));
-            cubeMeta.Variables[2].IncludedValues[0].Name.Edit(new MultiLanguageString("fi", "foobar 2"));
-            cubeMeta.Variables[3].IncludedValues[0].Name.Edit(new MultiLanguageString("fi", "foobar 3"));
+            Dictionary<string, Dictionary<string, MultilanguageString>> valueNameEdits = new()
+            {
+                ["variable-0"] = new() { ["value-0"] = new("fi", "foobar 1") },
+                ["variable-2"] = new() { ["value-0"] = new("fi", "foobar 2") },
+                ["variable-3"] = new() { ["value-0"] = new("fi", "foobar 3") }
+            };
+
+            MatrixQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(metaParams);
+            MatrixMetadata cubeMeta = TestDataCubeBuilder.BuildTestMeta(metaParams);
+            cubeQuery.ApplyNameEdits(cubeMeta, valueNameEdits: valueNameEdits);
 
             string expectedResult = "foobar 1, foobar 2 [FIRST] muuttujana variable-3";
-            cubeMeta.CreateDefaultChartHeader(cubeQuery).TryGetLanguage("fi", out string result);
+            MultilanguageString header = HeaderBuildingUtilities.CreateDefaultHeader(cubeMeta.Dimensions, cubeQuery, _languages);
+            string result = header["fi"];
 
             Assert.That(result, Is.EqualTo(expectedResult));
         }
@@ -132,19 +171,27 @@ namespace DataCubeTests
         [Test]
         public void CreateDefaultChartHeader_SumType_ReturnsCorrectHeader()
         {
-            List<VariableParameters> metaParams =
+            List<DimensionParameters> metaParams =
             [
-                new (VariableType.Content, 1),
-                new (VariableType.Time, 5),
-                new (VariableType.OtherClassificatory, 1) { HasCombinationValue = true }
+                new (DimensionType.Content, 1),
+                new (DimensionType.Time, 5),
+                new (DimensionType.Other, 1) { HasCombinationValue = true }
             ];
 
-            CubeQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(metaParams);
-            CubeMeta cubeMeta = TestDataCubeBuilder.BuildTestMeta(metaParams);
-            cubeMeta.Variables[0].IncludedValues[0].Name.Edit(new MultiLanguageString("fi", "foobar 1"));
+            Dictionary<string, Dictionary<string, MultilanguageString>> valueNameEdits = new()
+            {
+                ["variable-0"] = new() { ["value-0"] = new("fi", "contval 0") },
+                ["variable-1"] = new() { ["2000"] = new("fi", "timeval 0") },
+                ["variable-2"] = new() { ["value-0"] = new("fi", "otherval 0") }
+            };
 
-            string expectedResult = "foobar 1 [FIRST]-[LAST]";
-            cubeMeta.CreateDefaultChartHeader(cubeQuery).TryGetLanguage("fi", out string result);
+            MatrixQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(metaParams);
+            MatrixMetadata cubeMeta = TestDataCubeBuilder.BuildTestMeta(metaParams);
+            cubeQuery.ApplyNameEdits(cubeMeta, valueNameEdits: valueNameEdits);
+
+            string expectedResult = "contval 0 [FIRST]-[LAST]";
+            MultilanguageString header = HeaderBuildingUtilities.CreateDefaultHeader(cubeMeta.Dimensions, cubeQuery, _languages);
+            string result = header["fi"];
 
             Assert.That(result, Is.EqualTo(expectedResult));
         }
@@ -152,22 +199,32 @@ namespace DataCubeTests
         [Test]
         public void CreateDefaultChartHeader_SelectableTimeValue_ReturnsCorrectHeader()
         {
-            List<VariableParameters> metaParams =
+            List<DimensionParameters> metaParams =
             [
-                new (VariableType.Content, 1),
-                new (VariableType.Time, 10) { Selectable = true },
-                new (VariableType.OtherClassificatory, 4),
-                new (VariableType.OtherClassificatory, 2)
+                new (DimensionType.Content, 1),
+                new (DimensionType.Time, 10) { Selectable = true },
+                new (DimensionType.Other, 4),
+                new (DimensionType.Other, 2)
             ];
 
-            CubeQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(metaParams);
-            CubeMeta cubeMeta = TestDataCubeBuilder.BuildTestMeta(metaParams);
-            cubeMeta.Variables[0].IncludedValues[0].Name.Edit(new MultiLanguageString("fi", "foobar 1"));
-            cubeMeta.Variables[2].Name.Edit(new MultiLanguageString("fi", "foobar 2"));
-            cubeMeta.Variables[3].Name.Edit(new MultiLanguageString("fi", "foobar 3"));
+            Dictionary<string, MultilanguageString> dimensionNameEdits = new()
+            {
+                ["variable-2"] = new("fi", "foobar 2"),
+                ["variable-3"] = new("fi", "foobar 3")
+            };
+
+            Dictionary<string, Dictionary<string, MultilanguageString>> valueNameEdits = new()
+            {
+                ["variable-0"] = new() { ["value-0"] = new("fi", "foobar 1") }
+            };
+
+            MatrixQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(metaParams);
+            MatrixMetadata cubeMeta = TestDataCubeBuilder.BuildTestMeta(metaParams);
+            cubeQuery.ApplyNameEdits(cubeMeta, dimensionNameEdits, valueNameEdits);
 
             string expectedResult = "foobar 1 muuttujina foobar 2, foobar 3";
-            cubeMeta.CreateDefaultChartHeader(cubeQuery).TryGetLanguage("fi", out string result);
+            MultilanguageString header = HeaderBuildingUtilities.CreateDefaultHeader(cubeMeta.Dimensions, cubeQuery, _languages);
+            string result = header["fi"];
 
             Assert.That(result, Is.EqualTo(expectedResult));
         }
@@ -175,22 +232,32 @@ namespace DataCubeTests
         [Test]
         public void CreateDefaultChartHeader_MultipleTimeVars_ReturnsCorrectHeaderForEn()
         {
-            List<VariableParameters> metaParams =
+            List<DimensionParameters> metaParams =
             [
-                new (VariableType.Content, 1),
-                new (VariableType.Time, 10),
-                new (VariableType.OtherClassificatory, 4),
-                new (VariableType.OtherClassificatory, 2)
+                new (DimensionType.Content, 1),
+                new (DimensionType.Time, 10),
+                new (DimensionType.Other, 4),
+                new (DimensionType.Other, 2)
             ];
 
-            CubeQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(metaParams);
-            CubeMeta cubeMeta = TestDataCubeBuilder.BuildTestMeta(metaParams);
-            cubeMeta.Variables[0].IncludedValues[0].Name.Edit(new MultiLanguageString("en", "foobar 1.en"));
-            cubeMeta.Variables[2].Name.Edit(new MultiLanguageString("en", "foobar 2.en"));
-            cubeMeta.Variables[3].Name.Edit(new MultiLanguageString("en", "foobar 3.en"));
+            Dictionary<string, MultilanguageString> dimensionNameEdits = new()
+            {
+                ["variable-2"] = new("en", "foobar 2.en"),
+                ["variable-3"] = new("en", "foobar 3.en")
+            };
+
+            Dictionary<string, Dictionary<string, MultilanguageString>> valueNameEdits = new()
+            {
+                ["variable-0"] = new() { ["value-0"] = new("en", "foobar 1.en") }
+            };
+
+            MatrixQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(metaParams);
+            MatrixMetadata cubeMeta = TestDataCubeBuilder.BuildTestMeta(metaParams);
+            cubeQuery.ApplyNameEdits(cubeMeta, dimensionNameEdits, valueNameEdits);
 
             string expectedResult = "foobar 1.en in [FIRST] to [LAST] by foobar 2.en, foobar 3.en";
-            cubeMeta.CreateDefaultChartHeader(cubeQuery).TryGetLanguage("en", out string result);
+            MultilanguageString header = HeaderBuildingUtilities.CreateDefaultHeader(cubeMeta.Dimensions, cubeQuery, _languages);
+            string result = header["en"];
 
             Assert.That(result, Is.EqualTo(expectedResult));
         }

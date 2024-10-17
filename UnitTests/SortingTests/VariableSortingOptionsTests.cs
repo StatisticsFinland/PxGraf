@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
+using Px.Utils.Models.Metadata.Enums;
+using Px.Utils.Models.Metadata;
 using PxGraf.Data;
-using PxGraf.Data.MetaData;
 using PxGraf.Enums;
 using PxGraf.Language;
 using PxGraf.Models.Queries;
@@ -9,10 +10,8 @@ using PxGraf.Models.Responses;
 using System.Collections.Generic;
 using System.Linq;
 using UnitTests.Fixtures;
-using UnitTests.TestDummies;
-using UnitTests.TestDummies.DummyQueries;
 
-namespace SortingTests
+namespace UnitTests.SortingTests
 {
     internal class VariableSortingOptionsTests
     {
@@ -25,15 +24,15 @@ namespace SortingTests
         [Test]
         public void SortingOptionsTest_HorizontalBarChart()
         {
-            List<VariableParameters> varParams =
+            List<DimensionParameters> varParams =
             [
-                new(VariableType.Content, 1),
-                new(VariableType.OtherClassificatory, 4),
-                new(VariableType.Unknown, 1),
+                new(DimensionType.Content, 1),
+                new(DimensionType.Other, 4),
+                new(DimensionType.Unknown, 1),
             ];
 
-            CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(varParams);
-            CubeQuery query = TestDataCubeBuilder.BuildTestCubeQuery(varParams);
+            IReadOnlyMatrixMetadata meta = TestDataCubeBuilder.BuildTestMeta(varParams);
+            MatrixQuery query = TestDataCubeBuilder.BuildTestCubeQuery(varParams);
 
             VisualizationSettingsRequest settingsRequest = new()
             {
@@ -49,15 +48,15 @@ namespace SortingTests
         [Test]
         public void SortingOptionsTest_GroupHorizontalBarChart()
         {
-            List<VariableParameters> varParams =
+            List<DimensionParameters> varParams =
             [
-                new(VariableType.Content, 1),
-                new(VariableType.OtherClassificatory, 4),
-                new(VariableType.Unknown, 3),
+                new(DimensionType.Content, 1),
+                new(DimensionType.Other, 4),
+                new(DimensionType.Unknown, 3),
             ];
 
-            CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(varParams);
-            CubeQuery query = TestDataCubeBuilder.BuildTestCubeQuery(varParams);
+            IReadOnlyMatrixMetadata meta = TestDataCubeBuilder.BuildTestMeta(varParams);
+            MatrixQuery query = TestDataCubeBuilder.BuildTestCubeQuery(varParams);
 
             VisualizationSettingsRequest settingsRequest = new()
             {
@@ -73,15 +72,15 @@ namespace SortingTests
         [Test]
         public void SortingOptionsSelectedVarTest_HorizontalBarChart()
         {
-            List<VariableParameters> varParams =
+            List<DimensionParameters> varParams =
             [
-                new(VariableType.Content, 1),
-                new(VariableType.OtherClassificatory, 4),
-                new(VariableType.Unknown, 5) { Selectable = true },
+                new(DimensionType.Content, 1),
+                new(DimensionType.Other, 4),
+                new(DimensionType.Unknown, 5) { Selectable = true },
             ];
 
-            CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(varParams);
-            CubeQuery query = TestDataCubeBuilder.BuildTestCubeQuery(varParams);
+            IReadOnlyMatrixMetadata meta = TestDataCubeBuilder.BuildTestMeta(varParams);
+            MatrixQuery query = TestDataCubeBuilder.BuildTestCubeQuery(varParams);
 
             VisualizationSettingsRequest settingsRequest = new()
             {
@@ -97,16 +96,16 @@ namespace SortingTests
         [Test]
         public void SortingOptionsSelectedVarTest_GroupHorizontalBarChart()
         {
-            List<VariableParameters> varParams =
+            List<DimensionParameters> varParams =
             [
-                new(VariableType.Content, 1),
-                new(VariableType.OtherClassificatory, 4),
-                new(VariableType.OtherClassificatory, 4) { Selectable = true},
-                new(VariableType.Unknown, 3),
+                new(DimensionType.Content, 1),
+                new(DimensionType.Other, 4),
+                new(DimensionType.Other, 4) { Selectable = true},
+                new(DimensionType.Unknown, 3),
             ];
 
-            CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(varParams);
-            CubeQuery query = TestDataCubeBuilder.BuildTestCubeQuery(varParams);
+            IReadOnlyMatrixMetadata meta = TestDataCubeBuilder.BuildTestMeta(varParams);
+            MatrixQuery query = TestDataCubeBuilder.BuildTestCubeQuery(varParams);
 
             VisualizationSettingsRequest settingsRequest = new()
             {
@@ -122,17 +121,17 @@ namespace SortingTests
         [Test]
         public void SortingOptionsTwoSelectedVarsTest_GroupHorizontalBarChart()
         {
-            List<VariableParameters> varParams =
+            List<DimensionParameters> varParams =
             [
-                new(VariableType.Content, 1),
-                new(VariableType.OtherClassificatory, 4),
-                new(VariableType.OtherClassificatory, 4) { Selectable = true},
-                new(VariableType.Unknown, 3),
-                new(VariableType.Time, 4) { Selectable = true},
+                new(DimensionType.Content, 1),
+                new(DimensionType.Other, 4),
+                new(DimensionType.Other, 4) { Selectable = true},
+                new(DimensionType.Unknown, 3),
+                new(DimensionType.Time, 4) { Selectable = true},
             ];
 
-            CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(varParams);
-            CubeQuery query = TestDataCubeBuilder.BuildTestCubeQuery(varParams);
+            IReadOnlyMatrixMetadata meta = TestDataCubeBuilder.BuildTestMeta(varParams);
+            MatrixQuery query = TestDataCubeBuilder.BuildTestCubeQuery(varParams);
 
             VisualizationSettingsRequest settingsRequest = new()
             {
@@ -148,15 +147,15 @@ namespace SortingTests
         [Test]
         public void SortingOptionsPivotTest_GroupHorizontalBarChart()
         {
-            List<VariableParameters> varParams =
+            List<DimensionParameters> varParams =
             [
-                new(VariableType.Content, 1),
-                new(VariableType.Time, 2),
-                new(VariableType.Unknown, 2),
+                new(DimensionType.Content, 1),
+                new(DimensionType.Time, 2),
+                new(DimensionType.Unknown, 2),
             ];
 
-            CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(varParams);
-            CubeQuery query = TestDataCubeBuilder.BuildTestCubeQuery(varParams);
+            IReadOnlyMatrixMetadata meta = TestDataCubeBuilder.BuildTestMeta(varParams);
+            MatrixQuery query = TestDataCubeBuilder.BuildTestCubeQuery(varParams);
 
             VisualizationSettingsRequest settingsRequest = new()
             {
@@ -172,15 +171,15 @@ namespace SortingTests
         [Test]
         public void SortingOptionsTest_StackedHorizontalBarChart()
         {
-            List<VariableParameters> varParams =
+            List<DimensionParameters> varParams =
             [
-                new(VariableType.Content, 1),
-                new(VariableType.OtherClassificatory, 4),
-                new(VariableType.Unknown, 3),
+                new(DimensionType.Content, 1),
+                new(DimensionType.Other, 4),
+                new(DimensionType.Unknown, 3),
             ];
 
-            CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(varParams);
-            CubeQuery query = TestDataCubeBuilder.BuildTestCubeQuery(varParams);
+            IReadOnlyMatrixMetadata meta = TestDataCubeBuilder.BuildTestMeta(varParams);
+            MatrixQuery query = TestDataCubeBuilder.BuildTestCubeQuery(varParams);
 
             VisualizationSettingsRequest settingsRequest = new()
             {

@@ -1,22 +1,23 @@
-﻿using Newtonsoft.Json;
-using PxGraf.Models.Queries;
-using PxGraf.Utility;
+﻿using PxGraf.Models.Queries;
+using PxGraf.Utility.CustomJsonConverters;
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace PxGraf.Models.SavedQueries
 {
-    [JsonConverter(typeof(SavedQuerySerializer))]
-    public class SavedQuery
+    [JsonConverter(typeof(SavedQueryConverter))]
+    public sealed class SavedQuery
     {
         /// <summary>
         /// The query
         /// </summary>
-        public CubeQuery Query { get; set; }
+        public MatrixQuery Query { get; set; }
 
         /// <summary>
         /// When was this query saved
         /// </summary>
+        [JsonConverter(typeof(DateTimeJsonConverter))]
         public DateTime CreationTime { get; set; }
 
         /// <summary>
@@ -43,7 +44,7 @@ namespace PxGraf.Models.SavedQueries
         /// <summary>
         /// Use this for builing the object outside of the serialization.
         /// </summary>
-        public SavedQuery(CubeQuery query, bool archived, VisualizationSettings settings, DateTime creationTime)
+        public SavedQuery(MatrixQuery query, bool archived, VisualizationSettings settings, DateTime creationTime)
         {
             Query = query;
             Archived = archived;

@@ -9,7 +9,7 @@ import { VisualizationType } from 'types/visualizationType';
 import UiLanguageContext from 'contexts/uiLanguageContext';
 import { getSelections } from './SelectableVariableMenus';
 import { ISelectabilityInfo } from '../Preview/Preview';
-import { VariableType } from 'types/cubeMeta'; 
+import { EDimensionType } from 'types/cubeMeta'; 
 
 const mockSetSelections = jest.fn((selections: IMenuProps | ((prevState: IMenuProps) => IMenuProps)) => {
     return;
@@ -21,7 +21,7 @@ const mockSelectables: ISelectabilityInfo[] = [
             code: "foobar1",
             name: { fi: "foo1", sv: "bar1", en: "foobar1" },
             note: { fi: "föö1", sv: "bär1", en: "fööbär1" },
-            type: VariableType.OtherClassificatory,
+            type: EDimensionType.Other,
             values: [{
                 code: "barfoo1",
                 name: { fi: "fyy1", sv: "bör1", en: "fyybör1" },
@@ -43,7 +43,7 @@ const mockSelectables: ISelectabilityInfo[] = [
             code: "foobar2",
             name: { fi: "foo2", sv: "bar2", en: "foobar2" },
             note: { fi: "föö2", sv: "bär2", en: "fööbär2" },
-            type: VariableType.OtherClassificatory,
+            type: EDimensionType.Other,
             values: [{
                 code: "barfoo1",
                 name: { fi: "fyy1", sv: "bör1", en: "fyybör1" },

@@ -2,7 +2,7 @@
 using PxGraf.Models.Queries;
 using System.Collections.Generic;
 
-namespace LayoutTests
+namespace UnitTests.LayoutTests
 {
     internal class LayoutEqualityTests
     {
