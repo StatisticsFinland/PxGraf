@@ -109,7 +109,7 @@
                         ""en"": ""value-0-source.en""
                     },
                     ""numberOfDecimals"": 0,
-                    ""lastUpdated"": ""2009-09-01T00:00:00.000Z""
+                    ""lastUpdated"": ""2009-09-01T00:00:00Z""
                     }
                 }
                 ]
@@ -305,7 +305,7 @@
                       ""en"": ""value-0-source.en""
                     },
                     ""numberOfDecimals"": 0,
-                    ""lastUpdated"": ""2009-09-01T00:00:00.000Z""
+                    ""lastUpdated"": ""2009-09-01T00:00:00Z""
                   }
                 }
               ]
@@ -679,7 +679,7 @@
                       ""en"": ""value-0-source.en""
                     },
                     ""numberOfDecimals"": 0,
-                    ""lastUpdated"": ""2009-09-01T00:00:00.000Z""
+                    ""lastUpdated"": ""2009-09-01T00:00:00Z""
                   }
                 }
               ]
