@@ -18,12 +18,23 @@ export interface IDatabaseGroupContents {
     files: IDatabaseTable[];
 }
 
+/***
+ * Interface for a table group header
+ * @property {string} code - The code of the table group.
+ * @property {MultiLanguageString} name - The name of the table group as a multi-language string.
+ * @property {string[]} languages - Available languages of the table group.
+ */
 export interface IDatabaseGroupHeader {
     code: string;
     name: MultiLanguageString;
     languages: string[];
 }
 
+/***
+ * Interface for a px table
+ * @property {string} lastUpdated - The last updated date of the table.
+ * @property {boolean} error - Flag to indicate if there's an error with the table.
+ */
 export interface IDatabaseTable extends IDatabaseGroupHeader {
     lastUpdated: string | null;
     error?: boolean;
