@@ -40,7 +40,7 @@ namespace PxGraf.Controllers
         /// Returns a list of database items from the given level of the data base based on the dbPath.
         /// </summary>
         /// <param name="dbPath">Path to the database.</param>
-        /// <returns>List of <see cref="DataBaseListingItem"/> objects.</returns>
+        /// <returns><see cref="DatabaseGroupContents"/> object that contains either the tables or listing groups of the given database level.</returns>
         [HttpGet("data-bases/{*dbPath}")]
         public async Task<DatabaseGroupContents> GetDataBaseListingAsync([FromRoute] string dbPath)
         {
@@ -142,6 +142,11 @@ namespace PxGraf.Controllers
             return result;
         }
 
+        /// <summary>
+        /// Returns a default header for the given table query.
+        /// </summary>
+        /// <param name="input"><see cref="MatrixQuery"/> object containing the table reference and the query.</param>
+        /// <returns><see cref="MultilanguageString"/> object containing the default header for different languages.</returns>
         [HttpPost("default-header")]
         public async Task<ActionResult<MultilanguageString>> GetDefaultHeaderAsync([FromBody] MatrixQuery input)
         {
@@ -157,7 +162,7 @@ namespace PxGraf.Controllers
         /// Returns a list of valid visualization type names.
         /// </summary>
         /// <param name="cubeQuery"><see cref="MatrixQuery"/> object containing the table reference and the query.</param>
-        /// <returns>List of valid visualization type names.</returns>
+        /// <returns>List of strings of valid visualization type names.</returns>
         [HttpPost("valid-visualizations")]
         public async Task<ActionResult<List<string>>> GetValidVisualizationTypesAsync([FromBody] MatrixQuery cubeQuery)
         {

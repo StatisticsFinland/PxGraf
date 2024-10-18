@@ -18,11 +18,21 @@ using System.Threading.Tasks;
 
 namespace PxGraf.Datasource.DatabaseConnection
 {
+    /// <summary>
+    /// Datasource for reading data from the local filesystem.
+    /// </summary>
+    /// <param name="config">Local file system database configuration.</param>
+    /// <param name="referenceToPathConverter">Function for converting a table reference to a file path.</param>
     [ExcludeFromCodeCoverage] // Methods consist mostly of filesystem IO
     public class LocalFilesystemDatabase(LocalFilesystemDatabaseConfig config, Func<PxTableReference, string> referenceToPathConverter) : IFileDatasource
     {
         private readonly Func<PxTableReference, string> _referenceToPath = referenceToPathConverter;
 
+        /// <summary>
+        /// Returns tables in a database group.
+        /// </summary>
+        /// <param name="groupHierarcy">Path to the group.</param>
+        /// <returns>List of tables in the group.</returns>
         public async Task<List<PxTableReference>> GetTablesAsync(IReadOnlyList<string> groupHierarcy)
         {
             return await Task.Factory.StartNew(() => GetTables(groupHierarcy));

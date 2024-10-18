@@ -12,17 +12,38 @@ using System.Threading.Tasks;
 
 namespace PxGraf.Datasource
 {
+    /// <summary>
+    /// Abstract class for a datasource that caches data about px files.
+    /// </summary>
     public abstract class CachedDatasource(IMultiStateMemoryTaskCache taskCache) : ICachedDatasource
     {
+        /// <summary>
+        /// Represents a cache housing for metadata.
+        /// </summary>
         public sealed class MetaCacheHousing(DateTime lastWriteTime, IReadOnlyMatrixMetadata meta)
         {
+            /// <summary>
+            /// Date time of the last write.
+            /// </summary>
             public DateTime LastWritetime { get; } = lastWriteTime;
+            /// <summary>
+            /// Metadata of the table.
+            /// </summary>
             public IReadOnlyMatrixMetadata Metadata { get; } = meta;
         }
         
+        /// <summary>
+        /// Represents a cache housing for data.
+        /// </summary>
         protected sealed class DataCacheHousing(DateTime lastWriteTime, DecimalDataValue[] data)
         {
+            /// <summary>
+            /// Date time of the last write.
+            /// </summary>
             public DateTime LastWritetime { get; } = lastWriteTime;
+            /// <summary>
+            /// Data of the table.
+            /// </summary>
             public DecimalDataValue[] Data { get; } = data;
         }
 

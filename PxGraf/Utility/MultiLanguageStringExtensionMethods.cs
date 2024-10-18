@@ -5,8 +5,14 @@ using System.Linq;
 
 namespace PxGraf.Utility
 {
-    public static class MultiLanguageStringUtilities
+    public static class MultiLanguageStringExtensionMethods
     {
+        /// <summary>
+        /// Copy and edit a multilanguage string.
+        /// </summary>
+        /// <param name="input"><see cref="MultilanguageString"/> to be copied and edited.</param>
+        /// <param name="edit"><see cref="MultilanguageString"/> to be used for editing.</param>
+        /// <returns><see cref="MultilanguageString"/> that is copied and edited.</returns>
         public static MultilanguageString CopyAndEdit(this MultilanguageString input, MultilanguageString? edit)
         {
             if(edit is null) return input;

@@ -16,7 +16,7 @@ using System.Linq;
 namespace PxGraf.Visualization
 {
     /// <summary>
-    /// Contains the query information as it was received with the request.
+    /// Adapter for building visualization responses for cube visualizations from matrix data.
     /// </summary>
     public static class PxVisualizerCubeAdapter
     {
@@ -36,6 +36,12 @@ namespace PxGraf.Visualization
             }
         }
 
+        /// <summary>
+        /// Builds a visualization response for a saved query.
+        /// </summary>
+        /// <param name="matrix">Matrix to visualize.</param>
+        /// <param name="savedQuery">Saved query containing the visualization settings.</param>
+        /// <returns>Visualization response for the matrix based on the given saved query.</returns>
         public static VisualizationResponse BuildVisualizationResponse(Matrix<DecimalDataValue> matrix, SavedQuery savedQuery)
         {
             if (savedQuery.Settings.Layout is null)
@@ -49,6 +55,13 @@ namespace PxGraf.Visualization
             return BuildVisualizationResponse(matrix, savedQuery.Query, savedQuery.Settings);
         }
 
+        /// <summary>
+        /// Builds a visualization response for a matrix and a query.
+        /// </summary>
+        /// <param name="matrix">Matrix to visualize.</param>
+        /// <param name="query">Query containing information about the table and selected values for dimensions.</param>
+        /// <param name="settings">Visualization settings.</param>
+        /// <returns>Visualization response for the matrix based on the given query and settings.</returns>
         public static VisualizationResponse BuildVisualizationResponse(Matrix<DecimalDataValue> matrix, MatrixQuery query, VisualizationSettings settings)
         {
             VariableLayout layout = GetVariableLayout(matrix.Metadata, query, settings);
