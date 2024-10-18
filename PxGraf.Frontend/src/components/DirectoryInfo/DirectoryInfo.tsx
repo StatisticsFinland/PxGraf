@@ -9,10 +9,9 @@ import { UiLanguageContext } from 'contexts/uiLanguageContext';
 interface IDirectoryInfoProps {
     path: string;
     item: {
-        id?: string;
-        updated?: string;
-        type?: 't' | 'l';
-        text?: MultiLanguageString;
+        code?: string;
+        lastUpdated?: string;
+        name?: MultiLanguageString;
         languages?: string[];
     }
 }
@@ -21,19 +20,19 @@ export const DirectoryInfo: React.FC<IDirectoryInfoProps> = ({ path, item }) => 
     const { language } = React.useContext(UiLanguageContext);
     const displayLanguage = item.languages.includes(language) ? language : item.languages[0];
 
-    const currentPath = [...path, item.id];
+    const currentPath = [...path, item.code];
     return (
         <>
             <ListItemButton id="mainContent" component={Link} to={urls.tableList(currentPath)}>
                 <ListItemText primary={
                     <>
                         <Typography variant="body1" sx={{ ...spacing(1) }}>
-                            {item.text[displayLanguage]}
+                            {item.name[displayLanguage]}
                         </Typography>
                         {
-                            item.updated &&
+                            item.lastUpdated &&
                             <Typography variant="body2" sx={{ ...spacing(1) }}>
-                                {item.updated}
+                                {item.lastUpdated}
                             </Typography>
                         }
                     </>

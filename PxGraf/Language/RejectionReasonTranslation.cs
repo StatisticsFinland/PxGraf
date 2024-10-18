@@ -1,8 +1,11 @@
 ﻿using PxGraf.ChartTypeSelection;
 using PxGraf.Enums;
+using PxGraf.Utility.CustomJsonConverters;
+using System.Text.Json.Serialization;
 
 namespace PxGraf.Language
 {
+    [JsonConverter(typeof(RequireObjectPropertiesReadOnlyConverter<RejectionReasonTranslation>))]
     public class RejectionReasonTranslation
     {
         public string TimeRequired { get; set; }

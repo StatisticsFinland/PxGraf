@@ -2,10 +2,10 @@
 using PxGraf.ChartTypeSelection;
 using System;
 
-namespace RangeClassTests
+namespace UnitTests
 {
     [TestFixture]
-    class DimensionRangeTests
+    public class DimensionRangeTests
     {
         [Test]
         public void IgnoreTest()
