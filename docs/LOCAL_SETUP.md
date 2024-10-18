@@ -9,7 +9,7 @@
 
 ## PxWeb
 
-PxGraf requires a connection to PxWeb api for database access.
+If PxWeb api is to be used, PxGraf requires a connection to PxWeb api for database access.
 
 Development setup can be configured to use a local instance of PxWeb or a remote instance running on a server.
 
@@ -18,6 +18,9 @@ PxWeb can be ran locally, which can be useful for debugging and easier access to
 The source code for PxWeb can be found here: https://github.com/statisticssweden/PxWeb.git
 PxGraf uses the PxWeb API to fetch data from the Px databases. Additional testing databases will be nessessary for development since the default testing database
 that comes with pxweb lacks the necessary metadata (content variables and time variables) for building visualizations with PxGraf.
+
+## Running PxGraf using local px database with Px.Utils
+PxGraf can be configured to run using the local px database using Px.Utils instead of a PxWeb server. Px.Utils provides a fast way to access Px files on the local px database. In order to use Px.Utils, a Px file database must be created on the local system. This can be done using the PxWeb admin tools. To enable PxGraf to use Px.Utils, the appsettings.json file must be updated with the path to the Px file database (LocalFileSystemDatabaseConfig.DatabaseRootPath) and LocalFileSystemDatabaseConfig.Enabled must be set to true. LocalFileSystemDatabaseConfig.Encoding should match the encoding of the Px and alias files in the database.
 
 ## Backend
 

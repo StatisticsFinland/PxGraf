@@ -6,8 +6,7 @@ Creation API provides endpoints for getting information about the databases and 
 | Function Name | API Route | Parameters | Returns |
 |---------------|-----------|------------|---------|
 | GetDataBaseListingAsync | GET: data-bases/{*dbPath*} | dbPath: The path to the database level provided in the url.<br>queryParameters: Dictionary of query parameters represented by key-value pair of strings. Used by this endpoint to determined the preferred language of the response item. | List of DataBaseListingItem objects that can represent either a database, subfolder or a Px table. |
-| GetLanguagesAsync | GET: languages | None | List of language code strings that are supported by the backend and supported by one or more databases. |
-| GetCubeMetaAsync | GET: cube-meta/{*tablePath*} | tablePath: The path to the table provided in the url. | CubeMeta object that contains the metadata of the table. |
+| GetCubeMetaAsync | GET: cube-meta/{*tablePath*} | tablePath: The path to the table provided in the url. | MatrixMetadata object that contains the metadata of the table. |
 | ValidateTableMetaData | GET: validate-table-metadata/{*tablePath*} | tablePath: The path to the table provided in the url. | TableMetaValidationResult object that contains the validation result of the table metadata. |
 | GetVariableFilterResultAsync | POST: filter-dimension | filterRequest: FilterRequest object that contains the table path and selected filters for each variable. | A dictionary of variable codes and their value codes that are available based on the filter request. |
 | GetDefaultHeaderAsync | POST: default-header | input: CubeQuery object that contains the table path and information about the selected variables. | A multi language string object that contains the default header for each available language. |
