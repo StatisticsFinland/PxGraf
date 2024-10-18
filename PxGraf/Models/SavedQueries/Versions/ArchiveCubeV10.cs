@@ -10,31 +10,13 @@ using Px.Utils.Language;
 namespace PxGraf.Models.SavedQueries.Versions
 {
     [JsonConverter(typeof(ArchiveCubeV10ReadOnlyConverter))]
-    public class ArchiveCubeV10 : IVersionedArchiveCube
+    public class ArchiveCubeV10 : VersionedArchiveCube
     {
-        /// <summary>
-        /// When this archive object was originally created.
-        /// </summary>
-        [JsonPropertyName("creationTime")]
-        public DateTime CreationTime { get; set; }
-
         /// <summary>
         /// Contains all metadata of this cube.
         /// </summary>
         [JsonPropertyName("meta")]
         public CubeMeta Meta { get; set; }
-
-        /// <summary>
-        /// Collection of key (variable value code coordinates) value (double or missing code) pairs.
-        /// </summary>
-        [JsonPropertyName("data")]
-        public List<DecimalDataValue> Data { get; set; }
-
-        /// <summary>
-        /// Notes mapped to the indexes of the data array.
-        /// </summary>
-        [JsonPropertyName("dataNotes")]
-        public Dictionary<int, MultilanguageString> DataNotes { get; set; }
 
         public ArchiveCubeV10() { }
 
@@ -46,7 +28,7 @@ namespace PxGraf.Models.SavedQueries.Versions
             DataNotes = dataNotes;
         }
 
-        public ArchiveCube ToArchiveCube()
+        public override ArchiveCube ToArchiveCube()
         {
             return new ArchiveCube
             {

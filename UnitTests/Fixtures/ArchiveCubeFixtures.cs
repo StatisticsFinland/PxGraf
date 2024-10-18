@@ -4,7 +4,6 @@
     {
         internal const string EXPECTED_ARCHIVE_CUBE_V11 = @"
         {
-            ""creationTime"": ""2024-08-19T14:00:00Z"",
             ""meta"": {
                 ""defaultLanguage"": ""fi"",
                 ""availableLanguages"": [""fi"", ""en""],
@@ -131,9 +130,10 @@
                     }
                 }
             },
+            ""version"": ""1.1"",
+            ""creationTime"": ""2024-08-19T14:00:00Z"",
             ""data"":[ 0.123, ""."", 2.123, 3.123, 4.123, 5.123, 6.123, 7.123],
-            ""dataNotes"": null,
-            ""version"": ""1.1""
+            ""dataNotes"": null
         }
         ";
 
