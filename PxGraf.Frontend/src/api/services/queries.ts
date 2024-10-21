@@ -25,7 +25,6 @@ export interface IFetchSavedQueryResponse {
             name: string;
             hierarchy: string[];
         };
-    } & {
         variableQueries: Query;
     } & ICubeQuery;
     settings: IVisualizationSettings;
@@ -85,11 +84,16 @@ const sendSaveRequest = async (
 
 export const fetchSavedQuery = async (queryId: string): Promise<IFetchSavedQueryResponse> => {
     const client = new ApiClient();
-
     const url = 'sq/' + queryId;
+    const response = await client.getAsync(url);
 
-    return await client.getAsync(url);
-}
+    // Check for VariableQueries and assign to variableQueries
+    if (!response.query?.variableQueries && response.query?.VariableQueries) {
+        response.query.variableQueries = response.query.VariableQueries;
+    }
+
+    return response as IFetchSavedQueryResponse;
+};
 
 export const useFetchSavedQuery = (queryId: string): IFetchSavedQueryResult => {
     return useQuery(

@@ -17,16 +17,10 @@ namespace PxGraf.Utility.CustomJsonConverters
         {
             JsonDocument jsonDocument = JsonDocument.ParseValue(ref reader);
             JsonElement root = jsonDocument.RootElement;
-
-            JsonElement GetPropertyCaseInsensitive(JsonElement element, string propertyName)
-            {
-                return element.EnumerateObject().FirstOrDefault(prop => string.Equals(prop.Name, propertyName, StringComparison.OrdinalIgnoreCase)).Value;
-            }
-
-            DateTime creationTime = GetPropertyCaseInsensitive(root, nameof(ArchiveCubeV10.CreationTime)).GetDateTime();
-            CubeMeta meta = JsonSerializer.Deserialize<CubeMeta>(GetPropertyCaseInsensitive(root, nameof(ArchiveCubeV10.Meta)).GetRawText(), options);
-            Dictionary<int, string> dataNotes = JsonSerializer.Deserialize<Dictionary<int, string>>(GetPropertyCaseInsensitive(root, nameof(ArchiveCubeV10.DataNotes)), options);
-            List<DecimalDataValue> values = ConvertData(JsonSerializer.Deserialize<List<decimal?>>(GetPropertyCaseInsensitive(root, nameof(ArchiveCubeV10.Data)).GetRawText(), options), dataNotes);
+            DateTime creationTime = root.GetPropertyCaseInsensitive(nameof(ArchiveCubeV10.CreationTime)).GetDateTime();
+            CubeMeta meta = JsonSerializer.Deserialize<CubeMeta>(root.GetPropertyCaseInsensitive(nameof(ArchiveCubeV10.Meta)).GetRawText(), options);
+            Dictionary<int, string> dataNotes = JsonSerializer.Deserialize<Dictionary<int, string>>(root.GetPropertyCaseInsensitive(nameof(ArchiveCubeV10.DataNotes)), options);
+            List<DecimalDataValue> values = ConvertData(JsonSerializer.Deserialize<List<decimal?>>(root.GetPropertyCaseInsensitive(nameof(ArchiveCubeV10.Data)).GetRawText(), options), dataNotes);
             return new ArchiveCubeV10(creationTime, meta, values, ConvertDataNotes(dataNotes, meta.Languages));
         }
 

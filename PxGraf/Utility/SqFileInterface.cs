@@ -81,7 +81,7 @@ namespace PxGraf.Utility
             return JsonSerializer.Deserialize<T>(respdata, GlobalJsonConverterOptions.Default)
                 ?? throw new JsonException($"Failed to deserialize object from {path}");
         }
-
+            
         /// <summary>
         /// Asyncronous function for serializing json serializable objects to a file.
         /// This function handles locking the file.
