@@ -217,6 +217,43 @@ namespace UnitTests.SerializerTests
         }
 
         [Test]
+        public void DeserializeSavedQuery__V1_1WithCamelCasePropertyNames__ReturnsV1_1DeserializedSavedQuery()
+        {
+            string testJson = @"{
+                    ""version"":""1.1"",
+		            ""query"":{},
+		            ""creationTime"": ""2023-04-24T14:36:18.7550813+03:00"",
+		            ""archived"":true,
+                    ""settings"":{
+                      ""matchXLabelsToEnd"":false,
+                      ""xLabelInterval"":1,
+                      ""layout"":{
+                         ""rowVariableCodes"":[
+                            ""Kuukausi""
+                         ],
+                         ""columnVariableCodes"":[
+                            ""Ilmoittava lentoasema""
+                         ]
+                      },
+                      ""visualizationType"":""GroupVerticalBarChart"",
+                      ""defaultSelectableVariableCodes"":{""foo"":[""bar""]}
+                   },
+                }";
+
+            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(testJson, options);
+
+            Assert.That(savedQuery.CreationTime, Is.EqualTo(PxSyntaxConstants.ParseDateTime("2023-04-24T14:36:18.7550813+03:00")));
+            Assert.That(savedQuery.Settings.VisualizationType, Is.EqualTo(VisualizationType.GroupVerticalBarChart));
+            Assert.That(savedQuery.Archived, Is.True);
+            Assert.That(savedQuery.Settings.Layout.RowVariableCodes.Count, Is.EqualTo(1));
+            Assert.That(savedQuery.Settings.Layout.RowVariableCodes[0], Is.EqualTo("Kuukausi"));
+            Assert.That(savedQuery.Settings.Layout.ColumnVariableCodes.Count, Is.EqualTo(1));
+            Assert.That(savedQuery.Settings.Layout.ColumnVariableCodes[0], Is.EqualTo("Ilmoittava lentoasema"));
+            Assert.That(savedQuery.Version, Is.EqualTo("1.1"));
+            Assert.That(savedQuery.Settings.DefaultSelectableVariableCodes, Is.Not.Null);
+        }
+
+        [Test]
         public void DeserializeSavedQuery__V1_1Pivot__ReturnsV1_1DeserializedSavedQuery()
         {
             string testJson = @"{
