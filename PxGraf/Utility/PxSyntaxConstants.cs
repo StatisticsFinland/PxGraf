@@ -23,6 +23,9 @@ namespace PxGraf.Utility
         public const string DATETIME_FORMAT_WITH_MS = "yyyy-MM-dd'T'HH:mm:ss.fffffffK";
         public const string DATETIME_FORMAT_NO_MS = "yyyy-MM-dd'T'HH:mm:ssK";
         public const string DATETIME_FORMAT_NO_MS_TS_ZERO = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+        public const string META_ID_KEY = "META-ID";
+        public const string ORDINAL_VALUE = "SCALE-TYPE=ordinal";
+        public const string NOMINAL_VALUE = "SCALE-TYPE=nominal";
 
         //Indexed by DataValueType with offset of one
         public static readonly string[] MissingValueDotCodes =

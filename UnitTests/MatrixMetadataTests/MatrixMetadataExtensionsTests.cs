@@ -355,5 +355,32 @@ namespace UnitTests.MatrixMetadataTests
             // Act && Assert
             Assert.Throws<InvalidOperationException>(() => input.AssignSourceToContentDimensionValues());
         }
+
+        [Test]
+        public void AssignOrdinalDimensionTypesReturnsCorrectOrdinalDimensionTypes()
+        {
+            // Arrange
+            List<DimensionParameters> metaParams =
+            [
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 10),
+                new DimensionParameters(DimensionType.Unknown, 2),
+                new DimensionParameters(DimensionType.Unknown, 2),
+            ];
+            MultilanguageStringProperty metaId = new(new MultilanguageString(new Dictionary<string, string> { { "fi", PxSyntaxConstants.ORDINAL_VALUE }, { "en", PxSyntaxConstants.ORDINAL_VALUE } }));
+            MatrixMetadata meta = TestDataCubeBuilder.BuildTestMeta(metaParams);
+            meta.Dimensions[0].AdditionalProperties.Add(PxSyntaxConstants.META_ID_KEY, metaId);
+            meta.Dimensions[1].AdditionalProperties.Add(PxSyntaxConstants.META_ID_KEY, metaId);
+            meta.Dimensions[2].AdditionalProperties.Add(PxSyntaxConstants.META_ID_KEY, metaId);
+
+            // Act
+            MatrixMetadata result = meta.AssignOrdinalDimensionTypes();
+
+            // Assert
+            Assert.That(result.Dimensions[0].Type.Equals(DimensionType.Content)); // Time and content dimensions should not be changed
+            Assert.That(result.Dimensions[1].Type.Equals(DimensionType.Time));
+            Assert.That(result.Dimensions[2].Type.Equals(DimensionType.Ordinal));
+            Assert.That(result.Dimensions[3].Type.Equals(DimensionType.Unknown));
+        }
     }
 }

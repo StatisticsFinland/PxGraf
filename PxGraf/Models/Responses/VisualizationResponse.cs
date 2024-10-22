@@ -5,7 +5,6 @@ using PxGraf.Models.Queries;
 using System.Collections.Generic;
 using System;
 using PxGraf.Data.MetaData;
-using Microsoft.AspNetCore.Mvc;
 using System.Text.Json.Serialization;
 
 namespace PxGraf.Models.Responses

@@ -151,6 +151,36 @@ namespace PxGraf.Models.Metadata
                 cdv.AdditionalProperties.TryAdd(PxSyntaxConstants.SOURCE_KEY, sourceProperty);
             }
         }
+
+        /// <summary>
+        /// Assigns ordinal or nominal dimension types to dimensions that are not content or time dimensions based on their meta-id properties.
+        /// </summary>
+        /// <param name="meta">The matrix metadata to assign the dimension types to.</param>
+        public static MatrixMetadata AssignOrdinalDimensionTypes(this MatrixMetadata meta)
+        {
+            List<Dimension> newDimensions = [..meta.Dimensions];
+            for(int i = 0; i < meta.Dimensions.Count; i++)
+            {
+                if (meta.Dimensions[i].Type == DimensionType.Content ||
+                    meta.Dimensions[i].Type == DimensionType.Time)
+                {
+                    continue;
+                }
+
+                DimensionType dimensionType = meta.Dimensions[i].GetDimensionType();
+                newDimensions[i] = new(
+                    meta.Dimensions[i].Code,
+                    meta.Dimensions[i].Name,
+                    meta.Dimensions[i].AdditionalProperties,
+                    meta.Dimensions[i].Values,
+                    dimensionType);
+            }
+            return new MatrixMetadata(
+                meta.DefaultLanguage,
+                meta.AvailableLanguages,
+                newDimensions,
+                meta.AdditionalProperties);
+        }
     }
 }
 #nullable disable

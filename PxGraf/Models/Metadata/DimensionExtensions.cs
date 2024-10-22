@@ -9,6 +9,7 @@ using PxGraf.Utility;
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using Px.Utils.Models.Metadata.Enums;
 
 namespace PxGraf.Models.Metadata
 {
@@ -26,25 +27,23 @@ namespace PxGraf.Models.Metadata
         /// <returns>A <see cref="Variable"/> object created from the given <see cref="IReadOnlyDimension"/> object.</returns>
         public static Variable ConvertToVariable(this IReadOnlyDimension input, Dictionary<string, DimensionQuery> dimensionQueries, IReadOnlyMatrixMetadata meta)
         {
-            if (input is not Dimension)
-            {
-                throw new ArgumentException("Input must be of type Dimension");
-            }
+            if (input is not Dimension dimension)
+                throw new ArgumentException("Input must be a Dimension object.");
 
-            MultilanguageString name = input.Name;
-            if (dimensionQueries.TryGetValue(input.Code, out DimensionQuery? query) &&
+            MultilanguageString name = dimension.Name;
+            if (dimensionQueries.TryGetValue(dimension.Code, out DimensionQuery? query) &&
                 query.NameEdit != null)
             {
                 name = query.NameEdit;
             }
 
             return new(
-                code: input.Code,
+                code: dimension.Code,
                 name: name,
-                note: input.GetMultilanguageDimensionProperty(PxSyntaxConstants.NOTE_KEY),
-                type: input.Type,
-                values: input.Values.Select(v => v
-                    .ConvertToVariableValue(input.GetEliminationValueCode(), query, meta)).ToList());
+                note: dimension.GetMultilanguageDimensionProperty(PxSyntaxConstants.NOTE_KEY),
+                type: dimension.Type,
+                values: dimension.Values.Select(v => v
+                    .ConvertToVariableValue(dimension.GetEliminationValueCode(), query, meta)).ToList());
         }
 
         /// <summary>
@@ -70,12 +69,37 @@ namespace PxGraf.Models.Metadata
         /// </summary>
         /// <param name="dimension">The dimension to search the property from.</param>
         /// <param name="propertyKey">The key of the property to search for.</param>
+        /// <param name="removeEntry">Whether to remove the property entry from the dimension after retrieval.</param>
         /// <returns></returns>
-        public static MultilanguageString? GetMultilanguageDimensionProperty(this IReadOnlyDimension dimension, string propertyKey)
+        public static MultilanguageString? GetMultilanguageDimensionProperty(this Dimension dimension, string propertyKey, bool removeEntry = false)
         {
             if (dimension.AdditionalProperties.TryGetValue(propertyKey, out MetaProperty? prop) &&
-                prop is MultilanguageStringProperty mlsProp) return mlsProp.Value;
+                prop is MultilanguageStringProperty mlsProp) 
+            {
+                if (removeEntry)
+                {
+                    dimension.AdditionalProperties.Remove(propertyKey);
+                }
+                return mlsProp.Value;
+            }
             else return null;
+        }
+
+        /// <summary>
+        /// Assigns a dimension type to the given dimension based on its meta-id property.
+        /// </summary>
+        /// <param name="dimension"></param>
+        /// <returns></returns>
+        public static DimensionType GetDimensionType(this Dimension dimension)
+        {
+            MultilanguageString? metaId = dimension.GetMultilanguageDimensionProperty(PxSyntaxConstants.META_ID_KEY, true);
+            if (metaId is not null)
+            {
+                if (metaId.UniformValue().Equals(PxSyntaxConstants.ORDINAL_VALUE)) return DimensionType.Ordinal;
+                else if (metaId.UniformValue().Equals(PxSyntaxConstants.NOMINAL_VALUE)) return DimensionType.Nominal;
+            }
+
+            return dimension.Type;
         }
     }
 }

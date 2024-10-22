@@ -138,6 +138,7 @@ namespace UnitTests.MatrixMetadataTests
             // Assert
             Assert.That(noteProperty, Is.Not.Null);
             Assert.That(noteProperty!.Equals(new MultilanguageString(note)));
+            Assert.That(dimension.AdditionalProperties.ContainsKey(PxSyntaxConstants.NOTE_KEY), Is.True);
         }
 
         [Test]
@@ -152,6 +153,69 @@ namespace UnitTests.MatrixMetadataTests
 
             // Assert
             Assert.That(noteProperty, Is.Null);
+        }
+
+        [Test]
+        public void GetMultilanguageDimensionPropertyWithRemoveFlagRemovesProperty()
+        {
+            // Arrange
+            DimensionParameters dimParams = new(DimensionType.Unknown, 1);
+            Dimension dimension = TestDataCubeBuilder.BuildTestDimension("foo", dimParams, ["fi", "en"]);
+            MultilanguageStringProperty metaString = new(new MultilanguageString(new Dictionary<string, string> { { "fi", PxSyntaxConstants.ORDINAL_VALUE }, { "en", PxSyntaxConstants.ORDINAL_VALUE } }));
+            dimension.AdditionalProperties.Add(PxSyntaxConstants.META_ID_KEY, metaString);
+
+            // Act
+            MultilanguageString? metaProperty = dimension.GetMultilanguageDimensionProperty(PxSyntaxConstants.META_ID_KEY, true);
+
+            // Assert
+            Assert.That(metaProperty, Is.Not.Null);
+            Assert.That(dimension.AdditionalProperties.ContainsKey(PxSyntaxConstants.NOTE_KEY), Is.False);
+        }
+
+        [Test]
+        public void GetDimensionTypeReturnsOrdinalDimensionType()
+        {
+            // Arrange
+            DimensionParameters dimParams = new(DimensionType.Unknown, 1);
+            Dimension dimension = TestDataCubeBuilder.BuildTestDimension("foo", dimParams, ["fi", "en"]);
+            MultilanguageStringProperty metaId = new(new MultilanguageString(new Dictionary<string, string> { { "fi", PxSyntaxConstants.ORDINAL_VALUE }, { "en", PxSyntaxConstants.ORDINAL_VALUE } }));
+            dimension.AdditionalProperties.Add(PxSyntaxConstants.META_ID_KEY, metaId);
+
+            // Act
+            DimensionType dimensionType = dimension.GetDimensionType();
+
+            // Assert
+            Assert.That(dimensionType, Is.EqualTo(DimensionType.Ordinal));
+        }
+
+        [Test]
+        public void GetDimensionTypeReturnsNominalDimensionType()
+        {
+            // Arrange
+            DimensionParameters dimParams = new(DimensionType.Unknown, 1);
+            Dimension dimension = TestDataCubeBuilder.BuildTestDimension("foo", dimParams, ["fi", "en"]);
+            MultilanguageStringProperty metaId = new(new MultilanguageString(new Dictionary<string, string> { { "fi", PxSyntaxConstants.NOMINAL_VALUE }, { "en", PxSyntaxConstants.NOMINAL_VALUE } }));
+            dimension.AdditionalProperties.Add(PxSyntaxConstants.META_ID_KEY, metaId);
+
+            // Act
+            DimensionType dimensionType = dimension.GetDimensionType();
+
+            // Assert
+            Assert.That(dimensionType, Is.EqualTo(DimensionType.Nominal));
+        }
+
+        [Test]
+        public void GetDimensionTypeReturnsUnknownDimensionType()
+        {
+            // Arrange
+            DimensionParameters dimParams = new(DimensionType.Unknown, 1);
+            Dimension dimension = TestDataCubeBuilder.BuildTestDimension("foo", dimParams, ["fi", "en"]);
+
+            // Act
+            DimensionType dimensionType = dimension.GetDimensionType();
+
+            // Assert
+            Assert.That(dimensionType, Is.EqualTo(DimensionType.Unknown));
         }
     }
 }

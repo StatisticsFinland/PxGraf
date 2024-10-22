@@ -6,6 +6,7 @@ using Px.Utils.Models.Data.DataValue;
 using Px.Utils.Models.Metadata;
 using Px.Utils.PxFile.Data;
 using Px.Utils.PxFile.Metadata;
+using PxGraf.Models.Metadata;
 using PxGraf.Models.Queries;
 using PxGraf.Models.Responses.DatabaseItems;
 using System;
@@ -128,7 +129,10 @@ namespace PxGraf.Datasource.DatabaseConnection
             PxFileMetadataReader metadataReader = new();
             IAsyncEnumerable<KeyValuePair<string, string>> entries = metadataReader.ReadMetadataAsync(readStream, config.Encoding);
             MatrixMetadataBuilder builder = new();
-            return await builder.BuildAsync(entries);
+            MatrixMetadata meta = await builder.BuildAsync(entries);
+            meta = meta.AssignOrdinalDimensionTypes();
+            meta.AssignSourceToContentDimensionValues();
+            return meta;
         }
 
         /// <summary>
