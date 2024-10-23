@@ -14,5 +14,7 @@ namespace Tools.PxUtilsIntegrationTestTool
         internal const string ACCEPTED_FILE = "accepted.txt";
         internal const string REJECTED_FILE = "rejected.json";
         internal const string WHITELIST_FILE = "whitelist.txt";
+
+        internal const string DATA_PATH = "data";
     }
 }

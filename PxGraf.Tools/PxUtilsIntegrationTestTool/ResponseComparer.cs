@@ -152,18 +152,34 @@ namespace Tools.PxUtilsIntegrationTestTool
 
         private static void OpenDiffInEditor(string resp1, string resp2)
         {
+            string json1 = File.ReadAllText(resp1);
+            string json2 = File.ReadAllText(resp2);
+
+            string formattedJson1 = JToken.Parse(json1).ToString(Formatting.Indented);
+            string formattedJson2 = JToken.Parse(json2).ToString(Formatting.Indented);
+
+            string temp1 = $"diff1-temp.json";
+            string temp2 = $"diff2-temp.json";
+
+            File.WriteAllText(temp1, formattedJson1);
+            File.WriteAllText(temp2, formattedJson2);
+
             var process = new System.Diagnostics.Process
             {
                 StartInfo = new System.Diagnostics.ProcessStartInfo
                 {
                     FileName = "code",
-                    Arguments = $"--diff \"{resp1}\" \"{resp2}\"",
-                    RedirectStandardOutput = true,
-                    UseShellExecute = false,
-                    CreateNoWindow = true
+                    Arguments = $"--diff \"{temp1}\" \"{temp2}\"",
+                    RedirectStandardOutput = false,
+                    UseShellExecute = true,
+                    CreateNoWindow = false
                 }
             };
             process.Start();
+
+            process.WaitForExit();
+            File.Delete(temp1);
+            File.Delete(temp2);
         }
 
         private int CompareDeserializedObjects(KeyValuePair<string, string> resp1, KeyValuePair<string, string> resp2, string responseToken)
@@ -239,6 +255,11 @@ namespace Tools.PxUtilsIntegrationTestTool
                     }
                     else
                     {
+                        if (responseToken == TokenConstants.RESPONSE_SQVISUALIZATION && path == TokenConstants.DATA_PATH)
+                        {
+                            CompareData(arr1, arr2, differences);
+                            break;
+                        }
                         for (int i = 0; i < arr1.Count; i++)
                         {
                             KeyValuePair<string, JToken> kvp1 = new (token1.Key, arr1[i]);
@@ -249,14 +270,41 @@ namespace Tools.PxUtilsIntegrationTestTool
                     break;
 
                 default:
-                    if (!JToken.DeepEquals(token1.Value, token2.Value))
+                    if (!JToken.DeepEquals(token1.Value, token2.Value) && !PromptWhitelisting(responseToken, path))
                     {
-                        if (!PromptWhitelisting(responseToken, path))
-                        {
-                            differences.Add($"Value mismatch at {path}: {token1.Value} vs {token2.Value} when comparing {token1.Key} and {token2.Key}");
-                        }
+                        differences.Add($"Value mismatch at {path}: {token1.Value} vs {token2.Value} when comparing {token1.Key} and {token2.Key}");
                     }
                     break;
+            }
+        }
+
+        private static void CompareData(JArray arr1, JArray arr2, List<string> differences)
+        {
+            for (int i = 0; i < arr1.Count; i++)
+            {
+                JToken item1 = arr1[i];
+                JToken item2 = arr2[i];
+
+                if (item1.Type != JTokenType.Float || item2.Type != JTokenType.Float)
+                {
+                    differences.Add($"Data type mismatch at {TokenConstants.DATA_PATH}[{i}]: {item1.Type} vs {item2.Type} when comparing {TokenConstants.RESPONSE_SQVISUALIZATION} and {TokenConstants.DATASOURCE_PXWEBAPI}");
+                    return;
+                }
+
+                decimal value1 = item1.Value<decimal>();
+                decimal value2 = item2.Value<decimal>();
+
+                int decimalPlaces1 = BitConverter.GetBytes(decimal.GetBits(value1)[3])[2];
+                int decimalPlaces2 = BitConverter.GetBytes(decimal.GetBits(value2)[3])[2];
+                int decimalPlaces = Math.Min(decimalPlaces1, decimalPlaces2);
+
+                decimal roundedValue1 = Math.Round(value1, decimalPlaces);
+                decimal roundedValue2 = Math.Round(value2, decimalPlaces);
+
+                if (roundedValue1 != roundedValue2)
+                {
+                    differences.Add($"Data mismatch at {TokenConstants.DATA_PATH}[{i}]: {value1} vs {value2} when comparing {TokenConstants.RESPONSE_SQVISUALIZATION} and {TokenConstants.DATASOURCE_PXWEBAPI}");
+                }
             }
         }
 

@@ -5,8 +5,8 @@
     "PxWebApiOld": "http://localhost:8443"
   },
   "Paths": {
-    "ResponseDirectory": "C:\\Users\\malkkis\\Desktop\\test\\2\\PxGrafIntergrationTestApp\\ResponseStorage",
-    "QueriesFile": "C:\\Users\\malkkis\\Desktop\\test\\2\\queries.txt",
-    "ResultsDirectory": "C:\\Users\\malkkis\\Desktop\\test\\2\\PxGrafIntergrationTestApp\\Results"
+    "ResponseDirectory": "path/to/response/directory",
+    "QueriesFile": "path/to/queries/file.txt",
+    "ResultsDirectory": "path/to/results/directory"
   }
 }
