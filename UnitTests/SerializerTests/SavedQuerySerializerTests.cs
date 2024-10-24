@@ -3,7 +3,6 @@ using PxGraf.Enums;
 using PxGraf.Models.SavedQueries;
 using PxGraf.Utility;
 using System;
-using System.Globalization;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using UnitTests.Fixtures;
@@ -169,6 +168,43 @@ namespace UnitTests.SerializerTests
             SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(testJson, options);
 
             Assert.That(savedQuery.CreationTime, Is.EqualTo(PxSyntaxConstants.ParseDateTime("2023-04-24T14:36:18.7550813+03:00")));
+            Assert.That(savedQuery.Settings.VisualizationType, Is.EqualTo(VisualizationType.GroupVerticalBarChart));
+            Assert.That(savedQuery.Archived, Is.True);
+            Assert.That(savedQuery.Settings.Layout.RowVariableCodes.Count, Is.EqualTo(1));
+            Assert.That(savedQuery.Settings.Layout.RowVariableCodes[0], Is.EqualTo("Kuukausi"));
+            Assert.That(savedQuery.Settings.Layout.ColumnVariableCodes.Count, Is.EqualTo(1));
+            Assert.That(savedQuery.Settings.Layout.ColumnVariableCodes[0], Is.EqualTo("Ilmoittava lentoasema"));
+            Assert.That(savedQuery.Version, Is.EqualTo("1.1"));
+            Assert.That(savedQuery.Settings.DefaultSelectableVariableCodes, Is.Null);
+        }
+
+        [Test]
+        public void DeserializeSavedQuery__V1_1WithUncommonDateTimeFormat__ReturnsV1_1DeserializedSavedQuery()
+        {
+            string testJson = @"{
+                    ""Version"":""1.1"",
+		            ""Query"":{},
+		            ""CreationTime"": ""2024-09-13T16:13:42.074783+03:00"",
+		            ""Archived"":true,
+                    ""Settings"":{
+                      ""MatchXLabelsToEnd"":false,
+                      ""XLabelInterval"":1,
+                      ""Layout"":{
+                         ""RowVariableCodes"":[
+                            ""Kuukausi""
+                         ],
+                         ""ColumnVariableCodes"":[
+                            ""Ilmoittava lentoasema""
+                         ]
+                      },
+                      ""VisualizationType"":""GroupVerticalBarChart"",
+                      ""DefaultSelectableVariableCodes"":null
+                   },
+                }";
+
+            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(testJson, options);
+
+            Assert.That(savedQuery.CreationTime, Is.EqualTo(PxSyntaxConstants.ParseDateTime("2024-09-13T16:13:42.074783+03:00")));
             Assert.That(savedQuery.Settings.VisualizationType, Is.EqualTo(VisualizationType.GroupVerticalBarChart));
             Assert.That(savedQuery.Archived, Is.True);
             Assert.That(savedQuery.Settings.Layout.RowVariableCodes.Count, Is.EqualTo(1));

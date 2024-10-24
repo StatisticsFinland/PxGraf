@@ -12,18 +12,7 @@ namespace PxGraf.Utility.CustomJsonConverters
             if (reader.TokenType == JsonTokenType.String)
             {
                 string dateTimeString = reader.GetString();
-                if (DateTime.TryParseExact(dateTimeString, PxSyntaxConstants.DATETIME_FORMAT_WITH_MS, CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out DateTime dateTime))
-                {
-                    return dateTime;
-                }
-                else if (DateTime.TryParseExact(dateTimeString, PxSyntaxConstants.DATETIME_FORMAT_NO_MS, CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out dateTime))
-                {
-                    return dateTime;
-                }
-                else if (DateTime.TryParseExact(dateTimeString, PxSyntaxConstants.DATETIME_FORMAT_NO_MS_TS_ZERO, CultureInfo.InvariantCulture, DateTimeStyles.None, out dateTime))
-                {
-                    return dateTime;
-                }
+                return PxSyntaxConstants.ParseDateTime(dateTimeString);
             }
             throw new JsonException($"Unable to convert \"{reader.GetString()}\" to {typeToConvert}.");
         }
