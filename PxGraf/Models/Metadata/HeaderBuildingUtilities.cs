@@ -1,13 +1,12 @@
 ﻿#nullable enable
 using Px.Utils.Language;
 using Px.Utils.Models.Metadata.Dimensions;
+using Px.Utils.Models.Metadata.Enums;
 using PxGraf.Language;
 using PxGraf.Models.Queries;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Px.Utils.Models.Metadata.Enums;
-using System.Collections;
 using static PxGraf.Models.Queries.DimensionQuery;
 
 namespace PxGraf.Models.Metadata
@@ -36,7 +35,7 @@ namespace PxGraf.Models.Metadata
                 langToHeader.AppendSingleValueDimensionTexts(dimensions, language, query);
 
                 IReadOnlyDimension? timeDim = dimensions.FirstOrDefault(v => v.Type == DimensionType.Time);
-                if (timeDim != null && (!query?.DimensionQueries[timeDim.Code].Selectable ?? false))
+                if (timeDim != null && (!query?.DimensionQueries?[timeDim.Code].Selectable ?? false))
                 {
                     langToHeader[language].AppendTimeValuePlaceholders(translation, timeDim.Values.Count > 1);
                 }
@@ -128,7 +127,7 @@ namespace PxGraf.Models.Metadata
 
         private static string GetDimensionNameEditForLanguage(MatrixQuery? query, IReadOnlyDimension dimension, string language)
         {
-            if (query?.DimensionQueries.TryGetValue(dimension.Code, out DimensionQuery? dq) == true &&
+            if (query?.DimensionQueries?.TryGetValue(dimension.Code, out DimensionQuery? dq) == true &&
                 dq.NameEdit?.Languages.Contains(language) == true)
             {
                 return dq.NameEdit[language];
@@ -138,7 +137,7 @@ namespace PxGraf.Models.Metadata
 
         private static string GetDimensionValueNameEditForLanguage(MatrixQuery? query, string dimensionCode, IReadOnlyDimensionValue value, string language)
         {
-            if (query?.DimensionQueries.TryGetValue(dimensionCode, out DimensionQuery? dq) == true &&
+            if (query?.DimensionQueries?.TryGetValue(dimensionCode, out DimensionQuery? dq) == true &&
                 dq.ValueEdits?.TryGetValue(value.Code, out VariableValueEdition? dvq) == true &&
                 dvq.NameEdit?.Languages.Contains(language) == true)
             {

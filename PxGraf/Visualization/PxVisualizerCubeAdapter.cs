@@ -11,7 +11,9 @@ using PxGraf.Models.Responses;
 using PxGraf.Models.SavedQueries;
 using PxGraf.Utility;
 using System.Collections.Generic;
+using System.Drawing.Drawing2D;
 using System.Linq;
+using System.Reflection.PortableExecutable;
 
 namespace PxGraf.Visualization
 {
@@ -78,8 +80,7 @@ namespace PxGraf.Visualization
             Matrix<DecimalDataValue> resultMatrix = matrix.GetTransform(finalMap);
             MatrixExtensions.DataAndNotesCollection dataAndNotes = resultMatrix.ExtractDataAndNotes();
             IReadOnlyList<string> timeDimensionCodes = matrix.Metadata.GetTimeDimension().Values.Codes;
-            MultilanguageString header = query.ChartHeaderEdit ?? HeaderBuildingUtilities.CreateDefaultHeader(matrix.Metadata.Dimensions, query, matrix.Metadata.AvailableLanguages);
-
+            
             return new VisualizationResponse()
             {
                 TableReference = query.TableReference,
@@ -90,7 +91,7 @@ namespace PxGraf.Visualization
                 SelectableVariableCodes = layout.SelectableVariableCodes,
                 RowVariableCodes = layout.RowVariableCodes,
                 ColumnVariableCodes = layout.ColumnVariableCodes,
-                Header = HeaderBuildingUtilities.ReplaceTimePlaceholdersInHeader(header, matrix.Metadata.GetTimeDimension()),
+                Header = GetHeader(matrix.Metadata, query),
                 VisualizationSettings = new()
                 {
                     VisualizationType = settings.VisualizationType,
@@ -136,6 +137,31 @@ namespace PxGraf.Visualization
             layout.SingleValueVariables.AddRange(remainingVars);
 
             return layout;
+        }
+
+        private static MultilanguageString GetHeader(IReadOnlyMatrixMetadata meta, MatrixQuery query)
+        {
+            MultilanguageString defaultHeader = HeaderBuildingUtilities.CreateDefaultHeader(meta.Dimensions, query, meta.AvailableLanguages);
+            if (query.ChartHeaderEdit != null)
+            {
+                Dictionary<string, string> translations = [];
+                foreach (string lang in defaultHeader.Languages)
+                {
+                    if (query.ChartHeaderEdit.Languages.Contains(lang))
+                    {
+                        translations[lang] = query.ChartHeaderEdit[lang];
+                    }
+                    else
+                    {
+                        translations[lang] = defaultHeader[lang];
+                    }
+                }
+                return HeaderBuildingUtilities.ReplaceTimePlaceholdersInHeader(new(translations), meta.GetTimeDimension());
+            }
+            else
+            {                 
+                return HeaderBuildingUtilities.ReplaceTimePlaceholdersInHeader(defaultHeader, meta.GetTimeDimension());
+            }
         }
     }
 }
