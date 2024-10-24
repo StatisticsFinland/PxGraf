@@ -16,7 +16,7 @@ jest.mock('react-i18next', () => ({
 }));
 
 const onCloseMock = jest.fn();
-const onSaveMock = jest.fn((bool: boolean) => { });
+const onSaveMock = jest.fn(() => { });
 
 describe('Rendering test', () => {
     it('renders correctly when closed', () => {

@@ -1,4 +1,5 @@
-﻿using PxGraf.ChartTypeSelection.JsonObjects;
+﻿using Px.Utils.Models.Metadata.Enums;
+using PxGraf.ChartTypeSelection.JsonObjects;
 using PxGraf.Enums;
 using System;
 using System.Collections.Generic;
@@ -43,13 +44,13 @@ namespace PxGraf.ChartTypeSelection
             reasons.AddRange(CheckMultiselectLimits(input, Limits.NumberOfMultiselectsRange));
 
             // Time
-            reasons.AddRange(CheckTimeLimits(input.Variables.FirstOrDefault(v => v.Type == VariableType.Time), Limits.TimeRange, Limits.IrregularTimeRange));
+            reasons.AddRange(CheckTimeLimits(input.Variables.FirstOrDefault(v => v.Type == DimensionType.Time), Limits.TimeRange, Limits.IrregularTimeRange));
 
             // Content
-            reasons.AddRange(CheckContentLimits(input.Variables.FirstOrDefault(v => v.Type == VariableType.Content), Limits.ContentRange));
+            reasons.AddRange(CheckContentLimits(input.Variables.FirstOrDefault(v => v.Type == DimensionType.Content), Limits.ContentRange));
 
             // Content units
-            reasons.AddRange(CheckContentUnitLimits(input.Variables.FirstOrDefault(v => v.Type == VariableType.Content), Limits.ContentUnitRange));
+            reasons.AddRange(CheckContentUnitLimits(input.Variables.FirstOrDefault(v => v.Type == DimensionType.Content), Limits.ContentUnitRange));
 
             var multiselects = input.Variables
                 .Where(variable => variable.Size > 1)
@@ -122,7 +123,7 @@ namespace PxGraf.ChartTypeSelection
                 yield break;
             }
 
-            if (timeVar.IsIrregular ?? throw new InvalidOperationException("Ragularity was not defined for the time variable"))
+            if (timeVar.IsIrregular ?? throw new InvalidOperationException("Regularity was not defined for the time variable"))
             {
                 if (irregularRange.DimensionNotAllowed) yield return BuildRejectionInfo(RejectionReason.IrregularTimeNotAllowed, timeVar);
                 else if (timeVar.Size < irregularRange.Min) yield return BuildRejectionInfo(RejectionReason.IrregularTimeBelowMin, timeVar.Size, irregularRange.Min, timeVar);
@@ -263,14 +264,14 @@ namespace PxGraf.ChartTypeSelection
         /// <returns></returns>
         protected abstract int GetPriority(RejectionReason reason);
 
-        protected VisualizationTypeSelectionObject.VariableInfo GetLargestMultiselect(VisualizationTypeSelectionObject input)
+        protected static VisualizationTypeSelectionObject.VariableInfo GetLargestMultiselect(VisualizationTypeSelectionObject input)
         {
             var multiselects = GetSortedMultiselects(input.Variables);
             return multiselects != null && multiselects.Count != 0 ? multiselects[0] : null;
 
         }
 
-        protected VisualizationTypeSelectionObject.VariableInfo GetSmallerMultiselect(VisualizationTypeSelectionObject input)
+        protected static VisualizationTypeSelectionObject.VariableInfo GetSmallerMultiselect(VisualizationTypeSelectionObject input)
         {
             var multiselects = GetSortedMultiselects(input.Variables);
             return multiselects != null && multiselects.Count > 1 ? multiselects[1] : null;
@@ -281,11 +282,11 @@ namespace PxGraf.ChartTypeSelection
         /// If the query contains neither time or progressive dimensions, returns null.
         /// </summary>
         /// <returns></returns>
-        protected VisualizationTypeSelectionObject.VariableInfo GetTimeOrLargestOrdinal(IEnumerable<VisualizationTypeSelectionObject.VariableInfo> variables)
+        protected static VisualizationTypeSelectionObject.VariableInfo GetTimeOrLargestOrdinal(IEnumerable<VisualizationTypeSelectionObject.VariableInfo> variables)
         {
             var multiselects = GetSortedMultiselects(variables); //OBS: multiselects are sorted here so First() can be used!
-            if (multiselects.Find(v => v.Type == VariableType.Time) is VisualizationTypeSelectionObject.VariableInfo tv) return tv;
-            if (multiselects.Find(v => v.Type == VariableType.Ordinal) is VisualizationTypeSelectionObject.VariableInfo ov) return ov;
+            if (multiselects.Find(v => v.Type == DimensionType.Time) is VisualizationTypeSelectionObject.VariableInfo tv) return tv;
+            if (multiselects.Find(v => v.Type == DimensionType.Ordinal) is VisualizationTypeSelectionObject.VariableInfo ov) return ov;
 
             return null;
         }
@@ -303,7 +304,7 @@ namespace PxGraf.ChartTypeSelection
         /// <param name="reasonPriorityList">List where RejectionReasons are in order</param>
         /// <param name="reason"></param>
         /// <returns></returns>
-        protected int GetPriorityIndex(IList<RejectionReason> reasonPriorityList, RejectionReason reason)
+        protected static int GetPriorityIndex(IList<RejectionReason> reasonPriorityList, RejectionReason reason)
         {
             var index = reasonPriorityList.IndexOf(reason);
             if (index >= 0)

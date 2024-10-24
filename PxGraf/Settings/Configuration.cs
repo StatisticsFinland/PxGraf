@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
+using PxGraf.Datasource.DatabaseConnection;
 using System.Collections.Generic;
+using System.Text;
 
 namespace PxGraf.Settings
 {
@@ -15,6 +17,7 @@ namespace PxGraf.Settings
         public LanguageOptions LanguageOptions { get; private set; }
         public CacheOptions CacheOptions { get; private set; }
         public CorsOptions CorsOptions { get; private set; }
+        public LocalFilesystemDatabaseConfig LocalFilesystemDatabaseConfig { get; private set; }
 
         public static void Load(IConfiguration configuration)
         {
@@ -42,13 +45,18 @@ namespace PxGraf.Settings
                     Database = configuration.GetSection("CacheOptions:Database").Get<CacheValues>(),
                     Table = configuration.GetSection("CacheOptions:Table").Get<CacheValues>(),
                     Visualization = configuration.GetSection("CacheOptions:Visualization").Get<CacheValues>(),
-                    CacheFreshnessCheckInterval = configuration.GetValue<int>("CacheOptions:CacheFreshnessCheckInterval")
+                    CacheFreshnessCheckIntervalSeconds = configuration.GetValue<int>("CacheOptions:CacheFreshnessCheckIntervalSeconds")
                 },
                 CorsOptions = new()
                 {
                     AllowAnyOrigin = configuration.GetSection("Cors:AllowAnyOrigin").Get<bool>(),
                     AllowedOrigins = configuration.GetSection("Cors:AllowedOrigins").Get<string[]>(),
                 },
+                LocalFilesystemDatabaseConfig = new LocalFilesystemDatabaseConfig(
+                    configuration.GetSection("LocalFileSystemDatabaseConfig:Enabled").Get<bool>(),
+                    configuration["LocalFilesystemDatabaseConfig:DatabaseRootPath"],
+                    Encoding.GetEncoding(configuration["LocalFilesystemDatabaseConfig:Encoding"])
+                )
             };
 
             Current = newConfig;

@@ -161,3 +161,32 @@ exports[`Rendering test renders correctly 1`] = `
                                 aria-hidden="t...
 </DocumentFragment>
 `;
+
+exports[`Rendering test renders correctly when cubeMetaResponse is loading 1`] = `
+<DocumentFragment>
+  <div
+  class="MuiContainer-root MuiContainer-maxWidthLg css-186hp2m-MuiContainer-root"
+>
+  <span
+    class="MuiCircularProgress-root MuiCircularProgress-indeterminate MuiCircularProgress-colorPrimary css-18lrjg1-MuiCircularProgress-root"
+    id="mainContent"
+    role="progressbar"
+    style="width: 40px; height: 40px;"
+  >
+    <svg
+      class="MuiCircularProgress-svg css-1idz92c-MuiCircularProgress-svg"
+      viewBox="22 22 44 44"
+    >
+      <circle
+        class="MuiCircularProgress-circle MuiCircularProgress-circleIndeterminate css-176wh8e-MuiCircularProgress-circle"
+        cx="44"
+        cy="44"
+        fill="none"
+        r="20.2"
+        stroke-width="3.6"
+      />
+    </svg>
+  </span>
+</div>
+</DocumentFragment>
+`;

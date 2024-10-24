@@ -1,5 +1,5 @@
-﻿using PxGraf.Language;
-using PxGraf.PxWebInterface.SerializationModels;
+﻿#nullable enable
+using Px.Utils.Language;
 using System.Collections.Generic;
 
 namespace PxGraf.Models.Responses
@@ -7,53 +7,31 @@ namespace PxGraf.Models.Responses
     /// <summary>
     /// Represents a listing item in the database. This can be a table, directory or a database.
     /// </summary>
-    public class DataBaseListingItem
+    /// <remarks>
+    /// Constructor for a table type listing item.
+    /// </remarks>
+    public class DataBaseListingItem(string id, MultilanguageString text, IReadOnlyList<string> langs, string updated, string? type = null)
     {
         /// <summary>
         /// The id of the item.
         /// </summary>
-        public string Id { get; set; }
+        public string Id { get; set; } = id;
         /// <summary>
         /// Multi-language description of the item.
         /// </summary>
-        public MultiLanguageString Text { get; set; }
+        public MultilanguageString Text { get; set; } = text;
         /// <summary>
         /// The languages the item is available in.
         /// </summary>
-        public List<string> Languages { get; set; }
+        public List<string> Languages { get; set; } = [.. langs];
         /// <summary>
         /// String representing the type of the item, a database, subdirectory or a Px table.
         /// </summary>
-        public string Type { get; set; }
+        public string? Type { get; set; } = type;
         /// <summary>
         /// The date the item was last updated.
         /// </summary>
-        public string Updated { get; set; }
-
-        /// <summary>
-        /// Constructor for a table type listing item.
-        /// </summary>
-        /// <param name="table"><see cref="TableListResponseItem"/> object that stores the information of the table.</param>
-        /// <param name="language">Language for the listing item.</param>
-        public DataBaseListingItem(TableListResponseItem table, string language)
-        {
-            Id = table.Id;
-            Text = new(language, table.Text);
-            Type = table.Type;
-            Updated = table.Updated;
-            Languages = [language];
-        }
-
-        /// <summary>
-        /// Constructor for a listing item.
-        /// </summary>
-        /// <param name="database"><see cref="DataBaseListResponseItem"/> object that stores the information of the database.</param>
-        /// <param name="language">Language for the listing item.</param>
-        public DataBaseListingItem(DataBaseListResponseItem database, string language)
-        {
-            Id = database.Dbid;
-            Text = new(language, database.Text);
-            Languages = [language];
-        }
+        public string Updated { get; set; } = updated;
     }
 }
+#nullable disable

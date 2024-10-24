@@ -4,12 +4,13 @@ import React from 'react';
 import '@testing-library/jest-dom';
 import { MemoryRouter } from 'react-router-dom';
 import UiLanguageContext from 'contexts/uiLanguageContext';
+import { IDatabaseTable } from '../../api/services/table';
 
 const mockPath = 'asd123';
-const mockItem = {
-    id: 'id',
-    updated: '01.01.2000',
-    text: { 'fi': 'foo1-fi', 'en': 'foo1-en', 'sv': 'foo1-sv' },
+const mockItem: IDatabaseTable = {
+    code: 'id',
+    lastUpdated: '01.01.2000',
+    name: { 'fi': 'foo1-fi', 'en': 'foo1-en', 'sv': 'foo1-sv' },
     languages: ['fi', 'en', 'sv']
 };
 
@@ -66,7 +67,7 @@ describe('Assertion tests', () => {
     it('should contain a specific link with a specific text', () => {
         const expectedHref = '/table-list/a/s/d/1/2/3/id/';
         render(<MemoryRouter><DirectoryInfo path={mockPath} item={mockItem} /></MemoryRouter>);
-        expect(screen.getByText(mockItem.text[language])).toBeInTheDocument();
+        expect(screen.getByText(mockItem.name[language])).toBeInTheDocument();
         expect(screen.getByRole('link').getAttribute('href')).toEqual(expectedHref);
     });
 
@@ -90,7 +91,6 @@ describe('Assertion tests', () => {
                 </UiLanguageContext.Provider>
             </MemoryRouter>
         );
-
         expect(getByText('foo1-fi')).toBeInTheDocument();
     });
 });

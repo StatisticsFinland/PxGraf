@@ -3,13 +3,13 @@ import { Autocomplete, TextField } from '@mui/material';
 import { UiLanguageContext } from 'contexts/uiLanguageContext';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
-import { IVariableValue } from 'types/cubeMeta';
+import { IDimensionValue } from 'types/cubeMeta';
 import { EditorContext } from 'contexts/editorContext';
 
 interface IDefaultSelectableVariableSelection {
     variableCode: string;
     resolvedVariableValueCodes: string[];
-    options: IVariableValue[],
+    options: IDimensionValue[],
 }
 
 const StyledAutocomplete = styled(Autocomplete)`
@@ -25,12 +25,12 @@ export const DefaultSelectableVariableSelection: React.FC<IDefaultSelectableVari
     const { t } = useTranslation();
 
     // Note: array filtering to support selecting multiple values in the future
-    const defaultOptionValues = defaultSelectables?.[variableCode] ? options.filter((option) => defaultSelectables[variableCode].includes(option.code)) : [];
-    const [value, setValue] = React.useState<IVariableValue>(defaultOptionValues[0] ? defaultOptionValues[0] : null);
+    const defaultOptionValues = defaultSelectables?.[variableCode] ? options.filter((option) => defaultSelectables[variableCode].includes(option.Code)) : [];
+    const [value, setValue] = React.useState<IDimensionValue>(defaultOptionValues[0] ? defaultOptionValues[0] : null);
 
     React.useEffect(() => {
         if (value && resolvedVariableValueCodes.length > 0) {
-            if (!resolvedVariableValueCodes.includes(value.code)) {
+            if (!resolvedVariableValueCodes.includes(value.Code)) {
                 const defaultSelectablesCopy = { ...defaultSelectables };
                 delete defaultSelectablesCopy[variableCode];
                 setDefaultSelectables(defaultSelectablesCopy);
@@ -39,11 +39,11 @@ export const DefaultSelectableVariableSelection: React.FC<IDefaultSelectableVari
         }
     }, [resolvedVariableValueCodes]);
 
-    const handleChange = (_evt, value: IVariableValue) => {
+    const handleChange = (_evt, value: IDimensionValue) => {
         if (value) {
             setDefaultSelectables({
                 ...defaultSelectables,
-                [variableCode]: [value.code]
+                [variableCode]: [value.Code]
             })
         } else {
             const defaultSelectablesCopy = { ...defaultSelectables };
@@ -54,8 +54,8 @@ export const DefaultSelectableVariableSelection: React.FC<IDefaultSelectableVari
     };
 
     return (<StyledAutocomplete
-        options={options.filter(option => resolvedVariableValueCodes.indexOf(option.code) > -1)}
-        getOptionLabel={(option: IVariableValue) => option?.name[language] ?? option.code}
+        options={options.filter(option => resolvedVariableValueCodes.indexOf(option.Code) > -1)}
+        getOptionLabel={(option: IDimensionValue) => option?.Name[language] ?? option.Code}
         isOptionEqualToValue={() => true}
         value={value}
         onChange={handleChange}

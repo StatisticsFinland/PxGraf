@@ -1,5 +1,5 @@
 /* istanbul ignore file */
-
+import { TTimeVariableInterval } from "@statisticsfinland/pxvisualizer";
 import { MultiLanguageString } from "./multiLanguageString";
 
 /**
@@ -7,81 +7,80 @@ import { MultiLanguageString } from "./multiLanguageString";
  * @property {string[]} languages - List of available languages.
  * @property {MultiLanguageString} header - The multi language header of the cube.
  * @property {MultiLanguageString} note - The note of the cube.
- * @property {IVariable[]} variables - List of variables.
+ * @property {IDimension[]} variables - List of dimensions.
  */
-export interface ICubeMeta {
-    languages: string[],
-    header: MultiLanguageString,
-    note: MultiLanguageString,
-    variables: IVariable[]
+export interface IMatrixMetadata {
+    DefaultLanguage: string,
+    AvailableLanguages: string[],
+    Dimensions: IDimension[],
+    AdditionalProperties?: { [key: string]: IMetaProperty }
 }
 
 /**
- * Interface for variable properties. Each variable defines a dimension in a cube.
- * @property {string} code - The code of the variable.
- * @property {MultiLanguageString} name - The multi language name of the variable.
- * @property {MultiLanguageString} note - The multi language note of the variable.
- * @property {VariableType} type - The type of the variable.
- * @property {IVariableValue[]} values - List of values associated with this variable.
+ * Enumeration for metadata property types.
  */
-export interface IVariable {
-    code: string,
-    name: MultiLanguageString,
-    note: MultiLanguageString,
-    type: VariableType,
-    values: IVariableValue[]
+export enum EMetaPropertyType {
+    Text = 'Text',
+    MultilanguageText = 'MultilanguageText',
+    Numeric = 'Numeric',
+    Boolean = 'Boolean',
+    TextArray = 'TextArray',
+    MultilanguageTextArray = 'MultilanguageTextArray'
 }
 
 /**
- * Interface for variable value properties.
+ * Interface for a metadata property of a cube, dimension or value.
+ * @property {MetaPropertyType} Type - The type of the property.
+ * @property {MultiLanguageString | string | boolean | number | MultiLanguageString[] | string[]} Value - The value of the property.
+ */
+export interface IMetaProperty {
+    Type: EMetaPropertyType,
+    Value: MultiLanguageString | string | boolean | number | MultiLanguageString[] | string[]
+}
+
+/**
+ * Interface for dimension properties. Each variable defines a dimension in a cube.
+ * @property {string} Code - The code of the variable.
+ * @property {MultiLanguageString} Name - The multi language name of the variable.
+ * @property {{ [key: string]: IMetaProperty }} additionalProperties - Optional dictionary for additional metadata properties
+ * @property {IDimensionValue[]} Values - List of values associated with this variable.
+ * @property {VariableType} Type - The type of the variable.
+ * @property {Interval} Interval - The interval of time variable if applicable.
+ */
+export interface IDimension {
+    Code: string,
+    Name: MultiLanguageString,
+    AdditionalProperties?: { [key: string]: IMetaProperty },
+    Values: IDimensionValue[]
+    Type: EDimensionType,
+    Interval?: TTimeVariableInterval 
+}
+
+/**
+ * Interface for dimension value properties.
  * @property {string} code - The code of the value.
  * @property {MultiLanguageString} name - The multi language name of the value.
- * @property {MultiLanguageString} note - The multi language note of the value.
- * @property {boolean} isSum - Flag to indicate if the value is an elimination value.
- * @property {IContentComponent} contentComponent - The content variable component of the value.
- * @property {IVirtualComponent[]} virtualComponents - List of virtual components.
+ * @property {{ [key: string]: IMetaProperty }} additionalProperties - Optional dictionary for additional metadata properties
  */
-export interface IVariableValue {
-    code: string,
-    name: MultiLanguageString,
-    note: MultiLanguageString,
-    isSum: boolean,
-    contentComponent?: IContentComponent
-    virtualComponents?: IVirtualComponent[]
-}
-
-/**
- * Interface for value content variable value properties.
- * @property {MultiLanguageString} unit - The unit of the value.
- * @property {MultiLanguageString} source - The source of the value.
- * @property {number} numberOfDecimals - The precision, number of decimals of the value.
- * @property {string} lastUpdated - The last updated date of the value.
- */
-export interface IContentComponent {
-    unit: MultiLanguageString,
-    source: MultiLanguageString,
-    numberOfDecimals: number,
-    lastUpdated: string
-}
-
-/**
- * Interface for virtual component properties.
- * @property {string} operator - The operator of the virtual component.
- * @property {string[]} operandCoded - List of coded operands.
- */
-export interface IVirtualComponent {
-    operator: string,
-    operandCoded: string[]
+export interface IDimensionValue {
+    Code: string,
+    Name: MultiLanguageString,
+    IsVirtual: boolean
+    AdditionalProperties?: { [key: string]: IMetaProperty },
+    Unit?: MultiLanguageString,
+    LastUpdated?: string,
+    Precision?: number,
 }
 
 /**
  * Enumeration for variable types.
  */
-export enum VariableType {
-    Unknown = 'N',
-    Time = 'T',
-    Ordinal = 'P',
-    Geological = 'G',
-    Content = 'C',
-    OtherClassificatory = 'F',
+export enum EDimensionType {
+    Time = 'Time',
+    Content = 'Content',
+    Geographical = 'Geographical',
+    Ordinal = 'Ordinal',
+    Nominal = 'Nominal',
+    Other = 'Other',
+    Unknow = 'Unknown'
 }

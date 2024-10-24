@@ -1,5 +1,5 @@
-﻿using PxGraf.Enums;
-using PxGraf.Language;
+﻿using Px.Utils.Language;
+using PxGraf.Enums;
 using System.Collections.Generic;
 
 namespace PxGraf.Models.Responses
@@ -37,7 +37,7 @@ namespace PxGraf.Models.Responses
         /// <summary>
         /// Collection of reasons why the invalid visualization types are not possible for this query.
         /// </summary>
-        public Dictionary<VisualizationType, MultiLanguageString> VisualizationRejectionReasons { get; }
+        public Dictionary<VisualizationType, MultilanguageString> VisualizationRejectionReasons { get; }
 
         public QueryInfoResponse()
         {

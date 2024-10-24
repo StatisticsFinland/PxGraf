@@ -2,9 +2,9 @@
 using PxGraf.Utility;
 using System.Collections.Generic;
 
-namespace UtilityFunctionsTests
+namespace UnitTests.UtilityFunctionsTests
 {
-    class CartesianProductTest
+    public class CartesianProductTest
     {
         [Test]
         public void CartesianProductBasicCaseTest()

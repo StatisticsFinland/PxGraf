@@ -1,336 +1,294 @@
-import { ITableListResponse } from '../api/services/table';
-import { sortTableData, sortedVariables } from './sortingHelpers';
-import { IVariable, VariableType } from "types/cubeMeta";
+import { IDatabaseTable } from '../api/services/table';
+import { sortDatabaseGroups, sortedDimensions } from './sortingHelpers';
+import { EMetaPropertyType, IDimension, EDimensionType } from "types/cubeMeta";
 
-const mockVariables: IVariable[] =
+const mockVariables: IDimension[] =
 [
     {
-        code: "FoobarManual",
-        name: {
+        Code: "FoobarManual",
+        Name: {
             fi: "FoobarManualFi",
             sv: "FoobarManualSv",
             en: "FoobarManualEn"
         },
-        type: VariableType.OtherClassificatory,
-        note: null,
-        values: [
+        Type: EDimensionType.Other,
+        Values: [
             {
-                code: "eka",
-                name: {
+                Code: "eka",
+                Name: {
                     fi: "ekaFi",
                     sv: "ekaSv",
                     en: "ekaEn"
                 },
-                note: null,
-                isSum: false,
-                contentComponent: null
+                IsVirtual: false
             },
             {
-                code: "toka",
-                name: {
+                Code: "toka",
+                Name: {
                     fi: "tokaFi",
                     sv: "tokaSv",
                     en: "tokaEn"
                 },
-                note: null,
-                isSum: false,
-                contentComponent: null
+                IsVirtual: false
             },
             {
-                code: "peruna",
-                name: {
+                Code: "peruna",
+                Name: {
                     fi: "perunaFi",
                     sv: "perunaSv",
                     en: "perunaEn"
                 },
-                note: null,
-                isSum: false,
-                contentComponent: null
+                IsVirtual: false
             }
         ]
     },
     {
-        code: "Vuosi",
-        name: {
+        Code: "Vuosi",
+        Name: {
             fi: "Vuosi",
             sv: "År",
             en: "Year"
         },
-        type: VariableType.Time,
-        note: null,
-        values: [
+        Type: EDimensionType.Time,
+        Values: [
             {
-                code: "2018",
-                name: {
+                Code: "2018",
+                Name: {
                     fi: "2018",
                     sv: "2018",
                     en: "2018"
                 },
-                note: null,
-                isSum: false,
-                contentComponent: null
+                IsVirtual: false
             },
             {
-                code: "2019",
-                name: {
+                Code: "2019",
+                Name: {
                     fi: "2019",
                     sv: "2019",
                     en: "2019"
                 },
-                note: null,
-                isSum: false,
-                contentComponent: null
+                IsVirtual: false
             },
             {
-                code: "2020",
-                name: {
+                Code: "2020",
+                Name: {
                     fi: "2020",
                     sv: "2020",
                     en: "2020"
                 },
-                note: null,
-                isSum: false,
-                contentComponent: null
+                IsVirtual: false
             },
             {
-                code: "2021",
-                name: {
+                Code: "2021",
+                Name: {
                     fi: "2021*",
                     sv: "2021*",
                     en: "2021*"
                 },
-                note: null,
-                isSum: false,
-                contentComponent: null
+                IsVirtual: false
             }
         ]
     },
     {
-        code: "FoobarFrom",
-        name: {
+        Code: "FoobarFrom",
+        Name: {
             fi: "FoobarFromFi",
             sv: "FoobarFromSv",
             en: "FoobarFromEn"
         },
-        type: VariableType.OtherClassificatory,
-        note: null,
-        values: [
+        Type: EDimensionType.Other,
+        Values: [
             {
-                code: "aaa",
-                name: {
+                Code: "aaa",
+                Name: {
                     fi: "aaaFi",
                     sv: "aaaSv",
                     en: "aaaEn"
                 },
-                note: null,
-                isSum: false,
-                contentComponent: null
+                IsVirtual: false
             },
             {
-                code: "bbb",
-                name: {
+                Code: "bbb",
+                Name: {
                     fi: "bbbFi",
                     sv: "bbbSv",
                     en: "bbbEn"
                 },
-                note: null,
-                isSum: false,
-                contentComponent: null
+                IsVirtual: false
             },
             {
-                code: "ccc",
-                name: {
+                Code: "ccc",
+                Name: {
                     fi: "cccFi",
                     sv: "cccSv",
                     en: "cccEn"
                 },
-                note: null,
-                isSum: false,
-                contentComponent: null
+                IsVirtual: false
             },
             {
-                code: "ddd",
-                name: {
+                Code: "ddd",
+                Name: {
                     fi: "dddFi",
                     sv: "dddSv",
                     en: "dddEn"
                 },
-                note: null,
-                isSum: false,
-                contentComponent: null
+                IsVirtual: false
             }
         ]
     },
     {
-        code: "FoobarAll",
-        name: {
+        Code: "FoobarAll",
+        Name: {
             fi: "FoobarAllFi",
             sv: "FoobarAllSv",
             en: "FoobarAllEn"
         },
-        type: VariableType.OtherClassificatory,
-        note: null,
-        values: [
+        Type: EDimensionType.Other,
+        Values: [
             {
-                code: "xxx",
-                name: {
+                Code: "xxx",
+                Name: {
                     fi: "xxxFi",
                     sv: "xxxSv",
                     en: "xxxEn"
                 },
-                note: null,
-                isSum: false,
-                contentComponent: null
+                IsVirtual: false
             },
             {
-                code: "yyy",
-                name: {
+                Code: "yyy",
+                Name: {
                     fi: "yyyFi",
                     sv: "yyySv",
                     en: "yyyEn"
                 },
-                note: null,
-                isSum: false,
-                contentComponent: null
+                IsVirtual: false
             },
             {
-                code: "zzz",
-                name: {
+                Code: "zzz",
+                Name: {
                     fi: "zzzFi",
                     sv: "zzzSv",
                     en: "zzzEn"
                 },
-                note: null,
-                isSum: false,
-                contentComponent: null
+                IsVirtual: false
             }
         ]
     },
     {
-        code: "FoobarContent",
-        name: {
+        Code: "FoobarContent",
+        Name: {
             fi: "AnalyysimuuttujaFi",
             sv: "ContentVariableSv",
             en: "ContentVariableEn"
         },
-        type: VariableType.Content,
-        note: null,
-        values: [
+        Type: EDimensionType.Content,
+        Values: [
             {
-                code: "eka",
-                name: {
+                Code: "eka",
+                Name: {
                     fi: "ekaFi",
                     sv: "ekaSv",
                     en: "ekaEn"
                 },
-                note: null,
-                isSum: false,
-                contentComponent: null
+                IsVirtual: false
             }
         ]
     },
     {
-        code: "FoobarElimination",
-        name: {
+        Code: "FoobarElimination",
+        Name: {
             fi: "EliminointiMuuttujaFi",
             sv: "EliminationVariableEn",
             en: "EliminationVariableEn"
         },
-        type: VariableType.OtherClassificatory,
-        note: null,
-        values: [
+        Type: EDimensionType.Other,
+        AdditionalProperties:
+        {
+            ELIMINATION: {
+                Type: EMetaPropertyType.Text,
+                Value: "sum"
+            }
+        },
+        Values: [
             {
-                code: "sum",
-                name: {
+                Code: "sum",
+                Name: {
                     fi: "sumFi",
                     sv: "sumSv",
                     en: "sumEn"
                 },
-                note: null,
-                isSum: true,
-                contentComponent: null
+                IsVirtual: false
             },
             {
-                code: "val",
-                name: {
+                Code: "val",
+                Name: {
                     fi: "valFi",
                     sv: "valSv",
                     en: "valEn"
                 },
-                note: null,
-                isSum: true,
-                contentComponent: null
+                IsVirtual: false
             }
         ]
     },
     {
-        code: "FoobarSingle",
-        name: {
+        Code: "FoobarSingle",
+        Name: {
             fi: "YksikkömuuttujaFi",
             sv: "SingleValueVariableSv",
             en: "SingleValueVariableEn"
         },
-        type: VariableType.OtherClassificatory,
-        note: null,
-        values: [
+        Type: EDimensionType.Other,
+        Values: [
             {
-                code: "single",
-                name: {
+                Code: "single",
+                Name: {
                     fi: "singleFi",
                     sv: "singleSv",
                     en: "singleEn"
                 },
-                note: null,
-                isSum: false,
-                contentComponent: null
+                IsVirtual: false
             }
         ]
     },
     {
-        code: "FoobarMissingValueName",
-        name: {
+        Code: "FoobarMissingValueName",
+        Name: {
             fi: "NimetönArvoMuuttujaFi",
             sv: "NamelessValueVariableSv",
             en: "NamelessValueVariableEn"
         },
-        type: VariableType.OtherClassificatory,
-        note: null,
-        values: [
+        Type: EDimensionType.Other,
+        Values: [
             {
-                code: "missingName",
-                name: {
+                Code: "missingName",
+                Name: {
                     fi: null,
                     sv: null,
                     en: null
                 },
-                note: null,
-                isSum: false,
-                contentComponent: null
+                IsVirtual: false
             }
         ]
     }
 ]
 
-const mockTableData: ITableListResponse[] = [
+const mockTableData: IDatabaseTable[] = [
     {
-        id: '0',
-        type: 't',
-        updated: '2024-6-10',
-        text: { en: 'Foo-en', fi: 'Foo-fi' },
+        code: '0',
+        lastUpdated: '2024-6-10',
+        name: { en: 'Foo-en', fi: 'Foo-fi' },
         languages: ['en', 'fi'],
     },
     {
-        id: '1',
-        type: 't',
-        updated: '2021-6-10',
-        text: { en: 'Bar-en', fi: 'Bar-fi' },
+        code: '1',
+        lastUpdated: '2021-6-10',
+        name: { en: 'Bar-en', fi: 'Bar-fi' },
         languages: ['en', 'fi'],
     },
     {
-        id: '2',
-        type: 't',
-        updated: '2021-6-10',
-        text: { fi: 'Baz-fi' },
+        code: '2',
+        lastUpdated: '2021-6-10',
+        name: { fi: 'Baz-fi' },
         languages: ['fi'],
     },
 ];
@@ -339,20 +297,20 @@ const mockPrimaryLanguage = 'en';
 
 describe('Assertion tests', () => {
     it('sorts variables in correct order', () => {
-        const result: IVariable[] = sortedVariables(mockVariables);
-        expect(result[0].code).toBe("FoobarContent");
-        expect(result[1].code).toBe("Vuosi");
-        expect(result[2].code).toBe("FoobarManual");
-        expect(result[3].code).toBe("FoobarFrom");
-        expect(result[4].code).toBe("FoobarAll");
-        expect(result[5].code).toBe("FoobarElimination");
-        expect(result[6].code).toBe("FoobarSingle");
+        const result: IDimension[] = sortedDimensions(mockVariables);
+        expect(result[0].Code).toBe("FoobarContent");
+        expect(result[1].Code).toBe("Vuosi");
+        expect(result[2].Code).toBe("FoobarManual");
+        expect(result[3].Code).toBe("FoobarFrom");
+        expect(result[4].Code).toBe("FoobarAll");
+        expect(result[5].Code).toBe("FoobarElimination");
+        expect(result[6].Code).toBe("FoobarSingle");
     });
 
     it('sorts table data by primary or first available language', () => {
-        const sortedData = sortTableData(mockTableData, mockPrimaryLanguage);
+        const sortedData = sortDatabaseGroups(mockTableData, mockPrimaryLanguage);
         const expected = ["1", "2", "0"];
-        const result = sortedData.map((item) => item.id);
+        const result = sortedData.map((item) => item.code);
         expect(result).toEqual(expected);
     });
 });
