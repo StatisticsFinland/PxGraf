@@ -5,6 +5,7 @@ import '@testing-library/jest-dom';
 import { MemoryRouter } from 'react-router-dom';
 import UiLanguageContext from 'contexts/uiLanguageContext';
 import { IDatabaseTable } from '../../api/services/table';
+import { BasePath } from '../../envVars';
 
 const mockPath = 'asd123';
 const mockItem: IDatabaseTable = {
@@ -16,7 +17,8 @@ const mockItem: IDatabaseTable = {
 
 jest.mock('envVars', () => ({
     PxGrafUrl: 'pxGrafUrl.fi/',
-    PublicUrl: 'publicUrl.fi/'
+    PublicUrl: 'publicUrl.fi/',
+    BasePath: ''
 }));
 
 jest.mock('react-i18next', () => ({

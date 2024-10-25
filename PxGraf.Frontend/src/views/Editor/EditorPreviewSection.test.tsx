@@ -10,7 +10,8 @@ import serializer from "../../testUtils/stripHighchartsHashes";
 
 jest.mock('envVars', () => ({
     PxGrafUrl: 'pxGrafUrl.fi/',
-    PublicUrl: 'publicUrl.fi/'
+    PublicUrl: 'publicUrl.fi/',
+    BasePath: ''
 }));
 
 const mockVisualizationQueryResult: IVisualizationResult = {

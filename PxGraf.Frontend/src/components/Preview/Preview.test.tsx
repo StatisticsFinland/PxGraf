@@ -20,7 +20,8 @@ function mockComponentMocker(name) {
 
 jest.mock('envVars', () => ({
     PxGrafUrl: 'pxGrafUrl.fi/',
-    PublicUrl: 'publicUrl.fi/'
+    PublicUrl: 'publicUrl.fi/',
+    BasePath: ''
 }));
 
 jest.mock('@statisticsfinland/pxvisualizer', () => {

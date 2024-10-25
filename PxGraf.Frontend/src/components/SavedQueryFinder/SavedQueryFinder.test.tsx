@@ -18,7 +18,8 @@ jest.mock('react-i18next', () => ({
 
 jest.mock('envVars', () => ({
     PxGrafUrl: 'pxGrafUrl.fi/',
-    PublicUrl: 'publicUrl.fi/'
+    PublicUrl: 'publicUrl.fi/',
+    BasePath: ''
 }));
 
 describe('Rendering test', () => {
