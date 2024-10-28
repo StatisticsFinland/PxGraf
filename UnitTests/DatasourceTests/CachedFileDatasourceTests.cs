@@ -12,14 +12,11 @@ using Px.Utils.Models;
 using PxGraf.Datasource.Cache;
 using PxGraf.Datasource.DatabaseConnection;
 using PxGraf.Datasource.FileDatasource;
-using PxGraf.Datasource;
-using PxGraf.Models.Metadata;
 using PxGraf.Models.Queries;
 using PxGraf.Models.Responses.DatabaseItems;
 using PxGraf.Settings;
 using PxGraf.Utility;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Threading;
 using System;
@@ -153,69 +150,161 @@ namespace UnitTests.DatasourceTests
             Assert.That(file1.LastUpdated, Is.EqualTo(_lastUpdated));
 
             DatabaseTable file2 = contents.Files[2];
-            Assert.That(file2.Code, Is.EqualTo("table_3.px"));
+            Assert.That(file2.Code, Is.EqualTo("table_3"));
             Assert.That(file2.LastUpdated, Is.Null);
             Assert.That(file2.Error, Is.True);
         }
 
         [Test]
-    public async Task GetMatrixAsync_ReturnsMatrix()
-    {
-        // Arrange
-        MatrixMetadata table1Meta = TestDataCubeBuilder.BuildTestMeta(_tableParams, [.. _languages]);
-        table1Meta.AdditionalProperties[PxSyntaxConstants.DESCRIPTION_KEY] = new MultilanguageStringProperty(new MultilanguageString(_table1Name));
-        Dictionary<PxTableReference, IReadOnlyMatrixMetadata> metadataResponses = new()
+        public async Task GetGroupContentAsyncShouldUseCachingAndOnlyDoOneCallToSource()
         {
-            [_fileReferences[0]] = table1Meta,
-        };
-        Matrix<DecimalDataValue> expectedData = TestDataCubeBuilder.BuildTestMatrix(_tableParams);
-        CachedFileDatasource datasource = BuildDatasource([], _fileReferences, metadataResponses, expectedData);
+            Mock<IFileDatasource> mockSource = new();
+            Mock<ILogger<CachedFileDatasource>> logger = new();
 
-        // Act
-        Matrix<DecimalDataValue> matrix = await datasource.GetMatrixAsync(_fileReferences[0], table1Meta);
+            // Arrange
+            List<DatabaseGroupHeader> headers =
+            [
+                new("header1", _languages, new(new Dictionary<string, string> { ["fi"] = "Header1.fi", ["sv"] = "Header1.sv", ["en"] = "Header1.en"})),
+                new("header2", _languages, new(new Dictionary<string, string> { ["fi"] = "Header2.fi", ["sv"] = "Header2.sv", ["en"] = "Header2.en"}))
+            ];
 
-        // Assert
-        Assert.That(matrix.Data, Is.EqualTo(expectedData.Data));
+
+            MatrixMetadata table1Meta = TestDataCubeBuilder.BuildTestMeta(_tableParams, [.. _languages]);
+            MatrixMetadata table2Meta = TestDataCubeBuilder.BuildTestMeta(_tableParams, [.. _languages]);
+
+            List<DimensionParameters> noContent =
+            [
+                new(DimensionType.Time, 10),
+                new(DimensionType.Other, 5),
+            ];
+
+            MatrixMetadata brokenMeta = TestDataCubeBuilder.BuildTestMeta(noContent, [.. _languages]);
+
+            Dictionary<string, IReadOnlyMatrixMetadata> metadataResponses = new()
+            {
+                [_fileReferences[0].Name] = table1Meta,
+                [_fileReferences[1].Name] = table2Meta,
+                [_fileReferences[2].Name] = brokenMeta
+            };
+
+            mockSource.Setup(d => d.GetGroupHeadersAsync(It.IsAny<IReadOnlyList<string>>())).ReturnsAsync(headers);
+            mockSource.Setup(d => d.GetTablesAsync(It.IsAny<IReadOnlyList<string>>())).ReturnsAsync(_fileReferences);
+            mockSource.Setup(d => d.GetMatrixMetadataAsync(It.IsAny<PxTableReference>()))
+                .Returns((PxTableReference reference) => Task.FromResult(metadataResponses[reference.Name]));
+
+            MultiStateMemoryTaskCache taskCache = new(10, TimeSpan.FromMinutes(10));
+            CachedFileDatasource datasource = new(mockSource.Object, taskCache, logger.Object);
+
+            // Act
+            DatabaseGroupContents call1 = await datasource.GetGroupContentsCachedAsync([]);
+            DatabaseGroupContents call2 = await datasource.GetGroupContentsCachedAsync([]);
+
+            // Assert
+            Assert.That(call1, Is.EqualTo(call2));
+            mockSource.Verify(d => d.GetGroupHeadersAsync(It.IsAny<IReadOnlyList<string>>()), Times.Once);
+        }
+
+        [Test]
+        public async Task GetMatrixMetadataAsyncShouldUseCachingAndOnlyDoOneCallToSource()
+        {
+            Mock<IFileDatasource> mockSource = new();
+            Mock<ILogger<CachedFileDatasource>> logger = new();
+
+            // Arrange
+            MatrixMetadata table1Meta = TestDataCubeBuilder.BuildTestMeta(_tableParams, [.. _languages]);
+            MatrixMetadata table2Meta = TestDataCubeBuilder.BuildTestMeta(_tableParams, [.. _languages]);
+
+            List<DimensionParameters> noContent =
+            [
+                new(DimensionType.Time, 10),
+                new(DimensionType.Other, 5),
+            ];
+
+            MatrixMetadata brokenMeta = TestDataCubeBuilder.BuildTestMeta(noContent, [.. _languages]);
+
+            Dictionary<string, IReadOnlyMatrixMetadata> metadataResponses = new()
+            {
+                [_fileReferences[0].Name] = table1Meta,
+                [_fileReferences[1].Name] = table2Meta,
+                [_fileReferences[2].Name] = brokenMeta
+            };
+
+            mockSource.Setup(d => d.GetMatrixMetadataAsync(It.IsAny<PxTableReference>()))
+                .Returns((PxTableReference reference) => Task.FromResult(metadataResponses[reference.Name]));
+
+            MultiStateMemoryTaskCache taskCache = new(10, TimeSpan.FromMinutes(10));
+            CachedFileDatasource datasource = new(mockSource.Object, taskCache, logger.Object);
+
+            // Act
+            IReadOnlyMatrixMetadata call1 = await datasource.GetMatrixMetadataCachedAsync(_fileReferences[0]);
+            IReadOnlyMatrixMetadata call2 = await datasource.GetMatrixMetadataCachedAsync(_fileReferences[0]);
+
+            // Assert
+            Assert.That(call1, Is.EqualTo(call2));
+            Assert.That(call1, Is.EqualTo(table1Meta));
+            mockSource.Verify(d => d.GetMatrixMetadataAsync(It.IsAny<PxTableReference>()), Times.Once);
+        }
+
+        [Test]
+        public async Task GetMatrixMetadataAsyncStaleMetaShouldCheckForUpdates()
+        {
+            Mock<IFileDatasource> mockSource = new();
+            Mock<ILogger<CachedFileDatasource>> logger = new();
+
+            // Arrange
+            MatrixMetadata table1Meta = TestDataCubeBuilder.BuildTestMeta(_tableParams, [.. _languages]);
+            MatrixMetadata table2Meta = TestDataCubeBuilder.BuildTestMeta(_tableParams, [.. _languages]);
+
+            Dictionary<string, IReadOnlyMatrixMetadata> metadataResponses = new()
+            {
+                [_fileReferences[0].Name] = table1Meta,
+                [_fileReferences[1].Name] = table2Meta,
+            };
+
+            mockSource.Setup(d => d.GetMatrixMetadataAsync(It.IsAny<PxTableReference>()))
+                .Returns((PxTableReference reference) => Task.FromResult(metadataResponses[reference.Name]));
+            DateTime lastUpdate = new(2020, 10, 10, 8, 00, 00, DateTimeKind.Utc);
+            mockSource.Setup(d => d.GetLastWriteTimeAsync(It.IsAny<PxTableReference>())).ReturnsAsync(lastUpdate);
+
+            MultiStateMemoryTaskCache taskCache = new(10, TimeSpan.FromMilliseconds(1));
+            CachedFileDatasource datasource = new(mockSource.Object, taskCache, logger.Object);
+
+            // Act
+            IReadOnlyMatrixMetadata call1 = await datasource.GetMatrixMetadataCachedAsync(_fileReferences[0]);
+
+            await Task.Delay(2);
+
+            IReadOnlyMatrixMetadata call2 = await datasource.GetMatrixMetadataCachedAsync(_fileReferences[0]);
+
+            // Assert
+            Assert.That(call1, Is.EqualTo(call2));
+            Assert.That(call1, Is.EqualTo(table1Meta));
+            mockSource.Verify(d => d.GetLastWriteTimeAsync(It.IsAny<PxTableReference>()), Times.Exactly(2));
+            mockSource.Verify(d => d.GetMatrixMetadataAsync(It.IsAny<PxTableReference>()), Times.Once);
+        }
+
+        private static CachedFileDatasource BuildDatasource(
+            List<DatabaseGroupHeader> headers,
+            List<PxTableReference> fileReferences,
+            Dictionary<PxTableReference, IReadOnlyMatrixMetadata> metadataResponses,
+            Matrix<DecimalDataValue>? expectedData = null)
+        {
+            Mock<IFileDatasource> datasource = new();
+            Mock<ILogger<CachedFileDatasource>> logger = new();
+
+            datasource.Setup(d => d.GetGroupHeadersAsync(It.IsAny<IReadOnlyList<string>>())).ReturnsAsync(headers);
+            datasource.Setup(d => d.GetTablesAsync(It.IsAny<IReadOnlyList<string>>())).ReturnsAsync(fileReferences);
+            datasource.Setup(d => d.GetMatrixMetadataAsync(It.IsAny<PxTableReference>()))
+                .Returns((PxTableReference reference) => Task.FromResult(metadataResponses[reference]));
+            datasource.Setup(d => d.GetMatrixAsync(It.IsAny<PxTableReference>(), It.IsAny<IReadOnlyMatrixMetadata>(), It.IsAny<IMatrixMap>(), It.IsAny<CancellationToken?>()))
+                .Returns((PxTableReference reference, IReadOnlyMatrixMetadata meta, IMatrixMap map, CancellationToken? cancellationToken) =>
+                {
+                    return Task.FromResult(expectedData);
+                });
+
+            MultiStateMemoryTaskCache taskCache = new(10, TimeSpan.FromMinutes(10));
+
+            return new CachedFileDatasource(datasource.Object, taskCache, logger.Object);
+        }
     }
-
-    private static CachedFileDatasource BuildDatasource(
-        List<DatabaseGroupHeader> headers,
-        List<PxTableReference> fileReferences,
-        Dictionary<PxTableReference, IReadOnlyMatrixMetadata> metadataResponses,
-        Matrix<DecimalDataValue>? expectedData = null)
-    {
-        Mock<IFileDatasource> datasource = new();
-        Mock<IMultiStateMemoryTaskCache> taskCache = new();
-        Mock<ILogger<CachedFileDatasource>> logger = new();
-
-        datasource.Setup(d => d.GetGroupHeadersAsync(It.IsAny<IReadOnlyList<string>>())).ReturnsAsync(headers);
-        datasource.Setup(d => d.GetTablesAsync(It.IsAny<IReadOnlyList<string>>())).ReturnsAsync(fileReferences);
-        datasource.Setup(d => d.GetMatrixMetadataAsync(It.IsAny<PxTableReference>()))
-            .Returns((PxTableReference reference) => Task.FromResult(metadataResponses[reference]));
-        datasource.Setup(d => d.GetMatrixAsync(It.IsAny<PxTableReference>(), It.IsAny<IReadOnlyMatrixMetadata>(), It.IsAny<IMatrixMap>(), It.IsAny<CancellationToken?>()))
-            .Returns((PxTableReference reference, IReadOnlyMatrixMetadata meta, IMatrixMap map, CancellationToken? cancellationToken) =>
-            {
-                return Task.FromResult(expectedData);
-            });
-
-        taskCache.Setup(x => x.TryGet(It.IsAny<string>(), out It.Ref<Task<DatabaseGroupContents>>.IsAny))
-            .Returns((string key, out Task<DatabaseGroupContents> value) =>
-            {
-                value = Task.FromResult(new DatabaseGroupContents(headers, []));
-                return MultiStateMemoryTaskCache.CacheEntryState.Null;
-            });
-
-        taskCache.Setup(x => x.TryGet(It.IsAny<string>(), out It.Ref<Task<CachedDatasource.MetaCacheHousing>>.IsAny))
-            .Returns((string key, out Task<CachedDatasource.MetaCacheHousing> value) =>
-            {
-                PxTableReference reference = new(key, '-');
-                IReadOnlyMatrixMetadata meta = metadataResponses[metadataResponses.Keys.First(k => k.Name == reference.Name)];
-                DateTime lastUpdated = meta.GetLastUpdated() ?? throw new ArgumentException("Failed to get lastWriteTime, the test should fail.");
-                value = Task.FromResult(new CachedDatasource.MetaCacheHousing(lastUpdated, meta));
-                return MultiStateMemoryTaskCache.CacheEntryState.Null;
-            });
-
-        return new CachedFileDatasource(datasource.Object, taskCache.Object, logger.Object);
-    }
-}
 }

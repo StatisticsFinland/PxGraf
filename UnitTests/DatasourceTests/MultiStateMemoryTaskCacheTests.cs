@@ -53,13 +53,13 @@ namespace UnitTests.DatasourceTests
         [Test]
         public void TryGetTest_NullEntry_ReturnsNull()
         {
-            const string TEST_KEY = "abcd-1234";
-
             // Arrange
             MultiStateMemoryTaskCache cache = new(1, TimeSpan.FromMinutes(1));
-
+            Task<string> task = Task.FromResult("test"); // Is completed already
+            cache.Set("some_key", task, TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(1));
+            
             // Act
-            MultiStateMemoryTaskCache.CacheEntryState state = cache.TryGet(TEST_KEY, out Task<string> value);
+            MultiStateMemoryTaskCache.CacheEntryState state = cache.TryGet("other_key", out Task<string> value);
 
             // Assert
             Assert.That(state, Is.EqualTo(MultiStateMemoryTaskCache.CacheEntryState.Null));

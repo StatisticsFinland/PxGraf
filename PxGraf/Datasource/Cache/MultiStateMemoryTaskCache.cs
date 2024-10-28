@@ -62,10 +62,9 @@ namespace PxGraf.Datasource.Cache
         {
             string freshnessKey = GenerateCacheKeyHash(key, FRESHNESS_TOKEN_HASH_SEED);
             string entryKey = GenerateCacheKeyHash(key, ENTRY_KEY_HASH_SEED);
-            if (_cache.TryGetValue(freshnessKey, out Task<ItemType> cachedTask))
+            if (_cache.TryGetValue(freshnessKey, out value))
             {
-                value = cachedTask;
-                if (cachedTask.IsFaulted)
+                if (value.IsFaulted)
                 {
                     _cache.Remove(freshnessKey);
                     _cache.Remove(entryKey);
@@ -74,10 +73,9 @@ namespace PxGraf.Datasource.Cache
 
                 return CacheEntryState.Fresh;
             }
-            else if (_cache.TryGetValue(entryKey, out cachedTask))
+            else if (_cache.TryGetValue(entryKey, out value))
             {
-                value = cachedTask;
-                if (cachedTask.IsFaulted)
+                if (value.IsFaulted)
                 {
                     _cache.Remove(entryKey);
                     return CacheEntryState.Error;
