@@ -90,6 +90,14 @@ namespace PxGraf.Datasource.Cache
             }
         }
 
+        public void TryRemove(string key)
+        {
+            string freshnessKey = GenerateCacheKeyHash(key, FRESHNESS_TOKEN_HASH_SEED);
+            string entryKey = GenerateCacheKeyHash(key, ENTRY_KEY_HASH_SEED);
+            _cache.Remove(freshnessKey);
+            _cache.Remove(entryKey);
+        }
+
         public void Dispose()
         {
             _cache.Dispose();

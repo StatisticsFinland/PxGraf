@@ -77,12 +77,14 @@ namespace UnitTests.DatasourceTests
             cache.Set(TEST_KEY, task, TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(1));
 
             // Act
-            MultiStateMemoryTaskCache.CacheEntryState state = cache.TryGet(TEST_KEY, out Task<string> value);
+            MultiStateMemoryTaskCache.CacheEntryState errorState = cache.TryGet(TEST_KEY, out Task<string> value1);
+            MultiStateMemoryTaskCache.CacheEntryState nullState = cache.TryGet(TEST_KEY, out Task<string> value2);
 
             // Assert
-            Assert.That(state, Is.EqualTo(MultiStateMemoryTaskCache.CacheEntryState.Error));
-            Assert.ThrowsAsync<Exception>(() => value);
-            Assert.That(value.Exception.Message.Contains("Test exception"));
+            Assert.That(errorState, Is.EqualTo(MultiStateMemoryTaskCache.CacheEntryState.Error));
+            Assert.ThrowsAsync<Exception>(() => value1);
+            Assert.That(value1.Exception.Message.Contains("Test exception"));
+            Assert.That(nullState, Is.EqualTo(MultiStateMemoryTaskCache.CacheEntryState.Null));
         }
     }
 }

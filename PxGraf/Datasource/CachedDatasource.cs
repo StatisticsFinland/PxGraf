@@ -57,7 +57,8 @@ namespace PxGraf.Datasource
             TimeSpan absoluteExpiration = TimeSpan.FromMinutes(_cacheOptions.Database.AbsoluteExpirationMinutes);
 
             MultiStateMemoryTaskCache.CacheEntryState state = _taskCache.TryGet(key, out Task<DatabaseGroupContents> contentsTask);
-            if (state == MultiStateMemoryTaskCache.CacheEntryState.Null)
+            if (state == MultiStateMemoryTaskCache.CacheEntryState.Null ||
+                state == MultiStateMemoryTaskCache.CacheEntryState.Error)
             {
                 contentsTask = GetGroupContentsAsync(hierarcy);
                 _taskCache.Set(key, contentsTask, slidingExpiration, absoluteExpiration);
@@ -71,17 +72,26 @@ namespace PxGraf.Datasource
             TimeSpan slidingExpiration = TimeSpan.FromMinutes(_cacheOptions.Meta.SlidingExpirationMinutes);
             TimeSpan absoluteExpiration = TimeSpan.FromMinutes(_cacheOptions.Meta.AbsoluteExpirationMinutes);
             MultiStateMemoryTaskCache.CacheEntryState state = _taskCache.TryGet(key, out Task<MetaCacheHousing> metaTask);
-            if (state == MultiStateMemoryTaskCache.CacheEntryState.Null)
+            if (state == MultiStateMemoryTaskCache.CacheEntryState.Null ||
+                state == MultiStateMemoryTaskCache.CacheEntryState.Error)
             {
                 metaTask = GenerateNewMetaCacheHousingAsync(tableReference);
                 _taskCache.Set(key, metaTask, slidingExpiration, absoluteExpiration);
             }
             else if (state == MultiStateMemoryTaskCache.CacheEntryState.Stale)
             {
-                DateTime lastWritetime = await GetLastUpdateTimeAsync(tableReference);
-                if (lastWritetime > (await metaTask).LastWritetime)
+                try // This is to make sure that that exceptions from the GetLastUpdateTimeAsync() dont cause the cache to be stuck in a stale state.
                 {
-                    metaTask = GenerateNewMetaCacheHousingAsync(tableReference);
+                    DateTime lastWritetime = await GetLastUpdateTimeAsync(tableReference);
+                    if (lastWritetime > (await metaTask).LastWritetime)
+                    {
+                        metaTask = GenerateNewMetaCacheHousingAsync(tableReference);
+                    }
+                }
+                catch
+                {
+                    _taskCache.TryRemove(key);
+                    throw;
                 }
                 _taskCache.Set(key, metaTask, slidingExpiration, absoluteExpiration);
             }
@@ -100,17 +110,26 @@ namespace PxGraf.Datasource
 
             string key = GetKeyForMatrixMap(tableReference, metadata);
             MultiStateMemoryTaskCache.CacheEntryState state = _taskCache.TryGet(key, out Task<DataCacheHousing> dataTask);
-            if(state == MultiStateMemoryTaskCache.CacheEntryState.Null)
+            if(state == MultiStateMemoryTaskCache.CacheEntryState.Null ||
+                state == MultiStateMemoryTaskCache.CacheEntryState.Error)
             {
                 dataTask = GenerateNewDataCacheHousingAsync(tableReference, metadata);
                 _taskCache.Set(key, dataTask, slidingExpiration, absoluteExpiration); 
             }
             else if (state == MultiStateMemoryTaskCache.CacheEntryState.Stale)
             {
-                DateTime lastWritetime = await GetLastUpdateTimeAsync(tableReference);
-                if (lastWritetime > (await dataTask).LastWritetime)
+                try // This is to make sure that that exceptions from the GetLastUpdateTimeAsync() dont cause the cache to be stuck in a stale state.
                 {
-                    dataTask = GenerateNewDataCacheHousingAsync(tableReference, metadata);
+                    DateTime lastWritetime = await GetLastUpdateTimeAsync(tableReference);
+                    if (lastWritetime > (await dataTask).LastWritetime)
+                    {
+                        dataTask = GenerateNewDataCacheHousingAsync(tableReference, metadata);
+                    }
+                }
+                catch
+                {
+                    _taskCache.TryRemove(key);
+                    throw;
                 }
                 _taskCache.Set(key, dataTask, slidingExpiration, absoluteExpiration);
             }
