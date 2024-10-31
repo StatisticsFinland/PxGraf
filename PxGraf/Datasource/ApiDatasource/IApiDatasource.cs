@@ -1,4 +1,5 @@
-﻿using Px.Utils.Models.Data.DataValue;
+﻿#nullable enable
+using Px.Utils.Models.Data.DataValue;
 using Px.Utils.Models.Metadata;
 using Px.Utils.Models;
 using PxGraf.Models.Queries;
@@ -46,3 +47,4 @@ namespace PxGraf.Datasource.PxWebInterface
         public Task<Matrix<DecimalDataValue>> GetMatrixAsync(PxTableReference tableReference, IReadOnlyMatrixMetadata meta, CancellationToken? cancellationToken = null);
     }
 }
+#nullable disable

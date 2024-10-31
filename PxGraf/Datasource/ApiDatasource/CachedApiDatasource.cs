@@ -1,7 +1,9 @@
-﻿using Px.Utils.Models.Data.DataValue;
+﻿#nullable enable
+using Px.Utils.Models.Data.DataValue;
 using Px.Utils.Models.Metadata;
 using Px.Utils.Models;
 using PxGraf.Datasource.Cache;
+using PxGraf.Datasource.PxWebInterface;
 using PxGraf.Models.Metadata;
 using PxGraf.Models.Queries;
 using PxGraf.Models.Responses.DatabaseItems;
@@ -9,7 +11,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;
 
-namespace PxGraf.Datasource.PxWebInterface
+namespace PxGraf.Datasource.ApiDatasource
 {
     public sealed class CachedApiDatasource(IApiDatasource datasource, IMultiStateMemoryTaskCache taskCache) : CachedDatasource(taskCache)
     {
@@ -38,10 +40,11 @@ namespace PxGraf.Datasource.PxWebInterface
             DateTime lastUpdated = meta.GetLastUpdated() ?? await _datasource.GetLastWriteTimeAsync(tableReference);
             return new DataCacheHousing(lastUpdated, matrix.Data);
         }
-        
+
         protected override Task<DateTime> GetLastUpdateTimeAsync(PxTableReference tableReference)
         {
             return _datasource.GetLastWriteTimeAsync(tableReference);
         }
     }
 }
+#nullable disable
