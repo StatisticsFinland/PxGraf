@@ -364,7 +364,9 @@ namespace UnitTests.MatrixMetadataTests
             [
                 new DimensionParameters(DimensionType.Content, 1),
                 new DimensionParameters(DimensionType.Time, 10),
-                new DimensionParameters(DimensionType.Unknown, 2),
+                new DimensionParameters(DimensionType.Geographical, 2),
+                new DimensionParameters(DimensionType.Nominal, 2),
+                new DimensionParameters(DimensionType.Other, 2),
                 new DimensionParameters(DimensionType.Unknown, 2),
             ];
             MultilanguageStringProperty metaId = new(new MultilanguageString(new Dictionary<string, string> { { "fi", PxSyntaxConstants.ORDINAL_VALUE }, { "en", PxSyntaxConstants.ORDINAL_VALUE } }));
@@ -372,15 +374,21 @@ namespace UnitTests.MatrixMetadataTests
             meta.Dimensions[0].AdditionalProperties.Add(PxSyntaxConstants.META_ID_KEY, metaId);
             meta.Dimensions[1].AdditionalProperties.Add(PxSyntaxConstants.META_ID_KEY, metaId);
             meta.Dimensions[2].AdditionalProperties.Add(PxSyntaxConstants.META_ID_KEY, metaId);
+            meta.Dimensions[3].AdditionalProperties.Add(PxSyntaxConstants.META_ID_KEY, metaId);
+            meta.Dimensions[4].AdditionalProperties.Add(PxSyntaxConstants.META_ID_KEY, metaId);
+            meta.Dimensions[5].AdditionalProperties.Add(PxSyntaxConstants.META_ID_KEY, metaId);
 
             // Act
             MatrixMetadata result = meta.AssignOrdinalDimensionTypes();
 
             // Assert
-            Assert.That(result.Dimensions[0].Type.Equals(DimensionType.Content)); // Time and content dimensions should not be changed
+            // Only other and unknown dimension types should be affected
+            Assert.That(result.Dimensions[0].Type.Equals(DimensionType.Content));
             Assert.That(result.Dimensions[1].Type.Equals(DimensionType.Time));
-            Assert.That(result.Dimensions[2].Type.Equals(DimensionType.Ordinal));
-            Assert.That(result.Dimensions[3].Type.Equals(DimensionType.Unknown));
+            Assert.That(result.Dimensions[2].Type.Equals(DimensionType.Geographical));
+            Assert.That(result.Dimensions[3].Type.Equals(DimensionType.Nominal));
+            Assert.That(result.Dimensions[4].Type.Equals(DimensionType.Ordinal));
+            Assert.That(result.Dimensions[5].Type.Equals(DimensionType.Ordinal));
         }
     }
 }

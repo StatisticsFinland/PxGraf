@@ -161,8 +161,8 @@ namespace PxGraf.Models.Metadata
             List<Dimension> newDimensions = [..meta.Dimensions];
             for(int i = 0; i < meta.Dimensions.Count; i++)
             {
-                if (meta.Dimensions[i].Type == DimensionType.Content ||
-                    meta.Dimensions[i].Type == DimensionType.Time)
+                if (meta.Dimensions[i].Type != DimensionType.Other &&
+                    meta.Dimensions[i].Type != DimensionType.Unknown)
                 {
                     continue;
                 }
