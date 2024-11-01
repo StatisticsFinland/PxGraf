@@ -1,7 +1,9 @@
 ﻿#nullable enable
 using Px.Utils.Language;
+using Px.Utils.Models.Metadata;
 using Px.Utils.Models.Metadata.Dimensions;
 using Px.Utils.Models.Metadata.Enums;
+using Px.Utils.Models.Metadata.ExtensionMethods;
 using PxGraf.Language;
 using PxGraf.Models.Queries;
 using System.Collections.Generic;
@@ -16,6 +18,38 @@ namespace PxGraf.Models.Metadata
     /// </summary>
     public static class HeaderBuildingUtilities
     {
+        /// <summary>
+        /// Gets header for the given metadata and query.
+        /// </summary>
+        /// <param name="meta">Metadata to be used in the header.</param>
+        /// <param name="query">Query properties to check for edited header.</param>
+        /// <returns><see cref="MultilanguageString"/> object that contains the header for different languages.</returns>
+        public static MultilanguageString GetHeader(IReadOnlyMatrixMetadata meta, MatrixQuery query, bool keepPlaceHolders = false)
+        {
+            MultilanguageString defaultHeader = CreateDefaultHeader(meta.Dimensions, query, meta.AvailableLanguages);
+            if (query.ChartHeaderEdit != null)
+            {
+                Dictionary<string, string> translations = [];
+                foreach (string lang in defaultHeader.Languages)
+                {
+                    if (query.ChartHeaderEdit.Languages.Contains(lang))
+                    {
+                        translations[lang] = query.ChartHeaderEdit[lang];
+                    }
+                    else
+                    {
+                        translations[lang] = defaultHeader[lang];
+                    }
+                }
+                MultilanguageString mls = new(translations);
+                return keepPlaceHolders ? mls : ReplaceTimePlaceholdersInHeader(new(translations), meta.GetTimeDimension());
+            }
+            else
+            {
+                return keepPlaceHolders ? defaultHeader : ReplaceTimePlaceholdersInHeader(defaultHeader, meta.GetTimeDimension());
+            }
+        }
+
         /// <summary>
         /// Returns default header for the given dimensions and query.
         /// </summary>

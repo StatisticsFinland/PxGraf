@@ -91,7 +91,7 @@ namespace PxGraf.Visualization
                 SelectableVariableCodes = layout.SelectableVariableCodes,
                 RowVariableCodes = layout.RowVariableCodes,
                 ColumnVariableCodes = layout.ColumnVariableCodes,
-                Header = GetHeader(matrix.Metadata, query),
+                Header = HeaderBuildingUtilities.GetHeader(matrix.Metadata, query),
                 VisualizationSettings = new()
                 {
                     VisualizationType = settings.VisualizationType,
@@ -137,31 +137,6 @@ namespace PxGraf.Visualization
             layout.SingleValueVariables.AddRange(remainingVars);
 
             return layout;
-        }
-
-        private static MultilanguageString GetHeader(IReadOnlyMatrixMetadata meta, MatrixQuery query)
-        {
-            MultilanguageString defaultHeader = HeaderBuildingUtilities.CreateDefaultHeader(meta.Dimensions, query, meta.AvailableLanguages);
-            if (query.ChartHeaderEdit != null)
-            {
-                Dictionary<string, string> translations = [];
-                foreach (string lang in defaultHeader.Languages)
-                {
-                    if (query.ChartHeaderEdit.Languages.Contains(lang))
-                    {
-                        translations[lang] = query.ChartHeaderEdit[lang];
-                    }
-                    else
-                    {
-                        translations[lang] = defaultHeader[lang];
-                    }
-                }
-                return HeaderBuildingUtilities.ReplaceTimePlaceholdersInHeader(new(translations), meta.GetTimeDimension());
-            }
-            else
-            {                 
-                return HeaderBuildingUtilities.ReplaceTimePlaceholdersInHeader(defaultHeader, meta.GetTimeDimension());
-            }
         }
     }
 }

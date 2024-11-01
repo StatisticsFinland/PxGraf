@@ -147,8 +147,8 @@ namespace UnitTests.ControllerTests.QueryMetaControllerTests
             QueryMetaController controller = TestQueryMetaControllerBuilder.BuildController(savedQueries, Configuration.Current.SavedQueryDirectory, dimParams, archiveCubes: archiveCubes);
             ActionResult<QueryMetaResponse> result = await controller.GetQueryMeta("test");
 
-            Assert.That(result.Value.Header["fi"], Is.EqualTo("value-0, value-0 2000-2009 muuttujana variable-2"));
-            Assert.That(result.Value.HeaderWithPlaceholders["fi"], Is.EqualTo("value-0, value-0 [FIRST]-[LAST] muuttujana variable-2"));
+            Assert.That(result.Value.Header["fi"], Is.EqualTo("variable-0 2000-2009 muuttujina variable-0, variable-2, variable-3"));
+            Assert.That(result.Value.HeaderWithPlaceholders["fi"], Is.EqualTo("variable-0 [FIRST]-[LAST] muuttujina variable-0, variable-2, variable-3"));
             Assert.That(result.Value.Archived, Is.True);
             Assert.That(result.Value.Selectable, Is.False);
             Assert.That(result.Value.VisualizationType, Is.EqualTo(VisualizationType.LineChart));

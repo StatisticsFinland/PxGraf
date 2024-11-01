@@ -44,10 +44,10 @@ namespace PxGraf.Controllers
                     return NotFound();
                 }
                 IReadOnlyMatrixMetadata filteredMeta = meta.FilterDimensionValues(savedQuery.Query);
-                MultilanguageString header = HeaderBuildingUtilities.CreateDefaultHeader(filteredMeta.Dimensions, savedQuery.Query, filteredMeta.AvailableLanguages);
+                MultilanguageString header = HeaderBuildingUtilities.GetHeader(meta, savedQuery.Query, true);
                 QueryMetaResponse queryMetaResponse = new()
                 {
-                    Header = HeaderBuildingUtilities.ReplaceTimePlaceholdersInHeader(header, meta.GetTimeDimension()),
+                    Header = HeaderBuildingUtilities.ReplaceTimePlaceholdersInHeader(header, filteredMeta.GetTimeDimension()),
                     HeaderWithPlaceholders = header,
                     Archived = savedQuery.Archived,
                     Selectable = savedQuery.Query.DimensionQueries.Any(q => q.Value.Selectable),
