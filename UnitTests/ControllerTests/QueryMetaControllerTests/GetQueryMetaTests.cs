@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
+using Px.Utils.Language;
 using Px.Utils.Models.Metadata.Enums;
 using PxGraf.Controllers;
 using PxGraf.Enums;
@@ -116,17 +117,17 @@ namespace UnitTests.ControllerTests.QueryMetaControllerTests
         {
             List<DimensionParameters> dimParams =
             [
-                new (DimensionType.Content, 1),
-                new (DimensionType.Time, 10),
-                new (DimensionType.Other, 2),
-                new (DimensionType.Other, 1)
+                new(DimensionType.Content, 1),
+                new(DimensionType.Time, 10),
+                new(DimensionType.Other, 2),
+                new(DimensionType.Other, 1)
             ];
             List<DimensionParameters> metaParams =
             [
-                new (DimensionType.Content, 4),
-                new (DimensionType.Time, 10),
-                new (DimensionType.Other, 3),
-                new (DimensionType.Other, 2)
+                new(DimensionType.Content, 4),
+                new(DimensionType.Time, 10),
+                new(DimensionType.Other, 3),
+                new(DimensionType.Other, 2)
             ];
             Layout layout = new()
             {
@@ -212,6 +213,52 @@ namespace UnitTests.ControllerTests.QueryMetaControllerTests
             QueryMetaController controller = TestQueryMetaControllerBuilder.BuildController(savedQueries, Configuration.Current.SavedQueryDirectory, []);
             ActionResult<QueryMetaResponse> result = controller.GetQueryMeta("test").Result;
             Assert.That(result.Result, Is.TypeOf<NotFoundResult>());
+        }
+
+        [Test]
+        public async Task GetQueryMetaTest_WithEditedHeaderAndNames_ReturnsCorrectResult()
+        {
+            List<DimensionParameters> dimParams =
+            [
+                new(DimensionType.Content, 1),
+                new(DimensionType.Time, 10),
+                new(DimensionType.Other, 2),
+                new(DimensionType.Other, 1)
+            ];
+            List<DimensionParameters> metaParams =
+            [
+                new(DimensionType.Content, 4),
+                new(DimensionType.Time, 10),
+                new(DimensionType.Other, 3),
+                new(DimensionType.Other, 2)
+            ];
+            Layout layout = new()
+            {
+                RowVariableCodes = [],
+                ColumnVariableCodes = ["variable-1"]
+            };
+            LineChartVisualizationSettings settings = new(layout, false, null);
+            SavedQuery sq = TestDataCubeBuilder.BuildTestSavedQuery(dimParams, true, settings);
+            Dictionary<string, string> headerEditTranslations = new()
+            {
+                ["fi"] = "editedHeader.fi",
+                ["en"] = "editedHeader.en"
+            };
+            MultilanguageString editedHeader = new(headerEditTranslations);
+            sq.Query.ChartHeaderEdit = editedHeader;
+            ArchiveCube archiveCube = TestDataCubeBuilder.BuildTestArchiveCube(metaParams);
+            Dictionary<string, SavedQuery> savedQueries = new()
+            {
+                {"goesNowhere/test", sq}
+            };
+            Dictionary<string, ArchiveCube> archiveCubes = new()
+            {
+                {"goesNowhere/test", archiveCube}
+            };
+            QueryMetaController controller = TestQueryMetaControllerBuilder.BuildController(savedQueries, Configuration.Current.SavedQueryDirectory, dimParams, archiveCubes: archiveCubes);
+            ActionResult<QueryMetaResponse> result = await controller.GetQueryMeta("test");
+            Assert.That(result.Value.Header["fi"].Equals("editedHeader.fi"));
+            Assert.That(result.Value.Header["en"].Equals("editedHeader.en"));
         }
     }
 }
