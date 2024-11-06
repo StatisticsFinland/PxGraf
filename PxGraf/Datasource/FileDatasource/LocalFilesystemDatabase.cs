@@ -9,6 +9,7 @@ using Px.Utils.PxFile.Metadata;
 using PxGraf.Models.Metadata;
 using PxGraf.Models.Queries;
 using PxGraf.Models.Responses.DatabaseItems;
+using PxGraf.Utility;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -42,9 +43,8 @@ namespace PxGraf.Datasource.DatabaseConnection
         private List<PxTableReference> GetTables(IReadOnlyList<string> groupHierarcy)
         {
             List<PxTableReference> tables = [];
-            const string PX_FILE_FILTER = "*.px";
             string path = Path.Combine(config.DatabaseRootPath, string.Join(Path.DirectorySeparatorChar, groupHierarcy));
-            foreach (string pxFile in Directory.EnumerateFiles(path, PX_FILE_FILTER))
+            foreach (string pxFile in Directory.EnumerateFiles(path, PxSyntaxConstants.PX_FILE_FILTER))
             {
                 tables.Add(new PxTableReference(pxFile.Remove(0, config.DatabaseRootPath.Length)));
             }
@@ -107,8 +107,8 @@ namespace PxGraf.Datasource.DatabaseConnection
             )
         {
             string path = _referenceToPath(tableReference);
-            if (!path.EndsWith(".px"))
-                path += ".px";
+            if (!path.EndsWith(PxSyntaxConstants.PX_FILE_EXTENSION))
+                path += PxSyntaxConstants.PX_FILE_EXTENSION;
             DataIndexer indexer = new(completeTableMap, meta);
             Matrix<DecimalDataValue> output = new(meta, new DecimalDataValue[indexer.DataLength]);
             using Stream fileStream = File.OpenRead(path);
@@ -121,8 +121,8 @@ namespace PxGraf.Datasource.DatabaseConnection
         /// <inheritdoc/> 
         public async Task<IReadOnlyMatrixMetadata> GetMatrixMetadataAsync(PxTableReference tableReference)
         {
-            if (!tableReference.Name.EndsWith(".px"))
-                tableReference.Name += ".px";
+            if (!tableReference.Name.EndsWith(PxSyntaxConstants.PX_FILE_EXTENSION))
+                tableReference.Name += PxSyntaxConstants.PX_FILE_EXTENSION;
 
             string path = _referenceToPath(tableReference);
             using Stream readStream = File.OpenRead(path);
@@ -143,12 +143,12 @@ namespace PxGraf.Datasource.DatabaseConnection
         private MultilanguageString GetGroupName(string path)
         {
             Dictionary<string, string> translatedNames = [];
-            const string ALIAS_FILE_FILTER = "*.txt";
-            IEnumerable<string> aliasFiles = Directory.GetFiles(path, ALIAS_FILE_FILTER)
-                .Where(p => Path.GetFileName(p).StartsWith("alias", StringComparison.OrdinalIgnoreCase));
+            IEnumerable<string> aliasFiles = Directory.GetFiles(path, PxSyntaxConstants.ALIAS_FILE_FILTER)
+                .Where(p => Path.GetFileName(p).StartsWith(PxSyntaxConstants.ALIAS_FILE_PREFIX, StringComparison.OrdinalIgnoreCase));
             foreach (string aliasFile in aliasFiles)
             {
-                string lang = new([.. Path.GetFileName(aliasFile).Skip(6).TakeWhile(c => c != '.')]);
+                int aliasFileSuffixLength = PxSyntaxConstants.ALIAS_FILE_PREFIX.Length + 1; // +1 for the underscore
+                string lang = new([.. Path.GetFileNameWithoutExtension(aliasFile).Skip(aliasFileSuffixLength)]);
                 string alias = File.ReadAllText(aliasFile, config.Encoding);
                 translatedNames.Add(lang, alias.Trim());
             }

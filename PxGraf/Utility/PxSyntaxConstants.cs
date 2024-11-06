@@ -26,6 +26,10 @@ namespace PxGraf.Utility
         public const string META_ID_KEY = "META-ID";
         public const string ORDINAL_VALUE = "SCALE-TYPE=ordinal";
         public const string NOMINAL_VALUE = "SCALE-TYPE=nominal";
+        public const string PX_FILE_FILTER = "*.px";
+        public const string PX_FILE_EXTENSION = ".px";
+        public const string ALIAS_FILE_FILTER = "*.txt";
+        public const string ALIAS_FILE_PREFIX = "alias";
 
         //Indexed by DataValueType with offset of one
         public static readonly string[] MissingValueDotCodes =
