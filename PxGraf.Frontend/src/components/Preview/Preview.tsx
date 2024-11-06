@@ -89,7 +89,7 @@ export const Preview: React.FC<IPreviewProps> = ({ path, query, language, cubeQu
         </ToggleButton>
     );
 
-    if (isLoading) {
+    if (isLoading || (!data && !isError)) {
         return (
             <ResponseWrapper>
                 <CircularProgress />
