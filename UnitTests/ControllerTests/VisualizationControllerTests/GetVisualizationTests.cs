@@ -18,6 +18,9 @@ using PxGraf.Datasource.Cache;
 using System.Linq;
 using Px.Utils.Models.Metadata.Dimensions;
 using PxGraf.Utility;
+using PxGraf.Models.SavedQueries;
+using Px.Utils.Models.Data;
+using PxGraf.Visualization;
 
 namespace UnitTests.ControllerTests.VisualizationControllerTests
 {

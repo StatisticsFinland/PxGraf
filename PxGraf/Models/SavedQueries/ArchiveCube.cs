@@ -4,6 +4,7 @@ using Px.Utils.Models.Data.DataValue;
 using Px.Utils.Models.Metadata;
 using PxGraf.Models.Metadata;
 using PxGraf.Models.Queries;
+using PxGraf.Utility;
 using PxGraf.Utility.CustomJsonConverters;
 using System;
 using System.Collections.Generic;
@@ -63,7 +64,9 @@ namespace PxGraf.Models.SavedQueries
         /// <returns></returns>
         public Matrix<DecimalDataValue> ToMatrix()
         {
-            return new Matrix<DecimalDataValue>(Meta, [..Data]);
+            Matrix<DecimalDataValue> matrix = new(Meta, [..Data]);
+            matrix.ApplyDataNotesToMissingData(DataNotes);
+            return matrix;
         }
 
         public static ArchiveCube FromMatrixAndQuery(Matrix<DecimalDataValue> matrix, MatrixQuery query)

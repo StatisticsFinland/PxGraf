@@ -2,7 +2,9 @@
 using Px.Utils.Models;
 using Px.Utils.Models.Data;
 using Px.Utils.Models.Data.DataValue;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace PxGraf.Utility
 {
@@ -19,6 +21,11 @@ namespace PxGraf.Utility
             public IReadOnlyDictionary<int, int> MissingValueInfo { get; set; }
         }
 
+        /// <summary>
+        /// Extracts data and notes from a matrix.
+        /// </summary>
+        /// <param name="matrix">Matrix to extract data and notes from.</param>
+        /// <returns><see cref="DataAndNotesCollection"/> object that contains the data and data notes.</returns>
         public static DataAndNotesCollection ExtractDataAndNotes(this Matrix<DecimalDataValue> matrix)
         {
             decimal?[] data = new decimal?[matrix.Data.Length];
@@ -47,6 +54,24 @@ namespace PxGraf.Utility
                 Notes = notes, //TODO cellnotes
                 MissingValueInfo = missingValueInfo
             };
+        }
+
+        /// <summary>
+        /// Finds missing values in data mtarix from data notes and replaces them with the appropriate missing value.
+        /// </summary>
+        /// <param name="matrix">Matrix to apply missing values to.</param>
+        /// <param name="dataNotes">Data notes to apply to the matrix.</param>
+        public static void ApplyDataNotesToMissingData(this Matrix<DecimalDataValue> matrix, IReadOnlyDictionary<int, MultilanguageString> dataNotes)
+        {
+            string defaultLanguage = matrix.Metadata.DefaultLanguage;
+            for (int i = 0; i < matrix.Data.Length; i++)
+            {
+                if (dataNotes.TryGetValue(i, out MultilanguageString value) && PxSyntaxConstants.MissingValueDotCodes.Contains(value[defaultLanguage]))
+                {
+                    DataValueType valueType = (DataValueType)Array.IndexOf(PxSyntaxConstants.MissingValueDotCodes, value[defaultLanguage]);
+                    matrix.Data[i] = new DecimalDataValue(0, valueType);
+                }
+            }
         }
     }
 }

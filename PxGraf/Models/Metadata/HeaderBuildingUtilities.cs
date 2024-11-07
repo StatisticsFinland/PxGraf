@@ -23,6 +23,7 @@ namespace PxGraf.Models.Metadata
         /// </summary>
         /// <param name="meta">Metadata to be used in the header.</param>
         /// <param name="query">Query properties to check for edited header.</param>
+        /// <param name="keepPlaceHolders">Whether to keep placeholders in the header.</param>
         /// <returns><see cref="MultilanguageString"/> object that contains the header for different languages.</returns>
         public static MultilanguageString GetHeader(IReadOnlyMatrixMetadata meta, MatrixQuery query, bool keepPlaceHolders = false)
         {

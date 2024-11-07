@@ -17,6 +17,15 @@ using UnitTests.Fixtures;
 using UnitTests.Utilities;
 using System.Text.Json;
 using PxGraf.Settings;
+using Microsoft.AspNetCore.Mvc;
+using Moq;
+using Px.Utils.Models.Data;
+using Px.Utils.Models.Metadata;
+using PxGraf.Controllers;
+using PxGraf.Datasource.Cache;
+using PxGraf.Datasource;
+using System.Threading.Tasks;
+using PxGraf.Utility;
 
 namespace UnitTests.Visualization
 {
@@ -567,6 +576,50 @@ namespace UnitTests.Visualization
 
             string normalizedResponse = JsonUtils.NormalizeJsonString(JsonSerializer.Serialize(result, GlobalJsonConverterOptions.Default));
             string normalizedExpected = JsonUtils.NormalizeJsonString(VisualizationResponseFixtures.LINE_CHART_RESPONSE_FIXTURE);
+
+            Assert.That(normalizedResponse, Is.EqualTo(normalizedExpected));
+        }
+
+
+        [Test]
+        public void ResponseSerializationTest_ArchivedVisualizationWithMissingDataValues_Returned()
+        {
+            // Arrange
+            List<DimensionParameters> cubeParams =
+            [
+                new DimensionParameters(DimensionType.Geographical, 3, name: "Alue"),
+                new DimensionParameters(DimensionType.Ordinal, 1, name: "Huoneluku"),
+                new DimensionParameters(DimensionType.Time, 15, name: "Vuosineljännes"),
+                new DimensionParameters(DimensionType.Other, 1, name: "Rahoitusmuoto"),
+                new DimensionParameters(DimensionType.Content, 1, name: "Tiedot"),
+            ];
+
+            Matrix<DecimalDataValue> cube = TestDataCubeBuilder.BuildTestMatrix(cubeParams, missingData: true);
+            LineChartVisualizationSettings settings = new(new Layout(["Alue"], ["Vuosineljännes"]), false, null);
+            SavedQuery savedQuery = TestDataCubeBuilder.BuildTestSavedQuery(cubeParams, false, settings);
+            savedQuery.Archived = true;
+            ArchiveCube ac = TestDataCubeBuilder.BuildTestArchiveCube(cubeParams);
+            ac.Data = [.. cube.Data];
+            ac.DataNotes = [];
+            for (int i = 0; i < ac.Data.Count; i++)
+            {
+                if (ac.Data[i].Type != DataValueType.Exists)
+                {
+                    Dictionary<string, string> translations = new (ac.Meta.AvailableLanguages.Count);
+                    foreach (string lang in ac.Meta.AvailableLanguages)
+                    {
+                        translations.Add(lang, PxSyntaxConstants.MissingValueDotCodes[(int)ac.Data[i].Type]);
+                    }
+                    ac.DataNotes.Add(i, new MultilanguageString(translations));
+                }
+            }
+
+            // Act
+            VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(ac.ToMatrix(), savedQuery);
+
+            // Assert
+            string normalizedResponse = JsonUtils.NormalizeJsonString(JsonSerializer.Serialize(result, GlobalJsonConverterOptions.Default));
+            string normalizedExpected = JsonUtils.NormalizeJsonString(VisualizationResponseFixtures.LINE_CHART_RESPONSE_FIXTURE_WITH_MISSING_VALUES);
 
             Assert.That(normalizedResponse, Is.EqualTo(normalizedExpected));
         }
