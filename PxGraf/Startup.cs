@@ -131,11 +131,8 @@ namespace PxGraf
                 TimeSpan.FromSeconds(Configuration.Current.CacheOptions.CacheFreshnessCheckIntervalSeconds)));
             if (Configuration.Current.LocalFilesystemDatabaseConfig.Enabled)
             {
-                static string referenceToPathConverter(PxTableReference reference) =>
-                    Path.Join(Configuration.Current.LocalFilesystemDatabaseConfig.DatabaseRootPath, reference.ToPath(Path.DirectorySeparatorChar.ToString()));
                 services.AddSingleton<IFileDatasource>(provider => new LocalFilesystemDatabase(
-                    Configuration.Current.LocalFilesystemDatabaseConfig,
-                    referenceToPathConverter));
+                    Configuration.Current.LocalFilesystemDatabaseConfig ));
                 services.AddSingleton<ICachedDatasource, CachedFileDatasource>();
             }
             else

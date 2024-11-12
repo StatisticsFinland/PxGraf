@@ -55,7 +55,7 @@ namespace PxGraf.Models.Queries
         public PxTableReference(string path, char? separator = null)
         {
             char pathSeparator = separator ?? Path.DirectorySeparatorChar;
-            List<string> parts = [.. path.Split(pathSeparator)];
+            List<string> parts = [.. path.Split(pathSeparator, StringSplitOptions.RemoveEmptyEntries)];
             Hierarchy = parts[0..^1];
             Name = parts[^1];
         }

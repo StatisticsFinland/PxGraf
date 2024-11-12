@@ -6,6 +6,7 @@ using Px.Utils.Models.Data.DataValue;
 using Px.Utils.Models.Metadata;
 using Px.Utils.PxFile.Data;
 using Px.Utils.PxFile.Metadata;
+using PxGraf.Datasource.DatabaseConnection;
 using PxGraf.Models.Metadata;
 using PxGraf.Models.Queries;
 using PxGraf.Models.Responses.DatabaseItems;
@@ -18,18 +19,15 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace PxGraf.Datasource.DatabaseConnection
+namespace PxGraf.Datasource.FileDatasource
 {
     /// <summary>
     /// Datasource for reading data from the local filesystem.
     /// </summary>
     /// <param name="config">Local file system database configuration.</param>
-    /// <param name="referenceToPathConverter">Function for converting a table reference to a file path.</param>
     [ExcludeFromCodeCoverage] // Methods consist mostly of filesystem IO
-    public class LocalFilesystemDatabase(LocalFilesystemDatabaseConfig config, Func<PxTableReference, string> referenceToPathConverter) : IFileDatasource
+    public class LocalFilesystemDatabase(LocalFilesystemDatabaseConfig config) : IFileDatasource
     {
-        private readonly Func<PxTableReference, string> _referenceToPath = referenceToPathConverter;
-
         /// <summary>
         /// Returns tables in a database group.
         /// </summary>
@@ -43,7 +41,7 @@ namespace PxGraf.Datasource.DatabaseConnection
         private List<PxTableReference> GetTables(IReadOnlyList<string> groupHierarcy)
         {
             List<PxTableReference> tables = [];
-            string path = Path.Combine(config.DatabaseRootPath, string.Join(Path.DirectorySeparatorChar, groupHierarcy));
+            string path = PathUtils.BuildAndSanitizePath(config.DatabaseRootPath, groupHierarcy);
             foreach (string pxFile in Directory.EnumerateFiles(path, PxSyntaxConstants.PX_FILE_FILTER))
             {
                 tables.Add(new PxTableReference(pxFile.Remove(0, config.DatabaseRootPath.Length)));
@@ -60,7 +58,7 @@ namespace PxGraf.Datasource.DatabaseConnection
         {
             List<DatabaseGroupHeader> headers = [];
 
-            string path = Path.Combine(config.DatabaseRootPath, string.Join(Path.DirectorySeparatorChar, groupHierarcy));
+            string path = PathUtils.BuildAndSanitizePath(config.DatabaseRootPath, groupHierarcy);
             foreach (string directory in Directory.EnumerateDirectories(path))
             {
                 string code = new DirectoryInfo(directory).Name;
@@ -75,21 +73,21 @@ namespace PxGraf.Datasource.DatabaseConnection
         /// <inheritdoc/>
         public DateTime GetLastWriteTime(PxTableReference tableReference)
         {
-            string path = _referenceToPath(tableReference);
+            string path = PathUtils.BuildAndSanitizePath(config.DatabaseRootPath, tableReference.Hierarchy);
             return Directory.GetLastWriteTime(path);
         }
 
         /// <inheritdoc/> 
         public async Task<DateTime> GetLastWriteTimeAsync(PxTableReference tableReference)
         {
-            string path = _referenceToPath(tableReference);
+            string path = PathUtils.BuildAndSanitizePath(config.DatabaseRootPath, tableReference);
             return await Task.Factory.StartNew(() => Directory.GetLastWriteTime(path));
         }
 
         /// <inheritdoc/> 
         public Matrix<DecimalDataValue> GetMatrix(PxTableReference tableReference, IReadOnlyMatrixMetadata meta, IMatrixMap completeMap)
         {
-            string path = _referenceToPath(tableReference);
+            string path = PathUtils.BuildAndSanitizePath(config.DatabaseRootPath, tableReference);
             DataIndexer indexer = new(completeMap, meta);
             Matrix<DecimalDataValue> output = new(meta, new DecimalDataValue[indexer.DataLength]);
             using Stream fileStream = File.OpenRead(path);
@@ -106,14 +104,14 @@ namespace PxGraf.Datasource.DatabaseConnection
             CancellationToken? cancellationToken = null
             )
         {
-            string path = _referenceToPath(tableReference);
+            string path = PathUtils.BuildAndSanitizePath(config.DatabaseRootPath, tableReference);
             if (!path.EndsWith(PxSyntaxConstants.PX_FILE_EXTENSION))
                 path += PxSyntaxConstants.PX_FILE_EXTENSION;
             DataIndexer indexer = new(completeTableMap, meta);
             Matrix<DecimalDataValue> output = new(meta, new DecimalDataValue[indexer.DataLength]);
             using Stream fileStream = File.OpenRead(path);
             PxFileStreamDataReader dataReader = new(fileStream);
-            if (cancellationToken is null) await dataReader.ReadDecimalDataValuesAsync(output.Data, 0, indexer); 
+            if (cancellationToken is null) await dataReader.ReadDecimalDataValuesAsync(output.Data, 0, indexer);
             else await dataReader.ReadDecimalDataValuesAsync(output.Data, 0, indexer, cancellationToken.Value);
             return output;
         }
@@ -124,7 +122,7 @@ namespace PxGraf.Datasource.DatabaseConnection
             if (!tableReference.Name.EndsWith(PxSyntaxConstants.PX_FILE_EXTENSION))
                 tableReference.Name += PxSyntaxConstants.PX_FILE_EXTENSION;
 
-            string path = _referenceToPath(tableReference);
+            string path = PathUtils.BuildAndSanitizePath(config.DatabaseRootPath, tableReference);
             using Stream readStream = File.OpenRead(path);
             PxFileMetadataReader metadataReader = new();
             IAsyncEnumerable<KeyValuePair<string, string>> entries = metadataReader.ReadMetadataAsync(readStream, config.Encoding);
@@ -154,6 +152,7 @@ namespace PxGraf.Datasource.DatabaseConnection
             }
             return new MultilanguageString(translatedNames);
         }
+
     }
 }
 #nullable disable
