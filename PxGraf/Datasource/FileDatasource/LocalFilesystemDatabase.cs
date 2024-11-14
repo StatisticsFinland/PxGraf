@@ -92,7 +92,7 @@ namespace PxGraf.Datasource.FileDatasource
             Matrix<DecimalDataValue> output = new(meta, new DecimalDataValue[indexer.DataLength]);
             using Stream fileStream = File.OpenRead(path);
             PxFileStreamDataReader dataReader = new(fileStream);
-            dataReader.ReadDecimalDataValues(output.Data, 0, indexer);
+            dataReader.ReadDecimalDataValues(output.Data, 0, meta, completeMap);
             return output;
         }
 
@@ -111,8 +111,8 @@ namespace PxGraf.Datasource.FileDatasource
             Matrix<DecimalDataValue> output = new(meta, new DecimalDataValue[indexer.DataLength]);
             using Stream fileStream = File.OpenRead(path);
             PxFileStreamDataReader dataReader = new(fileStream);
-            if (cancellationToken is null) await dataReader.ReadDecimalDataValuesAsync(output.Data, 0, indexer);
-            else await dataReader.ReadDecimalDataValuesAsync(output.Data, 0, indexer, cancellationToken.Value);
+            if (cancellationToken is null) await dataReader.ReadDecimalDataValuesAsync(output.Data, 0, meta, completeTableMap);
+            else await dataReader.ReadDecimalDataValuesAsync(output.Data, 0, meta, completeTableMap, cancellationToken.Value);
             return output;
         }
 
