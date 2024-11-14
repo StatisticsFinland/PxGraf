@@ -28,7 +28,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Px.Utils" Version="1.0.5" />
+    <PackageReference Include="Px.Utils" Version="1.1.0" />
   </ItemGroup>
 
   <ItemGroup>
