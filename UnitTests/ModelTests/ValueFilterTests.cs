@@ -36,6 +36,15 @@ namespace UnitTests.ModelTests
         }
 
         [Test]
+        public void FromFilterTest_WithUnmatchingCode_ReturnsEmpty()
+        {
+            FromFilter filter = new("val5");
+            IEnumerable<string> output = filter.Filter(values).Select(v => v.Code);
+            string[] expected = [];
+            Assert.That(output, Is.EquivalentTo(expected));
+        }
+
+        [Test]
         public void AllFilterTest()
         {
             AllFilter filter = new();

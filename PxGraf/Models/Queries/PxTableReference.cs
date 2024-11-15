@@ -59,17 +59,5 @@ namespace PxGraf.Models.Queries
             Hierarchy = parts[0..^1];
             Name = parts[^1];
         }
-
-        /// <summary>
-        /// Builds a cache key hash for the file reference.
-        /// </summary>
-        /// <param name="seed">Optional seed for generating the hash.</param>
-        /// <returns>Cache key hash for the file reference.</returns>
-        public string BuildCacheKeyHash(string seed = "")
-        {
-            byte[] inputBytes = Encoding.UTF8.GetBytes($"{seed}pxFileReference{ToPath()}");
-            byte[] hashBytes = System.Security.Cryptography.MD5.HashData(inputBytes);
-            return BitConverter.ToString(hashBytes);
-        }
     }
 }

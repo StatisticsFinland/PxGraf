@@ -14,7 +14,6 @@ using System.Linq;
 using Px.Utils.Models.Data;
 using Px.Utils.Models.Data.DataValue;
 using System;
-using PxGraf.Models.SavedQueries.Versions;
 
 namespace UnitTests.SerializerTests
 {
