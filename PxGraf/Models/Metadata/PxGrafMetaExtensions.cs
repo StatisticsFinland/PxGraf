@@ -21,7 +21,7 @@ namespace PxGraf.Models.Metadata
     {
         public static MatrixMetadata ToMatrixMetadata(this CubeMeta pxGrafMeta)
         {
-            List<Dimension> dimensions = [];
+            List<Dimension> dimensions = new(pxGrafMeta.Variables.Count);
             Dictionary<string, MetaProperty> matrixProperties = [];
             if (pxGrafMeta.Note != null)
             {
@@ -32,56 +32,28 @@ namespace PxGraf.Models.Metadata
                 }
                 matrixProperties[PxSyntaxConstants.NOTE_KEY] = new MultilanguageStringProperty(new(note));
             }
-            foreach (Variable dimension in pxGrafMeta.Variables)
+            foreach (Variable variable in pxGrafMeta.Variables)
             {
-                Dictionary<string, MetaProperty> dimensionProperties = [];
-                if (dimension.DimensionType == DimensionType.Content)
+                Dimension dimension = variable.ConvertToDimension();
+                dimensions.Add(dimension);
+                if (dimension is ContentDimension)
                 {
-                    List<ContentDimensionValue> contentDimValues = [];
-                    foreach (VariableValue dimValue in dimension.Values)
-                    {
-                        dimValue.AddEliminationKeyIfSumValue(dimensionProperties);
-                        DateTime lastUpdate = PxSyntaxConstants.ParseDateTime(dimValue.ContentComponent.LastUpdated);
-                        ContentDimensionValue cdv = new(dimValue.Code, dimValue.Name, dimValue.ContentComponent.Unit, lastUpdate, dimValue.ContentComponent.NumberOfDecimals);
-                        contentDimValues.Add(cdv);
-                    }
-                    dimensions.Add(new ContentDimension(dimension.Code, dimension.Name, dimensionProperties, contentDimValues));
-                    matrixProperties[PxSyntaxConstants.SOURCE_KEY] = new MultilanguageStringProperty(dimension.Values[0].ContentComponent.Source);
-                }
-                else if (dimension.DimensionType == DimensionType.Time)
-                {
-                    List<DimensionValue> values = [];
-                    foreach (VariableValue dimValue in dimension.Values)
-                    {
-                        dimValue.AddEliminationKeyIfSumValue(dimensionProperties);
-                        DimensionValue tdv = new(dimValue.Code, dimValue.Name);
-                        values.Add(tdv);
-                    }
-                    TimeDimensionInterval intervals = TimeVarIntervalParser.DetermineIntervalFromCodes(values.Select(v => v.Code).ToList());
-                    dimensions.Add(new TimeDimension(dimension.Code, dimension.Name, dimensionProperties, values, intervals));
-                }
-                else
-                {
-                    List<DimensionValue> values = [];
-                    foreach (VariableValue dimValue in dimension.Values)
-                    {
-                        dimValue.AddEliminationKeyIfSumValue(dimensionProperties);
-                        DimensionValue dv = new(dimValue.Code, dimValue.Name);
-                        values.Add(dv);
-                    }
-                    dimensions.Add(new Dimension(dimension.Code, dimension.Name, dimensionProperties, values, dimension.DimensionType));
+                    matrixProperties[PxSyntaxConstants.SOURCE_KEY] = new MultilanguageStringProperty(variable.Values[0].ContentComponent.Source);
                 }
             }
             string defaultLang = pxGrafMeta.GetDefaultLanguage();
-            return new(defaultLang, pxGrafMeta.Languages, dimensions, matrixProperties);
+            MatrixMetadata meta = new(defaultLang, pxGrafMeta.Languages, dimensions, matrixProperties);
+            meta = meta.AssignOrdinalDimensionTypes();
+            meta.AssignSourceToContentDimensionValues();
+            return meta;
         }
 
-        /// <summary>
-        /// Returns the default language of the cube.
-        /// </summary>
-        /// <param name="pxGrafMeta">The cube metadata.</param>
-        /// <returns>The default language of the cube.</returns>
-        public static string GetDefaultLanguage(this CubeMeta pxGrafMeta)
+            /// <summary>
+            /// Returns the default language of the cube.
+            /// </summary>
+            /// <param name="pxGrafMeta">The cube metadata.</param>
+            /// <returns>The default language of the cube.</returns>
+            public static string GetDefaultLanguage(this CubeMeta pxGrafMeta)
         {
             return pxGrafMeta.Languages.Contains(Configuration.Current.LanguageOptions.Default) ? 
                 Configuration.Current.LanguageOptions.Default :
@@ -98,6 +70,46 @@ namespace PxGraf.Models.Metadata
             if (dimensionValue.IsSumValue)
             {
                 dimensionProperties[PxSyntaxConstants.ELIMINATION_KEY] = new StringProperty(dimensionValue.Code);
+            }
+        }
+
+        public static Dimension ConvertToDimension(this Variable input)
+        {
+            Dictionary<string, MetaProperty> dimensionProperties = [];
+            if (input.DimensionType == DimensionType.Content)
+            {
+                List<ContentDimensionValue> contentDimValues = [];
+                foreach (VariableValue dimValue in input.Values)
+                {
+                    dimValue.AddEliminationKeyIfSumValue(dimensionProperties);
+                    DateTime lastUpdate = PxSyntaxConstants.ParseDateTime(dimValue.ContentComponent.LastUpdated);
+                    ContentDimensionValue cdv = new(dimValue.Code, dimValue.Name, dimValue.ContentComponent.Unit, lastUpdate, dimValue.ContentComponent.NumberOfDecimals);
+                    contentDimValues.Add(cdv);
+                }
+                return new ContentDimension(input.Code, input.Name, dimensionProperties, contentDimValues);
+            }
+            else if (input.DimensionType == DimensionType.Time)
+            {
+                List<DimensionValue> values = [];
+                foreach (VariableValue dimValue in input.Values)
+                {
+                    dimValue.AddEliminationKeyIfSumValue(dimensionProperties);
+                    DimensionValue tdv = new(dimValue.Code, dimValue.Name);
+                    values.Add(tdv);
+                }
+                TimeDimensionInterval intervals = TimeVarIntervalParser.DetermineIntervalFromCodes(values.Select(v => v.Code).ToList());
+                return new TimeDimension(input.Code, input.Name, dimensionProperties, values, intervals);
+            }
+            else
+            {
+                List<DimensionValue> values = [];
+                foreach (VariableValue dimValue in input.Values)
+                {
+                    dimValue.AddEliminationKeyIfSumValue(dimensionProperties);
+                    DimensionValue dv = new(dimValue.Code, dimValue.Name);
+                    values.Add(dv);
+                }
+                return new Dimension(input.Code, input.Name, dimensionProperties, values, input.DimensionType);
             }
         }
     }
