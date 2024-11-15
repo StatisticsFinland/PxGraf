@@ -1,7 +1,7 @@
-﻿using Px.Utils.Language;
-using Px.Utils.Models;
+﻿using Px.Utils.Models;
 using Px.Utils.Models.Data.DataValue;
 using Px.Utils.Models.Metadata;
+using Px.Utils.Models.Metadata.Dimensions;
 using Px.Utils.Models.Metadata.ExtensionMethods;
 using PxGraf.Data;
 using PxGraf.Data.MetaData;
@@ -11,9 +11,7 @@ using PxGraf.Models.Responses;
 using PxGraf.Models.SavedQueries;
 using PxGraf.Utility;
 using System.Collections.Generic;
-using System.Drawing.Drawing2D;
 using System.Linq;
-using System.Reflection.PortableExecutable;
 
 namespace PxGraf.Visualization
 {
@@ -80,14 +78,20 @@ namespace PxGraf.Visualization
             Matrix<DecimalDataValue> resultMatrix = matrix.GetTransform(finalMap);
             MatrixExtensions.DataAndNotesCollection dataAndNotes = resultMatrix.ExtractDataAndNotes();
             IReadOnlyList<string> timeDimensionCodes = matrix.Metadata.GetTimeDimension().Values.Codes;
-            
+            List<Variable> variables = [];
+            for (int i = 0; i < resultMatrix.Metadata.Dimensions.Count; i++)
+            {
+                Dimension dimension = resultMatrix.Metadata.Dimensions[i] as Dimension;
+                variables.Add(dimension.ConvertToVariable(query.DimensionQueries, matrix.Metadata));
+            }   
+
             return new VisualizationResponse()
             {
                 TableReference = query.TableReference,
                 Data = dataAndNotes.Data,
                 DataNotes = dataAndNotes.Notes,
                 MissingDataInfo = dataAndNotes.MissingValueInfo,
-                MetaData = resultMatrix.Metadata.Dimensions.Select(d => d.ConvertToVariable(query.DimensionQueries, matrix.Metadata)).ToList(),
+                MetaData = variables,
                 SelectableVariableCodes = layout.SelectableVariableCodes,
                 RowVariableCodes = layout.RowVariableCodes,
                 ColumnVariableCodes = layout.ColumnVariableCodes,

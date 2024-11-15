@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿#nullable enable
+using NUnit.Framework;
 using Px.Utils.Language;
 using Px.Utils.Models.Metadata;
 using Px.Utils.Models.Metadata.Dimensions;
@@ -148,6 +149,24 @@ namespace UnitTests.MatrixMetadataTests
 
             // Assert
             Assert.That(result.Values.Count.Equals(4));
+        }
+
+        [Test]
+        public void GetMultivalueTimeOrLargestOrdinalCalledWithoutTimeOrOrdinalDimensionsReturnsNull()
+        {
+            // Arrange
+            List<DimensionParameters> metaParams =
+            [
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Other, 2)
+            ];
+            MatrixMetadata input = TestDataCubeBuilder.BuildTestMeta(metaParams);
+
+            // Act
+            IReadOnlyDimension? result = input.GetMultivalueTimeOrLargestOrdinal();
+
+            // Assert
+            Assert.That(result, Is.Null);
         }
 
         [Test]
@@ -392,3 +411,4 @@ namespace UnitTests.MatrixMetadataTests
         }
     }
 }
+#nullable disable

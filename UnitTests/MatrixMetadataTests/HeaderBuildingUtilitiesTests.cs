@@ -43,6 +43,30 @@ namespace UnitTests.MatrixMetadataTests
         }
 
         [Test]
+        public void GetHeader_WithPartiallyEditedChartHeaderEdit_ReturnsPartiallyEditedHeader()
+        {
+            // Arrange
+            List<DimensionParameters> dimensions =
+            [
+                new(DimensionType.Content, 1, name: "ContentDim"),
+                new(DimensionType.Time, 2, name: "TimeDim")
+            ];
+            MatrixQuery query = TestDataCubeBuilder.BuildTestCubeQuery(dimensions);
+            query.ChartHeaderEdit = new(new Dictionary<string, string>
+            {
+                { "en", "Edited Header" },
+            });
+            MatrixMetadata meta = TestDataCubeBuilder.BuildTestMeta(dimensions);
+
+            // Act
+            MultilanguageString header = HeaderBuildingUtilities.GetHeader(meta, query);
+
+            // Assert
+            Assert.That(header["en"], Is.EqualTo("Edited Header"));
+            Assert.That(header["fi"], Is.EqualTo("value-0 2000-2001"));
+        }
+
+        [Test]
         public void GetHeader_WithDefaultHeader_ReturnsDefaultHeader()
         {
             // Arrange

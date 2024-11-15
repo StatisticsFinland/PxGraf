@@ -19,8 +19,6 @@ using System.Linq;
 using Px.Utils.Models.Metadata.Dimensions;
 using PxGraf.Utility;
 using PxGraf.Models.SavedQueries;
-using Px.Utils.Models.Data;
-using PxGraf.Visualization;
 
 namespace UnitTests.ControllerTests.VisualizationControllerTests
 {
@@ -245,7 +243,6 @@ namespace UnitTests.ControllerTests.VisualizationControllerTests
 
             VisualizationResponse mockResponse = default;
 
-
             VisualizationController vController = TestVisualizationControllerBuilder.BuildController(
                 [],
                 [],
@@ -258,6 +255,71 @@ namespace UnitTests.ControllerTests.VisualizationControllerTests
 
             mockCachedDatasource.Verify(x => x.GetMatrixMetadataCachedAsync(It.IsAny<PxTableReference>()), Times.Never());
             Assert.That(result.Result, Is.InstanceOf<BadRequestResult>());
+        }
+
+        [Test]
+        public async Task GetVisualizationTest_WithFaultyQueryId_Returns_NotFound()
+        {
+            Mock<ICachedDatasource> mockCachedDatasource = new();
+
+            string testQueryId = "foo";
+
+            VisualizationController vController = TestVisualizationControllerBuilder.BuildController(
+                [],
+                [],
+                null,
+                testQueryId,
+                mockCachedDatasource,
+                MultiStateMemoryTaskCache.CacheEntryState.Null,
+                false);
+
+            ActionResult<VisualizationResponse> result = await vController.GetVisualization(testQueryId);
+
+            Assert.That(result.Result, Is.InstanceOf<NotFoundResult>());
+        }
+
+        [Test]
+        public async Task GetVisualizationTest_WithArchivedQuery_ReturnsArchivedResponse()
+        {
+            Mock<ICachedDatasource> mockCachedDatasource = new();
+
+            string testQueryId = "aaa-bbb-111-222-333";
+
+            List<DimensionParameters> metaParams =
+            [
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 10),
+                new DimensionParameters(DimensionType.Other, 2),
+                new DimensionParameters(DimensionType.Other, 1)
+            ];
+
+            MatrixMetadata meta = TestDataCubeBuilder.BuildTestMeta(metaParams);
+            ArchiveCube ac = TestDataCubeBuilder.BuildTestArchiveCube(metaParams);
+            MatrixQuery query = TestDataCubeBuilder.BuildTestCubeQuery(metaParams);
+            SavedQuery sq = TestDataCubeBuilder.BuildTestSavedQuery(metaParams, true, new LineChartVisualizationSettings(null, false, null));
+            
+            VisualizationResponse mockResponse = new()
+            {
+                MetaData = meta.Dimensions.Select(d => d.ConvertToVariable(query.DimensionQueries, meta)).ToList()
+            };
+
+            Mock<ISqFileInterface> sqFileInterface = new();
+            sqFileInterface.Setup(x => x.ReadSavedQueryFromFile(It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(() => sq);
+            sqFileInterface.Setup(x => x.ReadArchiveCubeFromFile(It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(() => ac);
+
+            VisualizationController vController = TestVisualizationControllerBuilder.BuildController(
+                [],
+                metaParams,
+                mockResponse,
+                testQueryId,
+                mockCachedDatasource,
+                MultiStateMemoryTaskCache.CacheEntryState.Fresh);
+
+            ActionResult<VisualizationResponse> result = await vController.GetVisualization(testQueryId);
+
+            Assert.That(result.Value, Is.InstanceOf<VisualizationResponse>());
         }
     }
 }

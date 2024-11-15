@@ -283,7 +283,11 @@
                     ""sv"": ""Header.sv"",
                     ""en"": ""Header.en""
                 },
-                ""Note"": null,
+                ""Note"": {
+                    ""fi"": ""Note"",
+                    ""sv"": ""Note.sv"",
+                    ""en"": ""Note.en""
+                },
                 ""Variables"": [
                     {
                         ""code"": ""variable-0"",

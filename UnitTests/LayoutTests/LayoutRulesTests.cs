@@ -4,6 +4,7 @@ using Px.Utils.Models.Metadata;
 using PxGraf.Data;
 using PxGraf.Models.Queries;
 using System.Collections.Generic;
+using PxGraf.Enums;
 
 namespace UnitTests.LayoutTests
 {
@@ -145,6 +146,23 @@ namespace UnitTests.LayoutTests
             Layout expexted = new([], ["variable-2"]);
 
             Assert.That(result, Is.EqualTo(expexted));
+        }
+
+        [Test]
+        public static void GetPivotBasedLayout_OneTimeDimension_TimeIsColumnVar()
+        {
+            List<DimensionParameters> dimensions =
+            [
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 3),
+                new DimensionParameters(DimensionType.Unknown, 1)
+            ];
+
+            MatrixQuery testCubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(dimensions);
+            IReadOnlyMatrixMetadata testMeta = TestDataCubeBuilder.BuildTestMeta(dimensions);
+
+            Layout result = LayoutRules.GetPivotBasedLayout(VisualizationType.VerticalBarChart, testMeta, testCubeQuery);
+            Layout expexted = new(["variable-1"], ["variable-2"]);
         }
     }
 }

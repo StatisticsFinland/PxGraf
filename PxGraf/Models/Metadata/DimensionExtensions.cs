@@ -21,15 +21,12 @@ namespace PxGraf.Models.Metadata
         /// <summary>
         /// Converts the given <see cref="IReadOnlyDimension"/> object to a <see cref="Variable"/> object.
         /// </summary>
-        /// <param name="input">The <see cref="IReadOnlyDimension"/> object to convert.</param>
+        /// <param name="dimension">The <see cref="IReadOnlyDimension"/> object to convert.</param>
         /// <param name="dimensionQueries">The dimension queries to use for the conversion.</param>"
         /// <param name="meta">The matrix metadata to append missing content value information from.</param>
         /// <returns>A <see cref="Variable"/> object created from the given <see cref="IReadOnlyDimension"/> object.</returns>
-        public static Variable ConvertToVariable(this IReadOnlyDimension input, Dictionary<string, DimensionQuery> dimensionQueries, IReadOnlyMatrixMetadata meta)
+        public static Variable ConvertToVariable(this Dimension dimension, Dictionary<string, DimensionQuery> dimensionQueries, IReadOnlyMatrixMetadata meta)
         {
-            if (input is not Dimension dimension)
-                throw new ArgumentException("Input must be a Dimension object.");
-
             MultilanguageString name = dimension.Name;
             if (dimensionQueries.TryGetValue(dimension.Code, out DimensionQuery? query) &&
                 query.NameEdit != null)
