@@ -136,16 +136,7 @@ namespace PxGraf.ChartTypeSelection
                 if (dimension.Type == DimensionType.Content && dimension is ContentDimension cDim)
                 {
                     if (query.Selectable) result.NumberOfUnits = 1;
-                    else
-                    {
-                        // TODO replace with a mapper function once implemented to utils
-                        List<MultilanguageString> units = [];
-                        foreach(ContentDimensionValue cDimVal in cDim.Values)
-                        {
-                            units.Add(cDimVal.Unit);
-                        }
-                        result.NumberOfUnits = GetUniqueUnits(units);
-                    }
+                    else result.NumberOfUnits = cDim.Values.Map(v => v.Unit).Distinct().Count();
                 }
                 else if (dimension.Type == DimensionType.Time && dimension is TimeDimension timeDim)
                 {
@@ -153,21 +144,6 @@ namespace PxGraf.ChartTypeSelection
                     TimeDimensionInterval.Irregular == Data.TimeVarIntervalParser.DetermineIntervalFromCodes(timeDim.Values.Codes);
                 }
 
-                return result;
-            }
-
-            private static int GetUniqueUnits(IEnumerable<MultilanguageString> units)
-            {
-                int result = 0;
-                List<MultilanguageString> chkd = [];
-                foreach (MultilanguageString unit in units)
-                {
-                    if (!chkd.Contains(unit))
-                    {
-                        result++;
-                        chkd.Add(unit);
-                    }
-                }
                 return result;
             }
 
