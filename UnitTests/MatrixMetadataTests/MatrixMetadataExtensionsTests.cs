@@ -30,11 +30,10 @@ namespace UnitTests.MatrixMetadataTests
             new DimensionParameters(DimensionType.Other, 1),
         ];
 
-        private MatrixMetadata _input;
-        private MatrixQuery _query;
+        private readonly MatrixMetadata _input;
+        private readonly MatrixQuery _query;
 
-        [SetUp]
-        public void Setup()
+        public MatrixMetadataExtensionsTests()
         {
             _input = TestDataCubeBuilder.BuildTestMeta(_metaParams);
             _query = TestDataCubeBuilder.BuildTestCubeQuery(_queryParams);
@@ -105,30 +104,33 @@ namespace UnitTests.MatrixMetadataTests
         public void GetLargestMultivalueDimensionReturnsCorrectLargestMultivalueDimension()
         {
             // Act
-            IReadOnlyDimension result = _input.GetLargestMultivalueDimension();
+            IReadOnlyDimension? result = _input.GetLargestMultivalueDimension();
 
             // Assert
-            Assert.That(result.Values.Count.Equals(10));
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result!.Values.Count.Equals(10));
         }
 
         [Test]
         public void GetSmallerMultivalueDimensionReturnsCorrectSecondLargestMultivalueDimension()
         {
             // Act
-            IReadOnlyDimension result = _input.GetSmallerMultivalueDimension();
+            IReadOnlyDimension? result = _input.GetSmallerMultivalueDimension();
 
             // Assert
-            Assert.That(result.Values.Count.Equals(2));
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result!.Values.Count.Equals(2));
         }
 
         [Test]
         public void GetMultivalueTimeOrLargestOrdinalCalledWithTimeDimensionReturnsCorrectTimeDimension()
         {
             // Act
-            IReadOnlyDimension result = _input.GetMultivalueTimeOrLargestOrdinal();
+            IReadOnlyDimension? result = _input.GetMultivalueTimeOrLargestOrdinal();
 
             // Assert
-            Assert.That(result.Values.Count.Equals(10));
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result!.Values.Count.Equals(10));
         }
 
         [Test]
@@ -145,10 +147,11 @@ namespace UnitTests.MatrixMetadataTests
             MatrixMetadata input = TestDataCubeBuilder.BuildTestMeta(metaParams);
 
             // Act
-            IReadOnlyDimension result = input.GetMultivalueTimeOrLargestOrdinal();
+            IReadOnlyDimension? result = input.GetMultivalueTimeOrLargestOrdinal();
 
             // Assert
-            Assert.That(result.Values.Count.Equals(4));
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result!.Values.Count.Equals(4));
         }
 
         [Test]
@@ -193,12 +196,13 @@ namespace UnitTests.MatrixMetadataTests
             _input.AdditionalProperties.Add("TEST", prop);
 
             // Act
-            MultilanguageString result = _input.GetMatrixMultilanguageProperty("TEST");
+            MultilanguageString? result = _input.GetMatrixMultilanguageProperty("TEST");
 
             // Assert
-            Assert.That(result["fi"].Equals("Test.fi"));
-            Assert.That(result["en"].Equals("Test.en"));
-            Assert.That(result["sv"].Equals("Test.sv"));
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result!["fi"].Equals("Test.fi"));
+            Assert.That(result!["en"].Equals("Test.en"));
+            Assert.That(result!["sv"].Equals("Test.sv"));
         }
 
         [Test]

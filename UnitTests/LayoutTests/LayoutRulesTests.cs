@@ -162,7 +162,9 @@ namespace UnitTests.LayoutTests
             IReadOnlyMatrixMetadata testMeta = TestDataCubeBuilder.BuildTestMeta(dimensions);
 
             Layout result = LayoutRules.GetPivotBasedLayout(VisualizationType.VerticalBarChart, testMeta, testCubeQuery);
-            Layout expexted = new(["variable-1"], ["variable-2"]);
+            Layout expexted = new([], ["variable-1"]);
+
+            Assert.That(result, Is.EqualTo(expexted));
         }
     }
 }
