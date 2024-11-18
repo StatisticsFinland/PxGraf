@@ -98,9 +98,9 @@ function getScatterPlotValidatedSettings(currentSettings: IVisualizationSettings
 
 function getTableValidatedSettings(currentSettings: IVisualizationSettings, variables: IDimension[], query: Query) {
     //Get multivalue variables that are not selectable, excluding multiselectable and sort them by the amount of values
-    const sortedMultivalueVariableCodes: string[] = variables.filter(v => v.Values.length > 1)
-        .filter(v => !query[v.Code]?.selectable && currentSettings?.multiselectableVariableCode != v.Code)
-        .sort((v1, v2) => v1.Values.length - v2.Values.length).map(v => v.Code);
+    const sortedMultivalueVariableCodes: string[] = variables.filter(v => v.values.length > 1)
+        .filter(v => !query[v.code]?.selectable && currentSettings?.multiselectableVariableCode != v.code)
+        .sort((v1, v2) => v1.values.length - v2.values.length).map(v => v.code);
  
     const currentRowVariableCodes = currentSettings?.rowVariableCodes ?? [];
     const currentColumnVariableCodes = currentSettings?.columnVariableCodes ?? [];
@@ -120,7 +120,7 @@ function getTableValidatedSettings(currentSettings: IVisualizationSettings, vari
     const newColumnVariableCodes = newVariableCodes.splice(0, columnVariablesCount);
     const newRowVariableCodes = newVariableCodes;
     //Add remaining (single value and selectable) variables to rows
-    newRowVariableCodes.push(...variables.filter(v => !sortedMultivalueVariableCodes.includes(v.Code)).map(v => v.Code));
+    newRowVariableCodes.push(...variables.filter(v => !sortedMultivalueVariableCodes.includes(v.code)).map(v => v.code));
 
     return {
         rowVariableCodes: rowVariableCodes.concat(newRowVariableCodes),

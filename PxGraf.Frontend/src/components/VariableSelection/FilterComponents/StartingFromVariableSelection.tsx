@@ -22,15 +22,15 @@ export const StartingFromVariableSelection: React.FC<IStartingFromVariableSelect
     const { uiContentLanguage } = React.useContext(UiLanguageContext);
 
     const handleChange = (_event, newValue: IDimensionValue) => {
-        onQueryChanged(newValue?.Code ?? null);
+        onQueryChanged(newValue?.code ?? null);
     }
 
     return (
         <StyledAutocomplete
             options={options}
-            getOptionLabel={(option: IDimensionValue) => option.Name[uiContentLanguage] ?? option.Code}
-            isOptionEqualToValue={(option: IDimensionValue, value: IDimensionValue) => option.Code === value.Code}
-            value={options.find((o: IDimensionValue) => o.Code === startingCode)}
+            getOptionLabel={(option: IDimensionValue) => option.name[uiContentLanguage] ?? option.code}
+            isOptionEqualToValue={(option: IDimensionValue, value: IDimensionValue) => option.code === value.code}
+            value={options.find((o: IDimensionValue) => o.code === startingCode)}
             onChange={handleChange}
             renderInput={(params) => (
                 <TextField {...params} label={t("variableSelect.fromFilter")} />

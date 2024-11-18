@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using PxGraf.Enums;
+using PxGraf.Models.Queries;
 using PxGraf.Models.SavedQueries;
 using PxGraf.Utility;
 using System;
@@ -430,6 +431,25 @@ namespace UnitTests.SerializerTests
             string serializedString = JsonSerializer.Serialize(savedQuery, options);
             JsonUtils.JsonStringsAreEqual(
                 SavedQuerySerializerExpectedOutputFixtures.V1_1_TEST_SAVEDQUERY1_SER_DESER_EXPECTED_OUTPUT,
+                serializedString);
+        }
+
+        [Test]
+        public void DesieralizeAndSerializeV11SQWithVaryingValueFilters()
+        {
+            //Serialize
+            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(SavedQueryFixtures.V1_1_TEST_SAVEDQUERY4, options);
+            Assert.That(savedQuery.Version, Is.EqualTo("1.1"));
+            Assert.That(savedQuery.Query.DimensionQueries.Count, Is.EqualTo(4));
+            Assert.That(savedQuery.Query.DimensionQueries["variable-0"].ValueFilter.GetType(), Is.EqualTo(typeof(AllFilter)));
+            Assert.That(savedQuery.Query.DimensionQueries["variable-1"].ValueFilter.GetType(), Is.EqualTo(typeof(ItemFilter)));
+            Assert.That(savedQuery.Query.DimensionQueries["variable-2"].ValueFilter.GetType(), Is.EqualTo(typeof(FromFilter)));
+            Assert.That(savedQuery.Query.DimensionQueries["variable-3"].ValueFilter.GetType(), Is.EqualTo(typeof(TopFilter)));
+
+            // Deserialize
+            string serializedString = JsonSerializer.Serialize(savedQuery, options);
+            JsonUtils.JsonStringsAreEqual(
+                SavedQuerySerializerExpectedOutputFixtures.V1_1_TEST_SAVEDQUERY4_SER_DESER_EXPECTED_OUTPUT,
                 serializedString);
         }
 

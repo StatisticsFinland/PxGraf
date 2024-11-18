@@ -230,5 +230,36 @@ namespace UnitTests.ControllerTests.CreationControllerTests
 
             Assert.That(actionResult.Value.Size, Is.GreaterThan(actionResult.Value.MaximumSupportedSize));
         }
+
+        [Test]
+        public async Task GetQueryInfoAsync_CalledWithOversizedQuery_ReturnsExpectedResult()
+        {
+            List<DimensionParameters> cubeParams =
+            [
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 12),
+                new DimensionParameters(DimensionType.Other, 10),
+                new DimensionParameters(DimensionType.Other, 10),
+                new DimensionParameters(DimensionType.Other, 100),
+                new DimensionParameters(DimensionType.Other, 3)
+            ];
+
+            List<DimensionParameters> metaParams =
+            [
+                new DimensionParameters(DimensionType.Content, 10),
+                new DimensionParameters(DimensionType.Time, 10),
+                new DimensionParameters(DimensionType.Other, 15),
+                new DimensionParameters(DimensionType.Other, 70),
+                new DimensionParameters(DimensionType.Other, 100),
+                new DimensionParameters(DimensionType.Other, 10)
+            ];
+
+            CreationController testController = TestCreationControllerBuilder.BuildController(cubeParams, metaParams);
+            MatrixQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
+            ActionResult<QueryInfoResponse> actionResult = await testController.GetQueryInfoAsync(cubeQuery);
+
+            Assert.That(actionResult.Value.Size, Is.GreaterThan(actionResult.Value.MaximumSupportedSize));
+            Assert.That(actionResult.Value.ValidVisualizations.Count.Equals(0));
+        }
     }
 }

@@ -57,12 +57,17 @@ namespace PxGraf.Utility
         }
 
         /// <summary>
-        /// Finds missing values in data mtarix from data notes and replaces them with the appropriate missing value.
+        /// Finds missing values in data matrix from data notes and replaces them with the appropriate missing value.
         /// </summary>
         /// <param name="matrix">Matrix to apply missing values to.</param>
         /// <param name="dataNotes">Data notes to apply to the matrix.</param>
         public static void ApplyDataNotesToMissingData(this Matrix<DecimalDataValue> matrix, IReadOnlyDictionary<int, MultilanguageString> dataNotes)
         {
+            if (dataNotes == null || dataNotes.Count == 0)
+            {
+                return;
+            }
+
             string defaultLanguage = matrix.Metadata.DefaultLanguage;
             for (int i = 0; i < matrix.Data.Length; i++)
             {

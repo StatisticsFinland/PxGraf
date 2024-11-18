@@ -25,12 +25,12 @@ export const DefaultSelectableVariableSelection: React.FC<IDefaultSelectableVari
     const { t } = useTranslation();
 
     // Note: array filtering to support selecting multiple values in the future
-    const defaultOptionValues = defaultSelectables?.[variableCode] ? options.filter((option) => defaultSelectables[variableCode].includes(option.Code)) : [];
+    const defaultOptionValues = defaultSelectables?.[variableCode] ? options.filter((option) => defaultSelectables[variableCode].includes(option.code)) : [];
     const [value, setValue] = React.useState<IDimensionValue>(defaultOptionValues[0] ? defaultOptionValues[0] : null);
 
     React.useEffect(() => {
         if (value && resolvedVariableValueCodes.length > 0) {
-            if (!resolvedVariableValueCodes.includes(value.Code)) {
+            if (!resolvedVariableValueCodes.includes(value.code)) {
                 const defaultSelectablesCopy = { ...defaultSelectables };
                 delete defaultSelectablesCopy[variableCode];
                 setDefaultSelectables(defaultSelectablesCopy);
@@ -43,7 +43,7 @@ export const DefaultSelectableVariableSelection: React.FC<IDefaultSelectableVari
         if (value) {
             setDefaultSelectables({
                 ...defaultSelectables,
-                [variableCode]: [value.Code]
+                [variableCode]: [value.code]
             })
         } else {
             const defaultSelectablesCopy = { ...defaultSelectables };
@@ -54,8 +54,8 @@ export const DefaultSelectableVariableSelection: React.FC<IDefaultSelectableVari
     };
 
     return (<StyledAutocomplete
-        options={options.filter(option => resolvedVariableValueCodes.indexOf(option.Code) > -1)}
-        getOptionLabel={(option: IDimensionValue) => option?.Name[language] ?? option.Code}
+        options={options.filter(option => resolvedVariableValueCodes.indexOf(option.code) > -1)}
+        getOptionLabel={(option: IDimensionValue) => option?.name[language] ?? option.code}
         isOptionEqualToValue={() => true}
         value={value}
         onChange={handleChange}

@@ -108,6 +108,39 @@ namespace UnitTests.DatasourceTests
         }
 
         [Test]
+        public async Task GetDatabaseItemGroup_WithHierarchy_ReturnsHeaders()
+        {
+            Mock<IPxWebConnection> mockConnection = new();
+            PxWebV1ApiInterface objectUnderTest = CreateInterface(mockConnection);
+
+            HttpResponseMessage mockEnResponse = new(HttpStatusCode.OK)
+            {
+                Content = new StringContent("[{ \"dbid\":\"FooBar\", \"text\":\"FooBarEn\", \"type\":\"l\" }]")
+            };
+            mockConnection.Setup(mc => mc.GetAsync("api/v1/en/database/", "")).ReturnsAsync(mockEnResponse);
+
+            HttpResponseMessage mockFiResponse = new(HttpStatusCode.OK)
+            {
+                Content = new StringContent("[{ \"dbid\":\"FooBar\", \"text\":\"FooBarFi\", \"type\":\"l\" }]")
+            };
+            mockConnection.Setup(mc => mc.GetAsync("api/v1/fi/database/", "")).ReturnsAsync(mockFiResponse);
+
+            HttpResponseMessage mockSvResponse = new(HttpStatusCode.OK)
+            {
+                Content = new StringContent("[{ \"dbid\":\"FooBar\", \"text\":\"FooBarSv\", \"type\":\"l\" }]")
+            };
+            mockConnection.Setup(mc => mc.GetAsync("api/v1/sv/database/", "")).ReturnsAsync(mockSvResponse);
+
+            DatabaseGroupContents dbContent = await objectUnderTest.GetDatabaseItemGroup(["database"]);
+
+            Assert.That(dbContent.Headers.Count, Is.EqualTo(1));
+            Assert.That(dbContent.Files.Count, Is.EqualTo(0));
+            Assert.That(dbContent.Headers[0].Name["en"], Is.EqualTo("FooBarEn"));
+            Assert.That(dbContent.Headers[0].Name["fi"], Is.EqualTo("FooBarFi"));
+            Assert.That(dbContent.Headers[0].Name["sv"], Is.EqualTo("FooBarSv"));
+        }
+
+        [Test]
         public void GetLastWriteTime_ReturnsNotSupported()
         {
             // Arrange

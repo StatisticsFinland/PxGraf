@@ -3,18 +3,18 @@ import { getDefaultQueries, resolveVariables } from "./editorHelpers";
 
 const mockVariables: IDimension[] = [
     {
-        Code: "foo",
-        Name: {
+        code: "foo",
+        name: {
             'fi': 'nimi'
         },
-        Type: EDimensionType.Content,
-        Values: [
+        type: EDimensionType.Content,
+        values: [
             {
-                Code: 'foo',
-                Name: {
+                code: 'foo',
+                name: {
                     'fi': 'nimi'
                 },
-                IsVirtual: false
+                isVirtual: false
             }
         ]
     }
@@ -37,7 +37,7 @@ describe('getDefaultQueries tests', () => {
 
 describe('resolveVariables tests', () => {
     it('Should return the correct object', () => {
-        const expected = [{ Code: 'foo', Name: { fi: 'nimi' }, Type: 'Content', Values: [] }];
+        const expected: IDimension[] = [{ code: 'foo', name: { fi: 'nimi' }, type: EDimensionType.Content, values: [] }];
         const result = resolveVariables(mockVariables, {'foo': ['bar', 'baz']});
         expect(result).toBeTruthy();
         expect(result).toEqual(expected);

@@ -27,22 +27,22 @@ const uiContentLanguage = 'fi';
 const setUiContentLanguage = jest.fn();
 
 const mockVariable: IDimension = {
-    Code: 'foo',
-    Name: {
+    code: 'foo',
+    name: {
         'fi': 'asd',
         'sv': 'asd',
         'en': 'asd'
     },
-    Type: EDimensionType.Content,
-    Values: [
+    type: EDimensionType.Content,
+    values: [
         {
-            Code: 'bar',
-            Name: {
+            code: 'bar',
+            name: {
                 'fi': 'fgfgfg',
                 'sv': 'fgfgfg',
                 'en': 'fgfgfg'
             },
-            IsVirtual: false
+            isVirtual: false
         }
     ]
 }

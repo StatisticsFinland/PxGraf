@@ -21,7 +21,8 @@ namespace UnitTests
             string testQueryId, 
             Mock<ICachedDatasource> mockCachedDatasource,
             MultiStateMemoryTaskCache.CacheEntryState entryState,
-            bool savedQueryFound = true)
+            bool savedQueryFound = true,
+            bool archived = false)
         {
             Mock<ISqFileInterface> sqFileInterface = new();
             Mock<IMultiStateMemoryTaskCache> taskCache = new();
@@ -44,7 +45,7 @@ namespace UnitTests
             sqFileInterface.Setup(x => x.SavedQueryExists(It.Is<string>(s => s == testQueryId), It.IsAny<string>()))
                 .Returns(savedQueryFound);
             sqFileInterface.Setup(x => x.ReadSavedQueryFromFile(It.Is<string>(s => s == testQueryId), It.IsAny<string>()))
-                .ReturnsAsync(() => TestDataCubeBuilder.BuildTestSavedQuery(cubeParams, false, new LineChartVisualizationSettings(null, false, null)));
+                .ReturnsAsync(() => TestDataCubeBuilder.BuildTestSavedQuery(cubeParams, archived, new LineChartVisualizationSettings(null, false, null)));
             sqFileInterface.Setup(x => x.ArchiveCubeExists(It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(() => true);
             sqFileInterface.Setup(x => x.ReadArchiveCubeFromFile(It.IsAny<string>(), It.IsAny<string>()))

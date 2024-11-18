@@ -5,268 +5,268 @@ import { EMetaPropertyType, IDimension, EDimensionType } from "types/cubeMeta";
 const mockVariables: IDimension[] =
 [
     {
-        Code: "FoobarManual",
-        Name: {
+        code: "FoobarManual",
+        name: {
             fi: "FoobarManualFi",
             sv: "FoobarManualSv",
             en: "FoobarManualEn"
         },
-        Type: EDimensionType.Other,
-        Values: [
+        type: EDimensionType.Other,
+        values: [
             {
-                Code: "eka",
-                Name: {
+                code: "eka",
+                name: {
                     fi: "ekaFi",
                     sv: "ekaSv",
                     en: "ekaEn"
                 },
-                IsVirtual: false
+                isVirtual: false
             },
             {
-                Code: "toka",
-                Name: {
+                code: "toka",
+                name: {
                     fi: "tokaFi",
                     sv: "tokaSv",
                     en: "tokaEn"
                 },
-                IsVirtual: false
+                isVirtual: false
             },
             {
-                Code: "peruna",
-                Name: {
+                code: "peruna",
+                name: {
                     fi: "perunaFi",
                     sv: "perunaSv",
                     en: "perunaEn"
                 },
-                IsVirtual: false
+                isVirtual: false
             }
         ]
     },
     {
-        Code: "Vuosi",
-        Name: {
+        code: "Vuosi",
+        name: {
             fi: "Vuosi",
             sv: "År",
             en: "Year"
         },
-        Type: EDimensionType.Time,
-        Values: [
+        type: EDimensionType.Time,
+        values: [
             {
-                Code: "2018",
-                Name: {
+                code: "2018",
+                name: {
                     fi: "2018",
                     sv: "2018",
                     en: "2018"
                 },
-                IsVirtual: false
+                isVirtual: false
             },
             {
-                Code: "2019",
-                Name: {
+                code: "2019",
+                name: {
                     fi: "2019",
                     sv: "2019",
                     en: "2019"
                 },
-                IsVirtual: false
+                isVirtual: false
             },
             {
-                Code: "2020",
-                Name: {
+                code: "2020",
+                name: {
                     fi: "2020",
                     sv: "2020",
                     en: "2020"
                 },
-                IsVirtual: false
+                isVirtual: false
             },
             {
-                Code: "2021",
-                Name: {
+                code: "2021",
+                name: {
                     fi: "2021*",
                     sv: "2021*",
                     en: "2021*"
                 },
-                IsVirtual: false
+                isVirtual: false
             }
         ]
     },
     {
-        Code: "FoobarFrom",
-        Name: {
+        code: "FoobarFrom",
+        name: {
             fi: "FoobarFromFi",
             sv: "FoobarFromSv",
             en: "FoobarFromEn"
         },
-        Type: EDimensionType.Other,
-        Values: [
+        type: EDimensionType.Other,
+        values: [
             {
-                Code: "aaa",
-                Name: {
+                code: "aaa",
+                name: {
                     fi: "aaaFi",
                     sv: "aaaSv",
                     en: "aaaEn"
                 },
-                IsVirtual: false
+                isVirtual: false
             },
             {
-                Code: "bbb",
-                Name: {
+                code: "bbb",
+                name: {
                     fi: "bbbFi",
                     sv: "bbbSv",
                     en: "bbbEn"
                 },
-                IsVirtual: false
+                isVirtual: false
             },
             {
-                Code: "ccc",
-                Name: {
+                code: "ccc",
+                name: {
                     fi: "cccFi",
                     sv: "cccSv",
                     en: "cccEn"
                 },
-                IsVirtual: false
+                isVirtual: false
             },
             {
-                Code: "ddd",
-                Name: {
+                code: "ddd",
+                name: {
                     fi: "dddFi",
                     sv: "dddSv",
                     en: "dddEn"
                 },
-                IsVirtual: false
+                isVirtual: false
             }
         ]
     },
     {
-        Code: "FoobarAll",
-        Name: {
+        code: "FoobarAll",
+        name: {
             fi: "FoobarAllFi",
             sv: "FoobarAllSv",
             en: "FoobarAllEn"
         },
-        Type: EDimensionType.Other,
-        Values: [
+        type: EDimensionType.Other,
+        values: [
             {
-                Code: "xxx",
-                Name: {
+                code: "xxx",
+                name: {
                     fi: "xxxFi",
                     sv: "xxxSv",
                     en: "xxxEn"
                 },
-                IsVirtual: false
+                isVirtual: false
             },
             {
-                Code: "yyy",
-                Name: {
+                code: "yyy",
+                name: {
                     fi: "yyyFi",
                     sv: "yyySv",
                     en: "yyyEn"
                 },
-                IsVirtual: false
+                isVirtual: false
             },
             {
-                Code: "zzz",
-                Name: {
+                code: "zzz",
+                name: {
                     fi: "zzzFi",
                     sv: "zzzSv",
                     en: "zzzEn"
                 },
-                IsVirtual: false
+                isVirtual: false
             }
         ]
     },
     {
-        Code: "FoobarContent",
-        Name: {
+        code: "FoobarContent",
+        name: {
             fi: "AnalyysimuuttujaFi",
             sv: "ContentVariableSv",
             en: "ContentVariableEn"
         },
-        Type: EDimensionType.Content,
-        Values: [
+        type: EDimensionType.Content,
+        values: [
             {
-                Code: "eka",
-                Name: {
+                code: "eka",
+                name: {
                     fi: "ekaFi",
                     sv: "ekaSv",
                     en: "ekaEn"
                 },
-                IsVirtual: false
+                isVirtual: false
             }
         ]
     },
     {
-        Code: "FoobarElimination",
-        Name: {
+        code: "FoobarElimination",
+        name: {
             fi: "EliminointiMuuttujaFi",
             sv: "EliminationVariableEn",
             en: "EliminationVariableEn"
         },
-        Type: EDimensionType.Other,
-        AdditionalProperties:
+        type: EDimensionType.Other,
+        additionalProperties:
         {
             ELIMINATION: {
                 Type: EMetaPropertyType.Text,
                 Value: "sum"
             }
         },
-        Values: [
+        values: [
             {
-                Code: "sum",
-                Name: {
+                code: "sum",
+                name: {
                     fi: "sumFi",
                     sv: "sumSv",
                     en: "sumEn"
                 },
-                IsVirtual: false
+                isVirtual: false
             },
             {
-                Code: "val",
-                Name: {
+                code: "val",
+                name: {
                     fi: "valFi",
                     sv: "valSv",
                     en: "valEn"
                 },
-                IsVirtual: false
+                isVirtual: false
             }
         ]
     },
     {
-        Code: "FoobarSingle",
-        Name: {
+        code: "FoobarSingle",
+        name: {
             fi: "YksikkömuuttujaFi",
             sv: "SingleValueVariableSv",
             en: "SingleValueVariableEn"
         },
-        Type: EDimensionType.Other,
-        Values: [
+        type: EDimensionType.Other,
+        values: [
             {
-                Code: "single",
-                Name: {
+                code: "single",
+                name: {
                     fi: "singleFi",
                     sv: "singleSv",
                     en: "singleEn"
                 },
-                IsVirtual: false
+                isVirtual: false
             }
         ]
     },
     {
-        Code: "FoobarMissingValueName",
-        Name: {
+        code: "FoobarMissingValueName",
+        name: {
             fi: "NimetönArvoMuuttujaFi",
             sv: "NamelessValueVariableSv",
             en: "NamelessValueVariableEn"
         },
-        Type: EDimensionType.Other,
-        Values: [
+        type: EDimensionType.Other,
+        values: [
             {
-                Code: "missingName",
-                Name: {
+                code: "missingName",
+                name: {
                     fi: null,
                     sv: null,
                     en: null
                 },
-                IsVirtual: false
+                isVirtual: false
             }
         ]
     }
@@ -298,13 +298,13 @@ const mockPrimaryLanguage = 'en';
 describe('Assertion tests', () => {
     it('sorts variables in correct order', () => {
         const result: IDimension[] = sortedDimensions(mockVariables);
-        expect(result[0].Code).toBe("FoobarContent");
-        expect(result[1].Code).toBe("Vuosi");
-        expect(result[2].Code).toBe("FoobarManual");
-        expect(result[3].Code).toBe("FoobarFrom");
-        expect(result[4].Code).toBe("FoobarAll");
-        expect(result[5].Code).toBe("FoobarElimination");
-        expect(result[6].Code).toBe("FoobarSingle");
+        expect(result[0].code).toBe("FoobarContent");
+        expect(result[1].code).toBe("Vuosi");
+        expect(result[2].code).toBe("FoobarManual");
+        expect(result[3].code).toBe("FoobarFrom");
+        expect(result[4].code).toBe("FoobarAll");
+        expect(result[5].code).toBe("FoobarElimination");
+        expect(result[6].code).toBe("FoobarSingle");
     });
 
     it('sorts table data by primary or first available language', () => {

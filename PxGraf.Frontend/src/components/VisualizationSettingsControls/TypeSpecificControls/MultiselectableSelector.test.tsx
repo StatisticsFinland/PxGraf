@@ -7,43 +7,43 @@ import { IVisualizationSettings } from '../../../types/visualizationSettings';
 
 const mockVariables: IDimension[] = [
 	{
-		Code: 'cVar',
-		Name: { fi: 'cVarName' },
-		Type: EDimensionType.Content,
-		Values: [
+		code: 'cVar',
+		name: { fi: 'cVarName' },
+		type: EDimensionType.Content,
+		values: [
 			{
-				Code: 'cVal',
-				Name: { fi: 'cValName' },
-				IsVirtual: false
+				code: 'cVal',
+				name: { fi: 'cValName' },
+				isVirtual: false
 			}
 		]
 	},
 	{
-		Code: 'tVar',
-		Name: { fi: 'tVarName' },
-		Type: EDimensionType.Time,
-		Values: [
+		code: 'tVar',
+		name: { fi: 'tVarName' },
+		type: EDimensionType.Time,
+		values: [
 			{
-				Code: 'tVal',
-				Name: { fi: 'tValName' },
-				IsVirtual: false
+				code: 'tVal',
+				name: { fi: 'tValName' },
+				isVirtual: false
 			}
 		]
 	},
 	{
-		Code: 'msVar',
-		Name: { fi: 'msVarAName' },
-		Type: EDimensionType.Other,
-		Values: [
+		code: 'msVar',
+		name: { fi: 'msVarAName' },
+		type: EDimensionType.Other,
+		values: [
 			{
-				Code: 'msVal1',
-				Name: { fi: 'msVal1Name' },
-				IsVirtual: false
+				code: 'msVal1',
+				name: { fi: 'msVal1Name' },
+				isVirtual: false
 			},
 			{
-				Code: 'msVal2',
-				Name: { fi: 'msVal2Name' },
-				IsVirtual: false
+				code: 'msVal2',
+				name: { fi: 'msVal2Name' },
+				isVirtual: false
 			}
 		]
 	}

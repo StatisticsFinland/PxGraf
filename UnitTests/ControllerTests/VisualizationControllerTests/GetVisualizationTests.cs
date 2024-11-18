@@ -294,28 +294,21 @@ namespace UnitTests.ControllerTests.VisualizationControllerTests
             ];
 
             MatrixMetadata meta = TestDataCubeBuilder.BuildTestMeta(metaParams);
-            ArchiveCube ac = TestDataCubeBuilder.BuildTestArchiveCube(metaParams);
             MatrixQuery query = TestDataCubeBuilder.BuildTestCubeQuery(metaParams);
-            SavedQuery sq = TestDataCubeBuilder.BuildTestSavedQuery(metaParams, true, new LineChartVisualizationSettings(null, false, null));
             
             VisualizationResponse mockResponse = new()
             {
                 MetaData = meta.Dimensions.Select(d => d.ConvertToVariable(query.DimensionQueries, meta)).ToList()
             };
 
-            Mock<ISqFileInterface> sqFileInterface = new();
-            sqFileInterface.Setup(x => x.ReadSavedQueryFromFile(It.IsAny<string>(), It.IsAny<string>()))
-                .ReturnsAsync(() => sq);
-            sqFileInterface.Setup(x => x.ReadArchiveCubeFromFile(It.IsAny<string>(), It.IsAny<string>()))
-                .ReturnsAsync(() => ac);
-
             VisualizationController vController = TestVisualizationControllerBuilder.BuildController(
-                [],
+                metaParams,
                 metaParams,
                 mockResponse,
                 testQueryId,
                 mockCachedDatasource,
-                MultiStateMemoryTaskCache.CacheEntryState.Fresh);
+                MultiStateMemoryTaskCache.CacheEntryState.Null,
+                archived: true);
 
             ActionResult<VisualizationResponse> result = await vController.GetVisualization(testQueryId);
 

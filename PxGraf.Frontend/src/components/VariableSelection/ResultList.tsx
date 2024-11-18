@@ -56,8 +56,8 @@ export const ResultList: React.FC<IResultListProps> = ({ variableValues, resolve
     }
     else {
         const resultTexts = resolvedVariableValueCodes.map(valueCode => {
-            const value = variableValues.find(value => value.Code === valueCode);
-            return value?.Name[uiContentLanguage] ?? valueCode;
+            const value = variableValues.find(value => value.code === valueCode);
+            return value?.name[uiContentLanguage] ?? valueCode;
         });
 
         listContent = resultTexts.map((value) =>

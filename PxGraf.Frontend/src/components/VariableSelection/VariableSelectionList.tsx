@@ -68,19 +68,19 @@ export const VariableSelectionList: React.FC<VariableSelectionListProps> = ({ va
             </TitleWrapper>
             {sortedDimensions(variables).map(variable => {
                 return (
-                    <StyledAccordion key={variable.Code} defaultExpanded={true}>
+                    <StyledAccordion key={variable.code} defaultExpanded={true}>
                         <AccordionSummary
                             expandIcon={<ExpandMoreIcon />}
                             aria-controls="panel1a-content"
                         >
-                            <Typography variant="h2"><b>{variable.Name[uiContentLanguage] ?? variable.Code} {selectedValues(variable.Code)}/{variable.Values.length}</b></Typography>
+                            <Typography variant="h2"><b>{variable.name[uiContentLanguage] ?? variable.code} {selectedValues(variable.code)}/{variable.values.length}</b></Typography>
                         </AccordionSummary>
                         <StyledAccordionDetails>
                             <VariableSelection
                                 variable={variable}
-                                resolvedVariableValueCodes={resolvedVariableCodes?.[variable.Code]}
-                                query={query[variable.Code]}
-                                onQueryChanged={newQuery => onQueryChanged({ ...query, [variable.Code]: newQuery })}
+                                resolvedVariableValueCodes={resolvedVariableCodes?.[variable.code]}
+                                query={query[variable.code]}
+                                onQueryChanged={newQuery => onQueryChanged({ ...query, [variable.code]: newQuery })}
                             />
                         </StyledAccordionDetails>
                     </StyledAccordion>

@@ -80,13 +80,13 @@ export const VariableSelection: React.FC<IVariableSelectionProps> = ({ variable,
 
     switch (query.valueFilter.type) {
         case FilterType.Item:
-            if (query?.valueFilter?.query && variable?.Values) {
+            if (query?.valueFilter?.query && variable?.values) {
                 const stringArray = query.valueFilter.query as string[];
-                selectedValues = stringArray.map(code => variable.Values.find(o => o.Code === code));
+                selectedValues = stringArray.map(code => variable.values.find(o => o.code === code));
             }
             filterComponent =
                 <ManualPickVariableSelection
-                options={variable.Values}
+                options={variable.values}
                 selectedValues={selectedValues}
                 onQueryChanged={handleFilterValueChanged}
                 />
@@ -98,7 +98,7 @@ export const VariableSelection: React.FC<IVariableSelectionProps> = ({ variable,
         case FilterType.From:
             filterComponent =
                 <StartingFromVariableSelection
-                options={variable.Values}
+                options={variable.values}
                 startingCode={query.valueFilter.query as string}
                 onQueryChanged={handleFilterValueChanged}
                 />
@@ -123,13 +123,13 @@ export const VariableSelection: React.FC<IVariableSelectionProps> = ({ variable,
 
             {
                 query.valueFilter.type !== FilterType.Item ? (
-                    <ResultList variableValues={variable.Values} resolvedVariableValueCodes={resolvedVariableValueCodes} />
+                    <ResultList variableValues={variable.values} resolvedVariableValueCodes={resolvedVariableValueCodes} />
                 ) : null
             }
 
             <SelectabilitySwitch onChange={value => onChangeMUIWrapper({ ...query, selectable: value })} selected={query.selectable} />
             {
-                query.selectable && <DefaultSelectableVariableSelection variableCode={variable.Code} resolvedVariableValueCodes={resolvedVariableValueCodes} options={variable.Values} />
+                query.selectable && <DefaultSelectableVariableSelection variableCode={variable.code} resolvedVariableValueCodes={resolvedVariableValueCodes} options={variable.values} />
             }
 
             <Menu open={anchorEl != null} anchorEl={anchorEl} onClose={closeMenu}>

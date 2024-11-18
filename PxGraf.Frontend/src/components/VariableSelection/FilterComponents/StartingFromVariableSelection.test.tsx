@@ -5,40 +5,40 @@ import StartingFromVariableSelection from "./StartingFromVariableSelection";
 
 const mockVariableValues: IDimensionValue[] = [
     {
-        Code: "2018",
-        Name: {
+        code: "2018",
+        name: {
             fi: "2018",
             sv: "2018",
             en: "2018"
         },
-        IsVirtual: false,
+        isVirtual: false,
     },
     {
-        Code: "2019",
-        Name: {
+        code: "2019",
+        name: {
             fi: "2019",
             sv: "2019",
             en: "2019"
         },
-        IsVirtual: false,
+        isVirtual: false,
     },
     {
-        Code: "2020",
-        Name: {
+        code: "2020",
+        name: {
             fi: "2020",
             sv: "2020",
             en: "2020"
         },
-        IsVirtual: false,
+        isVirtual: false,
     },
     {
-        Code: "2021",
-        Name: {
+        code: "2021",
+        name: {
             fi: "2021*",
             sv: "2021*",
             en: "2021*"
         },
-        IsVirtual: false,
+        isVirtual: false,
     }
 ];
 

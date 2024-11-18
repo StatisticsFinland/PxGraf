@@ -27,9 +27,9 @@ const uiContentLanguage = 'fi';
 const setUiContentLanguage = jest.fn();
 
 const mockVariableValue: IDimensionValue = {
-    LastUpdated: '1.1.2000',
-    Precision: 5,
-    AdditionalProperties:
+    lastUpdated: '1.1.2000',
+    precision: 5,
+    additionalProperties:
     {
         SOURCE: {
             Type: EMetaPropertyType.MultilanguageText,
@@ -40,18 +40,18 @@ const mockVariableValue: IDimensionValue = {
             }
         }
     },
-    Unit: {
+    unit: {
         'fi': 'qwe',
         'sv': 'qwe',
         'en': 'qwe'
     },
-    Code: 'foo',
-    Name: {
+    code: 'foo',
+    name: {
         'fi': 'asd',
         'sv': 'asd',
         'en': 'asd'
     },
-    IsVirtual: false
+    isVirtual: false
 }
 const mockLang = 'fi';
 const mockFunction = jest.fn();

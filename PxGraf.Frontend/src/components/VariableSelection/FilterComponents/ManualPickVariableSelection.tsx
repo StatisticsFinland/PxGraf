@@ -23,7 +23,7 @@ export const ManualPickVariableSelection: React.FC<ManualPickVariableSelectionPr
     const { uiContentLanguage } = React.useContext(UiLanguageContext);
 
     const handleChange = (_evt, newValues: IDimensionValue[]) => {
-        const selectedCodes = newValues.map(newValue => newValue.Code);
+        const selectedCodes = newValues.map(newValue => newValue.code);
         onQueryChanged(selectedCodes);
     }
 
@@ -31,8 +31,8 @@ export const ManualPickVariableSelection: React.FC<ManualPickVariableSelectionPr
         <StyledAutocomplete
             multiple
             options={options}
-            getOptionLabel={(option: IDimensionValue) => option.Name[uiContentLanguage] ?? option.Code}
-            isOptionEqualToValue={(option: IDimensionValue, value: IDimensionValue) => option.Code === value.Code}
+            getOptionLabel={(option: IDimensionValue) => option.name[uiContentLanguage] ?? option.code}
+            isOptionEqualToValue={(option: IDimensionValue, value: IDimensionValue) => option.code === value.code}
             value={selectedValues}
             onChange={handleChange}
             openText={t("selectable.open")}
@@ -44,14 +44,14 @@ export const ManualPickVariableSelection: React.FC<ManualPickVariableSelectionPr
                     return <Chip 
                         {...getTagProps({ index })}
                         key={index + '-key'}
-                        label={option.Name[uiContentLanguage] ?? option.Code}
+                        label={option.name[uiContentLanguage] ?? option.code}
                         />
                 })
             }}
             renderOption={(props, option: IDimensionValue) => {
                 return (
-                    <li {...props} key={option.Code}>
-                        {option.Name[uiContentLanguage] ?? option.Code}
+                    <li {...props} key={option.code}>
+                        {option.name[uiContentLanguage] ?? option.code}
                     </li>
                 );
             }}

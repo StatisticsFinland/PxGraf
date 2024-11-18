@@ -109,26 +109,26 @@ export const MetaEditor: React.FC<IMetaEditorProps> = ({
                         <StyledAccordionDetails>
                             <TabsWrapper sx={{ borderColor: 'divider' }}>
                                 <Tabs value={variableTab} onChange={(evt, newTab) => setVariableTab(newTab)}>
-                                    {resolvedVariables.map((variable, index) => <Tab label={variable.Name[uiContentLanguage] ?? variable.Code} {...a11yProps(index)} key={variable.Code} />)}
+                                    {resolvedVariables.map((variable, index) => <Tab label={variable.name[uiContentLanguage] ?? variable.code} {...a11yProps(index)} key={variable.code} />)}
                                 </Tabs>
                             </TabsWrapper>
                             <TabPanelWrapper>
                                 {resolvedVariables.map((variable, index) => {
                                     return (
-                                        <TabPanel selectedValue={variableTab} value={index} key={variable.Code}>
+                                        <TabPanel selectedValue={variableTab} value={index} key={variable.code}>
                                             <VariableEditor
                                                 variable={variable}
                                                 language={language}
-                                                variableEdits={cubeQuery?.variableQueries[variable.Code]}
+                                                variableEdits={cubeQuery?.variableQueries[variable.code]}
                                                 onChange={newEdit => {
                                                     onChange({
                                                         ...cubeQuery,
                                                         variableQueries: {
                                                             ...cubeQuery?.variableQueries,
-                                                            [variable.Code]: {
-                                                                ...cubeQuery?.variableQueries[variable.Code],
+                                                            [variable.code]: {
+                                                                ...cubeQuery?.variableQueries[variable.code],
                                                                 valueEdits: {
-                                                                    ...cubeQuery?.variableQueries[variable.Code]?.valueEdits,
+                                                                    ...cubeQuery?.variableQueries[variable.code]?.valueEdits,
                                                                     ...newEdit.valueEdits
                                                                 }
                                                             }
