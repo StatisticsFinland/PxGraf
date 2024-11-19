@@ -271,7 +271,7 @@ namespace PxGraf.Datasource.ApiDatasource
             return [];
         }
 
-        private async Task<JsonStat2> GetSinglePointJsonStat2RespAsync(PxTableReference pxFile, IMatrixMap map, string language)
+        private async Task<JsonStat2> GetSinglePointJsonStat2RespAsync(PxTableReference pxFile, PxMetaResponse map, string language)
         {
             if (map.DimensionMaps.Any(v => v.ValueCodes.Count == 0))
             {
@@ -323,7 +323,7 @@ namespace PxGraf.Datasource.ApiDatasource
 
         private async Task<ContentDimension> ConvertToContentDimension(
             Dimension dimensionBase,
-            IMatrixMap mapForDataFetching,
+            PxMetaResponse mapForDataFetching,
             List<string> fetchLanguages,
             PxTableReference tableReference)
         {
@@ -388,7 +388,7 @@ namespace PxGraf.Datasource.ApiDatasource
             };
         }
 
-        private static IEnumerable<PxWebDataQueryPostParams.VariableQuery> BuildMinimalContentVariableQueries(IMatrixMap map, string contentDimCode)
+        private static IEnumerable<PxWebDataQueryPostParams.VariableQuery> BuildMinimalContentVariableQueries(PxMetaResponse map, string contentDimCode)
         {
             foreach (IDimensionMap dimMap in map.DimensionMaps)
             {
