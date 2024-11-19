@@ -128,7 +128,7 @@ export const Editor = () => {
 
     const { language, languageTab, setLanguageTab, uiContentLanguage, setUiContentLanguage } = React.useContext(UiLanguageContext);
 
-    const contentLanguages: string[] = cubeMetaResponse.data ? cubeMetaResponse.data.AvailableLanguages : [];
+    const contentLanguages: string[] = cubeMetaResponse.data ? cubeMetaResponse.data.availableLanguages : [];
 
     useEffect(() => {
         if (!contentLanguages || contentLanguages.length == 0) {
@@ -144,7 +144,7 @@ export const Editor = () => {
         }
     }, [language, contentLanguages]);
 
-    const dimensions: IDimension[] = cubeMetaResponse.data?.Dimensions ?? [];
+    const dimensions: IDimension[] = cubeMetaResponse.data?.dimensions ?? [];
 
     const modifiedQuery = React.useMemo(() => {
         if (query != null) {
@@ -169,7 +169,7 @@ export const Editor = () => {
         else if (dimensions != null) {
             const varCodesNoVals = {}
             dimensions.forEach(v => {
-                varCodesNoVals[v.Code] = [];
+                varCodesNoVals[v.code] = [];
             })
             return varCodesNoVals;
         }

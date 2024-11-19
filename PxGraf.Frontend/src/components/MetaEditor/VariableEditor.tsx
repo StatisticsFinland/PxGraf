@@ -25,14 +25,14 @@ interface IVariableEditorProps {
 export const VariableEditor: React.FC<IVariableEditorProps> = ({ variable, language, variableEdits, onChange }) => {
     const { t } = useTranslation();
 
-    if (variable.Values?.length === 0) {
+    if (variable.values?.length === 0) {
         return (
             <ContentWrapper spacing={2}>
                 <StyledEm>{t("editMetadata.noVariableValuesSelected")}</StyledEm>
             </ContentWrapper>
         );
     }
-    else if (variable.Type === EDimensionType.Content) {
+    else if (variable.type === EDimensionType.Content) {
         return <ContentVariableEditor
             variable={variable}
             language={language}

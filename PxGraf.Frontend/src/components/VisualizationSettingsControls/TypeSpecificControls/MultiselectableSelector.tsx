@@ -29,7 +29,7 @@ export const MultiselectableSelector: React.FC<MultiselectableSelectorProps> = (
                 })}
             >
                 <MenuItem value={"noMultiselectable"}>{t("chartSettings.noMultiselectable")}</MenuItem>
-                {variables.map(v => { return <MenuItem key={"key" + v.Code} value={v.Code}>{v.Name[language] ?? v.Name[languageTab] ?? v.Code}</MenuItem> })}
+                {variables.map(v => { return <MenuItem key={"key" + v.code} value={v.code}>{v.name[language] ?? v.name[languageTab] ?? v.code}</MenuItem> })}
             </Select>
         </FormControl>
     )

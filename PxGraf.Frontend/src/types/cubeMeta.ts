@@ -10,10 +10,10 @@ import { MultiLanguageString } from "./multiLanguageString";
  * @property {IDimension[]} variables - List of dimensions.
  */
 export interface IMatrixMetadata {
-    DefaultLanguage: string,
-    AvailableLanguages: string[],
-    Dimensions: IDimension[],
-    AdditionalProperties?: { [key: string]: IMetaProperty }
+    defaultLanguage: string,
+    availableLanguages: string[],
+    dimensions: IDimension[],
+    additionalProperties?: { [key: string]: IMetaProperty }
 }
 
 /**
@@ -48,12 +48,12 @@ export interface IMetaProperty {
  * @property {Interval} Interval - The interval of time variable if applicable.
  */
 export interface IDimension {
-    Code: string,
-    Name: MultiLanguageString,
-    AdditionalProperties?: { [key: string]: IMetaProperty },
-    Values: IDimensionValue[]
-    Type: EDimensionType,
-    Interval?: TTimeVariableInterval 
+    code: string,
+    name: MultiLanguageString,
+    additionalProperties?: { [key: string]: IMetaProperty },
+    values: IDimensionValue[]
+    type: EDimensionType,
+    interval?: TTimeVariableInterval 
 }
 
 /**
@@ -63,13 +63,13 @@ export interface IDimension {
  * @property {{ [key: string]: IMetaProperty }} additionalProperties - Optional dictionary for additional metadata properties
  */
 export interface IDimensionValue {
-    Code: string,
-    Name: MultiLanguageString,
-    IsVirtual: boolean
-    AdditionalProperties?: { [key: string]: IMetaProperty },
-    Unit?: MultiLanguageString,
-    LastUpdated?: string,
-    Precision?: number,
+    code: string,
+    name: MultiLanguageString,
+    isVirtual: boolean
+    additionalProperties?: { [key: string]: IMetaProperty },
+    unit?: MultiLanguageString,
+    lastUpdated?: string,
+    precision?: number,
 }
 
 /**

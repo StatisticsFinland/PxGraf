@@ -73,8 +73,7 @@ namespace PxGraf.Controllers
             MatrixMetadata metadataClone = readOnlyMeta.GetTransform(readOnlyMeta);
             metadataClone.AssignSourceToContentDimensionValues();
             _logger.LogDebug("cube-meta result {Meta}", metadataClone);
-            string json = JsonSerializer.Serialize(metadataClone);
-            return Content(json, "application/json");
+            return metadataClone;
         }
 
         /// <summary>

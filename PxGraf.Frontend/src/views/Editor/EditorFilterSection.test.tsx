@@ -7,18 +7,18 @@ import UiLanguageContext from 'contexts/uiLanguageContext';
 
 const mockVariables: IDimension[] = [
     {
-        Code: 'foo',
-        Name: {
+        code: 'foo',
+        name: {
             'fi': 'name'
         },
-        Type: EDimensionType.Content,
-        Values: [
+        type: EDimensionType.Content,
+        values: [
             {
-                Code: 'bar',
-                Name: {
+                code: 'bar',
+                name: {
                     'fi': 'name'
                 },
-                IsVirtual: false
+                isVirtual: false
             }
         ]
     }

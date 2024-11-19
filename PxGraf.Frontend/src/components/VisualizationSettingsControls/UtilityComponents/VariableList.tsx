@@ -21,8 +21,8 @@ interface VariableListProps {
 }
 
 const variableNameAndValues = (variable: IDimension, uiContentLanguage: string): string => {
-    const name: string = variable.Name[uiContentLanguage] ?? variable.Code;
-    const values: number = variable.Values.length;
+    const name: string = variable.name[uiContentLanguage] ?? variable.code;
+    const values: number = variable.values.length;
     return name + " " + values;
 };
 
@@ -37,9 +37,9 @@ export const VariableList: React.FC<VariableListProps> = ({ title, variables, se
             {variables.map(v => {
                 return (
                     <ListItemButton
-                        key={"var-" + v.Code}
-                        onClick={() => selectedChangedHandler(v.Code)}
-                        selected={selectedVariableCode === v.Code}>
+                        key={"var-" + v.code}
+                        onClick={() => selectedChangedHandler(v.code)}
+                        selected={selectedVariableCode === v.code}>
                         <ListItemText primary={variableNameAndValues(v, uiContentLanguage)} />
                     </ListItemButton>
                 );

@@ -206,6 +206,16 @@ namespace UnitTests.MatrixMetadataTests
         }
 
         [Test]
+        public void GetMatrixMultilanguagePropertyCalledWithNonExistingPropertyReturnsNull()
+        {
+            // Act
+            MultilanguageString? result = _input.GetMatrixMultilanguageProperty("FOO");
+
+            // Assert
+            Assert.That(result, Is.Null);
+        }
+
+        [Test]
         public void AssignSourceToContentDimensionValuesReturnsCorrectSourceForContentDimensionValuesWithDimensionValueLevelSource()
         {
             // Arrange

@@ -46,70 +46,70 @@ const mockVisualizationSettings = {
 
 const mockVariables: IDimension[]  = [
     {
-        Code: "foobar1",
-        Name: { fi: "foo1", sv: "bar1", en: "foobar1" },
-        Type: EDimensionType.Other,
-        Values: [
+        code: "foobar1",
+        name: { fi: "foo1", sv: "bar1", en: "foobar1" },
+        type: EDimensionType.Other,
+        values: [
             {
-                Code: "barfoo1",
-                Name: { fi: "fyy1", sv: "bör1", en: "fyybör1" },
-                IsVirtual: false
+                code: "barfoo1",
+                name: { fi: "fyy1", sv: "bör1", en: "fyybör1" },
+                isVirtual: false
             },
             {
-                Code: "barfoo2",
-                Name: { fi: "fyy2", sv: "bör2", en: "fyybör2" },
-                IsVirtual: false
+                code: "barfoo2",
+                name: { fi: "fyy2", sv: "bör2", en: "fyybör2" },
+                isVirtual: false
             }
         ],
     },
     {
-        Code: "foobar2",
-        Name: { fi: "foo2", sv: "bar2", en: "foobar2" },
-        Type: EDimensionType.Other,
-        Values: [
+        code: "foobar2",
+        name: { fi: "foo2", sv: "bar2", en: "foobar2" },
+        type: EDimensionType.Other,
+        values: [
             {
-                Code: "barfoo1",
-                Name: { fi: "fyy1", sv: "bör1", en: "fyybör1" },
-                IsVirtual: false
+                code: "barfoo1",
+                name: { fi: "fyy1", sv: "bör1", en: "fyybör1" },
+                isVirtual: false
             },
             {
-                Code: "barfoo2",
-                Name: { fi: "fyy2", sv: "bör2", en: "fyybör2" },
-                IsVirtual: false
+                code: "barfoo2",
+                name: { fi: "fyy2", sv: "bör2", en: "fyybör2" },
+                isVirtual: false
             }
         ],
     },
     {
-        Code: "foobar3",
-        Name: { fi: "foo3", sv: "bar3", en: "foobar3" },
-        Type: EDimensionType.Other,
-        Values: [
+        code: "foobar3",
+        name: { fi: "foo3", sv: "bar3", en: "foobar3" },
+        type: EDimensionType.Other,
+        values: [
             {
-                Code: "barfoo1",
-                Name: { fi: "fyy1", sv: "bör1", en: "fyybör1" },
-                IsVirtual: false
+                code: "barfoo1",
+                name: { fi: "fyy1", sv: "bör1", en: "fyybör1" },
+                isVirtual: false
             },
             {
-                Code: "barfoo2",
-                Name: { fi: "fyy2", sv: "bör2", en: "fyybör2" },
-                IsVirtual: false
+                code: "barfoo2",
+                name: { fi: "fyy2", sv: "bör2", en: "fyybör2" },
+                isVirtual: false
             }
         ],
     },
     {
-        Code: "foobar4",
-        Name: { fi: "foo4", sv: "bar4", en: "foobar4" },
-        Type: EDimensionType.Other,
-        Values: [
+        code: "foobar4",
+        name: { fi: "foo4", sv: "bar4", en: "foobar4" },
+        type: EDimensionType.Other,
+        values: [
             {
-                Code: "barfoo1",
-                Name: { fi: "fyy1", sv: "bör1", en: "fyybör1" },
-                IsVirtual: false
+                code: "barfoo1",
+                name: { fi: "fyy1", sv: "bör1", en: "fyybör1" },
+                isVirtual: false
             },
             {
-                Code: "barfoo2",
-                Name: { fi: "fyy2", sv: "bör2", en: "fyybör2" },
-                IsVirtual: false
+                code: "barfoo2",
+                name: { fi: "fyy2", sv: "bör2", en: "fyybör2" },
+                isVirtual: false
             }
         ],
     }

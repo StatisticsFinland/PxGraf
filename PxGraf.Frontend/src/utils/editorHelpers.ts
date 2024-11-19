@@ -5,7 +5,7 @@ import { getDefaultFilter } from './variableSelectionHelpers';
 export const getDefaultQueries = (variables: IDimension[]) => {
     const queries: { [key: string]: IVariableQuery } = {};
     for (const variable of variables) {
-      queries[variable.Code] = {
+      queries[variable.code] = {
         valueFilter: getDefaultFilter(FilterType.Item),
         selectable: false,
         virtualValueDefinitions: null
@@ -15,5 +15,5 @@ export const getDefaultQueries = (variables: IDimension[]) => {
 }
 
 export const resolveVariables = (variables: IDimension[], resolvedValueCodes: { [key: string]: string[] }) => {
-    return variables.map(v => { return { Code: v.Code, Name: v.Name, Type: v.Type, Values: v.Values.filter(val => resolvedValueCodes?.[v.Code]?.includes(val.Code)) } as IDimension });
+    return variables.map(v => { return { code: v.code, name: v.name, type: v.type, values: v.values.filter(val => resolvedValueCodes?.[v.code]?.includes(val.code)) } as IDimension });
 }

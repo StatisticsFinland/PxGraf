@@ -24,22 +24,22 @@ export const BasicVariableEditor: React.FC<IBasicVariableEditorProps> = ({ varia
 
     return (
         <EditorFieldWrapper spacing={2}>
-            {variable.Values.map(value => {
+            {variable.values.map(value => {
                 return (
                     <EditorField
-                        label={t("editMetadata.valueName") + ": " + value.Name[uiContentLanguage]}
-                        key={value.Code}
-                        defaultValue={value.Name[language]}
-                        editValue={variableEdits?.valueEdits[value.Code]?.nameEdit?.[language]}
+                        label={t("editMetadata.valueName") + ": " + value.name[uiContentLanguage]}
+                        key={value.code}
+                        defaultValue={value.name[language]}
+                        editValue={variableEdits?.valueEdits[value.code]?.nameEdit?.[language]}
                         onChange={newValue => {
                             const newVariableEdit = {
                                 ...variableEdits,
                                 valueEdits: {
                                     ...variableEdits?.valueEdits,
-                                    [value.Code]: {
-                                        ...variableEdits?.valueEdits[value.Code],
+                                    [value.code]: {
+                                        ...variableEdits?.valueEdits[value.code],
                                         nameEdit: {
-                                            ...variableEdits?.valueEdits[value.Code]?.nameEdit,
+                                            ...variableEdits?.valueEdits[value.code]?.nameEdit,
                                             [language]: newValue
                                         }
                                     }

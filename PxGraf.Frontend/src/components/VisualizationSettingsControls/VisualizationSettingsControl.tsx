@@ -54,8 +54,8 @@ export const VisualizationSettingControl: React.FC<IVisualizationSettingControlP
     const showDataPoints: boolean = visualizationRules.visualizationTypeSpecificRules.allowShowingDataPoints;
 
     const { t } = useTranslation();
-    const selectableVariables: IDimension[] = variables.filter(v => variableQuery[v.Code].selectable);
-    const selectableVariablesExcludingContent: IDimension[] = selectableVariables?.filter(fv => fv.Type !== EDimensionType.Content);
+    const selectableVariables: IDimension[] = variables.filter(v => variableQuery[v.code].selectable);
+    const selectableVariablesExcludingContent: IDimension[] = selectableVariables?.filter(fv => fv.type !== EDimensionType.Content);
     const showMultiselectableSelector: boolean = visualizationRules.multiselectVariableAllowed && selectableVariablesExcludingContent.length > 0;
 
     return (

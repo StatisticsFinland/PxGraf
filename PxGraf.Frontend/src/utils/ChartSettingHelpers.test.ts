@@ -39,18 +39,18 @@ const mockZeroVariables: IDimension[] = [];
 
 const mockVariables: IDimension[] = [
     {
-        Code: 'foo',
-        Name: {
+        code: 'foo',
+        name: {
             'fi': 'nimi'
         },
-        Type: EDimensionType.Content,
-        Values: [
+        type: EDimensionType.Content,
+        values: [
             {
-                Code: 'foo',
-                Name: {
+                code: 'foo',
+                name: {
                     'fi': 'nimi'
                 },
-                IsVirtual: false
+                isVirtual: false
             }
         ]
     }
@@ -58,55 +58,55 @@ const mockVariables: IDimension[] = [
 
 const mockTableTwoVariables: IDimension[] = [
     {
-        Code: 'foo',
-        Name: {
+        code: 'foo',
+        name: {
             'fi': 'nimi'
         },
-        Type: EDimensionType.Content,
-        Values: [
+        type: EDimensionType.Content,
+        values: [
             {
-                Code: 'foo',
-                Name: {
+                code: 'foo',
+                name: {
                     'fi': 'nimi'
                 },
-                IsVirtual: false
+                isVirtual: false
             },
             {
-                Code: 'bar',
-                Name: {
+                code: 'bar',
+                name: {
                     'fi': 'toinennimi'
                 },
-                IsVirtual: false
+                isVirtual: false
             }
         ]
     },
     {
-        Code: 'bar',
-        Name: {
+        code: 'bar',
+        name: {
             'fi': 'toinennimi'
         },
-        Type: EDimensionType.Content,
-        Values: [
+        type: EDimensionType.Content,
+        values: [
             {
-                Code: 'bar',
-                Name: {
+                code: 'bar',
+                name: {
                     'fi': 'toinennimi'
                 },
-                IsVirtual: false
+                isVirtual: false
             },
             {
-                Code: 'lorem',
-                Name: {
+                code: 'lorem',
+                name: {
                     'fi': 'kolmasnimi'
                 },
-                IsVirtual: false
+                isVirtual: false
             },
             {
-                Code: 'ipsum',
-                Name: {
+                code: 'ipsum',
+                name: {
                     'fi': 'neljasnimi'
                 },
-                IsVirtual: false
+                isVirtual: false
             }
         ]
     }
@@ -114,78 +114,78 @@ const mockTableTwoVariables: IDimension[] = [
 
 const mockTableThreeVariables: IDimension[] = [
     {
-        Code: 'foo',
-        Name: {
+        code: 'foo',
+        name: {
             'fi': 'nimi'
         },
-        Type: EDimensionType.Content,
-        Values: [
+        type: EDimensionType.Content,
+        values: [
             {
-                Code: 'foo',
-                Name: {
+                code: 'foo',
+                name: {
                     'fi': 'nimi'
                 },
-                IsVirtual: false
+                isVirtual: false
             },
             {
-                Code: 'bar',
-                Name: {
+                code: 'bar',
+                name: {
                     'fi': 'jokunimi'
                 },
-                IsVirtual: false
+                isVirtual: false
             }
         ]
     },
     {
-        Code: 'bar',
-        Name: {
+        code: 'bar',
+        name: {
             'fi': 'toinennimi'
         },
-        Type: EDimensionType.Content,
-        Values: [
+        type: EDimensionType.Content,
+        values: [
             {
-                Code: 'bar',
-                Name: {
+                code: 'bar',
+                name: {
                     'fi': 'toinennimi'
                 },
-                IsVirtual: false
+                isVirtual: false
             },
             {
-                Code: 'lorem',
-                Name: {
+                code: 'lorem',
+                name: {
                     'fi': 'kolmasnimi'
                 },
-                IsVirtual: false
+                isVirtual: false
             },
             {
-                Code: 'ipsum',
-                Name: {
+                code: 'ipsum',
+                name: {
                     'fi': 'neljasnimi'
                 },
-                IsVirtual: false
+                isVirtual: false
             }
         ]
     },
     {
-        Code: 'baz',
-        Name: {
+        code: 'baz',
+        name: {
             'fi': 'kolmasnimi'
         },
-        Type: EDimensionType.Content,
-        Values: [
+        type: EDimensionType.Content,
+        values: [
             {
-                Code: 'foobar',
-                Name: {
+                code: 'foobar',
+                name: {
                     'fi': 'nimi'
                 },
-                IsVirtual: false
+                isVirtual: false
             },
             {
-                Code: 'loremipsum',
-                Name: {
+                code: 'loremipsum',
+                name: {
                     'fi': 'toinennimi'
                 },
-                IsVirtual: false
+                isVirtual: false
             }
         ]
     }
@@ -193,94 +193,94 @@ const mockTableThreeVariables: IDimension[] = [
 
 const mockTableFourVariables: IDimension[] = [
     {
-        Code: 'foo',
-        Name: {
+        code: 'foo',
+        name: {
             'fi': 'nimi'
         },
-        Type: EDimensionType.Content,
-        Values: [
+        type: EDimensionType.Content,
+        values: [
             {
-                Code: 'foo',
-                Name: {
+                code: 'foo',
+                name: {
                     'fi': 'nimi'
                 },
-                IsVirtual: false
+                isVirtual: false
             },
             {
-                Code: 'bar',
-                Name: {
+                code: 'bar',
+                name: {
                     'fi': 'jokunimi'
                 },
-                IsVirtual: false
+                isVirtual: false
             }
         ]
     },
     {
-        Code: 'bar',
-        Name: {
+        code: 'bar',
+        name: {
             'fi': 'toinennimi'
         },
-        Type: EDimensionType.Content,
-        Values: [
+        type: EDimensionType.Content,
+        values: [
             {
-                Code: 'bar',
-                Name: {
+                code: 'bar',
+                name: {
                     'fi': 'toinennimi'
                 },
-                IsVirtual: false
+                isVirtual: false
             },
             {
-                Code: 'lorem',
-                Name: {
+                code: 'lorem',
+                name: {
                     'fi': 'kolmasnimi'
                 },
-                IsVirtual: false
+                isVirtual: false
             },
             {
-                Code: 'ipsum',
-                Name: {
+                code: 'ipsum',
+                name: {
                     'fi': 'neljasnimi'
                 },
-                IsVirtual: false
+                isVirtual: false
             }
         ]
     },
     {
-        Code: 'baz',
-        Name: {
+        code: 'baz',
+        name: {
             'fi': 'kolmasnimi'
         },
-        Type: EDimensionType.Content,
-        Values: [
+        type: EDimensionType.Content,
+        values: [
             {
-                Code: 'foobar',
-                Name: {
+                code: 'foobar',
+                name: {
                     'fi': 'nimi'
                 },
-                IsVirtual: false
+                isVirtual: false
             },
             {
-                Code: 'loremipsum',
-                Name: {
+                code: 'loremipsum',
+                name: {
                     'fi': 'toinennimi'
                 },
-                IsVirtual: false
+                isVirtual: false
             }
         ]
     },
     {
-        Code: 'foobar',
-        Name: {
+        code: 'foobar',
+        name: {
             'fi': 'neljasnimi'
         },
-        Type: EDimensionType.Content,
-        Values: [
+        type: EDimensionType.Content,
+        values: [
             {
-                Code: 'barfoo',
-                Name: {
+                code: 'barfoo',
+                name: {
                     'fi': 'nimi'
                 },
-                IsVirtual: false
+                isVirtual: false
             }
         ]
     }

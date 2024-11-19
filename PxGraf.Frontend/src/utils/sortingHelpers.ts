@@ -45,16 +45,16 @@ export const sortedDimensions = (dimensions: IDimension[]): IDimension[] => {
     const eliminationVariables = [];
     const singleValueVariables = [];
     dimensions.forEach((dimension: IDimension) => {
-        if (dimension.Type === EDimensionType.Content) {
+        if (dimension.type === EDimensionType.Content) {
             contentVariable = dimension;
         }
-        else if (dimension.Type === EDimensionType.Time) {
+        else if (dimension.type === EDimensionType.Time) {
             timeVariables.push(dimension);
         }
-        else if (dimension.Values.filter(vv => getValueIsSumValue(vv, dimension)).length > 0) {
+        else if (dimension.values.filter(vv => getValueIsSumValue(vv, dimension)).length > 0) {
             eliminationVariables.push(dimension);
         }
-        else if (dimension.Values.length === 1) {
+        else if (dimension.values.length === 1) {
             singleValueVariables.push(dimension);
         }
         else {
@@ -75,7 +75,7 @@ export const sortedDimensions = (dimensions: IDimension[]): IDimension[] => {
 }
 
 function getValueIsSumValue(value: IDimensionValue, dimension: IDimension): boolean {
-    const eliminationCode: string = getAdditionalPropertyValue("ELIMINATION", dimension.AdditionalProperties) as string;
-    if (eliminationCode) return eliminationCode === value.Code;
+    const eliminationCode: string = getAdditionalPropertyValue("ELIMINATION", dimension.additionalProperties) as string;
+    if (eliminationCode) return eliminationCode === value.code;
     else return false;
 }

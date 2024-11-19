@@ -27,21 +27,21 @@ export const ContentVariableEditor: React.FC<IContentVariableEditorProps> = ({ v
 
     return (
         <Grid container spacing={3}>
-            {variable.Values.map((value) => {
-                const valueEdits = variableEdits?.valueEdits[value.Code];
+            {variable.values.map((value) => {
+                const valueEdits = variableEdits?.valueEdits[value.code];
 
                 return (
                     <Grid item
-                        key={value.Code}
+                        key={value.code}
                         xs={12}
-                        xl={variable.Values.length > 1 ? 6 : 12 /* Use two columns layout when screen is big enought and there is more than one value */}
+                        xl={variable.values.length > 1 ? 6 : 12 /* Use two columns layout when screen is big enought and there is more than one value */}
                     >
                         <ContentVariableValueEditor
-                            key={value.Code}
+                            key={value.code}
                             variableValue={value}
                             language={language}
                             valueEdits={valueEdits}
-                            onChange={(newEdit) => handleChange(newEdit, value.Code)}
+                            onChange={(newEdit) => handleChange(newEdit, value.code)}
                         />
                     </Grid>
                 );

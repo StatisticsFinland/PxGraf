@@ -29,30 +29,30 @@ const uiContentLanguage = 'fi';
 const setUiContentLanguage = jest.fn();
 
 const mockVariables: IDimension[] = [{
-        Code:'foo',
-        Name: {
+        code:'foo',
+        name: {
             'fi': 'asd',
             'sv': 'asd',
             'en': 'asd'
         },
-        Type: EDimensionType.Content,
-        Values: [
+        type: EDimensionType.Content,
+        values: [
             {
-                Code:'bar',
-                Name: {
+                code:'bar',
+                name: {
                     'fi': 'fgfgfg',
                     'sv': 'fgfgfg',
                     'en': 'fgfgfg'
                 },
-                IsVirtual: false,
-                Unit: {
+                isVirtual: false,
+                unit: {
                     'fi': 'yksikko',
                     'sv': 'enhet',
                     'en': 'unit'
                 },
-                Precision: 0,
-                LastUpdated: '2021-01-01',
-                AdditionalProperties: {
+                precision: 0,
+                lastUpdated: '2021-01-01',
+                additionalProperties: {
                     SOURCE: {
                         Type: EMetaPropertyType.MultilanguageText,
                         Value: {
@@ -66,30 +66,30 @@ const mockVariables: IDimension[] = [{
         ]
     },
     {
-        Code:'foo2',
-        Name: {
+        code:'foo2',
+        name: {
             'fi': null,
             'sv': null,
             'en': null
         },
-        Type: EDimensionType.Content,
-        Values: [
+        type: EDimensionType.Content,
+        values: [
             {
-                Code:'bar2',
-                Name: {
+                code:'bar2',
+                name: {
                     'fi': null,
                     'sv': null,
                     'en': null,
                 },
-                IsVirtual: false,
-                Unit: {
+                isVirtual: false,
+                unit: {
                     'fi': 'yksikko',
                     'sv': 'enhet',
                     'en': 'unit'
                 },
-                Precision: 0,
-                LastUpdated: '2021-01-01',
-                AdditionalProperties: {
+                precision: 0,
+                lastUpdated: '2021-01-01',
+                additionalProperties: {
                     SOURCE: {
                         Type: EMetaPropertyType.MultilanguageText,
                         Value: {

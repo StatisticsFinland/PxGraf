@@ -354,6 +354,80 @@ namespace UnitTests.ControllerTests.CreationControllerTests
             ActionResult<VisualizationRules> actionResult = await testController.GetVisualizationRulesAsync(rulesRequest);
             Assert.That(actionResult.Value.VisualizationTypeSpecificRules.AllowShowingDataPoints, Is.False);
         }
+
+        [Test]
+        public async Task GetVisualizationRulesAsync_CalledWithZeroSizedQuery_ReturnsExpectedResult()
+        {
+            List<DimensionParameters> cubeParams =
+            [
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 12),
+                new DimensionParameters(DimensionType.Geographical, 1),
+                new DimensionParameters(DimensionType.Ordinal, 1),
+                new DimensionParameters(DimensionType.Other, 0)
+            ];
+
+            List<DimensionParameters> metaParams =
+            [
+                new DimensionParameters(DimensionType.Content, 4),
+                new DimensionParameters(DimensionType.Time, 24),
+                new DimensionParameters(DimensionType.Other, 6),
+                new DimensionParameters(DimensionType.Other, 6),
+                new DimensionParameters(DimensionType.Other, 6)
+            ];
+
+            CreationController testController = TestCreationControllerBuilder.BuildController(cubeParams, metaParams);
+            MatrixQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
+            VisualizationSettingsRequest rulesRequest = new()
+            {
+                SelectedVisualization = VisualizationType.LineChart,
+                PivotRequested = false,
+                Query = cubeQuery
+            };
+
+            ActionResult<VisualizationRules> actionResult = await testController.GetVisualizationRulesAsync(rulesRequest);
+
+            Assert.That(actionResult.Value.AllowManualPivot, Is.False);
+            Assert.That(actionResult.Value.MultiselectVariableAllowed, Is.False);
+            Assert.That(actionResult.Value.VisualizationTypeSpecificRules, Is.Null);
+        }
+
+        [Test]
+        public async Task GetVisualizationRulesAync_CalledWithInvalidVisualizationType_ReturnsExpectedResults()
+        {
+            List<DimensionParameters> cubeParams =
+            [
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 12),
+                new DimensionParameters(DimensionType.Geographical, 1),
+                new DimensionParameters(DimensionType.Ordinal, 1),
+                new DimensionParameters(DimensionType.Other, 3)
+            ];
+
+            List<DimensionParameters> metaParams =
+            [
+                new DimensionParameters(DimensionType.Content, 4),
+                new DimensionParameters(DimensionType.Time, 24),
+                new DimensionParameters(DimensionType.Other, 6),
+                new DimensionParameters(DimensionType.Other, 6),
+                new DimensionParameters(DimensionType.Other, 6)
+            ];
+
+            CreationController testController = TestCreationControllerBuilder.BuildController(cubeParams, metaParams);
+            MatrixQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
+            VisualizationSettingsRequest rulesRequest = new()
+            {
+                SelectedVisualization = VisualizationType.ScatterPlot,
+                PivotRequested = false,
+                Query = cubeQuery
+            };
+
+            ActionResult<VisualizationRules> actionResult = await testController.GetVisualizationRulesAsync(rulesRequest);
+
+            Assert.That(actionResult.Value.AllowManualPivot, Is.False);
+            Assert.That(actionResult.Value.MultiselectVariableAllowed, Is.False);
+            Assert.That(actionResult.Value.VisualizationTypeSpecificRules, Is.Null);
+        }
     }
 }
 

@@ -258,27 +258,27 @@ const mockCubeMetaResult: ICubeMetaResult = {
     isLoading: false,
     isError: false,
     data: {
-        DefaultLanguage: 'fi',
-        AvailableLanguages: ['fi'],
-        AdditionalProperties: {},
-        Dimensions: [
+        defaultLanguage: 'fi',
+        availableLanguages: ['fi'],
+        additionalProperties: {},
+        dimensions: [
             {
-                Code: 'code',
-                Name: {
+                code: 'code',
+                name: {
                     'fi': 'variableName'
                 },
-                Type: EDimensionType.Content,
-                Values: [
+                type: EDimensionType.Content,
+                values: [
                     {
-                        Code: 'variableValueCode',
-                        Name: {
+                        code: 'variableValueCode',
+                        name: {
                             'fi': 'variableValueName'
                         },
-                        IsVirtual: false,
-                        AdditionalProperties: {},
+                        isVirtual: false,
+                        additionalProperties: {},
                     }
                 ],
-                AdditionalProperties: {}
+                additionalProperties: {}
             }
         ]
     }

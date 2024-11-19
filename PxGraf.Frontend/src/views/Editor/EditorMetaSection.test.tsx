@@ -20,30 +20,30 @@ const headerResultMock: IHeaderResult = {
 
 const mockVariables: IDimension[] = [
     {
-        Code: 'foo',
-        Name: {
+        code: 'foo',
+        name: {
             'fi': 'foofi',
             'sv': 'foosv',
             'en': 'fooen'
         },
-        Type: EDimensionType.Content,
-        Values: [
+        type: EDimensionType.Content,
+        values: [
             {
-                Code: 'fooval1',
-                Name: {
+                code: 'fooval1',
+                name: {
                     'fi': 'fgfgfg1',
                     'sv': 'fgfgfg1',
                     'en': 'fgfgfg1'
                 },
-                IsVirtual: false,
-                Unit: {
+                isVirtual: false,
+                unit: {
                     'fi': 'yksikko',
                     'sv': 'enhet',
                     'en': 'unit'
                 },
-                Precision: 0,
-                LastUpdated: '2021-01-01',
-                AdditionalProperties: {
+                precision: 0,
+                lastUpdated: '2021-01-01',
+                additionalProperties: {
                     SOURCE: {
                         Type: EMetaPropertyType.MultilanguageText,
                         Value: {
@@ -55,21 +55,21 @@ const mockVariables: IDimension[] = [
                 }
             },
             {
-                Code: 'fooval2',
-                Name: {
+                code: 'fooval2',
+                name: {
                     'fi': 'fgfgfg2',
                     'sv': 'fgfgfg2',
                     'en': 'fgfgfg2'
                 },
-                IsVirtual: false,
-                Unit: {
+                isVirtual: false,
+                unit: {
                     'fi': 'prosenttia',
                     'sv': 'procent',
                     'en': 'percent'
                 },
-                Precision: 1,
-                LastUpdated: '2022-01-01',
-                AdditionalProperties: {
+                precision: 1,
+                lastUpdated: '2022-01-01',
+                additionalProperties: {
                     SOURCE: {
                         Type: EMetaPropertyType.MultilanguageText,
                         Value: {
@@ -83,30 +83,30 @@ const mockVariables: IDimension[] = [
         ]
     },
     {
-        Code: 'bar',
-        Name: {
+        code: 'bar',
+        name: {
             'fi': 'barfi',
             'sv': 'barsv',
             'en': 'baren'
         },
-        Type: EDimensionType.Content,
-        Values: [
+        type: EDimensionType.Content,
+        values: [
             {
-                Code: 'barval1',
-                Name: {
+                code: 'barval1',
+                name: {
                     'fi': 'fgfgfg1',
                     'sv': 'fgfgfg1',
                     'en': 'fgfgfg1'
                 },
-                IsVirtual: false,
-                Unit: {
+                isVirtual: false,
+                unit: {
                     'fi': 'yksikko',
                     'sv': 'enhet',
                     'en': 'unit'
                 },
-                Precision: 0,
-                LastUpdated: '2021-01-01',
-                AdditionalProperties: {
+                precision: 0,
+                lastUpdated: '2021-01-01',
+                additionalProperties: {
                     SOURCE: {
                         Type: EMetaPropertyType.MultilanguageText,
                         Value: {
@@ -118,21 +118,21 @@ const mockVariables: IDimension[] = [
                 }
             },
             {
-                Code: 'barval2',
-                Name: {
+                code: 'barval2',
+                name: {
                     'fi': 'fgfgfg2',
                     'sv': 'fgfgfg2',
                     'en': 'fgfgfg2'
                 },
-                IsVirtual: false,
-                Unit: {
+                isVirtual: false,
+                unit: {
                     'fi': 'prosenttia',
                     'sv': 'procent',
                     'en': 'percent'
                 },
-                Precision: 1,
-                LastUpdated: '2022-01-01',
-                AdditionalProperties: {
+                precision: 1,
+                lastUpdated: '2022-01-01',
+                additionalProperties: {
                     SOURCE: {
                         Type: EMetaPropertyType.MultilanguageText,
                         Value: {

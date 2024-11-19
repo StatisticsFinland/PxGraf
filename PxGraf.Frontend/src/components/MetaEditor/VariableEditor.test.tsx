@@ -19,30 +19,30 @@ jest.mock('react-i18next', () => ({
 }));
 
 const mockVariable: IDimension = {
-    Code: 'foo',
-    Name: {
+    code: 'foo',
+    name: {
         'fi': 'asd',
         'sv': 'asd',
         'en': 'asd'
     },
-    Type: EDimensionType.Content,
-    Values: [
+    type: EDimensionType.Content,
+    values: [
         {
-            Code: 'bar',
-            Name: {
+            code: 'bar',
+            name: {
                 'fi': 'fgfgfg',
                 'sv': 'fgfgfg',
                 'en': 'fgfgfg'
             },
-            IsVirtual: true,
-            Unit: {
+            isVirtual: true,
+            unit: {
                 'fi': 'yksikko',
                 'sv': 'enhet',
                 'en': 'unit'
             },
-            Precision: 0,
-            LastUpdated: '2021-01-01',
-            AdditionalProperties: {
+            precision: 0,
+            lastUpdated: '2021-01-01',
+            additionalProperties: {
                 SOURCE: {
                     Type: EMetaPropertyType.MultilanguageText,
                     Value: {
