@@ -24,6 +24,10 @@ using System.Threading.Tasks;
 using System.Threading;
 using System;
 
+#if DEBUG
+using System.Diagnostics;
+#endif
+
 namespace PxGraf.Datasource.ApiDatasource
 {
     public class PxWebV1ApiInterface(IPxWebConnection pxwebConnection, ILogger<PxWebV1ApiInterface> logger) : IApiDatasource
@@ -281,7 +285,7 @@ namespace PxGraf.Datasource.ApiDatasource
             return jsonStat2;
         }
 
-        private async Task<Dictionary<string, DimensionType>> GetDimensionTypesAsync(IMatrixMap matrixMap, List<string> succeededLanguages, PxTableReference tableReference)
+        private async Task<Dictionary<string, DimensionType>> GetDimensionTypesAsync(PxMetaResponse matrixMap, List<string> succeededLanguages, PxTableReference tableReference)
         {
             JsonStat2 jsonStat2 = await GetSinglePointJsonStat2RespAsync(tableReference, matrixMap, succeededLanguages[0]);
             Dictionary<string, DimensionType> types = [];

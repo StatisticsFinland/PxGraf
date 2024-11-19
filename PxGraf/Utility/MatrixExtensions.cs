@@ -51,7 +51,7 @@ namespace PxGraf.Utility
             return new DataAndNotesCollection()
             {
                 Data = data,
-                Notes = notes, //TODO cellnotes
+                Notes = notes,
                 MissingValueInfo = missingValueInfo
             };
         }
