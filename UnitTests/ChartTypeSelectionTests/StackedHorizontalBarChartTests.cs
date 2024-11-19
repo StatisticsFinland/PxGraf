@@ -12,7 +12,7 @@ namespace UnitTests.ChartTypeSelectionTests
     [TestFixture]
     public class StackedHorizontalBarChartTests
     {
-        private IChartSelectionLimits Limits { get; set; }
+        private ChartSelectionLimits Limits { get; set; }
 
         [OneTimeSetUp]
         public void SetupChartSelectionLimits()

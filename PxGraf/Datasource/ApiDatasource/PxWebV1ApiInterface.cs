@@ -16,7 +16,6 @@ using PxGraf.Models.Responses.DatabaseItems;
 using PxGraf.Settings;
 using PxGraf.Utility;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Net.Http;
@@ -122,7 +121,7 @@ namespace PxGraf.Datasource.ApiDatasource
 
             if (langToResponse.Count == 0) throw new TableMetadataException("Could not load table with any language.");
 
-            IMatrixMap map = langToResponse[defaultLang];
+            PxMetaResponse map = langToResponse[defaultLang];
             List<Dimension> dimensions = [];
             Dictionary<string, DimensionType> dimensionTypes = await GetDimensionTypesAsync(map, [.. langToResponse.Keys], tableReference);
             for (int dimIndx = 0; dimIndx < map.DimensionMaps.Count; dimIndx++)

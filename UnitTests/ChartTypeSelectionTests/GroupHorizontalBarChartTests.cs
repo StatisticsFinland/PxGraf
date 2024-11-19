@@ -11,7 +11,7 @@ namespace UnitTests.ChartTypeSelectionTests
     [TestFixture]
     public class GroupHorizontalBarChartTests
     {
-        private IChartSelectionLimits Limits { get; set; }
+        private ChartSelectionLimits Limits { get; set; }
 
         [OneTimeSetUp]
         public void SetupChartSelectionLimits()
