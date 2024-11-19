@@ -17,8 +17,6 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
-using Px.Utils.Models.Metadata.Dimensions;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace PxGraf.Controllers
 {
@@ -44,6 +42,7 @@ namespace PxGraf.Controllers
         private static CacheValues CacheValues => Configuration.Current.CacheOptions.Visualization;
         private static readonly TimeSpan AbsoluteExpiration = TimeSpan.FromMinutes(CacheValues.AbsoluteExpirationMinutes);
         private static readonly TimeSpan SlidingExpiration = TimeSpan.FromMinutes(CacheValues.SlidingExpirationMinutes);
+
         #region ACTIONS
 
         /// <summary>
@@ -56,11 +55,13 @@ namespace PxGraf.Controllers
         {
             _logger.LogDebug("Requested visualization GET: api/sq/visualization/{SqId}", sqId);
             MultiStateMemoryTaskCache.CacheEntryState itemCacheState = _taskCache.TryGet(sqId, out Task<VisualizationResponse> cachedRespTask);
+            string maxAge = $"max-age={Configuration.Current.CacheOptions.CacheFreshnessCheckIntervalSeconds}";
 
             if (itemCacheState == MultiStateMemoryTaskCache.CacheEntryState.Fresh)
             {
                 VisualizationResponse response = await cachedRespTask;
                 _logger.LogDebug("{SqId} result: {CachedResp}", sqId, response);
+                Response.Headers.CacheControl = $"{maxAge}";
                 return response;
             }
 
@@ -69,7 +70,7 @@ namespace PxGraf.Controllers
                 VisualizationResponse response = await cachedRespTask;
                 _ = HandleStaleCacheResponseAsync(sqId, response); // OBS: No await
                 _logger.LogDebug("{SqId} result: {CachedResp}", sqId, response);
-                // TODO: stale-while-revalidate header?
+                Response.Headers.CacheControl = $"max-age=0"; // Already stale, so no max-age
                 return response;
             }
 
@@ -85,6 +86,7 @@ namespace PxGraf.Controllers
                 _taskCache.Set(sqId, newResponseTask, SlidingExpiration, AbsoluteExpiration);
                 VisualizationResponse response = await newResponseTask;
                 _logger.LogDebug("{SqId} result: {Response}", sqId, response);
+                Response.Headers.CacheControl = $"{maxAge}";
                 return await newResponseTask; // Return directly if archived
             }
             else
@@ -93,9 +95,11 @@ namespace PxGraf.Controllers
                 return NotFound();
             }
         }
+
         #endregion
 
         #region UTILITY
+        
         private async Task HandleStaleCacheResponseAsync(string sqId, VisualizationResponse cachedResp)
         {
             // This refreshes the cache, so no additional update triggers happen.
@@ -135,6 +139,7 @@ namespace PxGraf.Controllers
                 return PxVisualizerCubeAdapter.BuildVisualizationResponse(matrix, sq);
             }
         }
+
         #endregion
     }
 }

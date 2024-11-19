@@ -1,9 +1,11 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Px.Utils.Models.Metadata;
 using PxGraf.Controllers;
-using PxGraf.Datasource;
 using PxGraf.Datasource.Cache;
+using PxGraf.Datasource;
 using PxGraf.Models.Queries;
 using PxGraf.Models.Responses;
 using PxGraf.Utility;
@@ -50,7 +52,15 @@ namespace UnitTests
             sqFileInterface.Setup(x => x.ReadArchiveCubeFromFile(It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(() => TestDataCubeBuilder.BuildTestArchiveCube(metaParams));
 
-            return new VisualizationController(sqFileInterface.Object, taskCache.Object, mockCachedDatasource.Object, logger.Object);
+            VisualizationController controller = new(sqFileInterface.Object, taskCache.Object, mockCachedDatasource.Object, logger.Object)
+            {
+                ControllerContext = new ControllerContext()
+                {
+                    HttpContext = new DefaultHttpContext()
+                }
+            };
+
+            return controller; 
         }
     }
 }
