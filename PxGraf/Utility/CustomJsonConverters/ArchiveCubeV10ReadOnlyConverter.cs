@@ -41,9 +41,9 @@ namespace PxGraf.Utility.CustomJsonConverters
                 else
                 {
                     DataValueType missingValueType = DataValueType.Nill;
-                    if (notes[i][1] != '-')
+                    if (notes[i][0] != '-')
                     {
-                        missingValueType = (DataValueType)(notes[i].Length - 2);
+                        missingValueType = (DataValueType)(notes[i].Length);
                     }
                     result.Add(new DecimalDataValue(0, missingValueType));
                 }

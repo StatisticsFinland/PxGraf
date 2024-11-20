@@ -91,7 +91,7 @@ namespace UnitTests.SerializerTests
             List<DecimalDataValue> expectedData =
             [
                 new (173.0m, DataValueType.Exists),
-                new (0, DataValueType.Missing),
+                new (0, DataValueType.Confidential),
                 new (0.0m, DataValueType.Exists),
                 new (0.0m, DataValueType.Exists),
                 new (0.0m, DataValueType.Exists),
