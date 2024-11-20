@@ -35,9 +35,9 @@ namespace PxGraf.Models.Metadata
             MultilanguageString name = valueEdits?.NameEdit is null ? input.Name : input.Name.CopyAndEdit(valueEdits.NameEdit);
             if (input is ContentDimensionValue cdv)
             {
-                MultilanguageString? source = valueEdits?.ContentComponent.SourceEdit is null
+                MultilanguageString? source = valueEdits?.ContentComponent?.SourceEdit is null
                     ? cdv.GetSource(meta) : cdv.GetSource(meta)?.CopyAndEdit(valueEdits.ContentComponent.SourceEdit);
-                MultilanguageString? unit = valueEdits?.ContentComponent.UnitEdit is null ?
+                MultilanguageString? unit = valueEdits?.ContentComponent?.UnitEdit is null ?
                     cdv.Unit : cdv.Unit.CopyAndEdit(valueEdits.ContentComponent.UnitEdit);
                 cc = new ContentComponent(unit, source, cdv.Precision, PxSyntaxConstants.FormatPxDateTime(cdv.LastUpdated));
             }

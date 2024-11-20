@@ -64,5 +64,79 @@ namespace UnitTests.MatrixMetadataTests
             Assert.That(variableValue.Name.Equals(nameEditMls));
             Assert.That(variableValue.IsSumValue.Equals(true));
         }
+
+        [Test]
+        public void ConvertToVariableValueWithContentComponentEdit()
+        {
+            // Arrange
+            List<DimensionParameters> dimParams =
+            [
+                new DimensionParameters(DimensionType.Content, 1)
+            ];
+
+            MatrixMetadata meta = TestDataCubeBuilder.BuildTestMeta(dimParams);
+            Dimension dimension = meta.Dimensions[0];
+            ContentDimensionValue value = (ContentDimensionValue)dimension.Values[0];
+            ContentComponentEdition contentComponentEdit = new()
+            {
+                SourceEdit = new MultilanguageString(new Dictionary<string, string> { { "fi", "SourceEdit.fi" }, { "en", "SourceEdit.en" } }),
+                UnitEdit = new MultilanguageString(new Dictionary<string, string> { { "fi", "UnitEdit.fi" }, { "en", "UnitEdit.en" } })
+            };
+            DimensionQuery dimensionQuery = new()
+            {
+                ValueEdits = new Dictionary<string, DimensionQuery.VariableValueEdition>
+                {
+                    { value.Code, new DimensionQuery.VariableValueEdition { NameEdit = null, ContentComponent = contentComponentEdit } }
+                }
+            };
+
+            // Act
+            VariableValue variableValue = value.ConvertToVariableValue(null, dimensionQuery, meta);
+
+            // Assert
+            Assert.That(variableValue, Is.Not.Null);
+            Assert.That(variableValue.Code.Equals(value.Code));
+            Assert.That(variableValue.Name.Equals(value.Name));
+            Assert.That(variableValue.IsSumValue.Equals(false));
+            Assert.That(variableValue.ContentComponent, Is.Not.Null);
+            Assert.That(variableValue.ContentComponent.NumberOfDecimals.Equals(value.Precision));
+            Assert.That(variableValue.ContentComponent.Source.Equals(contentComponentEdit.SourceEdit));
+            Assert.That(variableValue.ContentComponent.Unit.Equals(contentComponentEdit.UnitEdit));
+        }
+
+        [Test]
+        public void ConvertToVariableValueWithNullContentComponentEdit()
+        {
+            // Arrange
+            List<DimensionParameters> dimParams =
+            [
+                new DimensionParameters(DimensionType.Content, 1)
+            ];
+
+            MatrixMetadata meta = TestDataCubeBuilder.BuildTestMeta(dimParams);
+            Dimension dimension = meta.Dimensions[0];
+            ContentDimensionValue value = (ContentDimensionValue)dimension.Values[0];
+            MultilanguageString nameEditMls = new(new Dictionary<string, string> { { "fi", "NameEdit.fi" }, { "en", "NameEdit.en" } });
+            DimensionQuery dimensionQuery = new()
+            {
+                ValueEdits = new Dictionary<string, DimensionQuery.VariableValueEdition>
+                {
+                    { value.Code, new DimensionQuery.VariableValueEdition { NameEdit = nameEditMls, ContentComponent = null } }
+                }
+            };
+
+            // Act
+            VariableValue variableValue = value.ConvertToVariableValue(null, dimensionQuery, meta);
+
+            // Assert
+            Assert.That(variableValue, Is.Not.Null);
+            Assert.That(variableValue.Code.Equals(value.Code));
+            Assert.That(variableValue.Name.Equals(nameEditMls));
+            Assert.That(variableValue.IsSumValue.Equals(false));
+            Assert.That(variableValue.ContentComponent, Is.Not.Null);
+            Assert.That(variableValue.ContentComponent.NumberOfDecimals.Equals(value.Precision));
+            Assert.That(variableValue.ContentComponent.Source.Equals(value.GetSource(meta)));
+            Assert.That(variableValue.ContentComponent.Unit.Equals(value.Unit));
+        }
     }
 }
