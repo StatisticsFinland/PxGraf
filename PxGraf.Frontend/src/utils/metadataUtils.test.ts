@@ -3,32 +3,32 @@ import { getAdditionalPropertyValue } from "./metadataUtils";
 
 const mockProperties: { [key: string]: IMetaProperty } = {
     MOCKPROPERTY_STRING: {
-        Type: EMetaPropertyType.Text,
-        Value: 'Mock property A value'
+        type: EMetaPropertyType.Text,
+        value: 'Mock property A value'
     },
     MOCKPROPERTY_MULTILANGUAGESTRING: {
-        Type: EMetaPropertyType.MultilanguageText,
-        Value: {
+        type: EMetaPropertyType.MultilanguageText,
+        value: {
             fi: 'Mock property B value in Finnish',
             sv: 'Mock property B value in Swedish',
             en: 'Mock property B value in English'
         }
     },
     MOCKPROPERTY_NUMBER: {
-        Type: EMetaPropertyType.Numeric,
-        Value: 42
+        type: EMetaPropertyType.Numeric,
+        value: 42
     },
     MOCKPROPERTY_BOOLEAN: {
-        Type: EMetaPropertyType.Boolean,
-        Value: true
+        type: EMetaPropertyType.Boolean,
+        value: true
     },
     MOCKPROPERTY_STRING_ARRAY: {
-        Type: EMetaPropertyType.TextArray,
-        Value: ['foo', 'bar', 'baz']
+        type: EMetaPropertyType.TextArray,
+        value: ['foo', 'bar', 'baz']
     },
     MOCKPROPERTY_MULTILANGUAGESTRING_ARRAY: {
-        Type: EMetaPropertyType.MultilanguageTextArray,
-        Value: [
+        type: EMetaPropertyType.MultilanguageTextArray,
+        value: [
             {
                 fi: 'Foo in Finnish',
                 sv: 'Foo in Swedish',

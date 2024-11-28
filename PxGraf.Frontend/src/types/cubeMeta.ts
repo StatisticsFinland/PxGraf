@@ -34,8 +34,8 @@ export enum EMetaPropertyType {
  * @property {MultiLanguageString | string | boolean | number | MultiLanguageString[] | string[]} Value - The value of the property.
  */
 export interface IMetaProperty {
-    Type: EMetaPropertyType,
-    Value: MultiLanguageString | string | boolean | number | MultiLanguageString[] | string[]
+    type: EMetaPropertyType,
+    value: MultiLanguageString | string | boolean | number | MultiLanguageString[] | string[]
 }
 
 /**

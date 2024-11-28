@@ -54,8 +54,8 @@ const mockVariables: IDimension[] = [{
                 lastUpdated: '2021-01-01',
                 additionalProperties: {
                     SOURCE: {
-                        Type: EMetaPropertyType.MultilanguageText,
-                        Value: {
+                        type: EMetaPropertyType.MultilanguageText,
+                        value: {
                             'fi': 'lahde',
                             'sv': 'kalla',
                             'en': 'source'
@@ -91,8 +91,8 @@ const mockVariables: IDimension[] = [{
                 lastUpdated: '2021-01-01',
                 additionalProperties: {
                     SOURCE: {
-                        Type: EMetaPropertyType.MultilanguageText,
-                        Value: {
+                        type: EMetaPropertyType.MultilanguageText,
+                        value: {
                             'fi': 'lahde',
                             'sv': 'kalla',
                             'en': 'source'

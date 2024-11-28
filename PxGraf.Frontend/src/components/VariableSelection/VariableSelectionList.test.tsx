@@ -207,8 +207,8 @@ const mockVariables: IDimension[] =
             type: EDimensionType.Other,
             additionalProperties: {
                 ELIMINATION: {
-                    Type: EMetaPropertyType.MultilanguageText,
-                    Value: {
+                    type: EMetaPropertyType.MultilanguageText,
+                    value: {
                         fi: "sum",
                         sv: "sum",
                         en: "sum"

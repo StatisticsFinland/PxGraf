@@ -11,19 +11,19 @@ export function getAdditionalPropertyValue(key: string, additionalProperties: { 
     if (!additionalProperties) return null;
 
     if (additionalProperties[key]) {
-        switch (additionalProperties[key].Type) {
+        switch (additionalProperties[key].type) {
             case EMetaPropertyType.Text:
-                return additionalProperties[key].Value as string;
+                return additionalProperties[key].value as string;
             case EMetaPropertyType.MultilanguageText:
-                return additionalProperties[key].Value as MultiLanguageString;
+                return additionalProperties[key].value as MultiLanguageString;
             case EMetaPropertyType.Numeric:
-                return additionalProperties[key].Value as number;
+                return additionalProperties[key].value as number;
             case EMetaPropertyType.Boolean:
-                return additionalProperties[key].Value as boolean;
+                return additionalProperties[key].value as boolean;
             case EMetaPropertyType.TextArray:
-                return additionalProperties[key].Value as string[];
+                return additionalProperties[key].value as string[];
             case EMetaPropertyType.MultilanguageTextArray:
-                return additionalProperties[key].Value as MultiLanguageString[];
+                return additionalProperties[key].value as MultiLanguageString[];
         }
     }
     return null;

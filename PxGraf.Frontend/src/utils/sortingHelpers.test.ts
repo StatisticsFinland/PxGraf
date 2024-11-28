@@ -205,8 +205,8 @@ const mockVariables: IDimension[] =
         additionalProperties:
         {
             ELIMINATION: {
-                Type: EMetaPropertyType.Text,
-                Value: "sum"
+                type: EMetaPropertyType.Text,
+                value: "sum"
             }
         },
         values: [
