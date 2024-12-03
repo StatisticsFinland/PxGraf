@@ -9,7 +9,7 @@ on:
 
 jobs:
  dependabot_version_increment:
-    if: ${{ github.actor == 'dependabot[bot]' }}
+    # if: ${{ github.actor == 'dependabot[bot]' }}
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -90,19 +90,11 @@ jobs:
             echo "Frontend version number in PR branch is already up-to-date. No action taken."
           fi
 
-      - name: Get current backend version number from dev branch
-        if: env.BACKEND_CHANGED == 'true'
-        run: |
-          git fetch origin dev
-          git checkout origin/dev -- PxGraf/PxGraf.csproj
-          CURRENT_VERSION=$(grep '<VersionPrefix>' PxGraf/PxGraf.csproj | sed 's/.*<VersionPrefix>\(.*\)<\/VersionPrefix>.*/\1/')
-          echo "CURRENT_VERSION=$CURRENT_VERSION" >> $GITHUB_ENV
-          echo "Current dev version is $CURRENT_VERSION"
-
       - name: Compare and increment backend version number
         if: env.BACKEND_CHANGED == 'true'
         run: |
           PR_VERSION=$(grep '<VersionPrefix>' PxGraf/PxGraf.csproj | sed 's/.*<VersionPrefix>\(.*\)<\/VersionPrefix>.*/\1/')
+          CURRENT_VERSION=$(git show origin/dev:PxGraf/PxGraf.csproj | grep '<VersionPrefix>' | sed 's/.*<VersionPrefix>\(.*\)<\/VersionPrefix>.*/\1/')
           if [ "$CURRENT_VERSION" = "$PR_VERSION" ]; then
             NEW_VERSION=$(echo $PR_VERSION | awk -F. -v OFS=. '{$NF++;print}')
             sed -i "s/<VersionPrefix>$PR_VERSION<\/VersionPrefix>/<VersionPrefix>$NEW_VERSION<\/VersionPrefix>/" PxGraf/PxGraf.csproj
