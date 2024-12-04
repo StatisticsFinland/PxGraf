@@ -42,7 +42,7 @@ jobs:
             /o:statisticsfinland-github
             /d:sonar.host.url=https://sonarcloud.io
             /d:sonar.token=${{ secrets.SONAR_TOKEN }}    
-            /d:sonar.cs.vscoveragexml.reportsPaths=./coverage.xml
+            /d:sonar.cs.vscoveragexml.reportsPaths=./PxGraf/UnitTests/coverage.xml
             /d:sonar.sources=./PxGraf/PxGraf
             /d:sonar.tests=./PxGraf/UnitTests
 
@@ -56,7 +56,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with: 
           name: coverage-report
-          path: ./TestResults
+          path: ./PxGraf/UnitTests/coverage.xml
         
       - name: End SonarScanner
         run: dotnet sonarscanner end /d:sonar.token=${{ secrets.SONAR_TOKEN }}
