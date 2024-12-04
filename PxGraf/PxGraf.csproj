@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-	<TargetFrameworks>net8.0;net8.0-windows8.0</TargetFrameworks>
+	<TargetFrameworks>net8.0-windows8.0</TargetFrameworks>
     <StartupObject>PxGraf.Program</StartupObject>
     <RootNamespace>PxGraf</RootNamespace>
     <AssemblyName>PxGraf</AssemblyName>
     <UserSecretsId>5fefcbdc-e04e-4475-9927-aab412b027ff</UserSecretsId>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <VersionPrefix>3.0.31</VersionPrefix>
+    <VersionPrefix>3.0.32</VersionPrefix>
     <AssemblyVersion>3.0.30.0</AssemblyVersion>
     <FileVersion>3.0.30.0</FileVersion>
 	<SpaRoot>..\PxGraf.Frontend</SpaRoot>
