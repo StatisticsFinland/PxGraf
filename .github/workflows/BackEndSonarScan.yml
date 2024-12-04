@@ -34,8 +34,8 @@ jobs:
             distribution: 'zulu'
             java-version: '21'
 
-      - name: Install dotnet-coverage
-        run: dotnet tool install -g dotnet-coverage
+      - name: Install AltCover
+        run: dotnet add package AltCover
       
       - name: Install SonarCloud scanner
         run: dotnet tool install -g dotnet-sonarscanner
@@ -50,7 +50,7 @@ jobs:
             /d:sonar.tests=./PxGraf/UnitTests
 
       - name: Run coverage test
-        run: dotnet-coverage collect "dotnet test --configuration Test --logger trx" -f xml -o coverage.xml --include-files '**/*.cs'
+        run: dotnet test /p:AltCover=true
 
       - name: Upload coverage report
         uses: actions/upload-artifact@v3
