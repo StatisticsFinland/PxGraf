@@ -15,7 +15,7 @@ on:
 jobs:
  sonar_backend:
     if: ${{ github.actor != 'dependabot[bot]' }}
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
 
