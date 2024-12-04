@@ -48,7 +48,7 @@ jobs:
         run: dotnet build --no-incremental --configuration Test
 
       - name: Run coverage test
-        run: dotnet test --no-build --configuration Test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=coverage.xml
+        run: dotnet test --no-build --configuration Test /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=coverage.xml
         working-directory: UnitTests
 
       - name: Upload coverage report
