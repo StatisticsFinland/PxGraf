@@ -47,7 +47,7 @@ jobs:
             /d:sonar.tests=./PxGraf/UnitTests
 
       - name: Run coverage test
-        run: dotnet test /p:AltCover=true
+        run: dotnet test /p:AltCover=true --configuration Test --logger trx
 
       - name: Upload coverage report
         uses: actions/upload-artifact@v3
