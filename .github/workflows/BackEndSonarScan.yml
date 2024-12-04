@@ -33,9 +33,6 @@ jobs:
         with:
             distribution: 'zulu'
             java-version: '21'
-
-      - name: Install AltCover
-        run: dotnet add package AltCover
       
       - name: Install SonarCloud scanner
         run: dotnet tool install -g dotnet-sonarscanner
