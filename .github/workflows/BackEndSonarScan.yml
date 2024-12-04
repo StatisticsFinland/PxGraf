@@ -47,13 +47,13 @@ jobs:
             /d:sonar.tests=./PxGraf/UnitTests
 
       - name: Run coverage test
-        run: dotnet test /p:AltCover=true --configuration Test --logger trx
+        run: dotnet test --collect:"XPlat Code Coverage" --configuration Test --results-directory ./TestResults --logger trx
 
       - name: Upload coverage report
         uses: actions/upload-artifact@v3
         with: 
           name: coverage-report
-          path: coverage.xml
+          path: ./TestResults
         
       - name: End SonarScanner
         run: dotnet sonarscanner end /d:sonar.token=${{ secrets.SONAR_TOKEN }}
