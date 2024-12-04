@@ -47,13 +47,8 @@ jobs:
             /d:sonar.cs.vscoveragexml.reportsPaths=**/coverage.xml
 
       - name: Run coverage test
-        run: dotnet-coverage collect "dotnet test --configuration Test --logger trx" -f xml -o coverage.xml
-
-      - name: Upload coverage report
-        uses: actions/upload-artifact@v3
-        with: 
-          name: coverage-report
-          path: coverage.xml
+        run: dotnet-coverage collect "dotnet test --configuration Test --logger trx -p:TargetFrameworks=net8.0" -f xml -o coverage.xml
         
       - name: End SonarScanner
         run: dotnet sonarscanner end /d:sonar.token=${{ secrets.SONAR_TOKEN }}
+        
