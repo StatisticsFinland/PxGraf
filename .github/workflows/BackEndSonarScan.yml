@@ -18,7 +18,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -33,6 +32,9 @@ jobs:
         with:
             distribution: 'zulu'
             java-version: '21'
+
+      - name: Install dotnet-coverage
+        run: dotnet tool install -g dotnet-coverage
       
       - name: Install SonarCloud scanner
         run: dotnet tool install -g dotnet-sonarscanner
@@ -42,20 +44,16 @@ jobs:
             /o:statisticsfinland-github
             /d:sonar.host.url=https://sonarcloud.io
             /d:sonar.token=${{ secrets.SONAR_TOKEN }}    
-            /d:sonar.coverageReportPaths=UnitTests/coverage.xml
-
-      - name: Build backend
-        run: dotnet build --no-incremental --configuration Test
+            /d:sonar.cs.vscoveragexml.reportsPaths=**/coverage.xml
 
       - name: Run coverage test
-        run: dotnet test --no-build --configuration Test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=coverage.xml
-        working-directory: UnitTests
+        run: dotnet-coverage collect "dotnet test --configuration Test --logger trx" -f xml -o coverage.xml
 
       - name: Upload coverage report
         uses: actions/upload-artifact@v3
         with: 
           name: coverage-report
-          path: UnitTests/coverage.xml
+          path: coverage.xml
         
       - name: End SonarScanner
         run: dotnet sonarscanner end /d:sonar.token=${{ secrets.SONAR_TOKEN }}
