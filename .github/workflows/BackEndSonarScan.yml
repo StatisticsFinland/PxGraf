@@ -50,7 +50,7 @@ jobs:
         run: dotnet build --no-incremental --configuration Test
 
       - name: Run coverage test
-        run: coverlet ./PxGraf/UnitTests/bin/Test/net8.0/PxGraf.UnitTests.dll --target "dotnet" --targetargs "test --no-build" -f opencover -o -./coverage.xml
+        run: dotnet test --no-build --configuration Test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=./coverage.xml
 
       - name: Upload coverage report
         uses: actions/upload-artifact@v3
