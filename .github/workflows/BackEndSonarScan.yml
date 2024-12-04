@@ -15,7 +15,7 @@ on:
 jobs:
  sonar_backend:
     if: ${{ github.actor != 'dependabot[bot]' }}
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
 
@@ -42,7 +42,7 @@ jobs:
             /o:statisticsfinland-github
             /d:sonar.host.url=https://sonarcloud.io
             /d:sonar.token=${{ secrets.SONAR_TOKEN }}    
-            /d:sonar.cs.vscoveragexml.reportsPaths=/UnitTests/coverage.xml
+            /d:sonar.coverageReportPaths=".\UnitTests\coverage.xml"
 
       - name: Build backend
         run: dotnet build --no-incremental --configuration Test
