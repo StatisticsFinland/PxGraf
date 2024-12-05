@@ -2,7 +2,6 @@
 
   <PropertyGroup>
 	<TargetFramework>net8.0-windows8.0</TargetFramework>
-	<TargetFrameworks>net8.0-windows8.0;net8.0</TargetFrameworks>
     <StartupObject>PxGraf.Program</StartupObject>
     <RootNamespace>PxGraf</RootNamespace>
     <AssemblyName>PxGraf</AssemblyName>
