@@ -21,6 +21,7 @@ using PxGraf.Datasource.Cache;
 using PxGraf.Models.Queries;
 using PxGraf.Datasource.FileDatasource;
 using PxGraf.Datasource.ApiDatasource;
+using System.Text;
 
 namespace PxGraf
 {
@@ -141,6 +142,7 @@ namespace PxGraf
                 services.AddSingleton<IApiDatasource, PxWebV1ApiInterface>();
                 services.AddSingleton<ICachedDatasource, CachedApiDatasource>();
             }
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
