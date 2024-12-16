@@ -1,6 +1,7 @@
 import { IDatabaseGroupHeader, IDatabaseTable } from '../api/services/table';
 import { IDimension, IDimensionValue, EDimensionType } from "types/cubeMeta";
 import { getAdditionalPropertyValue } from './metadataUtils';
+import { eliminationKey } from './keywordConstants';
 
 /**
  * Function for sorting databases based on the primary language.
@@ -75,7 +76,7 @@ export const sortedDimensions = (dimensions: IDimension[]): IDimension[] => {
 }
 
 function getValueIsSumValue(value: IDimensionValue, dimension: IDimension): boolean {
-    const eliminationCode: string = getAdditionalPropertyValue("ELIMINATION", dimension.additionalProperties) as string;
+    const eliminationCode: string = getAdditionalPropertyValue(eliminationKey, dimension.additionalProperties) as string;
     if (eliminationCode) return eliminationCode === value.code;
     else return false;
 }

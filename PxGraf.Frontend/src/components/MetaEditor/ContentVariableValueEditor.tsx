@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import { IDimensionValue } from 'types/cubeMeta';
 import { IVariableValueEditions } from 'types/query';
 import { getAdditionalPropertyValue } from '../../utils/metadataUtils';
+import { sourceKey } from '../../utils/keywordConstants';
 
 const EditorFieldWrapper = styled(Stack)`
   padding: 16px;
@@ -62,7 +63,7 @@ export const ContentVariableValueEditor: React.FC<IContentVariableValueEditorPro
                 />
                 <EditorField
                     label={t("editMetadata.source")}
-                    defaultValue={getAdditionalPropertyValue("SOURCE", variableValue?.additionalProperties)[language] ?? ''}
+                    defaultValue={getAdditionalPropertyValue(sourceKey, variableValue?.additionalProperties)[language] ?? ''}
                     editValue={valueEdits?.contentComponent?.sourceEdit?.[language]}
                     onChange={newValue => {
                         const newValueEdit: IVariableValueEditions = {
