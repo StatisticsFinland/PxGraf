@@ -20,13 +20,17 @@ PxGraf uses the PxWeb API to fetch data from the Px databases. Additional testin
 that comes with pxweb lacks the necessary metadata (content variables and time variables) for building visualizations with PxGraf.
 
 ## Running PxGraf using local px database with Px.Utils
-PxGraf can be configured to run using the local px database using Px.Utils instead of a PxWeb server. Px.Utils provides a fast way to access Px files on the local px database. In order to use Px.Utils, a Px file database must be created on the local system. This can be done using the PxWeb admin tools. To enable PxGraf to use Px.Utils, the appsettings.json file must be updated with the path to the Px file database (LocalFileSystemDatabaseConfig.DatabaseRootPath) and LocalFileSystemDatabaseConfig.Enabled must be set to true. LocalFileSystemDatabaseConfig.Encoding should match the encoding of the Px and alias files in the database.
+PxGraf can be configured to run using the local px database using Px.Utils instead of a PxWeb server. Px.Utils provides a fast way to access Px files on the local px database.
+In order to use Px.Utils, a Px file database must be created on the local system. This can be done using the PxWeb admin tools.
+To enable PxGraf to use Px.Utils, the appsettings.json file must be updated with the path to the Px file database (LocalFileSystemDatabaseConfig.DatabaseRootPath) and LocalFileSystemDatabaseConfig.Enabled must be set to true. LocalFileSystemDatabaseConfig.Encoding should match the encoding of the Px and alias files in the database.
 
 ## Backend
 
 1. Make a copy of the appsettings.template.json and rename it to appsettings.json
 2. Replace the placeholders in the appsettings.json file based on your environment.
-3. Fill in the address of the remote pxweb server to the appsettings.json file's "pxwebUrl" field. This can be the address of the remote server running PxWeb or localhost if you're running a local instance of PxWeb. If running a local instance of PxWeb, make sure to include the port number.
+3. Set up the database to either use a PxWeb instance (a) or a local database using Px.Utils (b).
+	a. Fill in the address of the remote pxweb server to the appsettings.json file's "pxwebUrl" field. This can be the address of the remote server running PxWeb or localhost if you're running a local instance of PxWeb. If running a local instance of PxWeb, make sure to include the port number.
+	b. Fill in the path to the local px database in the appsettings.json file's "LocalFileSystemDatabaseConfig.DatabaseRootPath" field. Set "LocalFileSystemDatabaseConfig.Enabled" to true. Set "LocalFileSystemDatabaseConfig.Encoding" to the encoding of the Px and alias files in the database.
 4. Build the solution in Visual Studio or run `dotnet build` in the PxGraf folder (See https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-build for more details).
 This will also build the frontend.
 
