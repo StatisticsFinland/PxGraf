@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -147,12 +148,27 @@ namespace PxGraf.Datasource.FileDatasource
             {
                 int aliasFileSuffixLength = PxSyntaxConstants.ALIAS_FILE_PREFIX.Length + 1; // +1 for the underscore
                 string lang = new([.. Path.GetFileNameWithoutExtension(aliasFile).Skip(aliasFileSuffixLength)]);
-                string alias = File.ReadAllText(aliasFile, config.Encoding);
+                Encoding encoding = GetFileEncoding(aliasFile);
+                string alias = File.ReadAllText(aliasFile, encoding);
                 translatedNames.Add(lang, alias.Trim());
             }
             return new MultilanguageString(translatedNames);
         }
 
+        private Encoding GetFileEncoding(string path)
+        {
+            using (var fs = File.OpenRead(path))
+            {
+                Ude.CharsetDetector cdet = new();
+                cdet.Feed(fs);
+                cdet.DataEnd();
+                if (cdet.Charset != null)
+                {
+                    return Encoding.GetEncoding(cdet.Charset);
+                }
+            }
+            return config.Encoding;
+        }
     }
 }
 #nullable disable
