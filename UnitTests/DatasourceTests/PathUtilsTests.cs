@@ -15,7 +15,7 @@ namespace UnitTests.DatasourceTests
             string rootPath = Path.Combine("C:", "Foo", "");
             IReadOnlyList<string> groupHierarcy = [ "Users", "Public" ];
             string expected = Path.Combine("C:", "Foo", "Users", "Public");
-            string actual = PathUtils.BuildAndSanitizePath(rootPath, groupHierarcy);
+            string actual = Path.GetFullPath(PathUtils.BuildAndSanitizePath(rootPath, groupHierarcy));
             Assert.That(actual, Is.EqualTo(expected));
         }
 
@@ -25,7 +25,7 @@ namespace UnitTests.DatasourceTests
             string rootPath = Path.Combine("C:", "Foo");
             IReadOnlyList<string> groupHierarcy = [ "Users", "Public" ];
             string expected = Path.Combine("C:", "Foo", "Users", "Public");
-            string actual = PathUtils.BuildAndSanitizePath(rootPath, groupHierarcy);
+            string actual = Path.GetFullPath(PathUtils.BuildAndSanitizePath(rootPath, groupHierarcy));
             Assert.That(actual, Is.EqualTo(expected));
         }
 
@@ -43,7 +43,7 @@ namespace UnitTests.DatasourceTests
             string rootPath = Path.Combine("C:", "Foo", "");
             PxTableReference reference = new (["Users", "Public" ], "file.px");
             string expected = Path.Combine("C:", "Foo", "Users", "Public", "file.px");
-            string actual = PathUtils.BuildAndSanitizePath(rootPath, reference);
+            string actual = Path.GetFullPath(PathUtils.BuildAndSanitizePath(rootPath, reference));
             Assert.That(actual, Is.EqualTo(expected));
         }
 
@@ -53,7 +53,7 @@ namespace UnitTests.DatasourceTests
             string rootPath = Path.Combine("C:", "Foo");
             PxTableReference reference = new ([ "Users", "Public" ], "file.px");
             string expected = Path.Combine("C:", "Foo", "Users", "Public", "file.px");
-            string actual = PathUtils.BuildAndSanitizePath(rootPath, reference);
+            string actual = Path.GetFullPath(PathUtils.BuildAndSanitizePath(rootPath, reference));
             Assert.That(actual, Is.EqualTo(expected));
         }
 

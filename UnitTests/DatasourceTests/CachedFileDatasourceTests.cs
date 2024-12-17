@@ -21,6 +21,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using System;
 using UnitTests.Fixtures;
+using System.IO;
 
 namespace UnitTests.DatasourceTests
 {
@@ -31,9 +32,9 @@ namespace UnitTests.DatasourceTests
 
         private readonly List<PxTableReference> _fileReferences =
         [
-            new("database\\subgroup\\folder\\table_1.px"),
-            new("database\\subgroup\\folder\\table_2.px"),
-            new("database\\subgroup\\folder\\table_3.px")
+            new(Path.Combine("database", "subgroup", "folder", "table_1.px")),
+            new(Path.Combine("database", "subgroup", "folder", "table_2.px")),
+            new(Path.Combine("database", "subgroup", "folder", "table_3.px"))
         ];
 
         private readonly Dictionary<string, string> _table1Name = new()
