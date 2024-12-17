@@ -49,9 +49,6 @@ jobs:
       - name: Build backend
         run: dotnet build --configuration Test /p:TargetFramework=net8.0-windows8.0
 
-      - name: Run backend tests
-        run: dotnet test --no-restore --verbosity normal --configuration Test /p:TargetFramework=net8.0-windows8.0
-
       - name: Run coverage test
         run: dotnet-coverage collect "dotnet test --configuration Test --logger trx /p:TargetFramework=net8.0-windows8.0" -f xml -o coverage.xml
         
