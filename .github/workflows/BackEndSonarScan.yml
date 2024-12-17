@@ -45,18 +45,13 @@ jobs:
             /d:sonar.host.url=https://sonarcloud.io
             /d:sonar.token=${{ secrets.SONAR_TOKEN }}    
             /d:sonar.cs.vscoveragexml.reportsPaths=**/coverage.xml
+            /d:sonar.scanner.scanAll=false
 
       - name: Build backend
         run: dotnet build --configuration Test /p:TargetFramework=net8.0-windows8.0
 
       - name: Run coverage test
         run: dotnet-coverage collect "dotnet test --configuration Test --logger trx /p:TargetFramework=net8.0" -f xml -o coverage.xml
-
-      - name: Upload coverage report
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage
-          path: coverage.xml
 
       - name: End SonarScanner
         run: dotnet sonarscanner end /d:sonar.token=${{ secrets.SONAR_TOKEN }}
