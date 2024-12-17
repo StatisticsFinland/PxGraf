@@ -53,7 +53,7 @@ jobs:
         run: dotnet-coverage collect "dotnet test --configuration Test --logger trx /p:TargetFramework=net8.0-windows8.0" -f xml -o coverage.xml
 
       - name: Upload coverage report
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: coverage.xml
 
