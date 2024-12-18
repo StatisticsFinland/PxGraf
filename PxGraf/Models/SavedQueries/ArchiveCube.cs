@@ -44,11 +44,6 @@ namespace PxGraf.Models.SavedQueries
         /// </summary>
         public string Version { get; }
 
-        /// <summary>
-        /// Parameterles constructor for json deserialization.
-        /// </summary>
-        public ArchiveCube() { }
-
         private ArchiveCube(IReadOnlyMatrixMetadata meta, IReadOnlyList<DecimalDataValue> data)
         {
             CreationTime = DateTime.Now;
@@ -74,6 +69,11 @@ namespace PxGraf.Models.SavedQueries
             IReadOnlyMatrixMetadata queriedMeta = matrix.Metadata.FilterDimensionValues(query);
             return new ArchiveCube(queriedMeta, matrix.Data);
         }
+
+        /// <summary>
+        /// Parameterles constructor for json deserialization.
+        /// </summary>
+        public ArchiveCube() { }
 
         public ArchiveCube(DateTime creationTime, IReadOnlyMatrixMetadata meta, List<DecimalDataValue> data, Dictionary<int, MultilanguageString> dataNotes, string version)
         {
