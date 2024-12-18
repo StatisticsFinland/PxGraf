@@ -25,7 +25,7 @@ namespace PxGraf.Models.Queries
         /// <summary>
         /// Dimension.Code to DimensionQuery
         /// </summary>
-        [JsonPropertyName("VariableQueries")] // legacy name, do not change or all the old queries break.
+        [JsonPropertyName("variableQueries")] // legacy name, do not change or all the old queries break.
         public Dictionary<string, DimensionQuery> DimensionQueries { get; set; }
     }
 }

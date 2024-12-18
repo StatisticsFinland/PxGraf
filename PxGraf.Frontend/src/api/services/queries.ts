@@ -87,11 +87,6 @@ export const fetchSavedQuery = async (queryId: string): Promise<IFetchSavedQuery
     const url = 'sq/' + queryId;
     const response = await client.getAsync(url);
 
-    // Check for VariableQueries and assign to variableQueries
-    if (!response.query?.variableQueries && response.query?.VariableQueries) {
-        response.query.variableQueries = response.query.VariableQueries;
-    }
-
     return response as IFetchSavedQueryResponse;
 };
 
