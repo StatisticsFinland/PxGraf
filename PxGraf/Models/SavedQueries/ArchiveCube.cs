@@ -21,28 +21,28 @@ namespace PxGraf.Models.SavedQueries
         /// <summary>
         /// When this archive object was originally created.
         /// </summary>
-        public DateTime CreationTime { get; set; }
+        public DateTime CreationTime { get; }
 
         /// <summary>
         /// Contains all metadata of this cube.
         /// </summary>
-        public IReadOnlyMatrixMetadata Meta { get; set; }
+        public IReadOnlyMatrixMetadata Meta { get; }
 
         /// <summary>
         /// Collection of key (variable value code coordinates) value (double or missing code) pairs.
         /// </summary>
         [JsonConverter(typeof(DecimalDataValueListConverter))]
-        public List<DecimalDataValue> Data { get; set; }
+        public List<DecimalDataValue> Data { get; }
 
         /// <summary>
         /// Notes mapped to the indexes of the data array.
         /// </summary>
-        public Dictionary<int, MultilanguageString> DataNotes { get; set; }
+        public Dictionary<int, MultilanguageString> DataNotes { get; }
 
         /// <summary>
         /// Verison of the archive cube.
         /// </summary>
-        public string Version { get; set; }
+        public string Version { get; }
 
         /// <summary>
         /// Parameterles constructor for json deserialization.
@@ -74,5 +74,14 @@ namespace PxGraf.Models.SavedQueries
             IReadOnlyMatrixMetadata queriedMeta = matrix.Metadata.FilterDimensionValues(query);
             return new ArchiveCube(queriedMeta, matrix.Data);
         }
-    }
+
+        public ArchiveCube(DateTime creationTime, IReadOnlyMatrixMetadata meta, List<DecimalDataValue> data, Dictionary<int, MultilanguageString> dataNotes, string version)
+        {
+            CreationTime = creationTime;
+            Meta = meta;
+            Data = data;
+            DataNotes = dataNotes;
+            Version = version;
+        }
+   }
 }

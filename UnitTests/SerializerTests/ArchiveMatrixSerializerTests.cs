@@ -73,8 +73,7 @@ namespace UnitTests.SerializerTests
                 new DimensionParameters(DimensionType.Time, 4),
                 new DimensionParameters(DimensionType.Other, 2)
             ];
-            ArchiveCube expected = TestDataCubeBuilder.BuildTestArchiveCube(metaParams);
-            expected.Version = "1.1";
+            ArchiveCube expected = TestDataCubeBuilder.BuildTestArchiveCube(metaParams, null, "1.1");
             DecimalDataValue missingValue = new(0, DataValueType.Missing);
             expected.Data[1] = missingValue;
 

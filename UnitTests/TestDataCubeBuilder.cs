@@ -211,17 +211,19 @@ namespace UnitTests
             return dimension;
         }
 
-        public static ArchiveCube BuildTestArchiveCube(List<DimensionParameters> metaParams, string[]? languages = null)
+        public static ArchiveCube BuildTestArchiveCube(List<DimensionParameters> metaParams, string[]? languages = null, string version = "1.0", Dictionary<int, MultilanguageString>? dataNotes = null)
         {
             MatrixMetadata meta = BuildTestMeta(metaParams, languages);
             List<DecimalDataValue> data = BuildTestData(meta.Dimensions.Aggregate(1, (acc, var) => acc * var.Values.Count)).ToList();
 
-            return new ArchiveCube()
-            {
-                CreationTime = PxSyntaxConstants.ParseDateTime("2024-08-19T14:00:00.000Z"),
-                Meta = meta,
-                Data = data
-            };
+            return new ArchiveCube
+            (
+                PxSyntaxConstants.ParseDateTime("2024-08-19T14:00:00.000Z"),
+                meta,
+                data,
+                dataNotes,
+                version
+            );
         }
 
         private static string GetTextForLanguage(string baseText, string[] languages, int index)

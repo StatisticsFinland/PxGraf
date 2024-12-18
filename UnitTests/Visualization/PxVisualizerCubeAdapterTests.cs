@@ -594,25 +594,24 @@ namespace UnitTests.Visualization
                 new DimensionParameters(DimensionType.Content, 1, name: "Tiedot"),
             ];
 
-            Matrix<DecimalDataValue> cube = TestDataCubeBuilder.BuildTestMatrix(cubeParams, missingData: true);
             LineChartVisualizationSettings settings = new(new Layout(["Alue"], ["Vuosineljännes"]), false, null);
             SavedQuery savedQuery = TestDataCubeBuilder.BuildTestSavedQuery(cubeParams, false, settings);
             savedQuery.Archived = true;
-            ArchiveCube ac = TestDataCubeBuilder.BuildTestArchiveCube(cubeParams);
-            ac.Data = [.. cube.Data];
-            ac.DataNotes = [];
-            for (int i = 0; i < ac.Data.Count; i++)
+            Dictionary<int, MultilanguageString> dataNotes = [];
+            Matrix<DecimalDataValue> cube = TestDataCubeBuilder.BuildTestMatrix(cubeParams, missingData: true);
+            for (int i = 0; i < cube.Data.Length; i++)
             {
-                if (ac.Data[i].Type != DataValueType.Exists)
+                if (cube.Data[i].Type != DataValueType.Exists)
                 {
-                    Dictionary<string, string> translations = new (ac.Meta.AvailableLanguages.Count);
-                    foreach (string lang in ac.Meta.AvailableLanguages)
+                    Dictionary<string, string> translations = new(cube.Metadata.AvailableLanguages.Count);
+                    foreach (string lang in cube.Metadata.AvailableLanguages)
                     {
-                        translations.Add(lang, PxSyntaxConstants.MissingValueDotCodes[(int)ac.Data[i].Type]);
+                        translations.Add(lang, PxSyntaxConstants.MissingValueDotCodes[(int)cube.Data[i].Type]);
                     }
-                    ac.DataNotes.Add(i, new MultilanguageString(translations));
+                    dataNotes.Add(i, new MultilanguageString(translations));
                 }
             }
+            ArchiveCube ac = TestDataCubeBuilder.BuildTestArchiveCube(cubeParams, dataNotes: dataNotes);
 
             // Act
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(ac.ToMatrix(), savedQuery);

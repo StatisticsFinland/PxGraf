@@ -31,13 +31,13 @@ namespace PxGraf.Models.SavedQueries.Versions
         public override ArchiveCube ToArchiveCube()
         {
             return new ArchiveCube
-            {
-                CreationTime = CreationTime,
-                Meta = Meta.ToMatrixMetadata(),
-                Data = Data,
-                DataNotes = DataNotes,
-                Version = "1.0"
-            };
+            (
+                CreationTime,
+                Meta.ToMatrixMetadata(),
+                Data,
+                DataNotes,
+                "1.0"
+            );
         }
     }
 }
