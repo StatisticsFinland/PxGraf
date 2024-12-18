@@ -3,221 +3,221 @@
     internal static class SavedQuerySerializerExpectedOutputFixtures
     {
         public static string V1_1_TEST_SAVEDQUERY1_SER_DESER_EXPECTED_OUTPUT = @"{
-                ""Settings"": {
-                    ""VisualizationType"": ""GroupVerticalBarChart"",
-                    ""CutYAxis"": false,
-                    ""MatchXLabelsToEnd"": false,
-                    ""XLabelInterval"": 1,
-                    ""Layout"": {
-                        ""RowVariableCodes"": [""Kuukausi""],
-                        ""ColumnVariableCodes"": [""Ilmoittava lentoasema""]
+                ""settings"": {
+                    ""visualizationType"": ""GroupVerticalBarChart"",
+                    ""cutYAxis"": false,
+                    ""matchXLabelsToEnd"": false,
+                    ""xLabelInterval"": 1,
+                    ""layout"": {
+                        ""rowVariableCodes"": [""Kuukausi""],
+                        ""columnVariableCodes"": [""Ilmoittava lentoasema""]
                     },
-                    ""ShowDataPoints"": false
+                    ""showDataPoints"": false
                 },
-                ""Version"": ""1.1"",
-                ""Query"": {
-                    ""TableReference"": {
-                        ""Name"": ""table.px"",
-                        ""Hierarchy"": [""foo"", ""bar""]
+                ""version"": ""1.1"",
+                ""query"": {
+                    ""tableReference"": {
+                        ""name"": ""table.px"",
+                        ""hierarchy"": [""foo"", ""bar""]
                     },
-                    ""ChartHeaderEdit"": null,
-                    ""VariableQueries"": {
+                    ""chartHeaderEdit"": null,
+                    ""variableQueries"": {
                         ""Kuukausi"": {
-                            ""NameEdit"": null,
-                            ""ValueEdits"": {},
-                            ""ValueFilter"": {
+                            ""nameEdit"": null,
+                            ""valueEdits"": {},
+                            ""valueFilter"": {
                                 ""type"": ""item"",
                                 ""query"": [""2022M12"", ""2022M11"", ""2019M02""]
                             },
-                            ""VirtualValueDefinitions"": null,
-                            ""Selectable"": false
+                            ""virtualValueDefinitions"": null,
+                            ""selectable"": false
                         },
                         ""Ilmoittava lentoasema"": {
-                            ""NameEdit"": null,
-                            ""ValueEdits"": {},
-                            ""ValueFilter"": {
+                            ""nameEdit"": null,
+                            ""valueEdits"": {},
+                            ""valueFilter"": {
                                 ""type"": ""item"",
                                 ""query"": [""EFJO"", ""EFKT""]
                             },
-                            ""VirtualValueDefinitions"": null,
-                            ""Selectable"": false
+                            ""virtualValueDefinitions"": null,
+                            ""selectable"": false
                         },
                         ""Lennon tyyppi"": {
-                            ""NameEdit"": null,
-                            ""ValueEdits"": {},
-                            ""ValueFilter"": {
+                            ""nameEdit"": null,
+                            ""valueEdits"": {},
+                            ""valueFilter"": {
                                 ""type"": ""item"",
                                 ""query"": [""1""]
                             },
-                            ""VirtualValueDefinitions"": null,
-                            ""Selectable"": false
+                            ""virtualValueDefinitions"": null,
+                            ""selectable"": false
                         },
                         ""Saapuneet/lähteneet"": {
-                            ""NameEdit"": null,
-                            ""ValueEdits"": {},
-                            ""ValueFilter"": {
+                            ""nameEdit"": null,
+                            ""valueEdits"": {},
+                            ""valueFilter"": {
                                 ""type"": ""item"",
                                 ""query"": [""1""]
                             },
-                            ""VirtualValueDefinitions"": null,
-                            ""Selectable"": false
+                            ""virtualValueDefinitions"": null,
+                            ""selectable"": false
                         },
                         ""Toinen lentoasema"": {
-                            ""NameEdit"": null,
-                            ""ValueEdits"": {},
-                            ""ValueFilter"": {
+                            ""nameEdit"": null,
+                            ""valueEdits"": {},
+                            ""valueFilter"": {
                                 ""type"": ""item"",
                                 ""query"": [""EFHK""]
                             },
-                            ""VirtualValueDefinitions"": null,
-                            ""Selectable"": false
+                            ""virtualValueDefinitions"": null,
+                            ""selectable"": false
                         },
                         ""Tiedot"": {
-                            ""NameEdit"": null,
-                            ""ValueEdits"": {},
-                            ""ValueFilter"": {
+                            ""nameEdit"": null,
+                            ""valueEdits"": {},
+                            ""valueFilter"": {
                                 ""type"": ""item"",
                                 ""query"": [""matkustajat""]
                             },
-                            ""VirtualValueDefinitions"": null,
-                            ""Selectable"": false
+                            ""virtualValueDefinitions"": null,
+                            ""selectable"": false
                         }
                     }
                 },
-                ""CreationTime"": ""2023-05-16T12:04:12Z"",
-                ""Archived"": false
+                ""creationTime"": ""2023-05-16T12:04:12Z"",
+                ""archived"": false
             }";
 
         public static string V1_0_TEST_SAVEDQUERY1_SER_DESER_EXPECTED_OUTPUT = @"{
-                ""Settings"": {
-                    ""VisualizationType"": ""GroupVerticalBarChart"",
-                    ""CutYAxis"": false,
-                    ""MatchXLabelsToEnd"": false,
-                    ""XLabelInterval"": 1,
-                    ""Layout"": null,
-                    ""ShowDataPoints"": false
+                ""settings"": {
+                    ""visualizationType"": ""GroupVerticalBarChart"",
+                    ""cutYAxis"": false,
+                    ""matchXLabelsToEnd"": false,
+                    ""xLabelInterval"": 1,
+                    ""layout"": null,
+                    ""showDataPoints"": false
                 },
-                ""Version"": ""1.1"",
-                ""Query"": {
-                    ""TableReference"": {
-                        ""Name"": ""table.px"",
-                        ""Hierarchy"": [""foo"", ""bar""]
+                ""version"": ""1.1"",
+                ""query"": {
+                    ""tableReference"": {
+                        ""name"": ""table.px"",
+                        ""hierarchy"": [""foo"", ""bar""]
                     },
-                    ""ChartHeaderEdit"": null,
-                    ""VariableQueries"": {
+                    ""chartHeaderEdit"": null,
+                    ""variableQueries"": {
                         ""Vuosi"": {
-                            ""NameEdit"": null,
-                            ""ValueEdits"": {},
-                            ""ValueFilter"": {
+                            ""nameEdit"": null,
+                            ""valueEdits"": {},
+                            ""valueFilter"": {
                                 ""type"": ""item"",
                                 ""query"": [""value-2"", ""value-1"", ""value-0""]
                             },
-                            ""VirtualValueDefinitions"": null,
-                            ""Selectable"": false
+                            ""virtualValueDefinitions"": null,
+                            ""selectable"": false
                         },
                         ""Syntymävaltio"": {
-                            ""NameEdit"": null,
-                            ""ValueEdits"": {},
-                            ""ValueFilter"": {
+                            ""nameEdit"": null,
+                            ""valueEdits"": {},
+                            ""valueFilter"": {
                                 ""type"": ""item"",
                                 ""query"": [""value-0"", ""value-1""]
                             },
-                            ""VirtualValueDefinitions"": null,
-                            ""Selectable"": false
+                            ""virtualValueDefinitions"": null,
+                            ""selectable"": false
                         },
                         ""Adoptiotyyppi"": {
-                            ""NameEdit"": null,
-                            ""ValueEdits"": {},
-                            ""ValueFilter"": {
+                            ""nameEdit"": null,
+                            ""valueEdits"": {},
+                            ""valueFilter"": {
                                 ""type"": ""item"",
                                 ""query"": [""value-0""]
                             },
-                            ""VirtualValueDefinitions"": null,
-                            ""Selectable"": false
+                            ""virtualValueDefinitions"": null,
+                            ""selectable"": false
                         },
                         ""Ikä"": {
-                            ""NameEdit"": null,
-                            ""ValueEdits"": {},
-                            ""ValueFilter"": {
+                            ""nameEdit"": null,
+                            ""valueEdits"": {},
+                            ""valueFilter"": {
                                 ""type"": ""item"",
                                 ""query"": [""value-0""]
                             },
-                            ""VirtualValueDefinitions"": null,
-                            ""Selectable"": false
+                            ""virtualValueDefinitions"": null,
+                            ""selectable"": false
                         },
                         ""Sukupuoli"": {
-                            ""NameEdit"": null,
-                            ""ValueEdits"": {},
-                            ""ValueFilter"": {
+                            ""nameEdit"": null,
+                            ""valueEdits"": {},
+                            ""valueFilter"": {
                                 ""type"": ""item"",
                                 ""query"": [""value-0""]
                             },
-                            ""VirtualValueDefinitions"": null,
-                            ""Selectable"": false
+                            ""virtualValueDefinitions"": null,
+                            ""selectable"": false
                         },
                         ""Tiedot"": {
-                            ""NameEdit"": null,
-                            ""ValueEdits"": {},
-                            ""ValueFilter"": {
+                            ""nameEdit"": null,
+                            ""valueEdits"": {},
+                            ""valueFilter"": {
                                 ""type"": ""item"",
                                 ""query"": [""value-0""]
                             },
-                            ""VirtualValueDefinitions"": null,
-                            ""Selectable"": false
+                            ""virtualValueDefinitions"": null,
+                            ""selectable"": false
                         }
                     }
                 },
-                ""CreationTime"": ""2023-05-16T14:13:33Z"",
-                ""Archived"": false
+                ""creationTime"": ""2023-05-16T14:13:33Z"",
+                ""archived"": false
             }";
 
         public static string V1_0_TABLETEST1_SER_DESER_EXPECTED_OUTPUT = @"{
-                ""Settings"": {
-                    ""VisualizationType"": ""Table"",
-                    ""CutYAxis"": false,
-                    ""DefaultSelectableVariableCodes"": {},
-                    ""Layout"": {
-                        ""RowVariableCodes"": [
+                ""settings"": {
+                    ""visualizationType"": ""Table"",
+                    ""cutYAxis"": false,
+                    ""defaultSelectableVariableCodes"": {},
+                    ""layout"": {
+                        ""rowVariableCodes"": [
                             ""Kuukausi"",
                             ""Ilmoittava lentoasema"",
                             ""Lennon tyyppi"",
                             ""Saapuneet/lähteneet""
                         ],
-                        ""ColumnVariableCodes"": [
+                        ""columnVariableCodes"": [
                             ""Toinen lentoasema"",
                             ""Tiedot""
                         ]
                     },
-                    ""ShowDataPoints"": false
+                    ""showDataPoints"": false
                 },
-                ""Version"": ""1.1"",
-                ""Query"": {
-                    ""TableReference"": {
-                        ""Name"": ""table.px"",
-                        ""Hierarchy"": [
+                ""version"": ""1.1"",
+                ""query"": {
+                    ""tableReference"": {
+                        ""name"": ""table.px"",
+                        ""hierarchy"": [
                             ""foo"",
                             ""bar""
                         ]
                     },
-                    ""ChartHeaderEdit"": {
+                    ""chartHeaderEdit"": {
                         ""fi"": ""v10 sq header-fi"",
                         ""sv"": ""v10 sq header-en"",
                         ""en"": ""v10 sq header-sv""
                     },
-                    ""VariableQueries"": {
+                    ""variableQueries"": {
                         ""Kuukausi"": {
-                            ""NameEdit"": {},
-                            ""ValueEdits"": {},
-                            ""ValueFilter"": {
+                            ""nameEdit"": {},
+                            ""valueEdits"": {},
+                            ""valueFilter"": {
                                 ""type"": ""all""
                             },
-                            ""VirtualValueDefinitions"": [],
-                            ""Selectable"": true
+                            ""virtualValueDefinitions"": [],
+                            ""selectable"": true
                         },
                         ""Ilmoittava lentoasema"": {
-                            ""NameEdit"": {},
-                            ""ValueEdits"": {},
-                            ""ValueFilter"": {
+                            ""nameEdit"": {},
+                            ""valueEdits"": {},
+                            ""valueFilter"": {
                                 ""type"": ""item"",
                                 ""query"": [
                                     ""SSS"",
@@ -227,53 +227,53 @@
                                     ""EFJO""
                                 ]
                             },
-                            ""VirtualValueDefinitions"": [],
-                            ""Selectable"": false
+                            ""virtualValueDefinitions"": [],
+                            ""selectable"": false
                         },
                         ""Lennon tyyppi"": {
-                            ""NameEdit"": {},
-                            ""ValueEdits"": {},
-                            ""ValueFilter"": {
+                            ""nameEdit"": {},
+                            ""valueEdits"": {},
+                            ""valueFilter"": {
                                 ""type"": ""item"",
                                 ""query"": [
                                     ""SSS""
                                 ]
                             },
-                            ""VirtualValueDefinitions"": [],
-                            ""Selectable"": false
+                            ""virtualValueDefinitions"": [],
+                            ""selectable"": false
                         },
                         ""Saapuneet/lähteneet"": {
-                            ""NameEdit"": {},
-                            ""ValueEdits"": {},
-                            ""ValueFilter"": {
+                            ""nameEdit"": {},
+                            ""valueEdits"": {},
+                            ""valueFilter"": {
                                 ""type"": ""item"",
                                 ""query"": [
                                     ""SSS""
                                 ]
                             },
-                            ""VirtualValueDefinitions"": [],
-                            ""Selectable"": false
+                            ""virtualValueDefinitions"": [],
+                            ""selectable"": false
                         },
                         ""Toinen lentoasema"": {
-                            ""NameEdit"": {},
-                            ""ValueEdits"": {},
-                            ""ValueFilter"": {
+                            ""nameEdit"": {},
+                            ""valueEdits"": {},
+                            ""valueFilter"": {
                                 ""type"": ""item"",
                                 ""query"": [
                                     ""SSS""
                                 ]
                             },
-                            ""VirtualValueDefinitions"": [],
-                            ""Selectable"": false
+                            ""virtualValueDefinitions"": [],
+                            ""selectable"": false
                         },
                         ""Tiedot"": {
-                            ""NameEdit"": {},
-                            ""ValueEdits"": {
+                            ""nameEdit"": {},
+                            ""valueEdits"": {
                                 ""matkustajat"": {
-                                    ""NameEdit"": null,
-                                    ""ContentComponent"": {
-                                        ""UnitEdit"": {},
-                                        ""SourceEdit"": {
+                                    ""nameEdit"": null,
+                                    ""contentComponent"": {
+                                        ""unitEdit"": {},
+                                        ""sourceEdit"": {
                                             ""fi"": ""PxGraf-fi"",
                                             ""sv"": ""PxGraf-sv"",
                                             ""en"": ""PxGraf-en""
@@ -281,10 +281,10 @@
                                     }
                                 },
                                 ""rahti"": {
-                                    ""NameEdit"": null,
-                                    ""ContentComponent"": {
-                                        ""UnitEdit"": {},
-                                        ""SourceEdit"": {
+                                    ""nameEdit"": null,
+                                    ""contentComponent"": {
+                                        ""unitEdit"": {},
+                                        ""sourceEdit"": {
                                             ""fi"": ""PxGraf-fi"",
                                             ""sv"": ""PxGraf-sv"",
                                             ""en"": ""PxGraf-en""
@@ -292,83 +292,83 @@
                                     }
                                 }
                             },
-                            ""ValueFilter"": {
+                            ""valueFilter"": {
                                 ""type"": ""item"",
                                 ""query"": [
                                     ""matkustajat"",
                                     ""rahti""
                                 ]
                             },
-                            ""VirtualValueDefinitions"": [],
-                            ""Selectable"": false
+                            ""virtualValueDefinitions"": [],
+                            ""selectable"": false
                         }
                     }
                 },
-                ""CreationTime"": ""2022-04-19T06:12:40Z"",
-                ""Archived"": false
+                ""creationTime"": ""2022-04-19T06:12:40Z"",
+                ""archived"": false
             }";
 
         public static string V1_1_TEST_SAVEDQUERY4_SER_DESER_EXPECTED_OUTPUT = @"{
-                ""Settings"": {
-                    ""VisualizationType"": ""LineChart"",
-                    ""CutYAxis"": true,
-                    ""Layout"": {
-                        ""RowVariableCodes"": [""variable-0""],
-                        ""ColumnVariableCodes"": [""variable-1""]
+                ""settings"": {
+                    ""visualizationType"": ""LineChart"",
+                    ""cutYAxis"": true,
+                    ""layout"": {
+                        ""rowVariableCodes"": [""variable-0""],
+                        ""columnVariableCodes"": [""variable-1""]
                     },
-                    ""ShowDataPoints"": false
+                    ""showDataPoints"": false
                 },
-                ""Version"": ""1.1"",
-                ""Query"": {
-                    ""TableReference"": {
-                        ""Name"": ""table.px"",
-                        ""Hierarchy"": [""foo"", ""bar""]
+                ""version"": ""1.1"",
+                ""query"": {
+                    ""tableReference"": {
+                        ""name"": ""table.px"",
+                        ""hierarchy"": [""foo"", ""bar""]
                     },
-                    ""ChartHeaderEdit"": null,
-                    ""VariableQueries"": {
+                    ""chartHeaderEdit"": null,
+                    ""variableQueries"": {
                         ""variable-0"": {
-                            ""NameEdit"": null,
-                            ""ValueEdits"": {},
-                            ""ValueFilter"": {
+                            ""nameEdit"": null,
+                            ""valueEdits"": {},
+                            ""valueFilter"": {
                                 ""type"": ""all""
                             },
-                            ""VirtualValueDefinitions"": null,
-                            ""Selectable"": false
+                            ""virtualValueDefinitions"": null,
+                            ""selectable"": false
                         },
                         ""variable-1"": {
-                            ""NameEdit"": null,
-                            ""ValueEdits"": {},
-                            ""ValueFilter"": {
+                            ""nameEdit"": null,
+                            ""valueEdits"": {},
+                            ""valueFilter"": {
                                 ""type"": ""item"",
                                 ""query"": [""2021"", ""2012"", ""2007""]
                             },
-                            ""VirtualValueDefinitions"": null,
-                            ""Selectable"": false
+                            ""virtualValueDefinitions"": null,
+                            ""selectable"": false
                         },
                         ""variable-2"": {
-                            ""NameEdit"": null,
-                            ""ValueEdits"": {},
-                            ""ValueFilter"": {
+                            ""nameEdit"": null,
+                            ""valueEdits"": {},
+                            ""valueFilter"": {
                                 ""type"": ""from"",
                                 ""query"": ""foo""
                             },
-                            ""VirtualValueDefinitions"": null,
-                            ""Selectable"": false
+                            ""virtualValueDefinitions"": null,
+                            ""selectable"": false
                         },
                         ""variable-3"": {
-                            ""NameEdit"": null,
-                            ""ValueEdits"": {},
-                            ""ValueFilter"": {
+                            ""nameEdit"": null,
+                            ""valueEdits"": {},
+                            ""valueFilter"": {
                                 ""type"": ""top"",
                                 ""query"": 3
                             },
-                            ""VirtualValueDefinitions"": null,
-                            ""Selectable"": false
+                            ""virtualValueDefinitions"": null,
+                            ""selectable"": false
                         }
                     }
                 },
-                ""CreationTime"": ""2023-05-16T12:31:13Z"",
-                ""Archived"": false
+                ""creationTime"": ""2023-05-16T12:31:13Z"",
+                ""archived"": false
             }";
     }
 }

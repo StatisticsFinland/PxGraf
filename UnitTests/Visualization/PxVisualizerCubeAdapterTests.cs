@@ -239,7 +239,7 @@ namespace UnitTests.Visualization
                 new DimensionParameters(DimensionType.Content, 1, name: "Tiedot"),
             ];
 
-            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(SavedQueryFixtures.V1_1_TEST_SAVEDQUERY1);
+            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(SavedQueryFixtures.V1_1_TEST_SAVEDQUERY1, GlobalJsonConverterOptions.Default);
             Matrix<DecimalDataValue> inputCube = TestDataCubeBuilder.BuildTestMatrix(cubeParams);
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(inputCube, savedQuery);
 
@@ -262,7 +262,7 @@ namespace UnitTests.Visualization
                 new DimensionParameters(DimensionType.Content, 1, name: "Tiedot"),
             ];
 
-            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(SavedQueryFixtures.V1_1_TEST_SAVEDQUERY2);
+            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(SavedQueryFixtures.V1_1_TEST_SAVEDQUERY2, GlobalJsonConverterOptions.Default);
             Matrix<DecimalDataValue> inputCube = TestDataCubeBuilder.BuildTestMatrix(cubeParams);
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(inputCube, savedQuery);
 
@@ -282,7 +282,7 @@ namespace UnitTests.Visualization
                 new DimensionParameters(DimensionType.Time, 10, name: "Vuosi")
             ];
 
-            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(SavedQueryFixtures.V1_1_TEST_SAVEDQUERY3);
+            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(SavedQueryFixtures.V1_1_TEST_SAVEDQUERY3, GlobalJsonConverterOptions.Default);
             Matrix<DecimalDataValue> inputCube = TestDataCubeBuilder.BuildTestMatrix(cubeParams);
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(inputCube, savedQuery);
 
@@ -300,7 +300,7 @@ namespace UnitTests.Visualization
                 new DimensionParameters(DimensionType.Time, 5, name: "Vuosi")
             ];
 
-            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(SavedQueryFixtures.V11_TEST_TABLE_SAVEDQUERY);
+            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(SavedQueryFixtures.V11_TEST_TABLE_SAVEDQUERY, GlobalJsonConverterOptions.Default);
             Matrix<DecimalDataValue> inputCube = TestDataCubeBuilder.BuildTestMatrix(cubeParams);
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(inputCube, savedQuery);
 
@@ -352,7 +352,7 @@ namespace UnitTests.Visualization
                 new DimensionParameters(DimensionType.Content, 1, name: "Tiedot")
             ];
 
-            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(SavedQueryFixtures.V1_0_TEST_SAVEDQUERY1);
+            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(SavedQueryFixtures.V1_0_TEST_SAVEDQUERY1, GlobalJsonConverterOptions.Default);
             Matrix<DecimalDataValue> inputCube = TestDataCubeBuilder.BuildTestMatrix(cubeParams);
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(inputCube, savedQuery);
 

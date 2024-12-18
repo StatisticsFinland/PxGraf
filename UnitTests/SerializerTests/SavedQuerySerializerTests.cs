@@ -2,6 +2,7 @@
 using PxGraf.Enums;
 using PxGraf.Models.Queries;
 using PxGraf.Models.SavedQueries;
+using PxGraf.Settings;
 using PxGraf.Utility;
 using System;
 using System.Text.Encodings.Web;
@@ -57,25 +58,18 @@ namespace UnitTests.SerializerTests
             }
         }";
 
-        private readonly static JsonSerializerOptions options = new()
-        {
-            AllowTrailingCommas = true,
-            PropertyNameCaseInsensitive = true,
-            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
-        };
-
         [Test]
         public void SavedQueryDeserializationTest_Success()
         {
-            SavedQuery query = JsonSerializer.Deserialize<SavedQuery>(testSavedQuery, options);
+            SavedQuery query = JsonSerializer.Deserialize<SavedQuery>(testSavedQuery, GlobalJsonConverterOptions.Default);
             Assert.That(query.Settings.VisualizationType, Is.EqualTo(VisualizationType.LineChart));
         }
 
         [Test]
         public void SavedQuerySerializationTest_Success()
         {
-            SavedQuery query = JsonSerializer.Deserialize<SavedQuery>(testSavedQuery, options);
-            string serializedString = JsonSerializer.Serialize(query, options);
+            SavedQuery query = JsonSerializer.Deserialize<SavedQuery>(testSavedQuery, GlobalJsonConverterOptions.Default);
+            string serializedString = JsonSerializer.Serialize(query, GlobalJsonConverterOptions.Default);
             Assert.That(serializedString.Contains("1.1"));
             Assert.That(serializedString.Contains(ChartTypeEnumConverter.ToJsonString(query.Settings.VisualizationType)));
         }
@@ -101,7 +95,7 @@ namespace UnitTests.SerializerTests
                     }
                 }";
 
-            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(testJson, options);
+            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(testJson, GlobalJsonConverterOptions.Default);
 
             Assert.That(savedQuery.CreationTime, Is.EqualTo(PxSyntaxConstants.ParseDateTime("2023-04-24T14:36:18.7550813+03:00")));
             Assert.That(savedQuery.Settings.VisualizationType, Is.EqualTo(VisualizationType.Table));
@@ -132,7 +126,7 @@ namespace UnitTests.SerializerTests
                     }
                 }";
 
-            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(testJson, options);
+            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(testJson, GlobalJsonConverterOptions.Default);
 
             Assert.That(savedQuery.CreationTime, Is.EqualTo(PxSyntaxConstants.ParseDateTime("2023-04-24T14:36:18.7550813+03:00")));
             Assert.That(savedQuery.Settings.VisualizationType, Is.EqualTo(VisualizationType.Table));
@@ -166,7 +160,7 @@ namespace UnitTests.SerializerTests
                    },
                 }";
 
-            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(testJson, options);
+            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(testJson, GlobalJsonConverterOptions.Default);
 
             Assert.That(savedQuery.CreationTime, Is.EqualTo(PxSyntaxConstants.ParseDateTime("2023-04-24T14:36:18.7550813+03:00")));
             Assert.That(savedQuery.Settings.VisualizationType, Is.EqualTo(VisualizationType.GroupVerticalBarChart));
@@ -203,7 +197,7 @@ namespace UnitTests.SerializerTests
                    },
                 }";
 
-            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(testJson, options);
+            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(testJson, GlobalJsonConverterOptions.Default);
 
             Assert.That(savedQuery.CreationTime, Is.EqualTo(PxSyntaxConstants.ParseDateTime("2024-09-13T16:13:42.074783+03:00")));
             Assert.That(savedQuery.Settings.VisualizationType, Is.EqualTo(VisualizationType.GroupVerticalBarChart));
@@ -240,7 +234,7 @@ namespace UnitTests.SerializerTests
                    },
                 }";
 
-            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(testJson, options);
+            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(testJson, GlobalJsonConverterOptions.Default);
 
             Assert.That(savedQuery.CreationTime, Is.EqualTo(PxSyntaxConstants.ParseDateTime("2023-04-24T14:36:18.7550813+03:00")));
             Assert.That(savedQuery.Settings.VisualizationType, Is.EqualTo(VisualizationType.GroupVerticalBarChart));
@@ -277,7 +271,7 @@ namespace UnitTests.SerializerTests
                    },
                 }";
 
-            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(testJson, options);
+            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(testJson, GlobalJsonConverterOptions.Default);
 
             Assert.That(savedQuery.CreationTime, Is.EqualTo(PxSyntaxConstants.ParseDateTime("2023-04-24T14:36:18.7550813+03:00")));
             Assert.That(savedQuery.Settings.VisualizationType, Is.EqualTo(VisualizationType.GroupVerticalBarChart));
@@ -314,7 +308,7 @@ namespace UnitTests.SerializerTests
                    },
                 }";
 
-            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(testJson, options);
+            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(testJson, GlobalJsonConverterOptions.Default);
 
             Assert.That(savedQuery.CreationTime, Is.EqualTo(PxSyntaxConstants.ParseDateTime("2023-04-24T14:36:18.7550813+03:00")));
             Assert.That(savedQuery.Settings.VisualizationType, Is.EqualTo(VisualizationType.GroupVerticalBarChart));
@@ -345,7 +339,7 @@ namespace UnitTests.SerializerTests
                     }
                 }";
 
-            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(testJson, options);
+            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(testJson, GlobalJsonConverterOptions.Default);
 
             Assert.That(savedQuery.CreationTime, Is.EqualTo(PxSyntaxConstants.ParseDateTime("2023-04-24T14:36:18.7550813+03:00")));
             Assert.That(savedQuery.Settings.VisualizationType, Is.EqualTo(VisualizationType.Table));
@@ -365,7 +359,7 @@ namespace UnitTests.SerializerTests
                     ""Settings"":{""SelectedVisualization"":""Table"" }
                 }";
 
-            Assert.Throws<NotSupportedException>(() => JsonSerializer.Deserialize<SavedQuery>(testJson, options));
+            Assert.Throws<NotSupportedException>(() => JsonSerializer.Deserialize<SavedQuery>(testJson, GlobalJsonConverterOptions.Default));
         }
 
         [Test]
@@ -387,7 +381,7 @@ namespace UnitTests.SerializerTests
                     }
                 }";
 
-            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(testJson, options);
+            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(testJson, GlobalJsonConverterOptions.Default);
 
             Assert.That(savedQuery.CreationTime, Is.EqualTo(PxSyntaxConstants.ParseDateTime("2023-04-24T14:36:18.7550813+03:00")));
             Assert.That(savedQuery.Settings.VisualizationType, Is.EqualTo(VisualizationType.Table));
@@ -404,7 +398,7 @@ namespace UnitTests.SerializerTests
         public void DeserializeAndSerializeV10SQTest()
         {
             // Serialize
-            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(SavedQueryFixtures.V1_0_TEST_SAVEDQUERY1, options);
+            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(SavedQueryFixtures.V1_0_TEST_SAVEDQUERY1, GlobalJsonConverterOptions.Default);
             Assert.That(savedQuery.Version, Is.EqualTo("1.0"));
             Assert.That(savedQuery.Query.DimensionQueries.Count, Is.EqualTo(6));
             string pivotKey = "PivotRequested";
@@ -412,7 +406,7 @@ namespace UnitTests.SerializerTests
             Assert.That(savedQuery.Settings.VisualizationType, Is.EqualTo(VisualizationType.GroupVerticalBarChart));
 
             // Deserialize
-            string serializedString = JsonSerializer.Serialize(savedQuery, options);
+            string serializedString = JsonSerializer.Serialize(savedQuery, GlobalJsonConverterOptions.Default);
             JsonUtils.JsonStringsAreEqual(
                 SavedQuerySerializerExpectedOutputFixtures.V1_0_TEST_SAVEDQUERY1_SER_DESER_EXPECTED_OUTPUT,
                 serializedString);
@@ -422,13 +416,13 @@ namespace UnitTests.SerializerTests
         public void DeserializeAndSerializeV11SQTest()
         {
             // Serialize
-            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(SavedQueryFixtures.V1_1_TEST_SAVEDQUERY1, options);
+            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(SavedQueryFixtures.V1_1_TEST_SAVEDQUERY1, GlobalJsonConverterOptions.Default);
             Assert.That(savedQuery.Version, Is.EqualTo("1.1"));
             Assert.That(savedQuery.Query.DimensionQueries.Count, Is.EqualTo(6));
             Assert.That(savedQuery.Settings.VisualizationType, Is.EqualTo(VisualizationType.GroupVerticalBarChart));
 
             // Deserialize
-            string serializedString = JsonSerializer.Serialize(savedQuery, options);
+            string serializedString = JsonSerializer.Serialize(savedQuery, GlobalJsonConverterOptions.Default);
             JsonUtils.JsonStringsAreEqual(
                 SavedQuerySerializerExpectedOutputFixtures.V1_1_TEST_SAVEDQUERY1_SER_DESER_EXPECTED_OUTPUT,
                 serializedString);
@@ -438,7 +432,7 @@ namespace UnitTests.SerializerTests
         public void DesieralizeAndSerializeV11SQWithVaryingValueFilters()
         {
             //Serialize
-            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(SavedQueryFixtures.V1_1_TEST_SAVEDQUERY4, options);
+            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(SavedQueryFixtures.V1_1_TEST_SAVEDQUERY4, GlobalJsonConverterOptions.Default);
             Assert.That(savedQuery.Version, Is.EqualTo("1.1"));
             Assert.That(savedQuery.Query.DimensionQueries.Count, Is.EqualTo(4));
             Assert.That(savedQuery.Query.DimensionQueries["variable-0"].ValueFilter.GetType(), Is.EqualTo(typeof(AllFilter)));
@@ -447,7 +441,7 @@ namespace UnitTests.SerializerTests
             Assert.That(savedQuery.Query.DimensionQueries["variable-3"].ValueFilter.GetType(), Is.EqualTo(typeof(TopFilter)));
 
             // Deserialize
-            string serializedString = JsonSerializer.Serialize(savedQuery, options);
+            string serializedString = JsonSerializer.Serialize(savedQuery, GlobalJsonConverterOptions.Default);
             JsonUtils.JsonStringsAreEqual(
                 SavedQuerySerializerExpectedOutputFixtures.V1_1_TEST_SAVEDQUERY4_SER_DESER_EXPECTED_OUTPUT,
                 serializedString);
@@ -457,7 +451,7 @@ namespace UnitTests.SerializerTests
         public void DeserializeAndSerializeV10TableSQTest()
         {
             // Serialize
-            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(SavedQueryFixtures.V10_TEST_TABLE_SAVEDQUERY, options);
+            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(SavedQueryFixtures.V10_TEST_TABLE_SAVEDQUERY, GlobalJsonConverterOptions.Default);
             Assert.That(savedQuery.Version, Is.EqualTo("1.0"));
             Assert.That(savedQuery.Query.DimensionQueries.Count, Is.EqualTo(6));
             Assert.That(savedQuery.Settings.VisualizationType, Is.EqualTo(VisualizationType.Table));
@@ -465,7 +459,7 @@ namespace UnitTests.SerializerTests
             Assert.That(savedQuery.Settings.Layout.ColumnVariableCodes.Count, Is.EqualTo(2));
 
             // Deserialize
-            string serializedString = JsonSerializer.Serialize(savedQuery, options);
+            string serializedString = JsonSerializer.Serialize(savedQuery, GlobalJsonConverterOptions.Default);
             JsonUtils.JsonStringsAreEqual(
                 SavedQuerySerializerExpectedOutputFixtures.V1_0_TABLETEST1_SER_DESER_EXPECTED_OUTPUT,
                 serializedString);
