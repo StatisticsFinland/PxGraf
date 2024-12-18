@@ -41,7 +41,7 @@ namespace PxGraf.ChartTypeSelection
 
         public static VisualizationTypeSelectionObject FromQueryAndMatrix(MatrixQuery query, Matrix<DecimalDataValue> matrix)
         {
-            var dimInfos = matrix.Metadata.Dimensions.Select(v =>
+            List<VariableInfo> dimInfos = matrix.Metadata.Dimensions.Select(v =>
             {
                 DimensionQuery varQuery = query.DimensionQueries[v.Code];
                 return VariableInfo.FromQueryAndDimension(varQuery, v);
@@ -64,7 +64,7 @@ namespace PxGraf.ChartTypeSelection
         }
 
         /// <summary>
-        /// Contains information about a variable relevant for determining
+        /// Contains information about a variable for determining
         /// which visualization types are valid for some query containing said variable
         /// </summary>
         public class VariableInfo

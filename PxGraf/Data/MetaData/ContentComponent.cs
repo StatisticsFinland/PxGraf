@@ -3,7 +3,7 @@
 namespace PxGraf.Data.MetaData
 {
     /// <summary>
-    /// Contains information spesific to variables that are of the content type.
+    /// Contains information specific to dimensions that are of the content type.
     /// </summary>
     public class ContentComponent
     { 
