@@ -34,8 +34,8 @@ namespace PxGraf.Datasource.ApiDatasource
     {
         private readonly IPxWebConnection _pxwebConnection = pxwebConnection;
         private readonly ILogger<PxWebV1ApiInterface> _logger = logger;
-        public const string LIST_ITEM_TYPE = "l";
-        public const string TABLE_ITEM_TYPE = "t";
+        private const string LIST_ITEM_TYPE = "l";
+        private const string TABLE_ITEM_TYPE = "t";
 
         public async Task<DatabaseGroupContents> GetDatabaseItemGroup(IReadOnlyList<string> groupHierarcy)
         {
