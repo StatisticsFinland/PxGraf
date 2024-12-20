@@ -1,7 +1,7 @@
 import React from 'react';
 import '@testing-library/jest-dom';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { EMetaPropertyType, IDimensionValue } from 'types/cubeMeta';
+import { EMetaPropertyType, IContentDimensionValue, IDimensionValue } from 'types/cubeMeta';
 import { IDimensionValueEditions } from 'types/query';
 import ContentDimensionValueEditor from './ContentDimensionValueEditor';
 import UiLanguageContext from 'contexts/uiLanguageContext';
@@ -26,7 +26,7 @@ const availableUiLanguages = ['fi', 'en', 'sv'];
 const uiContentLanguage = 'fi';
 const setUiContentLanguage = jest.fn();
 
-const mockDimensionValue: IDimensionValue = {
+const mockDimensionValue: IContentDimensionValue = {
     lastUpdated: '1.1.2000',
     precision: 5,
     additionalProperties:

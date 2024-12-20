@@ -4,7 +4,7 @@ import { Stack, Paper } from '@mui/material';
 import { UiLanguageContext } from 'contexts/uiLanguageContext';
 import EditorField from './Editorfield';
 import styled from 'styled-components';
-import { IDimensionValue } from 'types/cubeMeta';
+import { IContentDimensionValue } from 'types/cubeMeta';
 import { IDimensionValueEditions } from 'types/query';
 import { getAdditionalPropertyValue } from '../../utils/metadataUtils';
 import { sourceKey } from '../../utils/keywordConstants';
@@ -14,7 +14,7 @@ const EditorFieldWrapper = styled(Stack)`
 `;
 
 interface IContentDimensionValueEditorProps {
-    dimensionValue: IDimensionValue;
+    dimensionValue: IContentDimensionValue;
     language: string;
     valueEdits: IDimensionValueEditions;
     onChange: (newEdit: IDimensionValueEditions) => void;

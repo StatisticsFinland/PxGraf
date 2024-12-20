@@ -51,7 +51,7 @@ export interface IDimension {
     code: string,
     name: MultiLanguageString,
     additionalProperties?: { [key: string]: IMetaProperty },
-    values: IDimensionValue[]
+    values: IDimensionValue[] | IContentDimensionValue[],
     type: EDimensionType,
     interval?: TTimeVariableInterval 
 }
@@ -66,10 +66,21 @@ export interface IDimensionValue {
     code: string,
     name: MultiLanguageString,
     isVirtual: boolean
-    additionalProperties?: { [key: string]: IMetaProperty },
+    additionalProperties?: { [key: string]: IMetaProperty }
+}
+
+/**
+ * Interface for content dimension value properties.
+ * @property {string} code - The code of the value.
+ * @property {MultiLanguageString} name - The multi language name of the value.
+ * @property {MultiLanguageString} unit - The unit of the value.
+ * @property {string} lastUpdated - The last updated date of the value.
+ * @property {number} precision - How many decimal places the value has.
+ */
+export interface IContentDimensionValue extends IDimensionValue {
     unit?: MultiLanguageString,
     lastUpdated?: string,
-    precision?: number,
+    precision?: number
 }
 
 /**
