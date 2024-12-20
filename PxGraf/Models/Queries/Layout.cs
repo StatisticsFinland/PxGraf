@@ -7,14 +7,16 @@ namespace PxGraf.Models.Queries
 {
     public class Layout
     {
-        public IReadOnlyList<string> RowVariableCodes { get; set; }
+        [JsonPropertyName("rowVariableCodes")] // legacy name, do not change or all the old queries break.
+        public IReadOnlyList<string> RowDimensionCodes { get; set; }
 
-        public IReadOnlyList<string> ColumnVariableCodes { get; set; }
+        [JsonPropertyName("columnVariableCodes")] // legacy name, do not change or all the old queries break.
+        public IReadOnlyList<string> ColumnDimensionCodes { get; set; }
 
-        public Layout(IReadOnlyList<string> rowVariableCodes, IReadOnlyList<string> columnVariableCodes)
+        public Layout(IReadOnlyList<string> rowDimensionCodes, IReadOnlyList<string> columnDimensionCodes)
         {
-            RowVariableCodes = rowVariableCodes;
-            ColumnVariableCodes = columnVariableCodes;
+            RowDimensionCodes = rowDimensionCodes;
+            ColumnDimensionCodes = columnDimensionCodes;
         }
 
         [JsonConstructor]
@@ -27,8 +29,8 @@ namespace PxGraf.Models.Queries
                 return false;
             }
 
-            return this.RowVariableCodes.SequenceEqual(other.RowVariableCodes) &&
-                   this.ColumnVariableCodes.SequenceEqual(other.ColumnVariableCodes);
+            return this.RowDimensionCodes.SequenceEqual(other.RowDimensionCodes) &&
+                   this.ColumnDimensionCodes.SequenceEqual(other.ColumnDimensionCodes);
         }
 
         public override int GetHashCode()

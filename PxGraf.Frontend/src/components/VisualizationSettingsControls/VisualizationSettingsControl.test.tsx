@@ -4,6 +4,8 @@ import { queryByLabelText, render, fireEvent } from '@testing-library/react';
 import { IDimension, EDimensionType } from "types/cubeMeta";
 import VisualizationSettingControl from "./VisualizationSettingsControl";
 import { FilterType, Query } from "types/query";
+import { ITypeSpecificVisualizationRules, IVisualizationRules } from '../../types/visualizationRules';
+import { IVisualizationSettings } from '../../types/visualizationSettings';
 
 jest.mock('react-i18next', () => ({
     ...jest.requireActual('react-i18next'),
@@ -17,21 +19,21 @@ jest.mock('react-i18next', () => ({
     },
 }));
 
-const mockTypeSpecificVisualizationRules = {
+const mockTypeSpecificVisualizationRules: ITypeSpecificVisualizationRules = {
     allowShowingDataPoints: true,
     allowCuttingYAxis: true,
     allowMatchXLabelsToEnd: true,
     allowSetMarkerScale: true
 }
 
-const mockVisualizationRules = {
+const mockVisualizationRules: IVisualizationRules = {
     allowManualPivot: false,
     sortingOptions: null,
-    multiselectVariableAllowed: false,
+    multiselectDimensionAllowed: false,
     visualizationTypeSpecificRules: mockTypeSpecificVisualizationRules
 };
 
-const mockVisualizationSettings = {
+const mockVisualizationSettings: IVisualizationSettings = {
     defaultSelectableVariableCodes: null,
     pivotRequested: null,
     cutYAxis: null,
@@ -44,7 +46,7 @@ const mockVisualizationSettings = {
     showDataPoints: false
 }
 
-const mockVariables: IDimension[]  = [
+const mockDimensions: IDimension[]  = [
     {
         code: "foobar1",
         name: { fi: "foo1", sv: "bar1", en: "foobar1" },
@@ -117,7 +119,7 @@ const mockVariables: IDimension[]  = [
 
 const mockSettingsChangedHandler = jest.fn();
 
-const mockVariableQuery: Query = {
+const mockDimensionQuery: Query = {
     'foobar4': {
         selectable: false,
         valueFilter: {
@@ -168,8 +170,8 @@ describe('Rendering test', () => {
     it('renders table correctly', () => {
         const { asFragment } = render(<VisualizationSettingControl
             selectedVisualization="Table"
-            variableQuery={mockVariableQuery}
-            variables={mockVariables}
+            dimensionQuery={mockDimensionQuery}
+            dimensions={mockDimensions}
             visualizationRules={mockVisualizationRules}
             visualizationSettings={mockVisualizationSettings}
             settingsChangedHandler={mockSettingsChangedHandler}
@@ -179,8 +181,8 @@ describe('Rendering test', () => {
     it('renders linechart correctly', () => {
         const { asFragment } = render(<VisualizationSettingControl
             selectedVisualization="LineChart"
-            variableQuery={mockVariableQuery}
-            variables={mockVariables}
+            dimensionQuery={mockDimensionQuery}
+            dimensions={mockDimensions}
             visualizationRules={mockVisualizationRules}
             visualizationSettings={mockVisualizationSettings}
             settingsChangedHandler={mockSettingsChangedHandler}
@@ -190,8 +192,8 @@ describe('Rendering test', () => {
     it('renders piechart correctly', () => {
         const { asFragment } = render(<VisualizationSettingControl
             selectedVisualization="PieChart"
-            variableQuery={mockVariableQuery}
-            variables={mockVariables}
+            dimensionQuery={mockDimensionQuery}
+            dimensions={mockDimensions}
             visualizationRules={mockVisualizationRules}
             visualizationSettings={mockVisualizationSettings}
             settingsChangedHandler={mockSettingsChangedHandler}
@@ -201,8 +203,8 @@ describe('Rendering test', () => {
     it('renders verticalbarchart correctly', () => {
         const { asFragment } = render(<VisualizationSettingControl
             selectedVisualization="VerticalBarChart"
-            variableQuery={mockVariableQuery}
-            variables={mockVariables}
+            dimensionQuery={mockDimensionQuery}
+            dimensions={mockDimensions}
             visualizationRules={mockVisualizationRules}
             visualizationSettings={mockVisualizationSettings}
             settingsChangedHandler={mockSettingsChangedHandler}
@@ -212,8 +214,8 @@ describe('Rendering test', () => {
     it('renders groupverticalbarchart correctly', () => {
         const { asFragment } = render(<VisualizationSettingControl
             selectedVisualization="GroupVerticalBarChart"
-            variableQuery={mockVariableQuery}
-            variables={mockVariables}
+            dimensionQuery={mockDimensionQuery}
+            dimensions={mockDimensions}
             visualizationRules={mockVisualizationRules}
             visualizationSettings={mockVisualizationSettings}
             settingsChangedHandler={mockSettingsChangedHandler}
@@ -223,8 +225,8 @@ describe('Rendering test', () => {
     it('renders stackedverticalbarchart correctly', () => {
         const { asFragment } = render(<VisualizationSettingControl
             selectedVisualization="StackedVerticalBarChart"
-            variableQuery={mockVariableQuery}
-            variables={mockVariables}
+            dimensionQuery={mockDimensionQuery}
+            dimensions={mockDimensions}
             visualizationRules={mockVisualizationRules}
             visualizationSettings={mockVisualizationSettings}
             settingsChangedHandler={mockSettingsChangedHandler}
@@ -234,8 +236,8 @@ describe('Rendering test', () => {
     it('renders percentverticalbarchart correctly', () => {
         const { asFragment } = render(<VisualizationSettingControl
             selectedVisualization="PercentVerticalBarChart"
-            variableQuery={mockVariableQuery}
-            variables={mockVariables}
+            dimensionQuery={mockDimensionQuery}
+            dimensions={mockDimensions}
             visualizationRules={mockVisualizationRules}
             visualizationSettings={mockVisualizationSettings}
             settingsChangedHandler={mockSettingsChangedHandler}
@@ -245,8 +247,8 @@ describe('Rendering test', () => {
     it('renders horizontalbarchart correctly', () => {
         const { asFragment } = render(<VisualizationSettingControl
             selectedVisualization="HorizontalBarChart"
-            variableQuery={mockVariableQuery}
-            variables={mockVariables}
+            dimensionQuery={mockDimensionQuery}
+            dimensions={mockDimensions}
             visualizationRules={mockVisualizationRules}
             visualizationSettings={mockVisualizationSettings}
             settingsChangedHandler={mockSettingsChangedHandler}
@@ -256,8 +258,8 @@ describe('Rendering test', () => {
     it('renders grouphorizontalbarchart correctly', () => {
         const { asFragment } = render(<VisualizationSettingControl
             selectedVisualization="GroupHorizontalBarChart"
-            variableQuery={mockVariableQuery}
-            variables={mockVariables}
+            dimensionQuery={mockDimensionQuery}
+            dimensions={mockDimensions}
             visualizationRules={mockVisualizationRules}
             visualizationSettings={mockVisualizationSettings}
             settingsChangedHandler={mockSettingsChangedHandler}
@@ -267,8 +269,8 @@ describe('Rendering test', () => {
     it('renders stackedhorizontalbarchart correctly', () => {
         const { asFragment } = render(<VisualizationSettingControl
             selectedVisualization="StackedHorizontalBarChart"
-            variableQuery={mockVariableQuery}
-            variables={mockVariables}
+            dimensionQuery={mockDimensionQuery}
+            dimensions={mockDimensions}
             visualizationRules={mockVisualizationRules}
             visualizationSettings={mockVisualizationSettings}
             settingsChangedHandler={mockSettingsChangedHandler}
@@ -278,8 +280,8 @@ describe('Rendering test', () => {
     it('renders percenthorizontalbarchart correctly', () => {
         const { asFragment } = render(<VisualizationSettingControl
             selectedVisualization="PercentHorizontalBarChart"
-            variableQuery={mockVariableQuery}
-            variables={mockVariables}
+            dimensionQuery={mockDimensionQuery}
+            dimensions={mockDimensions}
             visualizationRules={mockVisualizationRules}
             visualizationSettings={mockVisualizationSettings}
             settingsChangedHandler={mockSettingsChangedHandler}
@@ -289,8 +291,8 @@ describe('Rendering test', () => {
     it('renders scatterplot correctly', () => {
         const { asFragment } = render(<VisualizationSettingControl
             selectedVisualization="ScatterPlot"
-            variableQuery={mockVariableQuery}
-            variables={mockVariables}
+            dimensionQuery={mockDimensionQuery}
+            dimensions={mockDimensions}
             visualizationRules={mockVisualizationRules}
             visualizationSettings={mockVisualizationSettings}
             settingsChangedHandler={mockSettingsChangedHandler}
@@ -313,8 +315,8 @@ describe('Assertion tests', () => {
         const { getByLabelText } = render(
             <VisualizationSettingControl
                 selectedVisualization="Table"
-                variableQuery={mockVariableQuery}
-                variables={mockVariables}
+                dimensionQuery={mockDimensionQuery}
+                dimensions={mockDimensions}
                 visualizationRules={modifiedVisualizationRules}
                 visualizationSettings={mockVisualizationSettings}
                 settingsChangedHandler={mockSettingsChangedHandler}
@@ -331,8 +333,8 @@ describe('Assertion tests', () => {
         const { getByLabelText } = render(
             <VisualizationSettingControl
                 selectedVisualization="Table"
-                variableQuery={mockVariableQuery}
-                variables={mockVariables}
+                dimensionQuery={mockDimensionQuery}
+                dimensions={mockDimensions}
                 visualizationRules={mockVisualizationRules}
                 visualizationSettings={mockVisualizationSettings}
                 settingsChangedHandler={mockSettingsChangedHandler}

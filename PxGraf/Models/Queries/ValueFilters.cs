@@ -7,7 +7,7 @@ using System.Text.Json.Serialization;
 namespace PxGraf.Models.Queries
 {
     /// <summary>
-    /// Base class for filtering values of a variable.
+    /// Base class for filtering values of a dimension.
     /// </summary>
     [JsonConverter(typeof(ValueFilterJsonConverter))]
     public interface IValueFilter

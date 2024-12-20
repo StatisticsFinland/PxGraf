@@ -9,7 +9,7 @@ namespace PxGraf.Models.Requests
     public class ChartRequest
     {
         /// <summary>
-        /// Query object that contains the table reference, header text and variable queries.
+        /// Query object that contains the table reference, header text and dimension queries.
         /// </summary>
         public MatrixQuery Query { get; set; }
         
@@ -19,9 +19,9 @@ namespace PxGraf.Models.Requests
         public string Language { get; set; }
 
         /// <summary>
-        /// Values of the currently actively selected selectable variables.
+        /// Values of the currently actively selected selectable dimensions.
         /// </summary>
-        public Dictionary<string, IReadOnlyList<string>> ActiveSelectableVariableValues { get; set; }
+        public Dictionary<string, IReadOnlyList<string>> ActiveSelectableDimensionValues { get; set; }
 
         /// <summary>
         /// Settings for the visualization.

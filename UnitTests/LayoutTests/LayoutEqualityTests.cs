@@ -11,14 +11,14 @@ namespace UnitTests.LayoutTests
         {
             Layout layout1 = new()
             {
-                RowVariableCodes = ["foo", "bar"],
-                ColumnVariableCodes = ["foo", "bar"],
+                RowDimensionCodes = ["foo", "bar"],
+                ColumnDimensionCodes = ["foo", "bar"],
             };
 
             Layout layout2 = new()
             {
-                RowVariableCodes = ["foo", "bar"],
-                ColumnVariableCodes = ["foo", "bar"],
+                RowDimensionCodes = ["foo", "bar"],
+                ColumnDimensionCodes = ["foo", "bar"],
             };
 
             Assert.That(layout1, Is.EqualTo(layout2));
@@ -29,14 +29,14 @@ namespace UnitTests.LayoutTests
         {
             Layout layout1 = new()
             {
-                RowVariableCodes = ["foo", "bar"],
-                ColumnVariableCodes = ["foo", "bar"]
+                RowDimensionCodes = ["foo", "bar"],
+                ColumnDimensionCodes = ["foo", "bar"]
             };
 
             Layout layout2 = new()
             {
-                RowVariableCodes = ["bar", "foo"],
-                ColumnVariableCodes = ["foo", "bar"]
+                RowDimensionCodes = ["bar", "foo"],
+                ColumnDimensionCodes = ["foo", "bar"]
             };
 
             Assert.That(layout1, Is.Not.EqualTo(layout2));
@@ -47,14 +47,14 @@ namespace UnitTests.LayoutTests
         {
             Layout layout1 = new()
             {
-                RowVariableCodes = ["foo", "bar"],
-                ColumnVariableCodes = ["foo", "bar"]
+                RowDimensionCodes = ["foo", "bar"],
+                ColumnDimensionCodes = ["foo", "bar"]
             };
 
             Layout layout2 = new()
             {
-                RowVariableCodes = ["xxx", "bar"],
-                ColumnVariableCodes = ["foo", "bar"]
+                RowDimensionCodes = ["xxx", "bar"],
+                ColumnDimensionCodes = ["foo", "bar"]
             };
 
             Assert.That(layout1, Is.Not.EqualTo(layout2));
@@ -65,8 +65,8 @@ namespace UnitTests.LayoutTests
         {
             Layout layout1 = new()
             {
-                RowVariableCodes = ["foo", "bar"],
-                ColumnVariableCodes = ["foo", "bar"]
+                RowDimensionCodes = ["foo", "bar"],
+                ColumnDimensionCodes = ["foo", "bar"]
             };
 
             List<string> layout2 = ["foo", "bar"];
@@ -79,8 +79,8 @@ namespace UnitTests.LayoutTests
         {
             Layout layout1 = new()
             {
-                RowVariableCodes = ["foo", "bar"],
-                ColumnVariableCodes = ["foo", "bar"]
+                RowDimensionCodes = ["foo", "bar"],
+                ColumnDimensionCodes = ["foo", "bar"]
             };
 
             Layout layout2 = null;

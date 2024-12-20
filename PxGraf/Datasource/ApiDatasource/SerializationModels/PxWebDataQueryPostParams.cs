@@ -5,12 +5,12 @@ namespace PxGraf.Datasource.PxWebInterface.SerializationModels
     public class PxWebDataQueryPostParams
     {
         [JsonPropertyName("query")]
-        public VariableQuery[] Query { get; set; }
+        public DimensionQuery[] Query { get; set; }
 
         [JsonPropertyName("response")]
         public ResponseInfo Response { get; set; }
 
-        public class VariableQuery
+        public class DimensionQuery
         {
             [JsonPropertyName("code")]
             public string Code { get; set; }

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Box, Typography, Accordion, AccordionSummary, AccordionDetails, Tabs, Tab } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { TabPanel } from 'components/TabPanel/TabPanel';
-import { VariableEditor } from './VariableEditor';
+import { DimensionEditor } from './DimensionEditor';
 import { HeaderEditor } from './HeaderEditor';
 import { a11yProps } from 'utils/componentHelpers';
 import styled from 'styled-components';
@@ -48,8 +48,8 @@ const StyledAccordionDetails = styled(AccordionDetails)`
 `;
 
 export interface INewEditMetaEditor {
-    variableQueries?: {
-        [variableCode: string]: string;
+    dimensionQueries?: {
+        [dimensionCode: string]: string;
     };
     chartHeaderEdit?: {
         [language: string]: string;
@@ -58,7 +58,7 @@ export interface INewEditMetaEditor {
 
 interface IMetaEditorProps {
     language: string;
-    resolvedVariables: IDimension[];
+    resolvedDimensions: IDimension[];
     cubeQuery: ICubeQuery;
     defaultHeaderResponse: IHeaderResult;
     onChange: (newEdit: ICubeQuery) => void;
@@ -70,7 +70,7 @@ interface IMetaEditorProps {
 
 export const MetaEditor: React.FC<IMetaEditorProps> = ({
     language,
-    resolvedVariables,
+    resolvedDimensions,
     cubeQuery,
     defaultHeaderResponse,
     onChange,
@@ -79,7 +79,7 @@ export const MetaEditor: React.FC<IMetaEditorProps> = ({
     titleMaxLength,
 }) => {
     const { t } = useTranslation();
-    const [variableTab, setVariableTab] = useState(0);
+    const [dimensionTab, setDimensionTab] = useState(0);
     const { uiContentLanguage } = React.useContext(UiLanguageContext);
 
     return (
@@ -108,27 +108,27 @@ export const MetaEditor: React.FC<IMetaEditorProps> = ({
                         </AccordionSummary>
                         <StyledAccordionDetails>
                             <TabsWrapper sx={{ borderColor: 'divider' }}>
-                                <Tabs value={variableTab} onChange={(evt, newTab) => setVariableTab(newTab)}>
-                                    {resolvedVariables.map((variable, index) => <Tab label={variable.name[uiContentLanguage] ?? variable.code} {...a11yProps(index)} key={variable.code} />)}
+                                <Tabs value={dimensionTab} onChange={(evt, newTab) => setDimensionTab(newTab)}>
+                                    {resolvedDimensions.map((dimension, index) => <Tab label={dimension.name[uiContentLanguage] ?? dimension.code} {...a11yProps(index)} key={dimension.code} />)}
                                 </Tabs>
                             </TabsWrapper>
                             <TabPanelWrapper>
-                                {resolvedVariables.map((variable, index) => {
+                                {resolvedDimensions.map((dimension, index) => {
                                     return (
-                                        <TabPanel selectedValue={variableTab} value={index} key={variable.code}>
-                                            <VariableEditor
-                                                variable={variable}
+                                        <TabPanel selectedValue={dimensionTab} value={index} key={dimension.code}>
+                                            <DimensionEditor
+                                                dimension={dimension}
                                                 language={language}
-                                                variableEdits={cubeQuery?.variableQueries[variable.code]}
+                                                dimensionEdits={cubeQuery?.variableQueries[dimension.code]}
                                                 onChange={newEdit => {
                                                     onChange({
                                                         ...cubeQuery,
                                                         variableQueries: {
                                                             ...cubeQuery?.variableQueries,
-                                                            [variable.code]: {
-                                                                ...cubeQuery?.variableQueries[variable.code],
+                                                            [dimension.code]: {
+                                                                ...cubeQuery?.variableQueries[dimension.code],
                                                                 valueEdits: {
-                                                                    ...cubeQuery?.variableQueries[variable.code]?.valueEdits,
+                                                                    ...cubeQuery?.variableQueries[dimension.code]?.valueEdits,
                                                                     ...newEdit.valueEdits
                                                                 }
                                                             }

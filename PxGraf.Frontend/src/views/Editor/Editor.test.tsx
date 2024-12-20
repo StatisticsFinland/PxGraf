@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen } from "@testing-library/react";
 import { ICubeMetaResult } from "api/services/cube-meta";
 import { IHeaderResult } from "api/services/default-header";
-import { IFilterVariableResult } from "api/services/filter-dimension";
+import { IFilterDimensionResult } from "api/services/filter-dimension";
 import { IVisualizationSettingsResult } from "api/services/visualization-rules";
 import { ISaveQueryResult } from "api/services/queries";
 import { EDimensionType } from "types/cubeMeta";
@@ -78,8 +78,8 @@ jest.mock('api/services/query-info', () => ({
 
 jest.mock('api/services/filter-dimension', () => ({
     ...jest.requireActual('api/services/filter-dimension'),
-    useResolveVariableFiltersQuery: () => {
-        return mockFilterVariableResult;
+    useResolveDimensionFiltersQuery: () => {
+        return mockFilterDimensionResult;
     }
 }));
 
@@ -208,7 +208,7 @@ const mockVisualizationSettingsResult: IVisualizationSettingsResult = {
     isError: false,
     data: {
         allowManualPivot: false,
-        multiselectVariableAllowed: false,
+        multiselectDimensionAllowed: false,
         sortingOptions: [
             {
                 code: 'DESCENDING',
@@ -221,7 +221,7 @@ const mockVisualizationSettingsResult: IVisualizationSettingsResult = {
     }
 }
 
-const mockFilterVariableResult: IFilterVariableResult = {
+const mockFilterDimensionResult: IFilterDimensionResult = {
     isLoading: false,
     isError: false,
     data: {
@@ -288,9 +288,9 @@ const mockTableValidationResult: IValidateTableMetaDataResult = {
     isLoading: false,
     isError: false,
     data: {
-        tableHasContentVariable: true,
-        tableHasTimeVariable: true,
-        allVariablesContainValues: true
+        tableHasContentDimension: true,
+        tableHasTimeDimension: true,
+        allDimensionsContainValues: true
     }
 }
 
@@ -298,9 +298,9 @@ const mockInvalidTableValidationResult: IValidateTableMetaDataResult = {
     isLoading: false,
     isError: false,
     data: {
-        tableHasContentVariable: false,
-        tableHasTimeVariable: false,
-        allVariablesContainValues: false
+        tableHasContentDimension: false,
+        tableHasTimeDimension: false,
+        allDimensionsContainValues: false
     }
 }
 

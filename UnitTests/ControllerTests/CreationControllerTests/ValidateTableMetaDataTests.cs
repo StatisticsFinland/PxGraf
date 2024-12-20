@@ -40,9 +40,9 @@ namespace UnitTests.ControllerTests.CreationControllerTests
             TableMetaValidationResult result = await controller.ValidateTableMetaData("path/table.px");
 
             // Assert
-            Assert.That(result.TableHasContentVariable, Is.EqualTo(hasContentVariable));
-            Assert.That(result.TableHasTimeVariable, Is.EqualTo(hasTimeVariable));
-            Assert.That(result.AllVariablesContainValues, Is.EqualTo(noZeroSizedVariables));
+            Assert.That(result.TableHasContentDimension, Is.EqualTo(hasContentVariable));
+            Assert.That(result.TableHasTimeDimension, Is.EqualTo(hasTimeVariable));
+            Assert.That(result.AllDimensionsContainValues, Is.EqualTo(noZeroSizedVariables));
         }
 
         [Test]
@@ -62,9 +62,9 @@ namespace UnitTests.ControllerTests.CreationControllerTests
             TableMetaValidationResult result = await controller.ValidateTableMetaData("foo");
 
             // Assert
-            Assert.That(result.TableHasContentVariable, Is.False);
-            Assert.That(result.TableHasTimeVariable, Is.False);
-            Assert.That(result.AllVariablesContainValues, Is.False);
+            Assert.That(result.TableHasContentDimension, Is.False);
+            Assert.That(result.TableHasTimeDimension, Is.False);
+            Assert.That(result.AllDimensionsContainValues, Is.False);
         }
     }
 }

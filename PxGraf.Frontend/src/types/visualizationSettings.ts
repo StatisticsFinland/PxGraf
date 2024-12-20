@@ -4,12 +4,12 @@ import {VisualizationType} from './visualizationType';
 
 /**
  * Interface for visualization settings
- * @property {string[]} defaultSelectableVariableCodes - Variable codes for default selectable variable values.
+ * @property {string[]} defaultSelectableVariableCodes - Dimension codes for default selectable dimension values.
  * @property {boolean} pivotRequested - Flag to indicate if the user has requested manual pivoting.
  * @property {boolean} cutYAxis - Flag to indicate if the y-axis should be cut based on the values.
- * @property {string} multiselectableVariableCode - The variable code for the multiselectable variable if any.
- * @property {string[]} rowVariableCodes - Variable codes for the row variables.
- * @property {string[]} columnVariableCodes - Variable codes for the column variables.
+ * @property {string} multiselectableVariableCode - The dimension code for the multiselectable dimension if any.
+ * @property {string[]} rowVariableCodes - Dimension codes for the row dimensions.
+ * @property {string[]} columnVariableCodes - Dimension codes for the column dimensions.
  * @property {string} sorting - Selected sorting order.
  * @property {boolean} matchXLabelsToEnd - Flag to indicate if the x-axis labels should be matched to the end.
  * @property {number} markerSize - The size of scatter plot markers.

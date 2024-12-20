@@ -100,9 +100,9 @@ namespace UnitTests.SerializerTests
             Assert.That(savedQuery.CreationTime, Is.EqualTo(PxSyntaxConstants.ParseDateTime("2023-04-24T14:36:18.7550813+03:00")));
             Assert.That(savedQuery.Settings.VisualizationType, Is.EqualTo(VisualizationType.Table));
             Assert.That(savedQuery.Archived, Is.True);
-            Assert.That(savedQuery.Settings.Layout.ColumnVariableCodes.Count, Is.EqualTo(3));
+            Assert.That(savedQuery.Settings.Layout.ColumnDimensionCodes.Count, Is.EqualTo(3));
             Assert.That(savedQuery.Version, Is.EqualTo("1.0"));
-            Assert.That(savedQuery.Settings.DefaultSelectableVariableCodes, Is.Null);
+            Assert.That(savedQuery.Settings.DefaultSelectableDimensionCodes, Is.Null);
         }
 
         [Test]
@@ -131,9 +131,9 @@ namespace UnitTests.SerializerTests
             Assert.That(savedQuery.CreationTime, Is.EqualTo(PxSyntaxConstants.ParseDateTime("2023-04-24T14:36:18.7550813+03:00")));
             Assert.That(savedQuery.Settings.VisualizationType, Is.EqualTo(VisualizationType.Table));
             Assert.That(savedQuery.Archived, Is.True);
-            Assert.That(savedQuery.Settings.Layout.ColumnVariableCodes.Count, Is.EqualTo(3));
+            Assert.That(savedQuery.Settings.Layout.ColumnDimensionCodes.Count, Is.EqualTo(3));
             Assert.That(savedQuery.Version, Is.EqualTo("1.0"));
-            Assert.That(savedQuery.Settings.DefaultSelectableVariableCodes, Is.Not.Null);
+            Assert.That(savedQuery.Settings.DefaultSelectableDimensionCodes, Is.Not.Null);
         }
 
         [Test]
@@ -165,12 +165,12 @@ namespace UnitTests.SerializerTests
             Assert.That(savedQuery.CreationTime, Is.EqualTo(PxSyntaxConstants.ParseDateTime("2023-04-24T14:36:18.7550813+03:00")));
             Assert.That(savedQuery.Settings.VisualizationType, Is.EqualTo(VisualizationType.GroupVerticalBarChart));
             Assert.That(savedQuery.Archived, Is.True);
-            Assert.That(savedQuery.Settings.Layout.RowVariableCodes.Count, Is.EqualTo(1));
-            Assert.That(savedQuery.Settings.Layout.RowVariableCodes[0], Is.EqualTo("Kuukausi"));
-            Assert.That(savedQuery.Settings.Layout.ColumnVariableCodes.Count, Is.EqualTo(1));
-            Assert.That(savedQuery.Settings.Layout.ColumnVariableCodes[0], Is.EqualTo("Ilmoittava lentoasema"));
+            Assert.That(savedQuery.Settings.Layout.RowDimensionCodes.Count, Is.EqualTo(1));
+            Assert.That(savedQuery.Settings.Layout.RowDimensionCodes[0], Is.EqualTo("Kuukausi"));
+            Assert.That(savedQuery.Settings.Layout.ColumnDimensionCodes.Count, Is.EqualTo(1));
+            Assert.That(savedQuery.Settings.Layout.ColumnDimensionCodes[0], Is.EqualTo("Ilmoittava lentoasema"));
             Assert.That(savedQuery.Version, Is.EqualTo("1.1"));
-            Assert.That(savedQuery.Settings.DefaultSelectableVariableCodes, Is.Null);
+            Assert.That(savedQuery.Settings.DefaultSelectableDimensionCodes, Is.Null);
         }
 
         [Test]
@@ -202,12 +202,12 @@ namespace UnitTests.SerializerTests
             Assert.That(savedQuery.CreationTime, Is.EqualTo(PxSyntaxConstants.ParseDateTime("2024-09-13T16:13:42.074783+03:00")));
             Assert.That(savedQuery.Settings.VisualizationType, Is.EqualTo(VisualizationType.GroupVerticalBarChart));
             Assert.That(savedQuery.Archived, Is.True);
-            Assert.That(savedQuery.Settings.Layout.RowVariableCodes.Count, Is.EqualTo(1));
-            Assert.That(savedQuery.Settings.Layout.RowVariableCodes[0], Is.EqualTo("Kuukausi"));
-            Assert.That(savedQuery.Settings.Layout.ColumnVariableCodes.Count, Is.EqualTo(1));
-            Assert.That(savedQuery.Settings.Layout.ColumnVariableCodes[0], Is.EqualTo("Ilmoittava lentoasema"));
+            Assert.That(savedQuery.Settings.Layout.RowDimensionCodes.Count, Is.EqualTo(1));
+            Assert.That(savedQuery.Settings.Layout.RowDimensionCodes[0], Is.EqualTo("Kuukausi"));
+            Assert.That(savedQuery.Settings.Layout.ColumnDimensionCodes.Count, Is.EqualTo(1));
+            Assert.That(savedQuery.Settings.Layout.ColumnDimensionCodes[0], Is.EqualTo("Ilmoittava lentoasema"));
             Assert.That(savedQuery.Version, Is.EqualTo("1.1"));
-            Assert.That(savedQuery.Settings.DefaultSelectableVariableCodes, Is.Null);
+            Assert.That(savedQuery.Settings.DefaultSelectableDimensionCodes, Is.Null);
         }
 
         [Test]
@@ -239,12 +239,12 @@ namespace UnitTests.SerializerTests
             Assert.That(savedQuery.CreationTime, Is.EqualTo(PxSyntaxConstants.ParseDateTime("2023-04-24T14:36:18.7550813+03:00")));
             Assert.That(savedQuery.Settings.VisualizationType, Is.EqualTo(VisualizationType.GroupVerticalBarChart));
             Assert.That(savedQuery.Archived, Is.True);
-            Assert.That(savedQuery.Settings.Layout.RowVariableCodes.Count, Is.EqualTo(1));
-            Assert.That(savedQuery.Settings.Layout.RowVariableCodes[0], Is.EqualTo("Kuukausi"));
-            Assert.That(savedQuery.Settings.Layout.ColumnVariableCodes.Count, Is.EqualTo(1));
-            Assert.That(savedQuery.Settings.Layout.ColumnVariableCodes[0], Is.EqualTo("Ilmoittava lentoasema"));
+            Assert.That(savedQuery.Settings.Layout.RowDimensionCodes.Count, Is.EqualTo(1));
+            Assert.That(savedQuery.Settings.Layout.RowDimensionCodes[0], Is.EqualTo("Kuukausi"));
+            Assert.That(savedQuery.Settings.Layout.ColumnDimensionCodes.Count, Is.EqualTo(1));
+            Assert.That(savedQuery.Settings.Layout.ColumnDimensionCodes[0], Is.EqualTo("Ilmoittava lentoasema"));
             Assert.That(savedQuery.Version, Is.EqualTo("1.1"));
-            Assert.That(savedQuery.Settings.DefaultSelectableVariableCodes, Is.Not.Null);
+            Assert.That(savedQuery.Settings.DefaultSelectableDimensionCodes, Is.Not.Null);
         }
 
         [Test]
@@ -276,12 +276,12 @@ namespace UnitTests.SerializerTests
             Assert.That(savedQuery.CreationTime, Is.EqualTo(PxSyntaxConstants.ParseDateTime("2023-04-24T14:36:18.7550813+03:00")));
             Assert.That(savedQuery.Settings.VisualizationType, Is.EqualTo(VisualizationType.GroupVerticalBarChart));
             Assert.That(savedQuery.Archived, Is.True);
-            Assert.That(savedQuery.Settings.Layout.RowVariableCodes.Count, Is.EqualTo(1));
-            Assert.That(savedQuery.Settings.Layout.RowVariableCodes[0], Is.EqualTo("Kuukausi"));
-            Assert.That(savedQuery.Settings.Layout.ColumnVariableCodes.Count, Is.EqualTo(1));
-            Assert.That(savedQuery.Settings.Layout.ColumnVariableCodes[0], Is.EqualTo("Ilmoittava lentoasema"));
+            Assert.That(savedQuery.Settings.Layout.RowDimensionCodes.Count, Is.EqualTo(1));
+            Assert.That(savedQuery.Settings.Layout.RowDimensionCodes[0], Is.EqualTo("Kuukausi"));
+            Assert.That(savedQuery.Settings.Layout.ColumnDimensionCodes.Count, Is.EqualTo(1));
+            Assert.That(savedQuery.Settings.Layout.ColumnDimensionCodes[0], Is.EqualTo("Ilmoittava lentoasema"));
             Assert.That(savedQuery.Version, Is.EqualTo("1.1"));
-            Assert.That(savedQuery.Settings.DefaultSelectableVariableCodes, Is.Not.Null);
+            Assert.That(savedQuery.Settings.DefaultSelectableDimensionCodes, Is.Not.Null);
         }
 
         [Test]
@@ -313,10 +313,10 @@ namespace UnitTests.SerializerTests
             Assert.That(savedQuery.CreationTime, Is.EqualTo(PxSyntaxConstants.ParseDateTime("2023-04-24T14:36:18.7550813+03:00")));
             Assert.That(savedQuery.Settings.VisualizationType, Is.EqualTo(VisualizationType.GroupVerticalBarChart));
             Assert.That(savedQuery.Archived, Is.True);
-            Assert.That(savedQuery.Settings.Layout.RowVariableCodes.Count, Is.EqualTo(1));
-            Assert.That(savedQuery.Settings.Layout.RowVariableCodes[0], Is.EqualTo("Ilmoittava lentoasema"));
-            Assert.That(savedQuery.Settings.Layout.ColumnVariableCodes.Count, Is.EqualTo(1));
-            Assert.That(savedQuery.Settings.Layout.ColumnVariableCodes[0], Is.EqualTo("Kuukausi"));
+            Assert.That(savedQuery.Settings.Layout.RowDimensionCodes.Count, Is.EqualTo(1));
+            Assert.That(savedQuery.Settings.Layout.RowDimensionCodes[0], Is.EqualTo("Ilmoittava lentoasema"));
+            Assert.That(savedQuery.Settings.Layout.ColumnDimensionCodes.Count, Is.EqualTo(1));
+            Assert.That(savedQuery.Settings.Layout.ColumnDimensionCodes[0], Is.EqualTo("Kuukausi"));
             Assert.That(savedQuery.Version, Is.EqualTo("1.1"));
         }
 
@@ -344,7 +344,7 @@ namespace UnitTests.SerializerTests
             Assert.That(savedQuery.CreationTime, Is.EqualTo(PxSyntaxConstants.ParseDateTime("2023-04-24T14:36:18.7550813+03:00")));
             Assert.That(savedQuery.Settings.VisualizationType, Is.EqualTo(VisualizationType.Table));
             Assert.That(savedQuery.Archived, Is.True);
-            Assert.That(savedQuery.Settings.Layout.ColumnVariableCodes.Count, Is.EqualTo(3));
+            Assert.That(savedQuery.Settings.Layout.ColumnDimensionCodes.Count, Is.EqualTo(3));
             Assert.That(savedQuery.Version, Is.EqualTo("1.0"));
         }
 
@@ -387,8 +387,8 @@ namespace UnitTests.SerializerTests
             Assert.That(savedQuery.Settings.VisualizationType, Is.EqualTo(VisualizationType.Table));
             Assert.That(savedQuery.Archived, Is.True);
             Assert.That((bool)savedQuery.LegacyProperties["PivotRequested"], Is.True);
-            Assert.That(savedQuery.Settings.Layout.RowVariableCodes.Count, Is.EqualTo(0));
-            Assert.That(savedQuery.Settings.Layout.ColumnVariableCodes.Count, Is.EqualTo(3));
+            Assert.That(savedQuery.Settings.Layout.RowDimensionCodes.Count, Is.EqualTo(0));
+            Assert.That(savedQuery.Settings.Layout.ColumnDimensionCodes.Count, Is.EqualTo(3));
             Assert.That(savedQuery.Version, Is.EqualTo("1.0"));
         }
 
@@ -455,8 +455,8 @@ namespace UnitTests.SerializerTests
             Assert.That(savedQuery.Version, Is.EqualTo("1.0"));
             Assert.That(savedQuery.Query.DimensionQueries.Count, Is.EqualTo(6));
             Assert.That(savedQuery.Settings.VisualizationType, Is.EqualTo(VisualizationType.Table));
-            Assert.That(savedQuery.Settings.Layout.RowVariableCodes.Count, Is.EqualTo(4));
-            Assert.That(savedQuery.Settings.Layout.ColumnVariableCodes.Count, Is.EqualTo(2));
+            Assert.That(savedQuery.Settings.Layout.RowDimensionCodes.Count, Is.EqualTo(4));
+            Assert.That(savedQuery.Settings.Layout.ColumnDimensionCodes.Count, Is.EqualTo(2));
 
             // Deserialize
             string serializedString = JsonSerializer.Serialize(savedQuery, GlobalJsonConverterOptions.Default);

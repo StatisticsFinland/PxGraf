@@ -49,9 +49,9 @@ namespace UnitTests.MatrixMetadataTests
             MultilanguageString nameEditMls = new(new Dictionary<string, string> { { "fi", "NameEdit.fi" }, { "en", "NameEdit.en" } });
             DimensionQuery dimensionQuery = new()
             {
-                ValueEdits = new Dictionary<string, DimensionQuery.VariableValueEdition>
+                ValueEdits = new Dictionary<string, DimensionQuery.DimensionValueEdition>
                 {
-                    { value.Code, new DimensionQuery.VariableValueEdition { NameEdit = nameEditMls } }
+                    { value.Code, new DimensionQuery.DimensionValueEdition { NameEdit = nameEditMls } }
                 }
             };
 
@@ -84,9 +84,9 @@ namespace UnitTests.MatrixMetadataTests
             };
             DimensionQuery dimensionQuery = new()
             {
-                ValueEdits = new Dictionary<string, DimensionQuery.VariableValueEdition>
+                ValueEdits = new Dictionary<string, DimensionQuery.DimensionValueEdition>
                 {
-                    { value.Code, new DimensionQuery.VariableValueEdition { NameEdit = null, ContentComponent = contentComponentEdit } }
+                    { value.Code, new DimensionQuery.DimensionValueEdition { NameEdit = null, ContentComponent = contentComponentEdit } }
                 }
             };
 
@@ -119,9 +119,9 @@ namespace UnitTests.MatrixMetadataTests
             MultilanguageString nameEditMls = new(new Dictionary<string, string> { { "fi", "NameEdit.fi" }, { "en", "NameEdit.en" } });
             DimensionQuery dimensionQuery = new()
             {
-                ValueEdits = new Dictionary<string, DimensionQuery.VariableValueEdition>
+                ValueEdits = new Dictionary<string, DimensionQuery.DimensionValueEdition>
                 {
-                    { value.Code, new DimensionQuery.VariableValueEdition { NameEdit = nameEditMls, ContentComponent = null } }
+                    { value.Code, new DimensionQuery.DimensionValueEdition { NameEdit = nameEditMls, ContentComponent = null } }
                 }
             };
 

@@ -51,8 +51,8 @@ namespace UnitTests.ControllerTests.QueryMetaControllerTests
             ];
             Layout layout = new()
             {
-                RowVariableCodes = [],
-                ColumnVariableCodes = ["variable-1"]
+                RowDimensionCodes = [],
+                ColumnDimensionCodes = ["variable-1"]
             };
             LineChartVisualizationSettings settings = new(layout, false, null);
             SavedQuery sq = TestDataCubeBuilder.BuildTestSavedQuery(dimParams, false, settings);
@@ -89,8 +89,8 @@ namespace UnitTests.ControllerTests.QueryMetaControllerTests
             ];
             Layout layout = new()
             {
-                RowVariableCodes = [],
-                ColumnVariableCodes = [],
+                RowDimensionCodes = [],
+                ColumnDimensionCodes = [],
             };
             LineChartVisualizationSettings settings = new(layout, false, null);
             SavedQuery sq = TestDataCubeBuilder.BuildTestSavedQuery(dimParams, false, settings);
@@ -131,8 +131,8 @@ namespace UnitTests.ControllerTests.QueryMetaControllerTests
             ];
             Layout layout = new()
             {
-                RowVariableCodes = [],
-                ColumnVariableCodes = ["variable-1"]
+                RowDimensionCodes = [],
+                ColumnDimensionCodes = ["variable-1"]
             };
             LineChartVisualizationSettings settings = new(layout, false, null);
             SavedQuery sq = TestDataCubeBuilder.BuildTestSavedQuery(dimParams, true, settings);
@@ -174,8 +174,8 @@ namespace UnitTests.ControllerTests.QueryMetaControllerTests
             ];
             Layout layout = new()
             {
-                RowVariableCodes = [],
-                ColumnVariableCodes = ["variable-1"]
+                RowDimensionCodes = [],
+                ColumnDimensionCodes = ["variable-1"]
             };
             LineChartVisualizationSettings settings = new(layout, false, null);
             SavedQuery sq = TestDataCubeBuilder.BuildTestSavedQuery(dimParams, false, settings);
@@ -201,8 +201,8 @@ namespace UnitTests.ControllerTests.QueryMetaControllerTests
             ];
             Layout layout = new()
             {
-                RowVariableCodes = [],
-                ColumnVariableCodes = ["variable-1"]
+                RowDimensionCodes = [],
+                ColumnDimensionCodes = ["variable-1"]
             };
             LineChartVisualizationSettings settings = new(layout, false, null);
             SavedQuery sq = TestDataCubeBuilder.BuildTestSavedQuery(dimParams, true, settings);
@@ -234,8 +234,8 @@ namespace UnitTests.ControllerTests.QueryMetaControllerTests
             ];
             Layout layout = new()
             {
-                RowVariableCodes = [],
-                ColumnVariableCodes = ["variable-1"]
+                RowDimensionCodes = [],
+                ColumnDimensionCodes = ["variable-1"]
             };
             LineChartVisualizationSettings settings = new(layout, false, null);
             SavedQuery sq = TestDataCubeBuilder.BuildTestSavedQuery(dimParams, true, settings);

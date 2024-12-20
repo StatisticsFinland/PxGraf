@@ -39,15 +39,15 @@ namespace PxGraf.ChartTypeSelection.ChartSpecificLimits
         /// <returns></returns>
         protected override int GetPriority(RejectionReason reason)
         {
-            var reasons = new RejectionReason[]
-            {
+            RejectionReason[] reasons =
+            [
                 RejectionReason.NotEnoughMultiselections,
                 RejectionReason.TooManyMultiselections,
                 RejectionReason.MultiselectProductBelowMin,
                 RejectionReason.MultiselectProductOverMax,
                 RejectionReason.FirstMultiselectBelowMin,
                 RejectionReason.FirstMultiselectOverMax,
-            };
+            ];
 
             return GetPriorityIndex(reasons, reason);
         }

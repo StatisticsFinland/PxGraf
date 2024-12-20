@@ -56,9 +56,9 @@ namespace PxGraf.Utility
         {
             lock (locks)
             {
-                if (!locks.TryGetValue(key, out var lockByKey))
+                if (!locks.TryGetValue(key, out LockInfo lockByKey))
                 {
-                    lockByKey = new LockInfo();
+                    lockByKey = new ();
                     locks.Add(key, lockByKey);
                 }
 

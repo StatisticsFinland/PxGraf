@@ -18,7 +18,7 @@ const headerResultMock: IHeaderResult = {
     }
 }
 
-const mockVariables: IDimension[] = [
+const mockDimensions: IDimension[] = [
     {
         code: 'foo',
         name: {
@@ -194,7 +194,7 @@ const visualizationRulesResponseMock: IVisualizationSettingsResult = {
     isError: false,
     data: {
         allowManualPivot: false,
-        multiselectVariableAllowed: false,
+        multiselectDimensionAllowed: false,
         sortingOptions: [
             {
                 code: 'DESCENDING',
@@ -248,10 +248,10 @@ describe('Rendering test', () => {
             <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
                 <EditorMetaSection
                     defaultHeaderResponse={headerResultMock}
-                    resolvedVariables={mockVariables}
+                    resolvedDimensions={mockDimensions}
                     selectedVisualization={selectedVisualizationMock}
                     settings={mockVisualizationSettings}
-                    variableQuery={mockQuery}
+                    dimensionQuery={mockQuery}
                     visualizationRulesResponse={visualizationRulesResponseMock}
                     queryInfo={mockQueryInfo}
                     contentLanguages={["fi", "sv", "en"]}

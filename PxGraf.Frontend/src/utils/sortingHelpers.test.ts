@@ -2,7 +2,7 @@ import { IDatabaseTable } from '../api/services/table';
 import { sortDatabaseGroups, sortedDimensions } from './sortingHelpers';
 import { EMetaPropertyType, IDimension, EDimensionType } from "types/cubeMeta";
 
-const mockVariables: IDimension[] =
+const mockDimensions: IDimension[] =
 [
     {
         code: "FoobarManual",
@@ -297,7 +297,7 @@ const mockPrimaryLanguage = 'en';
 
 describe('Assertion tests', () => {
     it('sorts variables in correct order', () => {
-        const result: IDimension[] = sortedDimensions(mockVariables);
+        const result: IDimension[] = sortedDimensions(mockDimensions);
         expect(result[0].code).toBe("FoobarContent");
         expect(result[1].code).toBe("Vuosi");
         expect(result[2].code).toBe("FoobarManual");

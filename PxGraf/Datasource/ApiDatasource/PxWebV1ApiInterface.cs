@@ -136,17 +136,17 @@ namespace PxGraf.Datasource.ApiDatasource
                 {
                     MultilanguageString valueName = new(langToResponse.ToDictionary(
                          kvp => kvp.Key,
-                         kvp => kvp.Value.Variables[dimIndx].ValueTexts[valIndx]));
+                         kvp => kvp.Value.Dimensions[dimIndx].ValueTexts[valIndx]));
                     values.Add(new(dimensionMap.ValueCodes[valIndx], valueName));
                 }
 
                 MultilanguageString dimensionName = new(langToResponse.ToDictionary(
                     kvp => kvp.Key,
-                    kvp => kvp.Value.Variables[dimIndx].Text));
+                    kvp => kvp.Value.Dimensions[dimIndx].Text));
 
                 if (dimensionTypes[dimensionMap.Code] == DimensionType.Time)
                 {
-                    TimeDimensionInterval interval = Data.TimeVarIntervalParser.DetermineIntervalFromCodes(dimensionMap.ValueCodes);
+                    TimeDimensionInterval interval = Data.TimeDimensionIntervalParser.DetermineIntervalFromCodes(dimensionMap.ValueCodes);
                     dimensions.Add(new TimeDimension(dimensionMap.Code, dimensionName, [], values, interval));
                     continue;
                 }
@@ -172,7 +172,7 @@ namespace PxGraf.Datasource.ApiDatasource
         public async Task<Matrix<DecimalDataValue>> GetMatrixAsync(PxTableReference tableReference, IReadOnlyMatrixMetadata meta, CancellationToken? cancellationToken = null)
         {
             string language = meta.DefaultLanguage;
-            IEnumerable<PxWebDataQueryPostParams.VariableQuery> queries = meta.Dimensions.Select(v => BuildVariableQuery(v.Code, [.. v.ValueCodes]));
+            IEnumerable<PxWebDataQueryPostParams.DimensionQuery> queries = meta.Dimensions.Select(v => BuildDimensionQuery(v.Code, [.. v.ValueCodes]));
 
             PxWebDataQueryPostParams postParams = BuildPostParams(queries);
             JsonStat2 dataResult = await GetPxWebDataResponseAsync<JsonStat2>(language, tableReference, postParams);
@@ -180,7 +180,7 @@ namespace PxGraf.Datasource.ApiDatasource
             decimal?[] values = dataResult.Value;
             DecimalDataValue[] dataValues = new DecimalDataValue[values.Length];
 
-            for (var i = 0; i < values.Length; i++)
+            for (int i = 0; i < values.Length; i++)
             {
                 if (values[i] is null)
                 {
@@ -194,35 +194,35 @@ namespace PxGraf.Datasource.ApiDatasource
             }
 
             List<IDimensionMap> dimMaps = [];
-            foreach (var dimensionId in dataResult.Id)
+            foreach (string dimensionId in dataResult.Id)
             {
                 JsonStat2.DimensionObj dimension = dataResult.Dimensions[dimensionId];
-                List<string> variableValueCodes = new(new string[dimension.Category.Index.Count]);
+                List<string> dimensionValueCodes = new(new string[dimension.Category.Index.Count]);
 
                 foreach (KeyValuePair<string, int> p in dimension.Category.Index)
                 {
                     string dimensionValueCode = p.Key;
                     int dimensionValueIndex = p.Value;
 
-                    variableValueCodes[dimensionValueIndex] = dimensionValueCode;
+                    dimensionValueCodes[dimensionValueIndex] = dimensionValueCode;
                 }
 
-                dimMaps.Add(new DimensionMap(dimensionId, variableValueCodes));
+                dimMaps.Add(new DimensionMap(dimensionId, dimensionValueCodes));
             }
 
 #if DEBUG
-            //Assert that loaded variables match to requested meta
+            //Assert that loaded dimensions match to requested meta
             Debug.Assert(dimMaps.Count == meta.Dimensions.Count);
-            for (var v = 0; v < meta.Dimensions.Count; v++)
+            for (int v = 0; v < meta.Dimensions.Count; v++)
             {
-                IDimensionMap jsonStatVariable = dimMaps[v];
-                IReadOnlyDimension cubeMetaVariable = meta.Dimensions[v];
-                Debug.Assert(jsonStatVariable.Code == cubeMetaVariable.Code);
-                Debug.Assert(jsonStatVariable.ValueCodes.Count == cubeMetaVariable.Values.Count);
+                IDimensionMap jsonStatDimension = dimMaps[v];
+                IReadOnlyDimension cubeMetaDimension = meta.Dimensions[v];
+                Debug.Assert(jsonStatDimension.Code == cubeMetaDimension.Code);
+                Debug.Assert(jsonStatDimension.ValueCodes.Count == cubeMetaDimension.Values.Count);
 
-                for (var vv = 0; vv < cubeMetaVariable.Values.Count; vv++)
+                for (int vv = 0; vv < cubeMetaDimension.Values.Count; vv++)
                 {
-                    Debug.Assert(jsonStatVariable.ValueCodes[vv] == cubeMetaVariable.Values[vv].Code);
+                    Debug.Assert(jsonStatDimension.ValueCodes[vv] == cubeMetaDimension.Values[vv].Code);
                 }
             }
 #endif
@@ -275,10 +275,10 @@ namespace PxGraf.Datasource.ApiDatasource
         {
             if (map.DimensionMaps.Any(v => v.ValueCodes.Count == 0))
             {
-                _logger.LogWarning("PxWeb: GetSinglePointJsonStat2RespAsync failed because one of the variables has no values. pxFile: {PxFile}, language: {Language}.", pxFile, language);
+                _logger.LogWarning("PxWeb: GetSinglePointJsonStat2RespAsync failed because one of the dimensions has no values. pxFile: {PxFile}, language: {Language}.", pxFile, language);
                 return null;
             }
-            IEnumerable<PxWebDataQueryPostParams.VariableQuery> queries = map.DimensionMaps.Select(v => BuildVariableQuery(v.Code, [v.ValueCodes[0]]));
+            IEnumerable<PxWebDataQueryPostParams.DimensionQuery> queries = map.DimensionMaps.Select(v => BuildDimensionQuery(v.Code, [v.ValueCodes[0]]));
             PxWebDataQueryPostParams postParams = BuildPostParams(queries);
             JsonStat2 jsonStat2 = await GetPxWebDataResponseAsync<JsonStat2>(language, pxFile, postParams);
             FixPxWebBrokenDateFormat(jsonStat2);
@@ -291,25 +291,25 @@ namespace PxGraf.Datasource.ApiDatasource
             Dictionary<string, DimensionType> types = [];
             foreach (string code in matrixMap.DimensionMaps.Select(dm => dm.Code))
             {
-                if (jsonStat2.Role.Metric is string[] contentVarCodes && contentVarCodes.Contains(code))
+                if (jsonStat2.Role.Metric is string[] contentDimCodes && contentDimCodes.Contains(code))
                 {
                     types[code] = DimensionType.Content;
                     continue;
                 }
 
-                if (jsonStat2.Role.Time is string[] timeVarCodes && timeVarCodes.Contains(code))
+                if (jsonStat2.Role.Time is string[] timeDimCodes && timeDimCodes.Contains(code))
                 {
                     types[code] = DimensionType.Time;
                     continue;
                 }
 
-                if (jsonStat2.Role.Geo is string[] geoVarCodes && geoVarCodes.Contains(code))
+                if (jsonStat2.Role.Geo is string[] geoDimCodes && geoDimCodes.Contains(code))
                 {
                     types[code] = DimensionType.Geographical;
                     continue;
                 }
 
-                if (jsonStat2.VarHasOrdinalScaleType(code))
+                if (jsonStat2.DimHasOrdinalScaleType(code))
                 {
                     types[code] = DimensionType.Ordinal;
                     continue;
@@ -327,11 +327,11 @@ namespace PxGraf.Datasource.ApiDatasource
             List<string> fetchLanguages,
             PxTableReference tableReference)
         {
-            IEnumerable<PxWebDataQueryPostParams.VariableQuery> queries = BuildMinimalContentVariableQueries(mapForDataFetching, dimensionBase.Code);
+            IEnumerable<PxWebDataQueryPostParams.DimensionQuery> queries = BuildMinimalContentDimensionQueries(mapForDataFetching, dimensionBase.Code);
             PxWebDataQueryPostParams postParams = BuildPostParams(queries);
 
             Dictionary<string, JsonStat2> dataResultsByLanguage = [];
-            foreach (var language in fetchLanguages) // OBS! This is only for getting the unit names in all languages! Needs to be changes once the pxweb v2 api is live.
+            foreach (string language in fetchLanguages) // OBS! This is only for getting the unit names in all languages! Needs to be changes once the pxweb v2 api is live.
             {
                 JsonStat2 dataResult = await GetPxWebDataResponseAsync<JsonStat2>(language, tableReference, postParams);
                 FixPxWebBrokenDateFormat(dataResult);
@@ -376,7 +376,7 @@ namespace PxGraf.Datasource.ApiDatasource
             return new ContentDimension(dimensionBase.Code, dimensionBase.Name, additionalProperties, contentdimensionValues);
         }
 
-        private static PxWebDataQueryPostParams BuildPostParams(IEnumerable<PxWebDataQueryPostParams.VariableQuery> queries)
+        private static PxWebDataQueryPostParams BuildPostParams(IEnumerable<PxWebDataQueryPostParams.DimensionQuery> queries)
         {
             return new PxWebDataQueryPostParams()
             {
@@ -388,7 +388,7 @@ namespace PxGraf.Datasource.ApiDatasource
             };
         }
 
-        private static IEnumerable<PxWebDataQueryPostParams.VariableQuery> BuildMinimalContentVariableQueries(PxMetaResponse map, string contentDimCode)
+        private static IEnumerable<PxWebDataQueryPostParams.DimensionQuery> BuildMinimalContentDimensionQueries(PxMetaResponse map, string contentDimCode)
         {
             foreach (IDimensionMap dimMap in map.DimensionMaps)
             {
@@ -402,19 +402,19 @@ namespace PxGraf.Datasource.ApiDatasource
                     selectedValues = [dimMap.ValueCodes[0]];
                 }
 
-                yield return BuildVariableQuery(dimMap.Code, selectedValues);
+                yield return BuildDimensionQuery(dimMap.Code, selectedValues);
             }
         }
 
-        private static PxWebDataQueryPostParams.VariableQuery BuildVariableQuery(string variableCode, string[] variableValues)
+        private static PxWebDataQueryPostParams.DimensionQuery BuildDimensionQuery(string dimensionCode, string[] dimensionValues)
         {
-            return new PxWebDataQueryPostParams.VariableQuery()
+            return new PxWebDataQueryPostParams.DimensionQuery()
             {
-                Code = variableCode,
-                Selectrion = new PxWebDataQueryPostParams.VariableQuery.Selection()
+                Code = dimensionCode,
+                Selectrion = new PxWebDataQueryPostParams.DimensionQuery.Selection()
                 {
                     Filter = "item",
-                    Values = variableValues,
+                    Values = dimensionValues,
                 }
             };
         }
@@ -425,7 +425,7 @@ namespace PxGraf.Datasource.ApiDatasource
         {
             string tableRefPath = pxTableRef.ToPath();
             _logger.LogDebug("PxWeb GET: api/v1/{Lang}/{TableRefPath}", lang, tableRefPath);
-            var resp = await _pxwebConnection.GetAsync($"api/v1/{lang}/{tableRefPath}");
+            HttpResponseMessage resp = await _pxwebConnection.GetAsync($"api/v1/{lang}/{tableRefPath}");
             string contentString = await resp.Content.ReadAsStringAsync();
 
             if (resp.IsSuccessStatusCode)
@@ -480,12 +480,12 @@ namespace PxGraf.Datasource.ApiDatasource
         */
         private static void FixPxWebBrokenDateFormat(JsonStat2 dataResult)
         {
-            if (DateTime.TryParseExact(dataResult.Updated, "yyyy'-'MM'-'dd'T'HH'.'mm'.'ss'Z'", CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out var parsedBuggyDate))
+            if (DateTime.TryParseExact(dataResult.Updated, "yyyy'-'MM'-'dd'T'HH'.'mm'.'ss'Z'", CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out DateTime parsedBuggyDate))
             {
                 dataResult.Updated = parsedBuggyDate.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'", CultureInfo.InvariantCulture);
             }
 
-            if (dataResult.Updated != null && !DateTime.TryParse(dataResult.Updated, CultureInfo.InvariantCulture, DateTimeStyles.None, out var _))
+            if (dataResult.Updated != null && !DateTime.TryParse(dataResult.Updated, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime _))
             {
                 throw new ArgumentException($"Invalid date format: {dataResult.Updated}");
             }

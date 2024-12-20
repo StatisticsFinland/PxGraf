@@ -20,9 +20,9 @@ namespace PxGraf.ChartTypeSelection
     public class VisualizationTypeSelectionObject
     {
         /// <summary>
-        /// List containing one variable info item for each variable in the query/cube.
+        /// List containing one dimension info item for each dimension in the query/cube.
         /// </summary>
-        public IReadOnlyList<VariableInfo> Variables { get; }
+        public IReadOnlyList<DimensionInfo> Dimensions { get; }
 
         /// <summary>
         /// True if the selection contains actual double values (Not only missing data codes).
@@ -41,10 +41,10 @@ namespace PxGraf.ChartTypeSelection
 
         public static VisualizationTypeSelectionObject FromQueryAndMatrix(MatrixQuery query, Matrix<DecimalDataValue> matrix)
         {
-            List<VariableInfo> dimInfos = matrix.Metadata.Dimensions.Select(v =>
+            List<DimensionInfo> dimInfos = matrix.Metadata.Dimensions.Select(v =>
             {
-                DimensionQuery varQuery = query.DimensionQueries[v.Code];
-                return VariableInfo.FromQueryAndDimension(varQuery, v);
+                DimensionQuery dimQuery = query.DimensionQueries[v.Code];
+                return DimensionInfo.FromQueryAndDimension(dimQuery, v);
             }).ToList();
 
             VisualizationTypeSelectionObject result = new(dimInfos);
@@ -54,9 +54,9 @@ namespace PxGraf.ChartTypeSelection
             return result;
         }
 
-        private VisualizationTypeSelectionObject(IReadOnlyList<VariableInfo> variables)
+        private VisualizationTypeSelectionObject(IReadOnlyList<DimensionInfo> dimensions)
         {
-            Variables = variables;
+            Dimensions = dimensions;
 
             HasActualData = false;
             HasMissingData = false;
@@ -64,13 +64,13 @@ namespace PxGraf.ChartTypeSelection
         }
 
         /// <summary>
-        /// Contains information about a variable for determining
-        /// which visualization types are valid for some query containing said variable
+        /// Contains information about a dimension for determining
+        /// which visualization types are valid for some query containing said dimension
         /// </summary>
-        public class VariableInfo
+        public class DimensionInfo
         {
             /// <summary>
-            /// Unique identifier of the variable.
+            /// Unique identifier of the dimension.
             /// </summary>
             public string Code { get; }
 
@@ -80,7 +80,7 @@ namespace PxGraf.ChartTypeSelection
             public DimensionType Type { get; }
 
             /// <summary>
-            /// How many values does the variable have
+            /// How many values does the dimension have
             /// </summary>
             public int Size { get; }
 
@@ -90,24 +90,24 @@ namespace PxGraf.ChartTypeSelection
             public bool FilterCanChangeToMultiValue { get; private set; } = false;
 
             /// <summary>
-            /// If the variable has a combination value (sum on other values) this is the identifier
+            /// If the dimension has a combination value (sum on other values) this is the identifier
             /// </summary>
             public string? CombinationValueCode { get; private set; }
 
             /// <summary>
-            /// How many different units does the variable have.
-            /// Only content variables have units.
+            /// How many different units does the dimension have.
+            /// Only content dimensions have units.
             /// </summary>
             public int? NumberOfUnits { get; private set; }
 
             /// <summary>
-            /// Only time variables can be consecutive or irregular. IE: cons: 2020, 2021, 2022 and irregular: 2020, 2022, 2023
-            /// True if the variable is a time variable and has irregular values, false if the time variable has cosecutive values.
-            /// null when the variable is not a time variable.
+            /// Only time dimensions can be consecutive or irregular. IE: cons: 2020, 2021, 2022 and irregular: 2020, 2022, 2023
+            /// True if the dimension is a time dimension and has irregular values, false if the time dimension has cosecutive values.
+            /// null when the dimension is not a time dimension.
             /// </summary>
             public bool? IsIrregular { get; private set; }
 
-            public static VariableInfo FromQueryAndDimension(DimensionQuery query, IReadOnlyDimension dimension)
+            public static DimensionInfo FromQueryAndDimension(DimensionQuery query, IReadOnlyDimension dimension)
             {
                 int size;
                 bool filterCanChangeToMultiValue;
@@ -122,7 +122,7 @@ namespace PxGraf.ChartTypeSelection
                     filterCanChangeToMultiValue = query.ValueFilter is FromFilter || query.ValueFilter is AllFilter; 
                 }
 
-                VariableInfo result = new (dimension.Code, dimension.Type, size)
+                DimensionInfo result = new (dimension.Code, dimension.Type, size)
                 {
                     FilterCanChangeToMultiValue = filterCanChangeToMultiValue,
                 };
@@ -141,13 +141,13 @@ namespace PxGraf.ChartTypeSelection
                 else if (dimension.Type == DimensionType.Time && dimension is TimeDimension timeDim)
                 {
                     result.IsIrregular = timeDim.Interval == TimeDimensionInterval.Irregular ||
-                    TimeDimensionInterval.Irregular == Data.TimeVarIntervalParser.DetermineIntervalFromCodes(timeDim.Values.Codes);
+                    TimeDimensionInterval.Irregular == Data.TimeDimensionIntervalParser.DetermineIntervalFromCodes(timeDim.Values.Codes);
                 }
 
                 return result;
             }
 
-            private VariableInfo(string code, DimensionType type, int size)
+            private DimensionInfo(string code, DimensionType type, int size)
             {
                 Code = code;
                 Type = type;

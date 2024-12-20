@@ -1,7 +1,7 @@
 import { IDimension, EDimensionType } from "types/cubeMeta";
-import { getDefaultQueries, resolveVariables } from "./editorHelpers";
+import { getDefaultQueries, resolveDimensions } from "./editorHelpers";
 
-const mockVariables: IDimension[] = [
+const mockDimensions: IDimension[] = [
     {
         code: "foo",
         name: {
@@ -29,7 +29,7 @@ describe('getDefaultQueries tests', () => {
                 virtualValueDefinitions: null
             }
         }
-        const result = getDefaultQueries(mockVariables);
+        const result = getDefaultQueries(mockDimensions);
         expect(result).toBeTruthy();
         expect(result).toEqual(expected);
     });
@@ -38,7 +38,7 @@ describe('getDefaultQueries tests', () => {
 describe('resolveVariables tests', () => {
     it('Should return the correct object', () => {
         const expected: IDimension[] = [{ code: 'foo', name: { fi: 'nimi' }, type: EDimensionType.Content, values: [] }];
-        const result = resolveVariables(mockVariables, {'foo': ['bar', 'baz']});
+        const result = resolveDimensions(mockDimensions, {'foo': ['bar', 'baz']});
         expect(result).toBeTruthy();
         expect(result).toEqual(expected);
     });

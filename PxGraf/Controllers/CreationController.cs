@@ -89,9 +89,9 @@ namespace PxGraf.Controllers
             if (tableMeta is null)
             {
                 return new(
-                    tableHasContentVariable: false,
-                    tableHasTimeVariable: false,
-                    allVariablesContainValues: false
+                    tableHasContentDimension: false,
+                    tableHasTimeDimension: false,
+                    allDimensionsContainValues: false
                 );
             }
             else
@@ -114,7 +114,7 @@ namespace PxGraf.Controllers
         /// <param name="filterRequest">Filter request object containing the table reference and the filter.</param>
         /// <returns>Dictionary with dimension codes as keys and their value codes as values</returns>
         [HttpPost("filter-dimension")]
-        public async Task<ActionResult<Dictionary<string, List<string>>>> GetVariableFilterResultAsync([FromBody] FilterRequest filterRequest)
+        public async Task<ActionResult<Dictionary<string, List<string>>>> GetDimensionFilterResultAsync([FromBody] FilterRequest filterRequest)
         {
             _logger.LogDebug("Requesting filter result for {FilterRequest} POST: api/creation/filter-dimension", filterRequest);
             IReadOnlyMatrixMetadata tableMeta = await _datasource.GetMatrixMetadataCachedAsync(filterRequest.TableReference);
@@ -224,7 +224,7 @@ namespace PxGraf.Controllers
                 if (reasonKvp.Value.Any())
                 {
                     Dictionary<string, string> translations = [];
-                    foreach (var language in Localization.GetAllAvailableLanguages())
+                    foreach (string language in Localization.GetAllAvailableLanguages())
                     {
                         string textInLang = Localization.FromLanguage(language).Translation.RejectionReasons.GetTranslation(reasonKvp.Value[0]);
                         translations[language] = textInLang;
@@ -272,18 +272,18 @@ namespace PxGraf.Controllers
             }
 
             bool manualPivotability = ManualPivotRules.GetManualPivotability(rulesQuery.SelectedVisualization, filteredMeta, rulesQuery.Query);
-            bool multiSelVar = IsMultivalueSelectableAllowed(rulesQuery.SelectedVisualization, rulesQuery.Query.DimensionQueries.Values);
+            bool multiSelDim = IsMultivalueSelectableAllowed(rulesQuery.SelectedVisualization, rulesQuery.Query.DimensionQueries.Values);
             IReadOnlyList<SortingOption> sortingOptions = CubeSorting.Get(filteredMeta, rulesQuery);
             VisualizationRules.TypeSpecificVisualizationRules typeSpecificRules = new (rulesQuery.SelectedVisualization);
-            VisualizationRules visualizationRules = new (manualPivotability, multiSelVar, typeSpecificRules, sortingOptions);
+            VisualizationRules visualizationRules = new (manualPivotability, multiSelDim, typeSpecificRules, sortingOptions);
             _logger.LogDebug("visualization-rules result: {VisualizationRules}", visualizationRules);
             return visualizationRules;
 
-            static bool IsMultivalueSelectableAllowed(VisualizationType type, IEnumerable<DimensionQuery> varQueries)
+            static bool IsMultivalueSelectableAllowed(VisualizationType type, IEnumerable<DimensionQuery> dimQueries)
             {
-                // MultiselectVariable only allowed for LineChart for now. Will be extended to Table in the future.
+                // Multiselect dimension only allowed for LineChart for now. Will be extended to Table in the future.
                 return (type == VisualizationType.LineChart)
-                    && varQueries.Any(vq => vq.Selectable);
+                    && dimQueries.Any(vq => vq.Selectable);
             }
         }
 

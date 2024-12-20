@@ -4,10 +4,10 @@ import { ISortingOption } from "types/visualizationRules";
 import { IVisualizationSettings } from "types/visualizationSettings";
 import { VisualizationType } from "types/visualizationType";
 
-export function getValidatedSettings(currentSettings: IVisualizationSettings, selectedVisualization: VisualizationType, sortingOptions: ISortingOption[], variables: IDimension[], query: Query): IVisualizationSettings {
+export function getValidatedSettings(currentSettings: IVisualizationSettings, selectedVisualization: VisualizationType, sortingOptions: ISortingOption[], dimensions: IDimension[], query: Query): IVisualizationSettings {
     switch (selectedVisualization) {
         case VisualizationType.Table:
-            return getTableValidatedSettings(currentSettings, variables, query);
+            return getTableValidatedSettings(currentSettings, dimensions, query);
         case VisualizationType.LineChart:
             return getLineChartValidatedSettings(currentSettings, query);
         case VisualizationType.PieChart:

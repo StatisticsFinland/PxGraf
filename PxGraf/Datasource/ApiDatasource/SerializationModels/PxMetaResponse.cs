@@ -10,12 +10,12 @@ namespace PxGraf.Datasource.PxWebInterface.SerializationModels
         public string Title { get; set; }
 
         [JsonPropertyName("variables")]
-        public Variable[] Variables { get; set; }
+        public Dimension[] Dimensions { get; set; }
 
         [JsonIgnore]
-        public IReadOnlyList<IDimensionMap> DimensionMaps => Variables;
+        public IReadOnlyList<IDimensionMap> DimensionMaps => Dimensions;
 
-        public class Variable : IDimensionMap
+        public class Dimension : IDimensionMap
         {
             [JsonPropertyName("code")]
             public string Code { get; set; }

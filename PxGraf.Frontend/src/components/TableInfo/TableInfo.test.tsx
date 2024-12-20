@@ -22,7 +22,7 @@ jest.mock('envVars', () => ({
 
 const mockTableQueryResult = {
     data: {
-        variables: [
+        dimensions: [
             {
                 code: 'code',
                 text: 'text',

@@ -33,46 +33,46 @@ const sortDatabaseItems = <T extends IDatabaseGroupHeader>(data: T[], primaryLan
 };
 
 /**
- * Function for sorting variables for the variable selection list based on their type.
- * @param {IDimension[]} dimensions  Variables to be sorted.
- * @returns A sorted list of variables.
+ * Function for sorting dimensions for the dimension selection list based on their type.
+ * @param {IDimension[]} dimensions  Dimensions to be sorted.
+ * @returns A sorted list of dimensions.
  */
 export const sortedDimensions = (dimensions: IDimension[]): IDimension[] => {
-    //Create a new array for sorted variables and store variables based on their type
-    const sortedVariables = [];
-    let contentVariable: IDimension;
-    const timeVariables = [];
-    const otherVariables = [];
-    const eliminationVariables = [];
-    const singleValueVariables = [];
+    //Create a new array for sorted dimensions and store dimensions based on their type
+    const sortedDimensions = [];
+    let contentDimension: IDimension;
+    const timeDimensions = [];
+    const otherDimensions = [];
+    const eliminationDimensions = [];
+    const singleValueDimensions = [];
     dimensions.forEach((dimension: IDimension) => {
         if (dimension.type === EDimensionType.Content) {
-            contentVariable = dimension;
+            contentDimension = dimension;
         }
         else if (dimension.type === EDimensionType.Time) {
-            timeVariables.push(dimension);
+            timeDimensions.push(dimension);
         }
         else if (dimension.values.filter(vv => getValueIsSumValue(vv, dimension)).length > 0) {
-            eliminationVariables.push(dimension);
+            eliminationDimensions.push(dimension);
         }
         else if (dimension.values.length === 1) {
-            singleValueVariables.push(dimension);
+            singleValueDimensions.push(dimension);
         }
         else {
-            otherVariables.push(dimension);
+            otherDimensions.push(dimension);
         }
     });
 
-    //Populate sortedVariables array with variables in the correct order
-    if (contentVariable) {
-        sortedVariables.push(contentVariable);
+    //Populate sortedDimensions array with dimensions in the correct order
+    if (contentDimension) {
+        sortedDimensions.push(contentDimension);
     }
-    sortedVariables.push(...timeVariables);
-    sortedVariables.push(...otherVariables);
-    sortedVariables.push(...eliminationVariables);
-    sortedVariables.push(...singleValueVariables);
+    sortedDimensions.push(...timeDimensions);
+    sortedDimensions.push(...otherDimensions);
+    sortedDimensions.push(...eliminationDimensions);
+    sortedDimensions.push(...singleValueDimensions);
 
-    return sortedVariables;
+    return sortedDimensions;
 }
 
 function getValueIsSumValue(value: IDimensionValue, dimension: IDimension): boolean {

@@ -16,7 +16,7 @@ export interface ISaveQueryResponse {
 
 /**
  * Response object for fetching a saved query.
- * @property query - The query object consisting of the table reference and variable queries @see {@link Query}.
+ * @property query - The query object consisting of the table reference and dimension queries @see {@link Query}.
  * @property {IVisualizationSettings} settings - The visualization settings for the query.
  */
 export interface IFetchSavedQueryResponse {

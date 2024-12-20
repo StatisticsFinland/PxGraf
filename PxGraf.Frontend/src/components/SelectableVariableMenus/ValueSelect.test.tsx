@@ -41,7 +41,7 @@ const mockVariable: IVariable =
     };
 
 const mockData: IValueSelectProps = {
-    variable: mockVariable,
+    dimension: mockVariable,
     multiselect: true,
     activeSelections: ['asd1', 'asd2'],
     onValueChanged: mockFunction,
@@ -51,7 +51,7 @@ describe('Rendering test', () => {
     it('renders correctly', () => {
         const { asFragment } = render(
             <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
-                <ValueSelect variable={mockData.variable} activeSelections={mockData.activeSelections} onValueChanged={mockData.onValueChanged} multiselect={mockData.multiselect} />
+                <ValueSelect dimension={mockData.dimension} activeSelections={mockData.activeSelections} onValueChanged={mockData.onValueChanged} multiselect={mockData.multiselect} />
             </UiLanguageContext.Provider>
         );
         expect(asFragment()).toMatchSnapshot();

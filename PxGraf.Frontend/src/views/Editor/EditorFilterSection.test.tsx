@@ -5,7 +5,7 @@ import { FilterType, Query } from "types/query";
 import EditorFilterSection from "./EditorFilterSection";
 import UiLanguageContext from 'contexts/uiLanguageContext';
 
-const mockVariables: IDimension[] = [
+const mockDimensions: IDimension[] = [
     {
         code: 'foo',
         name: {
@@ -62,8 +62,8 @@ describe('Rendering test', () => {
             <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
                 <EditorFilterSection
                     queries={mockQuery}
-                    resolvedVariableCodes={{ 'foo': ['foo', 'bar', 'baz'] }}
-                    variables={mockVariables}
+                    resolvedDimensionCodes={{ 'foo': ['foo', 'bar', 'baz'] }}
+                    dimensions={mockDimensions}
                     />
             </UiLanguageContext.Provider>
         );

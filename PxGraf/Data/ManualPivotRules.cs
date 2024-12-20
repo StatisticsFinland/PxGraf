@@ -37,14 +37,14 @@ namespace PxGraf.Data
         public static bool GroupVerticalBarChart(IReadOnlyMatrixMetadata meta)
         {
             if (meta.GetNumberOfMultivalueDimensions() != 2) throw new ArgumentException("Can not determine the pivotability of a GroupVerticalBarChart with the provided cubemeta.");
-            IReadOnlyDimension largestMultivalueVar = meta.GetLargestMultivalueDimension();
-            IReadOnlyDimension smallerMultiValueVar = meta.GetSmallerMultivalueDimension();
-            if (largestMultivalueVar == null || smallerMultiValueVar == null)
+            IReadOnlyDimension largestMultivalueDim = meta.GetLargestMultivalueDimension();
+            IReadOnlyDimension smallerMultiValueDim = meta.GetSmallerMultivalueDimension();
+            if (largestMultivalueDim == null || smallerMultiValueDim == null)
             {
                 string errMsg = $"Provided chart selections limits are not compatible with determining the pivotability with GroupVerticalBarChart.";
                 throw new ArgumentException(errMsg);
             }
-            return largestMultivalueVar.Values.Count <= 4 && smallerMultiValueVar.Values.Count <= 4;
+            return largestMultivalueDim.Values.Count <= 4 && smallerMultiValueDim.Values.Count <= 4;
         }
 
         /// <summary>
@@ -55,14 +55,14 @@ namespace PxGraf.Data
         {
             if (meta.GetNumberOfMultivalueDimensions() != 2) throw new ArgumentException("Can not determine the pivotability of a StackedVerticalBarChart with the provided cubemeta.");
             bool noMultivalueTime = meta.GetTimeDimension().Values.Count == 1;
-            IReadOnlyDimension largestMultivalueVar = meta.GetLargestMultivalueDimension();
-            IReadOnlyDimension smallerMultivalueVar = meta.GetSmallerMultivalueDimension();
-            if (largestMultivalueVar == null || smallerMultivalueVar == null)
+            IReadOnlyDimension largestMultivalueDim = meta.GetLargestMultivalueDimension();
+            IReadOnlyDimension smallerMultivalueDim = meta.GetSmallerMultivalueDimension();
+            if (largestMultivalueDim == null || smallerMultivalueDim == null)
             {
                 string errMsg = $"Provided chart selections limits are not compatible with determining pivotability with StackedVerticalBarChart";
                 throw new ArgumentException(errMsg);
             }
-            return noMultivalueTime && largestMultivalueVar.Values.Count < 10 && smallerMultivalueVar.Values.Count < 10;
+            return noMultivalueTime && largestMultivalueDim.Values.Count < 10 && smallerMultivalueDim.Values.Count < 10;
         }
 
         /// <summary>
@@ -85,17 +85,17 @@ namespace PxGraf.Data
         public static bool GroupHorizontalBarChart(IReadOnlyMatrixMetadata meta)
         {
             if (meta.GetNumberOfMultivalueDimensions() != 2) throw new ArgumentException("Can not determine the pivotability of a GroupHorizontalBarChart with the provided cubemeta.");
-            IReadOnlyDimension timeVar = meta.Dimensions.FirstOrDefault(v => v.Type == DimensionType.Time);
-            IReadOnlyDimension largestMultivalueVar = meta.GetLargestMultivalueDimension();
-            IReadOnlyDimension smallerMultivalueVar = meta.GetSmallerMultivalueDimension();
-            if (largestMultivalueVar == null || smallerMultivalueVar == null)
+            IReadOnlyDimension timeDim = meta.Dimensions.FirstOrDefault(v => v.Type == DimensionType.Time);
+            IReadOnlyDimension largestMultivalueDim = meta.GetLargestMultivalueDimension();
+            IReadOnlyDimension smallerMultivalueDim = meta.GetSmallerMultivalueDimension();
+            if (largestMultivalueDim == null || smallerMultivalueDim == null)
             {
                 string errMsg = $"Provided chart selections limits are not compatible with determining pivotability with GroupHorizontalBarChart";
                 throw new ArgumentException(errMsg);
             }
-            return ((timeVar == null || timeVar.Values.Count <= 1) &&
-                    largestMultivalueVar.Values.Count <= 4 &&
-                    smallerMultivalueVar.Values.Count <= 4);
+            return ((timeDim == null || timeDim.Values.Count <= 1) &&
+                    largestMultivalueDim.Values.Count <= 4 &&
+                    smallerMultivalueDim.Values.Count <= 4);
         }
 
         /// <summary>
@@ -105,14 +105,14 @@ namespace PxGraf.Data
         public static bool StackedHorizontalBarChart(IReadOnlyMatrixMetadata meta)
         {
             if (meta.GetNumberOfMultivalueDimensions() != 2) throw new ArgumentException("Can not determine the pivotability of a StackedHorizontalBarChart with the provided cubemeta.");
-            IReadOnlyDimension largestMultivalueVar = meta.GetLargestMultivalueDimension();
-            IReadOnlyDimension smallerMultivalueVar = meta.GetSmallerMultivalueDimension();
-            if (largestMultivalueVar == null || smallerMultivalueVar == null)
+            IReadOnlyDimension largestMultivalueDim = meta.GetLargestMultivalueDimension();
+            IReadOnlyDimension smallerMultivalueDim = meta.GetSmallerMultivalueDimension();
+            if (largestMultivalueDim == null || smallerMultivalueDim == null)
             {
                 string errMsg = $"Provided chart selections limits are not compatible with determining pivotability with StackedHorizontalBarChart";
                 throw new ArgumentException(errMsg);
             }
-            return largestMultivalueVar.Values.Count < 10 && smallerMultivalueVar.Values.Count < 10;
+            return largestMultivalueDim.Values.Count < 10 && smallerMultivalueDim.Values.Count < 10;
         }
 
         /// <summary>
@@ -179,16 +179,16 @@ namespace PxGraf.Data
         public static bool GetManualPivotability(VisualizationType visualization, IReadOnlyMatrixMetadata meta, MatrixQuery query)
         {
             List<IDimensionMap> resultList = [];
-            foreach (IDimensionMap varMap in meta.DimensionMaps)
+            foreach (IDimensionMap dimMap in meta.DimensionMaps)
             {
-                // Selectable varaibles always have a size of 1 and for purposes of this class the actual value does not matter, just the size.
-                if (query.DimensionQueries[varMap.Code].Selectable)
+                // Selectable dimensions always have a size of 1 and for purposes of this class the actual value does not matter, just the size.
+                if (query.DimensionQueries[dimMap.Code].Selectable)
                 {
-                    resultList.Add(new DimensionMap(varMap.Code, [varMap.ValueCodes[0]]));
+                    resultList.Add(new DimensionMap(dimMap.Code, [dimMap.ValueCodes[0]]));
                 }
                 else
                 {
-                    resultList.Add(varMap);
+                    resultList.Add(dimMap);
                 }
             }
 

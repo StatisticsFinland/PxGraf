@@ -29,7 +29,7 @@ namespace PxGraf.Models.Metadata
             ContentComponent? cc = null;
             MultilanguageString? valueNote = input.GetDimensionValueMultilanguageProperty(PxSyntaxConstants.VALUENOTE_KEY);
 
-            DimensionQuery.VariableValueEdition? valueEdits = null;
+            DimensionQuery.DimensionValueEdition? valueEdits = null;
             dimensionQuery?.ValueEdits.TryGetValue(input.Code, out valueEdits);
 
             MultilanguageString name = valueEdits?.NameEdit is null ? input.Name : input.Name.CopyAndEdit(valueEdits.NameEdit);

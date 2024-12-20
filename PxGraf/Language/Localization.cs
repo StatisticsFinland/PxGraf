@@ -17,7 +17,7 @@ namespace PxGraf.Language
 
         public static Localization FromLanguage(string lang)
         {
-            if (localizations.TryGetValue(lang, out var result))
+            if (localizations.TryGetValue(lang, out Localization result))
             {
                 return result;
             }
@@ -38,7 +38,7 @@ namespace PxGraf.Language
 
         public static void Load(string configPath)
         {
-            var json = File.ReadAllText(configPath);
+            string json = File.ReadAllText(configPath);
 
             //Strict json deserialization
             LocalizationConfig config = JsonSerializer.Deserialize<LocalizationConfig>(json, GlobalJsonConverterOptions.Default);

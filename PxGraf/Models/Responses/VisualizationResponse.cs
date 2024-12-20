@@ -23,12 +23,14 @@ namespace PxGraf.Models.Responses
             public VisualizationType VisualizationType { get; set; }
 
             [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-            public Dictionary<string, List<string>> DefaultSelectableVariableCodes { get; set; }
+            [JsonPropertyName("defaultSelectableVariableCodes")] // legacy name, changing this will be a breaking change for PxVisualizer
+            public Dictionary<string, List<string>> DefaultSelectableDimensionCodes { get; set; }
             
             [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-            public string MultiselectableVariableCode { get; set; }
-
-            public TimeDimensionInterval TimeVariableIntervals { get; set; }
+            [JsonPropertyName("multiSelectableVariableCode")] // legacy name, changing this will be a breaking change for PxVisualizer
+            public string MultiselectableDimensionCode { get; set; }
+            [JsonPropertyName("timeVariableIntervals")] // legacy name, changing this will be a breaking change for PxVisualizer
+            public Px.Utils.Models.Metadata.Enums.TimeDimensionInterval TimeDimensionIntervals { get; set; }
 
             [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
             public DateTime? TimeSeriesStartingPoint { get; set; }
@@ -78,17 +80,20 @@ namespace PxGraf.Models.Responses
         /// <summary>
         /// Variable codes for variables that have been set as selectable.
         /// </summary>
-        public IReadOnlyList<string> SelectableVariableCodes { get; set; }
+        [JsonPropertyName("selectableVariableCodes")] // legacy name, changing this will be a breaking change for PxVisualizer
+        public IReadOnlyList<string> SelectableDimensionCodes { get; set; }
 
         /// <summary>
         /// List of variable codes to be used on rows.
         /// </summary>
-        public IReadOnlyList<string> RowVariableCodes { get; set; }
+        [JsonPropertyName("rowVariableCodes")] // legacy name, changing this will be a breaking change for PxVisualizer
+        public IReadOnlyList<string> RowDimensionCodes { get; set; }
 
         /// <summary>
         /// List of variable codes to be used on columns.
         /// </summary>
-        public IReadOnlyList<string> ColumnVariableCodes { get; set; }
+        [JsonPropertyName("columnVariableCodes")] // legacy name, changing this will be a breaking change for PxVisualizer
+        public IReadOnlyList<string> ColumnDimensionCodes { get; set; }
 
         /// <summary>
         /// Header text for the visualization.

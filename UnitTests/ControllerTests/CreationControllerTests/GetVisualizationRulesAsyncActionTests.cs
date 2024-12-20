@@ -236,7 +236,7 @@ namespace UnitTests.ControllerTests.CreationControllerTests
             };
 
             ActionResult<VisualizationRules> actionResult = await testController.GetVisualizationRulesAsync(rulesRequest);
-            Assert.That(actionResult.Value.MultiselectVariableAllowed, Is.True);
+            Assert.That(actionResult.Value.MultiselectDimensionAllowed, Is.True);
         }
 
         [Test]
@@ -388,7 +388,7 @@ namespace UnitTests.ControllerTests.CreationControllerTests
             ActionResult<VisualizationRules> actionResult = await testController.GetVisualizationRulesAsync(rulesRequest);
 
             Assert.That(actionResult.Value.AllowManualPivot, Is.False);
-            Assert.That(actionResult.Value.MultiselectVariableAllowed, Is.False);
+            Assert.That(actionResult.Value.MultiselectDimensionAllowed, Is.False);
             Assert.That(actionResult.Value.VisualizationTypeSpecificRules, Is.Null);
         }
 
@@ -425,7 +425,7 @@ namespace UnitTests.ControllerTests.CreationControllerTests
             ActionResult<VisualizationRules> actionResult = await testController.GetVisualizationRulesAsync(rulesRequest);
 
             Assert.That(actionResult.Value.AllowManualPivot, Is.False);
-            Assert.That(actionResult.Value.MultiselectVariableAllowed, Is.False);
+            Assert.That(actionResult.Value.MultiselectDimensionAllowed, Is.False);
             Assert.That(actionResult.Value.VisualizationTypeSpecificRules, Is.Null);
         }
     }

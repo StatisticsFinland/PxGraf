@@ -144,7 +144,7 @@ namespace PxGraf.Models.Metadata
             IEnumerable<IReadOnlyDimension> singleValueDimensions = dimensions
                 .Where(d => d.Values.Count == 1 && d.Type != DimensionType.Content && d.Type != DimensionType.Time);
 
-            foreach (var singleDim in singleValueDimensions)
+            foreach (IReadOnlyDimension? singleDim in singleValueDimensions)
             {
                 string? eliminationCode = singleDim.GetEliminationValueCode();
                 IReadOnlyDimensionValue dimensionValue = singleDim.Values[0];
@@ -173,7 +173,7 @@ namespace PxGraf.Models.Metadata
         private static string GetDimensionValueNameEditForLanguage(MatrixQuery? query, string dimensionCode, IReadOnlyDimensionValue value, string language)
         {
             if (query?.DimensionQueries?.TryGetValue(dimensionCode, out DimensionQuery? dq) == true &&
-                dq.ValueEdits?.TryGetValue(value.Code, out VariableValueEdition? dvq) == true &&
+                dq.ValueEdits?.TryGetValue(value.Code, out DimensionValueEdition? dvq) == true &&
                 dvq.NameEdit?.Languages.Contains(language) == true)
             {
                 return dvq.NameEdit[language];

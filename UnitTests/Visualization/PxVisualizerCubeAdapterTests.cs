@@ -244,10 +244,10 @@ namespace UnitTests.Visualization
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(inputCube, savedQuery);
 
             Assert.That(result.VisualizationSettings.VisualizationType, Is.EqualTo(VisualizationType.GroupVerticalBarChart));
-            Assert.That(result.ColumnVariableCodes.Count, Is.EqualTo(1));
-            Assert.That(result.ColumnVariableCodes[0], Is.EqualTo("Ilmoittava lentoasema"));
-            Assert.That(result.RowVariableCodes.Count, Is.EqualTo(1));
-            Assert.That(result.RowVariableCodes[0], Is.EqualTo("Kuukausi"));
+            Assert.That(result.ColumnDimensionCodes.Count, Is.EqualTo(1));
+            Assert.That(result.ColumnDimensionCodes[0], Is.EqualTo("Ilmoittava lentoasema"));
+            Assert.That(result.RowDimensionCodes.Count, Is.EqualTo(1));
+            Assert.That(result.RowDimensionCodes[0], Is.EqualTo("Kuukausi"));
         }
 
         [Test]
@@ -267,10 +267,10 @@ namespace UnitTests.Visualization
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(inputCube, savedQuery);
 
             Assert.That(result.VisualizationSettings.VisualizationType, Is.EqualTo(VisualizationType.GroupHorizontalBarChart));
-            Assert.That(result.ColumnVariableCodes.Count, Is.EqualTo(1));
-            Assert.That(result.ColumnVariableCodes[0], Is.EqualTo("Syntymävaltio"));
-            Assert.That(result.RowVariableCodes.Count, Is.EqualTo(1));
-            Assert.That(result.RowVariableCodes[0], Is.EqualTo("Vuosi"));
+            Assert.That(result.ColumnDimensionCodes.Count, Is.EqualTo(1));
+            Assert.That(result.ColumnDimensionCodes[0], Is.EqualTo("Syntymävaltio"));
+            Assert.That(result.RowDimensionCodes.Count, Is.EqualTo(1));
+            Assert.That(result.RowDimensionCodes[0], Is.EqualTo("Vuosi"));
         }
 
         [Test]
@@ -287,8 +287,8 @@ namespace UnitTests.Visualization
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(inputCube, savedQuery);
 
             Assert.That(result.VisualizationSettings.VisualizationType, Is.EqualTo(VisualizationType.LineChart));
-            Assert.That(result.ColumnVariableCodes.Count, Is.EqualTo(1));
-            Assert.That(result.ColumnVariableCodes[0], Is.EqualTo("Vuosi"));
+            Assert.That(result.ColumnDimensionCodes.Count, Is.EqualTo(1));
+            Assert.That(result.ColumnDimensionCodes[0], Is.EqualTo("Vuosi"));
         }
 
         [Test]
@@ -305,10 +305,10 @@ namespace UnitTests.Visualization
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(inputCube, savedQuery);
 
             Assert.That(result.VisualizationSettings.VisualizationType, Is.EqualTo(VisualizationType.Table));
-            Assert.That(result.RowVariableCodes.Count, Is.EqualTo(1));
-            Assert.That(result.RowVariableCodes[0], Is.EqualTo("Joukkoviestimet"));
-            Assert.That(result.ColumnVariableCodes.Count, Is.EqualTo(1));
-            Assert.That(result.ColumnVariableCodes[0], Is.EqualTo("Vuosi"));
+            Assert.That(result.RowDimensionCodes.Count, Is.EqualTo(1));
+            Assert.That(result.RowDimensionCodes[0], Is.EqualTo("Joukkoviestimet"));
+            Assert.That(result.ColumnDimensionCodes.Count, Is.EqualTo(1));
+            Assert.That(result.ColumnDimensionCodes[0], Is.EqualTo("Vuosi"));
         }
 
         [Test]
@@ -334,9 +334,9 @@ namespace UnitTests.Visualization
             string[] expectedColVarCodes = ["Toinen lentoasema", "Tiedot"];
 
             Assert.That(result.VisualizationSettings.VisualizationType, Is.EqualTo(VisualizationType.Table));
-            Assert.That(result.SelectableVariableCodes, Is.EqualTo(expectedSelVarCodes));
-            Assert.That(result.RowVariableCodes, Is.EqualTo(expectedRowVarCodes));
-            Assert.That(result.ColumnVariableCodes, Is.EqualTo(expectedColVarCodes));
+            Assert.That(result.SelectableDimensionCodes, Is.EqualTo(expectedSelVarCodes));
+            Assert.That(result.RowDimensionCodes, Is.EqualTo(expectedRowVarCodes));
+            Assert.That(result.ColumnDimensionCodes, Is.EqualTo(expectedColVarCodes));
         }
 
         [Test]
@@ -357,10 +357,10 @@ namespace UnitTests.Visualization
             VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(inputCube, savedQuery);
 
             Assert.That(result.VisualizationSettings.VisualizationType, Is.EqualTo(VisualizationType.GroupVerticalBarChart));
-            Assert.That(result.ColumnVariableCodes.Count, Is.EqualTo(1));
-            Assert.That(result.ColumnVariableCodes[0], Is.EqualTo("Syntymävaltio"));
-            Assert.That(result.RowVariableCodes.Count, Is.EqualTo(1));
-            Assert.That(result.RowVariableCodes[0], Is.EqualTo("Vuosi"));
+            Assert.That(result.ColumnDimensionCodes.Count, Is.EqualTo(1));
+            Assert.That(result.ColumnDimensionCodes[0], Is.EqualTo("Syntymävaltio"));
+            Assert.That(result.RowDimensionCodes.Count, Is.EqualTo(1));
+            Assert.That(result.RowDimensionCodes[0], Is.EqualTo("Vuosi"));
             Assert.That((bool)savedQuery.LegacyProperties["PivotRequested"], Is.True);
         }
 
@@ -423,8 +423,8 @@ namespace UnitTests.Visualization
             VisualizationCreationSettings creationSettings = new()
             {
                 SelectedVisualization = VisualizationType.Table,
-                RowVariableCodes = ["variable-0"],
-                ColumnVariableCodes = ["variable-1"]
+                RowDimensionCodes = ["variable-0"],
+                ColumnDimensionCodes = ["variable-1"]
             };
 
             Matrix<DecimalDataValue> inputCube = TestDataCubeBuilder.BuildTestMatrix(cubeParams, missingData: true);

@@ -80,7 +80,7 @@ namespace PxGraf.Models.Metadata
         /// </summary>
         public static IReadOnlyDimension? GetLargestMultivalueDimension(this IReadOnlyMatrixMetadata meta)
         {
-            var multiselects = GetSortedMultivalueDimensions(meta);
+            IReadOnlyList<IReadOnlyDimension> multiselects = GetSortedMultivalueDimensions(meta);
             return multiselects != null && multiselects.Any() ? multiselects[0] : null;
 
         }
@@ -91,7 +91,7 @@ namespace PxGraf.Models.Metadata
         /// </summary>
         public static IReadOnlyDimension? GetSmallerMultivalueDimension(this IReadOnlyMatrixMetadata meta)
         {
-            var multiselects = GetSortedMultivalueDimensions(meta);
+            IReadOnlyList<IReadOnlyDimension> multiselects = GetSortedMultivalueDimensions(meta);
             return multiselects != null && multiselects.Count > 1 ? multiselects[1] : null;
         }
 
@@ -102,7 +102,7 @@ namespace PxGraf.Models.Metadata
         /// <returns></returns>
         public static IReadOnlyDimension? GetMultivalueTimeOrLargestOrdinal(this IReadOnlyMatrixMetadata meta)
         {
-            var multiselects = GetSortedMultivalueDimensions(meta); //OBS: multiselects are sorted here so First() can be used!
+            IReadOnlyList<IReadOnlyDimension> multiselects = GetSortedMultivalueDimensions(meta); //OBS: multiselects are sorted here so First() can be used!
             if (multiselects.FirstOrDefault(d => d.Type == DimensionType.Time) is IReadOnlyDimension timeDim) return timeDim;
             if (multiselects.FirstOrDefault(d => d.Type == DimensionType.Ordinal) is IReadOnlyDimension ordinalDim) return ordinalDim;
 

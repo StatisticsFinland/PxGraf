@@ -26,7 +26,7 @@ namespace PxGraf.Models.Metadata
             if (pxGrafMeta.Note != null)
             {
                 Dictionary<string, string> note = [];
-                foreach (var lang in pxGrafMeta.Note.Languages)
+                foreach (string lang in pxGrafMeta.Note.Languages)
                 {
                     note[lang] = $"\"{pxGrafMeta.Note[lang]}\""; // Meta property values must be enclosed
                 }
@@ -97,7 +97,7 @@ namespace PxGraf.Models.Metadata
                     DimensionValue tdv = new(dimValue.Code, dimValue.Name);
                     values.Add(tdv);
                 }
-                TimeDimensionInterval intervals = TimeVarIntervalParser.DetermineIntervalFromCodes(values.Select(v => v.Code).ToList());
+                TimeDimensionInterval intervals = TimeDimensionIntervalParser.DetermineIntervalFromCodes(values.Select(v => v.Code).ToList());
                 return new TimeDimension(input.Code, input.Name, dimensionProperties, values, intervals);
             }
             else

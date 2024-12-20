@@ -72,9 +72,9 @@ namespace UnitTests.ControllerTests.SqControllerTests
                 Settings = new VisualizationCreationSettings()
                 {
                     SelectedVisualization = VisualizationType.LineChart,
-                    RowVariableCodes = ["variable-2"],
-                    ColumnVariableCodes = ["variable-1"],
-                    MultiselectableVariableCode = null
+                    RowDimensionCodes = ["variable-2"],
+                    ColumnDimensionCodes = ["variable-1"],
+                    MultiselectableDimensionCode = null
                 }
             };
 

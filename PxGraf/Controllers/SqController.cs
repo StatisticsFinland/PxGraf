@@ -63,7 +63,7 @@ namespace PxGraf.Controllers
 
                 if (meta.Dimensions.Any(v => v.Values.Count == 0))
                 {
-                    _logger.LogWarning("Saved query {SavedQueryId} contains variables with no values", savedQueryId);
+                    _logger.LogWarning("Saved query {SavedQueryId} contains dimensions with no values", savedQueryId);
                     BadRequest();
                 }
 
@@ -116,19 +116,19 @@ namespace PxGraf.Controllers
 
             VisualizationSettings visualizationSettings = parameters.Settings.ToVisualizationSettings(filteredMeta, parameters.Query);
 
-            // All variables must have atleast one value selected
+            // All dimensions must have atleast one value selected
             if (!filteredMeta.Dimensions.Any(v => v.Values.Count != 0) || !ValidateVisualizationSettings(filteredMeta, visualizationSettings))
             {
-                _logger.LogWarning("Query {NewGuid} is missing a value for a variable. {Parameters}", newGuid, parameters);
+                _logger.LogWarning("Query {NewGuid} is missing a value for a dimension. {Parameters}", newGuid, parameters);
                 return BadRequest();
             }
 
             Matrix<DecimalDataValue> dataCube = await _cachedDatasource.GetMatrixCachedAsync(parameters.Query.TableReference, filteredMeta);
 
-            var validTypes = ChartTypeSelector.Selector.GetValidChartTypes(parameters.Query, dataCube);
+            IReadOnlyList<VisualizationType> validTypes = ChartTypeSelector.Selector.GetValidChartTypes(parameters.Query, dataCube);
             if (validTypes.Contains(visualizationSettings.VisualizationType))
             {
-                var savedQuery = new SavedQuery(parameters.Query, archived: false, visualizationSettings, DateTime.Now);
+                SavedQuery savedQuery = new (parameters.Query, archived: false, visualizationSettings, DateTime.Now);
                 await _sqFileInterface.SerializeToFile(fileName, Configuration.Current.SavedQueryDirectory, savedQuery);
                 
                 SaveQueryResponse saveQueryResponse = new () { Id = newGuid };
@@ -158,10 +158,10 @@ namespace PxGraf.Controllers
 
             VisualizationSettings visualizationSettings = parameters.Settings.ToVisualizationSettings(filteredMeta, parameters.Query);
 
-            // All variables must have atleast one value selected
+            // All dimensions must have atleast one value selected
             if (filteredMeta.Dimensions.Any(v => v.Values.Count == 0) || !ValidateVisualizationSettings(filteredMeta, visualizationSettings))
             {
-                _logger.LogWarning("Archived query {NewGuid} is missing a value for a variable. {Parameters}", newGuid, parameters);
+                _logger.LogWarning("Archived query {NewGuid} is missing a value for a dimension. {Parameters}", newGuid, parameters);
                 return BadRequest();
             }
 
@@ -185,7 +185,7 @@ namespace PxGraf.Controllers
         }
 
         /// <summary>
-        /// Reads a saved query, fetches the current variable values and data matching the query,
+        /// Reads a saved query, fetches the current dimension values and data matching the query,
         /// creates a new saved query based on that data and returns the id of that created query.
         /// </summary>
         /// <param name="request"><see cref="ReArchiveRequest"/> object that contains the ID of the query to be rearchived.</param>
@@ -242,7 +242,7 @@ namespace PxGraf.Controllers
         private static bool ValidateVisualizationSettings(IReadOnlyMatrixMetadata meta, VisualizationSettings settings)
         {
             if (settings is LineChartVisualizationSettings lcvs &&
-                meta.Dimensions.FirstOrDefault(v => v.Type == DimensionType.Content)?.Code == lcvs.MultiselectableVariableCode)
+                meta.Dimensions.FirstOrDefault(v => v.Type == DimensionType.Content)?.Code == lcvs.MultiselectableDimensionCode)
             {
                 return false;
             }

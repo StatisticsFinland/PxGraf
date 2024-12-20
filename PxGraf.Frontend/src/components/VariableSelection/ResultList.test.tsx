@@ -3,7 +3,7 @@ import { render } from "@testing-library/react";
 import { IDimensionValue } from "../../types/cubeMeta";
 import ResultList from "./ResultList";
 
-const mockVariableValues: IDimensionValue[] = [
+const mockDimensionValues: IDimensionValue[] = [
     {
         code: "2018",
         name: {
@@ -57,8 +57,8 @@ jest.mock('react-i18next', () => ({
 describe('Rendering test', () => {
     it('renders correctly', () => {
         const { asFragment } = render(<ResultList
-            variableValues={mockVariableValues}
-            resolvedVariableValueCodes={["2019", "2020"]}
+            dimensionValues={mockDimensionValues}
+            resolvedDimensionValueCodes={["2019", "2020"]}
         ></ResultList>);
         expect(asFragment()).toMatchSnapshot();
     });

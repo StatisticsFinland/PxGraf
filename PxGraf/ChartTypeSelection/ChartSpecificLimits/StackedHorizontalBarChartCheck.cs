@@ -36,9 +36,9 @@ namespace PxGraf.ChartTypeSelection.ChartSpecificLimits
         /// </summary>
         protected override IEnumerable<ChartRejectionInfo> CheckChartSpecificRules(VisualizationTypeSelectionObject input)
         {
-            // Check for progressive variables
-            var largestMultiselect = GetLargestMultiselect(input);
-            var smallerMultiselect = GetSmallerMultiselect(input);
+            // Check for progressive dimensions
+            VisualizationTypeSelectionObject.DimensionInfo largestMultiselect = GetLargestMultiselect(input);
+            VisualizationTypeSelectionObject.DimensionInfo smallerMultiselect = GetSmallerMultiselect(input);
 
             if (largestMultiselect != null && largestMultiselect.Type == DimensionType.Ordinal)
             {
@@ -69,8 +69,8 @@ namespace PxGraf.ChartTypeSelection.ChartSpecificLimits
         /// <returns></returns>
         protected override int GetPriority(RejectionReason reason)
         {
-            var reasons = new RejectionReason[]
-            {
+            RejectionReason[] reasons =
+            [
                 RejectionReason.NotEnoughMultiselections,
                 RejectionReason.TooManyMultiselections,
                 RejectionReason.ContentRequired,
@@ -91,7 +91,7 @@ namespace PxGraf.ChartTypeSelection.ChartSpecificLimits
                 RejectionReason.FirstMultiselectOverMax,
                 RejectionReason.SecondMultiselectBelowMin,
                 RejectionReason.SecondMultiselectOverMax,
-            };
+            ];
 
             return GetPriorityIndex(reasons, reason);
         }

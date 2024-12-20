@@ -4,10 +4,10 @@ import { MultiLanguageString } from "./multiLanguageString";
 
 /**
  * Interface for cube meta properties. A cube is a multi-dimensional result of Px file data filtered by a query.
- * @property {string[]} languages - List of available languages.
- * @property {MultiLanguageString} header - The multi language header of the cube.
- * @property {MultiLanguageString} note - The note of the cube.
- * @property {IDimension[]} variables - List of dimensions.
+ * @property {string} defaultLanguage - The default language of the cube.
+ * @property {availableLanguages[]} languages - List of available languages.
+ * @property {IDimension[]} dimensions - List of dimensions.
+ * @property {{ [key: string]: IMetaProperty }} additionalProperties - Optional dictionary for additional metadata properties
  */
 export interface IMatrixMetadata {
     defaultLanguage: string,
@@ -39,13 +39,13 @@ export interface IMetaProperty {
 }
 
 /**
- * Interface for dimension properties. Each variable defines a dimension in a cube.
- * @property {string} Code - The code of the variable.
- * @property {MultiLanguageString} Name - The multi language name of the variable.
+ * Interface for dimension properties. Each dimension defines a dimension in a cube.
+ * @property {string} Code - The code of the dimension.
+ * @property {MultiLanguageString} Name - The multi language name of the dimension.
  * @property {{ [key: string]: IMetaProperty }} additionalProperties - Optional dictionary for additional metadata properties
- * @property {IDimensionValue[]} Values - List of values associated with this variable.
- * @property {VariableType} Type - The type of the variable.
- * @property {Interval} Interval - The interval of time variable if applicable.
+ * @property {IDimensionValue[]} Values - List of values associated with this dimension.
+ * @property {VariableType} Type - The type of the dimension.
+ * @property {Interval} Interval - The interval of time dimension if applicable.
  */
 export interface IDimension {
     code: string,
@@ -73,7 +73,7 @@ export interface IDimensionValue {
 }
 
 /**
- * Enumeration for variable types.
+ * Enumeration for dimension types.
  */
 export enum EDimensionType {
     Time = 'Time',

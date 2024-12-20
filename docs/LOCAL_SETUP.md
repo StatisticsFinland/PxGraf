@@ -17,7 +17,7 @@ Development setup can be configured to use a local instance of PxWeb or a remote
 PxWeb can be ran locally, which can be useful for debugging and easier access to the database files and application settings.
 The source code for PxWeb can be found here: https://github.com/statisticssweden/PxWeb.git
 PxGraf uses the PxWeb API to fetch data from the Px databases. Additional testing databases will be nessessary for development since the default testing database
-that comes with pxweb lacks the necessary metadata (content variables and time variables) for building visualizations with PxGraf.
+that comes with pxweb lacks the necessary metadata (content and time dimensions) for building visualizations with PxGraf.
 
 ## Running PxGraf using local px database with Px.Utils
 PxGraf can be configured to run using the local px database using Px.Utils instead of a PxWeb server. Px.Utils provides a fast way to access Px files on the local px database.

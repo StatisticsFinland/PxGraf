@@ -20,19 +20,19 @@ namespace PxGraf.Visualization
     /// </summary>
     public static class PxVisualizerCubeAdapter
     {
-        private readonly struct VariableLayout
+        private readonly struct DimensionLayout
         {
-            public readonly List<string> SingleValueVariables;
-            public readonly List<string> RowVariableCodes;
-            public readonly List<string> ColumnVariableCodes;
-            public readonly List<string> SelectableVariableCodes;
+            public readonly List<string> SingleValueDimensions;
+            public readonly List<string> RowDimensionCodes;
+            public readonly List<string> ColumnDimensionCodes;
+            public readonly List<string> SelectableDimensionCodes;
 
-            public VariableLayout()
+            public DimensionLayout()
             {
-                SingleValueVariables = [];
-                RowVariableCodes = [];
-                ColumnVariableCodes = [];
-                SelectableVariableCodes = [];
+                SingleValueDimensions = [];
+                RowDimensionCodes = [];
+                ColumnDimensionCodes = [];
+                SelectableDimensionCodes = [];
             }
         }
 
@@ -64,13 +64,13 @@ namespace PxGraf.Visualization
         /// <returns>Visualization response for the matrix based on the given query and settings.</returns>
         public static VisualizationResponse BuildVisualizationResponse(Matrix<DecimalDataValue> matrix, MatrixQuery query, VisualizationSettings settings)
         {
-            VariableLayout layout = GetVariableLayout(matrix.Metadata, query, settings);
+            DimensionLayout layout = GetDimensionLayout(matrix.Metadata, query, settings);
 
             MatrixMap finalMap = new(
-                layout.SingleValueVariables
-                    .Concat(layout.SelectableVariableCodes)
-                    .Concat(layout.RowVariableCodes)
-                    .Concat(layout.ColumnVariableCodes)
+                layout.SingleValueDimensions
+                    .Concat(layout.SelectableDimensionCodes)
+                    .Concat(layout.RowDimensionCodes)
+                    .Concat(layout.ColumnDimensionCodes)
                     .Select(vc => matrix.Metadata.DimensionMaps.First(vm => vm.Code == vc))
                     .ToList()
                 );
@@ -92,17 +92,17 @@ namespace PxGraf.Visualization
                 DataNotes = dataAndNotes.Notes,
                 MissingDataInfo = dataAndNotes.MissingValueInfo,
                 MetaData = variables,
-                SelectableVariableCodes = layout.SelectableVariableCodes,
-                RowVariableCodes = layout.RowVariableCodes,
-                ColumnVariableCodes = layout.ColumnVariableCodes,
+                SelectableDimensionCodes = layout.SelectableDimensionCodes,
+                RowDimensionCodes = layout.RowDimensionCodes,
+                ColumnDimensionCodes = layout.ColumnDimensionCodes,
                 Header = HeaderBuildingUtilities.GetHeader(matrix.Metadata, query),
                 VisualizationSettings = new()
                 {
                     VisualizationType = settings.VisualizationType,
-                    DefaultSelectableVariableCodes = settings.DefaultSelectableVariableCodes,
-                    MultiselectableVariableCode = settings.MultiselectableVariableCode,
-                    TimeVariableIntervals = TimeVarIntervalParser.DetermineIntervalFromCodes(timeDimensionCodes),
-                    TimeSeriesStartingPoint = TimeVarIntervalParser.DetermineTimeVarStartingPointFromCode(timeDimensionCodes[0]),
+                    DefaultSelectableDimensionCodes = settings.DefaultSelectableDimensionCodes,
+                    MultiselectableDimensionCode = settings.MultiselectableDimensionCode,
+                    TimeDimensionIntervals = TimeDimensionIntervalParser.DetermineIntervalFromCodes(timeDimensionCodes),
+                    TimeSeriesStartingPoint = TimeDimensionIntervalParser.DetermineTimeDimStartingPointFromCode(timeDimensionCodes[0]),
                     CutValueAxis = settings.CutYAxis,
                     ShowLastLabel = settings.MatchXLabelsToEnd,
                     MarkerSize = settings.MarkerSize,
@@ -112,33 +112,33 @@ namespace PxGraf.Visualization
             };
         }
 
-        private static VariableLayout GetVariableLayout(IReadOnlyMatrixMetadata meta, MatrixQuery query, VisualizationSettings settings)
+        private static DimensionLayout GetDimensionLayout(IReadOnlyMatrixMetadata meta, MatrixQuery query, VisualizationSettings settings)
         {
-            VariableLayout layout = new();
+            DimensionLayout layout = new();
             List<string> remainingVars = meta.Dimensions.Select(v => v.Code).ToList();
 
-            // Selectables are added first from multivalue variables, so that the data from each selection is grouped together
+            // Selectables are added first from multivalue dimensions, so that the data from each selection is grouped together
             foreach (string code in query.DimensionQueries
                 .Where(vq => vq.Value.Selectable)
                 .Select(vq => vq.Key))
             {
-                layout.SelectableVariableCodes.Add(code);
+                layout.SelectableDimensionCodes.Add(code);
                 remainingVars.Remove(code);
             }
 
-            foreach (string code in settings.Layout.RowVariableCodes.Where(code => remainingVars.Exists(vc => vc == code)))
+            foreach (string code in settings.Layout.RowDimensionCodes.Where(code => remainingVars.Exists(vc => vc == code)))
             {
-                layout.RowVariableCodes.Add(code);
+                layout.RowDimensionCodes.Add(code);
                 remainingVars.Remove(code);
             }
 
-            foreach (string code in settings.Layout.ColumnVariableCodes.Where(code => remainingVars.Exists(vc => vc == code)))
+            foreach (string code in settings.Layout.ColumnDimensionCodes.Where(code => remainingVars.Exists(vc => vc == code)))
             {
-                layout.ColumnVariableCodes.Add(code);
+                layout.ColumnDimensionCodes.Add(code);
                 remainingVars.Remove(code);
             }
 
-            layout.SingleValueVariables.AddRange(remainingVars);
+            layout.SingleValueDimensions.AddRange(remainingVars);
 
             return layout;
         }

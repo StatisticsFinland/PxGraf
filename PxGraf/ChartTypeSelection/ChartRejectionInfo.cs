@@ -27,7 +27,7 @@ namespace PxGraf.ChartTypeSelection
         /// <summary>
         /// The Name of the related dimension
         /// </summary>
-        public string VariableName { get; set; }
+        public string DimensionName { get; set; }
 
         /// <summary>
         /// The actual value measured
@@ -47,12 +47,12 @@ namespace PxGraf.ChartTypeSelection
         /// <summary>
         /// Default constructor
         /// </summary>
-        public ChartRejectionInfo(RejectionReason reason, int priority, VisualizationType chartType, int? value, int? threshold, VisualizationTypeSelectionObject.VariableInfo variable = null, string invalidValueName = null)
+        public ChartRejectionInfo(RejectionReason reason, int priority, VisualizationType chartType, int? value, int? threshold, VisualizationTypeSelectionObject.DimensionInfo dimension = null, string invalidValueName = null)
         {
             Reason = reason;
             Priority = priority;
             ChartType = chartType;
-            VariableName = (variable != null) ? variable.Code : "Unknown";
+            DimensionName = (dimension != null) ? dimension.Code : "Unknown";
             InvalidValueName = invalidValueName;
 
             //Do not care about nulls externally
@@ -63,12 +63,12 @@ namespace PxGraf.ChartTypeSelection
         /// <summary>
         /// Default constructor
         /// </summary>
-        public ChartRejectionInfo(RejectionReason reason, int priority, VisualizationType chartType, int? value, int? threshold, Variable variable = null, string invalidValueName = null)
+        public ChartRejectionInfo(RejectionReason reason, int priority, VisualizationType chartType, int? value, int? threshold, Variable dimension = null, string invalidValueName = null)
         {
             Reason = reason;
             Priority = priority;
             ChartType = chartType;
-            VariableName = (variable != null) ? variable.Code : "Unknown";
+            DimensionName = (dimension != null) ? dimension.Code : "Unknown";
             InvalidValueName = invalidValueName;
 
             //Do not care about nulls externally

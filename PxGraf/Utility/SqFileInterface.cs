@@ -77,7 +77,7 @@ namespace PxGraf.Utility
         /// <returns></returns>
         private static async Task<T> ReadJsonObjectFromFileImpl<T>(string path)
         {
-            var respdata = await File.ReadAllTextAsync(path);
+            string respdata = await File.ReadAllTextAsync(path);
             return JsonSerializer.Deserialize<T>(respdata, GlobalJsonConverterOptions.Default)
                 ?? throw new JsonException($"Failed to deserialize object from {path}");
         }

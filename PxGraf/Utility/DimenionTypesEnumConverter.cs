@@ -52,7 +52,7 @@ namespace PxGraf.Utility
         /// <returns></returns>
         public static IEnumerable<string> ToString(IEnumerable<DimensionType> types)
         {
-            foreach (var type in types) yield return ToString(type);
+            foreach (DimensionType type in types) yield return ToString(type);
         }
     }
 }

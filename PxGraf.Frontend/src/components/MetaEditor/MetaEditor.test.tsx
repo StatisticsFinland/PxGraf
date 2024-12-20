@@ -28,7 +28,7 @@ const availableUiLanguages = ['fi', 'en', 'sv'];
 const uiContentLanguage = 'fi';
 const setUiContentLanguage = jest.fn();
 
-const mockVariables: IDimension[] = [{
+const mockDimensions: IDimension[] = [{
         code:'foo',
         name: {
             'fi': 'asd',
@@ -166,7 +166,7 @@ describe('Rendering test', () => {
                 <EditorContext.Provider value={{ cubeQuery, setCubeQuery, query, setQuery, saveDialogOpen, setSaveDialogOpen, selectedVisualizationUserInput, setSelectedVisualizationUserInput, visualizationSettingsUserInput, setVisualizationSettingsUserInput, defaultSelectables, setDefaultSelectables }}>
                     <EditorProvider>
                         <MetaEditor
-                            resolvedVariables={mockVariables}
+                            resolvedDimensions={mockDimensions}
                             cubeQuery={mockCubeQuery}
                             defaultHeaderResponse={defaultHeaderResponseMock}
                             isMetaAccordionOpen={isMetaAccordionOpenMock}

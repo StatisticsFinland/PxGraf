@@ -6,10 +6,10 @@ import { UiLanguageContext } from 'contexts/uiLanguageContext';
 import { useTranslation } from 'react-i18next';
 
 interface MultiselectableSelectorProps extends IVisualizationSettingsProps {
-    variables: IDimension[]
+    dimensions: IDimension[]
 }
 
-export const MultiselectableSelector: React.FC<MultiselectableSelectorProps> = ({ settingsChangedHandler, visualizationSettings, variables  }) => {
+export const MultiselectableSelector: React.FC<MultiselectableSelectorProps> = ({ settingsChangedHandler, visualizationSettings, dimensions  }) => {
     const { t } = useTranslation();
     const { language, languageTab } = React.useContext(UiLanguageContext);
 
@@ -29,7 +29,7 @@ export const MultiselectableSelector: React.FC<MultiselectableSelectorProps> = (
                 })}
             >
                 <MenuItem value={"noMultiselectable"}>{t("chartSettings.noMultiselectable")}</MenuItem>
-                {variables.map(v => { return <MenuItem key={"key" + v.code} value={v.code}>{v.name[language] ?? v.name[languageTab] ?? v.code}</MenuItem> })}
+                {dimensions.map(v => { return <MenuItem key={"key" + v.code} value={v.code}>{v.name[language] ?? v.name[languageTab] ?? v.code}</MenuItem> })}
             </Select>
         </FormControl>
     )

@@ -4,8 +4,9 @@ import { render, screen } from '@testing-library/react';
 import { MultiselectableSelector } from './MultiselectableSelector';
 import { IDimension, EDimensionType } from "types/cubeMeta";
 import { IVisualizationSettings } from '../../../types/visualizationSettings';
+import { IVisualizationRules } from '../../../types/visualizationRules';
 
-const mockVariables: IDimension[] = [
+const mockDimensions: IDimension[] = [
 	{
 		code: 'cVar',
 		name: { fi: 'cVarName' },
@@ -53,8 +54,8 @@ const mockSettingsChangedHandler = jest.fn();
 const mockVisualizationSettings: IVisualizationSettings = {
 	multiselectableVariableCode: 'msVar'
 };
-const mockVisualizationRules = {
-	allowManualPivot: false, sortingOptions: null, multiselectVariableAllowed: true
+const mockVisualizationRules: IVisualizationRules = {
+	allowManualPivot: false, sortingOptions: null, multiselectDimensionAllowed: true
 };
 
 jest.mock('react-i18next', () => ({
@@ -76,7 +77,7 @@ describe('Rendering test', () => {
 				visualizationRules={mockVisualizationRules}
 				settingsChangedHandler={mockSettingsChangedHandler}
 				visualizationSettings={mockVisualizationSettings}
-				variables={mockVariables}
+				dimensions={mockDimensions}
 			/>);
 		expect(asFragment()).toMatchSnapshot();
 	});
@@ -88,7 +89,7 @@ describe('Assertion tests', () => {
 	it('When no multiselect variable code is provided, the selector should default to "noMultiselectable"', () => {
 		const mockSettingsChangedHandler = jest.fn();
 		render(<MultiselectableSelector
-			variables={mockVariables}
+			dimensions={mockDimensions}
 			visualizationRules={mockVisualizationRules}
 			visualizationSettings={{ ...mockVisualizationSettings, multiselectableVariableCode: null }}
 			settingsChangedHandler={mockSettingsChangedHandler}
@@ -98,9 +99,9 @@ describe('Assertion tests', () => {
 
 	it('When multiselect variable code is provided, the selector should be rendered with a corresponding value', () => {
 		const mockSettingsChangedHandler = jest.fn();
-		const changedMockSettings = { ...mockVisualizationSettings, multiselectableVariableCode: "msVar" }
+		const changedMockSettings = { ...mockVisualizationSettings, multiselectableDimensionCode: "msVar" }
 		render(<MultiselectableSelector
-			variables={mockVariables}
+			dimensions={mockDimensions}
 			visualizationRules={mockVisualizationRules}
 			visualizationSettings={changedMockSettings}
 			settingsChangedHandler={mockSettingsChangedHandler}

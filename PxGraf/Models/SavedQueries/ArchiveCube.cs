@@ -29,7 +29,7 @@ namespace PxGraf.Models.SavedQueries
         public IReadOnlyMatrixMetadata Meta { get; }
 
         /// <summary>
-        /// Collection of key (variable value code coordinates) value (double or missing code) pairs.
+        /// Collection of key (dimension value code coordinates) value (double or missing code) pairs.
         /// </summary>
         [JsonConverter(typeof(DecimalDataValueListConverter))]
         public List<DecimalDataValue> Data { get; }

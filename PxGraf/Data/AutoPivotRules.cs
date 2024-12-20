@@ -1,4 +1,5 @@
-﻿using Px.Utils.Models.Metadata.Enums;
+﻿#nullable enable
+using Px.Utils.Models.Metadata.Enums;
 using Px.Utils.Models.Metadata;
 using PxGraf.Enums;
 using PxGraf.Models.Metadata;
@@ -6,6 +7,7 @@ using PxGraf.Models.Queries;
 using PxGraf.Utility;
 using System.Collections.Generic;
 using System;
+using Px.Utils.Models.Metadata.Dimensions;
 
 namespace PxGraf.Data
 {
@@ -28,7 +30,7 @@ namespace PxGraf.Data
         {
             if (meta.GetNumberOfMultivalueDimensions() > 1)
             {
-                var errMsg = $"Cannot determine autopivot for basic vertical bar chart," +
+                string errMsg = $"Cannot determine autopivot for basic vertical bar chart," +
                     $" the query has {meta.GetNumberOfMultivalueDimensions()} multiselect dimensions, but the maximum allowed is 1";
                 throw new ArgumentException(errMsg);
             }
@@ -47,12 +49,12 @@ namespace PxGraf.Data
         {
             if (meta.GetNumberOfMultivalueDimensions() != 2)
             {
-                var errMsg = "Cannot determine autopivot for the group vertical bar chart," +
+                string errMsg = "Cannot determine autopivot for the group vertical bar chart," +
                     $" the query has {meta.GetNumberOfMultivalueDimensions()} multiselect dimensions, but exactly 2 are required.";
                 throw new ArgumentException(errMsg);
             }
 
-            var multiselects = meta.GetMultivalueDimensions();
+            IReadOnlyList<IReadOnlyDimension> multiselects = meta.GetMultivalueDimensions();
 
             if ((multiselects[0].Type == DimensionType.Time || multiselects[0].Type == DimensionType.Ordinal) &&
                     !(multiselects[1].Type == DimensionType.Time || multiselects[1].Type == DimensionType.Ordinal) &&
@@ -71,18 +73,18 @@ namespace PxGraf.Data
         {
             if (meta.GetNumberOfMultivalueDimensions() != 2)
             {
-                var errMsg = "Cannot determine autopivot for the stacked vertical bar chart," +
+                string errMsg = "Cannot determine autopivot for the stacked vertical bar chart," +
                     $" the query has {meta.GetNumberOfMultivalueDimensions()} multiselect dimensions, but exactly 2 are required.";
                 throw new ArgumentException(errMsg);
             }
 
-            var multiselects = meta.GetMultivalueDimensions();
+            IReadOnlyList<IReadOnlyDimension> multiselects = meta.GetMultivalueDimensions();
 
-            bool rowVarIsOrdinal = multiselects[0].Type == DimensionType.Time || multiselects[0].Type == DimensionType.Ordinal;
-            bool colVarIsOrdinal = multiselects[1].Type == DimensionType.Time || multiselects[1].Type == DimensionType.Ordinal;
+            bool rowDimIsOrdinal = multiselects[0].Type == DimensionType.Time || multiselects[0].Type == DimensionType.Ordinal;
+            bool colDimIsOrdinal = multiselects[1].Type == DimensionType.Time || multiselects[1].Type == DimensionType.Ordinal;
 
-            if (rowVarIsOrdinal && !colVarIsOrdinal) return true;
-            else if (colVarIsOrdinal && !rowVarIsOrdinal) return false;
+            if (rowDimIsOrdinal && !colDimIsOrdinal) return true;
+            else if (colDimIsOrdinal && !rowDimIsOrdinal) return false;
             else return multiselects[0].Values.Count > multiselects[1].Values.Count;
         }
 
@@ -100,7 +102,7 @@ namespace PxGraf.Data
         {
             if (meta.GetNumberOfMultivalueDimensions() > 1)
             {
-                var errMsg = $"Cannot determine autopivot for basic horizontal bar chart," +
+                string errMsg = $"Cannot determine autopivot for basic horizontal bar chart," +
                     $" the query has {meta.GetNumberOfMultivalueDimensions()} multiselect dimensions, but the maximum allowed is 1";
                 throw new ArgumentException(errMsg);
             }
@@ -117,12 +119,12 @@ namespace PxGraf.Data
         {
             if (meta.GetNumberOfMultivalueDimensions() != 2)
             {
-                var errMsg = $"Cannot determine autopivot for the group horizontal bar chart," +
+                string errMsg = $"Cannot determine autopivot for the group horizontal bar chart," +
                     $" the query has {meta.GetNumberOfMultivalueDimensions()} multiselect dimensions, but exactly 2 are required";
                 throw new ArgumentException(errMsg);
             }
 
-            var multiselects = meta.GetMultivalueDimensions();
+            IReadOnlyList<IReadOnlyDimension> multiselects = meta.GetMultivalueDimensions();
             // If the time dimension has two values it is the inner dimension
             // The dimension with fewer values is the inner dimension.
             return (multiselects[1].Type == DimensionType.Time && multiselects[1].Values.Count == 2) ||
@@ -137,12 +139,12 @@ namespace PxGraf.Data
         {
             if (meta.GetNumberOfMultivalueDimensions() != 2)
             {
-                var errMsg = $"Cannot determine autopivot for the stacked horizontal bar chart," +
+                string errMsg = $"Cannot determine autopivot for the stacked horizontal bar chart," +
                     $" the query has {meta.GetNumberOfMultivalueDimensions()} multiselect dimensions, but exactly 2 are required";
                 throw new ArgumentException(errMsg);
             }
 
-            var multiselects = meta.GetMultivalueDimensions();
+            IReadOnlyList<IReadOnlyDimension> multiselects = meta.GetMultivalueDimensions();
 
             // If the time dimension has two values it is the inner dimension
             // The dimension with fewer values is the inner dimension.
@@ -163,10 +165,10 @@ namespace PxGraf.Data
         {
             // If the query contains a time dimension it is set as the outer dimension.
             // If the query contains multiple progressive dimensions, the one with most values selected is set as the outer dimension.
-            var timeOrLargestOrdinal = meta.GetMultivalueTimeOrLargestOrdinal();
+            IReadOnlyDimension? timeOrLargestOrdinal = meta.GetMultivalueTimeOrLargestOrdinal();
             if (timeOrLargestOrdinal == null)
             {
-                var errMsg = $"Cannot determine autopivot for the line chart, query doest not contain a multiselect time or ordinal dimension.";
+                string errMsg = $"Cannot determine autopivot for the line chart, query doest not contain a multiselect time or ordinal dimension.";
                 throw new ArgumentException(errMsg);
             }
 
@@ -181,7 +183,7 @@ namespace PxGraf.Data
         {
             if (meta.GetNumberOfMultivalueDimensions() != 1)
             {
-                var errMsg = $"Cannot determine autopivot for the pie chart," +
+                string errMsg = $"Cannot determine autopivot for the pie chart," +
                     $" the query has {meta.GetNumberOfMultivalueDimensions()} multiselect dimensions, but the maximum allowed is 1";
                 throw new ArgumentException(errMsg);
             }
@@ -242,22 +244,23 @@ namespace PxGraf.Data
         public static bool GetAutoPivot(VisualizationType visualization, IReadOnlyMatrixMetadata meta, MatrixQuery query)
         {
             List<IDimensionMap> resultList = [];
-            foreach (IDimensionMap varMap in meta.DimensionMaps)
+            foreach (IDimensionMap dimensionMap in meta.DimensionMaps)
             {
-                // Selectable varaibles always have a size of 1 and for purposes of this class the actual value does not matter, just the size.
-                if (query.DimensionQueries[varMap.Code].Selectable)
+                // Selectable dimensions always have a size of 1 and for purposes of this class the actual value does not matter, just the size.
+                if (query.DimensionQueries[dimensionMap.Code].Selectable)
                 {
-                    resultList.Add(new DimensionMap(varMap.Code, [varMap.ValueCodes[0]]));
+                    resultList.Add(new DimensionMap(dimensionMap.Code, [dimensionMap.ValueCodes[0]]));
                 }
                 else
                 {
-                    resultList.Add(varMap);
+                    resultList.Add(dimensionMap);
                 }
             }
 
-            var newMata = meta.GetTransform(new MatrixMap(resultList));
+            MatrixMetadata newMata = meta.GetTransform(new MatrixMap(resultList));
 
             return GetAutoPivot(visualization, newMata);
         }
     }
 }
+#nullable disable

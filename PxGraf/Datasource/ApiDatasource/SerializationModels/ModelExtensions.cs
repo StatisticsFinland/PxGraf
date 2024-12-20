@@ -5,16 +5,16 @@ namespace PxGraf.Datasource.PxWebInterface.SerializationModels
     public static class ModelExtensions
     {
         /// <summary>
-        /// Returns true if the variable matching the provided variabale code is marked as ordinal
+        /// Returns true if the dimension matching the provided dimension code is marked as ordinal
         /// </summary>
         /// <param name="jsonStat2"></param>
-        /// <param name="varCode"></param>
+        /// <param name="dimCode"></param>
         /// <returns></returns>
-        public static bool VarHasOrdinalScaleType(this JsonStat2 jsonStat2, string varCode)
+        public static bool DimHasOrdinalScaleType(this JsonStat2 jsonStat2, string dimCode)
         {
-            if (jsonStat2.Dimensions[varCode]?
+            if (jsonStat2.Dimensions[dimCode]?
                 .Link?.DescribedBy[0]?.Extension
-                .TryGetValue(varCode, out string extension) ?? false)
+                .TryGetValue(dimCode, out string extension) ?? false)
             {
                 return extension.Contains("SCALE-TYPE=ordinal");
             }
@@ -23,14 +23,14 @@ namespace PxGraf.Datasource.PxWebInterface.SerializationModels
         }
 
         /// <summary>
-        /// IMPORTANT! THIS METHOD ONLY READS VARIABLE CODES AND NAMES AND IS NOT 100% CONCLUSIVE
+        /// IMPORTANT! THIS METHOD ONLY READS DIMENSION CODES AND NAMES AND IS NOT 100% CONCLUSIVE
         /// PxWeb does not directly return combination value so this method can be used to parse that information
-        /// from the response variable object is SOME cases.
+        /// from the response dimension object is SOME cases.
         /// </summary>
-        public static bool IsSumValue(this PxMetaResponse.Variable variable, int valueIndex)
+        public static bool IsSumValue(this PxMetaResponse.Dimension dimension, int valueIndex)
         {
-            return variable.Values[valueIndex].Equals("sss", System.StringComparison.CurrentCultureIgnoreCase) ||
-                variable.ValueTexts[valueIndex].Equals("yhteensä", System.StringComparison.CurrentCultureIgnoreCase);
+            return dimension.Values[valueIndex].Equals("sss", System.StringComparison.CurrentCultureIgnoreCase) ||
+                dimension.ValueTexts[valueIndex].Equals("yhteensä", System.StringComparison.CurrentCultureIgnoreCase);
         }
     }
 }

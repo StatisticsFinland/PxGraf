@@ -6,8 +6,8 @@ import { IDimensionValue } from 'types/cubeMeta';
 import { UiLanguageContext } from 'contexts/uiLanguageContext';
 
 interface IResultListProps {
-    variableValues: IDimensionValue[]
-    resolvedVariableValueCodes: string[]
+    dimensionValues: IDimensionValue[]
+    resolvedDimensionValueCodes: string[]
 }
 
 const DenseList = styled(List)`
@@ -37,26 +37,26 @@ const DenseListWrapper = styled(Stack)`
     width: 100%;
 `;
 
-export const ResultList: React.FC<IResultListProps> = ({ variableValues, resolvedVariableValueCodes }) => {
+export const ResultList: React.FC<IResultListProps> = ({ dimensionValues, resolvedDimensionValueCodes }) => {
     const { t } = useTranslation();
     const { uiContentLanguage } = React.useContext(UiLanguageContext);
 
     let listContent;
-    if (resolvedVariableValueCodes == null) {
+    if (resolvedDimensionValueCodes == null) {
         listContent =
             <NoPaddingListItem>
                 <StyledSkeleton variant="text" />
             </NoPaddingListItem>
     }
-    else if (resolvedVariableValueCodes.length === 0) {
+    else if (resolvedDimensionValueCodes.length === 0) {
         listContent =
             <NoPaddingListItem>
                 <StyledEm>{t("general.noResults")}</StyledEm>
             </NoPaddingListItem>
     }
     else {
-        const resultTexts = resolvedVariableValueCodes.map(valueCode => {
-            const value = variableValues.find(value => value.code === valueCode);
+        const resultTexts = resolvedDimensionValueCodes.map(valueCode => {
+            const value = dimensionValues.find(value => value.code === valueCode);
             return value?.name[uiContentLanguage] ?? valueCode;
         });
 

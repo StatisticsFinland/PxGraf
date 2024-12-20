@@ -6,27 +6,27 @@ import { UiLanguageContext } from 'contexts/uiLanguageContext';
 import { IVariable } from '../../types/visualizationResponse';
 
 export interface IValueSelectProps {
-    variable: IVariable;
+    dimension: IVariable;
     multiselect: boolean;
     activeSelections: string | string[];
     onValueChanged: (value: string | string[]) => void;
 }
 
-export const ValueSelect: React.FC<IValueSelectProps> = ({ variable, multiselect, activeSelections, onValueChanged }) => {
+export const ValueSelect: React.FC<IValueSelectProps> = ({ dimension, multiselect, activeSelections, onValueChanged }) => {
     const { uiContentLanguage } = React.useContext(UiLanguageContext);
 
     return (
         <FormControl>
-            <InputLabel id={variable.code + "-selection-label"}>{variable.name[uiContentLanguage]}</InputLabel>
+            <InputLabel id={dimension.code + "-selection-label"}>{dimension.name[uiContentLanguage]}</InputLabel>
             <Select
-                labelId={variable.code + "-selection-label"}
-                id={variable.code + "-variable-select"}
+                labelId={dimension.code + "-selection-label"}
+                id={dimension.code + "-variable-select"}
                 value={activeSelections}
-                label={variable.name[uiContentLanguage]}
+                label={dimension.name[uiContentLanguage]}
                 onChange={(e) => onValueChanged(e.target.value)}
                 multiple={multiselect}
             >
-                {variable.values.map(value => { return <MenuItem key={value.code} value={value.code}>{value.name[uiContentLanguage]}</MenuItem> })}
+                {dimension.values.map(value => { return <MenuItem key={value.code} value={value.code}>{value.name[uiContentLanguage]}</MenuItem> })}
             </Select>
         </FormControl>
     )

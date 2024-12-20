@@ -13,7 +13,7 @@ namespace PxGraf.Models.Queries
         public PxTableReference TableReference { get; set; }
 
         /// <summary>
-        /// Dictionary that maps variable codes and their respective filters.
+        /// Dictionary that maps dimension codes and their respective filters.
         /// </summary>
         public Dictionary<string, IValueFilter> Filters { get; set; }
     }

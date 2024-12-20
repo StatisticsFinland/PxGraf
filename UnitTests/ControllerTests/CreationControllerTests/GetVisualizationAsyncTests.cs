@@ -65,18 +65,18 @@ namespace UnitTests.ControllerTests.CreationControllerTests
             VisualizationCreationSettings settings = new()
             {
                 SelectedVisualization = PxGraf.Enums.VisualizationType.LineChart,
-                RowVariableCodes = ["variable-1"],
-                ColumnVariableCodes = [],
-                MultiselectableVariableCode = string.Empty,
+                RowDimensionCodes = ["variable-1"],
+                ColumnDimensionCodes = [],
+                MultiselectableDimensionCode = string.Empty,
                 Sorting = "NO_SORTING",
-                DefaultSelectableVariableCodes = []
+                DefaultSelectableDimensionCodes = []
             };
 
             ChartRequest chartRequest = new()
             {
                 Query = cubeQuery,
                 VisualizationSettings = settings,
-                ActiveSelectableVariableValues = [],
+                ActiveSelectableDimensionValues = [],
                 Language = "fi",
             };
 
@@ -118,18 +118,18 @@ namespace UnitTests.ControllerTests.CreationControllerTests
             VisualizationCreationSettings settings = new()
             {
                 SelectedVisualization = PxGraf.Enums.VisualizationType.LineChart,
-                RowVariableCodes = ["variable-1"],
-                ColumnVariableCodes = [],
-                MultiselectableVariableCode = string.Empty,
+                RowDimensionCodes = ["variable-1"],
+                ColumnDimensionCodes = [],
+                MultiselectableDimensionCode = string.Empty,
                 Sorting = "NO_SORTING",
-                DefaultSelectableVariableCodes = []
+                DefaultSelectableDimensionCodes = []
             };
 
             ChartRequest chartRequest = new()
             {
                 Query = cubeQuery,
                 VisualizationSettings = settings,
-                ActiveSelectableVariableValues = [],
+                ActiveSelectableDimensionValues = [],
                 Language = "fi",
             };
 
@@ -165,18 +165,18 @@ namespace UnitTests.ControllerTests.CreationControllerTests
             VisualizationCreationSettings settings = new()
             {
                 SelectedVisualization = PxGraf.Enums.VisualizationType.LineChart,
-                RowVariableCodes = ["variable-1"],
-                ColumnVariableCodes = [],
-                MultiselectableVariableCode = string.Empty,
+                RowDimensionCodes = ["variable-1"],
+                ColumnDimensionCodes = [],
+                MultiselectableDimensionCode = string.Empty,
                 Sorting = "NO_SORTING",
-                DefaultSelectableVariableCodes = []
+                DefaultSelectableDimensionCodes = []
             };
 
             ChartRequest chartRequest = new()
             {
                 Query = cubeQuery,
                 VisualizationSettings = settings,
-                ActiveSelectableVariableValues = [],
+                ActiveSelectableDimensionValues = [],
                 Language = "fi",
             };
 
@@ -213,18 +213,18 @@ namespace UnitTests.ControllerTests.CreationControllerTests
             VisualizationCreationSettings settings = new()
             {
                 SelectedVisualization = PxGraf.Enums.VisualizationType.LineChart,
-                RowVariableCodes = ["variable-1"],
-                ColumnVariableCodes = [],
-                MultiselectableVariableCode = string.Empty,
+                RowDimensionCodes = ["variable-1"],
+                ColumnDimensionCodes = [],
+                MultiselectableDimensionCode = string.Empty,
                 Sorting = "NO_SORTING",
-                DefaultSelectableVariableCodes = []
+                DefaultSelectableDimensionCodes = []
             };
 
             ChartRequest chartRequest = new()
             {
                 Query = cubeQuery,
                 VisualizationSettings = settings,
-                ActiveSelectableVariableValues = [],
+                ActiveSelectableDimensionValues = [],
                 Language = "fi",
             };
 

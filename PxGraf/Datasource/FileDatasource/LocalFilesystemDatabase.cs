@@ -157,7 +157,7 @@ namespace PxGraf.Datasource.FileDatasource
 
         private Encoding GetFileEncoding(string path)
         {
-            using (var fs = File.OpenRead(path))
+            using (FileStream? fs = File.OpenRead(path))
             {
                 Ude.CharsetDetector cdet = new();
                 cdet.Feed(fs);
