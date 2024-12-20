@@ -3,10 +3,10 @@ import { render } from '@testing-library/react';
 import { IHeaderResult } from 'api/services/default-header';
 import '@testing-library/jest-dom';
 import { EMetaPropertyType, IDimension, EDimensionType } from 'types/cubeMeta';
-import { ICubeQuery, Query, FilterType } from 'types/query';
+import { ICubeQuery } from 'types/query';
 import MetaEditor from './MetaEditor';
 import UiLanguageContext from 'contexts/uiLanguageContext';
-import { EditorContext, EditorProvider } from 'contexts/editorContext';
+import { EditorContext } from 'contexts/editorContext';
 
 jest.mock('react-i18next', () => ({
     ...jest.requireActual('react-i18next'),
@@ -164,17 +164,15 @@ describe('Rendering test', () => {
         const { asFragment } = render(
             <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
                 <EditorContext.Provider value={{ cubeQuery, setCubeQuery, query, setQuery, saveDialogOpen, setSaveDialogOpen, selectedVisualizationUserInput, setSelectedVisualizationUserInput, visualizationSettingsUserInput, setVisualizationSettingsUserInput, defaultSelectables, setDefaultSelectables }}>
-                    <EditorProvider>
-                        <MetaEditor
-                            resolvedDimensions={mockDimensions}
-                            cubeQuery={mockCubeQuery}
-                            defaultHeaderResponse={defaultHeaderResponseMock}
-                            isMetaAccordionOpen={isMetaAccordionOpenMock}
-                            language={mockLang}
-                            onChange={mockFunction}
-                            onMetaAccordionOpenChange={mockFunction}
-                        />
-                    </EditorProvider>
+                    <MetaEditor
+                        resolvedDimensions={mockDimensions}
+                        cubeQuery={mockCubeQuery}
+                        defaultHeaderResponse={defaultHeaderResponseMock}
+                        isMetaAccordionOpen={isMetaAccordionOpenMock}
+                        language={mockLang}
+                        onChange={mockFunction}
+                        onMetaAccordionOpenChange={mockFunction}
+                    />
                 </EditorContext.Provider>
             </UiLanguageContext.Provider>
         );
