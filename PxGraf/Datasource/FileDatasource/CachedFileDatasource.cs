@@ -55,7 +55,7 @@ namespace PxGraf.Datasource.FileDatasource
                 IReadOnlyMatrixMetadata meta = await GetMatrixMetadataCachedAsync(reference);
                 DateTime? lastUpdated = meta.GetLastUpdated();
                 string tableId = meta.AdditionalProperties.TryGetValue(PxSyntaxConstants.TABLEID_KEY, out MetaProperty? tableIdProperty) &&
-                    tableIdProperty is StringProperty stringIdProp ? stringIdProp.Value : reference.Name.Split(Path.DirectorySeparatorChar)[^1].Split('.')[0];
+                    tableIdProperty is StringProperty stringIdProp ? stringIdProp.Value : Path.GetFileNameWithoutExtension(reference.Name);
 
                 List<string> languages = [.. meta.AvailableLanguages];
                 MultilanguageString name = new(languages.ToDictionary(lang => lang, lang => tableId));
