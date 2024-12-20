@@ -32,7 +32,7 @@ namespace PxGraf.Models.SavedQueries
         /// Collection of key (dimension value code coordinates) value (double or missing code) pairs.
         /// </summary>
         [JsonConverter(typeof(DecimalDataValueListConverter))]
-        public List<DecimalDataValue> Data { get; }
+        public IReadOnlyList<DecimalDataValue> Data { get; }
 
         /// <summary>
         /// Notes mapped to the indexes of the data array.
@@ -49,7 +49,7 @@ namespace PxGraf.Models.SavedQueries
             CreationTime = DateTime.Now;
             Meta = meta;
 
-            Data = [.. data];
+            Data = data;
             DataNotes = [];
         }
 
@@ -75,7 +75,7 @@ namespace PxGraf.Models.SavedQueries
         /// </summary>
         public ArchiveCube() { }
 
-        public ArchiveCube(DateTime creationTime, IReadOnlyMatrixMetadata meta, List<DecimalDataValue> data, Dictionary<int, MultilanguageString> dataNotes, string version)
+        public ArchiveCube(DateTime creationTime, IReadOnlyMatrixMetadata meta, IReadOnlyList<DecimalDataValue> data, Dictionary<int, MultilanguageString> dataNotes, string version)
         {
             CreationTime = creationTime;
             Meta = meta;

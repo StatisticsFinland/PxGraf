@@ -7,7 +7,7 @@ using System.Text.Json.Serialization;
 
 namespace PxGraf.Utility.CustomJsonConverters
 {
-    public class DecimalDataValueListConverter : JsonConverter<List<DecimalDataValue>>
+    public class DecimalDataValueListConverter : JsonConverter<IReadOnlyList<DecimalDataValue>>
     {
         public override List<DecimalDataValue> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
@@ -48,7 +48,7 @@ namespace PxGraf.Utility.CustomJsonConverters
             throw new JsonException("Expected EndArray token.");
         }
 
-        public override void Write(Utf8JsonWriter writer, List<DecimalDataValue> value, JsonSerializerOptions options)
+        public override void Write(Utf8JsonWriter writer, IReadOnlyList<DecimalDataValue> value, JsonSerializerOptions options)
         {
             writer.WriteStartArray();
 

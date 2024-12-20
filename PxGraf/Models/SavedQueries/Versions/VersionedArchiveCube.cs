@@ -18,7 +18,7 @@ namespace PxGraf.Models.SavedQueries.Versions
         /// Collection of key (dimension value code coordinates) value (double or missing code) pairs.
         /// </summary>
         [JsonConverter(typeof(DecimalDataValueListConverter))]
-        public List<DecimalDataValue> Data { get; set; }
+        public IReadOnlyList<DecimalDataValue> Data { get; set; }
 
         /// <summary>
         /// Notes mapped to the indexes of the data array.

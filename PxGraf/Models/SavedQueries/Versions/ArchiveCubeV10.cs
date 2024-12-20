@@ -20,7 +20,7 @@ namespace PxGraf.Models.SavedQueries.Versions
 
         public ArchiveCubeV10() { }
 
-        public ArchiveCubeV10(DateTime creationTime, CubeMeta meta, List<DecimalDataValue> data, Dictionary<int, MultilanguageString> dataNotes)
+        public ArchiveCubeV10(DateTime creationTime, CubeMeta meta, IReadOnlyList<DecimalDataValue> data, Dictionary<int, MultilanguageString> dataNotes)
         {
             CreationTime = creationTime;
             Meta = meta;

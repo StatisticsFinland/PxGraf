@@ -14,6 +14,7 @@ using System.Linq;
 using Px.Utils.Models.Data;
 using Px.Utils.Models.Data.DataValue;
 using System;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace UnitTests.SerializerTests
 {
@@ -53,9 +54,18 @@ namespace UnitTests.SerializerTests
             
             ArchiveCube archiveCube = TestDataCubeBuilder.BuildTestArchiveCube(metaParams);
             DecimalDataValue missingValue = new(0, DataValueType.Missing);
-            archiveCube.Data[1] = missingValue;
+            List<DecimalDataValue> expectedData = new(archiveCube.Data)
+            {
+                [1] = missingValue
+            };
+            archiveCube = new(
+                archiveCube.CreationTime,
+                archiveCube.Meta,
+                expectedData,
+                archiveCube.DataNotes,
+                archiveCube.Version
+                );
 
-            
             // Act
             string actual = JsonSerializer.Serialize(archiveCube, GlobalJsonConverterOptions.Default);
 
@@ -75,7 +85,17 @@ namespace UnitTests.SerializerTests
             ];
             ArchiveCube expected = TestDataCubeBuilder.BuildTestArchiveCube(metaParams, null, "1.1");
             DecimalDataValue missingValue = new(0, DataValueType.Missing);
-            expected.Data[1] = missingValue;
+            List<DecimalDataValue> expectedData = new(expected.Data)
+            {
+                [1] = missingValue
+            };
+            expected = new(
+                expected.CreationTime,
+                expected.Meta,
+                expectedData,
+                expected.DataNotes,
+                expected.Version
+            );
 
             // Act
             ArchiveCube actual = JsonSerializer.Deserialize<ArchiveCube>(ArchiveCubeFixtures.ARCHIVE_CUBE_V11, GlobalJsonConverterOptions.Default);
