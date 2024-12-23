@@ -34,7 +34,8 @@ namespace UnitTests.DatasourceTests
         [
             new(Path.Combine("database", "subgroup", "folder", "table_1.px")),
             new(Path.Combine("database", "subgroup", "folder", "table_2.px")),
-            new(Path.Combine("database", "subgroup", "folder", "table_3.px"))
+            new(Path.Combine("database", "subgroup", "folder", "table_3.px")),
+            new(Path.Combine("database", "subgroup", "folder", "table_4.px"))
         ];
 
         private readonly Dictionary<string, string> _table1Name = new()
@@ -115,7 +116,14 @@ namespace UnitTests.DatasourceTests
                 new(DimensionType.Other, 5),
             ];
 
-            MatrixMetadata brokenMeta = TestDataCubeBuilder.BuildTestMeta(noContent, [.. _languages]);
+            List<DimensionParameters> noTime =
+            [
+                new(DimensionType.Content, 1),
+                new(DimensionType.Other, 5),
+            ];
+
+            MatrixMetadata missingContentDimension = TestDataCubeBuilder.BuildTestMeta(noContent, [.. _languages]);
+            MatrixMetadata missingTimeDimension = TestDataCubeBuilder.BuildTestMeta(noTime, [.. _languages]);
 
             StringProperty table1IDProperty = new("table1.px");
             table1Meta.AdditionalProperties[PxSyntaxConstants.TABLEID_KEY] = table1IDProperty; // Adds TABLE_ID property for table1
@@ -125,7 +133,8 @@ namespace UnitTests.DatasourceTests
             {
                 [_fileReferences[0]] = table1Meta,
                 [_fileReferences[1]] = table2Meta,
-                [_fileReferences[2]] = brokenMeta
+                [_fileReferences[2]] = missingContentDimension,
+                [_fileReferences[3]] = missingTimeDimension
             };
 
             CachedFileDatasource datasource = BuildDatasource([], _fileReferences, metadataResponses);
@@ -134,7 +143,7 @@ namespace UnitTests.DatasourceTests
             DatabaseGroupContents contents = await datasource.GetGroupContentsCachedAsync(["database", "subgroup", "folder"]);
 
             // Assert
-            Assert.That(contents.Files.Count, Is.EqualTo(3));
+            Assert.That(contents.Files.Count, Is.EqualTo(4));
 
             DatabaseTable file0 = contents.Files[0];
             Assert.That(file0.FileName, Is.EqualTo("table_1.px"));
@@ -153,7 +162,14 @@ namespace UnitTests.DatasourceTests
             DatabaseTable file2 = contents.Files[2];
             Assert.That(file2.FileName, Is.EqualTo("table_3.px"));
             Assert.That(file2.LastUpdated, Is.Null);
-            Assert.That(file2.Error, Is.True);
+            Assert.That(file2.Error, Is.Not.Null);
+            Assert.That(file2.Error, Is.EqualTo(DatabaseTableError.ContentDimensionMissing));
+
+            DatabaseTable file3 = contents.Files[3];
+            Assert.That(file3.Code, Is.EqualTo("table_4"));
+            Assert.That(file3.LastUpdated, Is.Null);
+            Assert.That(file3.Error, Is.Not.Null);
+            Assert.That(file3.Error, Is.EqualTo(DatabaseTableError.TimeDimensionMissing));
         }
 
         [Test]
