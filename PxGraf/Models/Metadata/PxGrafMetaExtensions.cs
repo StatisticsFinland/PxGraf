@@ -28,7 +28,7 @@ namespace PxGraf.Models.Metadata
                 Dictionary<string, string> note = [];
                 foreach (string lang in pxGrafMeta.Note.Languages)
                 {
-                    note[lang] = $"\"{pxGrafMeta.Note[lang]}\""; // Meta property values must be enclosed
+                    note[lang] = $"{pxGrafMeta.Note[lang]}";
                 }
                 matrixProperties[PxSyntaxConstants.NOTE_KEY] = new MultilanguageStringProperty(new(note));
             }

@@ -43,7 +43,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
         [Test]
         public async Task GetSavedQueryAsyncTest_Return_SaveQueryParams_With_Valid_Id()
         {
-            Mock<ICachedDatasource> mocmCachedDatasource = new();
+            Mock<ICachedDatasource> mockCachedDatasource = new();
             Mock<ISqFileInterface> mockSqFileInterface = new();
 
             string testQueryId = "aaa-bbb-111-222-333";
@@ -64,9 +64,9 @@ namespace UnitTests.ControllerTests.SqControllerTests
                 new DimensionParameters(DimensionType.Other, 7)
             ];
 
-            mocmCachedDatasource.Setup(x => x.GetMatrixMetadataCachedAsync(It.IsAny<PxTableReference>()))
+            mockCachedDatasource.Setup(x => x.GetMatrixMetadataCachedAsync(It.IsAny<PxTableReference>()))
                 .Returns(Task.Run(() => (IReadOnlyMatrixMetadata)TestDataCubeBuilder.BuildTestMeta(metaParams)));
-            mocmCachedDatasource.Setup(x => x.GetMatrixCachedAsync(It.IsAny<PxTableReference>(), It.IsAny<IReadOnlyMatrixMetadata>()))
+            mockCachedDatasource.Setup(x => x.GetMatrixCachedAsync(It.IsAny<PxTableReference>(), It.IsAny<IReadOnlyMatrixMetadata>()))
                 .Returns(Task.Run(() => TestDataCubeBuilder.BuildTestMatrix(cubeParams)));
 
             mockSqFileInterface.Setup(x => x.SavedQueryExists(It.Is<string>(s => s == testQueryId), It.IsAny<string>()))
@@ -74,7 +74,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
             mockSqFileInterface.Setup(x => x.ReadSavedQueryFromFile(It.Is<string>(s => s == testQueryId), It.IsAny<string>()))
                 .Returns(Task.Run(() => TestDataCubeBuilder.BuildTestSavedQuery(cubeParams, false, new LineChartVisualizationSettings(null, false, null))));
 
-            SqController metaController = new(mocmCachedDatasource.Object, mockSqFileInterface.Object, new Mock<ILogger<SqController>>().Object);
+            SqController metaController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, new Mock<ILogger<SqController>>().Object);
             ActionResult<SaveQueryParams> result = await metaController.GetSavedQueryAsync(testQueryId);
 
             Assert.That(result, Is.InstanceOf<ActionResult<SaveQueryParams>>());
@@ -83,7 +83,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
         [Test]
         public async Task GetSavedQueryAsyncTest_Return_BadRequest_With_Invalid_Query_Id()
         {
-            Mock<ICachedDatasource> mocmCachedDatasource = new();
+            Mock<ICachedDatasource> mockCachedDatasource = new();
             Mock<ISqFileInterface> mockSqFileInterface = new();
 
             string testQueryId = "aaa-bbb-111-222-333";
@@ -104,9 +104,9 @@ namespace UnitTests.ControllerTests.SqControllerTests
                 new DimensionParameters(DimensionType.Other, 7)
             ];
 
-            mocmCachedDatasource.Setup(x => x.GetMatrixMetadataCachedAsync(It.IsAny<PxTableReference>()))
+            mockCachedDatasource.Setup(x => x.GetMatrixMetadataCachedAsync(It.IsAny<PxTableReference>()))
                 .Returns(Task.Run(() => (IReadOnlyMatrixMetadata)TestDataCubeBuilder.BuildTestMeta(metaParams)));
-            mocmCachedDatasource.Setup(x => x.GetMatrixAsync(It.IsAny<PxTableReference>(), It.IsAny<IReadOnlyMatrixMetadata>()))
+            mockCachedDatasource.Setup(x => x.GetMatrixAsync(It.IsAny<PxTableReference>(), It.IsAny<IReadOnlyMatrixMetadata>()))
                 .Returns(Task.Run(() => TestDataCubeBuilder.BuildTestMatrix(cubeParams)));
 
             mockSqFileInterface.Setup(x => x.SavedQueryExists(It.Is<string>(s => s == testQueryId), It.IsAny<string>()))
@@ -114,7 +114,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
             mockSqFileInterface.Setup(x => x.ReadSavedQueryFromFile(It.Is<string>(s => s == testQueryId), It.IsAny<string>()))
                 .Returns(Task.Run(() => TestDataCubeBuilder.BuildTestSavedQuery(cubeParams, false, new HorizontalBarChartVisualizationSettings(null))));
 
-            SqController metaController = new(mocmCachedDatasource.Object, mockSqFileInterface.Object, new Mock<ILogger<SqController>>().Object);
+            SqController metaController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, new Mock<ILogger<SqController>>().Object);
             ActionResult<SaveQueryParams> actionResult = await metaController.GetSavedQueryAsync(testQueryId);
 
             Assert.That(actionResult.Result, Is.InstanceOf<BadRequestResult>());
@@ -123,7 +123,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
         [Test]
         public async Task GetSavedQueryAsyncTest_Return_NotFound_When_Query_Does_Not_Exist()
         {
-            Mock<ICachedDatasource> mocmCachedDatasource = new();
+            Mock<ICachedDatasource> mockCachedDatasource = new();
             Mock<ISqFileInterface> mockSqFileInterface = new();
 
             string testQueryId = "aaa-bbb-111-222-333";
@@ -131,7 +131,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
             mockSqFileInterface.Setup(x => x.SavedQueryExists(It.Is<string>(s => s == testQueryId), It.IsAny<string>()))
                 .Returns(false);
 
-            SqController metaController = new(mocmCachedDatasource.Object, mockSqFileInterface.Object, new Mock<ILogger<SqController>>().Object);
+            SqController metaController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, new Mock<ILogger<SqController>>().Object);
             ActionResult<SaveQueryParams> actionResult = await metaController.GetSavedQueryAsync(testQueryId);
 
             Assert.That(actionResult.Result, Is.InstanceOf<NotFoundResult>());
@@ -140,7 +140,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
         [Test]
         public async Task GetSavedQueryAsyncTest_CalledWithZeroSizedDimension_ThrowsBadRequest()
         {
-            Mock<ICachedDatasource> mocmCachedDatasource = new();
+            Mock<ICachedDatasource> mockCachedDatasource = new();
             Mock<ISqFileInterface> mockSqFileInterface = new();
 
             string testQueryId = "aaa-bbb-111-222-333";
@@ -153,9 +153,9 @@ namespace UnitTests.ControllerTests.SqControllerTests
                 new DimensionParameters(DimensionType.Other, 0)
             ];
 
-            mocmCachedDatasource.Setup(x => x.GetMatrixMetadataCachedAsync(It.IsAny<PxTableReference>()))
+            mockCachedDatasource.Setup(x => x.GetMatrixMetadataCachedAsync(It.IsAny<PxTableReference>()))
                 .Returns(Task.Run(() => (IReadOnlyMatrixMetadata)TestDataCubeBuilder.BuildTestMeta(metaParams)));
-            mocmCachedDatasource.Setup(x => x.GetMatrixAsync(It.IsAny<PxTableReference>(), It.IsAny<IReadOnlyMatrixMetadata>()))
+            mockCachedDatasource.Setup(x => x.GetMatrixAsync(It.IsAny<PxTableReference>(), It.IsAny<IReadOnlyMatrixMetadata>()))
                 .Returns(Task.Run(() => TestDataCubeBuilder.BuildTestMatrix(metaParams)));
 
             mockSqFileInterface.Setup(x => x.SavedQueryExists(It.Is<string>(s => s == testQueryId), It.IsAny<string>()))
@@ -163,7 +163,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
             mockSqFileInterface.Setup(x => x.ReadSavedQueryFromFile(It.Is<string>(s => s == testQueryId), It.IsAny<string>()))
                 .Returns(Task.Run(() => TestDataCubeBuilder.BuildTestSavedQuery(metaParams, false, new HorizontalBarChartVisualizationSettings(null))));
 
-            SqController metaController = new(mocmCachedDatasource.Object, mockSqFileInterface.Object, new Mock<ILogger<SqController>>().Object);
+            SqController metaController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, new Mock<ILogger<SqController>>().Object);
             ActionResult<SaveQueryParams> actionResult = await metaController.GetSavedQueryAsync(testQueryId);
 
             Assert.That(actionResult.Result, Is.InstanceOf<BadRequestResult>());

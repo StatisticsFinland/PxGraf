@@ -35,8 +35,4 @@
     <ProjectReference Include="..\PxGraf\PxGraf.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="CachingTests\" />
-  </ItemGroup>
-
 </Project>
