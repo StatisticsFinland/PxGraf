@@ -1,14 +1,11 @@
 ﻿using Px.Utils.Language;
-using Px.Utils.Models;
 using Px.Utils.Models.Data.DataValue;
 using Px.Utils.Models.Metadata;
-using PxGraf.Models.Metadata;
-using PxGraf.Models.Queries;
-using PxGraf.Utility;
+using Px.Utils.Models;
 using PxGraf.Utility.CustomJsonConverters;
-using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
+using System;
 
 namespace PxGraf.Models.SavedQueries
 {
@@ -44,36 +41,19 @@ namespace PxGraf.Models.SavedQueries
         /// </summary>
         public string Version { get; }
 
-        private ArchiveCube(IReadOnlyMatrixMetadata meta, IReadOnlyList<DecimalDataValue> data)
-        {
-            CreationTime = DateTime.Now;
-            Meta = meta;
-
-            Data = data;
-            DataNotes = [];
-        }
-
-        /// <summary>
-        /// Creates a data cube object based on the archive cube.
-        /// </summary>
-        /// <returns></returns>
-        public Matrix<DecimalDataValue> ToMatrix()
-        {
-            Matrix<DecimalDataValue> matrix = new(Meta, [..Data]);
-            matrix.ApplyDataNotesToMissingData(DataNotes);
-            return matrix;
-        }
-
-        public static ArchiveCube FromMatrixAndQuery(Matrix<DecimalDataValue> matrix, MatrixQuery query)
-        {
-            IReadOnlyMatrixMetadata queriedMeta = matrix.Metadata.FilterDimensionValues(query);
-            return new ArchiveCube(queriedMeta, matrix.Data);
-        }
-
         /// <summary>
         /// Parameterles constructor for json deserialization.
         /// </summary>
         public ArchiveCube() { }
+
+        public ArchiveCube(Matrix<DecimalDataValue> matrix)
+        {
+            CreationTime = DateTime.Now;
+            Meta = matrix.Metadata;
+            Data = matrix.Data;
+            DataNotes = [];
+            Version = "1.1";
+        }
 
         public ArchiveCube(DateTime creationTime, IReadOnlyMatrixMetadata meta, IReadOnlyList<DecimalDataValue> data, Dictionary<int, MultilanguageString> dataNotes, string version)
         {
@@ -82,6 +62,16 @@ namespace PxGraf.Models.SavedQueries
             Data = data;
             DataNotes = dataNotes;
             Version = version;
+        }
+        
+        /// <summary>
+        /// Creates a data cube object based on the archive cube.
+        /// </summary>
+        /// <returns></returns>
+        public Matrix<DecimalDataValue> ToMatrix()
+        {
+            Matrix<DecimalDataValue> matrix = new(Meta, [..Data]);
+            return matrix;
         }
    }
 }

@@ -173,8 +173,7 @@ namespace PxGraf.Controllers
                 await _sqFileInterface.SerializeToFile(queryFileName, Configuration.Current.SavedQueryDirectory, savedQuery);
 
                 string archiveName = $"{newGuid}.sqa";
-                ArchiveCube archiveMatrix = ArchiveCube.FromMatrixAndQuery(matrix, parameters.Query);
-                await _sqFileInterface.SerializeToFile(archiveName, Configuration.Current.ArchiveFileDirectory, archiveMatrix);
+                await _sqFileInterface.SerializeToFile(archiveName, Configuration.Current.ArchiveFileDirectory, new ArchiveCube(matrix));
                 _logger.LogInformation("Archiving query {ArchiveName}", archiveName);
                 return new SaveQueryResponse() { Id = newGuid };
             }
@@ -212,8 +211,7 @@ namespace PxGraf.Controllers
                         await _sqFileInterface.SerializeToFile(queryFileName, Configuration.Current.SavedQueryDirectory, savedQuery);
 
                         string archiveName = $"{newGuid}.sqa";
-                        ArchiveCube archiveMatrix = ArchiveCube.FromMatrixAndQuery(matrix, baseQuery.Query);
-                        await _sqFileInterface.SerializeToFile(archiveName, Configuration.Current.ArchiveFileDirectory, archiveMatrix);
+                        await _sqFileInterface.SerializeToFile(archiveName, Configuration.Current.ArchiveFileDirectory, new ArchiveCube(matrix));
                         _logger.LogInformation("Rearchived query {ArchiveName}", archiveName);
                         return new ReArchiveResponse() { NewSqId = newGuid };
                     }

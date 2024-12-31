@@ -9,23 +9,14 @@ using PxGraf.Models.Queries;
 using PxGraf.Models.Requests;
 using PxGraf.Models.Responses;
 using PxGraf.Models.SavedQueries;
+using PxGraf.Settings;
 using PxGraf.Visualization;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using UnitTests.Fixtures.ResponseFixtures;
 using UnitTests.Fixtures;
 using UnitTests.Utilities;
-using System.Text.Json;
-using PxGraf.Settings;
-using Microsoft.AspNetCore.Mvc;
-using Moq;
-using Px.Utils.Models.Data;
-using Px.Utils.Models.Metadata;
-using PxGraf.Controllers;
-using PxGraf.Datasource.Cache;
-using PxGraf.Datasource;
-using System.Threading.Tasks;
-using PxGraf.Utility;
 
 namespace UnitTests.Visualization
 {
@@ -595,26 +586,13 @@ namespace UnitTests.Visualization
             ];
 
             LineChartVisualizationSettings settings = new(new Layout(["Alue"], ["Vuosineljännes"]), false, null);
-            SavedQuery savedQuery = TestDataCubeBuilder.BuildTestSavedQuery(cubeParams, false, settings);
-            savedQuery.Archived = true;
+            SavedQuery savedQuery = TestDataCubeBuilder.BuildTestSavedQuery(cubeParams, true, settings);
             Dictionary<int, MultilanguageString> dataNotes = [];
             Matrix<DecimalDataValue> cube = TestDataCubeBuilder.BuildTestMatrix(cubeParams, missingData: true);
-            for (int i = 0; i < cube.Data.Length; i++)
-            {
-                if (cube.Data[i].Type != DataValueType.Exists)
-                {
-                    Dictionary<string, string> translations = new(cube.Metadata.AvailableLanguages.Count);
-                    foreach (string lang in cube.Metadata.AvailableLanguages)
-                    {
-                        translations.Add(lang, PxSyntaxConstants.MissingValueDotCodes[(int)cube.Data[i].Type]);
-                    }
-                    dataNotes.Add(i, new MultilanguageString(translations));
-                }
-            }
-            ArchiveCube ac = TestDataCubeBuilder.BuildTestArchiveCube(cubeParams, dataNotes: dataNotes);
+            ArchiveCube archiveCube = new(cube);
 
             // Act
-            VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(ac.ToMatrix(), savedQuery);
+            VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(archiveCube.ToMatrix(), savedQuery);
 
             // Assert
             string normalizedResponse = JsonUtils.NormalizeJsonString(JsonSerializer.Serialize(result, GlobalJsonConverterOptions.Default));
