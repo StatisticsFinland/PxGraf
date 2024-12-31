@@ -64,8 +64,10 @@ namespace PxGraf.Datasource.FileDatasource
             {
                 string code = new DirectoryInfo(directory).Name;
                 MultilanguageString alias = GetGroupName(directory);
-                if (!alias.Languages.Any()) continue; // Skip folders without alias folder - they are not valid database groups
-                headers.Add(new DatabaseGroupHeader(code, [.. alias.Languages], alias));
+                if (alias.Languages.Any()) // Only include groups with an alias file for one or more languages
+                {
+                    headers.Add(new DatabaseGroupHeader(code, [.. alias.Languages], alias));
+                }
             }
 
             return headers;
@@ -137,8 +139,8 @@ namespace PxGraf.Datasource.FileDatasource
         /// <summary>
         /// Assumes the alias files to be named Alias_[lang].txt where [lang] is the language code of the alias.
         /// </summary>
-        /// <param name="path">Path to the folder containing the allias files.</param>
-        /// <returns>Multilanguage string of the alias</returns>
+        /// <param name="path">Path to the folder containing the alias files.</param>
+        /// <returns>Multilanguage string of the group name based on the alias files</returns>
         private MultilanguageString GetGroupName(string path)
         {
             Dictionary<string, string> translatedNames = [];
@@ -148,26 +150,25 @@ namespace PxGraf.Datasource.FileDatasource
             {
                 int aliasFileSuffixLength = PxSyntaxConstants.ALIAS_FILE_PREFIX.Length + 1; // +1 for the underscore
                 string lang = new([.. Path.GetFileNameWithoutExtension(aliasFile).Skip(aliasFileSuffixLength)]);
-                Encoding encoding = GetFileEncoding(aliasFile);
-                string alias = File.ReadAllText(aliasFile, encoding);
+                string alias = GetAliasFronFile(aliasFile);
                 translatedNames.Add(lang, alias.Trim());
             }
             return new MultilanguageString(translatedNames);
         }
 
-        private Encoding GetFileEncoding(string path)
+        private string GetAliasFronFile(string path)
         {
-            using (FileStream? fs = File.OpenRead(path))
+            using FileStream? fs = File.OpenRead(path);
+            Encoding encoding = config.Encoding;
+            Ude.CharsetDetector cdet = new();
+            cdet.Feed(fs);
+            cdet.DataEnd();
+            if (cdet.Charset != null)
             {
-                Ude.CharsetDetector cdet = new();
-                cdet.Feed(fs);
-                cdet.DataEnd();
-                if (cdet.Charset != null)
-                {
-                    return Encoding.GetEncoding(cdet.Charset);
-                }
+                encoding = Encoding.GetEncoding(cdet.Charset);
             }
-            return config.Encoding;
+            using StreamReader sr = new(fs, encoding);
+            return sr.ReadToEnd();
         }
     }
 }

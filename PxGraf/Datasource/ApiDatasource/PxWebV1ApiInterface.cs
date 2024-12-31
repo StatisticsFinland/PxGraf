@@ -184,8 +184,7 @@ namespace PxGraf.Datasource.ApiDatasource
             {
                 if (values[i] is null)
                 {
-                    string statusCode = dataResult.Status?.GetValueOrDefault(i.ToString());
-                    dataValues[i] = new DecimalDataValue(0, (DataValueType)Array.IndexOf(PxSyntaxConstants.MissingValueDotCodes, statusCode));
+                    dataValues[i] = new DecimalDataValue(0, PxSyntaxConstants.GetMissingDataTypeFromCode(dataResult.Status?.GetValueOrDefault(i.ToString())));
                 }
                 else
                 {

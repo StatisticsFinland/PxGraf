@@ -31,13 +31,7 @@ namespace PxGraf.Utility.CustomJsonConverters
                 }
                 else if (reader.TokenType == JsonTokenType.String)
                 {
-                    string stringValue = reader.GetString();
-                    int index = Array.IndexOf(PxSyntaxConstants.MissingValueDotCodes, stringValue);
-                    if (index < 1)
-                    {
-                        throw new JsonException($"Invalid missing value code: {stringValue}");
-                    }
-                    result.Add(new(0, (DataValueType)(index)));
+                    result.Add(new(0, PxSyntaxConstants.GetMissingDataTypeFromCode(reader.GetString())));
                 }
                 else
                 {

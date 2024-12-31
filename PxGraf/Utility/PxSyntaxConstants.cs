@@ -1,6 +1,9 @@
 ﻿using System.Globalization;
 using System;
 using System.Collections.Generic;
+using Px.Utils.Models.Data;
+using System.Collections.Immutable;
+using System.Collections.ObjectModel;
 
 namespace PxGraf.Utility
 {
@@ -44,6 +47,18 @@ namespace PxGraf.Utility
             "-",
         ];
 
+        private static Dictionary<string, DataValueType> missingValueTypes =
+        new()
+        {
+            ["."] = DataValueType.Missing,
+            [".."] = DataValueType.CanNotRepresent,
+            ["..."] = DataValueType.Confidential,
+            ["...."] = DataValueType.NotAcquired,
+            ["....."] = DataValueType.NotAsked,
+            ["......"] = DataValueType.Empty,
+            ["-"] = DataValueType.Nill,
+        };
+
         /// <summary> 
         /// Tries to parse a string to a DateTime object using several different formats.
         /// </summary>
@@ -77,5 +92,23 @@ namespace PxGraf.Utility
         /// <returns>Formatted string</returns>
         public static string FormatPxDateTime(DateTime dateTime) =>
             dateTime.ToUniversalTime().ToString(DATETIME_FORMAT_NO_MS_TS_ZERO, CultureInfo.InvariantCulture);
+
+        /// <summary>
+        /// Gets the <see cref="DataValueType"/> from a missing value dot code.
+        /// </summary>
+        /// <param name="code">Missing value code</param>
+        /// <returns><see cref="DataValueType"/> which the input code represents</returns>
+        /// <exception cref="ArgumentException">If the provided code does not match any missing data value types</exception>
+        public static DataValueType GetMissingDataTypeFromCode(string code)
+        {
+            if (missingValueTypes.TryGetValue(code, out DataValueType type))
+            {
+                return type;
+            }
+            else
+            {
+                throw new ArgumentException($"Invalid missing value dot code {code}");
+            }
+        }
     }
 }
