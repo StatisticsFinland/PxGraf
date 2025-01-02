@@ -1,7 +1,7 @@
-﻿using Px.Utils.Models;
+﻿using Px.Utils.Language;
+using Px.Utils.Models;
 using Px.Utils.Models.Data.DataValue;
 using Px.Utils.Models.Metadata;
-using Px.Utils.Models.Metadata.Dimensions;
 using Px.Utils.Models.Metadata.ExtensionMethods;
 using PxGraf.Data;
 using PxGraf.Data.MetaData;
@@ -78,12 +78,6 @@ namespace PxGraf.Visualization
             Matrix<DecimalDataValue> resultMatrix = matrix.GetTransform(finalMap);
             MatrixExtensions.DataAndNotesCollection dataAndNotes = resultMatrix.ExtractDataAndNotes();
             IReadOnlyList<string> timeDimensionCodes = matrix.Metadata.GetTimeDimension().Values.Codes;
-            List<Variable> variables = [];
-            for (int i = 0; i < resultMatrix.Metadata.Dimensions.Count; i++)
-            {
-                Dimension dimension = resultMatrix.Metadata.Dimensions[i] as Dimension;
-                variables.Add(dimension.ConvertToVariable(query.DimensionQueries, matrix.Metadata));
-            }   
 
             return new VisualizationResponse()
             {
@@ -91,7 +85,7 @@ namespace PxGraf.Visualization
                 Data = dataAndNotes.Data,
                 DataNotes = dataAndNotes.Notes,
                 MissingDataInfo = dataAndNotes.MissingValueInfo,
-                MetaData = variables,
+                MetaData = BuildVariableList(query.DimensionQueries, resultMatrix.Metadata),
                 SelectableDimensionCodes = layout.SelectableDimensionCodes,
                 RowDimensionCodes = layout.RowDimensionCodes,
                 ColumnDimensionCodes = layout.ColumnDimensionCodes,
@@ -110,6 +104,29 @@ namespace PxGraf.Visualization
                     ShowDataPoints = settings.ShowDataPoints
                 }
             };
+        }
+        
+        private static List<Variable> BuildVariableList(Dictionary<string, DimensionQuery> dimensionQueries, IReadOnlyMatrixMetadata meta)
+        {
+            return meta.Dimensions.Select(dimension =>
+            {
+                MultilanguageString name = dimension.Name;
+                if (dimensionQueries.TryGetValue(dimension.Code, out DimensionQuery query) &&
+                    query.NameEdit != null)
+                {
+                    name = query.NameEdit;
+                }
+
+                return new Variable(
+                    code: dimension.Code,
+                    name: name,
+                    note: dimension.GetMultilanguageDimensionProperty(PxSyntaxConstants.NOTE_KEY),
+                    type: dimension.Type,
+                    values: dimension.Values.Select(v => v
+                        .ConvertToVariableValue(dimension.GetEliminationValueCode(), query))
+                        .ToList()
+                    );
+            }).ToList();
         }
 
         private static DimensionLayout GetDimensionLayout(IReadOnlyMatrixMetadata meta, MatrixQuery query, VisualizationSettings settings)

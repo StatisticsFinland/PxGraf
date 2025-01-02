@@ -1,5 +1,4 @@
-﻿using Px.Utils.Language;
-using Px.Utils.Models.Metadata;
+﻿using Px.Utils.Models.Metadata;
 using Px.Utils.Models.Metadata.Dimensions;
 using Px.Utils.Models.Metadata.Enums;
 using Px.Utils.Models.Metadata.MetaProperties;
@@ -9,7 +8,6 @@ using PxGraf.Settings;
 using PxGraf.Utility;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 
 namespace PxGraf.Models.Metadata
@@ -21,41 +19,31 @@ namespace PxGraf.Models.Metadata
     {
         public static MatrixMetadata ToMatrixMetadata(this CubeMeta pxGrafMeta)
         {
-            List<Dimension> dimensions = new(pxGrafMeta.Variables.Count);
             Dictionary<string, MetaProperty> matrixProperties = [];
             if (pxGrafMeta.Note != null)
             {
                 Dictionary<string, string> note = [];
                 foreach (string lang in pxGrafMeta.Note.Languages)
                 {
-                    note[lang] = $"{pxGrafMeta.Note[lang]}";
+                    note[lang] = pxGrafMeta.Note[lang];
                 }
                 matrixProperties[PxSyntaxConstants.NOTE_KEY] = new MultilanguageStringProperty(new(note));
             }
-            foreach (Variable variable in pxGrafMeta.Variables)
-            {
-                Dimension dimension = variable.ConvertToDimension();
-                dimensions.Add(dimension);
-                if (dimension is ContentDimension)
-                {
-                    matrixProperties[PxSyntaxConstants.SOURCE_KEY] = new MultilanguageStringProperty(variable.Values[0].ContentComponent.Source);
-                }
-            }
+
+            List<Dimension> dimensions = pxGrafMeta.Variables.Select(v => v.ConvertToDimension()).ToList();
             string defaultLang = pxGrafMeta.GetDefaultLanguage();
             MatrixMetadata meta = new(defaultLang, pxGrafMeta.Languages, dimensions, matrixProperties);
-            meta = meta.AssignOrdinalDimensionTypes();
-            meta.AssignSourceToContentDimensionValues();
             return meta;
         }
 
-            /// <summary>
-            /// Returns the default language of the cube.
-            /// </summary>
-            /// <param name="pxGrafMeta">The cube metadata.</param>
-            /// <returns>The default language of the cube.</returns>
-            public static string GetDefaultLanguage(this CubeMeta pxGrafMeta)
+        /// <summary>
+        /// Returns the default language of the cube.
+        /// </summary>
+        /// <param name="pxGrafMeta">The cube metadata.</param>
+        /// <returns>The default language of the cube.</returns>
+        public static string GetDefaultLanguage(this CubeMeta pxGrafMeta)
         {
-            return pxGrafMeta.Languages.Contains(Configuration.Current.LanguageOptions.Default) ? 
+            return pxGrafMeta.Languages.Contains(Configuration.Current.LanguageOptions.Default) ?
                 Configuration.Current.LanguageOptions.Default :
                 pxGrafMeta.Languages[0];
         }
@@ -83,8 +71,18 @@ namespace PxGraf.Models.Metadata
                 {
                     dimValue.AddEliminationKeyIfSumValue(dimensionProperties);
                     DateTime lastUpdate = PxSyntaxConstants.ParseDateTime(dimValue.ContentComponent.LastUpdated);
-                    ContentDimensionValue cdv = new(dimValue.Code, dimValue.Name, dimValue.ContentComponent.Unit, lastUpdate, dimValue.ContentComponent.NumberOfDecimals);
-                    contentDimValues.Add(cdv);
+                    Dictionary<string, MetaProperty> contentDimValueProps = [];
+                    contentDimValueProps[PxSyntaxConstants.SOURCE_KEY] = new MultilanguageStringProperty(dimValue.ContentComponent.Source);
+                    contentDimValues.Add(
+                        new(
+                            dimValue.Code,
+                            dimValue.Name,
+                            dimValue.ContentComponent.Unit,
+                            lastUpdate,
+                            dimValue.ContentComponent.NumberOfDecimals,
+                            false,
+                            contentDimValueProps
+                        ));
                 }
                 return new ContentDimension(input.Code, input.Name, dimensionProperties, contentDimValues);
             }

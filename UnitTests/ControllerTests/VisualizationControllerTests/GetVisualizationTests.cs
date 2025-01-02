@@ -1,24 +1,21 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Moq;
 using NUnit.Framework;
+using Px.Utils.Models.Metadata.Dimensions;
+using Px.Utils.Models.Metadata.Enums;
+using Px.Utils.Models.Metadata;
+using PxGraf.Controllers;
+using PxGraf.Datasource.Cache;
+using PxGraf.Datasource;
 using PxGraf.Language;
+using PxGraf.Models.Queries;
+using PxGraf.Models.Responses;
 using PxGraf.Settings;
+using PxGraf.Utility;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnitTests.Fixtures;
-using Moq;
-using Microsoft.AspNetCore.Mvc;
-using Px.Utils.Models.Metadata.Enums;
-using PxGraf.Controllers;
-using PxGraf.Models.Queries;
-using PxGraf.Datasource;
-using Px.Utils.Models.Metadata;
-using PxGraf.Models.Responses;
-using PxGraf.Models.Metadata;
-using PxGraf.Datasource.Cache;
-using System.Linq;
-using Px.Utils.Models.Metadata.Dimensions;
-using PxGraf.Utility;
-using PxGraf.Models.SavedQueries;
 
 namespace UnitTests.ControllerTests.VisualizationControllerTests
 {
@@ -90,16 +87,9 @@ namespace UnitTests.ControllerTests.VisualizationControllerTests
                     contentDimension.AdditionalProperties,
                     new ContentValueList([cdv]));
 
-            MatrixQuery query = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
-            VisualizationResponse mockResponse = new()
-            {
-                MetaData = meta.Dimensions.Select(d => d.ConvertToVariable(query.DimensionQueries, meta)).ToList()
-            };
-
             VisualizationController vController = TestVisualizationControllerBuilder.BuildController(
                 cubeParams,
                 metaParams, 
-                mockResponse,
                 testQueryId,
                 mockCachedDatasource,
                 MultiStateMemoryTaskCache.CacheEntryState.Fresh);
@@ -152,16 +142,10 @@ namespace UnitTests.ControllerTests.VisualizationControllerTests
                     contentDimension.Name,
                     contentDimension.AdditionalProperties,
                     new ContentValueList([cdv]));
-            MatrixQuery query = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
-            VisualizationResponse mockResponse = new()
-            {
-                MetaData = meta.Dimensions.Select(d => d.ConvertToVariable(query.DimensionQueries, meta)).ToList()
-            };
 
             VisualizationController vController = TestVisualizationControllerBuilder.BuildController(
                 cubeParams,
                 metaParams,
-                mockResponse,
                 testQueryId,
                 mockCachedDatasource,
                 MultiStateMemoryTaskCache.CacheEntryState.Stale);
@@ -214,16 +198,10 @@ namespace UnitTests.ControllerTests.VisualizationControllerTests
                     contentDimension.Name,
                     contentDimension.AdditionalProperties,
                     new ContentValueList([cdv]));
-            MatrixQuery query = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
-            VisualizationResponse mockResponse = new()
-            {
-                MetaData = meta.Dimensions.Select(d => d.ConvertToVariable(query.DimensionQueries, meta)).ToList()
-            };
 
             VisualizationController vController = TestVisualizationControllerBuilder.BuildController(
                 cubeParams,
                 metaParams,
-                mockResponse,
                 testQueryId,
                 mockCachedDatasource,
                 MultiStateMemoryTaskCache.CacheEntryState.Null);
@@ -241,12 +219,9 @@ namespace UnitTests.ControllerTests.VisualizationControllerTests
 
             string testQueryId = "aaa-bbb-111-222-333";
 
-            VisualizationResponse mockResponse = default;
-
             VisualizationController vController = TestVisualizationControllerBuilder.BuildController(
                 [],
                 [],
-                mockResponse,
                 testQueryId,
                 mockCachedDatasource,
                 MultiStateMemoryTaskCache.CacheEntryState.Error);
@@ -267,7 +242,6 @@ namespace UnitTests.ControllerTests.VisualizationControllerTests
             VisualizationController vController = TestVisualizationControllerBuilder.BuildController(
                 [],
                 [],
-                null,
                 testQueryId,
                 mockCachedDatasource,
                 MultiStateMemoryTaskCache.CacheEntryState.Null,
@@ -293,18 +267,9 @@ namespace UnitTests.ControllerTests.VisualizationControllerTests
                 new DimensionParameters(DimensionType.Other, 1)
             ];
 
-            MatrixMetadata meta = TestDataCubeBuilder.BuildTestMeta(metaParams);
-            MatrixQuery query = TestDataCubeBuilder.BuildTestCubeQuery(metaParams);
-            
-            VisualizationResponse mockResponse = new()
-            {
-                MetaData = meta.Dimensions.Select(d => d.ConvertToVariable(query.DimensionQueries, meta)).ToList()
-            };
-
             VisualizationController vController = TestVisualizationControllerBuilder.BuildController(
                 metaParams,
                 metaParams,
-                mockResponse,
                 testQueryId,
                 mockCachedDatasource,
                 MultiStateMemoryTaskCache.CacheEntryState.Null,

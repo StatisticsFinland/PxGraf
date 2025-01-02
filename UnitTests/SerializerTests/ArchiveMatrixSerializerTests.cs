@@ -1,20 +1,19 @@
 ﻿using Microsoft.Extensions.Configuration;
-using NUnit.Framework;
 using NUnit.Framework.Internal;
+using NUnit.Framework;
+using Px.Utils.Language;
+using Px.Utils.Models.Data.DataValue;
+using Px.Utils.Models.Data;
 using Px.Utils.Models.Metadata.Enums;
 using PxGraf.Language;
 using PxGraf.Models.SavedQueries;
+using PxGraf.Settings;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
+using System;
 using UnitTests.Fixtures;
 using UnitTests.Utilities;
-using PxGraf.Settings;
-using Px.Utils.Language;
-using System.Linq;
-using Px.Utils.Models.Data;
-using Px.Utils.Models.Data.DataValue;
-using System;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace UnitTests.SerializerTests
 {
@@ -133,10 +132,9 @@ namespace UnitTests.SerializerTests
             {
                 Assert.That((actual.Data[i]).Equals(expectedData[i]));
             }
-            Assert.That(actual.DataNotes.Count.Equals(expectedDataNotes.Count));
+            Assert.That(actual.DataNotes.Count, Is.EqualTo(expectedDataNotes.Count));
             Assert.That(actual.DataNotes[1].Equals(expectedDataNotes[1]));
-            Assert.That(actual.Meta.AdditionalProperties.Count.Equals(2));
-            Assert.That(actual.Meta.AdditionalProperties.ContainsKey("SOURCE"));
+            Assert.That(actual.Meta.AdditionalProperties.Count, Is.EqualTo(1));
             Assert.That(actual.Meta.DefaultLanguage.Equals("fi"));
             foreach (string language in expectedLanguages)
             {
@@ -151,6 +149,7 @@ namespace UnitTests.SerializerTests
             Assert.That(actual.Meta.Dimensions[5].Values.Count.Equals(1));
             Assert.That(actual.Meta.Dimensions[0].Type.Equals(DimensionType.Time));
             Assert.That(actual.Meta.Dimensions[5].Type.Equals(DimensionType.Content));
+            Assert.That(actual.Meta.Dimensions[5].Values[0].AdditionalProperties.ContainsKey("SOURCE"));
             Assert.That(actual.Meta.AdditionalProperties.ContainsKey("NOTE"));
             Assert.That(actual.Meta.AdditionalProperties["NOTE"].Type.Equals(MetaPropertyType.MultilanguageText));
         }

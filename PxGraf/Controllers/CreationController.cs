@@ -71,7 +71,6 @@ namespace PxGraf.Controllers
                 return BadRequest();
             }
             MatrixMetadata metadataClone = readOnlyMeta.GetTransform(readOnlyMeta);
-            metadataClone.AssignSourceToContentDimensionValues();
             _logger.LogDebug("cube-meta result {Meta}", metadataClone);
             return metadataClone;
         }

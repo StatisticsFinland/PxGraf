@@ -19,7 +19,6 @@ namespace UnitTests
         public static VisualizationController BuildController
             (List<DimensionParameters> cubeParams,
             List<DimensionParameters> metaParams,
-            VisualizationResponse mockResponse,
             string testQueryId, 
             Mock<ICachedDatasource> mockCachedDatasource,
             MultiStateMemoryTaskCache.CacheEntryState entryState,
@@ -40,7 +39,7 @@ namespace UnitTests
             taskCache.Setup(x => x.TryGet(It.IsAny<string>(), out It.Ref<Task<VisualizationResponse>>.IsAny))
                 .Returns((string key, out Task<VisualizationResponse> value) =>
                 {
-                    value = Task.FromResult(mockResponse);
+                    value = Task.FromResult(new VisualizationResponse());
                     return entryState;
                 });
 

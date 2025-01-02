@@ -367,12 +367,19 @@ namespace PxGraf.Datasource.ApiDatasource
                 )
                 .Distinct()
                 .Single();
-                contentdimensionValues.Add(new ContentDimensionValue(contentDimVal.Code, contentDimVal.Name, unit, updated, decimals));
+
+                contentDimVal.AdditionalProperties[PxSyntaxConstants.SOURCE_KEY] = sourceProperty;
+                contentdimensionValues.Add(new ContentDimensionValue(
+                    contentDimVal.Code,
+                    contentDimVal.Name,
+                    unit,
+                    updated,
+                    decimals,
+                    contentDimVal.IsVirtual,
+                    contentDimVal.AdditionalProperties));
             }
 
-            Dictionary<string, MetaProperty> additionalProperties = dimensionBase.AdditionalProperties;
-            additionalProperties[PxSyntaxConstants.SOURCE_KEY] = sourceProperty;
-            return new ContentDimension(dimensionBase.Code, dimensionBase.Name, additionalProperties, contentdimensionValues);
+            return new ContentDimension(dimensionBase.Code, dimensionBase.Name, dimensionBase.AdditionalProperties, contentdimensionValues);
         }
 
         private static PxWebDataQueryPostParams BuildPostParams(IEnumerable<PxWebDataQueryPostParams.DimensionQuery> queries)

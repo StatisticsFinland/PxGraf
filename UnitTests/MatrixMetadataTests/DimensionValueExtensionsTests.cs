@@ -1,13 +1,14 @@
 ﻿using NUnit.Framework;
-using Px.Utils.Models.Metadata.Enums;
-using Px.Utils.Models.Metadata;
-using System.Collections.Generic;
+using Px.Utils.Language;
 using Px.Utils.Models.Metadata.Dimensions;
-using PxGraf.Utility;
+using Px.Utils.Models.Metadata.Enums;
+using Px.Utils.Models.Metadata.MetaProperties;
+using Px.Utils.Models.Metadata;
 using PxGraf.Data.MetaData;
 using PxGraf.Models.Metadata;
 using PxGraf.Models.Queries;
-using Px.Utils.Language;
+using PxGraf.Utility;
+using System.Collections.Generic;
 
 namespace UnitTests.MatrixMetadataTests
 {
@@ -26,7 +27,7 @@ namespace UnitTests.MatrixMetadataTests
             DimensionValue value = dimension.Values[0];
 
             // Act
-            VariableValue variableValue = value.ConvertToVariableValue(value.Code, null, meta);
+            VariableValue variableValue = value.ConvertToVariableValue(value.Code, null);
 
             // Assert
             Assert.That(variableValue, Is.Not.Null);
@@ -56,7 +57,7 @@ namespace UnitTests.MatrixMetadataTests
             };
 
             // Act
-            VariableValue variableValue = value.ConvertToVariableValue(value.Code, dimensionQuery, meta);
+            VariableValue variableValue = value.ConvertToVariableValue(value.Code, dimensionQuery);
 
             // Assert
             Assert.That(variableValue, Is.Not.Null);
@@ -91,7 +92,7 @@ namespace UnitTests.MatrixMetadataTests
             };
 
             // Act
-            VariableValue variableValue = value.ConvertToVariableValue(null, dimensionQuery, meta);
+            VariableValue variableValue = value.ConvertToVariableValue(null, dimensionQuery);
 
             // Assert
             Assert.That(variableValue, Is.Not.Null);
@@ -126,7 +127,7 @@ namespace UnitTests.MatrixMetadataTests
             };
 
             // Act
-            VariableValue variableValue = value.ConvertToVariableValue(null, dimensionQuery, meta);
+            VariableValue variableValue = value.ConvertToVariableValue(null, dimensionQuery);
 
             // Assert
             Assert.That(variableValue, Is.Not.Null);
@@ -135,7 +136,12 @@ namespace UnitTests.MatrixMetadataTests
             Assert.That(variableValue.IsSumValue.Equals(false));
             Assert.That(variableValue.ContentComponent, Is.Not.Null);
             Assert.That(variableValue.ContentComponent.NumberOfDecimals.Equals(value.Precision));
-            Assert.That(variableValue.ContentComponent.Source.Equals(value.GetSource(meta)));
+            if(value.AdditionalProperties.TryGetValue(PxSyntaxConstants.SOURCE_KEY, out MetaProperty metaProperty) &&
+                metaProperty is MultilanguageStringProperty mlsProperty)
+            {
+                Assert.That(variableValue.ContentComponent.Source.Equals(mlsProperty.Value));
+            }
+            else Assert.Fail();
             Assert.That(variableValue.ContentComponent.Unit.Equals(value.Unit));
         }
     }

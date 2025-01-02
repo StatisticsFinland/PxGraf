@@ -1,15 +1,14 @@
 ﻿#nullable enable
 using Px.Utils.Language;
 using Px.Utils.Models.Metadata.Dimensions;
+using Px.Utils.Models.Metadata.Enums;
 using Px.Utils.Models.Metadata.ExtensionMethods;
+using Px.Utils.Models.Metadata.MetaProperties;
 using Px.Utils.Models.Metadata;
-using System.Linq;
 using PxGraf.Models.Queries;
 using System.Collections.Generic;
-using PxGraf.Utility;
-using Px.Utils.Models.Metadata.Enums;
+using System.Linq;
 using System;
-using Px.Utils.Models.Metadata.MetaProperties;
 
 namespace PxGraf.Models.Metadata
 {
@@ -136,51 +135,6 @@ namespace PxGraf.Models.Metadata
             return null;
         }
 
-        /// <summary>
-        /// Ensures that source property exists for all content dimension values in the given metadata.
-        /// Prioritises the source property of the content dimension value over the source property of the dimension and the table.
-        /// </summary>
-        /// <param name="meta">Metadata boject to be processed.</param>
-        /// <exception cref="InvalidOperationException">Thrown if source property is not found from metadata.</exception>
-        public static void AssignSourceToContentDimensionValues(this IReadOnlyMatrixMetadata meta)
-        {
-            foreach (ContentDimensionValue cdv in meta.GetContentDimension().Values)
-            {
-                MultilanguageString? source = cdv.GetSource(meta) ?? throw new InvalidOperationException("Source property not found from metadata.");
-                MultilanguageStringProperty sourceProperty = new (source);
-                cdv.AdditionalProperties.TryAdd(PxSyntaxConstants.SOURCE_KEY, sourceProperty);
-            }
-        }
-
-        /// <summary>
-        /// Assigns ordinal or nominal dimension types to dimensions that are not content or time dimensions based on their meta-id properties.
-        /// </summary>
-        /// <param name="meta">The matrix metadata to assign the dimension types to.</param>
-        public static MatrixMetadata AssignOrdinalDimensionTypes(this MatrixMetadata meta)
-        {
-            List<Dimension> newDimensions = [..meta.Dimensions];
-            for(int i = 0; i < meta.Dimensions.Count; i++)
-            {
-                if (meta.Dimensions[i].Type != DimensionType.Other &&
-                    meta.Dimensions[i].Type != DimensionType.Unknown)
-                {
-                    continue;
-                }
-
-                DimensionType dimensionType = meta.Dimensions[i].GetDimensionType();
-                newDimensions[i] = new(
-                    meta.Dimensions[i].Code,
-                    meta.Dimensions[i].Name,
-                    meta.Dimensions[i].AdditionalProperties,
-                    meta.Dimensions[i].Values,
-                    dimensionType);
-            }
-            return new MatrixMetadata(
-                meta.DefaultLanguage,
-                meta.AvailableLanguages,
-                newDimensions,
-                meta.AdditionalProperties);
-        }
     }
 }
 #nullable disable
