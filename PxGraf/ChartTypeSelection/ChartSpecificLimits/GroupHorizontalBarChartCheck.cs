@@ -1,4 +1,5 @@
-﻿using PxGraf.ChartTypeSelection.JsonObjects;
+﻿using Px.Utils.Models.Metadata.Enums;
+using PxGraf.ChartTypeSelection.JsonObjects;
 using PxGraf.Enums;
 using System.Collections.Generic;
 
@@ -20,7 +21,7 @@ namespace PxGraf.ChartTypeSelection.ChartSpecificLimits
         // 3. Number of selections from the content dimension
         // 4. Progressive dimensions are not allowed (Fixed rule, but could be made adjustable)
         // 5. Number of selections from the time dimension
-        // 6. Combination variables are not allowed (Fixed rule)
+        // 6. Combination dimensions are not allowed (Fixed rule)
         // 7. Number of values in the greater multiselect dimension.
         // 8. Number of values in the smaller multiselect dimension.
         // 9. Value of the product of the sizes of the multiselect dimensions.
@@ -35,10 +36,10 @@ namespace PxGraf.ChartTypeSelection.ChartSpecificLimits
         /// </summary>
         protected override IEnumerable<ChartRejectionInfo> CheckChartSpecificRules(VisualizationTypeSelectionObject input)
         {
-            var largestMultiselect = GetLargestMultiselect(input);
+            VisualizationTypeSelectionObject.DimensionInfo largestMultiselect = GetLargestMultiselect(input);
             if (largestMultiselect != null)
             {
-                if (largestMultiselect.Type == VariableType.Ordinal)
+                if (largestMultiselect.Type == DimensionType.Ordinal)
                 {
                     yield return BuildRejectionInfo(RejectionReason.ProgressiveNotAllowed, largestMultiselect);
                 }
@@ -49,10 +50,10 @@ namespace PxGraf.ChartTypeSelection.ChartSpecificLimits
                 }
             }
 
-            var smallerMultiselect = GetSmallerMultiselect(input);
+            VisualizationTypeSelectionObject.DimensionInfo smallerMultiselect = GetSmallerMultiselect(input);
             if (smallerMultiselect != null)
             {
-                if (smallerMultiselect.Type == VariableType.Ordinal)
+                if (smallerMultiselect.Type == DimensionType.Ordinal)
                 {
                     yield return BuildRejectionInfo(RejectionReason.ProgressiveNotAllowed, smallerMultiselect);
                 }
@@ -70,8 +71,8 @@ namespace PxGraf.ChartTypeSelection.ChartSpecificLimits
         /// <returns></returns>
         protected override int GetPriority(RejectionReason reason)
         {
-            var reasons = new RejectionReason[]
-            {
+            RejectionReason[] reasons =
+            [
                 RejectionReason.NotEnoughMultiselections,
                 RejectionReason.TooManyMultiselections,
                 RejectionReason.ContentNotAllowed,
@@ -92,7 +93,7 @@ namespace PxGraf.ChartTypeSelection.ChartSpecificLimits
                 RejectionReason.SecondMultiselectBelowMin,
                 RejectionReason.SecondMultiselectOverMax,
                 RejectionReason.MultiselectProductOverMax,
-            };
+            ];
 
             return GetPriorityIndex(reasons, reason);
         }

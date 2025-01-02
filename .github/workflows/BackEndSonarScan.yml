@@ -45,6 +45,7 @@ jobs:
             /d:sonar.host.url=https://sonarcloud.io
             /d:sonar.token=${{ secrets.SONAR_TOKEN }}    
             /d:sonar.cs.vscoveragexml.reportsPaths=**/coverage.xml
+            /d:sonar.scanner.scanAll=false
 
       - name: Build backend
         run: dotnet build --configuration Test /p:TargetFramework=net8.0

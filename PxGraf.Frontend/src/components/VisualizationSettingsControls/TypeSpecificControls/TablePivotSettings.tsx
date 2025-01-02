@@ -7,13 +7,13 @@ import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 
 import { useTranslation } from 'react-i18next';
-import VariableList from '../UtilityComponents/VariableList';
+import DimensionList from '../UtilityComponents/DimensionList';
 import { IVisualizationSettingsProps } from '../VisualizationSettingsControl';
-import { IVariable } from 'types/cubeMeta';
+import { IDimension } from 'types/cubeMeta';
 import styled from 'styled-components';
 import { Query } from "types/query";
 
-const VariableListWrapper = styled(Stack)`
+const DimensionListWrapper = styled(Stack)`
     padding: 8px;
     align-items: center;
     min-width: 375px;
@@ -24,48 +24,48 @@ const IconWrapper = styled(Stack)`
 `;
 
 interface ITableSettingsProps extends IVisualizationSettingsProps {
-    variables: IVariable[]
-    selectableVariables?: IVariable[]
+    dimensions: IDimension[]
+    selectableDimensions?: IDimension[]
     query?: Query
 }
 
-export const TablePivotSettings: React.FC<ITableSettingsProps> = ({ visualizationSettings, settingsChangedHandler, variables, selectableVariables, query }) => {
+export const TablePivotSettings: React.FC<ITableSettingsProps> = ({ visualizationSettings, settingsChangedHandler, dimensions, selectableDimensions, query }) => {
     const { t } = useTranslation();
     const [selected, setSelected] = useState("");
 
     const upHandler = () => {
         if (selected == null) return;
         if (visualizationSettings.columnVariableCodes.includes(selected) && visualizationSettings.columnVariableCodes[0] !== selected) {
-            const varsCopy = [...visualizationSettings.columnVariableCodes];
-            const i = varsCopy.indexOf(selected);
-            varsCopy[i] = varsCopy[i - 1];
-            varsCopy[i - 1] = selected;
-            settingsChangedHandler({ ...visualizationSettings, columnVariableCodes: varsCopy });
+            const dimsCopy = [...visualizationSettings.columnVariableCodes];
+            const i = dimsCopy.indexOf(selected);
+            dimsCopy[i] = dimsCopy[i - 1];
+            dimsCopy[i - 1] = selected;
+            settingsChangedHandler({ ...visualizationSettings, columnVariableCodes: dimsCopy });
         }
         else if (visualizationSettings.rowVariableCodes.includes(selected) && visualizationSettings.rowVariableCodes[0] !== selected) {
-            const varsCopy = [...visualizationSettings.rowVariableCodes];
-            const i = varsCopy.indexOf(selected);
-            varsCopy[i] = varsCopy[i - 1];
-            varsCopy[i - 1] = selected;
-            settingsChangedHandler({ ...visualizationSettings, rowVariableCodes: varsCopy });
+            const dimsCopy = [...visualizationSettings.rowVariableCodes];
+            const i = dimsCopy.indexOf(selected);
+            dimsCopy[i] = dimsCopy[i - 1];
+            dimsCopy[i - 1] = selected;
+            settingsChangedHandler({ ...visualizationSettings, rowVariableCodes: dimsCopy });
         }
     }
 
     const downHandler = () => {
         if (selected == null) return;
         if (visualizationSettings.columnVariableCodes.includes(selected) && visualizationSettings.columnVariableCodes[visualizationSettings.columnVariableCodes.length - 1] !== selected) {
-            const varsCopy = [...visualizationSettings.columnVariableCodes];
-            const i = varsCopy.indexOf(selected);
-            varsCopy[i] = varsCopy[i + 1];
-            varsCopy[i + 1] = selected;
-            settingsChangedHandler({ ...visualizationSettings, columnVariableCodes: varsCopy });
+            const dimsCopy = [...visualizationSettings.columnVariableCodes];
+            const i = dimsCopy.indexOf(selected);
+            dimsCopy[i] = dimsCopy[i + 1];
+            dimsCopy[i + 1] = selected;
+            settingsChangedHandler({ ...visualizationSettings, columnVariableCodes: dimsCopy });
         }
         else if (visualizationSettings.rowVariableCodes.includes(selected) && visualizationSettings.rowVariableCodes[visualizationSettings.rowVariableCodes.length - 1] !== selected) {
-            const varsCopy = [...visualizationSettings.rowVariableCodes];
-            const i = varsCopy.indexOf(selected);
-            varsCopy[i] = varsCopy[i + 1];
-            varsCopy[i + 1] = selected;
-            settingsChangedHandler({ ...visualizationSettings, rowVariableCodes: varsCopy });
+            const dimsCopy = [...visualizationSettings.rowVariableCodes];
+            const i = dimsCopy.indexOf(selected);
+            dimsCopy[i] = dimsCopy[i + 1];
+            dimsCopy[i + 1] = selected;
+            settingsChangedHandler({ ...visualizationSettings, rowVariableCodes: dimsCopy });
         }
     }
 
@@ -83,22 +83,22 @@ export const TablePivotSettings: React.FC<ITableSettingsProps> = ({ visualizatio
         }
     }
 
-    const getMultiValueVariables = (codes): IVariable[] => {
-        //Filter multi value variables and variables that are defined with either "from" or "all" value filters. Exclude selectables - except for multivalueseletable variable
-        const multiValueVariableCodes = codes
-            .map(c => variables.find(v => v.code === c))
-            .filter(v => variables.filter(v => query[v.code].valueFilter.type === 'from' || query[v.code].valueFilter.type === 'all')?.includes(v) || v.values.length > 1)
-            .filter(v => !selectableVariables?.includes(v) || v.code === visualizationSettings.multiselectableVariableCode);
-        return multiValueVariableCodes;
+    const getMultivalueDimensions = (codes): IDimension[] => {
+        //Filter multi value dimensions and dimensions that are defined with either "from" or "all" value filters. Exclude selectables - except for multivalueseletable dimension
+        const multiValueDimensionCodes = codes
+            .map(c => dimensions.find(v => v.code === c))
+            .filter(v => dimensions.filter(v => query[v.code].valueFilter.type === 'from' || query[v.code].valueFilter.type === 'all')?.includes(v) || v.values.length > 1)
+            .filter(v => !selectableDimensions?.includes(v) || v.Code === visualizationSettings.multiselectableVariableCode);
+        return multiValueDimensionCodes;
     }
 
     return (
         <FormControl fullWidth>
-            <VariableListWrapper direction="row">
-                <VariableList
+            <DimensionListWrapper direction="row">
+                <DimensionList
                     title={t("chartSettings.rowVariables")}
-                    variables={getMultiValueVariables(visualizationSettings.rowVariableCodes)}
-                    selectedVariableCode={selected}
+                    dimensions={getMultivalueDimensions(visualizationSettings.rowVariableCodes)}
+                    selectedDimensionCode={selected}
                     selectedChangedHandler={(newSel) => setSelected(newSel)}
                 />
                 <IconWrapper>
@@ -112,13 +112,13 @@ export const TablePivotSettings: React.FC<ITableSettingsProps> = ({ visualizatio
                         <SwapHorizIcon />
                     </IconButton>
                 </IconWrapper>
-                <VariableList
+                <DimensionList
                     title={t("chartSettings.columnVariables")}
-                    variables={getMultiValueVariables(visualizationSettings.columnVariableCodes)}
-                    selectedVariableCode={selected}
+                    dimensions={getMultivalueDimensions(visualizationSettings.columnVariableCodes)}
+                    selectedDimensionCode={selected}
                     selectedChangedHandler={(newSel) => setSelected(newSel)}
                 />
-            </VariableListWrapper>
+            </DimensionListWrapper>
         </FormControl>
     );
 }

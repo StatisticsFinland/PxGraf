@@ -1,26 +1,20 @@
-import { IVariable, VariableType } from "types/cubeMeta";
-import { getDefaultQueries, resolveVariables } from "./editorHelpers";
+import { IDimension, EDimensionType } from "types/cubeMeta";
+import { getDefaultQueries, resolveDimensions } from "./editorHelpers";
 
-const mockVariables: IVariable[] = [
+const mockDimensions: IDimension[] = [
     {
-        code: 'foo',
+        code: "foo",
         name: {
             'fi': 'nimi'
         },
-        note: {
-            'fi': 'nootti'
-        },
-        type: VariableType.Content,
+        type: EDimensionType.Content,
         values: [
             {
                 code: 'foo',
-                isSum: false,
                 name: {
                     'fi': 'nimi'
                 },
-                note: {
-                    'fi': 'nootti'
-                }
+                isVirtual: false
             }
         ]
     }
@@ -35,7 +29,7 @@ describe('getDefaultQueries tests', () => {
                 virtualValueDefinitions: null
             }
         }
-        const result = getDefaultQueries(mockVariables);
+        const result = getDefaultQueries(mockDimensions);
         expect(result).toBeTruthy();
         expect(result).toEqual(expected);
     });
@@ -43,8 +37,8 @@ describe('getDefaultQueries tests', () => {
 
 describe('resolveVariables tests', () => {
     it('Should return the correct object', () => {
-        const expected = [ { code: 'foo', name: { fi: 'nimi' }, type: 'C', values: [] } ];
-        const result = resolveVariables(mockVariables, {'foo': ['bar', 'baz']});
+        const expected: IDimension[] = [{ code: 'foo', name: { fi: 'nimi' }, type: EDimensionType.Content, values: [] }];
+        const result = resolveDimensions(mockDimensions, {'foo': ['bar', 'baz']});
         expect(result).toBeTruthy();
         expect(result).toEqual(expected);
     });

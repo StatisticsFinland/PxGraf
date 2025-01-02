@@ -19,13 +19,13 @@ import { Divider } from "@mui/material";
  * @param {string[]} path - The path to the table
  */
 export const urls = {
-  editor: (path: string[]) => {
-    return "/" + ["editor", ...path].join("/") + "/";
-  },
-  tableTree: "/",
-  tableList: (path: string[]) => {
-    return "/" + ["table-list", ...path].join("/")  + "/";
-  }
+    editor: (path: string[]) => {
+        return `/editor/${path.join("/")}/`;
+    },
+    tableTree: `/`,
+    tableList: (path: string[]) => {
+        return `/table-list/${path.join("/")}/`;
+    }
 }
 
 const PageLayout: React.FC<{ element: ReactNode }> = ({ element }) => (
@@ -39,7 +39,7 @@ const PageLayout: React.FC<{ element: ReactNode }> = ({ element }) => (
 export function Router() {
     return (
         <Routes>
-            <Route path="/" element={<PageLayout element={<TableTreeSelection />} />} />
+            <Route path={"/"} element={<PageLayout element={<TableTreeSelection />} />} />
             <Route path={"/editor/*"} element={<PageLayout element={<EditorProvider><Editor /></EditorProvider>} />} />
             <Route path={"/table-list/*"} element={<PageLayout element={<TableListSelection />} />} />
             <Route path={"/sqid/*"} element={<PageLayout element={<QueryLoader />} />} />

@@ -1,9 +1,10 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json;
 using PxGraf.Models.SavedQueries;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading.Tasks;
+using PxGraf.Settings;
 
 namespace PxGraf.Utility
 {
@@ -76,10 +77,11 @@ namespace PxGraf.Utility
         /// <returns></returns>
         private static async Task<T> ReadJsonObjectFromFileImpl<T>(string path)
         {
-            var respdata = await File.ReadAllTextAsync(path);
-            return JsonConvert.DeserializeObject<T>(respdata);
+            string respdata = await File.ReadAllTextAsync(path);
+            return JsonSerializer.Deserialize<T>(respdata, GlobalJsonConverterOptions.Default)
+                ?? throw new JsonException($"Failed to deserialize object from {path}");
         }
-
+            
         /// <summary>
         /// Asyncronous function for serializing json serializable objects to a file.
         /// This function handles locking the file.
@@ -98,12 +100,10 @@ namespace PxGraf.Utility
 
         private static void SerializeToFileImpl(string fileName, string filePath, object input)
         {
-            System.IO.Directory.CreateDirectory(filePath); //If the directory does not exist, create it.
-            using StreamWriter outputFile = new(Path.Combine(filePath, fileName));
-            using JsonTextWriter jsonWriter = new(outputFile);
-            JsonSerializer ser = new();
-            ser.Serialize(jsonWriter, input);
-            jsonWriter.Flush();
+            Directory.CreateDirectory(filePath); //If the directory does not exist, create it.
+            using FileStream createStream = File.Create(Path.Combine(filePath, fileName));
+            JsonSerializer.Serialize(createStream, input, GlobalJsonConverterOptions.Default);
+            createStream.Flush();
         }
     }
 }

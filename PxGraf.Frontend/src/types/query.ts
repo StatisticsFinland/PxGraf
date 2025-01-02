@@ -1,15 +1,15 @@
 /* istanbul ignore file */
 
-/* Query - variable queries*/
+/* Query - dimension queries*/
 
 /**
- * Type for a query that contains @see {@link IVariableQuery} objects for each variable.
- * @property {{ [key: string]: IVariableQuery }} - Queries for each variable.
+ * Type for a query that contains @see {@link IDimensionQuery} objects for each dimension.
+ * @property {{ [key: string]: IDimensionQuery }} - Queries for each dimension.
  */
-export type Query = { [key: string]: IVariableQuery };
+export type Query = { [key: string]: IDimensionQuery };
 
 /**
- * Enum that defines different variable value filter types.
+ * Enum that defines different dimension value filter types.
  */
 export enum FilterType {
     Item = 'item',
@@ -19,12 +19,12 @@ export enum FilterType {
 }
 
 /**
- * Interface for variable query properties.
+ * Interface for dimension query properties.
  * @property {IValueFilter} valueFilter - Reference to value filter.
- * @property {boolean} selectable - Selected selectable variable.
+ * @property {boolean} selectable - Selected selectable dimension.
  * @property {any} virtualValueDefinitions - Virtual value definitions.
   */
-export interface IVariableQuery {
+export interface IDimensionQuery {
     valueFilter: IValueFilter
     selectable: boolean
     virtualValueDefinitions
@@ -50,29 +50,29 @@ type MultiLanguageString = { [key: string]: string };
 /**
  * Interface for cube query properties.
  * @property {MultiLanguageString} chartHeaderEdit - The chart header edition.
- * @property {{ [key: string]: IVariableEditions }} variableQueries - The variable edition queries.
+ * @property {{ [key: string]: IDimensionEditions }} variableQueries - The IDimensionEditions edition queries.
  */
 export interface ICubeQuery {
     chartHeaderEdit?: MultiLanguageString;
-    variableQueries: { [key: string]: IVariableEditions };
+    variableQueries: { [key: string]: IDimensionEditions };
 }
 
 /**
- * Interface for variable editions.
- * @property {{ [key: string]: IVariableValueEditions }} valueEdits - The value editions.
+ * Interface for IDimensionEditions editions.
+ * @property {{ [key: string]: IDimensionValueEditions }} valueEdits - The value editions.
  */
-export interface IVariableEditions {
+export interface IDimensionEditions {
     valueEdits: {
-        [valueCode: string]: IVariableValueEditions;
+        [valueCode: string]: IDimensionValueEditions;
     };
 }
 
 /**
- * Interface for variable value editions.
+ * Interface for dimension value editions.
  * @property {MultiLanguageString} nameEdit - The name edition.
  * @property {IContentComponentEdition} contentComponent - The content component edition containing source and unit.
   */
-export interface IVariableValueEditions {
+export interface IDimensionValueEditions {
     nameEdit? : MultiLanguageString;
     contentComponent? : IContentComponentEdition;
 }

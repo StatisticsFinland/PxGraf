@@ -65,7 +65,7 @@ jobs:
         run: dotnet restore
 
       - name: Build backend
-        run: dotnet build --no-restore --verbosity normal --configuration ${{ matrix.configuration }} /p:TargetFramework=net8.0-windows8.0
+        run: dotnet build --no-restore --verbosity normal --configuration ${{ matrix.configuration }} /p:TargetFramework=net8.0
 
       - name: Run backend tests
-        run: dotnet test --no-restore --verbosity normal --configuration ${{ matrix.configuration }} /p:TargetFramework=net8.0-windows8.0
+        run: dotnet test --no-restore --verbosity normal --configuration ${{ matrix.configuration }} /p:TargetFramework=net8.0

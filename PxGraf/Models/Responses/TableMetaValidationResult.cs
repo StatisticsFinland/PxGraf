@@ -6,10 +6,10 @@
     /// <remarks>
     /// Default constructor.
     /// </remarks>
-    public class TableMetaValidationResult(bool tableHasContentVariable, bool tableHasTimeVariable, bool allVariablesContainValues)
+    public class TableMetaValidationResult(bool tableHasContentDimension, bool tableHasTimeDimension, bool allDimensionsContainValues)
     {
-        public bool TableHasContentVariable { get; } = tableHasContentVariable;
-        public bool TableHasTimeVariable { get; } = tableHasTimeVariable;
-        public bool AllVariablesContainValues { get; } = allVariablesContainValues;
+        public bool TableHasContentDimension { get; } = tableHasContentDimension;
+        public bool TableHasTimeDimension { get; } = tableHasTimeDimension;
+        public bool AllDimensionsContainValues { get; } = allDimensionsContainValues;
     }
 }

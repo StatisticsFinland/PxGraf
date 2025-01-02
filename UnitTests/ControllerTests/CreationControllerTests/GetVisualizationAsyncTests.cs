@@ -1,25 +1,20 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using Moq;
 using NUnit.Framework;
+using Px.Utils.Models.Metadata.Enums;
 using PxGraf.Controllers;
 using PxGraf.Data.MetaData;
-using PxGraf.Enums;
 using PxGraf.Language;
 using PxGraf.Models.Queries;
 using PxGraf.Models.Requests;
 using PxGraf.Models.Responses;
-using PxGraf.PxWebInterface;
 using PxGraf.Settings;
-using PxGraf.Utility;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using UnitTests.Fixtures;
-using UnitTests.TestDummies;
-using UnitTests.TestDummies.DummyQueries;
 
-namespace CreationControllerTests
+namespace UnitTests.ControllerTests.CreationControllerTests
 {
     internal class GetVisualizationAsyncTests
     {
@@ -33,7 +28,11 @@ namespace CreationControllerTests
                 {"pxwebUrl", "http://pxwebtesturl:12345/"},
                 {"pxgrafUrl", "http://pxgraftesturl:8443/PxGraf"},
                 {"savedQueryDirectory", "goesNowhere"},
-                {"archiveFileDirectory", "goesNowhere"}
+                {"archiveFileDirectory", "goesNowhere"},
+                {"LocalFileSystemDatabaseConfig:Encoding", "latin1"},
+                {"CacheOptions:Visualization:SlidingExpirationMinutes", "15" },
+                {"CacheOptions:Visualization:AbsoluteExpirationMinutes", "720" },
+                {"CacheOptions:Visualization:ItemAmountLimit", "1000" }
             };
 
             IConfiguration configuration = new ConfigurationBuilder()
@@ -45,196 +44,195 @@ namespace CreationControllerTests
         [Test]
         public async Task GetVisualizationTest_Fresh_Data_Is_Returned()
         {
-            Mock<ICachedPxWebConnection> mockCachedPxWebConnection = new();
-
-            List<VariableParameters> cubeParams =
+            List<DimensionParameters> cubeParams =
             [
-                new VariableParameters(VariableType.Content, 1),
-                new VariableParameters(VariableType.Time, 10),
-                new VariableParameters(VariableType.OtherClassificatory, 1),
-                new VariableParameters(VariableType.OtherClassificatory, 1),
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 10),
+                new DimensionParameters(DimensionType.Other, 1),
+                new DimensionParameters(DimensionType.Other, 1)
             ];
 
-            List<VariableParameters> metaParams =
+            List<DimensionParameters> metaParams =
             [
-                new VariableParameters(VariableType.Content, 10),
-                new VariableParameters(VariableType.Time, 10),
-                new VariableParameters(VariableType.OtherClassificatory, 15),
-                new VariableParameters(VariableType.OtherClassificatory, 7)
+                new DimensionParameters(DimensionType.Content, 10),
+                new DimensionParameters(DimensionType.Time, 10),
+                new DimensionParameters(DimensionType.Other, 15),
+                new DimensionParameters(DimensionType.Other, 7),
             ];
 
-            CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(metaParams);
-            mockCachedPxWebConnection.Setup(x => x.GetCubeMetaCachedAsync(It.IsAny<PxFileReference>()))
-                .Returns(Task.Run(() => (IReadOnlyCubeMeta)meta));
-            mockCachedPxWebConnection.Setup(x => x.GetDataCubeCachedAsync(It.IsAny<PxFileReference>(), It.IsAny<IReadOnlyCubeMeta>()))
-                .Returns(Task.Run(() => TestDataCubeBuilder.BuildTestDataCube(cubeParams)));
-
-            Variable contetClone = meta.GetContentVariable().Clone();
-            contetClone.IncludedValues.ForEach(cv => cv.ContentComponent.LastUpdated = "2008-09-01T00:00:00.000Z");
-
-            CubeQuery testQuery = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
-
-            VisualizationCreationSettings testSettings = new()
+            CreationController testController = TestCreationControllerBuilder.BuildController(cubeParams, metaParams);
+            MatrixQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
+            VisualizationCreationSettings settings = new()
             {
-                SelectedVisualization = VisualizationType.LineChart,
-
+                SelectedVisualization = PxGraf.Enums.VisualizationType.LineChart,
+                RowDimensionCodes = ["variable-1"],
+                ColumnDimensionCodes = [],
+                MultiselectableDimensionCode = string.Empty,
+                Sorting = "NO_SORTING",
+                DefaultSelectableDimensionCodes = []
             };
 
-            CreationController cController = new(mockCachedPxWebConnection.Object, new Mock<ILogger<CreationController>>().Object);
-            ActionResult<VisualizationResponse> result = await cController.GetVisualizationAsync(
-                new ChartRequest()
-                {
-                    VisualizationSettings = testSettings,
-                    Query = testQuery
-                });
+            ChartRequest chartRequest = new()
+            {
+                Query = cubeQuery,
+                VisualizationSettings = settings,
+                ActiveSelectableDimensionValues = [],
+                Language = "fi",
+            };
 
-            mockCachedPxWebConnection.Verify(x => x.GetDataCubeCachedAsync(It.IsAny<PxFileReference>(), It.IsAny<IReadOnlyCubeMeta>()), Times.Once());
-            Assert.That(result.Value, Is.InstanceOf<VisualizationResponse>());
+            // Act
+            ActionResult<VisualizationResponse> initialResult = await testController.GetVisualizationAsync(chartRequest);
+            ContentComponent contentClone = initialResult.Value.MetaData.First(d => d.DimensionType == DimensionType.Content).Values[0].ContentComponent.Clone();
+            contentClone.LastUpdated = "2008-09-01T00:00:00.000Z";
+            initialResult.Value.MetaData.First(d => d.DimensionType == DimensionType.Content).Values[0].ContentComponent = contentClone;
+            ActionResult<VisualizationResponse> freshResult = await testController.GetVisualizationAsync(chartRequest);
+
+            // Assert
+            Assert.That(initialResult.Value, Is.InstanceOf<VisualizationResponse>());
+            Assert.That(freshResult.Value, Is.InstanceOf<VisualizationResponse>());
+            Assert.That(initialResult.Value, Is.Not.EqualTo(freshResult.Value));
         }
 
         [Test]
         public async Task GetVisualizationTest_Volume_0_Cube_Returns_BadRequest()
         {
-            Mock<ICachedPxWebConnection> mockCachedPxWebConnection = new();
-
-            List<VariableParameters> cubeParams =
+            // Arrange
+            List<DimensionParameters> cubeParams =
             [
-                new VariableParameters(VariableType.Content, 1),
-                new VariableParameters(VariableType.Time, 10),
-                new VariableParameters(VariableType.OtherClassificatory, 1),
-                new VariableParameters(VariableType.OtherClassificatory, 1),
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 10),
+                new DimensionParameters(DimensionType.Other, 1),
+                new DimensionParameters(DimensionType.Other, 0) // Note 0 values
             ];
 
-            List<VariableParameters> metaParams =
+            List<DimensionParameters> metaParams =
             [
-                new VariableParameters(VariableType.Content, 10),
-                new VariableParameters(VariableType.Time, 10),
-                new VariableParameters(VariableType.OtherClassificatory, 15),
-                new VariableParameters(VariableType.OtherClassificatory, 7)
+                new DimensionParameters(DimensionType.Content, 10),
+                new DimensionParameters(DimensionType.Time, 10),
+                new DimensionParameters(DimensionType.Other, 15),
+                new DimensionParameters(DimensionType.Other, 7),
             ];
 
-            CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(metaParams);
-            mockCachedPxWebConnection.Setup(x => x.GetCubeMetaCachedAsync(It.IsAny<PxFileReference>()))
-                .Returns(Task.Run(() => (IReadOnlyCubeMeta)meta));
-            mockCachedPxWebConnection.Setup(x => x.GetDataCubeCachedAsync(It.IsAny<PxFileReference>(), It.IsAny<IReadOnlyCubeMeta>()))
-                .Returns(Task.Run(() => TestDataCubeBuilder.BuildTestDataCube(cubeParams)));
+            CreationController testController = TestCreationControllerBuilder.BuildController(cubeParams, metaParams);
+            MatrixQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
+            VisualizationCreationSettings settings = new()
+            {
+                SelectedVisualization = PxGraf.Enums.VisualizationType.LineChart,
+                RowDimensionCodes = ["variable-1"],
+                ColumnDimensionCodes = [],
+                MultiselectableDimensionCode = string.Empty,
+                Sorting = "NO_SORTING",
+                DefaultSelectableDimensionCodes = []
+            };
 
-            Variable contetClone = meta.GetContentVariable().Clone();
-            contetClone.IncludedValues.ForEach(cv => cv.ContentComponent.LastUpdated = "2008-09-01T00:00:00.000Z");
+            ChartRequest chartRequest = new()
+            {
+                Query = cubeQuery,
+                VisualizationSettings = settings,
+                ActiveSelectableDimensionValues = [],
+                Language = "fi",
+            };
 
-            CubeQuery testQuery = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
-            testQuery.VariableQueries["variable-1"].ValueFilter = new ItemFilter([]);
+            // Act
+            ActionResult<VisualizationResponse> result = await testController.GetVisualizationAsync(chartRequest);
 
-            CreationController cController = new(mockCachedPxWebConnection.Object, new Mock<ILogger<CreationController>>().Object);
-            ActionResult<VisualizationResponse> result = await cController.GetVisualizationAsync(
-                new ChartRequest()
-                {
-                    VisualizationSettings = new VisualizationCreationSettings(),
-                    Query = testQuery
-                });
-
-            mockCachedPxWebConnection.Verify(x => x.GetDataCubeCachedAsync(It.IsAny<PxFileReference>(), It.IsAny<IReadOnlyCubeMeta>()), Times.Never());
-            Assert.That(result.Result, Is.InstanceOf<BadRequestResult>());
+            // Assert
+            Assert.That(result.Result, Is.TypeOf<BadRequestResult>());
         }
 
         [Test]
         public async Task GetVisualizationTest_Valid_VisualizationType_DoesNotReturn_BadRequest()
         {
-            Mock<ICachedPxWebConnection> mockCachedPxWebConnection = new();
-
-            List<VariableParameters> cubeParams =
+            // Arrange
+            List<DimensionParameters> cubeParams =
             [
-                new VariableParameters(VariableType.Content, 2) { Selectable = true },
-                new VariableParameters(VariableType.Time, 10),
-                new VariableParameters(VariableType.OtherClassificatory, 1),
-                new VariableParameters(VariableType.OtherClassificatory, 1),
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 10),
+                new DimensionParameters(DimensionType.Other, 1),
+                new DimensionParameters(DimensionType.Other, 1)
             ];
 
-            List<VariableParameters> metaParams =
+            List<DimensionParameters> metaParams =
             [
-                new VariableParameters(VariableType.Content, 10),
-                new VariableParameters(VariableType.Time, 10),
-                new VariableParameters(VariableType.OtherClassificatory, 15),
-                new VariableParameters(VariableType.OtherClassificatory, 7)
+                new DimensionParameters(DimensionType.Content, 10),
+                new DimensionParameters(DimensionType.Time, 10),
+                new DimensionParameters(DimensionType.Other, 15),
+                new DimensionParameters(DimensionType.Other, 7),
             ];
 
-            CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(metaParams);
-            mockCachedPxWebConnection.Setup(x => x.GetCubeMetaCachedAsync(It.IsAny<PxFileReference>()))
-                .Returns(Task.Run(() => (IReadOnlyCubeMeta)meta));
-            mockCachedPxWebConnection.Setup(x => x.GetDataCubeCachedAsync(It.IsAny<PxFileReference>(), It.IsAny<IReadOnlyCubeMeta>()))
-                .Returns(Task.Run(() => TestDataCubeBuilder.BuildTestDataCube(cubeParams)));
-
-            Variable contentClone = meta.GetContentVariable().Clone();
-            contentClone.IncludedValues.ForEach(cv => cv.ContentComponent.LastUpdated = "2008-09-01T00:00:00.000Z");
-
-            CubeQuery testQuery = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
-
-            VisualizationCreationSettings testSettings = new()
+            CreationController testController = TestCreationControllerBuilder.BuildController(cubeParams, metaParams);
+            MatrixQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
+            VisualizationCreationSettings settings = new()
             {
-                CutYAxis = false,
-                SelectedVisualization = VisualizationType.LineChart
+                SelectedVisualization = PxGraf.Enums.VisualizationType.LineChart,
+                RowDimensionCodes = ["variable-1"],
+                ColumnDimensionCodes = [],
+                MultiselectableDimensionCode = string.Empty,
+                Sorting = "NO_SORTING",
+                DefaultSelectableDimensionCodes = []
             };
 
-            CreationController cController = new(mockCachedPxWebConnection.Object, new Mock<ILogger<CreationController>>().Object);
-            ActionResult<VisualizationResponse> result = await cController.GetVisualizationAsync(
-                new ChartRequest()
-                {
-                    VisualizationSettings = testSettings,
-                    Query = testQuery
-                });
+            ChartRequest chartRequest = new()
+            {
+                Query = cubeQuery,
+                VisualizationSettings = settings,
+                ActiveSelectableDimensionValues = [],
+                Language = "fi",
+            };
 
-            mockCachedPxWebConnection.Verify(x => x.GetDataCubeCachedAsync(It.IsAny<PxFileReference>(), It.IsAny<IReadOnlyCubeMeta>()), Times.Once());
-            Assert.That(result.Result, Is.Not.InstanceOf<BadRequestResult>());
+            // Act
+            ActionResult<VisualizationResponse> result = await testController.GetVisualizationAsync(chartRequest);
+
+            // Assert
+            Assert.That(result.Value, Is.Not.Null);
+            Assert.That(result.Value, Is.TypeOf<VisualizationResponse>());
         }
 
         [Test]
         public async Task GetVisualizationTest_Invalid_VisualizationType_Returns_BadRequest()
         {
-            Mock<ICachedPxWebConnection> mockCachedPxWebConnection = new();
-
-            List<VariableParameters> cubeParams =
+            // Arrange
+            List<DimensionParameters> cubeParams =
             [
-                new VariableParameters(VariableType.Content, 1),
-                new VariableParameters(VariableType.Time, 10),
-                new VariableParameters(VariableType.OtherClassificatory, 1),
-                new VariableParameters(VariableType.OtherClassificatory, 1),
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 1),
+                new DimensionParameters(DimensionType.Other, 10),
+                new DimensionParameters(DimensionType.Other, 5)
             ];
 
-            List<VariableParameters> metaParams =
+            List<DimensionParameters> metaParams =
             [
-                new VariableParameters(VariableType.Content, 10),
-                new VariableParameters(VariableType.Time, 10),
-                new VariableParameters(VariableType.OtherClassificatory, 15),
-                new VariableParameters(VariableType.OtherClassificatory, 7)
+                new DimensionParameters(DimensionType.Content, 10),
+                new DimensionParameters(DimensionType.Time, 10),
+                new DimensionParameters(DimensionType.Other, 15),
+                new DimensionParameters(DimensionType.Other, 7),
             ];
 
-            CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(metaParams);
-            mockCachedPxWebConnection.Setup(x => x.GetCubeMetaCachedAsync(It.IsAny<PxFileReference>()))
-                .Returns(Task.Run(() => (IReadOnlyCubeMeta)meta));
-            mockCachedPxWebConnection.Setup(x => x.GetDataCubeCachedAsync(It.IsAny<PxFileReference>(), It.IsAny<IReadOnlyCubeMeta>()))
-                .Returns(Task.Run(() => TestDataCubeBuilder.BuildTestDataCube(cubeParams)));
-
-            Variable contetClone = meta.GetContentVariable().Clone();
-            contetClone.IncludedValues.ForEach(cv => cv.ContentComponent.LastUpdated = "2008-09-01T00:00:00.000Z");
-
-            CubeQuery testQuery = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
-
-            VisualizationCreationSettings testSettings = new()
+            CreationController testController = TestCreationControllerBuilder.BuildController(cubeParams, metaParams);
+            MatrixQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
+            VisualizationCreationSettings settings = new()
             {
-                CutYAxis = false,
-                SelectedVisualization = VisualizationType.PieChart
+                SelectedVisualization = PxGraf.Enums.VisualizationType.LineChart,
+                RowDimensionCodes = ["variable-1"],
+                ColumnDimensionCodes = [],
+                MultiselectableDimensionCode = string.Empty,
+                Sorting = "NO_SORTING",
+                DefaultSelectableDimensionCodes = []
             };
 
-            CreationController cController = new(mockCachedPxWebConnection.Object, new Mock<ILogger<CreationController>>().Object);
-            ActionResult<VisualizationResponse> result = await cController.GetVisualizationAsync(
-                new ChartRequest()
-                {
-                    VisualizationSettings = testSettings,
-                    Query = testQuery
-                });
+            ChartRequest chartRequest = new()
+            {
+                Query = cubeQuery,
+                VisualizationSettings = settings,
+                ActiveSelectableDimensionValues = [],
+                Language = "fi",
+            };
 
-            mockCachedPxWebConnection.Verify(x => x.GetDataCubeCachedAsync(It.IsAny<PxFileReference>(), It.IsAny<IReadOnlyCubeMeta>()), Times.Once());
-            Assert.That(result.Result, Is.InstanceOf<BadRequestResult>());
+            // Act
+            ActionResult<VisualizationResponse> result = await testController.GetVisualizationAsync(chartRequest);
+
+            // Assert
+            Assert.That(result.Result, Is.TypeOf<BadRequestResult>());
         }
     }
 }

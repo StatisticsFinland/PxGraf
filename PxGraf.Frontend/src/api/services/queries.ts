@@ -16,7 +16,7 @@ export interface ISaveQueryResponse {
 
 /**
  * Response object for fetching a saved query.
- * @property query - The query object consisting of the table reference and variable queries @see {@link Query}.
+ * @property query - The query object consisting of the table reference and dimension queries @see {@link Query}.
  * @property {IVisualizationSettings} settings - The visualization settings for the query.
  */
 export interface IFetchSavedQueryResponse {
@@ -25,7 +25,6 @@ export interface IFetchSavedQueryResponse {
             name: string;
             hierarchy: string[];
         };
-    } & {
         variableQueries: Query;
     } & ICubeQuery;
     settings: IVisualizationSettings;
@@ -85,11 +84,11 @@ const sendSaveRequest = async (
 
 export const fetchSavedQuery = async (queryId: string): Promise<IFetchSavedQueryResponse> => {
     const client = new ApiClient();
-
     const url = 'sq/' + queryId;
+    const response = await client.getAsync(url);
 
-    return await client.getAsync(url);
-}
+    return response as IFetchSavedQueryResponse;
+};
 
 export const useFetchSavedQuery = (queryId: string): IFetchSavedQueryResult => {
     return useQuery(

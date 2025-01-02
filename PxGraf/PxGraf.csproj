@@ -1,15 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-	<TargetFrameworks>net8.0-windows8.0;net8.0</TargetFrameworks>
+	<TargetFrameworks>net8.0</TargetFrameworks>
     <StartupObject>PxGraf.Program</StartupObject>
     <RootNamespace>PxGraf</RootNamespace>
     <AssemblyName>PxGraf</AssemblyName>
     <UserSecretsId>5fefcbdc-e04e-4475-9927-aab412b027ff</UserSecretsId>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <VersionPrefix>3.0.32</VersionPrefix>
-    <AssemblyVersion>3.0.30.0</AssemblyVersion>
-    <FileVersion>3.0.30.0</FileVersion>
+    <VersionPrefix>4.0.00</VersionPrefix>
 	<SpaRoot>..\PxGraf.Frontend</SpaRoot>
 	<Configurations>Debug;Release;Test</Configurations>
   </PropertyGroup>
@@ -48,14 +46,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.5" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="8.0.0" />
-    <PackageReference Include="Microsoft.FeatureManagement.AspNetCore" Version="3.3.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="NLog" Version="5.3.2" />
-    <PackageReference Include="NLog.Web.AspNetCore" Version="5.3.11" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.1" />
-    <PackageReference Include="System.Drawing.Common" Version="8.0.5" />
-    <PackageReference Include="System.Runtime.Caching" Version="8.0.1" />
+	<PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="8.0.1" />
+	<PackageReference Include="Microsoft.FeatureManagement.AspNetCore" Version="3.4.0" />
+	<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.5" />
+	<PackageReference Include="NLog" Version="5.3.2" />
+	<PackageReference Include="NLog.Web.AspNetCore" Version="5.3.11" />
+	<PackageReference Include="Px.Utils" Version="1.1.0" />
+	<PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+	<PackageReference Include="System.Drawing.Common" Version="8.0.6" />
+	<PackageReference Include="System.Runtime.Caching" Version="8.0.1" />
+	<PackageReference Include="Ude.NetStandard" Version="1.2.0" />
   </ItemGroup>
 </Project>

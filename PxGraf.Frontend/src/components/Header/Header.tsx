@@ -8,6 +8,7 @@ import logo from 'images/pxgraf-logo.png';
 import logo_small from 'images/pxgraf-logo-small.png';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
+import { BasePath } from '../../envVars';
 
 const Logo = styled.img`
   height: 60px;
@@ -58,10 +59,10 @@ const Header: React.FC = () => {
     const isNarrowScreen = useMediaQuery('(max-width: 800px)');
     const { tablePath } = useNavigationContext();
     const headerRef = useRef(null);
-  
-    let indexUrl = '/';
-    if(tablePath?.length) {
-      indexUrl = indexUrl + `?tablePath=${tablePath.join(',')}`;
+
+    let indexUrl: string = BasePath || '/';
+    if (tablePath?.length) {
+        indexUrl = `${BasePath}/?tablePath=${tablePath.join(',')}`;
     }
 
     // Show different top title for editor and database/table selection

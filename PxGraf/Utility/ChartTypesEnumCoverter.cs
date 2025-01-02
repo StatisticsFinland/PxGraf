@@ -42,7 +42,7 @@ namespace PxGraf.Utility
         /// <returns></returns>
         public static IEnumerable<string> ToString(IEnumerable<VisualizationType> types)
         {
-            foreach (var type in types) yield return ToString(type);
+            foreach (VisualizationType type in types) yield return ToString(type);
         }
 
         /// <summary>

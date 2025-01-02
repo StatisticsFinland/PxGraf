@@ -1,13 +1,13 @@
-import { IVariable } from "types/cubeMeta";
+import { IDimension } from "types/cubeMeta";
 import { Query } from "types/query";
 import { ISortingOption } from "types/visualizationRules";
 import { IVisualizationSettings } from "types/visualizationSettings";
 import { VisualizationType } from "types/visualizationType";
 
-export function getValidatedSettings(currentSettings: IVisualizationSettings, selectedVisualization: VisualizationType, sortingOptions: ISortingOption[], variables: IVariable[], query: Query): IVisualizationSettings {
+export function getValidatedSettings(currentSettings: IVisualizationSettings, selectedVisualization: VisualizationType, sortingOptions: ISortingOption[], dimensions: IDimension[], query: Query): IVisualizationSettings {
     switch (selectedVisualization) {
         case VisualizationType.Table:
-            return getTableValidatedSettings(currentSettings, variables, query);
+            return getTableValidatedSettings(currentSettings, dimensions, query);
         case VisualizationType.LineChart:
             return getLineChartValidatedSettings(currentSettings, query);
         case VisualizationType.PieChart:
@@ -96,7 +96,7 @@ function getScatterPlotValidatedSettings(currentSettings: IVisualizationSettings
     };
 }
 
-function getTableValidatedSettings(currentSettings: IVisualizationSettings, variables: IVariable[], query: Query) {
+function getTableValidatedSettings(currentSettings: IVisualizationSettings, variables: IDimension[], query: Query) {
     //Get multivalue variables that are not selectable, excluding multiselectable and sort them by the amount of values
     const sortedMultivalueVariableCodes: string[] = variables.filter(v => v.values.length > 1)
         .filter(v => !query[v.code]?.selectable && currentSettings?.multiselectableVariableCode != v.code)

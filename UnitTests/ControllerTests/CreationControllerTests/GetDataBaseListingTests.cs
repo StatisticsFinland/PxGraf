@@ -1,110 +1,82 @@
 ﻿using NUnit.Framework;
-using PxGraf.Controllers;
+using PxGraf.Models.Responses.DatabaseItems;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Moq;
-using Microsoft.Extensions.Logging;
-using PxGraf.PxWebInterface;
-using Microsoft.Extensions.Configuration;
-using UnitTests.Fixtures;
-using PxGraf.Settings;
-using PxGraf.PxWebInterface.SerializationModels;
+using Px.Utils.Language;
+using PxGraf.Controllers;
+using System;
+using PxGraf.Utility;
 
-namespace CreationControllerTests
+namespace UnitTests.ControllerTests.CreationControllerTests
 {
-    internal class GetDataBaseListingTests
+    public class GetDataBaseListingTests
     {
-        private Mock<ICachedPxWebConnection> _mockCachedPxWebConnection;
-        private Mock<ILogger<CreationController>> _mockLogger;
-        private CreationController _controller;
-        private IConfiguration _configuration;
-
-        [OneTimeSetUp]
-        public void DoSetup()
+        [Test]
+        public async Task GetDatabaseListingAsync_EmptyPath_ReturnsHeaderGroups()
         {
-            _mockCachedPxWebConnection = new Mock<ICachedPxWebConnection>();
-            _mockLogger = new Mock<ILogger<CreationController>>();
-            _controller = new CreationController(_mockCachedPxWebConnection.Object, _mockLogger.Object);
+            // Arrange
+            Dictionary<string, string> header1Name = new()
+            {
+                ["fi"] = "header1",
+                ["en"] = "header1.en"
+            };
 
-            _configuration = new ConfigurationBuilder()
-                .AddInMemoryCollection(TestInMemoryConfiguration.Get())
-                .Build();
-            Configuration.Load(_configuration);
+            Dictionary<string, string> header2Name = new()
+            {
+                ["fi"] = "header2",
+                ["en"] = "header2.en"
+            };
 
-            Configuration.Current.LanguageOptions.Available = ["foo", "bar"];
-            Configuration.Current.LanguageOptions.Default = "foo";
+            List<DatabaseGroupHeader> expectedHeaders =
+            [
+                new DatabaseGroupHeader("header1", ["fi", "en"], new MultilanguageString(header1Name)),
+                new DatabaseGroupHeader("header2", ["fi", "en"], new MultilanguageString(header2Name))
+            ];
+            DatabaseGroupContents expectedContents = new(expectedHeaders, []);
+            CreationController controller = TestCreationControllerBuilder.BuildController([], [], expectedContents);
+
+            // Act
+            DatabaseGroupContents result = await controller.GetDataBaseListingAsync(null);
+
+            // Assert
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Headers, Is.EqualTo(expectedHeaders));
+            Assert.That(expectedHeaders[0].Code, Is.EqualTo(result.Headers[0].Code));
         }
 
         [Test]
-        public async Task GetDataBaseListingAsync_NoDbPath_ReturnsDatabasesForAllLanguages()
+        public async Task GetDatabaseListingAsync_WithPath_ReturnsFiles()
         {
             // Arrange
-            List<DataBaseListResponseItem> primaryLanguageDatabases = [new() { Dbid = "dbid1", Text = "foobar1" }];
-            List<DataBaseListResponseItem> otherDatabases = [
-                new DataBaseListResponseItem { Dbid = "dbid1", Text = "foobar1" },
-                new DataBaseListResponseItem { Dbid = "dbid2", Text = "foobar2" }
-            ];
+            Dictionary<string, string> table1Name = new()
+            {
+                ["fi"] = "table1",
+                ["en"] = "table1.en"
+            };
 
-            _mockCachedPxWebConnection.Setup(x => x.GetDataBaseListingAsync("foo")).ReturnsAsync(primaryLanguageDatabases);
-            _mockCachedPxWebConnection.Setup(x => x.GetDataBaseListingAsync("bar")).ReturnsAsync(otherDatabases);
+            Dictionary<string, string> table2Name = new()
+            {
+                ["fi"] = "table2",
+                ["en"] = "table2.en"
+            };
+
+            DateTime lastUpdated = PxSyntaxConstants.ParseDateTime("2021-01-01T00:00:00.000Z");
+
+            List<DatabaseTable> expectedTables =
+            [
+                new DatabaseTable("table1", new(table1Name), lastUpdated, ["fi, en"]),
+                new DatabaseTable("table2", new(table2Name), lastUpdated, ["fi, en"]),
+            ];
+            DatabaseGroupContents expectedContents = new([], expectedTables);
+            CreationController controller = TestCreationControllerBuilder.BuildController([], [], expectedContents);
 
             // Act
-            var result = await _controller.GetDataBaseListingAsync(null, new Dictionary<string, string> { { "lang", "foo" } });
+            DatabaseGroupContents result = await controller.GetDataBaseListingAsync("database/subgroup/folder");
 
             // Assert
-            Assert.That(result.Exists(r => r.Id == "dbid1" && r.Languages.Count == 2), Is.True);
-            Assert.That(result.Exists(r => r.Id == "dbid2" && r.Languages.Count == 1), Is.True);
-        }
-
-        [Test]
-        public async Task GetDatabaseListingAsync_WithPath_ReturnsTablesForAllLanguages()
-        {
-            // Arrange
-            string mockPath = "path/db";
-            List<string> mockPathList = [.. mockPath.Split("/")];
-            List<TableListResponseItem> primaryLanguageTables = [
-                new() { Id = "id1", Text = "foobar1" },
-                new() { Id = "id2", Text = "foobar2" }
-            ];
-
-            List<TableListResponseItem> otherTables = [
-                new TableListResponseItem { Id = "id1", Text = "foobar1" },
-                new TableListResponseItem { Id = "id2", Text = "foobar2" },
-                new TableListResponseItem { Id = "id3", Text = "foobar3" }
-            ];
-
-            _mockCachedPxWebConnection.Setup(x => x.GetDataTableItemListingAsync("foo", mockPathList)).ReturnsAsync(primaryLanguageTables);
-            _mockCachedPxWebConnection.Setup(x => x.GetDataTableItemListingAsync("bar", mockPathList)).ReturnsAsync(otherTables);
-
-            // Act
-            var result = await _controller.GetDataBaseListingAsync(mockPath, new Dictionary<string, string> { { "lang", "foo" } });
-
-            // Assert
-            Assert.That(result.Count, Is.EqualTo(3));
-            Assert.That(result.Exists(r => r.Id == "id1" && r.Languages.Count == 2), Is.True);
-            Assert.That(result.Exists(r => r.Id == "id2" && r.Languages.Count == 2), Is.True);
-            Assert.That(result.Exists(r => r.Id == "id3" && r.Languages.Count == 1), Is.True);
-        }
-
-        [Test]
-        public async Task GetDataBaseListingAsync_WithoutPreferredLanguage_ReturnsDataBasesPreferringDefaultLanguage()
-        {
-            // Arrange
-            List<DataBaseListResponseItem> primaryLanguageDatabases = [new() { Dbid = "dbid1", Text = "foobar1" }];
-            List<DataBaseListResponseItem> otherDatabases = [
-                new() { Dbid = "dbid1", Text = "foobar1" },
-                new() { Dbid = "dbid2", Text = "foobar2"}
-            ];
-
-            _mockCachedPxWebConnection.Setup(x => x.GetDataBaseListingAsync("foo")).ReturnsAsync(primaryLanguageDatabases);
-            _mockCachedPxWebConnection.Setup(x => x.GetDataBaseListingAsync("bar")).ReturnsAsync(otherDatabases);
-
-            // Act
-            var result = await _controller.GetDataBaseListingAsync(null, new Dictionary<string, string> { { "param", "baz" } });
-
-            // Assert
-            Assert.That(result.Exists(r => r.Id == "dbid1" && r.Languages.Count == 2), Is.True);
-            Assert.That(result.Exists(r => r.Id == "dbid2" && r.Languages.Count == 1), Is.True);
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Files, Is.EqualTo(expectedTables));
+            Assert.That(expectedTables[0].Code, Is.EqualTo(result.Files[0].Code));
         }
     }
 }

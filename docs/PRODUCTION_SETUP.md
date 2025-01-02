@@ -1,6 +1,6 @@
 # Production setup
 
-Because technical details or requirements of the target anvironment will vary, here are some high-level examples to give an idea how the PxGraf can be set up.
+Because technical details or requirements of the target environment will vary, here are some high-level examples to give an idea how the PxGraf can be set up.
 
 Statistics Finland will **not** offer any support for the production setup of PxGraf. The following examples are provided as is and are not guaranteed to work in all environments.
 

@@ -1,9 +1,9 @@
-import { ICubeMeta, IVariable } from 'types/cubeMeta';
-import { FilterType, IVariableQuery } from 'types/query';
-import { getDefaultFilter } from './variableSelectionHelpers';
+import { IDimension } from 'types/cubeMeta';
+import { FilterType, IDimensionQuery } from 'types/query';
+import { getDefaultFilter } from './dimensionSelectionHelpers';
 
-export const getDefaultQueries = (variables: IVariable[]) => {
-    const queries: { [key: string]: IVariableQuery } = {};
+export const getDefaultQueries = (variables: IDimension[]) => {
+    const queries: { [key: string]: IDimensionQuery } = {};
     for (const variable of variables) {
       queries[variable.code] = {
         valueFilter: getDefaultFilter(FilterType.Item),
@@ -14,15 +14,6 @@ export const getDefaultQueries = (variables: IVariable[]) => {
     return queries;
 }
 
-export const resolveVariables = (variables: IVariable[], resolvedValueCodes: { [key: string]: string[] }) => {
-    return variables.map(v => { return { code: v.code, name: v.name, type: v.type, values: v.values.filter(val => resolvedValueCodes?.[v.code]?.includes(val.code)) } as IVariable });
-}
-
-export const getContentLanguages = (meta: ICubeMeta) => {
-    if (!meta) return [];
-    return meta.variables.reduce((acc: string[], val: IVariable) => {
-        if (acc.length === 0) return Object.keys(val.name);
-        else if (Object.keys(val.name).every(s => acc.includes(s))) return acc;
-        else throw new Error("Metadata has inconsistent languages defined for the variables");
-    }, []);
+export const resolveDimensions = (dimensions: IDimension[], resolvedDimensionCodes: { [key: string]: string[] }) => {
+    return dimensions.map(v => { return { code: v.code, name: v.name, type: v.type, values: v.values.filter(val => resolvedDimensionCodes?.[v.code]?.includes(val.code)) } as IDimension });
 }

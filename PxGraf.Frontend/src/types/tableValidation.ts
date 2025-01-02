@@ -1,11 +1,11 @@
 /**
  * Interface for the result of table meta data validation
- * @property {boolean} tableHasContentVariable - True if the table has a content variable
- * @property {boolean} tableHasTimeVariable - True if the table has a time variable
- * @property {boolean} allVariablesContainValues - True if all variables contain values
+ * @property {boolean} tableHasContentDimension - True if the table has a content dimension
+ * @property {boolean} tableHasTimeDimension - True if the table has a time dimension
+ * @property {boolean} allDimensionsContainValues - True if all dimensions contain values
  */
 export interface ITableMetaValidationResult {
-    tableHasContentVariable: boolean,
-    tableHasTimeVariable: boolean,
-    allVariablesContainValues: boolean,
+    tableHasContentDimension: boolean,
+    tableHasTimeDimension: boolean,
+    allDimensionsContainValues: boolean,
 }

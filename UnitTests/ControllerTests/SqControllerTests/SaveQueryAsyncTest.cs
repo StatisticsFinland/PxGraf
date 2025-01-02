@@ -3,24 +3,23 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
+using Px.Utils.Models.Metadata;
+using Px.Utils.Models.Metadata.Enums;
 using PxGraf.Controllers;
-using PxGraf.Data.MetaData;
+using PxGraf.Datasource;
 using PxGraf.Enums;
 using PxGraf.Language;
 using PxGraf.Models.Queries;
 using PxGraf.Models.Requests;
 using PxGraf.Models.Responses;
 using PxGraf.Models.SavedQueries;
-using PxGraf.PxWebInterface;
 using PxGraf.Settings;
 using PxGraf.Utility;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnitTests.Fixtures;
-using UnitTests.TestDummies;
-using UnitTests.TestDummies.DummyQueries;
 
-namespace ControllerTests
+namespace UnitTests.ControllerTests.SqControllerTests
 {
     internal class SaveQueryAsyncTest
     {
@@ -38,31 +37,31 @@ namespace ControllerTests
         [Test]
         public async Task ValidSaveRequestReturnsSaveQueryResponseAndCallsSerializeToFile()
         {
-            Mock<ICachedPxWebConnection> mockCachedPxWebConnection = new();
+            Mock<ICachedDatasource> mockCachedDatasource = new();
             Mock<ISqFileInterface> mockSqFileInterface = new();
             Mock<ILogger<SqController>> mockLogger = new();
 
-            List<VariableParameters> metaParams =
+            List<DimensionParameters> metaParams =
             [
-                new VariableParameters(VariableType.Content, 10),
-                new VariableParameters(VariableType.Time, 10),
-                new VariableParameters(VariableType.OtherClassificatory, 15),
-                new VariableParameters(VariableType.OtherClassificatory, 7),
+                new DimensionParameters(DimensionType.Content, 10),
+                new DimensionParameters(DimensionType.Time, 10),
+                new DimensionParameters(DimensionType.Other, 15),
+                new DimensionParameters(DimensionType.Other, 7),
             ];
 
-            List<VariableParameters> cubeParams =
+            List<DimensionParameters> cubeParams =
             [
-                new VariableParameters(VariableType.Content, 1),
-                new VariableParameters(VariableType.Time, 10),
-                new VariableParameters(VariableType.OtherClassificatory, 1),
-                new VariableParameters(VariableType.OtherClassificatory, 1),
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 10),
+                new DimensionParameters(DimensionType.Other, 1),
+                new DimensionParameters(DimensionType.Other, 1),
             ];
 
-            mockCachedPxWebConnection.Setup(c => c.GetCubeMetaCachedAsync(It.IsAny<PxFileReference>()))
-                .Returns(Task.Run(() => (IReadOnlyCubeMeta)TestDataCubeBuilder.BuildTestMeta(metaParams)));
+            mockCachedDatasource.Setup(c => c.GetMatrixMetadataCachedAsync(It.IsAny<PxTableReference>()))
+                .Returns(Task.Run(() => (IReadOnlyMatrixMetadata)TestDataCubeBuilder.BuildTestMeta(metaParams)));
 
-            mockCachedPxWebConnection.Setup(c => c.GetDataCubeCachedAsync(It.IsAny<PxFileReference>(), It.IsAny<CubeMeta>()))
-                .Returns(Task.Run(() => TestDataCubeBuilder.BuildTestDataCube(cubeParams)));
+            mockCachedDatasource.Setup(c => c.GetMatrixCachedAsync(It.IsAny<PxTableReference>(), It.IsAny<IReadOnlyMatrixMetadata>()))
+                .Returns(Task.Run(() => TestDataCubeBuilder.BuildTestMatrix(cubeParams)));
 
             mockSqFileInterface.Setup(s => s.SerializeToFile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<SavedQuery>()))
                 .Returns(Task.CompletedTask);
@@ -73,13 +72,13 @@ namespace ControllerTests
                 Settings = new VisualizationCreationSettings()
                 {
                     SelectedVisualization = VisualizationType.LineChart,
-                    RowVariableCodes = ["variable-2"],
-                    ColumnVariableCodes = ["variable-1"],
-                    MultiselectableVariableCode = null
+                    RowDimensionCodes = ["variable-2"],
+                    ColumnDimensionCodes = ["variable-1"],
+                    MultiselectableDimensionCode = null
                 }
             };
 
-            SqController testController = new(mockCachedPxWebConnection.Object, mockSqFileInterface.Object, mockLogger.Object);
+            SqController testController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, mockLogger.Object);
             ActionResult<SaveQueryResponse> actionResult = await testController.SaveQueryAsync(testInput);
             Assert.That(actionResult.Value, Is.InstanceOf<SaveQueryResponse>());
             mockSqFileInterface.Verify(

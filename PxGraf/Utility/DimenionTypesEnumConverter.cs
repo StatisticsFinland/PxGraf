@@ -1,4 +1,4 @@
-﻿using PxGraf.Enums;
+﻿using Px.Utils.Models.Metadata.Enums;
 using System.Collections.Generic;
 
 namespace PxGraf.Utility
@@ -13,16 +13,16 @@ namespace PxGraf.Utility
         /// </summary>
         /// <param name="typeString"></param>
         /// <returns></returns>
-        public static VariableType ToEnum(string typeString)
+        public static DimensionType ToEnum(string typeString)
         {
             return typeString switch
             {
-                "T" => VariableType.Time,
-                "P" => VariableType.Ordinal,
-                "G" => VariableType.Geological,
-                "C" => VariableType.Content,
-                "F" => VariableType.OtherClassificatory,
-                _ => VariableType.Unknown,
+                "T" => DimensionType.Time,
+                "P" => DimensionType.Ordinal,
+                "G" => DimensionType.Geographical,
+                "C" => DimensionType.Content,
+                "F" => DimensionType.Other,
+                _ => DimensionType.Unknown,
             };
         }
 
@@ -32,15 +32,15 @@ namespace PxGraf.Utility
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        public static string ToString(VariableType type)
+        public static string ToString(DimensionType type)
         {
             return type switch
             {
-                VariableType.Time => "T",
-                VariableType.Ordinal => "P",
-                VariableType.Geological => "G",
-                VariableType.Content => "C",
-                VariableType.OtherClassificatory => "F",
+                DimensionType.Time => "T",
+                DimensionType.Ordinal => "P",
+                DimensionType.Geographical => "G",
+                DimensionType.Content => "C",
+                DimensionType.Other => "F",
                 _ => "N"
             };
         }
@@ -50,9 +50,9 @@ namespace PxGraf.Utility
         /// </summary>
         /// <param name="types"></param>
         /// <returns></returns>
-        public static IEnumerable<string> ToString(IEnumerable<VariableType> types)
+        public static IEnumerable<string> ToString(IEnumerable<DimensionType> types)
         {
-            foreach (var type in types) yield return ToString(type);
+            foreach (DimensionType type in types) yield return ToString(type);
         }
     }
 }

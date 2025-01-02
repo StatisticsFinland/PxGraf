@@ -32,7 +32,7 @@ namespace PxGraf.ChartTypeSelection.ChartSpecificLimits
         /// </summary>
         protected override IEnumerable<ChartRejectionInfo> CheckChartSpecificRules(VisualizationTypeSelectionObject input)
         {
-            if (GetTimeOrLargestOrdinal(input.Variables) == null)
+            if (GetTimeOrLargestOrdinal(input.Dimensions) == null)
             {
                 yield return BuildRejectionInfo(RejectionReason.TimeOrProgressiveRequired);
             }
@@ -45,8 +45,8 @@ namespace PxGraf.ChartTypeSelection.ChartSpecificLimits
         /// <returns></returns>
         protected override int GetPriority(RejectionReason reason)
         {
-            var reasons = new RejectionReason[]
-            {
+            RejectionReason[] reasons =
+            [
                 RejectionReason.NotEnoughMultiselections,
                 RejectionReason.TooManyMultiselections,
                 RejectionReason.ContentRequired,
@@ -59,7 +59,7 @@ namespace PxGraf.ChartTypeSelection.ChartSpecificLimits
                 RejectionReason.TimeOrProgressiveRequired,
                 RejectionReason.FirstMultiselectBelowMin,
                 RejectionReason.FirstMultiselectOverMax,
-            };
+            ];
 
             return GetPriorityIndex(reasons, reason);
         }

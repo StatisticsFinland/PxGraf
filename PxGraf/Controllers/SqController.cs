@@ -1,22 +1,26 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.FeatureManagement.Mvc;
+using Px.Utils.Models.Data.DataValue;
+using Px.Utils.Models.Metadata.Enums;
+using Px.Utils.Models.Metadata;
+using Px.Utils.Models;
 using PxGraf.ChartTypeSelection;
-using PxGraf.Data;
-using PxGraf.Data.MetaData;
+using PxGraf.Datasource.PxWebInterface;
+using PxGraf.Datasource;
 using PxGraf.Enums;
 using PxGraf.Exceptions;
+using PxGraf.Models.Metadata;
 using PxGraf.Models.Queries;
 using PxGraf.Models.Requests;
 using PxGraf.Models.Responses;
 using PxGraf.Models.SavedQueries;
-using PxGraf.PxWebInterface;
 using PxGraf.Settings;
 using PxGraf.Utility;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System;
 
 namespace PxGraf.Controllers
 {
@@ -26,15 +30,15 @@ namespace PxGraf.Controllers
     /// <remarks>
     /// Default constructor.
     /// </remarks>
-    /// <param name="cachedPxWebConnection">Instance of a <see cref="ICachedPxWebConnection"/> object. Used to interact with PxWeb API and cache data.</param>
+    /// <param name="datasource">Instance of a <see cref="ICachedDatasource"/> object. Used to interact with data source and cached data.</param>
     /// <param name="sqFileInterface">Instance of a <see cref="ISqFileInterface"/> object. Used for interacting with saved queries.</param>
     /// <param name="logger"><see cref="ILogger"/> instance used for logging.</param>
     [FeatureGate("CreationAPI")]
     [ApiController]
     [Route("api/sq")]
-    public class SqController(ICachedPxWebConnection cachedPxWebConnection, ISqFileInterface sqFileInterface, ILogger<SqController> logger) : ControllerBase
+    public class SqController(ICachedDatasource datasource, ISqFileInterface sqFileInterface, ILogger<SqController> logger) : ControllerBase
     {
-        private readonly ICachedPxWebConnection _cachedPxWebConnection = cachedPxWebConnection;
+        private readonly ICachedDatasource _cachedDatasource = datasource;
         private readonly ISqFileInterface _sqFileInterface = sqFileInterface;
         private readonly ILogger<SqController> _logger = logger;
 
@@ -54,18 +58,23 @@ namespace PxGraf.Controllers
             if (_sqFileInterface.SavedQueryExists(savedQueryId, Configuration.Current.SavedQueryDirectory))
             {
                 SavedQuery savedQuery = await _sqFileInterface.ReadSavedQueryFromFile(savedQueryId, Configuration.Current.SavedQueryDirectory);
-                IReadOnlyCubeMeta readOnlyTableMeta = await _cachedPxWebConnection.GetCubeMetaCachedAsync(savedQuery.Query.TableReference);
-                CubeMeta tableMeta = readOnlyTableMeta.Clone();
-                tableMeta.ApplyEditionFromQuery(savedQuery.Query);
+                IReadOnlyMatrixMetadata meta = await _cachedDatasource.GetMatrixMetadataCachedAsync(savedQuery.Query.TableReference);
+                IReadOnlyMatrixMetadata filteredMeta = meta.FilterDimensionValues(savedQuery.Query);
 
-                if (tableMeta.Variables.Exists(v => v.IncludedValues.Count == 0))
+                if (meta.Dimensions.Any(v => v.Values.Count == 0))
                 {
-                    _logger.LogWarning("Saved query {SavedQueryId} contains variables with no values", savedQueryId);
+                    _logger.LogWarning("Saved query {SavedQueryId} contains dimensions with no values", savedQueryId);
                     BadRequest();
                 }
 
-                DataCube dataCube = await _cachedPxWebConnection.GetDataCubeCachedAsync(savedQuery.Query.TableReference, tableMeta);
-                IReadOnlyList<VisualizationType> validTypes = ChartTypeSelector.Selector.GetValidChartTypes(savedQuery.Query, dataCube);
+                Matrix<DecimalDataValue> matrix = await _cachedDatasource.GetMatrixCachedAsync(savedQuery.Query.TableReference, filteredMeta);
+                if (matrix == null)
+                {
+                    _logger.LogWarning("Saved query {SavedQueryId} failed to fetch data", savedQueryId);
+                    return BadRequest();
+                }
+
+                IReadOnlyList<VisualizationType> validTypes = ChartTypeSelector.Selector.GetValidChartTypes(savedQuery.Query, matrix);
 
                 if (!validTypes.Contains(savedQuery.Settings.VisualizationType))
                 {
@@ -76,7 +85,7 @@ namespace PxGraf.Controllers
                 SaveQueryParams saveQueryParams = new ()
                 {
                     Query = savedQuery.Query,
-                    Settings = VisualizationCreationSettings.FromVisualizationSettings(savedQuery, tableMeta)
+                    Settings = VisualizationCreationSettings.FromVisualizationSettings(savedQuery, filteredMeta)
                 };
 
                 _logger.LogInformation("{SavedQueryId} result: Query: {Query}, Settings: {Settings}", savedQueryId, saveQueryParams.Query, saveQueryParams.Settings);
@@ -102,26 +111,24 @@ namespace PxGraf.Controllers
             string newGuid = Guid.NewGuid().ToString();
             string fileName = $"{newGuid}.sq";
 
-            var tableMeta = await _cachedPxWebConnection.GetCubeMetaCachedAsync(parameters.Query.TableReference);
-            var tableMetaCopy = tableMeta.Clone();
-            tableMetaCopy.ApplyEditionFromQuery(parameters.Query);
-            tableMetaCopy.Header.Truncate(Configuration.Current.QueryOptions.MaxHeaderLength);
+            IReadOnlyMatrixMetadata tableMeta = await _cachedDatasource.GetMatrixMetadataCachedAsync(parameters.Query.TableReference);
+            IReadOnlyMatrixMetadata filteredMeta = tableMeta.FilterDimensionValues(parameters.Query);
 
-            VisualizationSettings visualizationSettings = parameters.Settings.ToVisualizationSettings(tableMetaCopy, parameters.Query);
+            VisualizationSettings visualizationSettings = parameters.Settings.ToVisualizationSettings(filteredMeta, parameters.Query);
 
-            // All variables must have atleast one value selected
-            if (!tableMetaCopy.Variables.TrueForAll(v => v.IncludedValues.Count != 0) || !ValidateVisualizationSettings(tableMetaCopy, visualizationSettings))
+            // All dimensions must have atleast one value selected
+            if (!filteredMeta.Dimensions.Any(v => v.Values.Count != 0) || !ValidateVisualizationSettings(filteredMeta, visualizationSettings))
             {
-                _logger.LogWarning("Query {NewGuid} is missing a value for a variable. {Parameters}", newGuid, parameters);
+                _logger.LogWarning("Query {NewGuid} is missing a value for a dimension. {Parameters}", newGuid, parameters);
                 return BadRequest();
             }
 
-            var dataCube = await _cachedPxWebConnection.GetDataCubeCachedAsync(parameters.Query.TableReference, tableMetaCopy);
+            Matrix<DecimalDataValue> dataCube = await _cachedDatasource.GetMatrixCachedAsync(parameters.Query.TableReference, filteredMeta);
 
-            var validTypes = ChartTypeSelector.Selector.GetValidChartTypes(parameters.Query, dataCube);
+            IReadOnlyList<VisualizationType> validTypes = ChartTypeSelector.Selector.GetValidChartTypes(parameters.Query, dataCube);
             if (validTypes.Contains(visualizationSettings.VisualizationType))
             {
-                var savedQuery = new SavedQuery(parameters.Query, archived: false, visualizationSettings, DateTime.Now);
+                SavedQuery savedQuery = new (parameters.Query, archived: false, visualizationSettings, DateTime.Now);
                 await _sqFileInterface.SerializeToFile(fileName, Configuration.Current.SavedQueryDirectory, savedQuery);
                 
                 SaveQueryResponse saveQueryResponse = new () { Id = newGuid };
@@ -146,25 +153,27 @@ namespace PxGraf.Controllers
             _logger.LogDebug("Archiving query {Parameters} POST: api/sq/archive", parameters);
             string newGuid = Guid.NewGuid().ToString();
             string queryFileName = $"{newGuid}.sq";
-            var archiveCube = await _cachedPxWebConnection.BuildArchiveCubeCachedAsync(parameters.Query);
+            IReadOnlyMatrixMetadata meta = await _cachedDatasource.GetMatrixMetadataCachedAsync(parameters.Query.TableReference);
+            IReadOnlyMatrixMetadata filteredMeta = meta.FilterDimensionValues(parameters.Query);
 
-            VisualizationSettings visualizationSettings = parameters.Settings.ToVisualizationSettings(archiveCube.Meta, parameters.Query);
+            VisualizationSettings visualizationSettings = parameters.Settings.ToVisualizationSettings(filteredMeta, parameters.Query);
 
-            // All variables must have atleast one value selected
-            if (!archiveCube.Meta.Variables.TrueForAll(v => v.IncludedValues.Count != 0) || !ValidateVisualizationSettings(archiveCube.Meta, visualizationSettings))
+            // All dimensions must have atleast one value selected
+            if (filteredMeta.Dimensions.Any(v => v.Values.Count == 0) || !ValidateVisualizationSettings(filteredMeta, visualizationSettings))
             {
-                _logger.LogWarning("Archived query {NewGuid} is missing a value for a variable. {Parameters}", newGuid, parameters);
+                _logger.LogWarning("Archived query {NewGuid} is missing a value for a dimension. {Parameters}", newGuid, parameters);
                 return BadRequest();
             }
 
-            var validTypes = ChartTypeSelector.Selector.GetValidChartTypes(parameters.Query, archiveCube);
+            Matrix<DecimalDataValue> matrix = await _cachedDatasource.GetMatrixCachedAsync(parameters.Query.TableReference, filteredMeta);
+            IReadOnlyList<VisualizationType> validTypes = ChartTypeSelector.Selector.GetValidChartTypes(parameters.Query, matrix);
             if (validTypes.Contains(visualizationSettings.VisualizationType))
             {
-                var savedQuery = new SavedQuery(parameters.Query, archived: true, visualizationSettings, DateTime.Now);
+                SavedQuery savedQuery = new(parameters.Query, archived: true, visualizationSettings, DateTime.Now);
                 await _sqFileInterface.SerializeToFile(queryFileName, Configuration.Current.SavedQueryDirectory, savedQuery);
 
                 string archiveName = $"{newGuid}.sqa";
-                await _sqFileInterface.SerializeToFile(archiveName, Configuration.Current.ArchiveFileDirectory, archiveCube);
+                await _sqFileInterface.SerializeToFile(archiveName, Configuration.Current.ArchiveFileDirectory, new ArchiveCube(matrix));
                 _logger.LogInformation("Archiving query {ArchiveName}", archiveName);
                 return new SaveQueryResponse() { Id = newGuid };
             }
@@ -175,7 +184,7 @@ namespace PxGraf.Controllers
         }
 
         /// <summary>
-        /// Reads a saved query, fetches the current variable values and data matching the query,
+        /// Reads a saved query, fetches the current dimension values and data matching the query,
         /// creates a new saved query based on that data and returns the id of that created query.
         /// </summary>
         /// <param name="request"><see cref="ReArchiveRequest"/> object that contains the ID of the query to be rearchived.</param>
@@ -191,16 +200,18 @@ namespace PxGraf.Controllers
                 {
                     string newGuid = Guid.NewGuid().ToString();
                     string queryFileName = $"{newGuid}.sq";
-                    var archiveCube = await _cachedPxWebConnection.BuildArchiveCubeCachedAsync(baseQuery.Query);
+                    IReadOnlyMatrixMetadata meta = await _cachedDatasource.GetMatrixMetadataCachedAsync(baseQuery.Query.TableReference);
+                    IReadOnlyMatrixMetadata filteredMeta = meta.FilterDimensionValues(baseQuery.Query);
+                    Matrix<DecimalDataValue> matrix = await _cachedDatasource.GetMatrixCachedAsync(baseQuery.Query.TableReference, filteredMeta);
 
-                    var validTypes = ChartTypeSelector.Selector.GetValidChartTypes(baseQuery.Query, archiveCube);
+                    IReadOnlyList<VisualizationType> validTypes = ChartTypeSelector.Selector.GetValidChartTypes(baseQuery.Query, matrix);
                     if (validTypes.Contains(baseQuery.Settings.VisualizationType))
                     {
-                        var savedQuery = new SavedQuery(baseQuery.Query, archived: true, baseQuery.Settings, DateTime.Now);
+                        SavedQuery savedQuery = new (baseQuery.Query, archived: true, baseQuery.Settings, DateTime.Now);
                         await _sqFileInterface.SerializeToFile(queryFileName, Configuration.Current.SavedQueryDirectory, savedQuery);
 
                         string archiveName = $"{newGuid}.sqa";
-                        await _sqFileInterface.SerializeToFile(archiveName, Configuration.Current.ArchiveFileDirectory, archiveCube);
+                        await _sqFileInterface.SerializeToFile(archiveName, Configuration.Current.ArchiveFileDirectory, new ArchiveCube(matrix));
                         _logger.LogInformation("Rearchived query {ArchiveName}", archiveName);
                         return new ReArchiveResponse() { NewSqId = newGuid };
                     }
@@ -226,10 +237,10 @@ namespace PxGraf.Controllers
         /// Validates visualization settings for th given cube meta
         /// Add all future validation rules here.
         /// </summary>
-        private static bool ValidateVisualizationSettings(IReadOnlyCubeMeta meta, VisualizationSettings settings)
+        private static bool ValidateVisualizationSettings(IReadOnlyMatrixMetadata meta, VisualizationSettings settings)
         {
             if (settings is LineChartVisualizationSettings lcvs &&
-                meta.Variables.FirstOrDefault(v => v.Type == VariableType.Content)?.Code == lcvs.MultiselectableVariableCode)
+                meta.Dimensions.FirstOrDefault(v => v.Type == DimensionType.Content)?.Code == lcvs.MultiselectableDimensionCode)
             {
                 return false;
             }

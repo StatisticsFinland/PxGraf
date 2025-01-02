@@ -1,5 +1,9 @@
-﻿namespace PxGraf.Language
+﻿using PxGraf.Utility.CustomJsonConverters;
+using System.Text.Json.Serialization;
+
+namespace PxGraf.Language
 {
+    [JsonConverter(typeof(RequireObjectPropertiesReadOnlyConverter<SortingOptionTranslation>))]
     public class SortingOptionTranslation
     {
         public string Ascending { get; set; }

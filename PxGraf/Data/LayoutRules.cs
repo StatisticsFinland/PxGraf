@@ -1,32 +1,34 @@
-﻿using PxGraf.Data.MetaData;
+﻿using Px.Utils.Models.Metadata.Dimensions;
+using Px.Utils.Models.Metadata.Enums;
+using Px.Utils.Models.Metadata;
 using PxGraf.Enums;
+using PxGraf.Models.Metadata;
 using PxGraf.Models.Queries;
-using PxGraf.Utility;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System;
 
 namespace PxGraf.Data
 {
     public static class LayoutRules
     {
-        public static Layout GetOneDimensionalLayout(IReadOnlyCubeMeta meta, CubeQuery query)
+        public static Layout GetOneDimensionalLayout(IReadOnlyMatrixMetadata meta, MatrixQuery query)
         {
             return new Layout(
-                rowVariableCodes: [],
-                columnVariableCodes: [ meta.GetMultivalueVariables()
-                .Where(v => !query.VariableQueries[v.Code].Selectable)
+                rowDimensionCodes: [],
+                columnDimensionCodes: [ meta.GetMultivalueDimensions()
+                .Where(v => !query.DimensionQueries[v.Code].Selectable)
                 .ToArray()[0].Code ]);
         }
 
-        public static Layout GetTwoDimensionalLayout(bool pivotRequested, VisualizationType visualizationType, IReadOnlyCubeMeta meta, CubeQuery query)
+        public static Layout GetTwoDimensionalLayout(bool pivotRequested, VisualizationType visualizationType, IReadOnlyMatrixMetadata meta, MatrixQuery query)
         {
-            IReadOnlyVariable[] multiValueVars = meta.GetMultivalueVariables()
-                .Where(v => !query.VariableQueries[v.Code].Selectable)
+            IReadOnlyDimension[] multiValueDims = meta.GetMultivalueDimensions()
+                .Where(v => !query.DimensionQueries[v.Code].Selectable)
                 .ToArray();
 
-            Debug.Assert(multiValueVars.Length == 2);
+            Debug.Assert(multiValueDims.Length == 2);
 
             bool autopivot = AutoPivotRules.GetAutoPivot(visualizationType, meta, query);
             bool manualPivotability = ManualPivotRules.GetManualPivotability(visualizationType, meta, query);
@@ -35,33 +37,33 @@ namespace PxGraf.Data
             if (transpose)
             {
                 return new Layout(
-                    rowVariableCodes: [multiValueVars[1].Code],
-                    columnVariableCodes: [multiValueVars[0].Code]);
+                    rowDimensionCodes: [multiValueDims[1].Code],
+                    columnDimensionCodes: [multiValueDims[0].Code]);
             }
             else
             {
                 return new Layout(
-                    rowVariableCodes: [multiValueVars[0].Code],
-                    columnVariableCodes: [multiValueVars[1].Code]);
+                    rowDimensionCodes: [multiValueDims[0].Code],
+                    columnDimensionCodes: [multiValueDims[1].Code]);
             }
         }
 
-        public static Layout GetLineChartLayout(IReadOnlyCubeMeta meta, CubeQuery query)
+        public static Layout GetLineChartLayout(IReadOnlyMatrixMetadata meta, MatrixQuery query)
         {
-            IReadOnlyVariable[] multiValueVars = meta.GetMultivalueVariables()
-                .Where(v => !query.VariableQueries[v.Code].Selectable)
+            IReadOnlyDimension[] multiValueDims = meta.GetMultivalueDimensions()
+                .Where(v => !query.DimensionQueries[v.Code].Selectable)
                 .ToArray();
 
-            // Prefer time variable over ordinal variable
-            IReadOnlyVariable multiValueTimeVar = Array.Find(multiValueVars, v => v.Type == VariableType.Time);
-            string columnVariableCode = multiValueTimeVar is not null
-                ? multiValueTimeVar.Code
-                : multiValueVars.OrderByDescending(v => v.IncludedValues.Count)
-                    .First(v => v.Type == VariableType.Ordinal).Code;
+            // Prefer time dimension over ordinal dimension
+            IReadOnlyDimension multiValueTimeDimension = Array.Find(multiValueDims, v => v.Type == DimensionType.Time);
+            string columnDimensionCode = multiValueTimeDimension is not null
+                ? multiValueTimeDimension.Code
+                : multiValueDims.OrderByDescending(d => d.Values.Count)
+                    .First(v => v.Type == DimensionType.Ordinal).Code;
 
             return new Layout(
-                multiValueVars.Select(v => v.Code).Where(vc => vc != columnVariableCode).ToList(),
-                [columnVariableCode]);
+                multiValueDims.Select(d => d.Code).Where(vc => vc != columnDimensionCode).ToList(),
+                [columnDimensionCode]);
         }
 
         public static Layout GetTableLayout(IReadOnlyList<string> rowCodes, IReadOnlyList<string> columnCodes)
@@ -69,7 +71,7 @@ namespace PxGraf.Data
             return new Layout(rowCodes, columnCodes);
         }
 
-        public static Layout GetPivotBasedLayout(VisualizationType type, IReadOnlyCubeMeta meta, CubeQuery query, bool pivotRequested = false)
+        public static Layout GetPivotBasedLayout(VisualizationType type, IReadOnlyMatrixMetadata meta, MatrixQuery query, bool pivotRequested = false)
         {
             return type switch
             {
