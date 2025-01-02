@@ -164,9 +164,9 @@ namespace PxGraf.Datasource.FileDatasource
         /// Ensures that source property exists for all content dimension values in the given metadata.
         /// Prioritises the source property of the content dimension value over the source property of the dimension and the table.
         /// </summary>
-        /// <param name="meta">Metadata boject to be processed.</param>
+        /// <param name="meta">Metadata object to be processed.</param>
         /// <exception cref="InvalidOperationException">Thrown if source property is not found from metadata.</exception>
-        public static void AssignSourceToContentDimensionValues(MatrixMetadata meta)
+        private static void AssignSourceToContentDimensionValues(MatrixMetadata meta)
         {
             ContentDimension contentDimension = meta.GetContentDimension();
             foreach (ContentDimensionValue cdv in contentDimension.Values)
@@ -178,20 +178,21 @@ namespace PxGraf.Datasource.FileDatasource
                     prop is MultilanguageStringProperty dimMlsp)
                 {
                     cdv.AdditionalProperties.TryAdd(PxSyntaxConstants.SOURCE_KEY, dimMlsp);
-                    contentDimension.AdditionalProperties.Remove(PxSyntaxConstants.SOURCE_KEY);
                 }
                 // If the dimension has no source, use the source of the table.
                 else if (meta.AdditionalProperties.TryGetValue(PxSyntaxConstants.SOURCE_KEY, out MetaProperty? tableProp) &&
                     tableProp is MultilanguageStringProperty tableMlsp)
                 {
                     cdv.AdditionalProperties.TryAdd(PxSyntaxConstants.SOURCE_KEY, tableMlsp);
-                    meta.AdditionalProperties.Remove(PxSyntaxConstants.SOURCE_KEY);
                 }
                 else
                 {
                     throw new InvalidOperationException("Source property not found from metadata.");
                 }
             }
+
+            meta.AdditionalProperties.Remove(PxSyntaxConstants.SOURCE_KEY);
+            contentDimension.AdditionalProperties.Remove(PxSyntaxConstants.SOURCE_KEY);
         }
 
         /// <summary>
