@@ -243,6 +243,7 @@ namespace PxGraf.Datasource.FileDatasource
             {
                 encoding = Encoding.GetEncoding(cdet.Charset);
             }
+            fs.Position = 0;
             using StreamReader sr = new(fs, encoding);
             return sr.ReadToEnd();
         }
