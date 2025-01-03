@@ -140,7 +140,7 @@ namespace PxGraf.Datasource.FileDatasource
         }
 
         /// <summary>
-        /// Assigns ordinal or nominal dimension types to dimensions that are not content or time dimensions based on their meta-id properties.
+        /// Assigns ordinal or nominal dimension types to dimensions that are either of unknown or other type based on their meta-id properties.
         /// </summary>
         /// <param name="meta">The matrix metadata to assign the dimension types to.</param>
         private static void AssignOrdinalDimensionTypes(MatrixMetadata meta)
@@ -202,6 +202,15 @@ namespace PxGraf.Datasource.FileDatasource
         /// <returns></returns>
         private static DimensionType GetDimensionType(Dimension dimension)
         {
+            // If the dimension already has a defining type, ordinality should not overrun it
+            DimensionType[] whitelist =
+                [
+                    DimensionType.Unknown,
+                    DimensionType.Other
+                ];
+
+            if (!whitelist.Contains(dimension.Type)) return dimension.Type;
+
             string propertyKey = PxSyntaxConstants.META_ID_KEY;
             if (dimension.AdditionalProperties.TryGetValue(propertyKey, out MetaProperty? prop) &&
                 prop is MultilanguageStringProperty mlsProp) 
