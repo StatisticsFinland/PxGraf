@@ -48,7 +48,7 @@ namespace PxGraf.Datasource.FileDatasource
             string path = PathUtils.BuildAndSanitizePath(config.DatabaseRootPath, groupHierarcy);
             foreach (string pxFile in Directory.EnumerateFiles(path, PxSyntaxConstants.PX_FILE_FILTER))
             {
-                tables.Add(new PxTableReference(pxFile.Remove(0, config.DatabaseRootPath.Length)));
+                tables.Add(new PxTableReference(Path.GetRelativePath(config.DatabaseRootPath, pxFile)));
             }
             return tables;
         }
