@@ -140,7 +140,7 @@ namespace PxGraf.Datasource.FileDatasource
         }
 
         /// <summary>
-        /// Assigns ordinal or nominal dimension types to dimensions that are not content or time dimensions based on their meta-id properties.
+        /// Assigns ordinal or nominal dimension types to dimensions that are either of unknown or other type based on their meta-id properties.
         /// </summary>
         /// <param name="meta">The matrix metadata to assign the dimension types to.</param>
         private static void AssignOrdinalDimensionTypes(MatrixMetadata meta)
@@ -173,8 +173,9 @@ namespace PxGraf.Datasource.FileDatasource
             {
                 // Primarily use source information from the content dimension value.
                 if (cdv.AdditionalProperties.ContainsKey(PxSyntaxConstants.SOURCE_KEY)) continue;
+                
                 // If the value has no source, use the source of the content dimension.
-                else if (contentDimension.AdditionalProperties.TryGetValue(PxSyntaxConstants.SOURCE_KEY, out MetaProperty? prop) &&
+                if (contentDimension.AdditionalProperties.TryGetValue(PxSyntaxConstants.SOURCE_KEY, out MetaProperty? prop) &&
                     prop is MultilanguageStringProperty dimMlsp)
                 {
                     cdv.AdditionalProperties.TryAdd(PxSyntaxConstants.SOURCE_KEY, dimMlsp);
@@ -202,13 +203,18 @@ namespace PxGraf.Datasource.FileDatasource
         /// <returns></returns>
         private static DimensionType GetDimensionType(Dimension dimension)
         {
-            string propertyKey = PxSyntaxConstants.META_ID_KEY;
-            if (dimension.AdditionalProperties.TryGetValue(propertyKey, out MetaProperty? prop) &&
-                prop is MultilanguageStringProperty mlsProp) 
+            // If the dimension already has a defining type, ordinality should not overrun it
+            if (dimension.Type == DimensionType.Unknown ||
+                dimension.Type == DimensionType.Other)
             {
-                dimension.AdditionalProperties.Remove(propertyKey); // OBS: Remove the property after retrieval
-                if (mlsProp.Value.UniformValue().Equals(PxSyntaxConstants.ORDINAL_VALUE)) return DimensionType.Ordinal;
-                else if (mlsProp.Value.UniformValue().Equals(PxSyntaxConstants.NOMINAL_VALUE)) return DimensionType.Nominal;
+                string propertyKey = PxSyntaxConstants.META_ID_KEY;
+                if (dimension.AdditionalProperties.TryGetValue(propertyKey, out MetaProperty? prop) &&
+                    prop is MultilanguageStringProperty mlsProp)
+                {
+                    dimension.AdditionalProperties.Remove(propertyKey); // OBS: Remove the property after retrieval
+                    if (mlsProp.Value.UniformValue().Equals(PxSyntaxConstants.ORDINAL_VALUE)) return DimensionType.Ordinal;
+                    else if (mlsProp.Value.UniformValue().Equals(PxSyntaxConstants.NOMINAL_VALUE)) return DimensionType.Nominal;
+                }
             }
             return dimension.Type;
         }
