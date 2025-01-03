@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace PxGraf.Models.Responses
 {
@@ -10,7 +10,7 @@ namespace PxGraf.Models.Responses
         /// <summary>
         /// The ID of the saved query
         /// </summary>
-        [JsonProperty]
+        [Required]
         public string Id { get; set; }
     }
 }

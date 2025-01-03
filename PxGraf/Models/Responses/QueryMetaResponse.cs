@@ -1,5 +1,5 @@
-﻿using PxGraf.Enums;
-using PxGraf.Language;
+﻿using Px.Utils.Language;
+using PxGraf.Enums;
 using PxGraf.Models.Queries;
 
 namespace PxGraf.Models.Responses
@@ -12,11 +12,11 @@ namespace PxGraf.Models.Responses
         /// <summary>
         /// Header text of the visualization.
         /// </summary>
-        public IReadOnlyMultiLanguageString Header { get; set; }
+        public MultilanguageString Header { get; set; }
         /// <summary>
         /// Header text of the visualization including placeholders.
         /// </summary>
-        public IReadOnlyMultiLanguageString HeaderWithPlaceholders { get; set; }
+        public MultilanguageString HeaderWithPlaceholders { get; set; }
         /// <summary>
         /// Whether the query is archived.
         /// </summary>
@@ -36,11 +36,11 @@ namespace PxGraf.Models.Responses
         /// <summary>
         /// Multi language object storing the description of the query.
         /// </summary>
-        public IReadOnlyMultiLanguageString Description { get; set; }
+        public MultilanguageString Description { get; set; }
         /// <summary>
         /// Reference to the table that the query is based on.
         /// </summary>
-        public PxFileReference TableReference { get; set; }
+        public PxTableReference TableReference { get; set; }
         /// <summary>
         /// Last time the table was updated.
         /// </summary>

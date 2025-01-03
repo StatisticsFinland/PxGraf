@@ -1,27 +1,20 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Moq;
 using NUnit.Framework;
+using Px.Utils.Models.Metadata.Enums;
 using PxGraf.Controllers;
 using PxGraf.Enums;
 using PxGraf.Language;
+using PxGraf.Models.Queries;
 using PxGraf.Models.Requests;
 using PxGraf.Models.Responses;
-using PxGraf.PxWebInterface;
-using PxGraf.PxWebInterface.Caching;
 using PxGraf.Settings;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UnitTests.Fixtures;
-using UnitTests.TestDummies;
-using UnitTests.TestDummies.DummyQueries;
-using Microsoft.Extensions.Logging;
-using PxGraf.Models.Queries;
 
-namespace CreationControllerTests
+namespace UnitTests.ControllerTests.CreationControllerTests
 {
     internal class GetVisualizationRulesAsyncActionTests
     {
@@ -36,43 +29,29 @@ namespace CreationControllerTests
             Configuration.Load(configuration);
         }
 
-        private static CreationController BuildController(List<VariableParameters> cubeParams, List<VariableParameters> metaParams)
-        {
-            PxWebApiDummy pxWebApiDummy = new(cubeParams, metaParams);
-
-            ServiceCollection services = new();
-            services.AddMemoryCache();
-            ServiceProvider serviceProvider = services.BuildServiceProvider();
-
-            IMemoryCache memoryCache = serviceProvider.GetService<IMemoryCache>();
-            IPxWebApiResponseCache apiCache = new PxWebApiResponseCache(memoryCache);
-
-            return new CreationController(new CachedPxWebConnection(pxWebApiDummy, apiCache), new Mock<ILogger<CreationController>>().Object);
-        }
-
         [Test]
         public async Task SimpleSuccessTest_Success()
         {
-            List<VariableParameters> cubeParams =
+            List<DimensionParameters> cubeParams =
             [
-                new VariableParameters(VariableType.Content, 1),
-                new VariableParameters(VariableType.Time, 1),
-                new VariableParameters(VariableType.OtherClassificatory, 3),
-                new VariableParameters(VariableType.OtherClassificatory, 3),
-                new VariableParameters(VariableType.OtherClassificatory, 2) { Selectable = true},
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 1),
+                new DimensionParameters(DimensionType.Other, 3),
+                new DimensionParameters(DimensionType.Other, 3),
+                new DimensionParameters(DimensionType.Other, 2) { Selectable = true},
             ];
 
-            List<VariableParameters> metaParams =
+            List<DimensionParameters> metaParams =
             [
-                new VariableParameters(VariableType.Content, 5),
-                new VariableParameters(VariableType.Time, 5),
-                new VariableParameters(VariableType.OtherClassificatory, 6),
-                new VariableParameters(VariableType.OtherClassificatory, 7),
-                new VariableParameters(VariableType.OtherClassificatory, 4),
+                new DimensionParameters(DimensionType.Content, 5),
+                new DimensionParameters(DimensionType.Time, 5),
+                new DimensionParameters(DimensionType.Other, 6),
+                new DimensionParameters(DimensionType.Other, 7),
+                new DimensionParameters(DimensionType.Other, 4),
             ];
 
-            CreationController testController = BuildController(cubeParams, metaParams);
-            CubeQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
+            CreationController testController = TestCreationControllerBuilder.BuildController(cubeParams, metaParams);
+            MatrixQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
             VisualizationSettingsRequest rulesRequest = new()
             {
                 SelectedVisualization = VisualizationType.GroupHorizontalBarChart,
@@ -87,26 +66,26 @@ namespace CreationControllerTests
         [Test]
         public async Task SortingNoManualPivotTest_Success()
         {
-            List<VariableParameters> cubeParams =
+            List<DimensionParameters> cubeParams =
             [
-                new VariableParameters(VariableType.Content, 1),
-                new VariableParameters(VariableType.Time, 1),
-                new VariableParameters(VariableType.OtherClassificatory, 3),
-                new VariableParameters(VariableType.OtherClassificatory, 1),
-                new VariableParameters(VariableType.OtherClassificatory, 2) { Selectable = true},
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 1),
+                new DimensionParameters(DimensionType.Other, 3),
+                new DimensionParameters(DimensionType.Other, 1),
+                new DimensionParameters(DimensionType.Other, 2) { Selectable = true},
             ];
 
-            List<VariableParameters> metaParams =
+            List<DimensionParameters> metaParams =
             [
-                new VariableParameters(VariableType.Content, 5),
-                new VariableParameters(VariableType.Time, 5),
-                new VariableParameters(VariableType.OtherClassificatory, 6),
-                new VariableParameters(VariableType.OtherClassificatory, 7),
-                new VariableParameters(VariableType.OtherClassificatory, 4),
+                new DimensionParameters(DimensionType.Content, 5),
+                new DimensionParameters(DimensionType.Time, 5),
+                new DimensionParameters(DimensionType.Other, 6),
+                new DimensionParameters(DimensionType.Other, 7),
+                new DimensionParameters(DimensionType.Other, 4),
             ];
 
-            CreationController testController = BuildController(cubeParams, metaParams);
-            CubeQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
+            CreationController testController = TestCreationControllerBuilder.BuildController(cubeParams, metaParams);
+            MatrixQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
             VisualizationSettingsRequest rulesRequest = new()
             {
                 SelectedVisualization = VisualizationType.HorizontalBarChart,
@@ -123,26 +102,26 @@ namespace CreationControllerTests
         [Test]
         public async Task SortingMultidimWithManualPivotTest_Success()
         {
-            List<VariableParameters> cubeParams =
+            List<DimensionParameters> cubeParams =
             [
-                new VariableParameters(VariableType.Content, 1),
-                new VariableParameters(VariableType.Time, 1),
-                new VariableParameters(VariableType.OtherClassificatory, 4),
-                new VariableParameters(VariableType.OtherClassificatory, 3),
-                new VariableParameters(VariableType.OtherClassificatory, 2) { Selectable = true},
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 1),
+                new DimensionParameters(DimensionType.Other, 4),
+                new DimensionParameters(DimensionType.Other, 3),
+                new DimensionParameters(DimensionType.Other, 2) { Selectable = true},
             ];
 
-            List<VariableParameters> metaParams =
+            List<DimensionParameters> metaParams =
             [
-                new VariableParameters(VariableType.Content, 5),
-                new VariableParameters(VariableType.Time, 5),
-                new VariableParameters(VariableType.OtherClassificatory, 6),
-                new VariableParameters(VariableType.OtherClassificatory, 7),
-                new VariableParameters(VariableType.OtherClassificatory, 4),
+                new DimensionParameters(DimensionType.Content, 5),
+                new DimensionParameters(DimensionType.Time, 5),
+                new DimensionParameters(DimensionType.Other, 6),
+                new DimensionParameters(DimensionType.Other, 7),
+                new DimensionParameters(DimensionType.Other, 4),
             ];
 
-            CreationController testController = BuildController(cubeParams, metaParams);
-            CubeQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
+            CreationController testController = TestCreationControllerBuilder.BuildController(cubeParams, metaParams);
+            MatrixQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
             VisualizationSettingsRequest rulesRequest = new()
             {
                 SelectedVisualization = VisualizationType.GroupHorizontalBarChart,
@@ -159,26 +138,26 @@ namespace CreationControllerTests
         [Test]
         public async Task SortingMultidimNoManualPivotTest_Success()
         {
-            List<VariableParameters> cubeParams =
+            List<DimensionParameters> cubeParams =
             [
-                new VariableParameters(VariableType.Content, 1),
-                new VariableParameters(VariableType.Time, 1),
-                new VariableParameters(VariableType.OtherClassificatory, 4),
-                new VariableParameters(VariableType.OtherClassificatory, 3),
-                new VariableParameters(VariableType.OtherClassificatory, 1),
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 1),
+                new DimensionParameters(DimensionType.Other, 4),
+                new DimensionParameters(DimensionType.Other, 3),
+                new DimensionParameters(DimensionType.Other, 1),
             ];
 
-            List<VariableParameters> metaParams =
+            List<DimensionParameters> metaParams =
             [
-                new VariableParameters(VariableType.Content, 5),
-                new VariableParameters(VariableType.Time, 5),
-                new VariableParameters(VariableType.OtherClassificatory, 6),
-                new VariableParameters(VariableType.OtherClassificatory, 7),
-                new VariableParameters(VariableType.OtherClassificatory, 4),
+                new DimensionParameters(DimensionType.Content, 5),
+                new DimensionParameters(DimensionType.Time, 5),
+                new DimensionParameters(DimensionType.Other, 6),
+                new DimensionParameters(DimensionType.Other, 7),
+                new DimensionParameters(DimensionType.Other, 4),
             ];
 
-            CreationController testController = BuildController(cubeParams, metaParams);
-            CubeQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
+            CreationController testController = TestCreationControllerBuilder.BuildController(cubeParams, metaParams);
+            MatrixQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
             VisualizationSettingsRequest rulesRequest = new()
             {
                 SelectedVisualization = VisualizationType.GroupHorizontalBarChart,
@@ -195,26 +174,26 @@ namespace CreationControllerTests
         [Test]
         public async Task TimeSeriesTest_DoNotAllowManualPivot()
         {
-            List<VariableParameters> cubeParams =
+            List<DimensionParameters> cubeParams =
             [
-                new VariableParameters(VariableType.Content, 1),
-                new VariableParameters(VariableType.Time, 10),
-                new VariableParameters(VariableType.OtherClassificatory, 4),
-                new VariableParameters(VariableType.OtherClassificatory, 3) { Selectable = true },
-                new VariableParameters(VariableType.OtherClassificatory, 1),
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 10),
+                new DimensionParameters(DimensionType.Other, 4),
+                new DimensionParameters(DimensionType.Other, 3) { Selectable = true },
+                new DimensionParameters(DimensionType.Other, 1),
             ];
 
-            List<VariableParameters> metaParams =
+            List<DimensionParameters> metaParams =
             [
-                new VariableParameters(VariableType.Content, 5),
-                new VariableParameters(VariableType.Time, 15),
-                new VariableParameters(VariableType.OtherClassificatory, 6),
-                new VariableParameters(VariableType.OtherClassificatory, 7),
-                new VariableParameters(VariableType.OtherClassificatory, 4),
+                new DimensionParameters(DimensionType.Content, 5),
+                new DimensionParameters(DimensionType.Time, 15),
+                new DimensionParameters(DimensionType.Other, 6),
+                new DimensionParameters(DimensionType.Other, 7),
+                new DimensionParameters(DimensionType.Other, 4),
             ];
 
-            CreationController testController = BuildController(cubeParams, metaParams);
-            CubeQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
+            CreationController testController = TestCreationControllerBuilder.BuildController(cubeParams, metaParams);
+            MatrixQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
             VisualizationSettingsRequest rulesRequest = new()
             {
                 SelectedVisualization = VisualizationType.GroupVerticalBarChart,
@@ -229,26 +208,26 @@ namespace CreationControllerTests
         [Test]
         public async Task TimeSeriesLineTest_MultiselectAllowed()
         {
-            List<VariableParameters> cubeParams =
+            List<DimensionParameters> cubeParams =
             [
-                new VariableParameters(VariableType.Content, 1),
-                new VariableParameters(VariableType.Time, 12),
-                new VariableParameters(VariableType.OtherClassificatory, 4),
-                new VariableParameters(VariableType.OtherClassificatory, 3) { Selectable = true },
-                new VariableParameters(VariableType.OtherClassificatory, 1),
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 12),
+                new DimensionParameters(DimensionType.Other, 4),
+                new DimensionParameters(DimensionType.Other, 3) { Selectable = true },
+                new DimensionParameters(DimensionType.Other, 1),
             ];
 
-            List<VariableParameters> metaParams =
+            List<DimensionParameters> metaParams =
             [
-                new VariableParameters(VariableType.Content, 5),
-                new VariableParameters(VariableType.Time, 15),
-                new VariableParameters(VariableType.OtherClassificatory, 6),
-                new VariableParameters(VariableType.OtherClassificatory, 7),
-                new VariableParameters(VariableType.OtherClassificatory, 4),
+                new DimensionParameters(DimensionType.Content, 5),
+                new DimensionParameters(DimensionType.Time, 15),
+                new DimensionParameters(DimensionType.Other, 6),
+                new DimensionParameters(DimensionType.Other, 7),
+                new DimensionParameters(DimensionType.Other, 4),
             ];
 
-            CreationController testController = BuildController(cubeParams, metaParams);
-            CubeQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
+            CreationController testController = TestCreationControllerBuilder.BuildController(cubeParams, metaParams);
+            MatrixQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
             VisualizationSettingsRequest rulesRequest = new()
             {
                 SelectedVisualization = VisualizationType.LineChart,
@@ -257,28 +236,28 @@ namespace CreationControllerTests
             };
 
             ActionResult<VisualizationRules> actionResult = await testController.GetVisualizationRulesAsync(rulesRequest);
-            Assert.That(actionResult.Value.MultiselectVariableAllowed, Is.True);
+            Assert.That(actionResult.Value.MultiselectDimensionAllowed, Is.True);
         }
 
         [Test]
         public async Task GetVisualizationRulesAsync_Creates_TypeSpecificVisualizationRules()
         {
-            List<VariableParameters> cubeParams =
+            List<DimensionParameters> cubeParams =
             [
-                new VariableParameters(VariableType.Content, 1),
-                new VariableParameters(VariableType.Time, 12),
-                new VariableParameters(VariableType.OtherClassificatory, 4)
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 12),
+                new DimensionParameters(DimensionType.Other, 4)
             ];
 
-            List<VariableParameters> metaParams =
+            List<DimensionParameters> metaParams =
             [
-                new VariableParameters(VariableType.Content, 5),
-                new VariableParameters(VariableType.Time, 15),
-                new VariableParameters(VariableType.OtherClassificatory, 6)
+                new DimensionParameters(DimensionType.Content, 5),
+                new DimensionParameters(DimensionType.Time, 15),
+                new DimensionParameters(DimensionType.Other, 6)
             ];
 
-            CreationController testController = BuildController(cubeParams, metaParams);
-            CubeQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
+            CreationController testController = TestCreationControllerBuilder.BuildController(cubeParams, metaParams);
+            MatrixQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
             VisualizationSettingsRequest rulesRequest = new()
             {
                 SelectedVisualization = VisualizationType.LineChart,
@@ -297,22 +276,22 @@ namespace CreationControllerTests
         [Test]
         public async Task GetVisualizationRulesAsync_VerticalBarChart_AllowsShowingDataPoints()
         {
-            List<VariableParameters> cubeParams =
+            List<DimensionParameters> cubeParams =
             [
-                new VariableParameters(VariableType.Content, 1),
-                new VariableParameters(VariableType.Time, 10),
-                new VariableParameters(VariableType.OtherClassificatory, 1)
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 10),
+                new DimensionParameters(DimensionType.Other, 1)
             ];
 
-            List<VariableParameters> metaParams =
+            List<DimensionParameters> metaParams =
             [
-                new VariableParameters(VariableType.Content, 5),
-                new VariableParameters(VariableType.Time, 15),
-                new VariableParameters(VariableType.OtherClassificatory, 6)
+                new DimensionParameters(DimensionType.Content, 5),
+                new DimensionParameters(DimensionType.Time, 15),
+                new DimensionParameters(DimensionType.Other, 6)
             ];
 
-            CreationController testController = BuildController(cubeParams, metaParams);
-            CubeQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
+            CreationController testController = TestCreationControllerBuilder.BuildController(cubeParams, metaParams);
+            MatrixQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
             VisualizationSettingsRequest rulesRequest = new()
             {
                 SelectedVisualization = VisualizationType.VerticalBarChart,
@@ -344,26 +323,26 @@ namespace CreationControllerTests
             int otherVarBAmount,
             int otherVarCAmount)
         {
-            List<VariableParameters> cubeParams =
+            List<DimensionParameters> cubeParams =
             [
-                new VariableParameters(VariableType.Content, cVarAmount),
-                new VariableParameters(VariableType.Time, timeVarAmount),
-                new VariableParameters(VariableType.Geological, otherVarAAmount),
-                new VariableParameters(VariableType.Ordinal, otherVarBAmount),
-                new VariableParameters(VariableType.OtherClassificatory, otherVarCAmount)
+                new DimensionParameters(DimensionType.Content, cVarAmount),
+                new DimensionParameters(DimensionType.Time, timeVarAmount),
+                new DimensionParameters(DimensionType.Geographical, otherVarAAmount),
+                new DimensionParameters(DimensionType.Ordinal, otherVarBAmount),
+                new DimensionParameters(DimensionType.Other, otherVarCAmount)
             ];
 
-            List<VariableParameters> metaParams =
+            List<DimensionParameters> metaParams =
             [
-                new VariableParameters(VariableType.Content, 5),
-                new VariableParameters(VariableType.Time, 15),
-                new VariableParameters(VariableType.OtherClassificatory, 6),
-                new VariableParameters(VariableType.OtherClassificatory, 6),
-                new VariableParameters(VariableType.OtherClassificatory, 6)
+                new DimensionParameters(DimensionType.Content, 5),
+                new DimensionParameters(DimensionType.Time, 15),
+                new DimensionParameters(DimensionType.Other, 6),
+                new DimensionParameters(DimensionType.Other, 6),
+                new DimensionParameters(DimensionType.Other, 6)
             ];
 
-            CreationController testController = BuildController(cubeParams, metaParams);
-            CubeQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
+            CreationController testController = TestCreationControllerBuilder.BuildController(cubeParams, metaParams);
+            MatrixQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
 
             VisualizationSettingsRequest rulesRequest = new()
             {
@@ -374,6 +353,80 @@ namespace CreationControllerTests
 
             ActionResult<VisualizationRules> actionResult = await testController.GetVisualizationRulesAsync(rulesRequest);
             Assert.That(actionResult.Value.VisualizationTypeSpecificRules.AllowShowingDataPoints, Is.False);
+        }
+
+        [Test]
+        public async Task GetVisualizationRulesAsync_CalledWithZeroSizedQuery_ReturnsExpectedResult()
+        {
+            List<DimensionParameters> cubeParams =
+            [
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 12),
+                new DimensionParameters(DimensionType.Geographical, 1),
+                new DimensionParameters(DimensionType.Ordinal, 1),
+                new DimensionParameters(DimensionType.Other, 0)
+            ];
+
+            List<DimensionParameters> metaParams =
+            [
+                new DimensionParameters(DimensionType.Content, 4),
+                new DimensionParameters(DimensionType.Time, 24),
+                new DimensionParameters(DimensionType.Other, 6),
+                new DimensionParameters(DimensionType.Other, 6),
+                new DimensionParameters(DimensionType.Other, 6)
+            ];
+
+            CreationController testController = TestCreationControllerBuilder.BuildController(cubeParams, metaParams);
+            MatrixQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
+            VisualizationSettingsRequest rulesRequest = new()
+            {
+                SelectedVisualization = VisualizationType.LineChart,
+                PivotRequested = false,
+                Query = cubeQuery
+            };
+
+            ActionResult<VisualizationRules> actionResult = await testController.GetVisualizationRulesAsync(rulesRequest);
+
+            Assert.That(actionResult.Value.AllowManualPivot, Is.False);
+            Assert.That(actionResult.Value.MultiselectDimensionAllowed, Is.False);
+            Assert.That(actionResult.Value.VisualizationTypeSpecificRules, Is.Null);
+        }
+
+        [Test]
+        public async Task GetVisualizationRulesAync_CalledWithInvalidVisualizationType_ReturnsExpectedResults()
+        {
+            List<DimensionParameters> cubeParams =
+            [
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 12),
+                new DimensionParameters(DimensionType.Geographical, 1),
+                new DimensionParameters(DimensionType.Ordinal, 1),
+                new DimensionParameters(DimensionType.Other, 3)
+            ];
+
+            List<DimensionParameters> metaParams =
+            [
+                new DimensionParameters(DimensionType.Content, 4),
+                new DimensionParameters(DimensionType.Time, 24),
+                new DimensionParameters(DimensionType.Other, 6),
+                new DimensionParameters(DimensionType.Other, 6),
+                new DimensionParameters(DimensionType.Other, 6)
+            ];
+
+            CreationController testController = TestCreationControllerBuilder.BuildController(cubeParams, metaParams);
+            MatrixQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
+            VisualizationSettingsRequest rulesRequest = new()
+            {
+                SelectedVisualization = VisualizationType.ScatterPlot,
+                PivotRequested = false,
+                Query = cubeQuery
+            };
+
+            ActionResult<VisualizationRules> actionResult = await testController.GetVisualizationRulesAsync(rulesRequest);
+
+            Assert.That(actionResult.Value.AllowManualPivot, Is.False);
+            Assert.That(actionResult.Value.MultiselectDimensionAllowed, Is.False);
+            Assert.That(actionResult.Value.VisualizationTypeSpecificRules, Is.Null);
         }
     }
 }

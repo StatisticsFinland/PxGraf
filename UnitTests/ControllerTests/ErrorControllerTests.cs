@@ -8,7 +8,7 @@ using PxGraf.Controllers;
 using System;
 using System.IO;
 
-namespace ControllerTests
+namespace UnitTests.ControllerTests.ErrorControllerTests
 {
     internal class ErrorControllerTests
     {

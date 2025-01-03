@@ -21,7 +21,8 @@ jest.mock('react-i18next', () => ({
 
 jest.mock('envVars', () => ({
     PxGrafUrl: 'pxGrafUrl.fi/',
-    PublicUrl: 'publicUrl.fi/'
+    PublicUrl: 'publicUrl.fi/',
+    BasePath: ''
 }));
 
 jest.mock('react-router-dom', () => ({
@@ -46,37 +47,29 @@ const setUiContentLanguage = jest.fn();
 const mockTableResult: ITableResult = {
     isLoading: false,
     isError: false,
-    data: [
-        {
-            text: { 'fi': 'foo1', 'en': 'foo1', 'sv': 'foo1'},
-            id: 'id1',
-            type: 't',
-            updated: '1.1.2000',
-            languages: ['fi', 'en', 'sv']
-        },
-        {
-            text: { 'fi': 'foo2', 'en': 'foo2'},
-            id: 'id2',
-            type: 't',
-            updated: '1.1.2000',
-            languages: ['fi', 'en']
-        }
-    ]
+    data: {
+        headers: [],
+        files: [
+            {
+                name: { 'fi': 'foo1', 'en': 'foo1', 'sv': 'foo1' },
+                code: 'id1',
+                lastUpdated: '1.1.2000',
+                languages: ['fi', 'en', 'sv']
+            },
+            {
+                name: { 'fi': 'foo2', 'en': 'foo2' },
+                code: 'id2',
+                lastUpdated: '1.1.2000',
+                languages: ['fi', 'en']
+            }
+        ],
+    }
 }
 
 jest.mock('api/services/table', () => ({
     ...jest.requireActual('api/services/table'),
     useTableQuery: () => {
         return mockTableResult;
-    },
-}));
-
-const mockLanguagesResult = ["fi", "en", "sv"];
-
-jest.mock('api/services/languages', () => ({
-    ...jest.requireActual('api/services/languages'),
-    useLanguagesQuery: () => {
-        return mockLanguagesResult;
     },
 }));
 

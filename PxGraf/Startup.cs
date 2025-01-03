@@ -6,19 +6,22 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.FeatureManagement;
 using Microsoft.OpenApi.Models;
-using Newtonsoft.Json.Serialization;
 using NLog.Extensions.Logging;
-using PxGraf.Caching;
-using PxGraf.PxWebInterface;
-using PxGraf.PxWebInterface.Caching;
 using PxGraf.Settings;
 using PxGraf.Utility;
-using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Runtime.Serialization;
+using System;
+using PxGraf.Datasource;
+using PxGraf.Datasource.PxWebInterface;
+using PxGraf.Datasource.DatabaseConnection;
+using PxGraf.Datasource.Cache;
+using PxGraf.Models.Queries;
+using PxGraf.Datasource.FileDatasource;
+using PxGraf.Datasource.ApiDatasource;
+using System.Text;
 
 namespace PxGraf
 {
@@ -46,6 +49,10 @@ namespace PxGraf
             catch(IOException ex)
             {
                 logger.LogCritical(ex, "A file system error occurred during startup");
+            }
+            catch (InvalidOperationException ex)
+            {
+                throw new InvalidOperationException("An error occurred while parsing the translation file", ex);
             }
         }
 
@@ -85,23 +92,13 @@ namespace PxGraf
 #pragma warning restore S5122
             });
             services.AddMemoryCache();
-
-            services.AddControllers()
-                .AddNewtonsoftJson(mvcNewtonsoftJsonOptions =>
-                {
-                    mvcNewtonsoftJsonOptions.AllowInputFormatterExceptionMessages = HostEnvironment.IsDevelopment();
-                    mvcNewtonsoftJsonOptions.SerializerSettings.ContractResolver = new DefaultContractResolver
-                    {
-                        NamingStrategy = new CamelCaseNamingStrategy()
-                    };
-
-                    //We have global error handler but for some reason serialization errors don't end up there
-                    //...until we throw in error handler...
-                    mvcNewtonsoftJsonOptions.SerializerSettings.Error += (sender, args) =>
-                    {
-                        throw new SerializationException("Serialization failed", args.ErrorContext.Error);
-                    };
-                });
+            services.AddControllers().AddJsonOptions(options =>
+            {
+                options.AllowInputFormatterExceptionMessages = HostEnvironment.IsDevelopment();
+                options.JsonSerializerOptions.PropertyNamingPolicy = GlobalJsonConverterOptions.Default.PropertyNamingPolicy;
+                options.JsonSerializerOptions.PropertyNameCaseInsensitive = GlobalJsonConverterOptions.Default.PropertyNameCaseInsensitive;
+                options.JsonSerializerOptions.AllowTrailingCommas = GlobalJsonConverterOptions.Default.AllowTrailingCommas;
+            });
 
             services.AddMvc(c =>
                 c.Conventions.Add(new ApiExplorerConventions())
@@ -129,11 +126,23 @@ namespace PxGraf
                     UseDefaultCredentials = true
                 });
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddSingleton<PxWebInterface.IPxWebApiInterface, PxWebInterface.PxWebV1ApiInterface>();
             services.AddSingleton<ISqFileInterface, SqFileInterface>();
-            services.AddSingleton<ICachedPxWebConnection, CachedPxWebConnection>();
-            services.AddSingleton<IVisualizationResponseCache, VisualizationResponseCache>();
-            services.AddSingleton<IPxWebApiResponseCache, PxWebApiResponseCache>();
+            services.AddSingleton<IMultiStateMemoryTaskCache>(provider => new MultiStateMemoryTaskCache(
+                Configuration.Current.CacheOptions.Database.ItemAmountLimit,
+                TimeSpan.FromSeconds(Configuration.Current.CacheOptions.CacheFreshnessCheckIntervalSeconds)));
+            if (Configuration.Current.LocalFilesystemDatabaseConfig.Enabled)
+            {
+                services.AddSingleton<IFileDatasource>(provider => new LocalFilesystemDatabase(
+                    Configuration.Current.LocalFilesystemDatabaseConfig ));
+                services.AddSingleton<ICachedDatasource, CachedFileDatasource>();
+            }
+            else
+            {
+                services.AddSingleton<IPxWebConnection, PxWebConnection>();
+                services.AddSingleton<IApiDatasource, PxWebV1ApiInterface>();
+                services.AddSingleton<ICachedDatasource, CachedApiDatasource>();
+            }
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

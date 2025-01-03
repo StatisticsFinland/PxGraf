@@ -10,11 +10,11 @@ namespace PxGraf.Models.Queries
         /// <summary>
         /// Reference to the table in Px file system.
         /// </summary>
-        public PxFileReference TableReference { get; set; }
+        public PxTableReference TableReference { get; set; }
 
         /// <summary>
-        /// Dictionary that maps variable codes and their respective filters.
+        /// Dictionary that maps dimension codes and their respective filters.
         /// </summary>
-        public Dictionary<string, ValueFilter> Filters { get; set; }
+        public Dictionary<string, IValueFilter> Filters { get; set; }
     }
 }

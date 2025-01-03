@@ -1,14 +1,14 @@
-import VariableSelectionList from 'components/VariableSelection/VariableSelectionList';
+import DimensionSelectionList from 'components/VariableSelection/DimensionSelectionList';
 import React from 'react';
 import { Box } from '@mui/material';
 import { EditorContext } from 'contexts/editorContext';
 import styled from 'styled-components';
-import { IVariable } from 'types/cubeMeta';
+import { IDimension } from 'types/cubeMeta';
 import { Query } from 'types/query';
 
 interface EditorFilterSectionProps {
-    variables: IVariable[],
-    resolvedVariableCodes: { [key: string]: string[] }
+    dimensions: IDimension[],
+    resolvedDimensionCodes: { [key: string]: string[] }
     queries: Query
     width?: number
     maxWidthPercentage?: number
@@ -34,22 +34,22 @@ const SelectorWrapper = styled(Box)<{width: number, $maxWidthPercentage: number}
 `;
 
 /**
- * Component for the filter section in the editor. Contains @see {@link VariableSelectionList} for each variable for filtering values and defining selectable variables.
- * @param {IVariable[]} variables Variables available for the table.
- * @param {{[key:string]: string[]}} resolvedVariableCodes Codes for the resolved variable values.
- * @param {Query} queries Object that contains variable queries
- * @param {number} width Width of the variable filter section
- * @param {number} maxWidthPercentage Maximum width of the variable filter section on the whole window defined in percentages
+ * Component for the filter section in the editor. Contains @see {@link DimensionSelectionList} for each dimension for filtering values and defining selectable dimensionss.
+ * @param {IDimension[]} dimensions Dimensions available for the table.
+ * @param {{[key:string]: string[]}} resolvedDimensionCodes Codes for the resolved dimension values.
+ * @param {Query} queries Object that contains dimension queries
+ * @param {number} width Width of the dimension filter section
+ * @param {number} maxWidthPercentage Maximum width of the dimension filter section on the whole window defined in percentages
  */
-export const EditorFilterSection: React.FC<EditorFilterSectionProps> = ({ variables, resolvedVariableCodes, queries, width, maxWidthPercentage }) => {
+export const EditorFilterSection: React.FC<EditorFilterSectionProps> = ({ dimensions, resolvedDimensionCodes, queries, width, maxWidthPercentage }) => {
     
     const { setQuery } = React.useContext(EditorContext);
 
     return (
         <SelectorWrapper width={width} $maxWidthPercentage={maxWidthPercentage}>
-            <VariableSelectionList
-                variables={variables}
-                resolvedVariableCodes={resolvedVariableCodes}
+            <DimensionSelectionList
+                dimensions={dimensions}
+                resolvedDimensionCodes={resolvedDimensionCodes}
                 query={queries}
                 onQueryChanged={setQuery}
             />

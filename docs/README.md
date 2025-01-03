@@ -1,7 +1,7 @@
 # PxGraf
 
 ## Overview
-PxGraf is a tool developed and maintained by Statistics Finland (Tilastokeskus) for visualizing statistical data from Px tables using the PxWeb API. The backend, written in C# with ASP.NET Core, fetches data from the PxWeb API and processes it for visualizations and serves it via REST apis. The frontend, written in TypeScript with React, provides a user interface for selecting and previewing data for visualizations and saving them as queries. The visualizations are drawn using PxVisualizer npm package, also developed and maintained by Statistics Finland.
+PxGraf is a tool developed and maintained by Statistics Finland (Tilastokeskus) for visualizing statistical data from Px tables using the PxWeb API or local px database with Px.Utils library. The backend, written in C# with ASP.NET Core, fetches px file data from the PxWeb API or local px database using Px.Utils library, processes it for visualizations and serves it via REST apis. The frontend, written in TypeScript with React, provides a user interface for selecting and previewing data for visualizations and saving them as queries. The visualizations are drawn using PxVisualizer npm package, also developed and maintained by Statistics Finland.
 
 The software is provided as is and Statistics Finland will **not** offer any support for setting up PxGraf or solving issues related to it.
 
@@ -14,7 +14,7 @@ in the [HighCharts shop](https://shop.highsoft.com/?utm_source=npmjs&utm_medium=
 - **APIs:** PxGraf's APIs provide functionality for processing the data for visualization and saving and loading queries.
 
 ## APIs
-- **Creation API:** Provides endpoints for fetching database listings, available languages and Px table metadata. It also provides functionality for metadata validation, filtering variables, generating default headers and determining which visualization types are valid for the given query. Can be disabled in the appsettings.json file.
+- **Creation API:** Provides endpoints for fetching database listings, available languages and Px table metadata. It also provides functionality for metadata validation, filtering dimensions, generating default headers and determining which visualization types are valid for the given query. Can be disabled in the appsettings.json file.
 - **Info API:** Provides information about the application. Its single endpoint returns the application's name, version and the environment it is running in.
 - **Query meta API:** Provides an endpoint that returns the metadata for a saved query given its ID.
 - **Saved query API:** Used for managing saved queries. Provides endpoints for fetching a saved query, saving a new query, archiving a query and re-archiving an existing query.
@@ -41,13 +41,21 @@ Configuration for the maximum header length and the maximum number of data point
 #### Language
 Configuration for the default language and the available languages in the backend.
 #### pxwebUrl
-The address of the PxWeb server.
+The address of the PxWeb server if in use.
 #### savedQueryDirectory
 The directory where saved query files are stored.
 #### arvhiveFileDirectory
 The directory where archived query files are stored.
 #### FeatureManagement
 Grants or denies access to the Creation API.
+#### LocalFileSystemDatabaseConfig
+Configuration for the local database if in use.
+#### LocalFileSystemDatabaseConfig.Enabled
+Determines whether the local database with Px.Utils or PxWeb api is used.
+#### LocalFileSystemDatabaseConfig.DatabaseRootPath
+The path to the database root directory.
+#### LocalFileSystemDatabaseConfig.Encoding
+Name of the encoding used in the database.
 
 ## Translation files
 

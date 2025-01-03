@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Box, Stack, Divider, Container, CircularProgress, Alert } from '@mui/material';
 
 import { EditorContext } from 'contexts/editorContext';
-import { getContentLanguages, getDefaultQueries, resolveVariables } from 'utils/editorHelpers';
+import { getDefaultQueries, resolveDimensions } from 'utils/editorHelpers';
 import { getValidatedSettings } from 'utils/ChartSettingHelpers';
 import EditorFilterSection from './EditorFilterSection';
 import EditorFooterSection from './EditorFooterSection';
@@ -15,7 +15,7 @@ import EditorDialogs from './EditorDialogs';
 import styled from 'styled-components';
 import { useCubeMetaQuery } from 'api/services/cube-meta';
 import { useDefaultHeaderQuery } from 'api/services/default-header';
-import { useResolveVariableFiltersQuery } from 'api/services/filter-variable';
+import { useResolveDimensionFiltersQuery } from 'api/services/filter-dimension';
 import { useVisualizationOptionsQuery } from 'api/services/visualization-rules';
 import { IFetchSavedQueryResponse, useSaveMutation } from 'api/services/queries';
 import { VisualizationType } from 'types/visualizationType';
@@ -24,11 +24,12 @@ import { extractCubeQuery, extractQuery } from 'utils/ApiHelpers';
 import { useNavigationContext } from 'contexts/navigationContext';
 import { useValidateTableMetadataQuery, IValidateTableMetaDataResult } from 'api/services/validate-table-metadata';
 import { UiLanguageContext } from 'contexts/uiLanguageContext';
+import { IDimension } from '../../types/cubeMeta';
 
-//Used to set the width of the variable selection and preview margin in pixels
-const variableSelectionWidth = 450;
-//Max width in % for variable selection and preview margin
-const variableSelectionMaxWidthPercentage = 33;
+//Used to set the width of the dimension selection and preview margin in pixels
+const dimensionSelectionWidth = 450;
+//Max width in % for dimension selection and preview margin
+const dimensionSelectionMaxWidthPercentage = 33;
 
 const MetaPreviewSectionWrapper = styled(Box)`
     flex: 2 0;
@@ -38,10 +39,10 @@ const MetaPreviewSectionWrapper = styled(Box)`
     grid-template-rows: auto auto 1fr auto auto;
     grid-template-areas: 'parameters' 'parameters-preview-div' 'preview' 'preview-footer-div' 'footer';
     min-height: 100%;
-    margin-left: ${variableSelectionWidth}px;
+    margin-left: ${dimensionSelectionWidth}px;
 
-    @media (max-width: ${variableSelectionWidth / (variableSelectionMaxWidthPercentage / 100) }px) {
-        margin-left: ${variableSelectionMaxWidthPercentage}%;
+    @media (max-width: ${dimensionSelectionWidth / (dimensionSelectionMaxWidthPercentage / 100) }px) {
+        margin-left: ${dimensionSelectionMaxWidthPercentage}%;
     }
 `;
 
@@ -59,7 +60,7 @@ const CubeMetaAlert = styled(Alert)`
 
 /**
  * Main component for the editor view.
- * Contains the @see {@link EditorFilterSection} for defining values for each variable, @see {@link EditorMetaSection} for editing the displayed meta data, @see {@link EditorPreviewSection} for previewing the chart and @see {@link EditorFooterSection} for saving a visualization.
+ * Contains the @see {@link EditorFilterSection} for defining values for each dimension, @see {@link EditorMetaSection} for editing the displayed meta data, @see {@link EditorPreviewSection} for previewing the chart and @see {@link EditorFooterSection} for saving a visualization.
  */
 export const Editor = () => {
 
@@ -106,7 +107,7 @@ export const Editor = () => {
     );
 
     useEffect(() => {
-        if(path.length) {
+        if (path.length) {
             setTablePath(path);
         }
     }, [path]);
@@ -115,7 +116,7 @@ export const Editor = () => {
     const tableValidityResponse = useValidateTableMetadataQuery(path);
     const isTableInvalid = (response: IValidateTableMetaDataResult) => {
         if (response.data) {
-            return !response.data.allVariablesContainValues || !response.data.tableHasContentVariable || !response.data.tableHasTimeVariable
+            return !response.data.allDimensionsContainValues || !response.data.tableHasContentDimension || !response.data.tableHasTimeDimension
         }
         else {
             return !response.isLoading;
@@ -127,12 +128,12 @@ export const Editor = () => {
 
     const { language, languageTab, setLanguageTab, uiContentLanguage, setUiContentLanguage } = React.useContext(UiLanguageContext);
 
-    const contentLanguages: string[] = React.useMemo(() => {
-        const langs = getContentLanguages(cubeMetaResponse.data);
-        return langs;
-    }, [cubeMetaResponse.data]);
+    const contentLanguages: string[] = cubeMetaResponse.data ? cubeMetaResponse.data.availableLanguages : [];
 
     useEffect(() => {
+        if (!contentLanguages || contentLanguages.length == 0) {
+            return;
+        }
         if (contentLanguages.includes(language)) {
             setUiContentLanguage(language);
         }
@@ -143,12 +144,14 @@ export const Editor = () => {
         }
     }, [language, contentLanguages]);
 
+    const dimensions: IDimension[] = cubeMetaResponse.data?.dimensions ?? [];
+
     const modifiedQuery = React.useMemo(() => {
         if (query != null) {
             return query;
         }
-        else if (cubeMetaResponse.data != null) {
-            return getDefaultQueries(cubeMetaResponse.data.variables);
+        else if (dimensions != null) {
+            return getDefaultQueries(dimensions);
         }
         else {
             return null;
@@ -158,30 +161,30 @@ export const Editor = () => {
     const defaultHeaderResponse = useDefaultHeaderQuery(path, modifiedQuery);
     const queryInfoResponse = useQueryInfoQuery(path, modifiedQuery, cubeQuery);
 
-    const resolvedVariableCodesResponse = useResolveVariableFiltersQuery(path, modifiedQuery);
-    const resolvedVariableCodes = React.useMemo(() => {
-        if (resolvedVariableCodesResponse.data != null) {
-            return resolvedVariableCodesResponse.data;
+    const resolvedDimensionCodesResponse = useResolveDimensionFiltersQuery(path, modifiedQuery);
+    const resolvedDimensionCodes = React.useMemo(() => {
+        if (resolvedDimensionCodesResponse.data != null) {
+            return resolvedDimensionCodesResponse.data;
         }
-        else if (cubeMetaResponse.data != null) {
-            const varCodesNoVals = {}
-            cubeMetaResponse.data.variables.forEach(v => {
-                varCodesNoVals[v.code] = [];
+        else if (dimensions != null) {
+            const dimCodesNoVals = {}
+            dimensions.forEach(v => {
+                dimCodesNoVals[v.code] = [];
             })
-            return varCodesNoVals;
+            return dimCodesNoVals;
         }
         else {
             return {};
         }
-    }, [resolvedVariableCodesResponse, cubeMetaResponse.data]);
-    const resolvedVariables = React.useMemo(() => {
-        if (cubeMetaResponse.data?.variables != null) {
-            return resolveVariables(cubeMetaResponse.data.variables, resolvedVariableCodes);
+    }, [resolvedDimensionCodesResponse, cubeMetaResponse.data]);
+    const resolvedDimensions = React.useMemo(() => {
+        if (cubeMetaResponse.data != null && dimensions != null) {
+            return resolveDimensions(dimensions, resolvedDimensionCodes);
         }
         else {
             return null;
         }
-    }, [cubeMetaResponse.data, resolvedVariableCodes]);
+    }, [cubeMetaResponse.data, resolvedDimensionCodes]);
     const selectedVisualization = React.useMemo(() => {
         if (queryInfoResponse.data?.validVisualizations.length > 0) {
             if (queryInfoResponse.data?.validVisualizations.includes(selectedVisualizationUserInput)) {
@@ -201,8 +204,8 @@ export const Editor = () => {
         visualizationSettingsUserInput?.pivotRequested ?? false,
     );
     const visualizationSettings = React.useMemo(() => {
-        if (selectedVisualization != null && visualizationRulesResponse.data?.sortingOptions != null && resolvedVariables != null) {
-            const result = getValidatedSettings(visualizationSettingsUserInput, selectedVisualization, visualizationRulesResponse.data.sortingOptions, resolvedVariables, modifiedQuery);
+        if (selectedVisualization != null && visualizationRulesResponse.data?.sortingOptions != null && resolvedDimensions != null) {
+            const result = getValidatedSettings(visualizationSettingsUserInput, selectedVisualization, visualizationRulesResponse.data.sortingOptions, resolvedDimensions, modifiedQuery);
             if (defaultSelectables && Object.keys(defaultSelectables).length > 0) {
                 result.defaultSelectableVariableCodes = defaultSelectables;
             } else {
@@ -213,7 +216,7 @@ export const Editor = () => {
         else {
             return null;
         }
-    }, [visualizationSettingsUserInput, selectedVisualization, visualizationRulesResponse.data?.sortingOptions, resolvedVariables, modifiedQuery, defaultSelectables]);
+    }, [visualizationSettingsUserInput, selectedVisualization, visualizationRulesResponse.data?.sortingOptions, resolvedDimensions, modifiedQuery, defaultSelectables]);
     const saveQueryMutation = useSaveMutation(path, modifiedQuery, cubeQuery, selectedVisualization, visualizationSettings);
 
     const errorContainer = (errorMessage: string) => {
@@ -232,13 +235,13 @@ export const Editor = () => {
             </Container>
         );
     }
-    else if (tableIsInvalid || cubeMetaResponse.isError || !cubeMetaResponse?.data?.variables) {
-        const errorWithCubeMeta = cubeMetaResponse.isError || !cubeMetaResponse?.data?.variables;
+    else if (tableIsInvalid || cubeMetaResponse.isError || !cubeMetaResponse?.data || !dimensions) {
+        const errorWithCubeMeta = cubeMetaResponse.isError || !cubeMetaResponse?.data || !dimensions;
         const errorConditionsAndMessages = [
-            { condition: tableValidityResponse.isError || (errorWithCubeMeta && tableValidityResponse.data?.allVariablesContainValues), message: t("error.contentLoad") },
-            { condition: !tableValidityResponse.data?.tableHasContentVariable, message: t("error.contentVariableMissing") },
-            { condition: !tableValidityResponse.data?.tableHasTimeVariable, message: t("error.timeVariableMissing") },
-            { condition: !tableValidityResponse.data?.allVariablesContainValues, message: t("error.variablesMissingValues") }
+            { condition: tableValidityResponse.isError || (errorWithCubeMeta && tableValidityResponse.data?.allDimensionsContainValues), message: t("error.contentLoad") },
+            { condition: !tableValidityResponse.data?.tableHasContentDimension, message: t("error.contentVariableMissing") },
+            { condition: !tableValidityResponse.data?.tableHasTimeDimension, message: t("error.timeVariableMissing") },
+            { condition: !tableValidityResponse.data?.allDimensionsContainValues, message: t("error.variablesMissingValues") }
         ];
         const errorMessages = errorConditionsAndMessages
             .filter(item => item.condition)
@@ -252,11 +255,11 @@ export const Editor = () => {
     return (
         <Stack direction="row">
             <EditorFilterSection
-                variables={cubeMetaResponse.data?.variables}
-                resolvedVariableCodes={resolvedVariableCodes}
+                dimensions={dimensions}
+                resolvedDimensionCodes={resolvedDimensionCodes}
                 queries={modifiedQuery}
-                width={variableSelectionWidth}
-                maxWidthPercentage={variableSelectionMaxWidthPercentage}
+                width={dimensionSelectionWidth}
+                maxWidthPercentage={dimensionSelectionMaxWidthPercentage}
             />
             <Divider orientation="vertical" />
             <MetaPreviewSectionWrapper>
@@ -264,10 +267,10 @@ export const Editor = () => {
                     defaultHeaderResponse={defaultHeaderResponse}
                     visualizationRulesResponse={visualizationRulesResponse}
                     queryInfo={queryInfoResponse.data}
-                    resolvedVariables={resolvedVariables}
+                    resolvedDimensions={resolvedDimensions}
                     selectedVisualization={selectedVisualization}
                     settings={visualizationSettings}
-                    variableQuery={modifiedQuery}
+                    dimensionQuery={modifiedQuery}
                     contentLanguages={contentLanguages}
                 />
                 <PreviewDivider />

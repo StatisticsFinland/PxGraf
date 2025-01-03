@@ -7,9 +7,9 @@ import { VisualizationType } from 'types/visualizationType';
 
 /**
  * Interface for editor context properties
- * @property {ICubeQuery} cubeQuery - Query object that contains the header and variable queries
+ * @property {ICubeQuery} cubeQuery - Query object that contains the header and dimension queries
  * @property {React.Dispatch<ICubeQuery>} setCubeQuery - Function to set the cube query
- * @property {Query} query - Query object that contains the variable queries
+ * @property {Query} query - Query object that contains the dimension queries
  * @property {React.Dispatch<Query>} setQuery - Function to set the query
  * @property {boolean} saveDialogOpen - Flag to indicate if the save dialog is open
  * @property {React.Dispatch<boolean>} setSaveDialogOpen - Function to set the save dialog open flag
@@ -17,7 +17,7 @@ import { VisualizationType } from 'types/visualizationType';
  * @property {React.Dispatch<VisualizationType>} setSelectedVisualizationUserInput - Function to set the selected visualization type
  * @property {IVisualizationSettings} visualizationSettingsUserInput - The visualization settings
  * @property {React.Dispatch<IVisualizationSettings>} setVisualizationSettingsUserInput - Function to set the visualization settings
- * @property {{ [key: string]: string[] }} defaultSelectables - The default selectables for each variable
+ * @property {{ [key: string]: string[] }} defaultSelectables - The default selectables for each dimension
  * @property {React.Dispatch<{ [key: string]: string[] }>} setDefaultSelectables - Function to set the default selectables
  */
 interface IEditorContext {

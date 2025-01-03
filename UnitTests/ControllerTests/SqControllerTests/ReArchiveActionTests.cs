@@ -1,29 +1,24 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
+using Px.Utils.Models.Metadata;
+using Px.Utils.Models.Metadata.Enums;
 using PxGraf.Controllers;
-using PxGraf.Enums;
+using PxGraf.Datasource;
 using PxGraf.Language;
 using PxGraf.Models.Queries;
 using PxGraf.Models.Requests;
 using PxGraf.Models.Responses;
 using PxGraf.Models.SavedQueries;
-using PxGraf.PxWebInterface;
-using PxGraf.PxWebInterface.Caching;
 using PxGraf.Settings;
-using System;
+using PxGraf.Utility;
 using System.Collections.Generic;
-using System.IO;
 using System.Threading.Tasks;
 using UnitTests.Fixtures;
-using UnitTests.TestDummies;
-using UnitTests.TestDummies.DummyQueries;
 
-namespace ControllerTests
+namespace UnitTests.ControllerTests.SqControllerTests
 {
     internal class ReArchiveActionTests
     {
@@ -40,94 +35,96 @@ namespace ControllerTests
             Configuration.Load(configuration);
         }
 
-        private static SqController BuildController(List<VariableParameters> cubeParams, List<VariableParameters> metaParams, VisualizationSettings vSettings = null)
+        private static SqController BuildController(List<DimensionParameters> cubeParams, List<DimensionParameters> metaParams)
         {
-            PxWebApiDummy pxWebApiDummy = new(cubeParams, metaParams);
-            Dictionary<string, SavedQuery> testQueries = new()
+            Mock<ICachedDatasource> mockCachedDatasource = new();
+            Mock<ISqFileInterface> mockSqFileInterface = new();
+            Mock<ILogger<SqController>> mockLogger = new();
+
+            mockCachedDatasource.Setup(c => c.GetMatrixMetadataCachedAsync(It.IsAny<PxTableReference>()))
+                .Returns(Task.Run(() => (IReadOnlyMatrixMetadata)TestDataCubeBuilder.BuildTestMeta(metaParams)));
+
+            mockCachedDatasource.Setup(c => c.GetMatrixCachedAsync(It.IsAny<PxTableReference>(), It.IsAny<IReadOnlyMatrixMetadata>()))
+                .Returns(Task.Run(() => TestDataCubeBuilder.BuildTestMatrix(cubeParams)));
+
+            mockSqFileInterface.Setup(s => s.SerializeToFile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<SavedQuery>()))
+                .Returns(Task.CompletedTask);
+
+            mockSqFileInterface.Setup(s => s.SavedQueryExists(It.IsAny<string>(), It.IsAny<string>()))
+                .Returns(cubeParams.Count > 0);
+
+            mockSqFileInterface.Setup(s => s.ReadSavedQueryFromFile(It.IsAny<string>(), It.IsAny<string>()))
+                .Returns(Task.Run(() => TestDataCubeBuilder.BuildTestSavedQuery(cubeParams, false, new LineChartVisualizationSettings(null, false, null))));
+
+            return new SqController(mockCachedDatasource.Object, mockSqFileInterface.Object, mockLogger.Object);
+        }
+
+        [Test]
+        public async Task ReArchiveExistingQueryAsync_NotFoundResult()
+        {
+            SqController controller = BuildController([], []);
+            ReArchiveRequest request = new ()
             {
-                [TEST_SQ_ID] = TestDataCubeBuilder.BuildTestSavedQuery(cubeParams, false, vSettings ?? new LineChartVisualizationSettings(null, false, null))
+                SqId = TEST_SQ_ID
             };
-            SqFileInterfaceDummy sqFileDummy = new(testQueries);
+            ActionResult<ReArchiveResponse> result = await controller.ReArchiveExistingQueryAsync(request);
 
-            ServiceCollection services = new();
-            services.AddMemoryCache();
-            ServiceProvider serviceProvider = services.BuildServiceProvider();
-
-            IMemoryCache memoryCache = serviceProvider.GetService<IMemoryCache>();
-            IPxWebApiResponseCache apiCache = new PxWebApiResponseCache(memoryCache);
-
-            return new SqController(new CachedPxWebConnection(pxWebApiDummy, apiCache), sqFileDummy, new Mock<ILogger<SqController>>().Object);
+            Assert.That(result.Result, Is.InstanceOf<NotFoundResult>());
         }
 
         [Test]
-        public async Task SqNotFoundTest_NotFoundResult()
+        public async Task ReArchiveExistingQueryAsync_WrongChartType()
         {
-            List<VariableParameters> cubeParams =
+            List<DimensionParameters> cubeParameters =
             [
-                new VariableParameters(VariableType.Content, 1),
-                new VariableParameters(VariableType.Time, 10),
-                new VariableParameters(VariableType.OtherClassificatory, 1)
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 1),
+                new DimensionParameters(DimensionType.Other, 3),
+                new DimensionParameters(DimensionType.Other, 5),
             ];
-
-            List<VariableParameters> metaParams =
+            List<DimensionParameters> metaParameters =
             [
-                new VariableParameters(VariableType.Content, 10),
-                new VariableParameters(VariableType.Time, 10),
-                new VariableParameters(VariableType.OtherClassificatory, 15),
-                new VariableParameters(VariableType.OtherClassificatory, 7),
+                new DimensionParameters(DimensionType.Content, 10),
+                new DimensionParameters(DimensionType.Time, 10),
+                new DimensionParameters(DimensionType.Other, 15),
+                new DimensionParameters(DimensionType.Other, 7)
             ];
+            SqController controller = BuildController(cubeParameters, metaParameters);
+            ReArchiveRequest request = new()
+            {
+                SqId = TEST_SQ_ID
+            };
+            ActionResult<ReArchiveResponse> result = await controller.ReArchiveExistingQueryAsync(request);
 
-            SqController testController = BuildController(cubeParams, metaParams);
-            ActionResult<ReArchiveResponse> actionResult = await testController.ReArchiveExistingQueryAsync(new ReArchiveRequest() { SqId = "not_found_asdf" });
-            Assert.That(actionResult.Result, Is.InstanceOf<NotFoundResult>());
+            Assert.That(result.Result, Is.InstanceOf<BadRequestResult>());
         }
 
         [Test]
-        public async Task SqNotFoundTest_WrongChartType()
+        public async Task ReArchiveExistingQueryAsync_Success()
         {
-            List<VariableParameters> cubeParams =
+            List<DimensionParameters> cubeParameters =
             [
-                new VariableParameters(VariableType.Content, 1),
-                new VariableParameters(VariableType.Time, 2), // horizontal bar chart is not possible with multiple time values
-                new VariableParameters(VariableType.OtherClassificatory, 5),
-                new VariableParameters(VariableType.OtherClassificatory, 1)
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 10),
+                new DimensionParameters(DimensionType.Other, 1),
+                new DimensionParameters(DimensionType.Other, 1),
             ];
-
-            List<VariableParameters> metaParams =
+            List<DimensionParameters> metaParameters =
             [
-                new VariableParameters(VariableType.Content, 10),
-                new VariableParameters(VariableType.Time, 10),
-                new VariableParameters(VariableType.OtherClassificatory, 15),
-                new VariableParameters(VariableType.OtherClassificatory, 7),
+                new DimensionParameters(DimensionType.Content, 10),
+                new DimensionParameters(DimensionType.Time, 10),
+                new DimensionParameters(DimensionType.Other, 15),
+                new DimensionParameters(DimensionType.Other, 7)
             ];
+            SqController controller = BuildController(cubeParameters, metaParameters);
+            ReArchiveRequest request = new()
+            {
+                SqId = TEST_SQ_ID
+            };
+            ActionResult<ReArchiveResponse> result = await controller.ReArchiveExistingQueryAsync(request);
 
-            SqController testController = BuildController(cubeParams, metaParams, new HorizontalBarChartVisualizationSettings(null));
-            ActionResult<ReArchiveResponse> actionResult = await testController.ReArchiveExistingQueryAsync(new ReArchiveRequest() { SqId = TEST_SQ_ID });
-            Assert.That(actionResult.Result, Is.InstanceOf<BadRequestResult>());
-        }
-
-        [Test]
-        public async Task SqNotFoundTest_Success()
-        {
-            List<VariableParameters> cubeParams =
-            [
-                new VariableParameters(VariableType.Content, 1),
-                new VariableParameters(VariableType.Time, 1),
-                new VariableParameters(VariableType.OtherClassificatory, 5),
-                new VariableParameters(VariableType.OtherClassificatory, 1)
-            ];
-
-            List<VariableParameters> metaParams =
-            [
-                new VariableParameters(VariableType.Content, 10),
-                new VariableParameters(VariableType.Time, 10),
-                new VariableParameters(VariableType.OtherClassificatory, 15),
-                new VariableParameters(VariableType.OtherClassificatory, 7),
-            ];
-
-            SqController testController = BuildController(cubeParams, metaParams, new HorizontalBarChartVisualizationSettings(null));
-            ActionResult<ReArchiveResponse> actionResult = await testController.ReArchiveExistingQueryAsync(new ReArchiveRequest() { SqId = TEST_SQ_ID });
-            Assert.That(actionResult.Value, Is.InstanceOf<ReArchiveResponse>());
+            Assert.That(result.Value, Is.Not.Null);
+            Assert.That(result.Value, Is.InstanceOf<ReArchiveResponse>());
         }
     }
 }

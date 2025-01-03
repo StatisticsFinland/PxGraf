@@ -1,10 +1,11 @@
-﻿using Newtonsoft.Json;
-using PxGraf.Data.MetaData;
+﻿using Px.Utils.Language;
+using Px.Utils.Models.Metadata.Enums;
 using PxGraf.Enums;
-using PxGraf.Language;
 using PxGraf.Models.Queries;
-using System;
 using System.Collections.Generic;
+using System;
+using PxGraf.Data.MetaData;
+using System.Text.Json.Serialization;
 
 namespace PxGraf.Models.Responses
 {
@@ -16,35 +17,54 @@ namespace PxGraf.Models.Responses
         /// <summary>
         /// Information about the visualization settings to be used by the PxVisualizer package.
         /// </summary>
-        [JsonObject(ItemNullValueHandling = NullValueHandling.Ignore)]
         public sealed class PxVisualizerSettings
         {
+            [JsonConverter(typeof(JsonStringEnumConverter))]
             public VisualizationType VisualizationType { get; set; }
-            public Dictionary<string, List<string>> DefaultSelectableVariableCodes { get; set; }
-            public string MultiselectableVariableCode { get; set; }
-            public TimeVariableInterval TimeVariableIntervals { get; set; }
+
+            [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+            [JsonPropertyName("defaultSelectableVariableCodes")] // legacy name, changing this will be a breaking change for PxVisualizer
+            public Dictionary<string, List<string>> DefaultSelectableDimensionCodes { get; set; }
+            
+            [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+            [JsonPropertyName("multiSelectableVariableCode")] // legacy name, changing this will be a breaking change for PxVisualizer
+            public string MultiselectableDimensionCode { get; set; }
+            [JsonPropertyName("timeVariableIntervals")] // legacy name, changing this will be a breaking change for PxVisualizer
+            public Px.Utils.Models.Metadata.Enums.TimeDimensionInterval TimeDimensionIntervals { get; set; }
+
+            [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
             public DateTime? TimeSeriesStartingPoint { get; set; }
+            
+            [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
             public bool? CutValueAxis { get; set; }
+
+            [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
             public int? MarkerSize { get; set; }
+
+            [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
             public bool? ShowLastLabel { get; set; }
+
+            [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
             public string Sorting { get; set; }
+
+            [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
             public bool? ShowDataPoints { get; set; }
         }
 
         /// <summary>
         /// Reference to the table that the data is from.
         /// </summary>
-        public PxFileReference TableReference { get; set; }
+        public PxTableReference TableReference { get; set; }
 
         /// <summary>
         /// The data points to be visualized in the order determined by MetaData property.
         /// </summary>
-        public IReadOnlyList<double?> Data { get; set; }
+        public IReadOnlyList<decimal?> Data { get; set; }
 
         /// <summary>
         /// Dictionary that contains notes for the data points, where the key is the index of the data point and the value is the note represented as a multilanguage string.
         /// </summary>
-        public IReadOnlyDictionary<int, IReadOnlyMultiLanguageString> DataNotes { get; set; }
+        public IReadOnlyDictionary<int, MultilanguageString> DataNotes { get; set; }
 
         /// <summary>
         /// Information about missing data points where key is the index of the data point. The value represents the index of the missing data point type:
@@ -55,27 +75,30 @@ namespace PxGraf.Models.Responses
         /// <summary>
         /// Information about the variables and their values that define the order of the data points in the Data property.
         /// </summary>
-        public IReadOnlyList<IReadOnlyVariable> MetaData { get; set; }
+        public IReadOnlyList<Variable> MetaData { get; set; }
 
         /// <summary>
         /// Variable codes for variables that have been set as selectable.
         /// </summary>
-        public IReadOnlyList<string> SelectableVariableCodes { get; set; }
+        [JsonPropertyName("selectableVariableCodes")] // legacy name, changing this will be a breaking change for PxVisualizer
+        public IReadOnlyList<string> SelectableDimensionCodes { get; set; }
 
         /// <summary>
         /// List of variable codes to be used on rows.
         /// </summary>
-        public IReadOnlyList<string> RowVariableCodes { get; set; }
+        [JsonPropertyName("rowVariableCodes")] // legacy name, changing this will be a breaking change for PxVisualizer
+        public IReadOnlyList<string> RowDimensionCodes { get; set; }
 
         /// <summary>
         /// List of variable codes to be used on columns.
         /// </summary>
-        public IReadOnlyList<string> ColumnVariableCodes { get; set; }
+        [JsonPropertyName("columnVariableCodes")] // legacy name, changing this will be a breaking change for PxVisualizer
+        public IReadOnlyList<string> ColumnDimensionCodes { get; set; }
 
         /// <summary>
         /// Header text for the visualization.
         /// </summary>
-        public IReadOnlyMultiLanguageString Header { get; set; }
+        public MultilanguageString Header { get; set; }
 
         /// <summary>
         /// Object that contains settings for the PxVisualizer package.

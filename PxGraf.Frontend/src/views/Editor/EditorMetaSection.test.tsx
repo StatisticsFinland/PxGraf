@@ -3,7 +3,7 @@ import EditorMetaSection from "./EditorMetaSection";
 import { render } from "@testing-library/react";
 import { IHeaderResult } from "api/services/default-header";
 import { IVisualizationSettingsResult } from "api/services/visualization-rules";
-import { IVariable, VariableType } from "types/cubeMeta";
+import { EMetaPropertyType, IDimension, EDimensionType } from "types/cubeMeta";
 import { FilterType, IQueryInfo, Query } from "types/query";
 import { IVisualizationSettings } from "types/visualizationSettings";
 import { VisualizationType } from "types/visualizationType";
@@ -18,7 +18,7 @@ const headerResultMock: IHeaderResult = {
     }
 }
 
-const mockVariables: IVariable[] = [
+const mockDimensions: IDimension[] = [
     {
         code: 'foo',
         name: {
@@ -26,39 +26,58 @@ const mockVariables: IVariable[] = [
             'sv': 'foosv',
             'en': 'fooen'
         },
-        note: {
-            'fi': 'foonotefi',
-            'sv': 'foonotesv',
-            'en': 'foonoteen'
-        },
-        type: VariableType.Content,
+        type: EDimensionType.Content,
         values: [
             {
                 code: 'fooval1',
-                isSum: false,
                 name: {
                     'fi': 'fgfgfg1',
                     'sv': 'fgfgfg1',
                     'en': 'fgfgfg1'
                 },
-                note: {
-                    'fi': 'fghjfgh1',
-                    'sv': 'fghjfgh1',
-                    'en': 'fghjfgh1'
+                isVirtual: false,
+                unit: {
+                    'fi': 'yksikko',
+                    'sv': 'enhet',
+                    'en': 'unit'
+                },
+                precision: 0,
+                lastUpdated: '2021-01-01',
+                additionalProperties: {
+                    SOURCE: {
+                        type: EMetaPropertyType.MultilanguageText,
+                        value: {
+                            'fi': 'lahde',
+                            'sv': 'kalla',
+                            'en': 'source'
+                        }
+                    }
                 }
             },
             {
                 code: 'fooval2',
-                isSum: false,
                 name: {
                     'fi': 'fgfgfg2',
                     'sv': 'fgfgfg2',
                     'en': 'fgfgfg2'
                 },
-                note: {
-                    'fi': 'fghjfgh2',
-                    'sv': 'fghjfgh2',
-                    'en': 'fghjfgh2'
+                isVirtual: false,
+                unit: {
+                    'fi': 'prosenttia',
+                    'sv': 'procent',
+                    'en': 'percent'
+                },
+                precision: 1,
+                lastUpdated: '2022-01-01',
+                additionalProperties: {
+                    SOURCE: {
+                        type: EMetaPropertyType.MultilanguageText,
+                        value: {
+                            'fi': 'lahde',
+                            'sv': 'kalla',
+                            'en': 'source'
+                        }
+                    }
                 }
             }
         ]
@@ -70,39 +89,58 @@ const mockVariables: IVariable[] = [
             'sv': 'barsv',
             'en': 'baren'
         },
-        note: {
-            'fi': 'barnotefi',
-            'sv': 'barnotesv',
-            'en': 'barnoteen'
-        },
-        type: VariableType.Content,
+        type: EDimensionType.Content,
         values: [
             {
                 code: 'barval1',
-                isSum: false,
                 name: {
                     'fi': 'fgfgfg1',
                     'sv': 'fgfgfg1',
                     'en': 'fgfgfg1'
                 },
-                note: {
-                    'fi': 'fghjfgh1',
-                    'sv': 'fghjfgh1',
-                    'en': 'fghjfgh1'
+                isVirtual: false,
+                unit: {
+                    'fi': 'yksikko',
+                    'sv': 'enhet',
+                    'en': 'unit'
+                },
+                precision: 0,
+                lastUpdated: '2021-01-01',
+                additionalProperties: {
+                    SOURCE: {
+                        type: EMetaPropertyType.MultilanguageText,
+                        value: {
+                            'fi': 'lahde',
+                            'sv': 'kalla',
+                            'en': 'source'
+                        }
+                    }
                 }
             },
             {
                 code: 'barval2',
-                isSum: false,
                 name: {
                     'fi': 'fgfgfg2',
                     'sv': 'fgfgfg2',
                     'en': 'fgfgfg2'
                 },
-                note: {
-                    'fi': 'fghjfgh2',
-                    'sv': 'fghjfgh2',
-                    'en': 'fghjfgh2'
+                isVirtual: false,
+                unit: {
+                    'fi': 'prosenttia',
+                    'sv': 'procent',
+                    'en': 'percent'
+                },
+                precision: 1,
+                lastUpdated: '2022-01-01',
+                additionalProperties: {
+                    SOURCE: {
+                        type: EMetaPropertyType.MultilanguageText,
+                        value: {
+                            'fi': 'lahde',
+                            'sv': 'kalla',
+                            'en': 'source'
+                        }
+                    }
                 }
             }
         ]
@@ -156,7 +194,7 @@ const visualizationRulesResponseMock: IVisualizationSettingsResult = {
     isError: false,
     data: {
         allowManualPivot: false,
-        multiselectVariableAllowed: false,
+        multiselectDimensionAllowed: false,
         sortingOptions: [
             {
                 code: 'DESCENDING',
@@ -210,10 +248,10 @@ describe('Rendering test', () => {
             <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
                 <EditorMetaSection
                     defaultHeaderResponse={headerResultMock}
-                    resolvedVariables={mockVariables}
+                    resolvedDimensions={mockDimensions}
                     selectedVisualization={selectedVisualizationMock}
                     settings={mockVisualizationSettings}
-                    variableQuery={mockQuery}
+                    dimensionQuery={mockQuery}
                     visualizationRulesResponse={visualizationRulesResponseMock}
                     queryInfo={mockQueryInfo}
                     contentLanguages={["fi", "sv", "en"]}

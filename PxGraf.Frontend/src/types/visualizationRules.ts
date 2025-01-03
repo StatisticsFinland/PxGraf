@@ -6,13 +6,13 @@ import { MultiLanguageString } from "./multiLanguageString"
  * Interface for visualization rules.
  * @property allowManualPivot - Flag to indicate if manual pivot is allowed.
  * @property sortingOptions - List of sorting options.
- * @property multiselectVariableAllowed - Flag to indicate if multiselect variable is allowed.
+ * @property multiselectDimensionAllowed - Flag to indicate if multiselect dimension is allowed.
  * @property visualizationTypeSpecificRules - Object for visualization type specific rules.
  */
 export interface IVisualizationRules {
     allowManualPivot: boolean,
     sortingOptions: ISortingOption[],
-    multiselectVariableAllowed: boolean
+    multiselectDimensionAllowed: boolean
     visualizationTypeSpecificRules?: ITypeSpecificVisualizationRules
 }
 

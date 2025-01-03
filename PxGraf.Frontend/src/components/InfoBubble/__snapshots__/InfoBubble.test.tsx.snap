@@ -4,7 +4,7 @@ exports[`Rendering test renders correctly with popper hidden 1`] = `
 <DocumentFragment>
   <button
     aria-label="tooltip.open: foo"
-    class="sc-braxZu jCpbQg"
+    class="sc-blHHSb fOYbXc"
   >
     <svg
       aria-hidden="true"

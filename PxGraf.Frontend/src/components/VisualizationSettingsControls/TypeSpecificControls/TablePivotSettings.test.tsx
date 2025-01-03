@@ -1,10 +1,12 @@
 import React from 'react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { TablePivotSettings } from "./TablePivotSettings";
-import { VariableType } from "types/cubeMeta";
+import { IDimension, EDimensionType } from "types/cubeMeta";
 import UiLanguageContext from 'contexts/uiLanguageContext';
 import { Query, FilterType } from "types/query";
 import '@testing-library/jest-dom';
+import { IVisualizationRules } from '../../../types/visualizationRules';
+import { IVisualizationSettings } from '../../../types/visualizationSettings';
 
 jest.mock('react-i18next', () => ({
     ...jest.requireActual('react-i18next'),
@@ -18,13 +20,13 @@ jest.mock('react-i18next', () => ({
     },
 }));
 
-const mockVisualizationRules = {
+const mockVisualizationRules: IVisualizationRules = {
     allowManualPivot: false,
     sortingOptions: null,
-    multiselectVariableAllowed: false
+    multiselectDimensionAllowed: false
 };
 
-const mockVisualizationSettings = {
+const mockVisualizationSettings: IVisualizationSettings = {
     defaultSelectableVariableCodes: null,
     pivotRequested: null,
     cutYAxis: null,
@@ -36,98 +38,84 @@ const mockVisualizationSettings = {
     markerSize: null,
 }
 
-const mockVariables = [
+const mockDimensions: IDimension[] = [
     {
         code: "foobar1",
         name: { fi: "foo1", sv: "bar1", en: "foobar1" },
-        note: { fi: "föö1", sv: "bär1", en: "fööbär1" },
-        type: VariableType.OtherClassificatory,
+        type: EDimensionType.Other,
         values: [
             {
                 code: "barfoo1",
                 name: { fi: "fyy1", sv: "bör1", en: "fyybör1" },
-                note: { fi: "fuu1", sv: "baar1", en: "fuubaar1" },
-                isSum: false
+                isVirtual: false
             },
             {
                 code: "barfoo2",
                 name: { fi: "fyy2", sv: "bör2", en: "fyybör2" },
-                note: { fi: "fuu2", sv: "baar2", en: "fuubaar2" },
-                isSum: false
+                isVirtual: false
             }
         ]
     },
     {
         code: "foobar2",
         name: { fi: "foo2", sv: "bar2", en: "foobar2" },
-        note: { fi: "föö2", sv: "bär2", en: "fööbär2" },
-        type: VariableType.OtherClassificatory,
+        type: EDimensionType.Other,
         values: [
             {
                 code: "barfoo1",
                 name: { fi: "fyy1", sv: "bör1", en: "fyybör1" },
-                note: { fi: "fuu1", sv: "baar1", en: "fuubaar1" },
-                isSum: false
+                isVirtual: false
             },
             {
                 code: "barfoo2",
                 name: { fi: "fyy2", sv: "bör2", en: "fyybör2" },
-                note: { fi: "fuu2", sv: "baar2", en: "fuubaar2" },
-                isSum: false
+                isVirtual: false
             }
         ]
     },
     {
         code: "foobar3",
         name: { fi: "foo3", sv: "bar3", en: "foobar3" },
-        note: { fi: "föö3", sv: "bär3", en: "fööbär3" },
-        type: VariableType.OtherClassificatory,
+        type: EDimensionType.Other,
         values: [
             {
                 code: "barfoo1",
                 name: { fi: "fyy1", sv: "bör1", en: "fyybör1" },
-                note: { fi: "fuu1", sv: "baar1", en: "fuubaar1" },
-                isSum: false
+                isVirtual: false
             },
             {
                 code: "barfoo2",
                 name: { fi: "fyy2", sv: "bör2", en: "fyybör2" },
-                note: { fi: "fuu2", sv: "baar2", en: "fuubaar2" },
-                isSum: false
+                isVirtual: false
             }
         ]
     },
     {
         code: "foobar4",
         name: { fi: "foo4", sv: "bar4", en: "foobar4" },
-        note: { fi: "föö4", sv: "bär4", en: "fööbär4" },
-        type: VariableType.OtherClassificatory,
+        type: EDimensionType.Other,
         values: [
             {
                 code: "barfoo1",
                 name: { fi: "fyy1", sv: "bör1", en: "fyybör1" },
-                note: { fi: "fuu1", sv: "baar1", en: "fuubaar1" },
-                isSum: false
+                isVirtual: false
             },
             {
                 code: "barfoo2",
                 name: { fi: "fyy2", sv: "bör2", en: "fyybör2" },
-                note: { fi: "fuu2", sv: "baar2", en: "fuubaar2" },
-                isSum: false
+                isVirtual: false
             }
         ]
     },
     {
         code: "foobar5",
         name: { fi: "foo5", sv: "bar5", en: "foobar5" },
-        note: { fi: "föö5", sv: "bär5", en: "fööbär5" },
-        type: VariableType.OtherClassificatory,
+        type: EDimensionType.Other,
         values: [
             {
                 code: "barfoo1",
                 name: { fi: "fyy1", sv: "bör1", en: "fyybör1" },
-                note: { fi: "fuu1", sv: "baar1", en: "fuubaar1" },
-                isSum: false
+                isVirtual: false
             }
         ]
     }
@@ -190,7 +178,7 @@ describe('Rendering test', () => {
         const { asFragment } = render(
             <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
                 <TablePivotSettings
-                    variables={mockVariables}
+                    dimensions={mockDimensions}
                     visualizationRules={mockVisualizationRules}
                     visualizationSettings={mockVisualizationSettings}
                     settingsChangedHandler={mockSettingsChangedHandler}
@@ -207,7 +195,7 @@ describe('Assertion tests', () => {
         render(
             <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
                 <TablePivotSettings
-                    variables={mockVariables}
+                    dimensions={mockDimensions}
                     visualizationRules={mockVisualizationRules}
                     visualizationSettings={mockVisualizationSettings}
                     settingsChangedHandler={mockSettingsChangedHandler}
@@ -222,7 +210,7 @@ describe('Assertion tests', () => {
         render(
             <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
                 <TablePivotSettings
-                    variables={mockVariables}
+                    dimensions={mockDimensions}
                     visualizationRules={mockVisualizationRules}
                     visualizationSettings={mockVisualizationSettings}
                     settingsChangedHandler={mockSettingsChangedHandler}
@@ -241,7 +229,7 @@ describe('Assertion tests', () => {
         render(
             <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
                 <TablePivotSettings
-                    variables={mockVariables}
+                    dimensions={mockDimensions}
                     visualizationRules={mockVisualizationRules}
                     visualizationSettings={mockVisualizationSettings}
                     settingsChangedHandler={mockSettingsChangedHandler}
@@ -260,7 +248,7 @@ describe('Assertion tests', () => {
         render(
             <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
                 <TablePivotSettings
-                    variables={mockVariables}
+                    dimensions={mockDimensions}
                     visualizationRules={mockVisualizationRules}
                     visualizationSettings={mockVisualizationSettings}
                     settingsChangedHandler={mockSettingsChangedHandler}
@@ -279,7 +267,7 @@ describe('Assertion tests', () => {
         render(
             <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
                 <TablePivotSettings
-                    variables={mockVariables}
+                    dimensions={mockDimensions}
                     visualizationRules={mockVisualizationRules}
                     visualizationSettings={mockVisualizationSettings}
                     settingsChangedHandler={mockSettingsChangedHandler}
@@ -298,7 +286,7 @@ describe('Assertion tests', () => {
         render(
             <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
                 <TablePivotSettings
-                    variables={mockVariables}
+                    dimensions={mockDimensions}
                     visualizationRules={mockVisualizationRules}
                     visualizationSettings={mockVisualizationSettings}
                     settingsChangedHandler={mockSettingsChangedHandler}
@@ -317,7 +305,7 @@ describe('Assertion tests', () => {
         render(
             <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
                 <TablePivotSettings
-                    variables={mockVariables}
+                    dimensions={mockDimensions}
                     visualizationRules={mockVisualizationRules}
                     visualizationSettings={mockVisualizationSettings}
                     settingsChangedHandler={mockSettingsChangedHandler}
@@ -336,7 +324,7 @@ describe('Assertion tests', () => {
         render(
             <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
                 <TablePivotSettings
-                    variables={mockVariables}
+                    dimensions={mockDimensions}
                     visualizationRules={mockVisualizationRules}
                     visualizationSettings={mockVisualizationSettings}
                     settingsChangedHandler={mockSettingsChangedHandler}
@@ -355,7 +343,7 @@ describe('Assertion tests', () => {
         render(
             <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
                 <TablePivotSettings
-                    variables={mockVariables}
+                    dimensions={mockDimensions}
                     visualizationRules={mockVisualizationRules}
                     visualizationSettings={toggledMockSettings}
                     settingsChangedHandler={mockSettingsChangedHandler}
@@ -371,7 +359,7 @@ describe('Assertion tests', () => {
         render(
             <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
                 <TablePivotSettings
-                    variables={mockVariables}
+                    dimensions={mockDimensions}
                     visualizationRules={mockVisualizationRules}
                     visualizationSettings={toggledMockSettings}
                     settingsChangedHandler={mockSettingsChangedHandler}
@@ -387,7 +375,7 @@ describe('Assertion tests', () => {
         render(
             <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
                 <TablePivotSettings
-                    variables={mockVariables}
+                    dimensions={mockDimensions}
                     visualizationRules={mockVisualizationRules}
                     visualizationSettings={toggledMockSettings}
                     settingsChangedHandler={mockSettingsChangedHandler}
@@ -403,11 +391,11 @@ describe('Assertion tests', () => {
         render(
             <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
                 <TablePivotSettings
-                    variables={mockVariables}
+                    dimensions={mockDimensions}
                     visualizationRules={mockVisualizationRules}
                     visualizationSettings={mockVisualizationSettings}
                     settingsChangedHandler={mockSettingsChangedHandler}
-                    selectableVariables={[mockVariables[1]]}
+                    selectableDimensions={[mockDimensions[1]]}
                     query={mockQuery}
                 ></TablePivotSettings>
             </UiLanguageContext.Provider>);
@@ -421,7 +409,7 @@ describe('Assertion tests', () => {
         render(
             <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
                 <TablePivotSettings
-                    variables={mockVariables}
+                    dimensions={mockDimensions}
                     visualizationRules={mockVisualizationRules}
                     visualizationSettings={toggledMockSettings}
                     settingsChangedHandler={mockSettingsChangedHandler}
@@ -439,7 +427,7 @@ describe('Assertion tests', () => {
         render(
             <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
                 <TablePivotSettings
-                    variables={mockVariables}
+                    dimensions={mockDimensions}
                     visualizationRules={multiselectableVisualizatioRules}
                     visualizationSettings={multiselectableMockSettings}
                     settingsChangedHandler={mockSettingsChangedHandler}

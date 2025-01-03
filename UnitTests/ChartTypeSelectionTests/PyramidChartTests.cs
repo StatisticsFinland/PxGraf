@@ -1,19 +1,17 @@
 ﻿using NUnit.Framework;
-using PxGraf.ChartTypeSelection;
+using Px.Utils.Models.Metadata.Enums;
 using PxGraf.ChartTypeSelection.ChartSpecificLimits;
 using PxGraf.ChartTypeSelection.JsonObjects;
+using PxGraf.ChartTypeSelection;
 using PxGraf.Enums;
 using System.Collections.Generic;
-using System.Linq;
-using UnitTests.TestDummies;
-using UnitTests.TestDummies.DummyQueries;
 
-namespace ChartTypeSelectionTests
+namespace UnitTests.ChartTypeSelectionTests
 {
     [TestFixture]
-    class PyramidChartTests
+    public class PyramidChartTests
     {
-        private IChartSelectionLimits Limits { get; set; }
+        private ChartSelectionLimits Limits { get; set; }
 
         [OneTimeSetUp]
         public void SetupChartSelectionLimits()
@@ -28,7 +26,7 @@ namespace ChartTypeSelectionTests
         [Test]
         public void NoData_NotEnoughMultiselections()
         {
-            List<VariableParameters> dimension = [];
+            List<DimensionParameters> dimension = [];
 
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
             PyramidChartCheck check = new(Limits.PyramidChartLimits);
@@ -43,12 +41,12 @@ namespace ChartTypeSelectionTests
         [Test]
         public void ValidData_Pass()
         {
-            List<VariableParameters> dimension =
+            List<DimensionParameters> dimension =
             [
-                new(VariableType.Content, 1),
-                new(VariableType.Time, 1),
-                new(VariableType.Unknown, 2),
-                new(VariableType.Ordinal, 200)
+                new(DimensionType.Content, 1),
+                new(DimensionType.Time, 1),
+                new(DimensionType.Unknown, 2),
+                new(DimensionType.Ordinal, 200)
             ];
 
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
@@ -68,11 +66,11 @@ namespace ChartTypeSelectionTests
         [Test]
         public void NoContentDimension_ContentRequired()
         {
-            List<VariableParameters> dimension =
+            List<DimensionParameters> dimension =
             [
-                new(VariableType.Time, 1),
-                new(VariableType.Unknown, 2),
-                new(VariableType.Ordinal, 200)
+                new(DimensionType.Time, 1),
+                new(DimensionType.Unknown, 2),
+                new(DimensionType.Ordinal, 200)
             ];
 
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
@@ -88,11 +86,11 @@ namespace ChartTypeSelectionTests
         [Test]
         public void ContentHas2_UnambiguousContentUnitRequired()
         {
-            List<VariableParameters> dimension =
+            List<DimensionParameters> dimension =
             [
-                new(VariableType.Content, 2),
-                new(VariableType.Time, 1),
-                new(VariableType.Ordinal, 200)
+                new(DimensionType.Content, 2),
+                new(DimensionType.Time, 1),
+                new(DimensionType.Ordinal, 200)
             ];
 
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
@@ -108,11 +106,11 @@ namespace ChartTypeSelectionTests
         [Test]
         public void ContentHas2WithSameUnit_Pass()
         {
-            List<VariableParameters> dimension =
+            List<DimensionParameters> dimension =
             [
-                new(VariableType.Content, 2) { SameUnit = true },
-                new(VariableType.Time, 1),
-                new(VariableType.Ordinal, 200)
+                new(DimensionType.Content, 2) { SameUnit = true },
+                new(DimensionType.Time, 1),
+                new(DimensionType.Ordinal, 200)
             ];
 
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
@@ -132,11 +130,11 @@ namespace ChartTypeSelectionTests
         [Test]
         public void NoTimeDimension_TimeRequired()
         {
-            List<VariableParameters> dimension =
+            List<DimensionParameters> dimension =
             [
-                new(VariableType.Content, 1),
-                new(VariableType.Unknown, 2),
-                new(VariableType.Ordinal, 200)
+                new(DimensionType.Content, 1),
+                new(DimensionType.Unknown, 2),
+                new(DimensionType.Ordinal, 200)
             ];
 
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
@@ -152,11 +150,11 @@ namespace ChartTypeSelectionTests
         [Test]
         public void TimeHas2_TimeOverMax()
         {
-            List<VariableParameters> dimension =
+            List<DimensionParameters> dimension =
             [
-                new(VariableType.Content, 1),
-                new(VariableType.Time, 2),
-                new(VariableType.Ordinal, 200)
+                new(DimensionType.Content, 1),
+                new(DimensionType.Time, 2),
+                new(DimensionType.Ordinal, 200)
             ];
 
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
@@ -172,12 +170,12 @@ namespace ChartTypeSelectionTests
         [Test]
         public void SecondMultiselectHas3_SecondMultiselectOverMax()
         {
-            List<VariableParameters> dimension =
+            List<DimensionParameters> dimension =
             [
-                new(VariableType.Content, 1),
-                new(VariableType.Time, 1),
-                new(VariableType.Unknown, 3),
-                new(VariableType.Ordinal, 200)
+                new(DimensionType.Content, 1),
+                new(DimensionType.Time, 1),
+                new(DimensionType.Unknown, 3),
+                new(DimensionType.Ordinal, 200)
             ];
 
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
@@ -193,12 +191,12 @@ namespace ChartTypeSelectionTests
         [Test]
         public void BothMultiselectsHave2_FirstMultiselectBelowMin()
         {
-            List<VariableParameters> dimension =
+            List<DimensionParameters> dimension =
             [
-                new(VariableType.Content, 1),
-                new(VariableType.Time, 1),
-                new(VariableType.Unknown, 2),
-                new(VariableType.Ordinal, 2)
+                new(DimensionType.Content, 1),
+                new(DimensionType.Time, 1),
+                new(DimensionType.Unknown, 2),
+                new(DimensionType.Ordinal, 2)
             ];
 
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
@@ -214,12 +212,12 @@ namespace ChartTypeSelectionTests
         [Test]
         public void FirstMultiselectIsNotProgressive_ProgressiveRequired()
         {
-            List<VariableParameters> dimension =
+            List<DimensionParameters> dimension =
             [
-                new(VariableType.Content, 1),
-                new(VariableType.Time, 1),
-                new(VariableType.Unknown, 2),
-                new(VariableType.Unknown, 200)
+                new(DimensionType.Content, 1),
+                new(DimensionType.Time, 1),
+                new(DimensionType.Unknown, 2),
+                new(DimensionType.Unknown, 200)
             ];
 
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
@@ -235,12 +233,12 @@ namespace ChartTypeSelectionTests
         [Test]
         public void SecondMultiselectProgressive_Pass()
         {
-            List<VariableParameters> dimension =
+            List<DimensionParameters> dimension =
             [
-                new(VariableType.Content, 1),
-                new(VariableType.Time, 1),
-                new(VariableType.Ordinal, 2),
-                new(VariableType.Unknown, 200)
+                new(DimensionType.Content, 1),
+                new(DimensionType.Time, 1),
+                new(DimensionType.Ordinal, 2),
+                new(DimensionType.Unknown, 200)
             ];
 
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
@@ -260,12 +258,12 @@ namespace ChartTypeSelectionTests
         [Test]
         public void FirstMultiselectHas1000_FirstMultiselectOverMax()
         {
-            List<VariableParameters> dimension =
+            List<DimensionParameters> dimension =
             [
-                new(VariableType.Content, 1),
-                new(VariableType.Time, 1),
-                new(VariableType.Unknown, 2),
-                new(VariableType.Ordinal, 1000)
+                new(DimensionType.Content, 1),
+                new(DimensionType.Time, 1),
+                new(DimensionType.Unknown, 2),
+                new(DimensionType.Ordinal, 1000)
             ];
 
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
@@ -281,12 +279,12 @@ namespace ChartTypeSelectionTests
         [Test]
         public void FirstMultiselectHas1000_CombinationValuesNotAllowed()
         {
-            List<VariableParameters> dimension =
+            List<DimensionParameters> dimension =
             [
-                new(VariableType.Content, 1),
-                new(VariableType.Time, 1),
-                new(VariableType.Unknown, 2),
-                new(VariableType.Ordinal, 800, true)
+                new(DimensionType.Content, 1),
+                new(DimensionType.Time, 1),
+                new(DimensionType.Unknown, 2),
+                new(DimensionType.Ordinal, 800, true)
             ];
 
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
@@ -302,12 +300,12 @@ namespace ChartTypeSelectionTests
         [Test]
         public void SecondMultiselectHas1000_CombinationValuesNotAllowed()
         {
-            List<VariableParameters> dimension =
+            List<DimensionParameters> dimension =
             [
-                new(VariableType.Content, 1),
-                new(VariableType.Time, 1),
-                new(VariableType.Unknown, 2, true),
-                new(VariableType.Ordinal, 800)
+                new(DimensionType.Content, 1),
+                new(DimensionType.Time, 1),
+                new(DimensionType.Unknown, 2, true),
+                new(DimensionType.Ordinal, 800)
             ];
 
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
@@ -323,12 +321,12 @@ namespace ChartTypeSelectionTests
         [Test]
         public void NegativeData_NegativeDataNotAllowed()
         {
-            List<VariableParameters> dimension =
+            List<DimensionParameters> dimension =
             [
-                new(VariableType.Content, 1),
-                new(VariableType.Time, 1),
-                new(VariableType.Unknown, 2),
-                new(VariableType.Ordinal, 200)
+                new(DimensionType.Content, 1),
+                new(DimensionType.Time, 1),
+                new(DimensionType.Unknown, 2),
+                new(DimensionType.Ordinal, 200)
             ];
 
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension, true); // <- true causes negative data to be built

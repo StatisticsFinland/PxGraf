@@ -1,11 +1,11 @@
-﻿using Newtonsoft.Json;
+﻿using Px.Utils.Models.Metadata;
 using PxGraf.Data;
-using PxGraf.Data.MetaData;
 using PxGraf.Enums;
 using PxGraf.Models.Queries;
 using PxGraf.Models.SavedQueries;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace PxGraf.Models.Requests
 {
@@ -13,34 +13,37 @@ namespace PxGraf.Models.Requests
     /// This class provides separation between the internal visualization settings and the API response.
     /// So that changes to one do not force changes to the other.
     /// </summary>
-    [JsonObject(ItemNullValueHandling = NullValueHandling.Ignore)]
     public class VisualizationCreationSettings
     {
         /// <summary>
         /// Currently selected visualization type. (various charts, table, text)
         /// </summary>    
-        [Required]
+        [JsonRequired]
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public VisualizationType SelectedVisualization { get; set; }
-
-        public IReadOnlyList<string> RowVariableCodes { get; set; }
-
-        public IReadOnlyList<string> ColumnVariableCodes { get; set; }
-
+        [JsonPropertyName("rowVariableCodes")] // legacy name, changing is a breaking change for PxVisualizer
+        public IReadOnlyList<string> RowDimensionCodes { get; set; }
+        [JsonPropertyName("columnVariableCodes")] // legacy name, changing is a breaking change for PxVisualizer
+        public IReadOnlyList<string> ColumnDimensionCodes { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? CutYAxis { get; set; } = false;
-
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public int? MarkerSize { get; set; }
-
-        public string MultiselectableVariableCode { get; set; }
-
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("multiSelectableVariableCode")] // legacy name, changing is a breaking change for PxVisualizer
+        public string MultiselectableDimensionCode { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? MatchXLabelsToEnd { get; set; }
-
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public int? XLabelInterval { get; set; }
-
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? PivotRequested { get; set; }
-
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string Sorting { get; set; }
-
-        public Dictionary<string, List<string>> DefaultSelectableVariableCodes { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("defaultSelectableVariableCodes")] // legacy name, changing is a breaking change for PxVisualizer
+        public Dictionary<string, List<string>> DefaultSelectableDimensionCodes { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? ShowDataPoints { get; set; } = false;
 
         #region Visualization settings conversion
@@ -51,10 +54,10 @@ namespace PxGraf.Models.Requests
         /// <param name="savedQuery">Object that represents the saved query.</param>
         /// <param name="meta">Metadata of the cube subject for visualization.</param>
         /// <returns>Converted settings in <see cref="VisualizationCreationSettings"/> format.</returns>
-        public static VisualizationCreationSettings FromVisualizationSettings(SavedQuery savedQuery, IReadOnlyCubeMeta meta)
+        public static VisualizationCreationSettings FromVisualizationSettings(SavedQuery savedQuery, IReadOnlyMatrixMetadata meta)
         {
             VisualizationSettings settings = savedQuery.Settings;
-            CubeQuery query = savedQuery.Query;
+            MatrixQuery query = savedQuery.Query;
             Layout layout = LayoutRules.GetPivotBasedLayout(settings.VisualizationType, meta, query);
 
             bool? pivotRequested;
@@ -75,16 +78,16 @@ namespace PxGraf.Models.Requests
             return new VisualizationCreationSettings()
             {
                 SelectedVisualization = settings.VisualizationType,
-                RowVariableCodes = settings.VisualizationType == VisualizationType.Table ? settings.Layout?.RowVariableCodes : null,
-                ColumnVariableCodes = settings.VisualizationType == VisualizationType.Table ? settings.Layout?.ColumnVariableCodes : null,
+                RowDimensionCodes = settings.VisualizationType == VisualizationType.Table ? settings.Layout?.RowDimensionCodes : null,
+                ColumnDimensionCodes = settings.VisualizationType == VisualizationType.Table ? settings.Layout?.ColumnDimensionCodes : null,
                 CutYAxis = settings.CutYAxis,
                 MarkerSize = settings.MarkerSize,
-                MultiselectableVariableCode = settings.MultiselectableVariableCode,
+                MultiselectableDimensionCode = settings.MultiselectableDimensionCode,
                 MatchXLabelsToEnd = settings.MatchXLabelsToEnd,
                 XLabelInterval = settings.XLabelInterval,
                 PivotRequested = pivotRequested,
                 Sorting = settings.Sorting,
-                DefaultSelectableVariableCodes = settings.DefaultSelectableVariableCodes,
+                DefaultSelectableDimensionCodes = settings.DefaultSelectableDimensionCodes,
                 ShowDataPoints = settings.ShowDataPoints
             };
         }
@@ -95,7 +98,7 @@ namespace PxGraf.Models.Requests
         /// <param name="meta">Metadata for the cube that's subject to the visualization.</param>
         /// <param name="query">Object that contains query settings for the cube.</param>
         /// <returns><see cref="VisualizationSettings"/> object with the converted settings.</returns>
-        public VisualizationSettings ToVisualizationSettings(IReadOnlyCubeMeta meta, CubeQuery query)
+        public VisualizationSettings ToVisualizationSettings(IReadOnlyMatrixMetadata meta, MatrixQuery query)
         {
             switch (SelectedVisualization)
             {
@@ -105,7 +108,7 @@ namespace PxGraf.Models.Requests
                             LayoutRules.GetOneDimensionalLayout(meta, query),
                             MatchXLabelsToEnd ?? false,
                             XLabelInterval ?? 1,
-                            DefaultSelectableVariableCodes,
+                            DefaultSelectableDimensionCodes,
                             ShowDataPoints ?? false);
                     }
                 case VisualizationType.GroupVerticalBarChart:
@@ -118,7 +121,7 @@ namespace PxGraf.Models.Requests
                                     query),
                                 MatchXLabelsToEnd ?? false,
                                 XLabelInterval ?? 1,
-                                DefaultSelectableVariableCodes);
+                                DefaultSelectableDimensionCodes);
                     }
                 case VisualizationType.StackedVerticalBarChart:
                     {
@@ -130,7 +133,7 @@ namespace PxGraf.Models.Requests
                                 query),
                             MatchXLabelsToEnd ?? false,
                             XLabelInterval ?? 1,
-                            DefaultSelectableVariableCodes);
+                            DefaultSelectableDimensionCodes);
                     }
                 case VisualizationType.PercentVerticalBarChart:
                     {
@@ -142,14 +145,14 @@ namespace PxGraf.Models.Requests
                                 query),
                             MatchXLabelsToEnd ?? false,
                             XLabelInterval ?? 1,
-                            DefaultSelectableVariableCodes);
+                            DefaultSelectableDimensionCodes);
                     }
                 case VisualizationType.HorizontalBarChart:
                     {
                         return new HorizontalBarChartVisualizationSettings(
                             LayoutRules.GetOneDimensionalLayout(meta, query),
                             Sorting,
-                            DefaultSelectableVariableCodes);
+                            DefaultSelectableDimensionCodes);
                     }
                 case VisualizationType.GroupHorizontalBarChart:
                     {
@@ -160,7 +163,7 @@ namespace PxGraf.Models.Requests
                                 meta,
                                 query),
                             Sorting,
-                            DefaultSelectableVariableCodes);
+                            DefaultSelectableDimensionCodes);
                     }
                 case VisualizationType.StackedHorizontalBarChart:
                     {
@@ -171,7 +174,7 @@ namespace PxGraf.Models.Requests
                                 meta,
                                 query),
                             Sorting,
-                            DefaultSelectableVariableCodes);
+                            DefaultSelectableDimensionCodes);
                     }
                 case VisualizationType.PercentHorizontalBarChart:
                     {
@@ -182,7 +185,7 @@ namespace PxGraf.Models.Requests
                                 meta,
                                 query),
                             Sorting,
-                            DefaultSelectableVariableCodes);
+                            DefaultSelectableDimensionCodes);
                     }
                 case VisualizationType.PyramidChart:
                     {
@@ -192,22 +195,22 @@ namespace PxGraf.Models.Requests
                                 VisualizationType.PyramidChart,
                                 meta,
                                 query),
-                            DefaultSelectableVariableCodes);
+                            DefaultSelectableDimensionCodes);
                     }
                 case VisualizationType.PieChart:
                     {
                         return new PieChartVisualizationSettings(
                             LayoutRules.GetOneDimensionalLayout(meta, query),
                             Sorting,
-                            DefaultSelectableVariableCodes);
+                            DefaultSelectableDimensionCodes);
                     }
                 case VisualizationType.LineChart:
                     {
                         return new LineChartVisualizationSettings(
                             LayoutRules.GetLineChartLayout(meta, query),
                             CutYAxis ?? false,
-                            MultiselectableVariableCode,
-                            DefaultSelectableVariableCodes);
+                            MultiselectableDimensionCode,
+                            DefaultSelectableDimensionCodes);
                     }
                 case VisualizationType.ScatterPlot:
                     {
@@ -219,15 +222,15 @@ namespace PxGraf.Models.Requests
                                 query),
                             CutYAxis ?? false,
                             MarkerSize ?? 100,
-                            DefaultSelectableVariableCodes);
+                            DefaultSelectableDimensionCodes);
                     }
                 case VisualizationType.Table:
                     {
                         return new TableVisualizationSettings(
                             LayoutRules.GetTableLayout(
-                                RowVariableCodes,
-                                ColumnVariableCodes),
-                            DefaultSelectableVariableCodes);
+                                RowDimensionCodes,
+                                ColumnDimensionCodes),
+                            DefaultSelectableDimensionCodes);
                     }
             }
 

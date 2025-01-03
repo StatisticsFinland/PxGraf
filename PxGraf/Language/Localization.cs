@@ -1,9 +1,9 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
+﻿using PxGraf.Settings;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 
 namespace PxGraf.Language
 {
@@ -17,7 +17,7 @@ namespace PxGraf.Language
 
         public static Localization FromLanguage(string lang)
         {
-            if (localizations.TryGetValue(lang, out var result))
+            if (localizations.TryGetValue(lang, out Localization result))
             {
                 return result;
             }
@@ -38,19 +38,10 @@ namespace PxGraf.Language
 
         public static void Load(string configPath)
         {
-            var json = File.ReadAllText(configPath);
+            string json = File.ReadAllText(configPath);
 
             //Strict json deserialization
-            LocalizationConfig config = JsonConvert.DeserializeObject<LocalizationConfig>(
-                json,
-                new JsonSerializerSettings()
-                {
-                    //Ensures json does include every property to avoid missing translations
-                    ContractResolver = new RequireObjectPropertiesContractResolver(),
-                    //Ensures that json does not have any unused extra fields to avoid carrying non-used translations around
-                    MissingMemberHandling = MissingMemberHandling.Error,
-                }
-            );
+            LocalizationConfig config = JsonSerializer.Deserialize<LocalizationConfig>(json, GlobalJsonConverterOptions.Default);
             Load(config.DefaultLanguage, config.Translations);
         }
 
@@ -63,24 +54,10 @@ namespace PxGraf.Language
             defaultLocalization = localizations[defaultLang];
         }
 
-        private sealed class LocalizationConfig
+        public sealed class LocalizationConfig
         {
-            public string DefaultLanguage { get; } = "en";
-            public Dictionary<string, Translation> Translations { get; } = [];
-        }
-
-        /// <summary>
-        /// This contract resolver requires every object field by default.
-        /// Individual properties can be still marked as optional with: [JsonProperty(Required = Required.Default)]
-        /// </summary>
-        private sealed class RequireObjectPropertiesContractResolver : DefaultContractResolver
-        {
-            protected override JsonObjectContract CreateObjectContract(System.Type objectType)
-            {
-                var contract = base.CreateObjectContract(objectType);
-                contract.ItemRequired = Required.Always;
-                return contract;
-            }
+            public string DefaultLanguage { get; set; } = "en";
+            public Dictionary<string, Translation> Translations { get; set; } = [];
         }
     }
 }

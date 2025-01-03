@@ -32,18 +32,18 @@ namespace PxGraf.ChartTypeSelection.ChartSpecificLimits
         /// </summary>
         protected override IEnumerable<ChartRejectionInfo> CheckChartSpecificRules(VisualizationTypeSelectionObject input)
         {
-            if (GetTimeOrLargestOrdinal(input.Variables) is null)
+            if (GetTimeOrLargestOrdinal(input.Dimensions) is null)
             {
                 yield return BuildRejectionInfo(RejectionReason.TimeOrProgressiveRequired);
             }
 
-            var largestMultiselect = GetLargestMultiselect(input);
+            VisualizationTypeSelectionObject.DimensionInfo largestMultiselect = GetLargestMultiselect(input);
             if (largestMultiselect != null && !string.IsNullOrEmpty(largestMultiselect.CombinationValueCode))
             {
                 yield return BuildRejectionInfo(RejectionReason.CombinationValuesNotAllowed, largestMultiselect, largestMultiselect.CombinationValueCode);
             }
 
-            var smallerMultiselect = GetSmallerMultiselect(input);
+            VisualizationTypeSelectionObject.DimensionInfo smallerMultiselect = GetSmallerMultiselect(input);
             if (smallerMultiselect != null && !string.IsNullOrEmpty(smallerMultiselect.CombinationValueCode))
             {
                 yield return BuildRejectionInfo(RejectionReason.CombinationValuesNotAllowed, smallerMultiselect, smallerMultiselect.CombinationValueCode);
@@ -59,8 +59,8 @@ namespace PxGraf.ChartTypeSelection.ChartSpecificLimits
         /// <returns></returns>
         protected override int GetPriority(RejectionReason reason)
         {
-            var reasons = new RejectionReason[]
-            {
+            RejectionReason[] reasons =
+            [
                 RejectionReason.NotEnoughMultiselections,
                 RejectionReason.TooManyMultiselections,
                 RejectionReason.ContentRequired,
@@ -77,7 +77,7 @@ namespace PxGraf.ChartTypeSelection.ChartSpecificLimits
                 RejectionReason.FirstMultiselectOverMax,
                 RejectionReason.SecondMultiselectBelowMin,
                 RejectionReason.SecondMultiselectOverMax,
-            };
+            ];
 
             return GetPriorityIndex(reasons, reason);
         }

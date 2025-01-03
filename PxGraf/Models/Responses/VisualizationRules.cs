@@ -1,5 +1,5 @@
-﻿using PxGraf.Enums;
-using PxGraf.Language;
+﻿using Px.Utils.Language;
+using PxGraf.Enums;
 using System.Collections.Generic;
 
 namespace PxGraf.Models.Responses
@@ -10,8 +10,8 @@ namespace PxGraf.Models.Responses
     /// <remarks>
     /// Constructor for the rules for a chart visualization.
     /// </remarks>
-    /// <param name="pivotAllowed">Whether manual ordering of variables is allowed.</param>
-    /// <param name="multiselectAllowed">Whether the user is allowed to define variables with multiple selectable values displayed simultaneously.</param>
+    /// <param name="pivotAllowed">Whether manual ordering of dimensions is allowed.</param>
+    /// <param name="multiselectAllowed">Whether the user is allowed to define dimensions with multiple selectable values displayed simultaneously.</param>
     /// <param name="typeSpecificVisualizationRules">Rules for a specific visualization type.</param>
     /// <param name="sortingOptions">List of available sorting options.</param>
     public class VisualizationRules(bool pivotAllowed, bool multiselectAllowed, VisualizationRules.TypeSpecificVisualizationRules typeSpecificVisualizationRules = null, IReadOnlyList<SortingOption> sortingOptions = null)
@@ -39,7 +39,7 @@ namespace PxGraf.Models.Responses
         }
 
         /// <summary>
-        /// Whether manual ordering of variables is allowed.
+        /// Whether manual ordering of dimensions is allowed.
         /// </summary>
         public bool AllowManualPivot { get; } = pivotAllowed;
 
@@ -49,9 +49,9 @@ namespace PxGraf.Models.Responses
         public IReadOnlyList<SortingOption> SortingOptions { get; } = sortingOptions;
 
         /// <summary>
-        /// Whether the user is allowed to define variables with multiple selectable values displayed simultaneously.
+        /// Whether the user is allowed to define dimensions with multiple selectable values displayed simultaneously.
         /// </summary>
-        public bool MultiselectVariableAllowed { get; } = multiselectAllowed;
+        public bool MultiselectDimensionAllowed { get; } = multiselectAllowed;
 
         /// <summary>
         /// Rules for a specific visualization type.
@@ -67,7 +67,7 @@ namespace PxGraf.Models.Responses
     /// </remarks>
     /// <param name="code">Value code for the sorting option.</param>
     /// <param name="description">Display name for the sorting option.</param>
-    public class SortingOption(string code, IReadOnlyMultiLanguageString description)
+    public class SortingOption(string code, MultilanguageString description)
     {
         /// <summary>
         /// Identifying code for the sorting option.
@@ -77,6 +77,6 @@ namespace PxGraf.Models.Responses
         /// <summary>
         /// Display name for the sorting option.
         /// </summary>
-        public IReadOnlyMultiLanguageString Description { get; } = description;
+        public MultilanguageString Description { get; } = description;
     }
 }

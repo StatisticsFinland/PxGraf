@@ -1,32 +1,24 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using PxGraf.Data.MetaData;
+using Px.Utils.Language;
+using Px.Utils.Models.Metadata;
+using Px.Utils.Models.Metadata.ExtensionMethods;
+using PxGraf.Datasource;
+using PxGraf.Models.Metadata;
 using PxGraf.Models.Responses;
 using PxGraf.Models.SavedQueries;
-using PxGraf.PxWebInterface;
 using PxGraf.Settings;
 using PxGraf.Utility;
-using System.IO;
 using System.Linq;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace PxGraf.Controllers
 {
-    /// <summary>
-    /// Handles requests for saved query metadata requests.
-    /// </summary>
-    /// <remarks>
-    /// Default constructor.
-    /// </remarks>
-    /// <param name="sqFileInterface">Instance of a <see cref="ISqFileInterface"/> object. Used for interacting with saved queries.</param>
-    /// <param name="cachedPxWebConnection">Instance of a <see cref="ICachedPxWebConnection"/> object. Used to interact with PxWeb API and cache data.</param>
-    /// <param name="logger">Instance of the <see cref="ILogger"/> used for logging API calls.</param>
     [ApiController]
     [Route("api/sq/meta")]
-    public class QueryMetaController(ISqFileInterface sqFileInterface, ICachedPxWebConnection cachedPxWebConnection, ILogger<QueryMetaController> logger) : ControllerBase
+    public class QueryMetaController(ISqFileInterface sqFileInterface, ICachedDatasource cachedDatasource, ILogger<QueryMetaController> logger) : ControllerBase
     {
-        private readonly ICachedPxWebConnection _cachedPxWebConnection = cachedPxWebConnection;
+        private readonly ICachedDatasource _cachedDatasource = cachedDatasource;
         private readonly ISqFileInterface _sqFileInterface = sqFileInterface;
         private readonly ILogger<QueryMetaController> _logger = logger;
 
@@ -45,21 +37,25 @@ namespace PxGraf.Controllers
             if (_sqFileInterface.SavedQueryExists(savedQueryId, Configuration.Current.SavedQueryDirectory))
             {
                 SavedQuery savedQuery = await _sqFileInterface.ReadSavedQueryFromFile(savedQueryId, Configuration.Current.SavedQueryDirectory);
-                IReadOnlyCubeMeta readOnlyTableMeta = await GetCubeMeta(savedQuery, savedQueryId);
-                CubeMeta tableMeta = readOnlyTableMeta.Clone();
-                tableMeta.ApplyEditionFromQuery(savedQuery.Query);
-
-                QueryMetaResponse queryMetaResponse = new ()
+                IReadOnlyMatrixMetadata meta = await GetMatrixMetadata(savedQuery, savedQueryId);
+                if (meta == null)
                 {
-                    Header = tableMeta.GetHeaderWithoutTimePlaceholders(),
-                    HeaderWithPlaceholders = tableMeta.Header,
+                    _logger.LogWarning("The table for the query {SavedQueryId} was not found.", savedQueryId);
+                    return NotFound();
+                }
+                IReadOnlyMatrixMetadata filteredMeta = meta.FilterDimensionValues(savedQuery.Query);
+                MultilanguageString header = HeaderBuildingUtilities.GetHeader(meta, savedQuery.Query, true);
+                QueryMetaResponse queryMetaResponse = new()
+                {
+                    Header = HeaderBuildingUtilities.ReplaceTimePlaceholdersInHeader(header, filteredMeta.GetTimeDimension()),
+                    HeaderWithPlaceholders = header,
                     Archived = savedQuery.Archived,
-                    Selectable = savedQuery.Query.VariableQueries.Any(q => q.Value.Selectable),
+                    Selectable = savedQuery.Query.DimensionQueries.Any(q => q.Value.Selectable),
                     VisualizationType = savedQuery.Settings.VisualizationType,
                     TableId = savedQuery.Query.TableReference.Name,
-                    Description = tableMeta.Note,
+                    Description = filteredMeta.GetMatrixMultilanguageProperty(PxSyntaxConstants.NOTE_KEY),
                     TableReference = savedQuery.Query.TableReference,
-                    LastUpdated = tableMeta.GetLastUpdated()
+                    LastUpdated = PxSyntaxConstants.FormatPxDateTime(filteredMeta.GetContentDimension().Values.Map(cdv => cdv.LastUpdated).Max())
                 };
                 _logger.LogInformation("{SavedQueryId} result: {QueryMetaResponse}", savedQueryId, queryMetaResponse);
                 return queryMetaResponse;
@@ -71,7 +67,7 @@ namespace PxGraf.Controllers
             }
         }
 
-        private async Task<IReadOnlyCubeMeta> GetCubeMeta(SavedQuery savedQuery, string id)
+        private async Task<IReadOnlyMatrixMetadata> GetMatrixMetadata(SavedQuery savedQuery, string id)
         {
             if(savedQuery.Archived)
             {
@@ -82,12 +78,14 @@ namespace PxGraf.Controllers
                 }
                 else
                 {
-                    throw new FileNotFoundException($"Could not find .sqa file matching the id {id}");
+                    return null;
                 }
             }
             else
             {
-                return await _cachedPxWebConnection.GetCubeMetaCachedAsync(savedQuery.Query.TableReference);
+                IReadOnlyMatrixMetadata meta = await _cachedDatasource.GetMatrixMetadataCachedAsync(savedQuery.Query.TableReference);
+                if (meta == null) return null;
+                return meta.FilterDimensionValues(savedQuery.Query);
             }
         }
     }

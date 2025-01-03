@@ -1,5 +1,9 @@
-﻿namespace PxGraf.Language
+﻿using PxGraf.Utility.CustomJsonConverters;
+using System.Text.Json.Serialization;
+
+namespace PxGraf.Language
 {
+    [JsonConverter(typeof(RequireObjectPropertiesReadOnlyConverter<Translation>))]
     public class Translation
     {
         public string NoteDescription { get; set; }

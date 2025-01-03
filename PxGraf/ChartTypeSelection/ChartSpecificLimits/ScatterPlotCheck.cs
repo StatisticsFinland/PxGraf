@@ -41,8 +41,8 @@ namespace PxGraf.ChartTypeSelection.ChartSpecificLimits
         /// <returns></returns>
         protected override int GetPriority(RejectionReason reason)
         {
-            var reasons = new RejectionReason[]
-            {
+            RejectionReason[] reasons =
+            [
                 RejectionReason.ContentNotAllowed,
                 RejectionReason.ContentRequired,
                 RejectionReason.ContentBelowMin,
@@ -54,7 +54,7 @@ namespace PxGraf.ChartTypeSelection.ChartSpecificLimits
                 RejectionReason.ContentUnitsOverMax,
                 RejectionReason.FirstMultiselectBelowMin,
                 RejectionReason.SecondMultiselectOverMax,
-            };
+            ];
 
             return GetPriorityIndex(reasons, reason);
         }

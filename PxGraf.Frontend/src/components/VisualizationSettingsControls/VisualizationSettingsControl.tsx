@@ -3,7 +3,7 @@ import { MarkerScaler } from "./UtilityComponents/MarkerScaler";
 import { IVisualizationSettings } from "types/visualizationSettings";
 import { IVisualizationRules } from "types/visualizationRules";
 import { VisualizationType } from "types/visualizationType";
-import { IVariable, VariableType } from "types/cubeMeta";
+import { IDimension, EDimensionType } from "types/cubeMeta";
 import { Query } from "types/query";
 import InfoBubble from "components/InfoBubble/InfoBubble";
 import { useTranslation } from "react-i18next";
@@ -18,8 +18,8 @@ export interface IVisualizationSettingControlProps {
     visualizationSettings: IVisualizationSettings,
     visualizationRules: IVisualizationRules,
     settingsChangedHandler: SettingsChangedHandler,
-    variables: IVariable[],
-    variableQuery: Query,
+    dimensions: IDimension[],
+    dimensionQuery: Query,
 }
 
 export type SettingsChangedHandler = (newSettings: IVisualizationSettings) => void;
@@ -41,8 +41,8 @@ export const VisualizationSettingControl: React.FC<IVisualizationSettingControlP
     visualizationSettings,
     visualizationRules,
     settingsChangedHandler,
-    variables,
-    variableQuery,
+    dimensions,
+    dimensionQuery,
 }) => {
 
     const showTableSettings: boolean = selectedVisualization === VisualizationType.Table;
@@ -54,9 +54,9 @@ export const VisualizationSettingControl: React.FC<IVisualizationSettingControlP
     const showDataPoints: boolean = visualizationRules.visualizationTypeSpecificRules.allowShowingDataPoints;
 
     const { t } = useTranslation();
-    const selectableVariables: IVariable[] = variables.filter(v => variableQuery[v.code].selectable);
-    const selectableVariablesExcludingContent: IVariable[] = selectableVariables?.filter(fv => fv.type !== VariableType.Content);
-    const showMultiselectableSelector: boolean = visualizationRules.multiselectVariableAllowed && selectableVariablesExcludingContent.length > 0;
+    const selectableDimensions: IDimension[] = dimensions.filter(v => dimensionQuery[v.code].selectable);
+    const selectableDimensionsExcludingContent: IDimension[] = selectableDimensions?.filter(fv => fv.type !== EDimensionType.Content);
+    const showMultiselectableSelector: boolean = visualizationRules.multiselectDimensionAllowed && selectableDimensionsExcludingContent.length > 0;
 
     return (
         <div>
@@ -68,9 +68,9 @@ export const VisualizationSettingControl: React.FC<IVisualizationSettingControlP
                             visualizationRules={visualizationRules}
                             visualizationSettings={visualizationSettings}
                             settingsChangedHandler={settingsChangedHandler}
-                            variables={variables}
-                            selectableVariables={selectableVariables}
-                            query={variableQuery}
+                            dimensions={dimensions}
+                            selectableDimensions={selectableDimensions}
+                            query={dimensionQuery}
                         />
                     )}
                     {showSortingOptions && (
@@ -92,7 +92,7 @@ export const VisualizationSettingControl: React.FC<IVisualizationSettingControlP
                             visualizationRules={visualizationRules}
                             settingsChangedHandler={settingsChangedHandler}
                             visualizationSettings={visualizationSettings}
-                            variables={selectableVariablesExcludingContent}
+                            dimensions={selectableDimensionsExcludingContent}
                         />
                     )}
                 </SettingsWrapper>

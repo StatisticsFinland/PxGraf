@@ -1,25 +1,23 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
-using PxGraf.Caching;
+using Px.Utils.Models.Metadata.Dimensions;
+using Px.Utils.Models.Metadata.Enums;
+using Px.Utils.Models.Metadata;
 using PxGraf.Controllers;
-using PxGraf.Data.MetaData;
-using PxGraf.Enums;
+using PxGraf.Datasource.Cache;
+using PxGraf.Datasource;
 using PxGraf.Language;
 using PxGraf.Models.Queries;
 using PxGraf.Models.Responses;
-using PxGraf.PxWebInterface;
 using PxGraf.Settings;
 using PxGraf.Utility;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnitTests.Fixtures;
-using UnitTests.TestDummies;
-using UnitTests.TestDummies.DummyQueries;
 
-namespace ControllerTests
+namespace UnitTests.ControllerTests.VisualizationControllerTests
 {
     internal class GetVisualizationTests
     {
@@ -33,7 +31,11 @@ namespace ControllerTests
                 {"pxwebUrl", "http://pxwebtesturl:12345/"},
                 {"pxgrafUrl", "http://pxgraftesturl:8443/PxGraf"},
                 {"savedQueryDirectory", "goesNowhere"},
-                {"archiveFileDirectory", "goesNowhere"}
+                {"archiveFileDirectory", "goesNowhere"},
+                {"LocalFileSystemDatabaseConfig:Encoding", "latin1"},
+                {"CacheOptions:Visualization:SlidingExpirationMinutes", "15" },
+                {"CacheOptions:Visualization:AbsoluteExpirationMinutes", "720" },
+                {"CacheOptions:Visualization:ItemAmountLimit", "1000" }
             };
 
             IConfiguration configuration = new ConfigurationBuilder()
@@ -45,225 +47,237 @@ namespace ControllerTests
         [Test]
         public async Task GetVisualizationTest_Fresh_Data_Is_Returned()
         {
-            Mock<ICachedPxWebConnection> mockCachedPxWebConnection = new();
-            Mock<IVisualizationResponseCache> mockVisualizationResponseCache = new();
-            Mock<ISqFileInterface> mockSqFileInterface = new();
+            Mock<ICachedDatasource> mockCachedDatasource = new();
 
             string testQueryId = "aaa-bbb-111-222-333";
 
-            List<VariableParameters> cubeParams =
+            List<DimensionParameters> cubeParams =
             [
-                new VariableParameters(VariableType.Content, 1),
-                new VariableParameters(VariableType.Time, 10),
-                new VariableParameters(VariableType.OtherClassificatory, 1),
-                new VariableParameters(VariableType.OtherClassificatory, 1),
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 10),
+                new DimensionParameters(DimensionType.Other, 1),
+                new DimensionParameters(DimensionType.Other, 1),
             ];
 
-            List<VariableParameters> metaParams =
+            List<DimensionParameters> metaParams =
             [
-                new VariableParameters(VariableType.Content, 10),
-                new VariableParameters(VariableType.Time, 10),
-                new VariableParameters(VariableType.OtherClassificatory, 15),
-                new VariableParameters(VariableType.OtherClassificatory, 7)
+                new DimensionParameters(DimensionType.Content, 10),
+                new DimensionParameters(DimensionType.Time, 10),
+                new DimensionParameters(DimensionType.Other, 15),
+                new DimensionParameters(DimensionType.Other, 7)
             ];
 
-            CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(metaParams);
-            mockCachedPxWebConnection.Setup(x => x.GetCubeMetaCachedAsync(It.IsAny<PxFileReference>()))
-                .ReturnsAsync(() => meta);
-            mockCachedPxWebConnection.Setup(x => x.BuildDataCubeCachedAsync(It.IsAny<CubeQuery>()))
-                .ReturnsAsync(() => TestDataCubeBuilder.BuildTestDataCube(cubeParams));
-
-            Variable contetClone = meta.GetContentVariable().Clone();
-            contetClone.IncludedValues.ForEach(cv => cv.ContentComponent.LastUpdated = "2008-09-01T00:00:00.000Z");
-            VisualizationResponse mockResult = new()
+            MatrixMetadata meta = TestDataCubeBuilder.BuildTestMeta(metaParams);
+            ContentDimensionValue cdv = meta.Dimensions.Find(v => v.Type == DimensionType.Content).Values[0] as ContentDimensionValue;
+            ContentDimensionValue newCdv = new(
+                cdv.Code,
+                cdv.Name,
+                cdv.Unit,
+                PxSyntaxConstants.ParseDateTime("2008-09-01T00:00:00.000Z"),
+                cdv.Precision);
+            foreach (var prop in cdv.AdditionalProperties)
             {
-                MetaData = [contetClone]
-            };
-            mockVisualizationResponseCache.Setup(x => x.TryGet(It.IsAny<string>(), out mockResult))
-                .Returns(VisualizationResponseCache.CacheEntryState.Fresh); //OBS: Fresh
+                newCdv.AdditionalProperties.Add(prop.Key, prop.Value);
+            }
+            ContentDimension contentDimension = meta.Dimensions.Find(v => v.Type == DimensionType.Content) as ContentDimension;
+            meta.Dimensions[meta.Dimensions.IndexOf(contentDimension)] =
+                new ContentDimension(
+                    contentDimension.Code,
+                    contentDimension.Name,
+                    contentDimension.AdditionalProperties,
+                    new ContentValueList([cdv]));
 
-            mockSqFileInterface.Setup(x => x.SavedQueryExists(It.Is<string>(s => s == testQueryId), It.IsAny<string>()))
-                .Returns(true);
-            mockSqFileInterface.Setup(x => x.ReadSavedQueryFromFile(It.Is<string>(s => s == testQueryId), It.IsAny<string>()))
-                .ReturnsAsync(() => TestDataCubeBuilder.BuildTestSavedQuery(cubeParams, false, new LineChartVisualizationSettings(null, false, null)));
+            VisualizationController vController = TestVisualizationControllerBuilder.BuildController(
+                cubeParams,
+                metaParams, 
+                testQueryId,
+                mockCachedDatasource,
+                MultiStateMemoryTaskCache.CacheEntryState.Fresh);
 
-            VisualizationController vController = new(mockSqFileInterface.Object, mockVisualizationResponseCache.Object, mockCachedPxWebConnection.Object, new Mock<ILogger<VisualizationController>>().Object);
             ActionResult<VisualizationResponse> result = await vController.GetVisualization(testQueryId);
 
-            mockCachedPxWebConnection.Verify(x => x.BuildDataCubeCachedAsync(It.IsAny<CubeQuery>()), Times.Never());
+            mockCachedDatasource.Verify(x => x.GetMatrixMetadataCachedAsync(It.IsAny<PxTableReference>()), Times.Never());
             Assert.That(result.Value, Is.InstanceOf<VisualizationResponse>());
         }
 
         [Test]
         public async Task GetVisualizationTest_Stale_Data_Is_Returned_And_Update_Is_Triggered()
         {
-            Mock<ICachedPxWebConnection> mockCachedPxWebConnection = new();
-            Mock<IVisualizationResponseCache> mockVisualizationResponseCache = new();
-            Mock<ISqFileInterface> mockSqFileInterface = new();
+            Mock<ICachedDatasource> mockCachedDatasource = new();
 
             string testQueryId = "aaa-bbb-111-222-333";
 
-            List<VariableParameters> cubeParams =
+            List<DimensionParameters> cubeParams =
             [
-                new VariableParameters(VariableType.Content, 1),
-                new VariableParameters(VariableType.Time, 10),
-                new VariableParameters(VariableType.OtherClassificatory, 1),
-                new VariableParameters(VariableType.OtherClassificatory, 1),
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 10),
+                new DimensionParameters(DimensionType.Other, 1),
+                new DimensionParameters(DimensionType.Other, 1),
             ];
 
-            List<VariableParameters> metaParams =
+            List<DimensionParameters> metaParams =
             [
-                new VariableParameters(VariableType.Content, 10),
-                new VariableParameters(VariableType.Time, 10),
-                new VariableParameters(VariableType.OtherClassificatory, 15),
-                new VariableParameters(VariableType.OtherClassificatory, 7)
+                new DimensionParameters(DimensionType.Content, 10),
+                new DimensionParameters(DimensionType.Time, 10),
+                new DimensionParameters(DimensionType.Other, 15),
+                new DimensionParameters(DimensionType.Other, 7)
             ];
 
-            CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(metaParams);
-            mockCachedPxWebConnection.Setup(x => x.GetCubeMetaCachedAsync(It.IsAny<PxFileReference>()))
-                .ReturnsAsync(() => meta);
-            mockCachedPxWebConnection.Setup(x => x.BuildDataCubeCachedAsync(It.IsAny<CubeQuery>()))
-                .ReturnsAsync(() => TestDataCubeBuilder.BuildTestDataCube(cubeParams));
-
-            Variable contetClone = meta.GetContentVariable().Clone();
-            contetClone.IncludedValues.ForEach(cv => cv.ContentComponent.LastUpdated = "2008-09-01T00:00:00.000Z");
-            VisualizationResponse mockResult = new()
+            MatrixMetadata meta = TestDataCubeBuilder.BuildTestMeta(metaParams);
+            ContentDimensionValue cdv = meta.Dimensions.Find(v => v.Type == DimensionType.Content).Values[0] as ContentDimensionValue;
+            ContentDimensionValue newCdv = new(
+                cdv.Code,
+                cdv.Name,
+                cdv.Unit,
+                PxSyntaxConstants.ParseDateTime("2008-09-01T00:00:00.000Z"),
+                cdv.Precision);
+            foreach (var prop in cdv.AdditionalProperties)
             {
-                MetaData = [contetClone]
-            };
-            mockVisualizationResponseCache.Setup(x => x.TryGet(It.IsAny<string>(), out mockResult))
-                .Returns(VisualizationResponseCache.CacheEntryState.Stale); //OBS: Stale
+                newCdv.AdditionalProperties.Add(prop.Key, prop.Value);
+            }
+            ContentDimension contentDimension = meta.Dimensions.Find(v => v.Type == DimensionType.Content) as ContentDimension;
+            meta.Dimensions[meta.Dimensions.IndexOf(contentDimension)] =
+                new ContentDimension(
+                    contentDimension.Code,
+                    contentDimension.Name,
+                    contentDimension.AdditionalProperties,
+                    new ContentValueList([cdv]));
 
-            mockSqFileInterface.Setup(x => x.SavedQueryExists(It.Is<string>(s => s == testQueryId), It.IsAny<string>()))
-                .Returns(true);
-            mockSqFileInterface.Setup(x => x.ReadSavedQueryFromFile(It.Is<string>(s => s == testQueryId), It.IsAny<string>()))
-                .ReturnsAsync(() => TestDataCubeBuilder.BuildTestSavedQuery(cubeParams, false, new LineChartVisualizationSettings(null, false, null)));
+            VisualizationController vController = TestVisualizationControllerBuilder.BuildController(
+                cubeParams,
+                metaParams,
+                testQueryId,
+                mockCachedDatasource,
+                MultiStateMemoryTaskCache.CacheEntryState.Stale);
 
-            VisualizationController vController = new(mockSqFileInterface.Object, mockVisualizationResponseCache.Object, mockCachedPxWebConnection.Object, new Mock<ILogger<VisualizationController>>().Object);
             ActionResult<VisualizationResponse> result = await vController.GetVisualization(testQueryId);
 
-            mockCachedPxWebConnection.Verify(x => x.BuildDataCubeCachedAsync(It.IsAny<CubeQuery>()), Times.Once());
+            mockCachedDatasource.Verify(x => x.GetMatrixMetadataCachedAsync(It.IsAny<PxTableReference>()), Times.Once());
             Assert.That(result.Value, Is.InstanceOf<VisualizationResponse>());
-        }
-
-        [Test]
-        public async Task GetVisualizationTest_202_Is_Returned_When_Fetch_Is_Pending()
-        {
-            Mock<ICachedPxWebConnection> mockCachedPxWebConnection = new();
-            Mock<IVisualizationResponseCache> mockVisualizationResponseCache = new();
-            Mock<ISqFileInterface> mockSqFileInterface = new();
-
-            string testQueryId = "aaa-bbb-111-222-333";
-
-            List<VariableParameters> cubeParams =
-            [
-                new VariableParameters(VariableType.Content, 1),
-                new VariableParameters(VariableType.Time, 10),
-                new VariableParameters(VariableType.OtherClassificatory, 1),
-                new VariableParameters(VariableType.OtherClassificatory, 1),
-            ];
-
-            List<VariableParameters> metaParams =
-            [
-                new VariableParameters(VariableType.Content, 10),
-                new VariableParameters(VariableType.Time, 10),
-                new VariableParameters(VariableType.OtherClassificatory, 15),
-                new VariableParameters(VariableType.OtherClassificatory, 7)
-            ];
-
-            CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(metaParams);
-            mockCachedPxWebConnection.Setup(x => x.GetCubeMetaCachedAsync(It.IsAny<PxFileReference>()))
-                .ReturnsAsync(() => meta);
-            mockCachedPxWebConnection.Setup(x => x.BuildDataCubeCachedAsync(It.IsAny<CubeQuery>()))
-                .ReturnsAsync(() => TestDataCubeBuilder.BuildTestDataCube(cubeParams));
-
-            Variable contetClone = meta.GetContentVariable().Clone();
-            contetClone.IncludedValues.ForEach(cv => cv.ContentComponent.LastUpdated = "2008-09-01T00:00:00.000Z");
-            VisualizationResponse mockResult = new()
-            {
-                MetaData = [contetClone]
-            };
-            mockVisualizationResponseCache.Setup(x => x.TryGet(It.IsAny<string>(), out mockResult))
-                .Returns(VisualizationResponseCache.CacheEntryState.Pending); //OBS: Pending
-
-            mockSqFileInterface.Setup(x => x.SavedQueryExists(It.Is<string>(s => s == testQueryId), It.IsAny<string>()))
-                .Returns(true);
-            mockSqFileInterface.Setup(x => x.ReadSavedQueryFromFile(It.Is<string>(s => s == testQueryId), It.IsAny<string>()))
-                .ReturnsAsync(() => TestDataCubeBuilder.BuildTestSavedQuery(cubeParams, false, new LineChartVisualizationSettings(null, false, null)));
-
-            VisualizationController vController = new(mockSqFileInterface.Object, mockVisualizationResponseCache.Object, mockCachedPxWebConnection.Object, new Mock<ILogger<VisualizationController>>().Object);
-            ActionResult<VisualizationResponse> result = await vController.GetVisualization(testQueryId);
-
-            mockCachedPxWebConnection.Verify(x => x.BuildDataCubeCachedAsync(It.IsAny<CubeQuery>()), Times.Never());
-            Assert.That(result.Result, Is.InstanceOf<AcceptedResult>());
         }
 
         [Test]
         public async Task GetVisualizationTest_Null_Data_202_Is_Returned_And_Update_Is_Triggered()
         {
-            Mock<ICachedPxWebConnection> mockCachedPxWebConnection = new();
-            Mock<IVisualizationResponseCache> mockVisualizationResponseCache = new();
-            Mock<ISqFileInterface> mockSqFileInterface = new();
+            Mock<ICachedDatasource> mockCachedDatasource = new();
 
             string testQueryId = "aaa-bbb-111-222-333";
 
-            List<VariableParameters> cubeParams =
+            List<DimensionParameters> cubeParams =
             [
-                new VariableParameters(VariableType.Content, 1),
-                new VariableParameters(VariableType.Time, 10),
-                new VariableParameters(VariableType.OtherClassificatory, 1),
-                new VariableParameters(VariableType.OtherClassificatory, 1),
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 10),
+                new DimensionParameters(DimensionType.Other, 1),
+                new DimensionParameters(DimensionType.Other, 1),
             ];
 
-            List<VariableParameters> metaParams =
+            List<DimensionParameters> metaParams =
             [
-                new VariableParameters(VariableType.Content, 10),
-                new VariableParameters(VariableType.Time, 10),
-                new VariableParameters(VariableType.OtherClassificatory, 15),
-                new VariableParameters(VariableType.OtherClassificatory, 7)
+                new DimensionParameters(DimensionType.Content, 10),
+                new DimensionParameters(DimensionType.Time, 10),
+                new DimensionParameters(DimensionType.Other, 15),
+                new DimensionParameters(DimensionType.Other, 7)
             ];
 
-            CubeMeta meta = TestDataCubeBuilder.BuildTestMeta(metaParams);
-            mockCachedPxWebConnection.Setup(x => x.GetCubeMetaCachedAsync(It.IsAny<PxFileReference>()))
-                .ReturnsAsync(() => meta);
-            mockCachedPxWebConnection.Setup(x => x.BuildDataCubeCachedAsync(It.IsAny<CubeQuery>()))
-                .ReturnsAsync(() => TestDataCubeBuilder.BuildTestDataCube(cubeParams));
+            MatrixMetadata meta = TestDataCubeBuilder.BuildTestMeta(metaParams);
+            ContentDimensionValue cdv = meta.Dimensions.Find(v => v.Type == DimensionType.Content).Values[0] as ContentDimensionValue;
+            ContentDimensionValue newCdv = new(
+                cdv.Code,
+                cdv.Name,
+                cdv.Unit,
+                PxSyntaxConstants.ParseDateTime("2008-09-01T00:00:00.000Z"),
+                cdv.Precision);
+            foreach (var prop in cdv.AdditionalProperties)
+            {
+                newCdv.AdditionalProperties.Add(prop.Key, prop.Value);
+            }
+            ContentDimension contentDimension = meta.Dimensions.Find(v => v.Type == DimensionType.Content) as ContentDimension;
+            meta.Dimensions[meta.Dimensions.IndexOf(contentDimension)] =
+                new ContentDimension(
+                    contentDimension.Code,
+                    contentDimension.Name,
+                    contentDimension.AdditionalProperties,
+                    new ContentValueList([cdv]));
 
-            VisualizationResponse mockResult = null;
-            mockVisualizationResponseCache.Setup(x => x.TryGet(It.IsAny<string>(), out mockResult))
-                .Returns(VisualizationResponseCache.CacheEntryState.Null); //OBS: Null
+            VisualizationController vController = TestVisualizationControllerBuilder.BuildController(
+                cubeParams,
+                metaParams,
+                testQueryId,
+                mockCachedDatasource,
+                MultiStateMemoryTaskCache.CacheEntryState.Null);
 
-            mockSqFileInterface.Setup(x => x.SavedQueryExists(It.Is<string>(s => s == testQueryId), It.IsAny<string>()))
-                .Returns(true);
-            mockSqFileInterface.Setup(x => x.ReadSavedQueryFromFile(It.Is<string>(s => s == testQueryId), It.IsAny<string>()))
-                .ReturnsAsync(() => TestDataCubeBuilder.BuildTestSavedQuery(cubeParams, false, new LineChartVisualizationSettings(null, false, null)));
-
-
-            VisualizationController vController = new(mockSqFileInterface.Object, mockVisualizationResponseCache.Object, mockCachedPxWebConnection.Object, new Mock<ILogger<VisualizationController>>().Object);
             ActionResult<VisualizationResponse> result = await vController.GetVisualization(testQueryId);
 
-            mockCachedPxWebConnection.Verify(x => x.BuildDataCubeCachedAsync(It.IsAny<CubeQuery>()), Times.Once());
-            Assert.That(result.Result, Is.InstanceOf<AcceptedResult>());
+            mockCachedDatasource.Verify(x => x.GetMatrixMetadataCachedAsync(It.IsAny<PxTableReference>()), Times.Once()); 
+            Assert.That(result.Value, Is.InstanceOf<VisualizationResponse>());
         }
 
         [Test]
         public async Task GetVisualizationTest_Faulty_Task_400_Is_Returned_No_Refetch_Is_Triggered()
         {
-            Mock<ICachedPxWebConnection> mockCachedPxWebConnection = new();
-            Mock<IVisualizationResponseCache> mockVisualizationResponseCache = new();
-            Mock<ISqFileInterface> mockSqFileInterface = new();
+            Mock<ICachedDatasource> mockCachedDatasource = new();
 
             string testQueryId = "aaa-bbb-111-222-333";
 
-            VisualizationResponse mockResult = default;
-            mockVisualizationResponseCache.Setup(x => x.TryGet(It.IsAny<string>(), out mockResult))
-                .Returns(VisualizationResponseCache.CacheEntryState.Error);
+            VisualizationController vController = TestVisualizationControllerBuilder.BuildController(
+                [],
+                [],
+                testQueryId,
+                mockCachedDatasource,
+                MultiStateMemoryTaskCache.CacheEntryState.Error);
 
-            VisualizationController vController = new(mockSqFileInterface.Object, mockVisualizationResponseCache.Object, mockCachedPxWebConnection.Object, new Mock<ILogger<VisualizationController>>().Object);
             ActionResult<VisualizationResponse> result = await vController.GetVisualization(testQueryId);
 
-            mockCachedPxWebConnection.Verify(x => x.BuildDataCubeCachedAsync(It.IsAny<CubeQuery>()), Times.Never());
+            mockCachedDatasource.Verify(x => x.GetMatrixMetadataCachedAsync(It.IsAny<PxTableReference>()), Times.Never());
             Assert.That(result.Result, Is.InstanceOf<BadRequestResult>());
+        }
+
+        [Test]
+        public async Task GetVisualizationTest_WithFaultyQueryId_Returns_NotFound()
+        {
+            Mock<ICachedDatasource> mockCachedDatasource = new();
+
+            string testQueryId = "foo";
+
+            VisualizationController vController = TestVisualizationControllerBuilder.BuildController(
+                [],
+                [],
+                testQueryId,
+                mockCachedDatasource,
+                MultiStateMemoryTaskCache.CacheEntryState.Null,
+                false);
+
+            ActionResult<VisualizationResponse> result = await vController.GetVisualization(testQueryId);
+
+            Assert.That(result.Result, Is.InstanceOf<NotFoundResult>());
+        }
+
+        [Test]
+        public async Task GetVisualizationTest_WithArchivedQuery_ReturnsArchivedResponse()
+        {
+            Mock<ICachedDatasource> mockCachedDatasource = new();
+
+            string testQueryId = "aaa-bbb-111-222-333";
+
+            List<DimensionParameters> metaParams =
+            [
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 10),
+                new DimensionParameters(DimensionType.Other, 2),
+                new DimensionParameters(DimensionType.Other, 1)
+            ];
+
+            VisualizationController vController = TestVisualizationControllerBuilder.BuildController(
+                metaParams,
+                metaParams,
+                testQueryId,
+                mockCachedDatasource,
+                MultiStateMemoryTaskCache.CacheEntryState.Null,
+                archived: true);
+
+            ActionResult<VisualizationResponse> result = await vController.GetVisualization(testQueryId);
+
+            Assert.That(result.Value, Is.InstanceOf<VisualizationResponse>());
         }
     }
 }
