@@ -2,6 +2,7 @@
 using System.Text.Json;
 using PxGraf.Models.SavedQueries.Versions;
 using System;
+using PxGraf.Utility.CustomJsonConverters;
 
 namespace PxGraf.Models.SavedQueries
 {
@@ -17,7 +18,7 @@ namespace PxGraf.Models.SavedQueries
             JsonDocument jdoc = JsonDocument.ParseValue(ref reader);
             string version = "1.0"; // Default version
 
-            if (jdoc.RootElement.TryGetProperty(nameof(ArchiveCube.Version), out JsonElement versionElement))
+            if (jdoc.RootElement.TryGetProperty(nameof(ArchiveCube.Version), options, out JsonElement versionElement))
             {
                 version = versionElement.GetString() ?? "1.0";
             }

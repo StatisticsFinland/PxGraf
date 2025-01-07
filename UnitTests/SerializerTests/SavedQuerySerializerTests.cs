@@ -413,10 +413,44 @@ namespace UnitTests.SerializerTests
         }
 
         [Test]
+        public void DeserializeAndSerializeCamelCaseV10SQTest()
+        {
+            // Serialize
+            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(SavedQueryFixtures.V1_0_TEST_SAVEDQUERY1_CAMEL_CASE_PROPERTY_NAMES, GlobalJsonConverterOptions.Default);
+            Assert.That(savedQuery.Version, Is.EqualTo("1.0"));
+            Assert.That(savedQuery.Query.DimensionQueries.Count, Is.EqualTo(6));
+            string pivotKey = "PivotRequested";
+            Assert.That(savedQuery.LegacyProperties.ContainsKey(pivotKey) && (bool)(savedQuery.LegacyProperties[pivotKey]));
+            Assert.That(savedQuery.Settings.VisualizationType, Is.EqualTo(VisualizationType.GroupVerticalBarChart));
+
+            // Deserialize
+            string serializedString = JsonSerializer.Serialize(savedQuery, GlobalJsonConverterOptions.Default);
+            JsonUtils.JsonStringsAreEqual(
+                SavedQuerySerializerExpectedOutputFixtures.V1_0_TEST_SAVEDQUERY1_SER_DESER_EXPECTED_OUTPUT,
+                serializedString);
+        }
+
+        [Test]
         public void DeserializeAndSerializeV11SQTest()
         {
             // Serialize
             SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(SavedQueryFixtures.V1_1_TEST_SAVEDQUERY1, GlobalJsonConverterOptions.Default);
+            Assert.That(savedQuery.Version, Is.EqualTo("1.1"));
+            Assert.That(savedQuery.Query.DimensionQueries.Count, Is.EqualTo(6));
+            Assert.That(savedQuery.Settings.VisualizationType, Is.EqualTo(VisualizationType.GroupVerticalBarChart));
+
+            // Deserialize
+            string serializedString = JsonSerializer.Serialize(savedQuery, GlobalJsonConverterOptions.Default);
+            JsonUtils.JsonStringsAreEqual(
+                SavedQuerySerializerExpectedOutputFixtures.V1_1_TEST_SAVEDQUERY1_SER_DESER_EXPECTED_OUTPUT,
+                serializedString);
+        }
+
+        [Test]
+        public void DeserializeAndSerializeCamelCaseV11SQTest()
+        {
+            // Serialize
+            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(SavedQueryFixtures.V1_1_TEST_SAVEDQUERY1_CAMEL_CASE_PROPERTY_NAMES, GlobalJsonConverterOptions.Default);
             Assert.That(savedQuery.Version, Is.EqualTo("1.1"));
             Assert.That(savedQuery.Query.DimensionQueries.Count, Is.EqualTo(6));
             Assert.That(savedQuery.Settings.VisualizationType, Is.EqualTo(VisualizationType.GroupVerticalBarChart));
