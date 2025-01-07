@@ -114,6 +114,118 @@
             }
         }";
 
+        internal const string V1_0_TEST_SAVEDQUERY1_CAMEL_CASE_PROPERTY_NAMES = @"
+        {
+            ""query"": {
+                ""tableReference"": {
+                    ""name"": ""table.px"",
+                    ""hierarchy"": [
+                        ""foo"",
+                        ""bar""
+                    ]
+                },
+                ""chartHeaderEdit"": null,
+                ""variableQueries"": {
+                    ""Vuosi"": {
+                        ""nameEdit"": null,
+                        ""valueEdits"": {
+
+                        },
+                        ""valueFilter"": {
+                            ""type"": ""item"",
+                            ""query"": [
+                                ""value-2"",
+                                ""value-1"",
+                                ""value-0""
+                            ]
+                        },
+                        ""virtualValueDefinitions"": null,
+                        ""selectable"": false
+                    },
+                    ""Syntymävaltio"": {
+                        ""nameEdit"": null,
+                        ""valueEdits"": {
+
+                        },
+                        ""valueFilter"": {
+                            ""type"": ""item"",
+                            ""query"": [
+                                ""value-0"",
+                                ""value-1""
+                            ]
+                        },
+                        ""virtualValueDefinitions"": null,
+                        ""selectable"": false
+                    },
+                    ""Adoptiotyyppi"": {
+                        ""nameEdit"": null,
+                        ""valueEdits"": {
+
+                        },
+                        ""valueFilter"": {
+                            ""type"": ""item"",
+                            ""query"": [
+                                ""value-0""
+                            ]
+                        },
+                        ""virtualValueDefinitions"": null,
+                        ""selectable"": false
+                    },
+                    ""Ikä"": {
+                        ""nameEdit"": null,
+                        ""valueEdits"": {
+
+                        },
+                        ""valueFilter"": {
+                            ""type"": ""item"",
+                            ""query"": [
+                                ""value-0""
+                            ]
+                        },
+                        ""virtualValueDefinitions"": null,
+                        ""selectable"": false
+                    },
+                    ""Sukupuoli"": {
+                        ""nameEdit"": null,
+                        ""valueEdits"": {
+
+                        },
+                        ""valueFilter"": {
+                            ""type"": ""item"",
+                            ""query"": [
+                                ""value-0""
+                            ]
+                        },
+                        ""virtualValueDefinitions"": null,
+                        ""selectable"": false
+                    },
+                    ""Tiedot"": {
+                        ""nameEdit"": null,
+                        ""valueEdits"": {
+
+                        },
+                        ""valueFilter"": {
+                            ""type"": ""item"",
+                            ""query"": [
+                                ""value-0""
+                            ]
+                        },
+                        ""virtualValueDefinitions"": null,
+                        ""selectable"": false
+                    }
+                }
+            },
+            ""creationTime"": ""2023-05-16T17:13:33.2211177+03:00"",
+            ""archived"": false,
+            ""settings"": {
+                ""pivotRequested"": true,
+                ""matchXLabelsToEnd"": false,
+                ""xLabelInterval"": 1,
+                ""selectedVisualization"": ""GroupVerticalBarChart"",
+                ""defaultSelectableVariableCodes"": null
+            }
+        }";
+
         internal const string V1_1_TEST_SAVEDQUERY1 = @"
         {
            ""Query"":{
@@ -232,6 +344,126 @@
               ""DefaultSelectableVariableCodes"":null
            },
            ""Version"":""1.1""
+        }";
+
+        internal const string V1_1_TEST_SAVEDQUERY1_CAMEL_CASE_PROPERTY_NAMES = @"
+        {
+            ""query"": {
+                ""tableReference"": {
+                    ""name"": ""table.px"",
+                    ""hierarchy"": [
+                        ""foo"",
+                        ""bar""
+                    ]
+                },
+                ""chartHeaderEdit"": null,
+                ""variableQueries"": {
+                    ""Kuukausi"": {
+                        ""nameEdit"": null,
+                        ""valueEdits"": {
+
+                        },
+                        ""valueFilter"": {
+                            ""type"": ""item"",
+                            ""query"": [
+                                ""2022M12"",
+                                ""2022M11"",
+                                ""2019M02""
+                            ]
+                        },
+                        ""virtualValueDefinitions"": null,
+                        ""selectable"": false
+                    },
+                    ""Ilmoittava lentoasema"": {
+                        ""nameEdit"": null,
+                        ""valueEdits"": {
+
+                        },
+                        ""valueFilter"": {
+                            ""type"": ""item"",
+                            ""query"": [
+                                ""EFJO"",
+                                ""EFKT""
+                            ]
+                        },
+                        ""virtualValueDefinitions"": null,
+                        ""selectable"": false
+                    },
+                    ""Lennon tyyppi"": {
+                        ""nameEdit"": null,
+                        ""valueEdits"": {
+
+                        },
+                        ""valueFilter"": {
+                            ""type"": ""item"",
+                            ""query"": [
+                                ""1""
+                            ]
+                        },
+                        ""virtualValueDefinitions"": null,
+                        ""selectable"": false
+                    },
+                    ""Saapuneet/lähteneet"": {
+                        ""nameEdit"": null,
+                        ""valueEdits"": {
+
+                        },
+                        ""valueFilter"": {
+                            ""type"": ""item"",
+                            ""query"": [
+                                ""1""
+                            ]
+                        },
+                        ""virtualValueDefinitions"": null,
+                        ""selectable"": false
+                    },
+                    ""Toinen lentoasema"": {
+                        ""nameEdit"": null,
+                        ""valueEdits"": {
+
+                        },
+                        ""valueFilter"": {
+                            ""type"": ""item"",
+                            ""query"": [
+                                ""EFHK""
+                            ]
+                        },
+                        ""virtualValueDefinitions"": null,
+                        ""selectable"": false
+                    },
+                    ""Tiedot"": {
+                        ""nameEdit"": null,
+                        ""valueEdits"": {
+
+                        },
+                        ""valueFilter"": {
+                            ""type"": ""item"",
+                            ""query"": [
+                                ""matkustajat""
+                            ]
+                        },
+                        ""virtualValueDefinitions"": null,
+                        ""selectable"": false
+                    }
+                }
+            },
+            ""creationTime"": ""2023-05-16T15:04:12.0948951+03:00"",
+            ""archived"": false,
+            ""settings"": {
+                ""matchXLabelsToEnd"": false,
+                ""xLabelInterval"": 1,
+                ""layout"": {
+                    ""rowVariableCodes"": [
+                        ""Kuukausi""
+                    ],
+                    ""columnVariableCodes"": [
+                        ""Ilmoittava lentoasema""
+                    ]
+                },
+                ""visualizationType"": ""GroupVerticalBarChart"",
+                ""defaultSelectableVariableCodes"": null
+            },
+            ""version"": ""1.1""
         }";
 
         internal const string V1_1_TEST_SAVEDQUERY2 = @"

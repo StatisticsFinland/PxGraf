@@ -153,5 +153,56 @@ namespace UnitTests.SerializerTests
             Assert.That(actual.Meta.AdditionalProperties.ContainsKey("NOTE"));
             Assert.That(actual.Meta.AdditionalProperties["NOTE"].Type.Equals(MetaPropertyType.MultilanguageText));
         }
+
+        [Test]
+        public void ArhiveMatrixSerializer_DeserializeV10_WithPascalCasePropertyNames_ReturnsCorrectObject()
+        {
+            List<DecimalDataValue> expectedData =
+            [
+                new(173.0m, DataValueType.Exists),
+                new(0, DataValueType.Confidential),
+                new(0.0m, DataValueType.Exists),
+                new(0.0m, DataValueType.Exists),
+                new(0.0m, DataValueType.Exists),
+                new(0.0m, DataValueType.Exists),
+                new(1.0m, DataValueType.Exists)
+            ];
+            Dictionary<int, MultilanguageString> expectedDataNotes = new()
+            {
+                { 1, new MultilanguageString(new Dictionary<string, string> { { "fi", "..." }, { "en", "..." }, { "sv", "..." } })}
+            };
+            string[] expectedLanguages = ["fi", "en", "sv"];
+
+            // Act
+            ArchiveCube actual = JsonSerializer.Deserialize<ArchiveCube>(ArchiveCubeFixtures.ARCHIVE_CUBE_V10_WITH_PASCAL_CASE_PROPERTY_NAMES, GlobalJsonConverterOptions.Default);
+
+            // Assert
+            Assert.That((actual.Version).Equals("1.0"));
+            Assert.That((actual.Data.Count).Equals(expectedData.Count));
+            for (int i = 0; i < expectedData.Count; i++)
+            {
+                Assert.That((actual.Data[i]).Equals(expectedData[i]));
+            }
+            Assert.That(actual.DataNotes.Count, Is.EqualTo(expectedDataNotes.Count));
+            Assert.That(actual.DataNotes[1].Equals(expectedDataNotes[1]));
+            Assert.That(actual.Meta.AdditionalProperties.Count, Is.EqualTo(1));
+            Assert.That(actual.Meta.DefaultLanguage.Equals("fi"));
+            foreach (string language in expectedLanguages)
+            {
+                Assert.That(actual.Meta.AvailableLanguages.Contains(language));
+            }
+            Assert.That(actual.Meta.Dimensions.Count.Equals(6));
+            Assert.That(actual.Meta.Dimensions[0].Values.Count.Equals(1));
+            Assert.That(actual.Meta.Dimensions[1].Values.Count.Equals(7));
+            Assert.That(actual.Meta.Dimensions[2].Values.Count.Equals(1));
+            Assert.That(actual.Meta.Dimensions[3].Values.Count.Equals(1));
+            Assert.That(actual.Meta.Dimensions[4].Values.Count.Equals(1));
+            Assert.That(actual.Meta.Dimensions[5].Values.Count.Equals(1));
+            Assert.That(actual.Meta.Dimensions[0].Type.Equals(DimensionType.Time));
+            Assert.That(actual.Meta.Dimensions[5].Type.Equals(DimensionType.Content));
+            Assert.That(actual.Meta.Dimensions[5].Values[0].AdditionalProperties.ContainsKey("SOURCE"));
+            Assert.That(actual.Meta.AdditionalProperties.ContainsKey("NOTE"));
+            Assert.That(actual.Meta.AdditionalProperties["NOTE"].Type.Equals(MetaPropertyType.MultilanguageText));
+        }
     }
 }
