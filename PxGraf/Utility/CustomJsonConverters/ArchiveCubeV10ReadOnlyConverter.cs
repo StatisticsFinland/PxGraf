@@ -2,6 +2,7 @@
 using Px.Utils.Models.Data;
 using Px.Utils.Models.Data.DataValue;
 using PxGraf.Data.MetaData;
+using PxGraf.Models.SavedQueries;
 using PxGraf.Models.SavedQueries.Versions;
 using System;
 using System.Collections.Generic;
@@ -16,10 +17,10 @@ namespace PxGraf.Utility.CustomJsonConverters
         {
             JsonDocument jsonDocument = JsonDocument.ParseValue(ref reader);
             JsonElement root = jsonDocument.RootElement;
-            DateTime creationTime = root.GetPropertyCaseInsensitive(nameof(ArchiveCubeV10.CreationTime)).GetDateTime();
-            CubeMeta meta = JsonSerializer.Deserialize<CubeMeta>(root.GetPropertyCaseInsensitive(nameof(ArchiveCubeV10.Meta)).GetRawText(), options);
-            Dictionary<int, string> dataNotes = JsonSerializer.Deserialize<Dictionary<int, string>>(root.GetPropertyCaseInsensitive(nameof(ArchiveCubeV10.DataNotes)), options);
-            List<DecimalDataValue> values = ConvertData(JsonSerializer.Deserialize<List<decimal?>>(root.GetPropertyCaseInsensitive(nameof(ArchiveCubeV10.Data)).GetRawText(), options), dataNotes);
+            DateTime creationTime = root.GetProperty(nameof(ArchiveCubeV10.CreationTime), options).GetDateTime();
+            CubeMeta meta = JsonSerializer.Deserialize<CubeMeta>(root.GetProperty(nameof(ArchiveCubeV10.Meta), options).GetRawText(), options);
+            Dictionary<int, string> dataNotes = JsonSerializer.Deserialize<Dictionary<int, string>>(root.GetProperty(nameof(ArchiveCubeV10.DataNotes), options), options);
+            List<DecimalDataValue> values = ConvertData(JsonSerializer.Deserialize<List<decimal?>>(root.GetProperty(nameof(ArchiveCubeV10.Data), options).GetRawText(), options), dataNotes);
             return new ArchiveCubeV10(creationTime, meta, values, ConvertDataNotes(dataNotes, meta.Languages));
         }
 
