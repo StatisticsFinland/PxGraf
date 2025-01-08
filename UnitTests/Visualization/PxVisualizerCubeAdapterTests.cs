@@ -571,7 +571,6 @@ namespace UnitTests.Visualization
             Assert.That(normalizedResponse, Is.EqualTo(normalizedExpected));
         }
 
-
         [Test]
         public void ResponseSerializationTest_ArchivedVisualizationWithMissingDataValues_Returned()
         {
@@ -587,7 +586,6 @@ namespace UnitTests.Visualization
 
             LineChartVisualizationSettings settings = new(new Layout(["Alue"], ["Vuosineljännes"]), false, null);
             SavedQuery savedQuery = TestDataCubeBuilder.BuildTestSavedQuery(cubeParams, true, settings);
-            Dictionary<int, MultilanguageString> dataNotes = [];
             Matrix<DecimalDataValue> cube = TestDataCubeBuilder.BuildTestMatrix(cubeParams, missingData: true);
             ArchiveCube archiveCube = new(cube);
 

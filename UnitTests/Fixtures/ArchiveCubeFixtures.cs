@@ -514,5 +514,247 @@
             }
         }
         ";
+
+        public const string ARCHIVE_CUBE_V10_WITH_PASCAL_CASE_PROPERTY_NAMES = @"
+        {
+            ""CreationTime"": ""2024-06-06T15:38:51.5768284+03:00"",
+            ""Meta"": {
+                ""Languages"": [""fi"", ""sv"", ""en""],
+                ""Header"": {
+                    ""fi"": ""Header"",
+                    ""sv"": ""Header.sv"",
+                    ""en"": ""Header.en""
+                },
+                ""Note"": {
+                    ""fi"": ""Note"",
+                    ""sv"": ""Note.sv"",
+                    ""en"": ""Note.en""
+                },
+                ""Variables"": [
+                    {
+                        ""Code"": ""variable-0"",
+                        ""Name"": {
+                            ""fi"": ""variable-0.fi"",
+                            ""sv"": ""variable-0.sv"",
+                            ""en"": ""variable-0.en""
+                        },
+                        ""Note"": null,
+                        ""Type"": ""T"",
+                        ""Values"": [
+                            {
+                                ""Code"": ""variable-0-value-0"",
+                                ""Name"": {
+                                    ""fi"": ""variable-0-value-0.fi"",
+                                    ""sv"": ""variable-0-value-0.sv"",
+                                    ""en"": ""variable-0-value-0.en""
+                                },
+                                ""Note"": null,
+                                ""IsSum"": false,
+                                ""ContentComponent"": null
+                            }
+                        ]
+                    },
+                    {
+                        ""Code"": ""variable-1"",
+                        ""Name"": {
+                            ""fi"": ""variable-1.fi"",
+                            ""sv"": ""variable-1.sv"",
+                            ""en"": ""variable-1.en""
+                        },
+                        ""Note"": null,
+                        ""Type"": ""G"",
+                        ""Values"": [
+                            {
+                                ""Code"": ""variable-1-value-0"",
+                                ""Name"": {
+                                    ""fi"": ""variable-1-value-0.fi"",
+                                    ""sv"": ""variable-1-value-0.sv"",
+                                    ""en"": ""variable-1-value-0.en""
+                                },
+                                ""Note"": null,
+                                ""IsSum"": false,
+                                ""ContentComponent"": null
+                            },
+                            {
+                                ""Code"": ""variable-1-value-1"",
+                                ""Name"": {
+                                    ""fi"": ""variable-1-value-1.fi"",
+                                    ""sv"": ""variable-1-value-1.sv"",
+                                    ""en"": ""variable-1-value-1.en""
+                                },
+                                ""Note"": null,
+                                ""IsSum"": false,
+                                ""ContentComponent"": null
+                            },
+                            {
+                                ""Code"": ""variable-1-value-2"",
+                                ""Name"": {
+                                    ""fi"": ""variable-1-value-2.fi"",
+                                    ""sv"": ""variable-1-value-2.sv"",
+                                    ""en"": ""variable-1-value-2.en""
+                                },
+                                ""Note"": null,
+                                ""IsSum"": false,
+                                ""ContentComponent"": null
+                            },
+                            {
+                                ""Code"": ""variable-1-value-3"",
+                                ""Name"": {
+                                    ""fi"": ""variable-1-value-3.fi"",
+                                    ""sv"": ""variable-1-value-3.sv"",
+                                    ""en"": ""variable-1-value-3.en""
+                                },
+                                ""Note"": null,
+                                ""IsSum"": false,
+                                ""ContentComponent"": null
+                            },
+                            {
+                                ""Code"": ""variable-1-value-4"",
+                                ""Name"": {
+                                    ""fi"": ""variable-1-value-4.fi"",
+                                    ""sv"": ""variable-1-value-4.sv"",
+                                    ""en"": ""variable-1-value-4.en""
+                                },
+                                ""Note"": null,
+                                ""IsSum"": false,
+                                ""ContentComponent"": null
+                            },
+                            {
+                                ""Code"": ""variable-1-value-5"",
+                                ""Name"": {
+                                    ""fi"": ""variable-1-value-5.fi"",
+                                    ""sv"": ""variable-1-value-5.sv"",
+                                    ""en"": ""variable-1-value-5.en""
+                                },
+                                ""Note"": null,
+                                ""IsSum"": false,
+                                ""ContentComponent"": null
+                            },
+                            {
+                                ""Code"": ""variable-1-value-6"",
+                                ""Name"": {
+                                    ""fi"": ""variable-1-value-6.fi"",
+                                    ""sv"": ""variable-1-value-6.sv"",
+                                    ""en"": ""variable-1-value-6.en""
+                                },
+                                ""Note"": null,
+                                ""IsSum"": false,
+                                ""ContentComponent"": null
+                            }
+                        ]
+                    },
+                    {
+                        ""Code"": ""variable-2"",
+                        ""Name"": {
+                            ""fi"": ""variable-2.fi"",
+                            ""sv"": ""variable-2.sv"",
+                            ""en"": ""variable-2.en""
+                        },
+                        ""Note"": null,
+                        ""Type"": ""F"",
+                        ""Values"": [
+                            {
+                                ""Code"": ""variable-2-value-0"",
+                                ""Name"": {
+                                    ""fi"": ""variable-2-value-0.fi"",
+                                    ""sv"": ""variable-2-value-0.sv"",
+                                    ""en"": ""variable-2-value-0.en""
+                                },
+                                ""Note"": null,
+                                ""IsSum"": true,
+                                ""ContentComponent"": null
+                            }
+                        ]
+                    },
+                    {
+                        ""Code"": ""variable-3"",
+                        ""Name"": {
+                            ""fi"": ""variable-3.fi"",
+                            ""sv"": ""variable-3.sv"",
+                            ""en"": ""variable-3.en""
+                        },
+                        ""Note"": null,
+                        ""Type"": ""P"",
+                        ""Values"": [
+                            {
+                                ""Code"": ""variable-3-value-0"",
+                                ""Name"": {
+                                    ""fi"": ""variable-3-value-0.fi"",
+                                    ""sv"": ""variable-3-value-0.sv"",
+                                    ""en"": ""variable-3-value-0.en""
+                                },
+                                ""Note"": null,
+                                ""IsSum"": true,
+                                ""ContentComponent"": null
+                            }
+                        ]
+                    },
+                    {
+                        ""Code"": ""variable-4"",
+                        ""Name"": {
+                            ""fi"": ""variable-4.fi"",
+                            ""sv"": ""variable-4.sv"",
+                            ""en"": ""variable-4.en""
+                        },
+                        ""Note"": null,
+                        ""Type"": ""P"",
+                        ""Values"": [
+                            {
+                                ""Code"": ""variable-4-value-0"",
+                                ""Name"": {
+                                    ""fi"": ""variable-4-value-0.fi"",
+                                    ""sv"": ""variable-4-value-0.sv"",
+                                    ""en"": ""variable-4-value-0.en""
+                                },
+                                ""Note"": null,
+                                ""IsSum"": true,
+                                ""ContentComponent"": null
+                            }
+                        ]
+                    },
+                    {
+                        ""Code"": ""variable-5"",
+                        ""Name"": {
+                            ""fi"": ""variable-5.fi"",
+                            ""sv"": ""variable-5.sv"",
+                            ""en"": ""variable-5.en""
+                        },
+                        ""Note"": null,
+                        ""Type"": ""C"",
+                        ""Values"": [
+                            {
+                                ""Code"": ""variable-5-value-0"",
+                                ""Name"": {
+                                    ""fi"": ""variable-5-value-0.fi"",
+                                    ""sv"": ""variable-5-value-0.sv"",
+                                    ""en"": ""variable-5-value-0.en""
+                                },
+                                ""Note"": null,
+                                ""IsSum"": false,
+                                ""ContentComponent"": {
+                                    ""Unit"": {
+                                        ""fi"": ""variable-5-value-0-unit.fi"",
+                                        ""sv"": ""variable-5-value-0-unit.sv"",
+                                        ""en"": ""variable-5-value-0-unit.en""
+                                    },
+                                    ""Source"": {
+                                        ""fi"": ""variable-5-value-0-source.fi"",
+                                        ""sv"": ""variable-5-value-0-source.sv"",
+                                        ""en"": ""variable-5-value-0-source.en""
+                                    },
+                                    ""NumberOfDecimals"": 0,
+                                    ""LastUpdated"": ""2023-08-31T05:00:00Z""
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            ""Data"": [173.0, null, 0.0, 0.0, 0.0, 0.0, 1.0],
+            ""DataNotes"": {
+                ""1"": ""...""
+            }
+        }
+        ";
     }
 }

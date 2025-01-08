@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using PxGraf.Settings;
 using PxGraf.Utility.CustomJsonConverters;
 using System;
 using System.Collections.Generic;
@@ -21,7 +22,7 @@ namespace UnitTests.SerializerTests
             JsonElement value = element.GetProperty("property");
 
             // Act
-            JsonElement result = CustomConverterUtilities.GetPropertyCaseInsensitive(element, propertyName);
+            JsonElement result = CustomConverterUtilities.GetProperty(element, propertyName, GlobalJsonConverterOptions.Default);
 
             // Assert
             Assert.That(value.Equals(result));
@@ -37,7 +38,7 @@ namespace UnitTests.SerializerTests
             JsonElement value = element.GetProperty("Property");
 
             // Act
-            JsonElement result = CustomConverterUtilities.GetPropertyCaseInsensitive(element, propertyName);
+            JsonElement result = CustomConverterUtilities.GetProperty(element, propertyName, GlobalJsonConverterOptions.Default);
 
             // Assert
             Assert.That(value.Equals(result));
@@ -53,7 +54,7 @@ namespace UnitTests.SerializerTests
             JsonElement value = element.GetProperty("property");
 
             // Act
-            bool result = CustomConverterUtilities.TryGetPropertyCaseInsensitive(element, propertyName, out JsonElement outValue);
+            bool result = CustomConverterUtilities.TryGetProperty(element, propertyName, GlobalJsonConverterOptions.Default, out JsonElement outValue);
 
             // Assert
             Assert.That(result, Is.True);
@@ -70,7 +71,7 @@ namespace UnitTests.SerializerTests
             JsonElement value = element.GetProperty("Property");
 
             // Act
-            bool result = CustomConverterUtilities.TryGetPropertyCaseInsensitive(element, propertyName, out JsonElement outValue);
+            bool result = CustomConverterUtilities.TryGetProperty(element, propertyName, GlobalJsonConverterOptions.Default, out JsonElement outValue);
 
             // Assert
             Assert.That(result, Is.True);
@@ -86,7 +87,7 @@ namespace UnitTests.SerializerTests
             string propertyName = "nonExistentProperty";
 
             // Act
-            bool result = CustomConverterUtilities.TryGetPropertyCaseInsensitive(element, propertyName, out JsonElement _);
+            bool result = CustomConverterUtilities.TryGetProperty(element, propertyName, GlobalJsonConverterOptions.Default, out JsonElement _);
 
             // Assert
             Assert.That(result, Is.False);

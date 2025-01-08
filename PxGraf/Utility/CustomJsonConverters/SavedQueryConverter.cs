@@ -14,7 +14,7 @@ namespace PxGraf.Utility.CustomJsonConverters
             JsonDocument jdoc = JsonDocument.ParseValue(ref reader);
             string version = "1.0"; // Default version
 
-            if (jdoc.RootElement.TryGetPropertyCaseInsensitive(nameof(SavedQuery.Version), out JsonElement versionElement))
+            if (jdoc.RootElement.TryGetProperty(nameof(version), options, out JsonElement versionElement))
             {
                 version = versionElement.GetString() ?? "1.0";
             }
