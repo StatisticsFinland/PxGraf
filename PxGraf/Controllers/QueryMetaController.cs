@@ -53,7 +53,6 @@ namespace PxGraf.Controllers
                     Selectable = savedQuery.Query.DimensionQueries.Any(q => q.Value.Selectable),
                     VisualizationType = savedQuery.Settings.VisualizationType,
                     TableId = savedQuery.Query.TableReference.Name,
-                    Description = filteredMeta.GetMatrixMultilanguageProperty(PxSyntaxConstants.NOTE_KEY),
                     TableReference = savedQuery.Query.TableReference,
                     LastUpdated = PxSyntaxConstants.FormatPxDateTime(filteredMeta.GetContentDimension().Values.Map(cdv => cdv.LastUpdated).Max())
                 };

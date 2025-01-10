@@ -264,7 +264,7 @@ namespace UnitTests.DatasourceTests
             // Act
             IReadOnlyMatrixMetadata call1 = await datasource.GetMatrixMetadataCachedAsync(_fileReferences[0]); // Null state
 
-            await Task.Delay(2);
+            await Task.Delay(3);
 
             IReadOnlyMatrixMetadata call2 = await datasource.GetMatrixMetadataCachedAsync(_fileReferences[0]); // Stale state
 

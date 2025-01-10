@@ -34,10 +34,6 @@ namespace PxGraf.Models.Responses
         /// </summary>
         public string TableId { get; set; }
         /// <summary>
-        /// Multi language object storing the description of the query.
-        /// </summary>
-        public MultilanguageString Description { get; set; }
-        /// <summary>
         /// Reference to the table that the query is based on.
         /// </summary>
         public PxTableReference TableReference { get; set; }
