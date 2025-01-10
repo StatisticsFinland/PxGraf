@@ -69,7 +69,7 @@ namespace UnitTests.ControllerTests.QueryMetaControllerTests
             Assert.That(result.Value.Selectable, Is.False);
             Assert.That(result.Value.VisualizationType, Is.EqualTo(VisualizationType.LineChart));
             Assert.That(result.Value.TableId, Is.EqualTo("TestPxFile.px"));
-            Assert.That(result.Value.Description["fi"], Is.EqualTo("Test note"));
+            Assert.That(result.Value.Description, Is.Null);
             Assert.That(result.Value.LastUpdated, Is.EqualTo("2009-09-01T00:00:00Z"));
             Assert.That(result.Value.TableReference.Name, Is.EqualTo("TestPxFile.px"));
 
@@ -154,7 +154,7 @@ namespace UnitTests.ControllerTests.QueryMetaControllerTests
             Assert.That(result.Value.Selectable, Is.False);
             Assert.That(result.Value.VisualizationType, Is.EqualTo(VisualizationType.LineChart));
             Assert.That(result.Value.TableId, Is.EqualTo("TestPxFile.px"));
-            Assert.That(result.Value.Description["fi"], Is.EqualTo("Test note"));
+            Assert.That(result.Value.Description, Is.Null);
             Assert.That(result.Value.LastUpdated, Is.EqualTo("2009-09-01T00:00:00Z"));
             Assert.That(result.Value.TableReference.Name, Is.EqualTo("TestPxFile.px"));
 

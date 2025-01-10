@@ -53,7 +53,7 @@ namespace PxGraf.Controllers
                     Selectable = savedQuery.Query.DimensionQueries.Any(q => q.Value.Selectable),
                     VisualizationType = savedQuery.Settings.VisualizationType,
                     TableId = savedQuery.Query.TableReference.Name,
-                    Description = filteredMeta.GetMatrixMultilanguageProperty(PxSyntaxConstants.NOTE_KEY),
+                    Description = null, // This is kept here for compatibility with the old version, but we currently don't have a description for saved queries
                     TableReference = savedQuery.Query.TableReference,
                     LastUpdated = PxSyntaxConstants.FormatPxDateTime(filteredMeta.GetContentDimension().Values.Map(cdv => cdv.LastUpdated).Max())
                 };
