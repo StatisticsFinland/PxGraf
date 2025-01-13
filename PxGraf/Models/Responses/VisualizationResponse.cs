@@ -27,7 +27,7 @@ namespace PxGraf.Models.Responses
             public Dictionary<string, List<string>> DefaultSelectableDimensionCodes { get; set; }
             
             [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-            [JsonPropertyName("multiSelectableVariableCode")] // legacy name, changing this will be a breaking change for PxVisualizer
+            [JsonPropertyName("multiselectableVariableCode")] // legacy name, changing this will be a breaking change for PxVisualizer
             public string MultiselectableDimensionCode { get; set; }
             [JsonPropertyName("timeVariableIntervals")] // legacy name, changing this will be a breaking change for PxVisualizer
             public Px.Utils.Models.Metadata.Enums.TimeDimensionInterval TimeDimensionIntervals { get; set; }
