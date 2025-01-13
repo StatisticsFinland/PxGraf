@@ -30,7 +30,7 @@ namespace PxGraf.Models.Requests
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public int? MarkerSize { get; set; }
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        [JsonPropertyName("multiSelectableVariableCode")] // legacy name, changing is a breaking change for PxVisualizer
+        [JsonPropertyName("multiselectableVariableCode")] // legacy name, changing is a breaking change for PxVisualizer
         public string MultiselectableDimensionCode { get; set; }
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? MatchXLabelsToEnd { get; set; }
