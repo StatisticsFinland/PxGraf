@@ -18,7 +18,7 @@ namespace PxGraf.Models.Queries
 
         public int? MarkerSize { get; protected set; }
 
-        [JsonPropertyName("multiSelectableVariableCode")] // legacy name, do not change or all the old queries break.
+        [JsonPropertyName("multiselectableVariableCode")] // legacy name, do not change or all the old queries break.
         public string MultiselectableDimensionCode { get; protected set; }
 
         public bool? MatchXLabelsToEnd { get; protected set; }
