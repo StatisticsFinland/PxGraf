@@ -76,7 +76,7 @@ namespace UnitTests.ControllerTests.CreationControllerTests
             // Assert
             Assert.That(result, Is.Not.Null);
             Assert.That(result.Files, Is.EqualTo(expectedTables));
-            Assert.That(expectedTables[0].Code, Is.EqualTo(result.Files[0].Code));
+            Assert.That(expectedTables[0].FileName, Is.EqualTo(result.Files[0].FileName));
         }
     }
 }

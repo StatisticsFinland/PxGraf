@@ -3,8 +3,9 @@ import { render } from '@testing-library/react';
 import UiLanguageContext from 'contexts/uiLanguageContext';
 import '@testing-library/jest-dom';
 import { MemoryRouter } from 'react-router-dom';
-import { IDatabaseGroupContents, ITableResult } from '../../api/services/table';
 import NestedList from './NestedList';
+import { IDatabaseGroupContents } from 'types/tableListItems';
+import { ITableResult } from 'api/services/table';
 
 jest.mock('react-i18next', () => ({
     ...jest.requireActual('react-i18next'),
@@ -39,7 +40,7 @@ const mockDatabaseContents: IDatabaseGroupContents = {
     ],
     files: [
         {
-            code: 'asd2',
+            fileName: 'asd2.px',
             lastUpdated: '2021-11-13T14:53:06',
             name: { 'fi': 'foo2-fi', 'sv': 'foo2-sv' },
             languages: ['en', 'sv']

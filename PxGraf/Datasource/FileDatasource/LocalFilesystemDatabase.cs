@@ -111,8 +111,6 @@ namespace PxGraf.Datasource.FileDatasource
             )
         {
             string path = PathUtils.BuildAndSanitizePath(config.DatabaseRootPath, tableReference);
-            if (!path.EndsWith(PxSyntaxConstants.PX_FILE_EXTENSION))
-                path += PxSyntaxConstants.PX_FILE_EXTENSION;
             DataIndexer indexer = new(completeTableMap, meta);
             Matrix<DecimalDataValue> output = new(meta, new DecimalDataValue[indexer.DataLength]);
             using Stream fileStream = File.OpenRead(path);
@@ -125,9 +123,6 @@ namespace PxGraf.Datasource.FileDatasource
         /// <inheritdoc/> 
         public async Task<IReadOnlyMatrixMetadata> GetMatrixMetadataAsync(PxTableReference tableReference)
         {
-            if (!tableReference.Name.EndsWith(PxSyntaxConstants.PX_FILE_EXTENSION))
-                tableReference.Name += PxSyntaxConstants.PX_FILE_EXTENSION;
-
             string path = PathUtils.BuildAndSanitizePath(config.DatabaseRootPath, tableReference);
             using Stream readStream = File.OpenRead(path);
             PxFileMetadataReader metadataReader = new();

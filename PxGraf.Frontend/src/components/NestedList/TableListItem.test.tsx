@@ -3,8 +3,8 @@ import { render } from '@testing-library/react';
 import UiLanguageContext from 'contexts/uiLanguageContext';
 import '@testing-library/jest-dom';
 import { MemoryRouter } from 'react-router-dom';
-import { IDatabaseGroupHeader } from 'api/services/table';
 import { TableListItem } from './TableListItem';
+import { IDatabaseGroupHeader } from 'types/tableListItems';
 
 jest.mock('react-i18next', () => ({
     ...jest.requireActual('react-i18next'),

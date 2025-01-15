@@ -5,22 +5,17 @@ import React from 'react';
 import { urls } from 'Router';
 import { spacing } from 'utils/componentHelpers';
 import UiLanguageContext from 'contexts/uiLanguageContext';
-import { MultiLanguageString } from "../../types/multiLanguageString";
+import { IDatabaseTable } from 'types/tableListItems';
 
 interface ITableInfoProps {
     path: string;
-    item: {
-        code?: string;
-        lastUpdated?: string;
-        name?: MultiLanguageString;
-        languages?: string[];
-    };
+    item: IDatabaseTable;
 }
 
 export const TableInfo: React.FC<ITableInfoProps> = ({ path, item }) => {
     const { t } = useTranslation();
     const { language } = React.useContext(UiLanguageContext);
-    const currentPath = [path, item.code];
+    const currentPath = [path, item.fileName];
     const displayLanguage = item.languages.includes(language) ? language : item.languages[0];
 
     return (
