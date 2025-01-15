@@ -4,7 +4,7 @@ import UiLanguageContext from 'contexts/uiLanguageContext';
 import '@testing-library/jest-dom';
 import { MemoryRouter } from 'react-router-dom';
 import { TableItem } from './TableItem';
-import { IDatabaseTable } from 'api/services/table';
+import { IDatabaseTable } from '../../types/tableListItems';
 
 jest.mock('react-i18next', () => ({
     ...jest.requireActual('react-i18next'),
@@ -25,7 +25,7 @@ jest.mock('envVars', () => ({
 }));
 
 const mockItem: IDatabaseTable = {
-    code: 'asd',
+    fileName: 'asd.px',
     lastUpdated: '2021-10-13T14:53:06',
     name: { 'fi': 'seppo', 'sv': 'seppo-sv' },
     languages: ['fi', 'sv']
@@ -73,7 +73,7 @@ describe('Assertion tests', () => {
 
     it('renders MUI alert when error property is true', async () => {
         const mockErrorItem: IDatabaseTable = {
-            code: 'error',
+            fileName: 'error',
             lastUpdated: null,
             name: { 'fi': 'error', 'sv': 'error-sv' },
             languages: ['fi', 'sv'],

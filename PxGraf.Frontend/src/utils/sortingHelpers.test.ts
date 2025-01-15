@@ -1,6 +1,6 @@
-import { IDatabaseTable } from '../api/services/table';
-import { sortDatabaseGroups, sortedDimensions } from './sortingHelpers';
-import { EMetaPropertyType, IDimension, EDimensionType } from "types/cubeMeta";
+import { EMetaPropertyType, IDimension, EDimensionType } from 'types/cubeMeta';
+import { sortDatabaseItems, sortedDimensions } from './sortingHelpers';
+import { IDatabaseTable } from 'types/tableListItems';
 
 const mockDimensions: IDimension[] =
 [
@@ -274,19 +274,19 @@ const mockDimensions: IDimension[] =
 
 const mockTableData: IDatabaseTable[] = [
     {
-        code: '0',
+        fileName: '0.px',
         lastUpdated: '2024-6-10',
         name: { en: 'Foo-en', fi: 'Foo-fi' },
         languages: ['en', 'fi'],
     },
     {
-        code: '1',
+        fileName: '1.px',
         lastUpdated: '2021-6-10',
         name: { en: 'Bar-en', fi: 'Bar-fi' },
         languages: ['en', 'fi'],
     },
     {
-        code: '2',
+        fileName: '2.px',
         lastUpdated: '2021-6-10',
         name: { fi: 'Baz-fi' },
         languages: ['fi'],
@@ -308,9 +308,9 @@ describe('Assertion tests', () => {
     });
 
     it('sorts table data by primary or first available language', () => {
-        const sortedData = sortDatabaseGroups(mockTableData, mockPrimaryLanguage);
-        const expected = ["1", "2", "0"];
-        const result = sortedData.map((item) => item.code);
+        const sortedData = sortDatabaseItems(mockTableData, mockPrimaryLanguage);
+        const expected = ["1.px", "2.px", "0.px"];
+        const result = sortedData.map((item) => item.fileName);
         expect(result).toEqual(expected);
     });
 });

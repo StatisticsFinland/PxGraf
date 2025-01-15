@@ -64,7 +64,7 @@ const mockTableResult: ITableResult = {
         files: [
             {
                 name: { 'fi': 'foo3-fi', 'en': 'foo3-en', 'sv': 'foo3-sv' },
-                code: 'id2',
+                fileName: 'id2.px',
                 lastUpdated: '1.1.2000',
                 languages: ['fi', 'en', 'sv']
             }
@@ -74,7 +74,7 @@ const mockTableResult: ITableResult = {
 
 jest.mock('api/services/table', () => ({
     ...jest.requireActual('api/services/table'),
-    useTableQuery: (path: string, lang: string) => {
+    useTableQuery: () => {
         return mockTableResult;
     },
 }));

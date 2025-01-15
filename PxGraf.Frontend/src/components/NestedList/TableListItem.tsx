@@ -9,10 +9,10 @@ import ExpandMore from '@mui/icons-material/ExpandMore';
 import ListViewIcon from '@mui/icons-material/ListAltOutlined';
 
 import { urls } from 'Router';
-import { IDatabaseGroupHeader } from 'api/services/table';
 import NestedList from './NestedList';
 import { UiLanguageContext } from 'contexts/uiLanguageContext';
-import { parseLanguageString } from '../../utils/ApiHelpers';
+import { parseLanguageString } from 'utils/ApiHelpers';
+import { IDatabaseGroupHeader } from 'types/tableListItems';
 
 interface ITableListItemProps {
     currentPath: string[];

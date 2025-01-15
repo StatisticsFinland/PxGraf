@@ -1,13 +1,14 @@
-import { useParams } from "react-router-dom";
+import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { List, ListItem, Divider, Container, Skeleton, Alert } from '@mui/material';
 import React from 'react';
 import { UiLanguageContext } from 'contexts/uiLanguageContext';
 import { DirectoryInfo } from 'components/DirectoryInfo/DirectoryInfo';
-import TableInfo from "components/TableInfo/TableInfo";
-import styled from "styled-components";
-import { IDatabaseGroupHeader, IDatabaseTable, useTableQuery } from "api/services/table";
-import { sortDatabaseGroups, sortDatabaseTables } from 'utils/sortingHelpers';
+import TableInfo from 'components/TableInfo/TableInfo';
+import styled from 'styled-components';
+import { useTableQuery } from 'api/services/table';
+import { IDatabaseGroupHeader, IDatabaseTable } from 'types/tableListItems';
+import { sortDatabaseItems } from 'utils/sortingHelpers';
 
 const TableQueryAlert = styled(Alert)`
   width: 100%;
@@ -40,13 +41,13 @@ export const TableListSelection: React.FC = () => {
     const sortedGroups: IDatabaseGroupHeader[] = React.useMemo(() => {
         if (!data?.headers) return null;
 
-        return sortDatabaseGroups(data.headers, language);
+        return sortDatabaseItems(data.headers, language);
     }, [data, language]);
 
     const sortedTables: IDatabaseTable[] = React.useMemo(() => {
         if (!data?.files) return null;
 
-        return sortDatabaseTables(data.files, language);
+        return sortDatabaseItems(data.files, language);
     }, [data, language])
 
     let content: React.ReactNode;
@@ -84,7 +85,7 @@ export const TableListSelection: React.FC = () => {
                     <DirectoryInfo path={params["*"]} item={item} key={`${item.code}-directory-info`} />
                 ))}
                 {sortedTables.map((item) => (
-                    <TableInfo path={params["*"]} item={item} key={`${item.code}-table-info`} />
+                    <TableInfo path={params["*"]} item={item} key={`${item.fileName}-table-info`} />
                 ))}
             </>
         );

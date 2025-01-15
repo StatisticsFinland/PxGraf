@@ -3,17 +3,12 @@ import { ListItemText, ListItemButton, Typography, Divider } from '@mui/material
 import { urls } from 'Router';
 import React from 'react';
 import { spacing } from 'utils/componentHelpers';
-import { MultiLanguageString } from "../../types/multiLanguageString";
 import { UiLanguageContext } from 'contexts/uiLanguageContext';
+import { IDatabaseGroupHeader } from 'types/tableListItems';
 
 interface IDirectoryInfoProps {
     path: string;
-    item: {
-        code?: string;
-        lastUpdated?: string;
-        name?: MultiLanguageString;
-        languages?: string[];
-    }
+    item: IDatabaseGroupHeader;
 }
 
 export const DirectoryInfo: React.FC<IDirectoryInfoProps> = ({ path, item }) => {
@@ -25,17 +20,9 @@ export const DirectoryInfo: React.FC<IDirectoryInfoProps> = ({ path, item }) => 
         <>
             <ListItemButton id="mainContent" component={Link} to={urls.tableList(currentPath)}>
                 <ListItemText primary={
-                    <>
-                        <Typography variant="body1" sx={{ ...spacing(1) }}>
-                            {item.name[displayLanguage]}
-                        </Typography>
-                        {
-                            item.lastUpdated &&
-                            <Typography variant="body2" sx={{ ...spacing(1) }}>
-                                {item.lastUpdated}
-                            </Typography>
-                        }
-                    </>
+                    <Typography variant="body1" sx={{ ...spacing(1) }}>
+                        {item.name[displayLanguage]}
+                    </Typography>
                 } />
             </ListItemButton>
             <Divider />
