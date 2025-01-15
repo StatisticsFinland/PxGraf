@@ -99,8 +99,8 @@ namespace UnitTests.DatasourceTests
             // Arrange
             List<DatabaseTable> mockTables =
                 [
-                    new("table1-id", new MultilanguageString(_table1Name), _lastUpdated, _languages),
-                    new("table2-id", new MultilanguageString(_table2Name), _lastUpdated, _languages),
+                    new("table1.px", new MultilanguageString(_table1Name), _lastUpdated, _languages),
+                    new("table2.px", new MultilanguageString(_table2Name), _lastUpdated, _languages),
                 ];
 
             Mock<IApiDatasource> mockSource = new();
@@ -116,14 +116,14 @@ namespace UnitTests.DatasourceTests
             Assert.That(contents.Headers.Count, Is.EqualTo(0));
 
             DatabaseTable file0 = contents.Files[0];
-            Assert.That(file0.Code, Is.EqualTo("table1-id"));
+            Assert.That(file0.FileName, Is.EqualTo("table1.px"));
             Assert.That(file0.Name["fi"], Is.EqualTo("Table1"));
             Assert.That(file0.Name["en"], Is.EqualTo("Table1.en"));
             Assert.That(file0.Name["sv"], Is.EqualTo("Table1.sv"));
             Assert.That(file0.LastUpdated, Is.EqualTo(_lastUpdated));
 
             DatabaseTable file1 = contents.Files[1];
-            Assert.That(file1.Code, Is.EqualTo("table2-id"));
+            Assert.That(file1.FileName, Is.EqualTo("table2.px"));
             Assert.That(file1.Name["fi"], Is.EqualTo("Table2"));
             Assert.That(file1.Name["en"], Is.EqualTo("Table2.en"));
             Assert.That(file1.Name["sv"], Is.EqualTo("Table2.sv"));
@@ -142,8 +142,8 @@ namespace UnitTests.DatasourceTests
 
             List<DatabaseTable> mockTables =
                 [
-                    new("table1-id", new MultilanguageString(_table1Name), _lastUpdated, _languages),
-                    new("table2-id", new MultilanguageString(_table2Name), _lastUpdated, _languages),
+                    new("table1.px", new MultilanguageString(_table1Name), _lastUpdated, _languages),
+                    new("table2.px", new MultilanguageString(_table2Name), _lastUpdated, _languages),
                 ];
 
             Mock<IApiDatasource> mockSource = new();

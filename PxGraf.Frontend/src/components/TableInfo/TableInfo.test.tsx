@@ -4,11 +4,11 @@ import { TableInfo } from './TableInfo';
 import '@testing-library/jest-dom';
 import UiLanguageContext from 'contexts/uiLanguageContext';
 import { MemoryRouter } from 'react-router-dom';
-import { IDatabaseTable } from '../../api/services/table';
+import { IDatabaseTable } from 'types/tableListItems';
 
 const mockPath = 'asd123';
 const mockItem: IDatabaseTable = {
-    code: 'id',
+    fileName: 'id',
     lastUpdated: '2021-10-13T14:53:06',
     name: { 'fi': 'text-fi', 'en': 'text-en', 'sv': 'text-sv'},
     languages: ['fi', 'en', 'sv'],
@@ -46,7 +46,7 @@ jest.mock('react-i18next', () => ({
 
 jest.mock('api/services/table', () => ({
     ...jest.requireActual('api/services/table'),
-    useTableQuery: (currentPath: string, language: string) => {
+    useTableQuery: () => {
         return mockTableQueryResult;
     },
 }));

@@ -14,7 +14,6 @@ using PxGraf.Settings;
 using PxGraf.Utility;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -54,19 +53,17 @@ namespace PxGraf.Datasource.FileDatasource
             {
                 IReadOnlyMatrixMetadata meta = await GetMatrixMetadataCachedAsync(reference);
                 DateTime? lastUpdated = meta.GetLastUpdated();
-                string tableId = meta.AdditionalProperties.TryGetValue(PxSyntaxConstants.TABLEID_KEY, out MetaProperty? tableIdProperty) &&
-                    tableIdProperty is StringProperty stringIdProp ? stringIdProp.Value : Path.GetFileNameWithoutExtension(reference.Name);
 
                 List<string> languages = [.. meta.AvailableLanguages];
-                MultilanguageString name = new(languages.ToDictionary(lang => lang, lang => tableId));
+                MultilanguageString name = new(languages.ToDictionary(lang => lang, lang => reference.Name));
                 if (meta.AdditionalProperties.TryGetValue(PxSyntaxConstants.DESCRIPTION_KEY, out MetaProperty? descriptionProperty))
                 {
                     if (descriptionProperty is StringProperty sProp) name = new(languages[0], sProp.Value);
                     else if (descriptionProperty is MultilanguageStringProperty mlsProp) name = mlsProp.Value;
                 }
 
-                if (lastUpdated is not null) return new(tableId, name, (DateTime)lastUpdated, languages);
-                else return DatabaseTable.FromError(tableId, name, languages);
+                if (lastUpdated is not null) return new(reference.Name, name, (DateTime)lastUpdated, languages);
+                else return DatabaseTable.FromError(reference.Name, name, languages);
             }
             catch (Exception e)
             {

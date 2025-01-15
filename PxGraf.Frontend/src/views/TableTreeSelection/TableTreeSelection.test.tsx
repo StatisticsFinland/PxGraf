@@ -52,13 +52,13 @@ const mockTableResult: ITableResult = {
         files: [
             {
                 name: { 'fi': 'foo1', 'en': 'foo1', 'sv': 'foo1' },
-                code: 'id1',
+                fileName: 'id1.px',
                 lastUpdated: '1.1.2000',
                 languages: ['fi', 'en', 'sv']
             },
             {
                 name: { 'fi': 'foo2', 'en': 'foo2' },
-                code: 'id2',
+                fileName: 'id2.px',
                 lastUpdated: '1.1.2000',
                 languages: ['fi', 'en']
             }

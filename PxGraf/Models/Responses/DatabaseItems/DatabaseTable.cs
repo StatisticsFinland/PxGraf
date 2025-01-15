@@ -14,7 +14,7 @@ namespace PxGraf.Models.Responses.DatabaseItems
         /// <summary>
         /// Code of the database table.
         /// </summary>
-        public string Code { get; private set; }
+        public string FileName { get; private set; }
         /// <summary>
         /// Multilanguage name of the database table.
         /// </summary>
@@ -34,17 +34,17 @@ namespace PxGraf.Models.Responses.DatabaseItems
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? Error { get; private set; } = null;
 
-        public DatabaseTable(string code, MultilanguageString name, DateTime lastUpdated, List<string> languages)
+        public DatabaseTable(string fileName, MultilanguageString name, DateTime lastUpdated, List<string> languages)
         {
-            Code = code;
+            FileName = fileName;
             Name = name;
             LastUpdated = lastUpdated;
             Languages = languages;
         }
 
-        private DatabaseTable(string code, MultilanguageString name, List<string> languages)
+        private DatabaseTable(string fileName, MultilanguageString name, List<string> languages)
         {
-            Code = code;
+            FileName = fileName;
             Name = name;
             Languages = languages;
             Error = true;

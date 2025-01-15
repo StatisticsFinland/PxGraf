@@ -117,7 +117,7 @@ namespace UnitTests.DatasourceTests
 
             MatrixMetadata brokenMeta = TestDataCubeBuilder.BuildTestMeta(noContent, [.. _languages]);
 
-            StringProperty table1IDProperty = new("table1-id");
+            StringProperty table1IDProperty = new("table1.px");
             table1Meta.AdditionalProperties[PxSyntaxConstants.TABLEID_KEY] = table1IDProperty; // Adds TABLE_ID property for table1
             table1Meta.AdditionalProperties[PxSyntaxConstants.DESCRIPTION_KEY] = new MultilanguageStringProperty(new MultilanguageString(_table1Name));
             table2Meta.AdditionalProperties[PxSyntaxConstants.DESCRIPTION_KEY] = new MultilanguageStringProperty(new MultilanguageString(_table2Name));
@@ -137,21 +137,21 @@ namespace UnitTests.DatasourceTests
             Assert.That(contents.Files.Count, Is.EqualTo(3));
 
             DatabaseTable file0 = contents.Files[0];
-            Assert.That(file0.Code, Is.EqualTo("table1-id"));
+            Assert.That(file0.FileName, Is.EqualTo("table_1.px"));
             Assert.That(file0.Name["fi"], Is.EqualTo("Table1"));
             Assert.That(file0.Name["en"], Is.EqualTo("Table1.en"));
             Assert.That(file0.Name["sv"], Is.EqualTo("Table1.sv"));
             Assert.That(file0.LastUpdated, Is.EqualTo(_lastUpdated));
 
             DatabaseTable file1 = contents.Files[1];
-            Assert.That(file1.Code, Is.EqualTo("table_2"));
+            Assert.That(file1.FileName, Is.EqualTo("table_2.px"));
             Assert.That(file1.Name["fi"], Is.EqualTo("Table2"));
             Assert.That(file1.Name["en"], Is.EqualTo("Table2.en"));
             Assert.That(file1.Name["sv"], Is.EqualTo("Table2.sv"));
             Assert.That(file1.LastUpdated, Is.EqualTo(_lastUpdated));
 
             DatabaseTable file2 = contents.Files[2];
-            Assert.That(file2.Code, Is.EqualTo("table_3"));
+            Assert.That(file2.FileName, Is.EqualTo("table_3.px"));
             Assert.That(file2.LastUpdated, Is.Null);
             Assert.That(file2.Error, Is.True);
         }
