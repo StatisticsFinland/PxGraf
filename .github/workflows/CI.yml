@@ -36,7 +36,7 @@ jobs:
           fetch-depth: 0
 
       - name: Check project versions
-        if: ${{ github.event_name == 'pull_request' && github.ref == 'refs/heads/dev' && github.actor != 'dependabot[bot]' }}
+        if: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'dev' && github.actor != 'dependabot[bot]' }}
         run: bash .github/scripts/check_version_changes.sh
 
       - name: Install Node.js
@@ -65,7 +65,7 @@ jobs:
         run: dotnet restore
 
       - name: Build backend
-        run: dotnet build --no-restore --verbosity normal --configuration ${{ matrix.configuration }}
+        run: dotnet build --no-restore --verbosity normal --configuration ${{ matrix.configuration }} /p:TargetFramework=net8.0
 
       - name: Run backend tests
-        run: dotnet test --no-restore --verbosity normal --configuration ${{ matrix.configuration }}
+        run: dotnet test --no-restore --verbosity normal --configuration ${{ matrix.configuration }} /p:TargetFramework=net8.0

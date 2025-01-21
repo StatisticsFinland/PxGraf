@@ -1,19 +1,18 @@
 import { useTranslation } from 'react-i18next';
 import { CircularProgress, Alert, ToggleButton, ToggleButtonGroup } from '@mui/material';
-import { SelectableVariableMenus } from 'components/SelectableVariableMenus/SelectableVariableMenus';
+import { SelectableDimensionMenus } from 'components/SelectableVariableMenus/SelectableDimensionMenus';
 import styled from 'styled-components';
 import React from 'react';
 import { ICubeQuery, Query } from 'types/query';
 import { IVisualizationSettings } from 'types/visualizationSettings';
-import { IVariable } from 'types/cubeMeta';
 import { useVisualizationQuery } from 'api/services/visualization';
 import { Chart } from '@statisticsfinland/pxvisualizer';
-
 import useSelections from 'components/SelectableVariableMenus/hooks/useSelections';
 import InfoBubble from 'components/InfoBubble/InfoBubble';
+import { IVariable } from '../../types/visualizationResponse';
 
 export interface ISelectabilityInfo {
-    variable: IVariable;
+    dimension: IVariable;
     multiselectable: boolean;
 }
 
@@ -66,7 +65,7 @@ enum EPreviewSize {
 
 /**
  * Preview component for visualizing the chart using the selected visualization type and settings. Visualization is rendered using @see {@link Chart} component from the PxVisualizer library.
- * Additionally, in this view the user can pick values for the selectable variables and choose a size for the visualization.
+ * Additionally, in this view the user can pick values for the selectable dimensions and choose a size for the visualization.
  * @param {string[]} path Path to the table subject to visualization in the Px file system.
  * @param {Query} query Object that represents the current query.
  * @param {string} language Content language used for displaying the visualization meta data.
@@ -90,7 +89,7 @@ export const Preview: React.FC<IPreviewProps> = ({ path, query, language, cubeQu
         </ToggleButton>
     );
 
-    if (isLoading) {
+    if (isLoading || (!data && !isError)) {
         return (
             <ResponseWrapper>
                 <CircularProgress />
@@ -113,7 +112,7 @@ export const Preview: React.FC<IPreviewProps> = ({ path, query, language, cubeQu
                         {buttons}
                     </ToggleButtonGroup>
                 </FlexContentWrapper>}
-            <SelectableVariableMenus
+            <SelectableDimensionMenus
                 setSelections={setSelections}
                 data={data}
                 selectedVisualization={selectedVisualization}

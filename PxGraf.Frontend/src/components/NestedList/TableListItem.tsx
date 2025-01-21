@@ -9,14 +9,14 @@ import ExpandMore from '@mui/icons-material/ExpandMore';
 import ListViewIcon from '@mui/icons-material/ListAltOutlined';
 
 import { urls } from 'Router';
-import { ITableListResponse } from 'api/services/table';
 import NestedList from './NestedList';
 import { UiLanguageContext } from 'contexts/uiLanguageContext';
-import { parseLanguageString } from '../../api/services/languages';
+import { parseLanguageString } from 'utils/ApiHelpers';
+import { IDatabaseGroupHeader } from 'types/tableListItems';
 
 interface ITableListItemProps {
     currentPath: string[];
-    item: ITableListResponse;
+    item: IDatabaseGroupHeader;
     initialOpenState?: boolean;
     depth: number;
 }
@@ -24,7 +24,7 @@ interface ITableListItemProps {
 /**
  * Component used for displaying a database or subfolder in @see {@link NestedList} component.
  * @param {string[]} currentPath Path to the item in question in the Px file system.
- * @param {ITableListResponse} item Response object that stores information about the database or subfolder.
+ * @param {IDatabaseGroupHeader} item Response object that stores information about the database or subfolder.
  * @param {boolean} initialOpenState Whether the item should be displayed as opened.
  * @param {number} depth Current browsing depth.
  */
@@ -34,10 +34,10 @@ export const TableListItem: React.FC<ITableListItemProps> = ({ currentPath, item
     const { language } = React.useContext(UiLanguageContext);
     const displayLanguage = item.languages.includes(language) ? language : item.languages[0];
 
-    return <React.Fragment key={`${item.id}-key`}>
+    return <React.Fragment key={`${item.code}-key`}>
         <ListItem
             secondaryAction={depth >= 1 ?
-                <Tooltip title={t("tableSelect.listView")} aria-label={`${t("tableSelect.listView")}: ${item.text[language]}`}>
+                <Tooltip title={t("tableSelect.listView")} aria-label={`${t("tableSelect.listView")}: ${item.name[displayLanguage]}`}>
                     <IconButton edge="end" component={Link} to={urls.tableList(currentPath)} >
                         <ListViewIcon />
                     </IconButton>
@@ -47,7 +47,7 @@ export const TableListItem: React.FC<ITableListItemProps> = ({ currentPath, item
                 <ListItemIcon sx={{ minWidth: '32px' }}>
                     {isOpen ? <ExpandLess /> : <ExpandMore />}
                 </ListItemIcon>
-                {isOpen ? <ListItemText primary={<b>{`${item.text[displayLanguage]} ${parseLanguageString(item.languages)}`}</b>} /> : <ListItemText primary={`${item.text[displayLanguage]} ${parseLanguageString(item.languages)}`} />}
+                {isOpen ? <ListItemText primary={<b>{`${item.name[displayLanguage]} ${parseLanguageString(item.languages)}`}</b>} /> : <ListItemText primary={`${item.name[displayLanguage]} ${parseLanguageString(item.languages)}`} />}
             </ListItemButton>
         </ListItem>
         <Divider />

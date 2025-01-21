@@ -15,18 +15,11 @@ namespace PxGraf
     {
         public static void Main(string[] args)
         {
-            var logger = LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
+            Logger logger = LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
             logger.Info("Starting application");
 
             try
             {
-                _ = new ConfigurationBuilder()
-                    .SetBasePath(Directory.GetCurrentDirectory())
-                    .AddEnvironmentVariables()
-                    .AddJsonFile("appsettings.json")
-                    .AddJsonFile($"appsettings.Development.json", optional: true, reloadOnChange: true)
-                    .Build();
-
                 logger.Info("Starting host");
                 CreateHostBuilder(args).Build().Run();
             }

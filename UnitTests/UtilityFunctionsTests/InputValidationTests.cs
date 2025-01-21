@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
 using PxGraf.Utility;
 
-namespace UtilityFunctionsTests
+namespace UnitTests.UtilityFunctionsTests
 {
     internal class InputValidationTests
     {

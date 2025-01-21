@@ -2,8 +2,9 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import { IValueSelectProps, ValueSelect } from './ValueSelect';
 import '@testing-library/jest-dom';
-import { VariableType } from 'types/cubeMeta';
+import { EDimensionType } from 'types/cubeMeta';
 import UiLanguageContext from 'contexts/uiLanguageContext';
+import { IVariable } from '../../types/visualizationResponse';
 
 const mockFunction = jest.fn((value: string) => {
     return;
@@ -17,12 +18,12 @@ const availableUiLanguages = ['fi', 'en', 'sv'];
 const uiContentLanguage = 'fi';
 const setUiContentLanguage = jest.fn();
 
-const mockVariable = 
+const mockVariable: IVariable = 
     {
         code: "foobar1",
         name: { fi: "foo1", sv: "bar1", en: "foobar1" },
         note: { fi: "föö1", sv: "bär1", en: "fööbär1" },
-        type: VariableType.OtherClassificatory,
+        type: EDimensionType.Other,
         values: [
             {
                 code: "barfoo1",
@@ -40,7 +41,7 @@ const mockVariable =
     };
 
 const mockData: IValueSelectProps = {
-    variable: mockVariable,
+    dimension: mockVariable,
     multiselect: true,
     activeSelections: ['asd1', 'asd2'],
     onValueChanged: mockFunction,
@@ -50,7 +51,7 @@ describe('Rendering test', () => {
     it('renders correctly', () => {
         const { asFragment } = render(
             <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
-                <ValueSelect variable={mockData.variable} activeSelections={mockData.activeSelections} onValueChanged={mockData.onValueChanged} multiselect={mockData.multiselect} />
+                <ValueSelect dimension={mockData.dimension} activeSelections={mockData.activeSelections} onValueChanged={mockData.onValueChanged} multiselect={mockData.multiselect} />
             </UiLanguageContext.Provider>
         );
         expect(asFragment()).toMatchSnapshot();

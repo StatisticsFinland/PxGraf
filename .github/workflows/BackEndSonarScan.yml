@@ -15,8 +15,7 @@ on:
 jobs:
  sonar_backend:
     if: ${{ github.actor != 'dependabot[bot]' }}
-    runs-on: windows-latest
-    # Note: for inexplicable reasons, the SonarScanner does not work on Ubuntu-latest, so we have to use Windows-latest
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
@@ -46,11 +45,14 @@ jobs:
             /d:sonar.host.url=https://sonarcloud.io
             /d:sonar.token=${{ secrets.SONAR_TOKEN }}    
             /d:sonar.cs.vscoveragexml.reportsPaths=**/coverage.xml
-            /d:sonar.sources=./PxGraf/PxGraf
-            /d:sonar.tests=./PxGraf/UnitTests
+            /d:sonar.scanner.scanAll=false
+
+      - name: Build backend
+        run: dotnet build --configuration Test /p:TargetFramework=net8.0
 
       - name: Run coverage test
-        run: dotnet-coverage collect "dotnet test --configuration Test --logger trx" -f xml -o coverage.xml
+        run: dotnet-coverage collect "dotnet test --configuration Test --logger trx /p:TargetFramework=net8.0" -f xml -o coverage.xml
         
       - name: End SonarScanner
         run: dotnet sonarscanner end /d:sonar.token=${{ secrets.SONAR_TOKEN }}
+        

@@ -1,124 +1,127 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using PxGraf.Caching;
-using PxGraf.Data;
-using PxGraf.Data.MetaData;
+using Px.Utils.Models.Data.DataValue;
+using Px.Utils.Models.Metadata.Enums;
+using Px.Utils.Models.Metadata.ExtensionMethods;
+using Px.Utils.Models.Metadata;
+using Px.Utils.Models;
+using PxGraf.Datasource.Cache;
+using PxGraf.Datasource;
+using PxGraf.Models.Metadata;
 using PxGraf.Models.Responses;
 using PxGraf.Models.SavedQueries;
-using PxGraf.PxWebInterface;
 using PxGraf.Settings;
 using PxGraf.Utility;
 using PxGraf.Visualization;
-using System;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using System;
 
 namespace PxGraf.Controllers
 {
     /// <summary>
     /// Controller for returning data required for visualizing a saved query
     /// </summary>
+    /// <param name="sqFileInterface">The interface for reading saved queries</param>
+    /// <param name="taskCache">The cache for storing tasks</param>
+    /// <param name="cachedDatasource">The cached datasource</param>
+    /// <param name="logger">The logger interface</param>
     /// <remarks>
     /// Default constructor.
     /// </remarks>
-    /// <param name="sqFileInterface">Instance of <see cref="ISqFileInterface"/> that is used to interact with sq and sqa files.</param>
-    /// <param name="respCache"><see cref="IVisualizationResponseCache"/> instance for caching <see cref="VisualizationResponse"/> objects.</param>
-    /// <param name="cachedPxWebConnection"><see cref="ICachedPxWebConnection"/> instance for handling PxWeb connection and cached data.</param>
-    /// <param name="logger"><see cref="ILogger"/> instance used for logging.</param>
     [ApiController]
     [Route("api/sq/visualization")]
-    public class VisualizationController(ISqFileInterface sqFileInterface, IVisualizationResponseCache respCache, ICachedPxWebConnection cachedPxWebConnection, ILogger<VisualizationController> logger) : ControllerBase
+    public class VisualizationController(ISqFileInterface sqFileInterface, IMultiStateMemoryTaskCache taskCache, ICachedDatasource cachedDatasource, ILogger<VisualizationController> logger) : ControllerBase
     {
-        private readonly ICachedPxWebConnection _cachedPxWebConnection = cachedPxWebConnection;
-        private readonly IVisualizationResponseCache _visualizationResponseCache = respCache;
+        private readonly ICachedDatasource _cachedDatasource = cachedDatasource;
+        private readonly IMultiStateMemoryTaskCache _taskCache = taskCache;
         private readonly ISqFileInterface _sqFileInterface = sqFileInterface;
         private readonly ILogger<VisualizationController> _logger = logger;
+
+        private static CacheValues CacheValues => Configuration.Current.CacheOptions.Visualization;
+        private static readonly TimeSpan AbsoluteExpiration = TimeSpan.FromMinutes(CacheValues.AbsoluteExpirationMinutes);
+        private static readonly TimeSpan SlidingExpiration = TimeSpan.FromMinutes(CacheValues.SlidingExpirationMinutes);
 
         #region ACTIONS
 
         /// <summary>
-        /// Tries to return a visualization data set from cache.
-        /// If the data is not found in the cache or it is outdated starts updating the cache in the background.
+        /// Get visualization for a saved query
         /// </summary>
-        /// <param name="sqId">The id of the saved query to visualize</param>
-        /// <returns>
-        /// <see cref="VisualizationResponse"/> object that contains data required for rendering a visualization.
-        /// If no query for the given ID is found, "Not Found" response is returned.
-        /// If the data is not found in the cache or it is outdated, "Accepted" response is returned.
-        /// If an error occurs, "Bad Request" response is returned.
-        /// </returns>
+        /// <param name="sqId">The id of the saved query</param>
+        /// <returns><see cref="VisualizationResponse"/> object containing the properties of the visualization</returns>
         [HttpGet("{sqId}")]
         public async Task<ActionResult<VisualizationResponse>> GetVisualization([FromRoute] string sqId)
         {
             _logger.LogDebug("Requested visualization GET: api/sq/visualization/{SqId}", sqId);
-            VisualizationResponseCache.CacheEntryState itemCacheState = _visualizationResponseCache.TryGet(sqId, out VisualizationResponse cachedResp);
-            switch (itemCacheState)
+            MultiStateMemoryTaskCache.CacheEntryState itemCacheState = _taskCache.TryGet(sqId, out Task<VisualizationResponse> cachedRespTask);
+            string maxAge = $"max-age={Configuration.Current.CacheOptions.CacheFreshnessCheckIntervalSeconds}";
+
+            if (itemCacheState == MultiStateMemoryTaskCache.CacheEntryState.Fresh)
             {
-                case VisualizationResponseCache.CacheEntryState.Fresh:
-                    _logger.LogDebug("{SqId} result: {CachedResp}", sqId, cachedResp);
-                    return cachedResp;
+                VisualizationResponse response = await cachedRespTask;
+                _logger.LogDebug("{SqId} result: {CachedResp}", sqId, response);
+                Response.Headers.CacheControl = $"{maxAge}";
+                return response;
+            }
 
-                case VisualizationResponseCache.CacheEntryState.Stale:
-                    _ = HandleStaleCacheResponseAsync(sqId, cachedResp);
+            if (itemCacheState == MultiStateMemoryTaskCache.CacheEntryState.Stale)
+            {
+                VisualizationResponse response = await cachedRespTask;
+                _ = HandleStaleCacheResponseAsync(sqId, response); // OBS: No await
+                _logger.LogDebug("{SqId} result: {CachedResp}", sqId, response);
+                Response.Headers.CacheControl = $"max-age=0"; // Already stale, so no max-age
+                return response;
+            }
 
-                    _logger.LogDebug("{SqId} result: {CachedResp}", sqId, cachedResp);
-                    return cachedResp;
+            if (itemCacheState == MultiStateMemoryTaskCache.CacheEntryState.Error)
+            {
+                return BadRequest();
+            }
 
-                case VisualizationResponseCache.CacheEntryState.Pending:
-                    _logger.LogDebug("{SqId} result: Pending", sqId);
-                    return Accepted();
-
-                case VisualizationResponseCache.CacheEntryState.Error:
-                    return BadRequest();
-
-                default: // Data not found in the cache
-                    if (_sqFileInterface.SavedQueryExists(sqId, Configuration.Current.SavedQueryDirectory))
-                    {
-                        SavedQuery sq = await _sqFileInterface.ReadSavedQueryFromFile(sqId, Configuration.Current.SavedQueryDirectory);
-                        Task<VisualizationResponse> newResponseTask = BuildNewResponseAsync(sqId, sq);
-                        _visualizationResponseCache.Set(sqId, newResponseTask);
-                        if (sq.Archived)
-                        {
-                            _logger.LogDebug("{SqId} result: {NewResponseTask}", sqId, newResponseTask);
-                            return await newResponseTask; // Return directly if archived
-                        }
-                        else
-                        {
-                            _logger.LogDebug("{SqId} result: Pending", sqId);
-                            return Accepted(); // Else return accepted and fetch data from pxweb in the background
-                        }
-                    }
-                    else
-                    {
-                        _logger.LogWarning("Could not find saved query with id {SqId}", sqId);
-                        return NotFound();
-                    }
+            if (_sqFileInterface.SavedQueryExists(sqId, Configuration.Current.SavedQueryDirectory))
+            {
+                SavedQuery sq = await _sqFileInterface.ReadSavedQueryFromFile(sqId, Configuration.Current.SavedQueryDirectory);
+                Task<VisualizationResponse> newResponseTask = BuildNewResponseAsync(sqId, sq);
+                _taskCache.Set(sqId, newResponseTask, SlidingExpiration, AbsoluteExpiration);
+                VisualizationResponse response = await newResponseTask;
+                _logger.LogDebug("{SqId} result: {Response}", sqId, response);
+                Response.Headers.CacheControl = $"{maxAge}";
+                return await newResponseTask; // Return directly if archived
+            }
+            else
+            {
+                _logger.LogWarning("Could not find saved query with id {SqId}", sqId);
+                return NotFound();
             }
         }
+
         #endregion
 
         #region UTILITY
+        
         private async Task HandleStaleCacheResponseAsync(string sqId, VisualizationResponse cachedResp)
         {
+            // This refreshes the cache, so no additional update triggers happen.
+            _taskCache.Set(sqId, Task.FromResult(cachedResp), SlidingExpiration, AbsoluteExpiration);
+
             SavedQuery savedQuery = await _sqFileInterface.ReadSavedQueryFromFile(sqId, Configuration.Current.SavedQueryDirectory);
             if (!savedQuery.Archived)
             {
-                IReadOnlyCubeMeta meta = await _cachedPxWebConnection.GetCubeMetaCachedAsync(savedQuery.Query.TableReference);
-                DateTime dbTableDate = meta.GetContentVariable().IncludedValues
-                    .Select(vv => DateTime.Parse(vv.ContentComponent.LastUpdated, CultureInfo.InvariantCulture)).Max();
+                IReadOnlyMatrixMetadata meta = await _cachedDatasource.GetMatrixMetadataCachedAsync(savedQuery.Query.TableReference);
+                DateTime dbTableDate = meta.GetContentDimension().Values
+                    .Map(vv => vv.LastUpdated).Max();
                 DateTime cachedTableDate = cachedResp.MetaData
-                    .Single(v => v.Type == Enums.VariableType.Content).IncludedValues
+                    .Single(v => v.DimensionType == DimensionType.Content).Values
                     .Select(vv => DateTime.Parse(vv.ContentComponent.LastUpdated, CultureInfo.InvariantCulture))
                     .Max();
 
                 if (dbTableDate > cachedTableDate)
                 {
                     _ = BuildNewResponseAsync(sqId, savedQuery)
-                        .ContinueWith(t => _visualizationResponseCache.Set(sqId, t));
+                        .ContinueWith(t => _taskCache.Set(sqId, t, SlidingExpiration, AbsoluteExpiration));
                 }
             }
-            _visualizationResponseCache.Refresh(sqId);
         }
 
         private async Task<VisualizationResponse> BuildNewResponseAsync(string sqId, SavedQuery sq)
@@ -126,14 +129,17 @@ namespace PxGraf.Controllers
             if (sq.Archived)
             {
                 ArchiveCube ac = await _sqFileInterface.ReadArchiveCubeFromFile(sqId, Configuration.Current.ArchiveFileDirectory);
-                return PxVisualizerCubeAdapter.BuildVisualizationResponse(ac.ToDataCube(), sq);
+                return PxVisualizerCubeAdapter.BuildVisualizationResponse(ac.ToMatrix(), sq);
             }
             else
             {
-                DataCube cube = await _cachedPxWebConnection.BuildDataCubeCachedAsync(sq.Query);
-                return PxVisualizerCubeAdapter.BuildVisualizationResponse(cube, sq);
+                IReadOnlyMatrixMetadata meta = await _cachedDatasource.GetMatrixMetadataCachedAsync(sq.Query.TableReference);
+                IReadOnlyMatrixMetadata filteredMetes = meta.FilterDimensionValues(sq.Query);
+                Matrix<DecimalDataValue> matrix = await _cachedDatasource.GetMatrixAsync(sq.Query.TableReference, filteredMetes);
+                return PxVisualizerCubeAdapter.BuildVisualizationResponse(matrix, sq);
             }
         }
+
         #endregion
     }
 }

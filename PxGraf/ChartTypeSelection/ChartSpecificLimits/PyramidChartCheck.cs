@@ -1,4 +1,5 @@
-﻿using PxGraf.ChartTypeSelection.JsonObjects;
+﻿using Px.Utils.Models.Metadata.Enums;
+using PxGraf.ChartTypeSelection.JsonObjects;
 using PxGraf.Enums;
 using System.Collections.Generic;
 
@@ -30,11 +31,11 @@ namespace PxGraf.ChartTypeSelection.ChartSpecificLimits
 
         protected override IEnumerable<ChartRejectionInfo> CheckChartSpecificRules(VisualizationTypeSelectionObject input)
         {
-            var largestMultiselect = GetLargestMultiselect(input);
-            var smallerMultiselect = GetSmallerMultiselect(input);
+            VisualizationTypeSelectionObject.DimensionInfo largestMultiselect = GetLargestMultiselect(input);
+            VisualizationTypeSelectionObject.DimensionInfo smallerMultiselect = GetSmallerMultiselect(input);
 
-            if ((largestMultiselect == null || largestMultiselect.Type != VariableType.Ordinal) &&
-            (smallerMultiselect == null || smallerMultiselect.Type != VariableType.Ordinal))
+            if ((largestMultiselect == null || largestMultiselect.Type != DimensionType.Ordinal) &&
+            (smallerMultiselect == null || smallerMultiselect.Type != DimensionType.Ordinal))
             {
                 yield return BuildRejectionInfo(RejectionReason.ProgressiveRequired);
             }
@@ -59,8 +60,8 @@ namespace PxGraf.ChartTypeSelection.ChartSpecificLimits
         /// <returns></returns>
         protected override int GetPriority(RejectionReason reason)
         {
-            var reasons = new RejectionReason[]
-            {
+            RejectionReason[] reasons =
+            [
                 RejectionReason.NotEnoughMultiselections,
                 RejectionReason.TooManyMultiselections,
                 RejectionReason.NegativeDataNotAllowed,
@@ -81,7 +82,7 @@ namespace PxGraf.ChartTypeSelection.ChartSpecificLimits
                 RejectionReason.ProgressiveRequired,
                 RejectionReason.FirstMultiselectOverMax,
                 RejectionReason.CombinationValuesNotAllowed,
-            };
+            ];
 
             return GetPriorityIndex(reasons, reason);
         }

@@ -1,30 +1,24 @@
 import React from 'react';
 import { render } from "@testing-library/react";
-import { IVariable, VariableType } from "types/cubeMeta";
+import { IDimension, EDimensionType } from "types/cubeMeta";
 import { FilterType, Query } from "types/query";
 import EditorFilterSection from "./EditorFilterSection";
 import UiLanguageContext from 'contexts/uiLanguageContext';
 
-const mockVariables: IVariable[] = [
+const mockDimensions: IDimension[] = [
     {
         code: 'foo',
         name: {
             'fi': 'name'
         },
-        note: {
-            'fi': 'note'
-        },
-        type: VariableType.Content,
+        type: EDimensionType.Content,
         values: [
             {
                 code: 'bar',
-                isSum: false,
                 name: {
                     'fi': 'name'
                 },
-                note: {
-                    'fi': 'note'
-                }
+                isVirtual: false
             }
         ]
     }
@@ -68,8 +62,8 @@ describe('Rendering test', () => {
             <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
                 <EditorFilterSection
                     queries={mockQuery}
-                    resolvedVariableCodes={{ 'foo': ['foo', 'bar', 'baz'] }}
-                    variables={mockVariables}
+                    resolvedDimensionCodes={{ 'foo': ['foo', 'bar', 'baz'] }}
+                    dimensions={mockDimensions}
                     />
             </UiLanguageContext.Provider>
         );

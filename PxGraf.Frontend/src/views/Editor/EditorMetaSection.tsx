@@ -10,7 +10,7 @@ import { a11yProps } from 'utils/componentHelpers';
 import TabPanel from 'components/TabPanel/TabPanel';
 import VisualizationSettingControl from 'components/VisualizationSettingsControls/VisualizationSettingsControl';
 import styled from 'styled-components';
-import { IVariable } from 'types/cubeMeta';
+import { IDimension } from 'types/cubeMeta';
 import { IHeaderResult } from 'api/services/default-header';
 import { VisualizationType } from 'types/visualizationType';
 import { IVisualizationSettings } from 'types/visualizationSettings';
@@ -89,8 +89,8 @@ interface IEditorMetaSectionProps {
     defaultHeaderResponse: IHeaderResult;
     selectedVisualization: VisualizationType;
     settings: IVisualizationSettings;
-    resolvedVariables: IVariable[];
-    variableQuery: Query;
+    resolvedDimensions: IDimension[];
+    dimensionQuery: Query;
     visualizationRulesResponse: IVisualizationSettingsResult;
     queryInfo: IQueryInfo;
     contentLanguages: string[];
@@ -107,11 +107,11 @@ const TitleWrapper = styled.div`
  * @param {IHeaderResult} defaultHeaderResponse Default header retrieved for the table.
  * @param {VisualizationType} selectedVisualization Currently selected visualization type.
  * @param {IVisualizationSettings} settings Visualization settings.
- * @param {IVariable[]} resolvedVariables: Resolved variable codes.
+ * @param {IDimension[]} resolvedDimensions: Resolved dimension codes.
  * @param {IVisualizationSettingsResult} visualizationRulesResponse Response object for rules based on the selected visualization type.
  * @param {IQueryInfo} queryInfo Information about the query.
  */
-export const EditorMetaSection: React.FC<IEditorMetaSectionProps> = ({ defaultHeaderResponse, selectedVisualization, settings, resolvedVariables, variableQuery, visualizationRulesResponse, queryInfo, contentLanguages }) => {
+export const EditorMetaSection: React.FC<IEditorMetaSectionProps> = ({ defaultHeaderResponse, selectedVisualization, settings, resolvedDimensions, dimensionQuery, visualizationRulesResponse, queryInfo, contentLanguages }) => {
 
     const { setSelectedVisualizationUserInput, setVisualizationSettingsUserInput, setCubeQuery, cubeQuery } = React.useContext(EditorContext);
     const { language, languageTab, setLanguageTab } = React.useContext(UiLanguageContext);
@@ -127,7 +127,7 @@ export const EditorMetaSection: React.FC<IEditorMetaSectionProps> = ({ defaultHe
     const { t } = useTranslation();
     const theme = useTheme();
 
-    const handleVariableValueChange = (newEdits: ICubeQuery) => {
+    const handleDimensionValueChange = (newEdits: ICubeQuery) => {
         setCubeQuery(newEdits);
     }
 
@@ -177,10 +177,10 @@ export const EditorMetaSection: React.FC<IEditorMetaSectionProps> = ({ defaultHe
                     <TabPanel value={editLanguage} selectedValue={languageTab} key={editLanguage}>
                         <MetaEditor
                             language={editLanguage}
-                            resolvedVariables={resolvedVariables}
+                            resolvedDimensions={resolvedDimensions}
                             cubeQuery={cubeQuery}
                             defaultHeaderResponse={defaultHeaderResponse}
-                            onChange={handleVariableValueChange}
+                            onChange={handleDimensionValueChange}
                             isMetaAccordionOpen={isMetaAccordionOpen}
                             onMetaAccordionOpenChange={handleMetaAccordionOpenChange}
                             titleMaxLength={queryInfo ? queryInfo.maximumHeaderLength : undefined}
@@ -211,8 +211,8 @@ export const EditorMetaSection: React.FC<IEditorMetaSectionProps> = ({ defaultHe
                     visualizationSettings={settings}
                     visualizationRules={visualizationRulesResponse.data}
                     settingsChangedHandler={setVisualizationSettingsUserInput}
-                    variables={resolvedVariables}
-                    variableQuery={variableQuery}
+                    dimensions={resolvedDimensions}
+                    dimensionQuery={dimensionQuery}
                 />}
         </MetaWrapper>
     );

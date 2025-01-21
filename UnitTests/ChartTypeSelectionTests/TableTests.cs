@@ -1,18 +1,17 @@
 ﻿using NUnit.Framework;
+using Px.Utils.Models.Metadata.Enums;
 using PxGraf.ChartTypeSelection;
 using PxGraf.ChartTypeSelection.ChartSpecificLimits;
 using PxGraf.ChartTypeSelection.JsonObjects;
 using PxGraf.Enums;
 using System.Collections.Generic;
-using UnitTests.TestDummies;
-using UnitTests.TestDummies.DummyQueries;
 
-namespace ChartTypeSelectionTests
+namespace UnitTests.ChartTypeSelectionTests
 {
     [TestFixture]
-    class TableTests
+    public class TableTests
     {
-        private IChartSelectionLimits Limits { get; set; }
+        private ChartSelectionLimits Limits { get; set; }
 
         [OneTimeSetUp]
         public void SetupChartSelectionLimits()
@@ -27,14 +26,13 @@ namespace ChartTypeSelectionTests
         [Test]
         public void NoData_FirstMultiselectBelowMin()
         {
-            List<VariableParameters> dimension = [];
+            List<DimensionParameters> dimension = [];
 
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
             TableCheck check = new(Limits.TableLimits);
 
             Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.DataRequired));
         }
-
 
         /// <summary>
         /// Case: Valid data
@@ -43,11 +41,11 @@ namespace ChartTypeSelectionTests
         [Test]
         public void ValidData_Pass()
         {
-            List<VariableParameters> dimension =
+            List<DimensionParameters> dimension =
             [
-                new VariableParameters(VariableType.Time, 5),
-                new VariableParameters(VariableType.Ordinal, 6),
-                new VariableParameters(VariableType.Unknown, 1),
+                new DimensionParameters(DimensionType.Time, 5),
+                new DimensionParameters(DimensionType.Ordinal, 6),
+                new DimensionParameters(DimensionType.Unknown, 1),
             ];
 
             VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);

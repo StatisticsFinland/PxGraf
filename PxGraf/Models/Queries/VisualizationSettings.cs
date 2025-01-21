@@ -1,12 +1,11 @@
-﻿using Newtonsoft.Json;
-using PxGraf.Data;
+﻿using PxGraf.Data;
 using PxGraf.Enums;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace PxGraf.Models.Queries
 {
-    [JsonObject(ItemNullValueHandling = NullValueHandling.Ignore)]
-    public abstract class VisualizationSettings(Layout layout, Dictionary<string, List<string>> defaultSelectableVariableCodes)
+    public abstract class VisualizationSettings(Layout layout, Dictionary<string, List<string>> defaultSelectableDimensionCodes)
     {
         /// <summary>
         /// Currently selected visualization type. (various charts, table, text)
@@ -19,7 +18,8 @@ namespace PxGraf.Models.Queries
 
         public int? MarkerSize { get; protected set; }
 
-        public string MultiselectableVariableCode { get; protected set; }
+        [JsonPropertyName("multiselectableVariableCode")] // legacy name, do not change or all the old queries break.
+        public string MultiselectableDimensionCode { get; protected set; }
 
         public bool? MatchXLabelsToEnd { get; protected set; }
 
@@ -27,14 +27,15 @@ namespace PxGraf.Models.Queries
 
         public string Sorting { get; protected set; }
 
-        public Dictionary<string, List<string>> DefaultSelectableVariableCodes { get; } = defaultSelectableVariableCodes;
+        [JsonPropertyName("defaultSelectableVariableCodes")] // legacy name, do not change or all the old queries break.
+        public Dictionary<string, List<string>> DefaultSelectableDimensionCodes { get; } = defaultSelectableDimensionCodes;
         public bool? ShowDataPoints { get; protected set; } = false;
     }
 
     /// <summary>
     /// Default constructor
     /// </summary>
-    public class TableVisualizationSettings(Layout layout, Dictionary<string, List<string>> defaultSelectableVariableCodes = null) : VisualizationSettings(layout, defaultSelectableVariableCodes)
+    public class TableVisualizationSettings(Layout layout, Dictionary<string, List<string>> defaultSelectableDimensionCodes = null) : VisualizationSettings(layout, defaultSelectableDimensionCodes)
     {
         public override VisualizationType VisualizationType => VisualizationType.Table;
     }
@@ -43,11 +44,11 @@ namespace PxGraf.Models.Queries
     {
         public override VisualizationType VisualizationType => VisualizationType.LineChart;
 
-        public LineChartVisualizationSettings(Layout layout, bool cutYAxis, string multiselVarCode, Dictionary<string, List<string>> defaultSelectableVariableCodes = null, bool showDataPoints = false)
-            : base(layout, defaultSelectableVariableCodes)
+        public LineChartVisualizationSettings(Layout layout, bool cutYAxis, string multiselDimCode, Dictionary<string, List<string>> defaultSelectableDimensionCodes = null, bool showDataPoints = false)
+            : base(layout, defaultSelectableDimensionCodes)
         {
             CutYAxis = cutYAxis;
-            MultiselectableVariableCode = multiselVarCode;
+            MultiselectableDimensionCode = multiselDimCode;
             ShowDataPoints = showDataPoints;
         }
     }
@@ -56,8 +57,8 @@ namespace PxGraf.Models.Queries
     {
         public override VisualizationType VisualizationType => VisualizationType.VerticalBarChart;
 
-        public VerticalBarChartVisualizationSettings(Layout layout, bool matchLabelsToEnd, int xLabelInterval, Dictionary<string, List<string>> defaultSelectableVariableCodes = null, bool showDataPoints = false)
-            : base(layout, defaultSelectableVariableCodes)
+        public VerticalBarChartVisualizationSettings(Layout layout, bool matchLabelsToEnd, int xLabelInterval, Dictionary<string, List<string>> defaultSelectableDimensionCodes = null, bool showDataPoints = false)
+            : base(layout, defaultSelectableDimensionCodes)
         {
 
             MatchXLabelsToEnd = matchLabelsToEnd;
@@ -70,8 +71,8 @@ namespace PxGraf.Models.Queries
     {
         public override VisualizationType VisualizationType => VisualizationType.GroupVerticalBarChart;
 
-        public GroupVerticalBarChartVisualizationSettings(Layout layout, bool matchLabelsToEnd, int xLabelInterval, Dictionary<string, List<string>> defaultSelectableVariableCodes = null, bool showDataPoints = false)
-            : base(layout, defaultSelectableVariableCodes)
+        public GroupVerticalBarChartVisualizationSettings(Layout layout, bool matchLabelsToEnd, int xLabelInterval, Dictionary<string, List<string>> defaultSelectableDimensionCodes = null, bool showDataPoints = false)
+            : base(layout, defaultSelectableDimensionCodes)
         {
             MatchXLabelsToEnd = matchLabelsToEnd;
             XLabelInterval = xLabelInterval;
@@ -83,8 +84,8 @@ namespace PxGraf.Models.Queries
     {
         public override VisualizationType VisualizationType => VisualizationType.StackedVerticalBarChart;
 
-        public StackedVerticalBarChartVisualizationSettings(Layout layout, bool matchLabelsToEnd, int xLabelInterval, Dictionary<string, List<string>> defaultSelectableVariableCodes = null, bool showDataPoints = false)
-            : base(layout, defaultSelectableVariableCodes)
+        public StackedVerticalBarChartVisualizationSettings(Layout layout, bool matchLabelsToEnd, int xLabelInterval, Dictionary<string, List<string>> defaultSelectableDimensionCodes = null, bool showDataPoints = false)
+            : base(layout, defaultSelectableDimensionCodes)
 
         {
             MatchXLabelsToEnd = matchLabelsToEnd;
@@ -97,8 +98,8 @@ namespace PxGraf.Models.Queries
     {
         public override VisualizationType VisualizationType => VisualizationType.PercentVerticalBarChart;
 
-        public PercentVerticalBarChartVisualizationSettings(Layout layout, bool matchLabelsToEnd, int xLabelInterval, Dictionary<string, List<string>> defaultSelectableVariableCodes = null, bool showDataPoints = false)
-            : base(layout, defaultSelectableVariableCodes)
+        public PercentVerticalBarChartVisualizationSettings(Layout layout, bool matchLabelsToEnd, int xLabelInterval, Dictionary<string, List<string>> defaultSelectableDimensionCodes = null, bool showDataPoints = false)
+            : base(layout, defaultSelectableDimensionCodes)
         {
             MatchXLabelsToEnd = matchLabelsToEnd;
             XLabelInterval = xLabelInterval;
@@ -109,8 +110,8 @@ namespace PxGraf.Models.Queries
     public class HorizontalBarChartVisualizationSettings : VisualizationSettings
     {
         public override VisualizationType VisualizationType => VisualizationType.HorizontalBarChart;
-        public HorizontalBarChartVisualizationSettings(Layout layout, string sorting = CubeSorting.NO_SORTING, Dictionary<string, List<string>> defaultSelectableVariableCodes = null, bool showDataPoints = false)
-            : base(layout, defaultSelectableVariableCodes)
+        public HorizontalBarChartVisualizationSettings(Layout layout, string sorting = CubeSorting.NO_SORTING, Dictionary<string, List<string>> defaultSelectableDimensionCodes = null, bool showDataPoints = false)
+            : base(layout, defaultSelectableDimensionCodes)
         {
             if (sorting == "descending" || sorting == "decending") Sorting = CubeSorting.DESCENDING;
             else
@@ -124,8 +125,8 @@ namespace PxGraf.Models.Queries
     public class GroupHorizontalBarChartVisualizationSettings : VisualizationSettings
     {
         public override VisualizationType VisualizationType => VisualizationType.GroupHorizontalBarChart;
-        public GroupHorizontalBarChartVisualizationSettings(Layout layout, string sorting = CubeSorting.NO_SORTING, Dictionary<string, List<string>> defaultSelectableVariableCodes = null, bool showDataPoints = false)
-            : base(layout, defaultSelectableVariableCodes)
+        public GroupHorizontalBarChartVisualizationSettings(Layout layout, string sorting = CubeSorting.NO_SORTING, Dictionary<string, List<string>> defaultSelectableDimensionCodes = null, bool showDataPoints = false)
+            : base(layout, defaultSelectableDimensionCodes)
         {
             Sorting = sorting ?? CubeSorting.NO_SORTING;
             ShowDataPoints = showDataPoints;
@@ -135,8 +136,8 @@ namespace PxGraf.Models.Queries
     public class StackedHorizontalBarChartVisualizationSettings : VisualizationSettings
     {
         public override VisualizationType VisualizationType => VisualizationType.StackedHorizontalBarChart;
-        public StackedHorizontalBarChartVisualizationSettings(Layout layout, string sorting = CubeSorting.NO_SORTING, Dictionary<string, List<string>> defaultSelectableVariableCodes = null, bool showDataPoints = false)
-            : base(layout, defaultSelectableVariableCodes)
+        public StackedHorizontalBarChartVisualizationSettings(Layout layout, string sorting = CubeSorting.NO_SORTING, Dictionary<string, List<string>> defaultSelectableDimensionCodes = null, bool showDataPoints = false)
+            : base(layout, defaultSelectableDimensionCodes)
         {
             Sorting = sorting ?? CubeSorting.NO_SORTING;
             ShowDataPoints = showDataPoints;
@@ -146,8 +147,8 @@ namespace PxGraf.Models.Queries
     public class PercentHorizontalBarChartVisualizationSettings : VisualizationSettings
     {
         public override VisualizationType VisualizationType => VisualizationType.PercentHorizontalBarChart;
-        public PercentHorizontalBarChartVisualizationSettings(Layout layout, string sorting = CubeSorting.NO_SORTING, Dictionary<string, List<string>> defaultSelectableVariableCodes = null, bool showDataPoints = false)
-            : base(layout, defaultSelectableVariableCodes)
+        public PercentHorizontalBarChartVisualizationSettings(Layout layout, string sorting = CubeSorting.NO_SORTING, Dictionary<string, List<string>> defaultSelectableDimensionCodes = null, bool showDataPoints = false)
+            : base(layout, defaultSelectableDimensionCodes)
         {
             Sorting = sorting ?? CubeSorting.NO_SORTING;
             ShowDataPoints = showDataPoints;
@@ -158,8 +159,8 @@ namespace PxGraf.Models.Queries
     {
         public override VisualizationType VisualizationType => VisualizationType.PyramidChart;
 
-        public PyramidChartVisualizationSettings(Layout layout, Dictionary<string, List<string>> defaultSelectableVariableCodes = null, bool showDataPoints = false)
-            : base(layout, defaultSelectableVariableCodes)
+        public PyramidChartVisualizationSettings(Layout layout, Dictionary<string, List<string>> defaultSelectableDimensionCodes = null, bool showDataPoints = false)
+            : base(layout, defaultSelectableDimensionCodes)
         {
             ShowDataPoints = showDataPoints;
         }
@@ -168,8 +169,8 @@ namespace PxGraf.Models.Queries
     public class PieChartVisualizationSettings : VisualizationSettings
     {
         public override VisualizationType VisualizationType => VisualizationType.PieChart;
-        public PieChartVisualizationSettings(Layout layout, string sorting = CubeSorting.NO_SORTING, Dictionary<string, List<string>> defaultSelectableVariableCodes = null, bool showDataPoints = false)
-            : base(layout, defaultSelectableVariableCodes)
+        public PieChartVisualizationSettings(Layout layout, string sorting = CubeSorting.NO_SORTING, Dictionary<string, List<string>> defaultSelectableDimensionCodes = null, bool showDataPoints = false)
+            : base(layout, defaultSelectableDimensionCodes)
         {
             if (sorting == "descending" || sorting == "decending") Sorting = CubeSorting.DESCENDING;
             else
@@ -183,8 +184,8 @@ namespace PxGraf.Models.Queries
     public class ScatterPlotVisualizationSettings : VisualizationSettings
     {
         public override VisualizationType VisualizationType => VisualizationType.ScatterPlot;
-        public ScatterPlotVisualizationSettings(Layout layout, bool cutYAxis, int markerSize, Dictionary<string, List<string>> defaultSelectableVariableCodes = null)
-            : base(layout, defaultSelectableVariableCodes)
+        public ScatterPlotVisualizationSettings(Layout layout, bool cutYAxis, int markerSize, Dictionary<string, List<string>> defaultSelectableDimensionCodes = null)
+            : base(layout, defaultSelectableDimensionCodes)
         {
             CutYAxis = cutYAxis;
             MarkerSize = markerSize;

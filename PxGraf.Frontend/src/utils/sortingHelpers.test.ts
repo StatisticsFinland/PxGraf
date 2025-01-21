@@ -1,8 +1,8 @@
-import { ITableListResponse } from '../api/services/table';
-import { sortTableData, sortedVariables } from './sortingHelpers';
-import { IVariable, VariableType } from "types/cubeMeta";
+import { EMetaPropertyType, IDimension, EDimensionType } from 'types/cubeMeta';
+import { sortDatabaseItems, sortedDimensions } from './sortingHelpers';
+import { IDatabaseTable } from 'types/tableListItems';
 
-const mockVariables: IVariable[] =
+const mockDimensions: IDimension[] =
 [
     {
         code: "FoobarManual",
@@ -11,8 +11,7 @@ const mockVariables: IVariable[] =
             sv: "FoobarManualSv",
             en: "FoobarManualEn"
         },
-        type: VariableType.OtherClassificatory,
-        note: null,
+        type: EDimensionType.Other,
         values: [
             {
                 code: "eka",
@@ -21,9 +20,7 @@ const mockVariables: IVariable[] =
                     sv: "ekaSv",
                     en: "ekaEn"
                 },
-                note: null,
-                isSum: false,
-                contentComponent: null
+                isVirtual: false
             },
             {
                 code: "toka",
@@ -32,9 +29,7 @@ const mockVariables: IVariable[] =
                     sv: "tokaSv",
                     en: "tokaEn"
                 },
-                note: null,
-                isSum: false,
-                contentComponent: null
+                isVirtual: false
             },
             {
                 code: "peruna",
@@ -43,9 +38,7 @@ const mockVariables: IVariable[] =
                     sv: "perunaSv",
                     en: "perunaEn"
                 },
-                note: null,
-                isSum: false,
-                contentComponent: null
+                isVirtual: false
             }
         ]
     },
@@ -56,8 +49,7 @@ const mockVariables: IVariable[] =
             sv: "År",
             en: "Year"
         },
-        type: VariableType.Time,
-        note: null,
+        type: EDimensionType.Time,
         values: [
             {
                 code: "2018",
@@ -66,9 +58,7 @@ const mockVariables: IVariable[] =
                     sv: "2018",
                     en: "2018"
                 },
-                note: null,
-                isSum: false,
-                contentComponent: null
+                isVirtual: false
             },
             {
                 code: "2019",
@@ -77,9 +67,7 @@ const mockVariables: IVariable[] =
                     sv: "2019",
                     en: "2019"
                 },
-                note: null,
-                isSum: false,
-                contentComponent: null
+                isVirtual: false
             },
             {
                 code: "2020",
@@ -88,9 +76,7 @@ const mockVariables: IVariable[] =
                     sv: "2020",
                     en: "2020"
                 },
-                note: null,
-                isSum: false,
-                contentComponent: null
+                isVirtual: false
             },
             {
                 code: "2021",
@@ -99,9 +85,7 @@ const mockVariables: IVariable[] =
                     sv: "2021*",
                     en: "2021*"
                 },
-                note: null,
-                isSum: false,
-                contentComponent: null
+                isVirtual: false
             }
         ]
     },
@@ -112,8 +96,7 @@ const mockVariables: IVariable[] =
             sv: "FoobarFromSv",
             en: "FoobarFromEn"
         },
-        type: VariableType.OtherClassificatory,
-        note: null,
+        type: EDimensionType.Other,
         values: [
             {
                 code: "aaa",
@@ -122,9 +105,7 @@ const mockVariables: IVariable[] =
                     sv: "aaaSv",
                     en: "aaaEn"
                 },
-                note: null,
-                isSum: false,
-                contentComponent: null
+                isVirtual: false
             },
             {
                 code: "bbb",
@@ -133,9 +114,7 @@ const mockVariables: IVariable[] =
                     sv: "bbbSv",
                     en: "bbbEn"
                 },
-                note: null,
-                isSum: false,
-                contentComponent: null
+                isVirtual: false
             },
             {
                 code: "ccc",
@@ -144,9 +123,7 @@ const mockVariables: IVariable[] =
                     sv: "cccSv",
                     en: "cccEn"
                 },
-                note: null,
-                isSum: false,
-                contentComponent: null
+                isVirtual: false
             },
             {
                 code: "ddd",
@@ -155,9 +132,7 @@ const mockVariables: IVariable[] =
                     sv: "dddSv",
                     en: "dddEn"
                 },
-                note: null,
-                isSum: false,
-                contentComponent: null
+                isVirtual: false
             }
         ]
     },
@@ -168,8 +143,7 @@ const mockVariables: IVariable[] =
             sv: "FoobarAllSv",
             en: "FoobarAllEn"
         },
-        type: VariableType.OtherClassificatory,
-        note: null,
+        type: EDimensionType.Other,
         values: [
             {
                 code: "xxx",
@@ -178,9 +152,7 @@ const mockVariables: IVariable[] =
                     sv: "xxxSv",
                     en: "xxxEn"
                 },
-                note: null,
-                isSum: false,
-                contentComponent: null
+                isVirtual: false
             },
             {
                 code: "yyy",
@@ -189,9 +161,7 @@ const mockVariables: IVariable[] =
                     sv: "yyySv",
                     en: "yyyEn"
                 },
-                note: null,
-                isSum: false,
-                contentComponent: null
+                isVirtual: false
             },
             {
                 code: "zzz",
@@ -200,9 +170,7 @@ const mockVariables: IVariable[] =
                     sv: "zzzSv",
                     en: "zzzEn"
                 },
-                note: null,
-                isSum: false,
-                contentComponent: null
+                isVirtual: false
             }
         ]
     },
@@ -213,8 +181,7 @@ const mockVariables: IVariable[] =
             sv: "ContentVariableSv",
             en: "ContentVariableEn"
         },
-        type: VariableType.Content,
-        note: null,
+        type: EDimensionType.Content,
         values: [
             {
                 code: "eka",
@@ -223,9 +190,7 @@ const mockVariables: IVariable[] =
                     sv: "ekaSv",
                     en: "ekaEn"
                 },
-                note: null,
-                isSum: false,
-                contentComponent: null
+                isVirtual: false
             }
         ]
     },
@@ -236,8 +201,14 @@ const mockVariables: IVariable[] =
             sv: "EliminationVariableEn",
             en: "EliminationVariableEn"
         },
-        type: VariableType.OtherClassificatory,
-        note: null,
+        type: EDimensionType.Other,
+        additionalProperties:
+        {
+            ELIMINATION: {
+                type: EMetaPropertyType.Text,
+                value: "sum"
+            }
+        },
         values: [
             {
                 code: "sum",
@@ -246,9 +217,7 @@ const mockVariables: IVariable[] =
                     sv: "sumSv",
                     en: "sumEn"
                 },
-                note: null,
-                isSum: true,
-                contentComponent: null
+                isVirtual: false
             },
             {
                 code: "val",
@@ -257,9 +226,7 @@ const mockVariables: IVariable[] =
                     sv: "valSv",
                     en: "valEn"
                 },
-                note: null,
-                isSum: true,
-                contentComponent: null
+                isVirtual: false
             }
         ]
     },
@@ -270,8 +237,7 @@ const mockVariables: IVariable[] =
             sv: "SingleValueVariableSv",
             en: "SingleValueVariableEn"
         },
-        type: VariableType.OtherClassificatory,
-        note: null,
+        type: EDimensionType.Other,
         values: [
             {
                 code: "single",
@@ -280,9 +246,7 @@ const mockVariables: IVariable[] =
                     sv: "singleSv",
                     en: "singleEn"
                 },
-                note: null,
-                isSum: false,
-                contentComponent: null
+                isVirtual: false
             }
         ]
     },
@@ -293,8 +257,7 @@ const mockVariables: IVariable[] =
             sv: "NamelessValueVariableSv",
             en: "NamelessValueVariableEn"
         },
-        type: VariableType.OtherClassificatory,
-        note: null,
+        type: EDimensionType.Other,
         values: [
             {
                 code: "missingName",
@@ -303,34 +266,29 @@ const mockVariables: IVariable[] =
                     sv: null,
                     en: null
                 },
-                note: null,
-                isSum: false,
-                contentComponent: null
+                isVirtual: false
             }
         ]
     }
 ]
 
-const mockTableData: ITableListResponse[] = [
+const mockTableData: IDatabaseTable[] = [
     {
-        id: '0',
-        type: 't',
-        updated: '2024-6-10',
-        text: { en: 'Foo-en', fi: 'Foo-fi' },
+        fileName: '0.px',
+        lastUpdated: '2024-6-10',
+        name: { en: 'Foo-en', fi: 'Foo-fi' },
         languages: ['en', 'fi'],
     },
     {
-        id: '1',
-        type: 't',
-        updated: '2021-6-10',
-        text: { en: 'Bar-en', fi: 'Bar-fi' },
+        fileName: '1.px',
+        lastUpdated: '2021-6-10',
+        name: { en: 'Bar-en', fi: 'Bar-fi' },
         languages: ['en', 'fi'],
     },
     {
-        id: '2',
-        type: 't',
-        updated: '2021-6-10',
-        text: { fi: 'Baz-fi' },
+        fileName: '2.px',
+        lastUpdated: '2021-6-10',
+        name: { fi: 'Baz-fi' },
         languages: ['fi'],
     },
 ];
@@ -339,7 +297,7 @@ const mockPrimaryLanguage = 'en';
 
 describe('Assertion tests', () => {
     it('sorts variables in correct order', () => {
-        const result: IVariable[] = sortedVariables(mockVariables);
+        const result: IDimension[] = sortedDimensions(mockDimensions);
         expect(result[0].code).toBe("FoobarContent");
         expect(result[1].code).toBe("Vuosi");
         expect(result[2].code).toBe("FoobarManual");
@@ -350,9 +308,9 @@ describe('Assertion tests', () => {
     });
 
     it('sorts table data by primary or first available language', () => {
-        const sortedData = sortTableData(mockTableData, mockPrimaryLanguage);
-        const expected = ["1", "2", "0"];
-        const result = sortedData.map((item) => item.id);
+        const sortedData = sortDatabaseItems(mockTableData, mockPrimaryLanguage);
+        const expected = ["1.px", "2.px", "0.px"];
+        const result = sortedData.map((item) => item.fileName);
         expect(result).toEqual(expected);
     });
 });

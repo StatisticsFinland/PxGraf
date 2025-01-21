@@ -16,7 +16,7 @@
         public DimensionRange TimeRange { get; }
 
         /// <summary>
-        /// The allowed range for the size of irregular time variables
+        /// The allowed range for the size of irregular time dimensions
         /// </summary>
         public DimensionRange IrregularTimeRange { get; }
 

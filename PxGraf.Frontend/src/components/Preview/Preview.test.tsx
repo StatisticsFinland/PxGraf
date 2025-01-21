@@ -1,6 +1,6 @@
 import { render } from "@testing-library/react";
 import React from 'react';
-import { FilterType, Query } from "types/query";
+import { FilterType, ICubeQuery, IDimensionEditions, IDimensionQuery, Query } from "types/query";
 import { IVisualizationSettings } from "types/visualizationSettings";
 import Preview from "./Preview";
 import { EVariableType, EVisualizationType, ETimeVariableInterval } from "@statisticsfinland/pxvisualizer";
@@ -20,7 +20,8 @@ function mockComponentMocker(name) {
 
 jest.mock('envVars', () => ({
     PxGrafUrl: 'pxGrafUrl.fi/',
-    PublicUrl: 'publicUrl.fi/'
+    PublicUrl: 'publicUrl.fi/',
+    BasePath: ''
 }));
 
 jest.mock('@statisticsfinland/pxvisualizer', () => {
@@ -174,7 +175,7 @@ const mockQuery: Query = {
     }
 };
 const mockLanguage = 'fi';
-const mockCubeQueryTextEdits = {
+const mockCubeQueryTextEdits: ICubeQuery = {
     chartHeaderEdit: null,
     variableQueries: {}
 };

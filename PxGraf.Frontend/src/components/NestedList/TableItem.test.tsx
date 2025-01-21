@@ -4,7 +4,7 @@ import UiLanguageContext from 'contexts/uiLanguageContext';
 import '@testing-library/jest-dom';
 import { MemoryRouter } from 'react-router-dom';
 import { TableItem } from './TableItem';
-import { ITableListResponse } from 'api/services/table';
+import { IDatabaseTable } from '../../types/tableListItems';
 
 jest.mock('react-i18next', () => ({
     ...jest.requireActual('react-i18next'),
@@ -20,14 +20,14 @@ jest.mock('react-i18next', () => ({
 
 jest.mock('envVars', () => ({
     PxGrafUrl: 'pxGrafUrl.fi/',
-    PublicUrl: 'publicUrl.fi/'
+    PublicUrl: 'publicUrl.fi/',
+    BasePath: ''
 }));
 
-const mockItem: ITableListResponse = {
-    id: 'asd',
-    type: 't',
-    updated: '2021-10-13T14:53:06',
-    text: { 'fi': 'seppo', 'sv': 'seppo-sv' },
+const mockItem: IDatabaseTable = {
+    fileName: 'asd.px',
+    lastUpdated: '2021-10-13T14:53:06',
+    name: { 'fi': 'seppo', 'sv': 'seppo-sv' },
     languages: ['fi', 'sv']
 }
 
@@ -70,4 +70,27 @@ describe('Assertion tests', () => {
         expect(name).toBeInTheDocument();
         expect(lastUpdate).toBeInTheDocument();
     });
-})
+
+    it('renders MUI alert when error property is true', async () => {
+        const mockErrorItem: IDatabaseTable = {
+            fileName: 'error',
+            lastUpdated: null,
+            name: { 'fi': 'error', 'sv': 'error-sv' },
+            languages: ['fi', 'sv'],
+            error: true
+        };
+
+        const { findByRole, findByText } = render(
+            <MemoryRouter>
+                <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
+                    <TableItem currentPath={mockPath} item={mockErrorItem} depth={mockDepth}  />
+                </UiLanguageContext.Provider>
+            </MemoryRouter>
+        );
+
+        const alert = await findByRole('alert');
+        const alertHeader = await findByText("error");
+        expect(alert).toBeInTheDocument();
+        expect(alertHeader).toBeInTheDocument();
+    });
+});

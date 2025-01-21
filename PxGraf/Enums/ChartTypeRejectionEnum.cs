@@ -26,17 +26,17 @@
         TimeBelowMin,
 
         /// <summary>
-        /// Values in the time variable are not in order OR the values are not consecutive.
+        /// Values in the time dimension are not in order OR the values are not consecutive.
         /// </summary>
         IrregularTimeNotAllowed,
 
         /// <summary>
-        /// The size of the irregular time variable is too large.
+        /// The size of the irregular time dimension is too large.
         /// </summary>
         IrregularTimeOverMax,
 
         /// <summary>
-        /// The size of the irregular time variable is too small.
+        /// The size of the irregular time dimension is too small.
         /// </summary>
         IrregularTimeBelowMin,
 

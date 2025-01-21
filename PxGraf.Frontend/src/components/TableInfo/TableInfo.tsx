@@ -5,23 +5,17 @@ import React from 'react';
 import { urls } from 'Router';
 import { spacing } from 'utils/componentHelpers';
 import UiLanguageContext from 'contexts/uiLanguageContext';
-import { MultiLanguageString } from "../../types/multiLanguageString";
+import { IDatabaseTable } from 'types/tableListItems';
 
 interface ITableInfoProps {
     path: string;
-    item: {
-        id?: string;
-        updated?: string;
-        type?: 't' | 'l';
-        text?: MultiLanguageString;
-        languages?: string[];
-    };
+    item: IDatabaseTable;
 }
 
 export const TableInfo: React.FC<ITableInfoProps> = ({ path, item }) => {
     const { t } = useTranslation();
     const { language } = React.useContext(UiLanguageContext);
-    const currentPath = [path, item.id];
+    const currentPath = [path, item.fileName];
     const displayLanguage = item.languages.includes(language) ? language : item.languages[0];
 
     return (
@@ -30,10 +24,10 @@ export const TableInfo: React.FC<ITableInfoProps> = ({ path, item }) => {
                 <ListItemText primary={
                     <>
                         <Typography variant="body1" sx={{ ...spacing(1) }}>
-                            {item.text[displayLanguage]}
+                            {item.name[displayLanguage]}
                         </Typography>
                         <Typography variant="body2" sx={{ ...spacing(1) }}>
-                            {t("tableSelect.updated") + ": " + new Date(item.updated).toLocaleString(language)}
+                            {t("tableSelect.updated") + ": " + new Date(item.lastUpdated).toLocaleString(language)}
                         </Typography>
                     </>
                 } />

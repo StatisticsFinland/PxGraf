@@ -3,8 +3,8 @@ import { render } from '@testing-library/react';
 import UiLanguageContext from 'contexts/uiLanguageContext';
 import '@testing-library/jest-dom';
 import { MemoryRouter } from 'react-router-dom';
-import { ITableListResponse } from 'api/services/table';
 import { TableListItem } from './TableListItem';
+import { IDatabaseGroupHeader } from 'types/tableListItems';
 
 jest.mock('react-i18next', () => ({
     ...jest.requireActual('react-i18next'),
@@ -20,12 +20,13 @@ jest.mock('react-i18next', () => ({
 
 jest.mock('envVars', () => ({
     PxGrafUrl: 'pxGrafUrl.fi/',
-    PublicUrl: 'publicUrl.fi/'
+    PublicUrl: 'publicUrl.fi/',
+    BasePath: ''
 }));
 
-const mockItem: ITableListResponse = {
-    id: 'dbid1',
-    text: { 'fi': 'seppodbid', 'en': 'seppodbiden' },
+const mockItem: IDatabaseGroupHeader = {
+    code: 'dbid1',
+    name: { 'fi': 'seppodbid', 'en': 'seppodbiden' },
     languages: ['fi', 'en']
 }
 

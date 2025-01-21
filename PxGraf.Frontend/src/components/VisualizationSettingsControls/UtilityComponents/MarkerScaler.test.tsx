@@ -2,6 +2,8 @@ import React from 'react';
 import '@testing-library/jest-dom';
 import { render, screen, fireEvent } from '@testing-library/react';
 import MarkerScaler from "./MarkerScaler";
+import { IVisualizationRules } from '../../../types/visualizationRules';
+import { IVisualizationSettings } from '../../../types/visualizationSettings';
 
 jest.mock('react-i18next', () => ({
     ...jest.requireActual('react-i18next'),
@@ -15,13 +17,13 @@ jest.mock('react-i18next', () => ({
     },
 }));
 
-const mockVisualizationRules = {
+const mockVisualizationRules: IVisualizationRules = {
     allowManualPivot: null,
     sortingOptions: null,
-    multiselectVariableAllowed: null
+    multiselectDimensionAllowed: null
 };
 
-const mockVisualizationSettings = {
+const mockVisualizationSettings: IVisualizationSettings = {
     defaultSelectableVariableCodes: null,
     pivotRequested: null,
     cutYAxis: false,

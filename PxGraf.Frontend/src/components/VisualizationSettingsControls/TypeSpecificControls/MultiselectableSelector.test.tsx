@@ -2,55 +2,49 @@ import React from 'react';
 import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
 import { MultiselectableSelector } from './MultiselectableSelector';
-import { IVariable, VariableType } from "types/cubeMeta";
+import { IDimension, EDimensionType } from "types/cubeMeta";
 import { IVisualizationSettings } from '../../../types/visualizationSettings';
+import { IVisualizationRules } from '../../../types/visualizationRules';
 
-const mockVariables: IVariable[] = [
+const mockDimensions: IDimension[] = [
 	{
 		code: 'cVar',
 		name: { fi: 'cVarName' },
-		note: { fi: 'cVarNote' },
-		type: VariableType.Content,
+		type: EDimensionType.Content,
 		values: [
 			{
 				code: 'cVal',
 				name: { fi: 'cValName' },
-				note: { fi: 'cValNote' },
-				isSum: false
+				isVirtual: false
 			}
 		]
 	},
 	{
 		code: 'tVar',
 		name: { fi: 'tVarName' },
-		note: { fi: 'tVarNote' },
-		type: VariableType.Time,
+		type: EDimensionType.Time,
 		values: [
 			{
 				code: 'tVal',
 				name: { fi: 'tValName' },
-				note: { fi: 'tValNote' },
-				isSum: false
+				isVirtual: false
 			}
 		]
 	},
 	{
 		code: 'msVar',
 		name: { fi: 'msVarAName' },
-		note: { fi: 'msVarANote' },
-		type: VariableType.OtherClassificatory,
+		type: EDimensionType.Other,
 		values: [
 			{
 				code: 'msVal1',
 				name: { fi: 'msVal1Name' },
-				note: { fi: 'msVal1Note' },
-				isSum: false
+				isVirtual: false
 			},
 			{
 				code: 'msVal2',
 				name: { fi: 'msVal2Name' },
-				note: { fi: 'msVal2Note' },
-				isSum: false
+				isVirtual: false
 			}
 		]
 	}
@@ -60,8 +54,8 @@ const mockSettingsChangedHandler = jest.fn();
 const mockVisualizationSettings: IVisualizationSettings = {
 	multiselectableVariableCode: 'msVar'
 };
-const mockVisualizationRules = {
-	allowManualPivot: false, sortingOptions: null, multiselectVariableAllowed: true
+const mockVisualizationRules: IVisualizationRules = {
+	allowManualPivot: false, sortingOptions: null, multiselectDimensionAllowed: true
 };
 
 jest.mock('react-i18next', () => ({
@@ -83,7 +77,7 @@ describe('Rendering test', () => {
 				visualizationRules={mockVisualizationRules}
 				settingsChangedHandler={mockSettingsChangedHandler}
 				visualizationSettings={mockVisualizationSettings}
-				variables={mockVariables}
+				dimensions={mockDimensions}
 			/>);
 		expect(asFragment()).toMatchSnapshot();
 	});
@@ -95,7 +89,7 @@ describe('Assertion tests', () => {
 	it('When no multiselect variable code is provided, the selector should default to "noMultiselectable"', () => {
 		const mockSettingsChangedHandler = jest.fn();
 		render(<MultiselectableSelector
-			variables={mockVariables}
+			dimensions={mockDimensions}
 			visualizationRules={mockVisualizationRules}
 			visualizationSettings={{ ...mockVisualizationSettings, multiselectableVariableCode: null }}
 			settingsChangedHandler={mockSettingsChangedHandler}
@@ -105,9 +99,9 @@ describe('Assertion tests', () => {
 
 	it('When multiselect variable code is provided, the selector should be rendered with a corresponding value', () => {
 		const mockSettingsChangedHandler = jest.fn();
-		const changedMockSettings = { ...mockVisualizationSettings, multiselectableVariableCode: "msVar" }
+		const changedMockSettings = { ...mockVisualizationSettings, multiselectableDimensionCode: "msVar" }
 		render(<MultiselectableSelector
-			variables={mockVariables}
+			dimensions={mockDimensions}
 			visualizationRules={mockVisualizationRules}
 			visualizationSettings={changedMockSettings}
 			settingsChangedHandler={mockSettingsChangedHandler}

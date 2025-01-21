@@ -1,61 +1,69 @@
-import { ITableListResponse } from '../api/services/table';
-import { IVariable } from "types/cubeMeta";
+import { IDimension, IDimensionValue, EDimensionType } from 'types/cubeMeta';
+import { getAdditionalPropertyValue } from './metadataUtils';
+import { eliminationKey } from './keywordConstants';
+import { ISortableTableListItem } from 'types/tableListItems';
 
 /**
- * Function for sorting tables or databases based on the primary language.
- * @param {ITableListResponse[]} data Table data to be sorted.
- * @param {string} primaryLanguage Primary language for sorting.
- * @returns Sorted table data.
+ * Sorts a group of database listing items based on their primary language name.
+ * Uses the first available language if the primary language is not available.
+ * @param data The group of database listing items to be sorted.
+ * @param primaryLanguage The primary language to be used for sorting.
+ * @returns A sorted list of database listing items.
  */
-export const sortTableData = (data: ITableListResponse[], primaryLanguage: string): ITableListResponse[] => {
+export const sortDatabaseItems = <T extends ISortableTableListItem>(data: T[], primaryLanguage: string): T[] => {
     return [...data].sort((a, b) => {
-        const textA = a.text[primaryLanguage] || a.text[a.languages[0]];
-        const textB = b.text[primaryLanguage] || b.text[a.languages[0]];
+        const textA = a.name[primaryLanguage] || a.name[a.languages[0]];
+        const textB = b.name[primaryLanguage] || b.name[a.languages[0]];
 
         return textA.localeCompare(textB, primaryLanguage);
     });
 };
 
 /**
- * Function for sorting variables for the variable selection list based on their type.
- * @param {IVariable[]} variables  Variables to be sorted.
- * @returns A sorted list of variables.
+ * Function for sorting dimensions for the dimension selection list based on their type.
+ * @param {IDimension[]} dimensions  Dimensions to be sorted.
+ * @returns A sorted list of dimensions.
  */
-export const sortedVariables = (variables: IVariable[]) => {
-
-    //Create a new array for sorted variables and store variables based on their type
-    const sortedVariables = [];
-    let contentVariable: IVariable;
-    const timeVariables = [];
-    const otherVariables = [];
-    const eliminationVariables = [];
-    const singleValueVariables = [];
-    variables.forEach((variable: IVariable) => {
-        if (variable.type == 'C') {
-            contentVariable = variable;
+export const sortedDimensions = (dimensions: IDimension[]): IDimension[] => {
+    //Create a new array for sorted dimensions and store dimensions based on their type
+    const sortedDimensions = [];
+    let contentDimension: IDimension;
+    const timeDimensions = [];
+    const otherDimensions = [];
+    const eliminationDimensions = [];
+    const singleValueDimensions = [];
+    dimensions.forEach((dimension: IDimension) => {
+        if (dimension.type === EDimensionType.Content) {
+            contentDimension = dimension;
         }
-        else if (variable.type == 'T') {
-            timeVariables.push(variable);
+        else if (dimension.type === EDimensionType.Time) {
+            timeDimensions.push(dimension);
         }
-        else if (variable.values.filter((vv: { isSum: boolean; }) => vv.isSum).length > 0) {
-            eliminationVariables.push(variable);
+        else if (dimension.values.filter(vv => getValueIsSumValue(vv, dimension)).length > 0) {
+            eliminationDimensions.push(dimension);
         }
-        else if (variable.values.length === 1) {
-            singleValueVariables.push(variable);
+        else if (dimension.values.length === 1) {
+            singleValueDimensions.push(dimension);
         }
         else {
-            otherVariables.push(variable);
+            otherDimensions.push(dimension);
         }
     });
 
-    //Populate sortedVariables array with variables in the correct order
-    if (contentVariable) {
-        sortedVariables.push(contentVariable);
+    //Populate sortedDimensions array with dimensions in the correct order
+    if (contentDimension) {
+        sortedDimensions.push(contentDimension);
     }
-    sortedVariables.push(...timeVariables);
-    sortedVariables.push(...otherVariables);
-    sortedVariables.push(...eliminationVariables);
-    sortedVariables.push(...singleValueVariables);
+    sortedDimensions.push(...timeDimensions);
+    sortedDimensions.push(...otherDimensions);
+    sortedDimensions.push(...eliminationDimensions);
+    sortedDimensions.push(...singleValueDimensions);
 
-    return sortedVariables;
+    return sortedDimensions;
+}
+
+function getValueIsSumValue(value: IDimensionValue, dimension: IDimension): boolean {
+    const eliminationCode: string = getAdditionalPropertyValue(eliminationKey, dimension.additionalProperties) as string;
+    if (eliminationCode) return eliminationCode === value.code;
+    else return false;
 }

@@ -55,7 +55,8 @@ describe('buildTableReference tests', () => {
 });
 
 jest.mock('envVars', () => ({
-    PxGrafUrl: 'mockedUrl.fi/'
+    PxGrafUrl: 'mockedUrl.fi/',
+    BasePath: ''
 }));
 
 describe('pxGrafUrl tests', () => {

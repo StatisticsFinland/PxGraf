@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-
-namespace PxGraf.ChartTypeSelection.JsonObjects
+﻿namespace PxGraf.ChartTypeSelection.JsonObjects
 {
     /// <summary>
     /// Collection of limits to determine which chart types can be drawn from the data.
@@ -15,7 +13,6 @@ namespace PxGraf.ChartTypeSelection.JsonObjects
         /// <summary>
         /// Limits for basic vertical bar chart
         /// </summary>
-        [JsonProperty(nameof(VerticalBarChart))]
         public ChartTypeLimits VerticalBarChart { get; set; } =
             new ChartTypeLimits()
             {
@@ -39,7 +36,6 @@ namespace PxGraf.ChartTypeSelection.JsonObjects
         /// Numerical limits for the group vertical bar chart
         /// Some additional conditions are implemented in the class
         /// </summary>
-        [JsonProperty(nameof(GroupVerticalBarChart))]
         public ChartTypeLimits GroupVerticalBarChart { get; set; } =
             new ChartTypeLimits()
             {
@@ -63,7 +59,6 @@ namespace PxGraf.ChartTypeSelection.JsonObjects
         /// Numerical limits for the stacked vertical bar chart
         /// Some additional conditions are implemented in the class
         /// </summary>
-        [JsonProperty(nameof(StackedVerticalBarChart))]
         public ChartTypeLimits StackedVerticalBarChart { get; set; } =
             new ChartTypeLimits()
             {

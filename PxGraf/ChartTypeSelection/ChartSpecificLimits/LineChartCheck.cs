@@ -28,21 +28,21 @@ namespace PxGraf.ChartTypeSelection.ChartSpecificLimits
         /// </summary>
         protected override IEnumerable<ChartRejectionInfo> CheckChartSpecificRules(VisualizationTypeSelectionObject input)
         {
-            if (GetTimeOrLargestOrdinal(input.Variables) is null) yield return BuildRejectionInfo(RejectionReason.TimeOrProgressiveRequired);
+            if (GetTimeOrLargestOrdinal(input.Dimensions) is null) yield return BuildRejectionInfo(RejectionReason.TimeOrProgressiveRequired);
         }
 
         /// <summary>
         /// Used for determining if the number of lines in the resulting chart will be withing acceptable limits.
         /// </summary>
         /// <returns></returns>
-        protected override IEnumerable<ChartRejectionInfo> CheckMultiselectProductLimits(IEnumerable<VisualizationTypeSelectionObject.VariableInfo> multiSelectVars, DimensionRange productOfMultiselectsRange)
+        protected override IEnumerable<ChartRejectionInfo> CheckMultiselectProductLimits(IEnumerable<VisualizationTypeSelectionObject.DimensionInfo> multiSelectDimensions, DimensionRange productOfMultiselectsRange)
         {
             int product = 1;
-            var timeOrLO = GetTimeOrLargestOrdinal(multiSelectVars);
-            foreach (var variable in multiSelectVars)
+            VisualizationTypeSelectionObject.DimensionInfo timeOrLO = GetTimeOrLargestOrdinal(multiSelectDimensions);
+            foreach (VisualizationTypeSelectionObject.DimensionInfo dimension in multiSelectDimensions)
             {
-                // The variable on the x axis will not affect the number of lines.
-                if (variable != timeOrLO) product *= variable.Size;
+                // The dimension on the x axis will not affect the number of lines.
+                if (dimension != timeOrLO) product *= dimension.Size;
             }
 
             if (product < productOfMultiselectsRange.Min) yield return BuildRejectionInfo(RejectionReason.MultiselectProductBelowMin, product, productOfMultiselectsRange.Min);
@@ -56,15 +56,15 @@ namespace PxGraf.ChartTypeSelection.ChartSpecificLimits
         /// <returns></returns>
         protected override int GetPriority(RejectionReason reason)
         {
-            var reasons = new RejectionReason[]
-            {
+            RejectionReason[] reasons =
+            [
                 RejectionReason.UnambiguousContentUnitRequired,
                 RejectionReason.TimeOrProgressiveRequired,
                 RejectionReason.IrregularTimeNotAllowed,
                 RejectionReason.FirstMultiselectBelowMin,
                 RejectionReason.FirstMultiselectOverMax,
                 RejectionReason.MultiselectProductOverMax,
-            };
+            ];
 
             return GetPriorityIndex(reasons, reason);
         }

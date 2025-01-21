@@ -4,27 +4,18 @@ exports[`Rendering test renders correctly 1`] = `
 <DocumentFragment>
   <a
     class="MuiButtonBase-root MuiListItemButton-root MuiListItemButton-gutters MuiListItemButton-root MuiListItemButton-gutters css-16ac5r2-MuiButtonBase-root-MuiListItemButton-root"
-    href="/table-list/a/s/d/1/2/3/id/"
+    href="/table-list/a/s/d/1/2/3/foo-group/"
     id="mainContent"
     tabindex="0"
   >
     <div
       class="MuiListItemText-root css-tlelie-MuiListItemText-root"
     >
-      <span
-        class="MuiTypography-root MuiTypography-body1 MuiListItemText-primary css-10hburv-MuiTypography-root"
+      <p
+        class="MuiTypography-root MuiTypography-body1 css-x61gb3-MuiTypography-root"
       >
-        <p
-          class="MuiTypography-root MuiTypography-body1 css-x61gb3-MuiTypography-root"
-        >
-          foo1-fi
-        </p>
-        <p
-          class="MuiTypography-root MuiTypography-body2 css-1wjvmi0-MuiTypography-root"
-        >
-          01.01.2000
-        </p>
-      </span>
+        foo1-fi
+      </p>
     </div>
     <span
       class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
