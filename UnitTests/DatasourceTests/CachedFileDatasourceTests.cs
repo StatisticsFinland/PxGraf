@@ -166,7 +166,7 @@ namespace UnitTests.DatasourceTests
             Assert.That(file2.Error, Is.EqualTo(DatabaseTableError.ContentDimensionMissing));
 
             DatabaseTable file3 = contents.Files[3];
-            Assert.That(file3.Code, Is.EqualTo("table_4"));
+            Assert.That(file3.FileName, Is.EqualTo("table_4.px"));
             Assert.That(file3.LastUpdated, Is.Null);
             Assert.That(file3.Error, Is.Not.Null);
             Assert.That(file3.Error, Is.EqualTo(DatabaseTableError.TimeDimensionMissing));

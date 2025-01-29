@@ -3,7 +3,7 @@
 exports[`Rendering test renders correctly 1`] = `
 <DocumentFragment>
   <div
-    class="MuiContainer-root MuiContainer-maxWidthMd sc-gFtjaa jCFGXo css-xdmu94-MuiContainer-root"
+    class="MuiContainer-root MuiContainer-maxWidthMd sc-ikngxL epXKmY css-xdmu94-MuiContainer-root"
   >
     <nav
       aria-labelledby="nested-list-subheader"
@@ -14,7 +14,7 @@ exports[`Rendering test renders correctly 1`] = `
         id="nested-list-subheader"
       >
         <div
-          class="sc-ikngxL ELzjk"
+          class="sc-geoRQH hVeCix"
         >
           <div>
             tableSelect.title
@@ -39,7 +39,7 @@ exports[`Rendering test renders correctly 1`] = `
         </div>
       </div>
       <li
-        class="MuiListItem-root MuiListItem-gutters MuiListItem-padding sc-khdDuB jYEFrN css-1p823my-MuiListItem-root"
+        class="MuiListItem-root MuiListItem-gutters MuiListItem-padding sc-hGNhLO fnYyPb css-1p823my-MuiListItem-root"
         id="id1.px"
       >
         <a
@@ -85,7 +85,7 @@ exports[`Rendering test renders correctly 1`] = `
         class="MuiDivider-root MuiDivider-fullWidth css-9mgopn-MuiDivider-root"
       />
       <li
-        class="MuiListItem-root MuiListItem-gutters MuiListItem-padding sc-khdDuB jYEFrN css-1p823my-MuiListItem-root"
+        class="MuiListItem-root MuiListItem-gutters MuiListItem-padding sc-hGNhLO fnYyPb css-1p823my-MuiListItem-root"
         id="id2.px"
       >
         <a

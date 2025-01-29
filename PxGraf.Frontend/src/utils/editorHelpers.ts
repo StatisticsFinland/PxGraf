@@ -1,8 +1,8 @@
 import { IDimension } from 'types/cubeMeta';
 import { FilterType, IDimensionQuery } from 'types/query';
 import { getDefaultFilter } from './dimensionSelectionHelpers';
-import { EDatabaseTableError } from '../api/services/table';
 import { useTranslation } from 'react-i18next';
+import { EDatabaseTableError } from '../types/tableListItems';
 
 export const getDefaultQueries = (variables: IDimension[]) => {
     const queries: { [key: string]: IDimensionQuery } = {};

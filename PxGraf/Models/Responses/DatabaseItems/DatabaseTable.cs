@@ -28,11 +28,10 @@ namespace PxGraf.Models.Responses.DatabaseItems
         /// </summary>
         public List<string> Languages { get; private set; }
         /// <summary>
-        /// Error flag.
+        /// Error identifier.
         /// </summary>
-
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public bool? Error { get; private set; } = null;
+        public DatabaseTableError? Error { get; private set; } = null;
 
         public DatabaseTable(string fileName, MultilanguageString name, DateTime lastUpdated, List<string> languages)
         {
@@ -42,17 +41,17 @@ namespace PxGraf.Models.Responses.DatabaseItems
             Languages = languages;
         }
 
-        private DatabaseTable(string fileName, MultilanguageString name, List<string> languages)
+        private DatabaseTable(string fileName, MultilanguageString name, List<string> languages, DatabaseTableError error)
         {
             FileName = fileName;
             Name = name;
             Languages = languages;
-            Error = true;
+            Error = error;
         }
 
-        public static DatabaseTable FromError(string code, MultilanguageString name, List<string> languages)
+        public static DatabaseTable FromError(string code, MultilanguageString name, List<string> languages, DatabaseTableError error)
         {
-            return new DatabaseTable(code, name, languages);
+            return new DatabaseTable(code, name, languages, error);
         }
     }
 }
