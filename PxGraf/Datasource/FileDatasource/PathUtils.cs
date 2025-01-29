@@ -1,8 +1,11 @@
 ﻿#nullable enable
+using PxGraf.Datasource.DatabaseConnection;
 using PxGraf.Models.Queries;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
+using System.Linq;
 
 namespace PxGraf.Datasource.FileDatasource
 {
@@ -36,6 +39,16 @@ namespace PxGraf.Datasource.FileDatasource
             }
 
             return fullPath;
+        }
+
+        public static bool DatabaseIsWhitelisted(IReadOnlyList<string> groupHierarchy, LocalFilesystemDatabaseConfig config)
+        {
+            return DatabaseIsWhitelisted(groupHierarchy[0], config);
+        }
+
+        public static bool DatabaseIsWhitelisted(string databaseName, LocalFilesystemDatabaseConfig config)
+        {
+            return config.DatabaseWhitelist.Length == 0 || config.DatabaseWhitelist.Contains(databaseName, StringComparer.OrdinalIgnoreCase);
         }
     }
 }

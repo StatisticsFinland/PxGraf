@@ -44,13 +44,17 @@ namespace PxGraf.Datasource.FileDatasource
 
         private List<PxTableReference> GetTables(IReadOnlyList<string> groupHierarcy)
         {
-            List<PxTableReference> tables = [];
-            string path = PathUtils.BuildAndSanitizePath(config.DatabaseRootPath, groupHierarcy);
-            foreach (string pxFile in Directory.EnumerateFiles(path, PxSyntaxConstants.PX_FILE_FILTER))
+            if (PathUtils.DatabaseIsWhitelisted(groupHierarcy, config))
             {
-                tables.Add(new PxTableReference(Path.GetRelativePath(config.DatabaseRootPath, pxFile)));
+                List<PxTableReference> tables = [];
+                string path = PathUtils.BuildAndSanitizePath(config.DatabaseRootPath, groupHierarcy);
+                foreach (string pxFile in Directory.EnumerateFiles(path, PxSyntaxConstants.PX_FILE_FILTER))
+                {
+                    tables.Add(new PxTableReference(Path.GetRelativePath(config.DatabaseRootPath, pxFile)));
+                }
+                return tables;
             }
-            return tables;
+            else return [];
         }
 
         public Task<List<DatabaseGroupHeader>> GetGroupHeadersAsync(IReadOnlyList<string> groupHierarcy)
@@ -60,20 +64,31 @@ namespace PxGraf.Datasource.FileDatasource
 
         public List<DatabaseGroupHeader> GetGroupHeaders(IReadOnlyList<string> groupHierarcy)
         {
-            List<DatabaseGroupHeader> headers = [];
-
-            string path = PathUtils.BuildAndSanitizePath(config.DatabaseRootPath, groupHierarcy);
-            foreach (string directory in Directory.EnumerateDirectories(path))
+            if (groupHierarcy.Count > 0 && !PathUtils.DatabaseIsWhitelisted(groupHierarcy, config))
             {
-                string code = new DirectoryInfo(directory).Name;
-                MultilanguageString alias = GetGroupName(directory);
-                if (alias.Languages.Any()) // Only include groups with an alias file for one or more languages
-                {
-                    headers.Add(new DatabaseGroupHeader(code, [.. alias.Languages], alias));
-                }
+                return [];
             }
+            else
+            {
+                List<DatabaseGroupHeader> headers = [];
 
-            return headers;
+                string path = PathUtils.BuildAndSanitizePath(config.DatabaseRootPath, groupHierarcy);
+                foreach (string directory in Directory.EnumerateDirectories(path))
+                {
+                    if (groupHierarcy.Count == 0 && !PathUtils.DatabaseIsWhitelisted(directory, config))
+                    {
+                        continue;
+                    }
+                    string code = new DirectoryInfo(directory).Name;
+                    MultilanguageString alias = GetGroupName(directory);
+                    if (alias.Languages.Any()) // Only include groups with an alias file for one or more languages
+                    {
+                        headers.Add(new DatabaseGroupHeader(code, [.. alias.Languages], alias));
+                    }
+                }
+
+                return headers;
+            }
         }
 
         /// <inheritdoc/>
@@ -126,7 +141,9 @@ namespace PxGraf.Datasource.FileDatasource
             string path = PathUtils.BuildAndSanitizePath(config.DatabaseRootPath, tableReference);
             using Stream readStream = File.OpenRead(path);
             PxFileMetadataReader metadataReader = new();
-            IAsyncEnumerable<KeyValuePair<string, string>> entries = metadataReader.ReadMetadataAsync(readStream, config.Encoding);
+            Encoding encoding = await metadataReader.GetEncodingAsync(readStream);
+            readStream.Position = 0;
+            IAsyncEnumerable<KeyValuePair<string, string>> entries = metadataReader.ReadMetadataAsync(readStream, encoding);
             MatrixMetadataBuilder builder = new();
             MatrixMetadata meta = await builder.BuildAsync(entries);
             AssignOrdinalDimensionTypes(meta);
@@ -230,13 +247,13 @@ namespace PxGraf.Datasource.FileDatasource
             {
                 int aliasFileSuffixLength = PxSyntaxConstants.ALIAS_FILE_PREFIX.Length + 1; // +1 for the underscore
                 string lang = new([.. Path.GetFileNameWithoutExtension(aliasFile).Skip(aliasFileSuffixLength)]);
-                string alias = GetAliasFronFile(aliasFile);
+                string alias = GetAliasFromFile(aliasFile);
                 translatedNames.Add(lang, alias.Trim());
             }
             return new MultilanguageString(translatedNames);
         }
 
-        private string GetAliasFronFile(string path)
+        private string GetAliasFromFile(string path)
         {
             using FileStream? fs = File.OpenRead(path);
             Encoding encoding = config.Encoding;

@@ -28,4 +28,22 @@
   <ItemGroup>
     <None Remove="build\**" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="src\components\CellCount\__snapshots__\" />
+    <Folder Include="src\components\ChartTypeSelector\__snapshots__\" />
+    <Folder Include="src\components\Header\__snapshots__\" />
+    <Folder Include="src\components\LanguageSelector\__snapshots__\" />
+    <Folder Include="src\components\MetaEditor\__snapshots__\" />
+    <Folder Include="src\components\NestedList\__snapshots__\" />
+    <Folder Include="src\components\SaveDialog\__snapshots__\" />
+    <Folder Include="src\components\SaveResultDialog\__snapshots__\" />
+    <Folder Include="src\components\SelectableVariableMenus\__snapshots__\" />
+    <Folder Include="src\components\TabPanel\__snapshots__\" />
+    <Folder Include="src\components\VariableSelection\FilterComponents\__snapshots__\" />
+    <Folder Include="src\components\VariableSelection\__snapshots__\" />
+    <Folder Include="src\components\VisualizationSettingsControls\TypeSpecificControls\__snapshots__\" />
+    <Folder Include="src\components\VisualizationSettingsControls\UtilityComponents\__snapshots__\" />
+    <Folder Include="src\views\Editor\__snapshots__\" />
+    <Folder Include="src\views\TableListSelection\__snapshots__\" />
+  </ItemGroup>
 </Project>
