@@ -15,16 +15,16 @@ namespace PxGraf.Datasource.DatabaseConnection
         /// <summary>
         /// Asynchronously lists all of the tables from the specified level of the database.
         /// </summary>
-        /// <param name="groupHierarcy">Defines the database level where to list the tables from.</param>
+        /// <param name="groupHierarchy">Defines the database level where to list the tables from.</param>
         /// <returns>The tables from a level of a database.</returns>
-        public Task<List<PxTableReference>> GetTablesAsync(IReadOnlyList<string> groupHierarcy);
+        public Task<List<PxTableReference>> GetTablesAsync(IReadOnlyList<string> groupHierarchy);
 
         /// <summary>
         /// Asynchronously lists the group header items from the specified level of the database.
         /// </summary>
-        /// <param name="groupHierarcy">Defines the database level where to list the items from.</param>
+        /// <param name="groupHierarchy">Defines the database level where to list the items from.</param>
         /// <returns>The subgroups from a level of a database.</returns>
-        public Task<List<DatabaseGroupHeader>> GetGroupHeadersAsync(IReadOnlyList<string> groupHierarcy);
+        public Task<List<DatabaseGroupHeader>> GetGroupHeadersAsync(IReadOnlyList<string> groupHierarchy);
 
         /// <summary>
         /// Asynchronously gets the last time a table has been changed.

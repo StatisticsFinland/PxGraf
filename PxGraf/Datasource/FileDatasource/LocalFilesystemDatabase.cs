@@ -35,19 +35,19 @@ namespace PxGraf.Datasource.FileDatasource
         /// <summary>
         /// Returns tables in a database group.
         /// </summary>
-        /// <param name="groupHierarcy">Path to the group.</param>
+        /// <param name="groupHierarchy">Path to the group.</param>
         /// <returns>List of tables in the group.</returns>
-        public async Task<List<PxTableReference>> GetTablesAsync(IReadOnlyList<string> groupHierarcy)
+        public async Task<List<PxTableReference>> GetTablesAsync(IReadOnlyList<string> groupHierarchy)
         {
-            return await Task.Factory.StartNew(() => GetTables(groupHierarcy));
+            return await Task.Factory.StartNew(() => GetTables(groupHierarchy));
         }
 
-        private List<PxTableReference> GetTables(IReadOnlyList<string> groupHierarcy)
+        private List<PxTableReference> GetTables(IReadOnlyList<string> groupHierarchy)
         {
-            if (PathUtils.DatabaseIsWhitelisted(groupHierarcy, config))
+            if (groupHierarchy.Count > 0 && PathUtils.DatabaseIsWhitelisted(groupHierarchy, config))
             {
                 List<PxTableReference> tables = [];
-                string path = PathUtils.BuildAndSanitizePath(config.DatabaseRootPath, groupHierarcy);
+                string path = PathUtils.BuildAndSanitizePath(config.DatabaseRootPath, groupHierarchy);
                 foreach (string pxFile in Directory.EnumerateFiles(path, PxSyntaxConstants.PX_FILE_FILTER))
                 {
                     tables.Add(new PxTableReference(Path.GetRelativePath(config.DatabaseRootPath, pxFile)));
@@ -57,14 +57,14 @@ namespace PxGraf.Datasource.FileDatasource
             else return [];
         }
 
-        public Task<List<DatabaseGroupHeader>> GetGroupHeadersAsync(IReadOnlyList<string> groupHierarcy)
+        public Task<List<DatabaseGroupHeader>> GetGroupHeadersAsync(IReadOnlyList<string> groupHierarchy)
         {
-            return Task.Factory.StartNew(() => GetGroupHeaders(groupHierarcy));
+            return Task.Factory.StartNew(() => GetGroupHeaders(groupHierarchy));
         }
 
-        public List<DatabaseGroupHeader> GetGroupHeaders(IReadOnlyList<string> groupHierarcy)
+        public List<DatabaseGroupHeader> GetGroupHeaders(IReadOnlyList<string> groupHierarchy)
         {
-            if (groupHierarcy.Count > 0 && !PathUtils.DatabaseIsWhitelisted(groupHierarcy, config))
+            if (groupHierarchy.Count > 0 && !PathUtils.DatabaseIsWhitelisted(groupHierarchy, config))
             {
                 return [];
             }
@@ -72,10 +72,10 @@ namespace PxGraf.Datasource.FileDatasource
             {
                 List<DatabaseGroupHeader> headers = [];
 
-                string path = PathUtils.BuildAndSanitizePath(config.DatabaseRootPath, groupHierarcy);
+                string path = PathUtils.BuildAndSanitizePath(config.DatabaseRootPath, groupHierarchy);
                 foreach (string directory in Directory.EnumerateDirectories(path))
                 {
-                    if (groupHierarcy.Count == 0 && !PathUtils.DatabaseIsWhitelisted(directory, config))
+                    if (groupHierarchy.Count == 0 && !PathUtils.DatabaseIsWhitelisted(new DirectoryInfo(directory).Name, config))
                     {
                         continue;
                     }
@@ -94,6 +94,10 @@ namespace PxGraf.Datasource.FileDatasource
         /// <inheritdoc/>
         public DateTime GetLastWriteTime(PxTableReference tableReference)
         {
+            if (!PathUtils.DatabaseIsWhitelisted(tableReference.Hierarchy, config))
+            {
+                throw new UnauthorizedAccessException($"Database {tableReference.Hierarchy[^1]} is not whitelisted");
+            }
             string path = PathUtils.BuildAndSanitizePath(config.DatabaseRootPath, tableReference.Hierarchy);
             return Directory.GetLastWriteTime(path);
         }
@@ -101,6 +105,10 @@ namespace PxGraf.Datasource.FileDatasource
         /// <inheritdoc/> 
         public async Task<DateTime> GetLastWriteTimeAsync(PxTableReference tableReference)
         {
+            if (!PathUtils.DatabaseIsWhitelisted(tableReference.Hierarchy, config))
+            {
+                throw new UnauthorizedAccessException($"Database {tableReference.Hierarchy[^1]} is not whitelisted");
+            }
             string path = PathUtils.BuildAndSanitizePath(config.DatabaseRootPath, tableReference);
             return await Task.Factory.StartNew(() => Directory.GetLastWriteTime(path));
         }
@@ -108,6 +116,11 @@ namespace PxGraf.Datasource.FileDatasource
         /// <inheritdoc/> 
         public Matrix<DecimalDataValue> GetMatrix(PxTableReference tableReference, IReadOnlyMatrixMetadata meta, IMatrixMap completeMap)
         {
+            if (!PathUtils.DatabaseIsWhitelisted(tableReference.Hierarchy, config))
+            {
+                throw new UnauthorizedAccessException($"Database {tableReference.Hierarchy[^1]} is not whitelisted");
+            }
+
             string path = PathUtils.BuildAndSanitizePath(config.DatabaseRootPath, tableReference);
             DataIndexer indexer = new(completeMap, meta);
             Matrix<DecimalDataValue> output = new(meta, new DecimalDataValue[indexer.DataLength]);
@@ -125,6 +138,11 @@ namespace PxGraf.Datasource.FileDatasource
             CancellationToken? cancellationToken = null
             )
         {
+            if (!PathUtils.DatabaseIsWhitelisted(tableReference.Hierarchy, config))
+            {
+                throw new UnauthorizedAccessException($"Database {tableReference.Hierarchy[^1]} is not whitelisted");
+            }
+
             string path = PathUtils.BuildAndSanitizePath(config.DatabaseRootPath, tableReference);
             DataIndexer indexer = new(completeTableMap, meta);
             Matrix<DecimalDataValue> output = new(meta, new DecimalDataValue[indexer.DataLength]);
@@ -138,6 +156,11 @@ namespace PxGraf.Datasource.FileDatasource
         /// <inheritdoc/> 
         public async Task<IReadOnlyMatrixMetadata> GetMatrixMetadataAsync(PxTableReference tableReference)
         {
+            if (!PathUtils.DatabaseIsWhitelisted(tableReference.Hierarchy, config))
+            {
+                throw new UnauthorizedAccessException($"Database {tableReference.Hierarchy[^1]} is not whitelisted");
+            }
+
             string path = PathUtils.BuildAndSanitizePath(config.DatabaseRootPath, tableReference);
             using Stream readStream = File.OpenRead(path);
             PxFileMetadataReader metadataReader = new();
