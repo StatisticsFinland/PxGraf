@@ -163,32 +163,34 @@ namespace PxGraf.Datasource.FileDatasource
         /// <exception cref="InvalidOperationException">Thrown if source property is not found from metadata.</exception>
         private static void AssignSourceToContentDimensionValues(MatrixMetadata meta)
         {
-            ContentDimension contentDimension = meta.GetContentDimension();
-            foreach (ContentDimensionValue cdv in contentDimension.Values)
+            if (meta.TryGetContentDimension(out ContentDimension? contentDimension))
             {
-                // Primarily use source information from the content dimension value.
-                if (cdv.AdditionalProperties.ContainsKey(PxSyntaxConstants.SOURCE_KEY)) continue;
-                
-                // If the value has no source, use the source of the content dimension.
-                if (contentDimension.AdditionalProperties.TryGetValue(PxSyntaxConstants.SOURCE_KEY, out MetaProperty? prop) &&
-                    prop is MultilanguageStringProperty dimMlsp)
+                foreach (ContentDimensionValue cdv in contentDimension.Values)
                 {
-                    cdv.AdditionalProperties.TryAdd(PxSyntaxConstants.SOURCE_KEY, dimMlsp);
-                }
-                // If the dimension has no source, use the source of the table.
-                else if (meta.AdditionalProperties.TryGetValue(PxSyntaxConstants.SOURCE_KEY, out MetaProperty? tableProp) &&
-                    tableProp is MultilanguageStringProperty tableMlsp)
-                {
-                    cdv.AdditionalProperties.TryAdd(PxSyntaxConstants.SOURCE_KEY, tableMlsp);
-                }
-                else
-                {
-                    throw new InvalidOperationException("Source property not found from metadata.");
-                }
-            }
+                    // Primarily use source information from the content dimension value.
+                    if (cdv.AdditionalProperties.ContainsKey(PxSyntaxConstants.SOURCE_KEY)) continue;
 
-            meta.AdditionalProperties.Remove(PxSyntaxConstants.SOURCE_KEY);
-            contentDimension.AdditionalProperties.Remove(PxSyntaxConstants.SOURCE_KEY);
+                    // If the value has no source, use the source of the content dimension.
+                    if (contentDimension.AdditionalProperties.TryGetValue(PxSyntaxConstants.SOURCE_KEY, out MetaProperty? prop) &&
+                        prop is MultilanguageStringProperty dimMlsp)
+                    {
+                        cdv.AdditionalProperties.TryAdd(PxSyntaxConstants.SOURCE_KEY, dimMlsp);
+                    }
+                    // If the dimension has no source, use the source of the table.
+                    else if (meta.AdditionalProperties.TryGetValue(PxSyntaxConstants.SOURCE_KEY, out MetaProperty? tableProp) &&
+                        tableProp is MultilanguageStringProperty tableMlsp)
+                    {
+                        cdv.AdditionalProperties.TryAdd(PxSyntaxConstants.SOURCE_KEY, tableMlsp);
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException("Source property not found from metadata.");
+                    }
+                }
+
+                meta.AdditionalProperties.Remove(PxSyntaxConstants.SOURCE_KEY);
+                contentDimension.AdditionalProperties.Remove(PxSyntaxConstants.SOURCE_KEY);
+            }
         }
 
         /// <summary>
