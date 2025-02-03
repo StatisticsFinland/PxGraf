@@ -1,9 +1,11 @@
 ﻿using NUnit.Framework;
+using PxGraf.Datasource.DatabaseConnection;
 using PxGraf.Datasource.FileDatasource;
 using PxGraf.Models.Queries;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 
 namespace UnitTests.DatasourceTests
 {
@@ -63,6 +65,39 @@ namespace UnitTests.DatasourceTests
             string rootPath = Path.Combine("C:", "Foo");
             PxTableReference reference = new ([ "..", "Users", "Public" ], "file.px");
             Assert.Throws<UnauthorizedAccessException>(() => PathUtils.BuildAndSanitizePath(rootPath, reference));
+        }
+
+        [Test]
+        public void DatabaseIsWhitelistedWithEmptyWhitelistDoesNotTHrow()
+        {
+            string[] databaseWhitelist = [];
+            LocalFilesystemDatabaseConfig config = new(true, $"path{Path.DirectorySeparatorChar}to{Path.DirectorySeparatorChar}database", Encoding.Default, databaseWhitelist);
+            Assert.DoesNotThrow(() => PathUtils.DatabaseWhitelistCheck(["foo", "bar"], config));
+        }
+
+        [Test]
+        public void DatabaseIsWhitelistedWithWhitelistedDatabaseDoesNotTHrow()
+        {
+            string[] databaseWhitelist = ["foo"];
+            LocalFilesystemDatabaseConfig config = new(true, $"path{Path.DirectorySeparatorChar}to{Path.DirectorySeparatorChar}database", Encoding.Default, databaseWhitelist);
+            Assert.DoesNotThrow(() => PathUtils.DatabaseWhitelistCheck(["foo", "bar"], config));
+
+        }
+
+        [Test]
+        public void DatabaseIsWhitelistedWithNonWhitelistedDatabaseThrowsDirectoryNotFoundException()
+        {
+            string[] databaseWhitelist = ["baz"];
+            LocalFilesystemDatabaseConfig config = new(true, $"path{Path.DirectorySeparatorChar}to{Path.DirectorySeparatorChar}database", Encoding.Default, databaseWhitelist);
+            Assert.Throws<DirectoryNotFoundException>(() => PathUtils.DatabaseWhitelistCheck(["foo", "bar"], config));
+        }
+
+        [Test]
+        public void DatabaseIsWhitelistedWithSubgroupNameAsWhitelisteddDatabaseThrowsDirectoryNotFoundException()
+        {
+            string[] databaseWhitelist = ["foo"];
+            LocalFilesystemDatabaseConfig config = new(true, $"path{Path.DirectorySeparatorChar}to{Path.DirectorySeparatorChar}database", Encoding.Default, databaseWhitelist);
+            Assert.Throws<DirectoryNotFoundException>(() => PathUtils.DatabaseWhitelistCheck(["bar", "foo"], config));
         }
     }
 }

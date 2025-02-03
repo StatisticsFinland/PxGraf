@@ -21,6 +21,33 @@ namespace PxGraf.Datasource.FileDatasource
             return BuildAndSanitizePath(rootPath, reference.ToPath());
         }
 
+        /// <summary>
+        /// TODO: summary
+        /// </summary>
+        /// <param name="groupHierarchy"></param>
+        /// <param name="config"></param>
+        public static void DatabaseWhitelistCheck(IReadOnlyList<string> groupHierarchy, LocalFilesystemDatabaseConfig config)
+        {
+            if (groupHierarchy.Count == 0 || config.DatabaseWhitelist.Length == 0)
+                return;
+
+            DatabaseWhitelistCheck(groupHierarchy[0], config); // Database name is the first part of the groupHierarchy
+        }
+
+        /// <summary>
+        /// TODO: Summary
+        /// </summary>
+        /// <param name="databaseName"></param>
+        /// <param name="config"></param>
+        /// <exception cref="DirectoryNotFoundException"></exception>
+        public static void DatabaseWhitelistCheck(string databaseName, LocalFilesystemDatabaseConfig config)
+        {
+            if (config.DatabaseWhitelist.Length > 0 && !config.DatabaseWhitelist.Contains(databaseName, StringComparer.OrdinalIgnoreCase))
+            {
+                throw new DirectoryNotFoundException($"Database {databaseName} is not defined in the allowed databases");
+            }
+        }
+
         private static string BuildAndSanitizePath(string rootPath, string userPath)
         {
             // Get the full path of the root folder
@@ -39,16 +66,6 @@ namespace PxGraf.Datasource.FileDatasource
             }
 
             return fullPath;
-        }
-
-        public static bool DatabaseIsWhitelisted(IReadOnlyList<string> groupHierarchy, LocalFilesystemDatabaseConfig config)
-        {
-            return DatabaseIsWhitelisted(groupHierarchy[0], config);
-        }
-
-        public static bool DatabaseIsWhitelisted(string databaseName, LocalFilesystemDatabaseConfig config)
-        {
-            return config.DatabaseWhitelist.Length == 0 || config.DatabaseWhitelist.Contains(databaseName, StringComparer.OrdinalIgnoreCase);
         }
     }
 }
