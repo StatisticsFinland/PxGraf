@@ -22,10 +22,11 @@ namespace PxGraf.Datasource.FileDatasource
         }
 
         /// <summary>
-        /// TODO: summary
+        /// Checks whether a given group hierarchy is under a database that has been whitelisted
         /// </summary>
-        /// <param name="groupHierarchy"></param>
-        /// <param name="config"></param>
+        /// <param name="groupHierarchy">List of strings that define the group hierarchy</param>
+        /// <param name="config"><see cref="LocalFilesystemDatabaseConfig"/> configuration object</param>
+        /// <exception cref="DirectoryNotFoundException"> if the database directory is not included in the whitelist</exception>
         public static void DatabaseWhitelistCheck(IReadOnlyList<string> groupHierarchy, LocalFilesystemDatabaseConfig config)
         {
             if (groupHierarchy.Count == 0 || config.DatabaseWhitelist.Length == 0)
@@ -35,11 +36,11 @@ namespace PxGraf.Datasource.FileDatasource
         }
 
         /// <summary>
-        /// TODO: Summary
+        /// Checks whether a given database name is included in the local file system database whitelist
         /// </summary>
-        /// <param name="databaseName"></param>
-        /// <param name="config"></param>
-        /// <exception cref="DirectoryNotFoundException"></exception>
+        /// <param name="databaseName">Name of the database to check</param>
+        /// <param name="config"><see cref="LocalFilesystemDatabaseConfig"/> configuration object</param>
+        /// <exception cref="DirectoryNotFoundException"> if the database name is not included in the whitelist</exception>
         public static void DatabaseWhitelistCheck(string databaseName, LocalFilesystemDatabaseConfig config)
         {
             if (config.DatabaseWhitelist.Length > 0 && !config.DatabaseWhitelist.Contains(databaseName, StringComparer.OrdinalIgnoreCase))
