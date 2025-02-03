@@ -6,7 +6,7 @@ exports[`Rendering test renders correctly 1`] = `
     class="MuiDialogContent-root MuiDialogContent-dividers css-1t4vnk2-MuiDialogContent-root"
   >
     <div
-      class="MuiContainer-root MuiContainer-maxWidthLg sc-blHHSb loUWaI css-1oqqzyl-MuiContainer-root"
+      class="MuiContainer-root MuiContainer-maxWidthLg sc-KXCwU FJNwG css-1oqqzyl-MuiContainer-root"
     >
       <span
         class="MuiCircularProgress-root MuiCircularProgress-indeterminate MuiCircularProgress-colorPrimary css-18lrjg1-MuiCircularProgress-root"
