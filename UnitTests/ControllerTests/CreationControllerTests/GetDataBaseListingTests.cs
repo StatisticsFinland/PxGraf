@@ -6,13 +6,36 @@ using Px.Utils.Language;
 using PxGraf.Controllers;
 using System;
 using PxGraf.Utility;
+using Microsoft.AspNetCore.Mvc;
+using PxGraf.Models.Responses;
+using Microsoft.Extensions.Configuration;
+using PxGraf.Language;
+using UnitTests.Fixtures;
+using PxGraf.Settings;
 
 namespace UnitTests.ControllerTests.CreationControllerTests
 {
     public class GetDataBaseListingTests
     {
+        [OneTimeSetUp]
+        public void DoSetup()
+        {
+            Localization.Load(TranslationFixture.DefaultLanguage, TranslationFixture.Translations);
+
+            Dictionary<string, string> settings = new()
+            {
+                {"LocalFilesystemDatabaseConfig:Encoding", "latin1"},
+                {"LocalFilesystemDatabaseConfig:DatabaseWhitelist:0", "StatFin" }
+            };
+
+            IConfiguration configuration = new ConfigurationBuilder()
+                .AddInMemoryCollection(settings)
+                .Build();
+            Configuration.Load(configuration);
+        }
+
         [Test]
-        public async Task GetDatabaseListingAsync_EmptyPath_ReturnsHeaderGroups()
+        public async Task GetDatabaseListingAsync_EmptyPath_ReturnsWhitelistedHeaderGroups()
         {
             // Arrange
             Dictionary<string, string> header1Name = new()
@@ -29,19 +52,25 @@ namespace UnitTests.ControllerTests.CreationControllerTests
 
             List<DatabaseGroupHeader> expectedHeaders =
             [
-                new DatabaseGroupHeader("header1", ["fi", "en"], new MultilanguageString(header1Name)),
-                new DatabaseGroupHeader("header2", ["fi", "en"], new MultilanguageString(header2Name))
+                new DatabaseGroupHeader("StatFin", ["fi", "en"], new MultilanguageString(header1Name)),
             ];
-            DatabaseGroupContents expectedContents = new(expectedHeaders, []);
-            CreationController controller = TestCreationControllerBuilder.BuildController([], [], expectedContents);
+
+            List<DatabaseGroupHeader> allHeaders =
+            [
+                new DatabaseGroupHeader("StatFin", ["fi", "en"], new MultilanguageString(header1Name)),
+                new DatabaseGroupHeader("NotStatFin", ["fi", "en"], new MultilanguageString(header2Name))
+            ];
+
+            DatabaseGroupContents allDatabases = new(allHeaders, []);
+            CreationController controller = TestCreationControllerBuilder.BuildController([], [], allDatabases);
 
             // Act
-            DatabaseGroupContents result = await controller.GetDataBaseListingAsync(null);
+            ActionResult<DatabaseGroupContents> actionResult = await controller.GetDataBaseListingAsync(null);
 
             // Assert
-            Assert.That(result, Is.Not.Null);
-            Assert.That(result.Headers, Is.EqualTo(expectedHeaders));
-            Assert.That(expectedHeaders[0].Code, Is.EqualTo(result.Headers[0].Code));
+            Assert.That(actionResult.Value, Is.Not.Null);
+            Assert.That(actionResult.Value.Headers.Count, Is.EqualTo(expectedHeaders.Count));
+            Assert.That(expectedHeaders[0].Code, Is.EqualTo(actionResult.Value.Headers[0].Code));
         }
 
         [Test]
@@ -71,12 +100,45 @@ namespace UnitTests.ControllerTests.CreationControllerTests
             CreationController controller = TestCreationControllerBuilder.BuildController([], [], expectedContents);
 
             // Act
-            DatabaseGroupContents result = await controller.GetDataBaseListingAsync("database/subgroup/folder");
+            ActionResult<DatabaseGroupContents> actionResult = await controller.GetDataBaseListingAsync("StatFin/subgroup/folder");
 
             // Assert
-            Assert.That(result, Is.Not.Null);
-            Assert.That(result.Files, Is.EqualTo(expectedTables));
-            Assert.That(expectedTables[0].FileName, Is.EqualTo(result.Files[0].FileName));
+            Assert.That(actionResult.Value, Is.Not.Null);
+            Assert.That(actionResult.Value.Files, Is.EqualTo(expectedTables));
+            Assert.That(expectedTables[0].FileName, Is.EqualTo(actionResult.Value.Files[0].FileName));
+        }
+
+        [Test]
+        public async Task GetDatabaseListingAsync_WithPathWithUnallowedDatabase_ReturnsNotFound()
+        {
+            // Arrange
+            Dictionary<string, string> table1Name = new()
+            {
+                ["fi"] = "table1",
+                ["en"] = "table1.en"
+            };
+
+            Dictionary<string, string> table2Name = new()
+            {
+                ["fi"] = "table2",
+                ["en"] = "table2.en"
+            };
+
+            DateTime lastUpdated = PxSyntaxConstants.ParseDateTime("2021-01-01T00:00:00.000Z");
+
+            List<DatabaseTable> expectedTables =
+            [
+                new DatabaseTable("table1", new(table1Name), lastUpdated, ["fi, en"]),
+                new DatabaseTable("table2", new(table2Name), lastUpdated, ["fi, en"]),
+            ];
+            DatabaseGroupContents expectedContents = new([], expectedTables);
+            CreationController controller = TestCreationControllerBuilder.BuildController([], [], expectedContents);
+
+            // Act
+            ActionResult<DatabaseGroupContents> actionResult = await controller.GetDataBaseListingAsync("database/subgroup/folder");
+
+            // Assert
+            Assert.That(actionResult.Result, Is.InstanceOf<NotFoundResult>());
         }
     }
 }

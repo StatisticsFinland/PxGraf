@@ -3,7 +3,6 @@ using PxGraf.Datasource.DatabaseConnection;
 using PxGraf.Models.Queries;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.IO;
 using System.Linq;
 
@@ -25,37 +24,31 @@ namespace PxGraf.Datasource.FileDatasource
         /// Checks whether a given group hierarchy is under a database that has been whitelisted
         /// </summary>
         /// <param name="groupHierarchy">List of strings that define the group hierarchy</param>
-        /// <param name="config"><see cref="LocalFilesystemDatabaseConfig"/> configuration object</param>
+        /// <param name="whitelist">List of allowed databases</param>
         /// <returns>True if the first part of the group hierarchy is included in the whitelisted database names or the list doesn't exist. Otherwise false.</returns>
-        /// <exception cref="DirectoryNotFoundException"> if the database directory is not included in the whitelist</exception>
-        public static bool IsDatabaseWhitelisted(IReadOnlyList<string> groupHierarchy, LocalFilesystemDatabaseConfig config)
+        public static bool IsDatabaseWhitelisted(IReadOnlyList<string> groupHierarchy, string[] whitelist)
         {
-            if (groupHierarchy.Count == 0 || config.DatabaseWhitelist.Length == 0)
+            if (groupHierarchy.Count == 0 || whitelist.Length == 0)
                 return true;
 
-            return IsDatabaseWhitelisted(groupHierarchy[0], config, true); // Database name is the first part of the groupHierarchy
+            return IsDatabaseWhitelisted(groupHierarchy[0], whitelist); // Database name is the first part of the groupHierarchy
         }
 
         /// <summary>
         /// Checks whether a given database name is included in the local file system database whitelist
         /// </summary>
         /// <param name="databaseName">Name of the database to check</param>
-        /// <param name="config"><see cref="LocalFilesystemDatabaseConfig"/> configuration object</param>
-        /// <param name="throwException">Whether to throw an exception if the database is not included in the whitelist</param>
+        /// <param name="whitelist">List of allowed databases</param>
         /// <returns>True if the given name is included in the whitelisted databases array, or database whitelist doesn't exist. Otherwise false.</returns>
-        /// <exception cref="DirectoryNotFoundException"> if the database name is not included in the whitelist</exception>
-        public static bool IsDatabaseWhitelisted(string databaseName, LocalFilesystemDatabaseConfig config, bool throwException)
+        public static bool IsDatabaseWhitelisted(string databaseName, string[] whitelist)
         {
-            if (config.DatabaseWhitelist.Length > 0 && !config.DatabaseWhitelist.Contains(databaseName, StringComparer.OrdinalIgnoreCase))
+            if (whitelist.Length == 0 || whitelist.Contains(databaseName, StringComparer.OrdinalIgnoreCase))
             {
-                if (throwException)
-                    throw new DirectoryNotFoundException($"Database {databaseName} is not defined in the allowed databases");
-
-                return false;
+                return true;
             }
             else
             {
-                return true;
+                return false;
             }
         }
 

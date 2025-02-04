@@ -24,6 +24,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
+using PxGraf.Datasource.FileDatasource;
 
 namespace PxGraf.Controllers
 {
@@ -39,16 +40,32 @@ namespace PxGraf.Controllers
         /// Returns a list of database items from the given level of the data base based on the dbPath.
         /// </summary>
         /// <param name="dbPath">Path to the database.</param>
-        /// <returns><see cref="DatabaseGroupContents"/> object that contains either the tables or listing groups of the given database level.</returns>
+        /// <returns>
+        /// <see cref="DatabaseGroupContents"/> object that contains either the tables or listing groups of the given database level.
+        /// If a database whitelist is configured and the database is not whitelisted, "Not Found" response is returned.
+        /// </returns>
         [HttpGet("data-bases/{*dbPath}")]
-        public async Task<DatabaseGroupContents> GetDataBaseListingAsync([FromRoute] string dbPath)
+        public async Task<ActionResult<DatabaseGroupContents>> GetDataBaseListingAsync([FromRoute] string dbPath)
         {
             const string LOGMSG = "Getting the database listing. GET: api/creation/data-bases/{DbPath}";
             _logger.LogDebug(LOGMSG, dbPath);
 
             string[] hierarchy = dbPath is not null ? dbPath.Split("/") : [];
+            if (hierarchy.Length > 0 && !PathUtils.IsDatabaseWhitelisted(hierarchy, Configuration.Current.LocalFilesystemDatabaseConfig.DatabaseWhitelist))
+            {
+                _logger.LogWarning("Database {DbPath} is not whitelisted.", dbPath);
+                return NotFound();
+            }
             // Find databases and tables with all available languages and add them to the response
             DatabaseGroupContents result = await _datasource.GetGroupContentsCachedAsync(hierarchy);
+
+            // If listing databases, filter out databases that are not whitelisted
+            if (hierarchy.Length == 0 && Configuration.Current.LocalFilesystemDatabaseConfig.DatabaseWhitelist.Length > 0)
+            {
+                List<DatabaseGroupHeader> filteredHeaders = result.Headers.Where(header => PathUtils.IsDatabaseWhitelisted(header.Code, Configuration.Current.LocalFilesystemDatabaseConfig.DatabaseWhitelist)).ToList();
+                _logger.LogDebug("data-bases/{DbPath} result: {Result}", dbPath, result);
+                return new DatabaseGroupContents(filteredHeaders, result.Files);
+            }
 
             _logger.LogDebug("data-bases/{DbPath} result: {Result}", dbPath, result);
             return result;
@@ -58,12 +75,23 @@ namespace PxGraf.Controllers
         /// Returns all metadata from the table
         /// </summary>
         /// <param name="tablePath">Path to the table</param>
-        /// <returns>Serialized json of <see cref="IReadOnlyMatrixMetadata"/> that contains the metadata of the cube</returns>
+        /// <returns>
+        /// Serialized json of <see cref="IReadOnlyMatrixMetadata"/> that contains the metadata of the cube
+        /// If the database is not whitelisted, "Not Found" response is returned.
+        /// </returns>
         [HttpGet("cube-meta/{*tablePath}")]
         public async Task<ActionResult<IReadOnlyMatrixMetadata>> GetCubeMetaAsync([FromRoute] string tablePath)
         {
             _logger.LogDebug("Requested cube meta for {TablePath} GET: api/creation/cube-meta", tablePath);
-            IReadOnlyMatrixMetadata readOnlyMeta = await _datasource.GetMatrixMetadataCachedAsync(new(tablePath, '/'));
+
+            PxTableReference tableReference = new(tablePath, '/');
+            if (!PathUtils.IsDatabaseWhitelisted(tableReference.Hierarchy, Configuration.Current.LocalFilesystemDatabaseConfig.DatabaseWhitelist))
+            {
+                _logger.LogWarning("Database {TablePath} is not whitelisted.", tablePath);
+                return NotFound();
+            }
+
+            IReadOnlyMatrixMetadata readOnlyMeta = await _datasource.GetMatrixMetadataCachedAsync(tableReference);
             if (readOnlyMeta == null)
             {
                 _logger.LogWarning("cube-meta result or {TablePath}: null. May result from a dimension without values.", tablePath);
@@ -78,15 +106,26 @@ namespace PxGraf.Controllers
         /// Validates whether the given table has required metadata for visualization.
         /// </summary>
         /// <param name="tablePath">Path to the table.</param>
-        /// <returns><see cref="TableMetaValidationResult"/> object that contains info about whether the table's metadata is sufficient for visualization.</returns>
+        /// <returns>
+        /// <see cref="TableMetaValidationResult"/> object that contains info about whether the table's metadata is sufficient for visualization.
+        /// If the database is not whitelisted, "Not Found" response is returned.
+        /// </returns>
         [HttpGet("validate-table-metadata/{*tablePath}")]
-        public async Task<TableMetaValidationResult> ValidateTableMetaData([FromRoute] string tablePath)
+        public async Task<ActionResult<TableMetaValidationResult>> ValidateTableMetaData([FromRoute] string tablePath)
         {
             _logger.LogDebug("Validating table metadata for {TablePath} GET: api/creation/validate-table-metadata", tablePath);
-            IReadOnlyMatrixMetadata tableMeta = await _datasource.GetMatrixMetadataCachedAsync(new(tablePath, '/'));
+
+            PxTableReference tableReference = new(tablePath, '/');
+            if (!PathUtils.IsDatabaseWhitelisted(tableReference.Hierarchy, Configuration.Current.LocalFilesystemDatabaseConfig.DatabaseWhitelist))
+            {
+                _logger.LogWarning("Database {TablePath} is not whitelisted.", tablePath);
+                return NotFound();
+            }
+
+            IReadOnlyMatrixMetadata tableMeta = await _datasource.GetMatrixMetadataCachedAsync(tableReference);
             if (tableMeta is null)
             {
-                return new(
+                return new TableMetaValidationResult(
                     tableHasContentDimension: false,
                     tableHasTimeDimension: false,
                     allDimensionsContainValues: false
@@ -97,7 +136,7 @@ namespace PxGraf.Controllers
 #nullable enable
                 IReadOnlyDimension? contDim = tableMeta.Dimensions.FirstOrDefault(v => v.Type == DimensionType.Content); 
                 IReadOnlyDimension? timeDim = tableMeta.Dimensions.FirstOrDefault(v => v.Type == DimensionType.Time);
-                return new(
+                return new TableMetaValidationResult(
                     contDim is not null && contDim.Values.Count > 0,
                     timeDim is not null && timeDim.Values.Count > 0,
                     tableMeta.Dimensions.All(v => v.Values.Count > 0)
