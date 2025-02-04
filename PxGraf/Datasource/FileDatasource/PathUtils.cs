@@ -26,13 +26,14 @@ namespace PxGraf.Datasource.FileDatasource
         /// </summary>
         /// <param name="groupHierarchy">List of strings that define the group hierarchy</param>
         /// <param name="config"><see cref="LocalFilesystemDatabaseConfig"/> configuration object</param>
+        /// <returns>True if the first part of the group hierarchy is included in the whitelisted database names or the list doesn't exist. Otherwise false.</returns>
         /// <exception cref="DirectoryNotFoundException"> if the database directory is not included in the whitelist</exception>
-        public static void DatabaseWhitelistCheck(IReadOnlyList<string> groupHierarchy, LocalFilesystemDatabaseConfig config)
+        public static bool IsDatabaseWhitelisted(IReadOnlyList<string> groupHierarchy, LocalFilesystemDatabaseConfig config)
         {
             if (groupHierarchy.Count == 0 || config.DatabaseWhitelist.Length == 0)
-                return;
+                return true;
 
-            DatabaseWhitelistCheck(groupHierarchy[0], config); // Database name is the first part of the groupHierarchy
+            return IsDatabaseWhitelisted(groupHierarchy[0], config, true); // Database name is the first part of the groupHierarchy
         }
 
         /// <summary>
@@ -40,12 +41,21 @@ namespace PxGraf.Datasource.FileDatasource
         /// </summary>
         /// <param name="databaseName">Name of the database to check</param>
         /// <param name="config"><see cref="LocalFilesystemDatabaseConfig"/> configuration object</param>
+        /// <param name="throwException">Whether to throw an exception if the database is not included in the whitelist</param>
+        /// <returns>True if the given name is included in the whitelisted databases array, or database whitelist doesn't exist. Otherwise false.</returns>
         /// <exception cref="DirectoryNotFoundException"> if the database name is not included in the whitelist</exception>
-        public static void DatabaseWhitelistCheck(string databaseName, LocalFilesystemDatabaseConfig config)
+        public static bool IsDatabaseWhitelisted(string databaseName, LocalFilesystemDatabaseConfig config, bool throwException)
         {
             if (config.DatabaseWhitelist.Length > 0 && !config.DatabaseWhitelist.Contains(databaseName, StringComparer.OrdinalIgnoreCase))
             {
-                throw new DirectoryNotFoundException($"Database {databaseName} is not defined in the allowed databases");
+                if (throwException)
+                    throw new DirectoryNotFoundException($"Database {databaseName} is not defined in the allowed databases");
+
+                return false;
+            }
+            else
+            {
+                return true;
             }
         }
 

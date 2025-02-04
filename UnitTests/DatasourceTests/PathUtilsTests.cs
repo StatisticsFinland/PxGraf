@@ -68,20 +68,19 @@ namespace UnitTests.DatasourceTests
         }
 
         [Test]
-        public void DatabaseIsWhitelistedWithEmptyWhitelistDoesNotTHrow()
+        public void DatabaseIsWhitelistedWithEmptyWhitelistReturnsTrue()
         {
             string[] databaseWhitelist = [];
             LocalFilesystemDatabaseConfig config = new(true, $"path{Path.DirectorySeparatorChar}to{Path.DirectorySeparatorChar}database", Encoding.Default, databaseWhitelist);
-            Assert.DoesNotThrow(() => PathUtils.DatabaseWhitelistCheck(["foo", "bar"], config));
+            Assert.That(PathUtils.IsDatabaseWhitelisted(["foo", "bar"], config), Is.True);
         }
 
         [Test]
-        public void DatabaseIsWhitelistedWithWhitelistedDatabaseDoesNotTHrow()
+        public void DatabaseIsWhitelistedWithWhitelistedDatabaseReturnsTrue()
         {
             string[] databaseWhitelist = ["foo"];
             LocalFilesystemDatabaseConfig config = new(true, $"path{Path.DirectorySeparatorChar}to{Path.DirectorySeparatorChar}database", Encoding.Default, databaseWhitelist);
-            Assert.DoesNotThrow(() => PathUtils.DatabaseWhitelistCheck(["foo", "bar"], config));
-
+            Assert.That(PathUtils.IsDatabaseWhitelisted(["foo", "bar"], config), Is.True);
         }
 
         [Test]
@@ -89,7 +88,7 @@ namespace UnitTests.DatasourceTests
         {
             string[] databaseWhitelist = ["baz"];
             LocalFilesystemDatabaseConfig config = new(true, $"path{Path.DirectorySeparatorChar}to{Path.DirectorySeparatorChar}database", Encoding.Default, databaseWhitelist);
-            Assert.Throws<DirectoryNotFoundException>(() => PathUtils.DatabaseWhitelistCheck(["foo", "bar"], config));
+            Assert.Throws<DirectoryNotFoundException>(() => PathUtils.IsDatabaseWhitelisted(["foo", "bar"], config));
         }
 
         [Test]
@@ -97,7 +96,15 @@ namespace UnitTests.DatasourceTests
         {
             string[] databaseWhitelist = ["foo"];
             LocalFilesystemDatabaseConfig config = new(true, $"path{Path.DirectorySeparatorChar}to{Path.DirectorySeparatorChar}database", Encoding.Default, databaseWhitelist);
-            Assert.Throws<DirectoryNotFoundException>(() => PathUtils.DatabaseWhitelistCheck(["bar", "foo"], config));
+            Assert.Throws<DirectoryNotFoundException>(() => PathUtils.IsDatabaseWhitelisted(["bar", "foo"], config));
+        }
+
+        [Test]
+        public void DatabaseIsWhitelistedWithOnlyInvalidDatabaseNameReturnsFalse()
+        {
+            string[] databaseWhitelist = ["foo"];
+            LocalFilesystemDatabaseConfig config = new(true, $"path{Path.DirectorySeparatorChar}to{Path.DirectorySeparatorChar}database", Encoding.Default, databaseWhitelist);
+            Assert.That(PathUtils.IsDatabaseWhitelisted("bar", config, false), Is.False);
         }
     }
 }

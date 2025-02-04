@@ -56,6 +56,8 @@ Determines whether the local database with Px.Utils or PxWeb api is used.
 The path to the database root directory.
 #### LocalFileSystemDatabaseConfig.Encoding
 Name of the encoding used in the database.
+#### LocalFileSystemDatabaseConfig.DatabaseWhitelist
+List of directory names that are allowed to be accessed as database root directories. If empty, all directories are allowed.
 
 ## Translation files
 
