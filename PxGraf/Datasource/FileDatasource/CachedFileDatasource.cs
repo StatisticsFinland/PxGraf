@@ -84,7 +84,6 @@ namespace PxGraf.Datasource.FileDatasource
         }
 
         protected override async Task<MetaCacheHousing> GenerateNewMetaCacheHousingAsync(PxTableReference tableReference)
-
         {
             DateTime lastWritetime = await _datasource.GetLastWriteTimeAsync(tableReference);
             IReadOnlyMatrixMetadata meta = await _datasource.GetMatrixMetadataAsync(tableReference);
