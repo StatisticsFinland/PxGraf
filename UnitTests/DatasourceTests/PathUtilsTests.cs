@@ -1,9 +1,11 @@
 ﻿using NUnit.Framework;
+using PxGraf.Datasource.DatabaseConnection;
 using PxGraf.Datasource.FileDatasource;
 using PxGraf.Models.Queries;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 
 namespace UnitTests.DatasourceTests
 {
@@ -63,6 +65,41 @@ namespace UnitTests.DatasourceTests
             string rootPath = Path.Combine("C:", "Foo");
             PxTableReference reference = new ([ "..", "Users", "Public" ], "file.px");
             Assert.Throws<UnauthorizedAccessException>(() => PathUtils.BuildAndSanitizePath(rootPath, reference));
+        }
+
+        [Test]
+        public void DatabaseIsWhitelistedWithEmptyWhitelistReturnsTrue()
+        {
+            string[] databaseWhitelist = [];
+            Assert.That(PathUtils.IsDatabaseWhitelisted(["foo", "bar"], databaseWhitelist), Is.True);
+        }
+
+        [Test]
+        public void DatabaseIsWhitelistedWithWhitelistedDatabaseReturnsTrue()
+        {
+            string[] databaseWhitelist = ["foo"];
+            Assert.That(PathUtils.IsDatabaseWhitelisted(["foo", "bar"], databaseWhitelist), Is.True);
+        }
+
+        [Test]
+        public void DatabaseIsWhitelistedWithNonWhitelistedDatabaseReturnsFalse()
+        {
+            string[] databaseWhitelist = ["baz"];
+            Assert.That(PathUtils.IsDatabaseWhitelisted(["foo", "bar"], databaseWhitelist), Is.False);
+        }
+
+        [Test]
+        public void DatabaseIsWhitelistedWithSubgroupNameAsWhitelisteddDatabaseReturnsFalse()
+        {
+            string[] databaseWhitelist = ["foo"];
+            Assert.That(PathUtils.IsDatabaseWhitelisted(["bar", "foo"], databaseWhitelist), Is.False);
+        }
+
+        [Test]
+        public void DatabaseIsWhitelistedWithOnlyInvalidDatabaseNameReturnsFalse()
+        {
+            string[] databaseWhitelist = ["foo"];
+            Assert.That(PathUtils.IsDatabaseWhitelisted("bar", databaseWhitelist), Is.False);
         }
     }
 }
