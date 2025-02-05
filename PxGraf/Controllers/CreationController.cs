@@ -54,7 +54,7 @@ namespace PxGraf.Controllers
             string[] hierarchy = dbPath is not null ? dbPath.Split("/") : [];
             if (hierarchy.Length > 0 && !PathUtils.IsDatabaseWhitelisted(hierarchy, databaseWhitelist))
             {
-                _logger.LogWarning("Database {DbPath} is not whitelisted.", dbPath);
+                _logger.LogInformation("Database {DbPath} is not whitelisted.", dbPath);
                 return NotFound();
             }
             // Find databases and tables with all available languages and add them to the response
@@ -88,7 +88,7 @@ namespace PxGraf.Controllers
             PxTableReference tableReference = new(tablePath, '/');
             if (!PathUtils.IsDatabaseWhitelisted(tableReference.Hierarchy, databaseWhitelist))
             {
-                _logger.LogWarning("Database {TablePath} is not whitelisted.", tablePath);
+                _logger.LogInformation("Database {TablePath} is not whitelisted.", tablePath);
                 return NotFound();
             }
 
@@ -119,7 +119,7 @@ namespace PxGraf.Controllers
             PxTableReference tableReference = new(tablePath, '/');
             if (!PathUtils.IsDatabaseWhitelisted(tableReference.Hierarchy, databaseWhitelist))
             {
-                _logger.LogWarning("Database {TablePath} is not whitelisted.", tablePath);
+                _logger.LogInformation("Database {TablePath} is not whitelisted.", tablePath);
                 return NotFound();
             }
 

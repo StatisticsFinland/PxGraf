@@ -30,7 +30,8 @@ namespace UnitTests.Fixtures
                     { "Language:Available:0", "fi"},
                     { "Language:Available:1", "sv"},
                     { "Language:Available:2", "en"},
-                    { "LocalFilesystemDatabaseConfig:Encoding", "latin1"}
+                    { "LocalFilesystemDatabaseConfig:Encoding", "latin1"},
+                    { "LocalFilesystemDatabaseConfig:DatabaseWhitelist:0", "StatFin" }
             };
         }
     }

@@ -22,14 +22,8 @@ namespace UnitTests.ControllerTests.CreationControllerTests
         {
             Localization.Load(TranslationFixture.DefaultLanguage, TranslationFixture.Translations);
 
-            Dictionary<string, string> settings = new()
-            {
-                {"LocalFilesystemDatabaseConfig:Encoding", "latin1"},
-                {"LocalFilesystemDatabaseConfig:DatabaseWhitelist:0", "StatFin" }
-            };
-
             IConfiguration configuration = new ConfigurationBuilder()
-                .AddInMemoryCollection(settings)
+                .AddInMemoryCollection(TestInMemoryConfiguration.Get())
                 .Build();
             Configuration.Load(configuration);
         }
