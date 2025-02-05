@@ -145,7 +145,7 @@ exports[`Rendering test renders correctly 1`] = `
                     editMetadata.header
                   </label>
                   <div
-                    class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl sc-gtLWhw hXgXvF css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root"
+                    class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl sc-gtLWhw bPTTGW default css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root"
                   >
                     <input
                       aria-invalid="false"
@@ -335,7 +335,7 @@ exports[`Rendering test renders correctly 1`] = `
                                               editMetadata.valueName: fgfgfg1
                                             </label>
                                             <div
-                                              class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl sc-gtLWhw hXgXvF css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root"
+                                              class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl sc-gtLWhw bPTTGW default css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root"
                                             >
                                               <input
                                                 aria-invalid="false"
@@ -372,7 +372,7 @@ exports[`Rendering test renders correctly 1`] = `
                                               editMetadata.unit
                                             </label>
                                             <div
-                                              class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl sc-gtLWhw hXgXvF css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root"
+                                              class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl sc-gtLWhw bPTTGW default css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root"
                                             >
                                               <input
                                                 aria-invalid="false"
@@ -409,7 +409,7 @@ exports[`Rendering test renders correctly 1`] = `
                                               editMetadata.source
                                             </label>
                                             <div
-                                              class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl sc-gtLWhw hXgXvF css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root"
+                                              class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl sc-gtLWhw bPTTGW default css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root"
                                             >
                                               <input
                                                 aria-invalid="false"
@@ -458,7 +458,7 @@ exports[`Rendering test renders correctly 1`] = `
                                               editMetadata.valueName: fgfgfg2
                                             </label>
                                             <div
-                                              class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl sc-gtLWhw hXgXvF css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root"
+                                              class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl sc-gtLWhw bPTTGW default css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root"
                                             >
                                               <input
                                                 aria-invalid="false"
@@ -495,7 +495,7 @@ exports[`Rendering test renders correctly 1`] = `
                                               editMetadata.unit
                                             </label>
                                             <div
-                                              class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl sc-gtLWhw hXgXvF css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root"
+                                              class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl sc-gtLWhw bPTTGW default css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root"
                                             >
                                               <input
                                                 aria-invalid="false"
@@ -532,7 +532,7 @@ exports[`Rendering test renders correctly 1`] = `
                                               editMetadata.source
                                             </label>
                                             <div
-                                              class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl sc-gtLWhw hXgXvF css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root"
+                                              class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl sc-gtLWhw bPTTGW default css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root"
                                             >
                                               <input
                                                 aria-invalid="false"
