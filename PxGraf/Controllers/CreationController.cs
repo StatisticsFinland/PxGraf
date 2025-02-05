@@ -35,6 +35,7 @@ namespace PxGraf.Controllers
     {
         private readonly ICachedDatasource _datasource = datasource;
         private readonly ILogger<CreationController> _logger = logger;
+        private readonly string[] databaseWhitelist = Configuration.Current.LocalFilesystemDatabaseConfig.DatabaseWhitelist;
 
         /// <summary>
         /// Returns a list of database items from the given level of the data base based on the dbPath.
@@ -51,7 +52,7 @@ namespace PxGraf.Controllers
             _logger.LogDebug(LOGMSG, dbPath);
 
             string[] hierarchy = dbPath is not null ? dbPath.Split("/") : [];
-            if (hierarchy.Length > 0 && !PathUtils.IsDatabaseWhitelisted(hierarchy, Configuration.Current.LocalFilesystemDatabaseConfig.DatabaseWhitelist))
+            if (hierarchy.Length > 0 && !PathUtils.IsDatabaseWhitelisted(hierarchy, databaseWhitelist))
             {
                 _logger.LogWarning("Database {DbPath} is not whitelisted.", dbPath);
                 return NotFound();
@@ -60,9 +61,9 @@ namespace PxGraf.Controllers
             DatabaseGroupContents result = await _datasource.GetGroupContentsCachedAsync(hierarchy);
 
             // If listing databases, filter out databases that are not whitelisted
-            if (hierarchy.Length == 0 && Configuration.Current.LocalFilesystemDatabaseConfig.DatabaseWhitelist.Length > 0)
+            if (hierarchy.Length == 0 && databaseWhitelist.Length > 0)
             {
-                List<DatabaseGroupHeader> filteredHeaders = result.Headers.Where(header => PathUtils.IsDatabaseWhitelisted(header.Code, Configuration.Current.LocalFilesystemDatabaseConfig.DatabaseWhitelist)).ToList();
+                List<DatabaseGroupHeader> filteredHeaders = result.Headers.Where(header => PathUtils.IsDatabaseWhitelisted(header.Code, databaseWhitelist)).ToList();
                 _logger.LogDebug("data-bases/{DbPath} result: {Result}", dbPath, result);
                 return new DatabaseGroupContents(filteredHeaders, result.Files);
             }
@@ -85,7 +86,7 @@ namespace PxGraf.Controllers
             _logger.LogDebug("Requested cube meta for {TablePath} GET: api/creation/cube-meta", tablePath);
 
             PxTableReference tableReference = new(tablePath, '/');
-            if (!PathUtils.IsDatabaseWhitelisted(tableReference.Hierarchy, Configuration.Current.LocalFilesystemDatabaseConfig.DatabaseWhitelist))
+            if (!PathUtils.IsDatabaseWhitelisted(tableReference.Hierarchy, databaseWhitelist))
             {
                 _logger.LogWarning("Database {TablePath} is not whitelisted.", tablePath);
                 return NotFound();
@@ -116,7 +117,7 @@ namespace PxGraf.Controllers
             _logger.LogDebug("Validating table metadata for {TablePath} GET: api/creation/validate-table-metadata", tablePath);
 
             PxTableReference tableReference = new(tablePath, '/');
-            if (!PathUtils.IsDatabaseWhitelisted(tableReference.Hierarchy, Configuration.Current.LocalFilesystemDatabaseConfig.DatabaseWhitelist))
+            if (!PathUtils.IsDatabaseWhitelisted(tableReference.Hierarchy, databaseWhitelist))
             {
                 _logger.LogWarning("Database {TablePath} is not whitelisted.", tablePath);
                 return NotFound();
