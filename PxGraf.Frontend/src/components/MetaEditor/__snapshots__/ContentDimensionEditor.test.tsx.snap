@@ -12,7 +12,7 @@ exports[`Rendering test renders correctly 1`] = `
         class="MuiPaper-root MuiPaper-outlined MuiPaper-rounded css-172kgz0-MuiPaper-root"
       >
         <div
-          class="MuiStack-root sc-gtLWhw cmNKGv css-1sazv7p-MuiStack-root"
+          class="MuiStack-root sc-gyycJP eIEBA-d css-1sazv7p-MuiStack-root"
         >
           <div
             class="MuiFormControl-root css-1nrlq1o-MuiFormControl-root"
@@ -27,7 +27,7 @@ exports[`Rendering test renders correctly 1`] = `
               </b>
             </label>
             <div
-              class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd sc-blHHSb bwJxkv css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root"
+              class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd sc-KXCwU lmZjwF css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root"
             >
               <input
                 aria-invalid="false"
@@ -95,7 +95,7 @@ exports[`Rendering test renders correctly 1`] = `
               editMetadata.unit
             </label>
             <div
-              class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl sc-blHHSb bgrSMJ css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root"
+              class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl sc-KXCwU hgKTaH css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root"
             >
               <input
                 aria-invalid="false"
@@ -132,7 +132,7 @@ exports[`Rendering test renders correctly 1`] = `
               editMetadata.source
             </label>
             <div
-              class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl sc-blHHSb bgrSMJ css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root"
+              class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl sc-KXCwU hgKTaH css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root"
             >
               <input
                 aria-invalid="false"

@@ -7,7 +7,7 @@
     <AssemblyName>PxGraf</AssemblyName>
     <UserSecretsId>5fefcbdc-e04e-4475-9927-aab412b027ff</UserSecretsId>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <VersionPrefix>4.0.8</VersionPrefix>
+    <VersionPrefix>4.0.9</VersionPrefix>
 	<SpaRoot>..\PxGraf.Frontend</SpaRoot>
 	<Configurations>Debug;Release;Test</Configurations>
   </PropertyGroup>
@@ -46,15 +46,13 @@
   </ItemGroup>
 
   <ItemGroup>
-	<PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="8.0.1" />
-	<PackageReference Include="Microsoft.FeatureManagement.AspNetCore" Version="3.4.0" />
-	<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.5" />
-	<PackageReference Include="NLog" Version="5.3.2" />
-	<PackageReference Include="NLog.Web.AspNetCore" Version="5.3.11" />
-	<PackageReference Include="Px.Utils" Version="1.1.0" />
-	<PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
-	<PackageReference Include="System.Drawing.Common" Version="8.0.6" />
-	<PackageReference Include="System.Runtime.Caching" Version="8.0.1" />
+	<PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.1" />
+	<PackageReference Include="Microsoft.FeatureManagement.AspNetCore" Version="4.0.0" />
+	<PackageReference Include="NLog" Version="5.4.0" />
+	<PackageReference Include="NLog.Web.AspNetCore" Version="5.4.0" />
+	<PackageReference Include="Px.Utils" Version="1.1.3" />
+	<PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0" />
+	<PackageReference Include="System.Runtime.Caching" Version="9.0.1" />
 	<PackageReference Include="Ude.NetStandard" Version="1.2.0" />
   </ItemGroup>
 </Project>
