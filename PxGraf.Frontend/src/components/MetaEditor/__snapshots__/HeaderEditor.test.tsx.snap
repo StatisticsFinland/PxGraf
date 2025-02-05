@@ -3,14 +3,14 @@
 exports[`Rendering test renders correctly 1`] = `
 <DocumentFragment>
   <div
-    class="sc-ghWlax fonjz"
+    class="sc-ivxoEo lglpeY"
   >
     <div
-      class="sc-ivxoEo fWiUCd"
+      class="sc-dntaoT ecSOzH"
     >
       <button
         aria-label="tooltip.open: editMetadata.header"
-        class="sc-egkSDF exohjD"
+        class="sc-gtLWhw dwjhoM"
       >
         <svg
           aria-hidden="true"
@@ -37,7 +37,7 @@ exports[`Rendering test renders correctly 1`] = `
           </b>
         </label>
         <div
-          class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd sc-blHHSb dwkEzj css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root"
+          class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd sc-blHHSb bwJxkv css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root"
         >
           <input
             aria-invalid="false"
@@ -102,7 +102,7 @@ exports[`Rendering test renders correctly 1`] = `
 exports[`Rendering test renders correctly when loading 1`] = `
 <DocumentFragment>
   <div
-    class="sc-ghWlax fonjz"
+    class="sc-ivxoEo lglpeY"
   >
     <span
       class="MuiSkeleton-root MuiSkeleton-rectangular MuiSkeleton-pulse css-153n0d3-MuiSkeleton-root"
@@ -115,7 +115,7 @@ exports[`Rendering test renders correctly when loading 1`] = `
 exports[`Rendering test renders correctly when receiving error 1`] = `
 <DocumentFragment>
   <div
-    class="sc-ghWlax fonjz"
+    class="sc-ivxoEo lglpeY"
   >
     <div
       class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation0 MuiAlert-root MuiAlert-colorError MuiAlert-standardError MuiAlert-standard css-x7o5da-MuiPaper-root-MuiAlert-root"
