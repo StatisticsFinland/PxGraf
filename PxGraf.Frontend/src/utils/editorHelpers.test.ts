@@ -20,6 +20,12 @@ const mockDimensions: IDimension[] = [
     }
 ];
 
+jest.mock('envVars', () => ({
+    PxGrafUrl: 'pxGrafUrl.fi/',
+    PublicUrl: 'publicUrl.fi/',
+    BasePath: ''
+}));
+
 describe('getDefaultQueries tests', () => {
     it('Should return the correct object', () => {
         const expected = {

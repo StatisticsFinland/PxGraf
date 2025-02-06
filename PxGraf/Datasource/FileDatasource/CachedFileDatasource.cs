@@ -56,6 +56,16 @@ namespace PxGraf.Datasource.FileDatasource
 
                 List<string> languages = [.. meta.AvailableLanguages];
                 MultilanguageString name = new(languages.ToDictionary(lang => lang, lang => reference.Name));
+
+                if (!meta.Dimensions.Any(dim => dim.Type == Px.Utils.Models.Metadata.Enums.DimensionType.Content))
+                {
+                    return DatabaseTable.FromError(reference.Name, name, languages, DatabaseTableError.ContentDimensionMissing);
+                }
+                else if (!meta.Dimensions.Any(dim => dim.Type == Px.Utils.Models.Metadata.Enums.DimensionType.Time))
+                {
+                    return DatabaseTable.FromError(reference.Name, name, languages, DatabaseTableError.TimeDimensionMissing);
+                }
+
                 if (meta.AdditionalProperties.TryGetValue(PxSyntaxConstants.DESCRIPTION_KEY, out MetaProperty? descriptionProperty))
                 {
                     if (descriptionProperty is StringProperty sProp) name = new(languages[0], sProp.Value);
@@ -63,13 +73,13 @@ namespace PxGraf.Datasource.FileDatasource
                 }
 
                 if (lastUpdated is not null) return new(reference.Name, name, (DateTime)lastUpdated, languages);
-                else return DatabaseTable.FromError(reference.Name, name, languages);
+                else return DatabaseTable.FromError(reference.Name, name, languages, DatabaseTableError.ContentLoad);
             }
             catch (Exception e)
             {
                 _logger.LogError(e, "Failed to get table listing item for {Reference}", reference);
                 MultilanguageString name = new(Configuration.Current.LanguageOptions.Available.ToDictionary(lang => lang, lang => reference.Name));
-                return DatabaseTable.FromError(reference.Name, name, []);
+                return DatabaseTable.FromError(reference.Name, name, [], DatabaseTableError.ContentLoad);
             }
         }
 

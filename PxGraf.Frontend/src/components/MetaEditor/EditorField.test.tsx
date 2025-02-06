@@ -37,6 +37,10 @@ describe('Rendering test', () => {
         const { asFragment } = render(<EditorField maxLength={11} defaultValue={'foobarbaz1'} editValue={'foobarbaz1'} label={mockLabel} onChange={mockFunction} />);
         expect(asFragment()).toMatchSnapshot();
     });
+    it('renders correctly if the value hsa not been edited', () => {
+        const { asFragment } = render(<EditorField defaultValue={mockDefaultValue} editValue={null} label={mockLabel} onChange={mockFunction} />);
+        expect(asFragment()).toMatchSnapshot();
+    });
 });
 
 describe('Assertion tests', () => {

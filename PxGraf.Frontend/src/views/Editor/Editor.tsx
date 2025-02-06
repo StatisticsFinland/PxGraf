@@ -22,7 +22,7 @@ import { VisualizationType } from 'types/visualizationType';
 import { useQueryInfoQuery } from 'api/services/query-info';
 import { extractCubeQuery, extractQuery } from 'utils/ApiHelpers';
 import { useNavigationContext } from 'contexts/navigationContext';
-import { useValidateTableMetadataQuery, IValidateTableMetaDataResult } from 'api/services/validate-table-metadata';
+import { useValidateTableMetadataQuery } from 'api/services/validate-table-metadata';
 import { UiLanguageContext } from 'contexts/uiLanguageContext';
 import { IDimension } from '../../types/cubeMeta';
 
@@ -114,16 +114,7 @@ export const Editor = () => {
 
     // queries and other functionality
     const tableValidityResponse = useValidateTableMetadataQuery(path);
-    const isTableInvalid = (response: IValidateTableMetaDataResult) => {
-        if (response.data) {
-            return !response.data.allDimensionsContainValues || !response.data.tableHasContentDimension || !response.data.tableHasTimeDimension
-        }
-        else {
-            return !response.isLoading;
-        }
-    }
-
-    const tableIsInvalid = isTableInvalid(tableValidityResponse);
+    const isTableInvalid = tableValidityResponse.data && (!tableValidityResponse.data.allDimensionsContainValues || !tableValidityResponse.data.tableHasContentDimension || !tableValidityResponse.data.tableHasTimeDimension);
     const cubeMetaResponse = useCubeMetaQuery(path);
 
     const { language, languageTab, setLanguageTab, uiContentLanguage, setUiContentLanguage } = React.useContext(UiLanguageContext);
@@ -235,13 +226,13 @@ export const Editor = () => {
             </Container>
         );
     }
-    else if (tableIsInvalid || cubeMetaResponse.isError || !cubeMetaResponse?.data || !dimensions) {
-        const errorWithCubeMeta = cubeMetaResponse.isError || !cubeMetaResponse?.data || !dimensions;
+    else if (isTableInvalid || tableValidityResponse.isError || cubeMetaResponse.isError || !cubeMetaResponse?.data?.dimensions) {
+        const errorWithCubeMeta = cubeMetaResponse.isError || !cubeMetaResponse?.data?.dimensions;
         const errorConditionsAndMessages = [
             { condition: tableValidityResponse.isError || (errorWithCubeMeta && tableValidityResponse.data?.allDimensionsContainValues), message: t("error.contentLoad") },
-            { condition: !tableValidityResponse.data?.tableHasContentDimension, message: t("error.contentVariableMissing") },
-            { condition: !tableValidityResponse.data?.tableHasTimeDimension, message: t("error.timeVariableMissing") },
-            { condition: !tableValidityResponse.data?.allDimensionsContainValues, message: t("error.variablesMissingValues") }
+            { condition: tableValidityResponse.data && !tableValidityResponse.data.tableHasContentDimension, message: t("error.contentVariableMissing") },
+            { condition: tableValidityResponse.data && !tableValidityResponse.data.tableHasTimeDimension, message: t("error.timeVariableMissing") },
+            { condition: tableValidityResponse.data && !tableValidityResponse.data.allDimensionsContainValues, message: t("error.variablesMissingValues") }
         ];
         const errorMessages = errorConditionsAndMessages
             .filter(item => item.condition)

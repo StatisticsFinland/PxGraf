@@ -32,13 +32,22 @@ export interface IDatabaseGroupHeader extends ISortableTableListItem {
 }
 
 /***
+ * Enum for database table errors
+ */
+export enum EDatabaseTableError {
+    contentLoad = 'ContentLoad',
+    contentDimensionMissing = 'ContentDimensionMissing',
+    timeDimensionMissing = 'TimeDimensionMissing',
+}
+
+/***
  * Interface for a px table
  * @property {fileName} fileName - Name of the px table file.
  * @property {string} lastUpdated - The last updated date of the table.
- * @property {boolean} error - Flag to indicate if there's an error with the table.
+ * @property {EDatabaseTableError} error - Enum to indicate if there's an error with the table.
  */
 export interface IDatabaseTable extends ISortableTableListItem {
     fileName: string;
     lastUpdated: string | null;
-    error?: boolean;
+    error?: EDatabaseTableError;
 }

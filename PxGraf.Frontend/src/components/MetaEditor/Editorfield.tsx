@@ -13,25 +13,15 @@ interface IEditorFieldProps {
     maxLength?: number;
 }
 
-const StyledEditedOutlinedInput = styled(({ ...other }) => <OutlinedInput {...other} />)({
-    backgroundColor: 'var(--editorfield-background-edited)',
+const StyledOutlinedInput = styled(OutlinedInput)<{ $isEdited: boolean }>(({ $isEdited }) => ({
+    backgroundColor: $isEdited ? 'var(--editorfield-background-edited)' : 'var(--editorfield-background)',
     '& .MuiOutlinedInput-notchedOutline': {
-        borderColor: 'var(--editorfield-outline-edited)'
+        borderColor: $isEdited ? 'var(--editorfield-outline-edited)' : 'var(--editorfield-outline)',
     },
     '& input': {
-        fontWeight: 'bold'
+        fontWeight: $isEdited ? 'bold' : 'normal',
     }
-});
-
-const StyledOutlinedInput = styled(({ ...other }) => <OutlinedInput {...other} />)({
-    backgroundColor: 'var(--editorfield-background)',
-    '& .MuiOutlinedInput-notchedOutline': {
-        borderColor: 'var(--editorfield-outline)',
-    },
-    '& input': {
-        fontWeight: 'normal',
-    }
-});
+}));
 
 export const EditorField: React.FC<IEditorFieldProps> = ({ label, defaultValue, editValue, onChange, maxLength, style = {} }) => {
     const { t } = useTranslation();
@@ -45,7 +35,7 @@ export const EditorField: React.FC<IEditorFieldProps> = ({ label, defaultValue, 
     return (
         <FormControl variant="outlined" style={style}>
             <InputLabel htmlFor={inputId}>{isEdited ? <b>{label + '*'}</b> : label}</InputLabel>
-            { isEdited ? <StyledEditedOutlinedInput
+            <StyledOutlinedInput
                 id={inputId}
                 type='text'
                 value={value.substring(0, maxLength || value.length)}
@@ -54,23 +44,15 @@ export const EditorField: React.FC<IEditorFieldProps> = ({ label, defaultValue, 
                     onChange(parsedValue);
                 }}
                 endAdornment={
-                    <InputAdornment position="end">
-                        <RevertButton onClick={onChange} />
-                    </InputAdornment>
+                    isEdited && (
+                        <InputAdornment position="end">
+                            <RevertButton onClick={onChange} />
+                        </InputAdornment>
+                    )
                 }
                 label={label}
+                $isEdited={isEdited}
             />
-            : <StyledOutlinedInput
-                id={inputId}
-                type='text'
-                value={value.substring(0, maxLength || value.length)}
-                onChange={evt => {
-                    const parsedValue = evt.target.value.substring(0, maxLength || evt.target.value.length);
-                    onChange(parsedValue);
-                }}
-                label={label}
-            />
-            }
             <div aria-live='polite'>
             {
                 showAlert &&
