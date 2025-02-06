@@ -13,13 +13,13 @@ interface IEditorFieldProps {
     maxLength?: number;
 }
 
-const StyledOutlinedInput = styled(OutlinedInput)<{ isEdited: boolean }>(({ isEdited }) => ({
-    backgroundColor: isEdited ? 'var(--editorfield-background-edited)' : 'var(--editorfield-background)',
+const StyledOutlinedInput = styled(OutlinedInput)<{ $isEdited: boolean }>(({ $isEdited }) => ({
+    backgroundColor: $isEdited ? 'var(--editorfield-background-edited)' : 'var(--editorfield-background)',
     '& .MuiOutlinedInput-notchedOutline': {
-        borderColor: isEdited ? 'var(--editorfield-outline-edited)' : 'var(--editorfield-outline)',
+        borderColor: $isEdited ? 'var(--editorfield-outline-edited)' : 'var(--editorfield-outline)',
     },
     '& input': {
-        fontWeight: isEdited ? 'bold' : 'normal',
+        fontWeight: $isEdited ? 'bold' : 'normal',
     }
 }));
 
@@ -51,7 +51,7 @@ export const EditorField: React.FC<IEditorFieldProps> = ({ label, defaultValue, 
                     )
                 }
                 label={label}
-                isEdited={isEdited}
+                $isEdited={isEdited}
             />
             <div aria-live='polite'>
             {
