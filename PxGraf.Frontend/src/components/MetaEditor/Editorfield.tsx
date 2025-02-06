@@ -13,26 +13,15 @@ interface IEditorFieldProps {
     maxLength?: number;
 }
 
-const StyledOutlinedInput = styled(OutlinedInput)`
-    &.edited {
-        background-color: var(--editorfield-background-edited);
-        & .MuiOutlinedInput-notchedOutline {
-            border-color: var(--editorfield-outline-edited);
-        }
-        & input {
-            font-weight: bold;
-        }
+const StyledOutlinedInput = styled(OutlinedInput)<{ $isEdited: boolean }>(({ $isEdited }) => ({
+    backgroundColor: $isEdited ? 'var(--editorfield-background-edited)' : 'var(--editorfield-background)',
+    '& .MuiOutlinedInput-notchedOutline': {
+        borderColor: $isEdited ? 'var(--editorfield-outline-edited)' : 'var(--editorfield-outline)',
+    },
+    '& input': {
+        fontWeight: $isEdited ? 'bold' : 'normal',
     }
-    &.default {
-        background-color: var(--editorfield-background);
-        & .MuiOutlinedInput-notchedOutline {
-            border-color: var(--editorfield-outline);
-        }
-        & input {
-            font-weight: normal;
-        }
-    }
-`;
+}));
 
 export const EditorField: React.FC<IEditorFieldProps> = ({ label, defaultValue, editValue, onChange, maxLength, style = {} }) => {
     const { t } = useTranslation();
@@ -62,7 +51,7 @@ export const EditorField: React.FC<IEditorFieldProps> = ({ label, defaultValue, 
                     )
                 }
                 label={label}
-                className={isEdited ? 'edited' : 'default'}
+                $isEdited={isEdited}
             />
             <div aria-live='polite'>
             {
