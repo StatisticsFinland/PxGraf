@@ -1,4 +1,4 @@
-﻿#VísualizationResponse
+﻿#VisualizationResponse
 
 VisualizationResponse is a JSON object response product from Visualization API's GetVisualization endpoint. The response contains the data and metadata needed to draw a visualization. The response is structured in such a way that the data is always in the correct order for the visualization type that is selected. Below is an example of a response object.
 
