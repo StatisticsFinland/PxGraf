@@ -8,6 +8,7 @@ import { urls } from "Router";
 import { UiLanguageContext } from "contexts/uiLanguageContext";
 import { parseLanguageString } from 'utils/ApiHelpers';
 import { IDatabaseTable } from 'types/tableListItems';
+import { getErrorText } from "../../utils/editorHelpers";
 
 const StyledListItem = styled(ListItem)`
   background-color: #f8f8f8;
@@ -42,7 +43,7 @@ export const TableItem: React.FC<ITableItemProps> = ({ currentPath, item, depth 
                 {item.error ?
                     <ErrorAlert sx={{ pl: depth * 4 }} severity="warning">
                         <AlertTitle>{`${item.name[displayLanguage] ?? item.fileName}`}</AlertTitle>
-                        {t("error.contentVariableMissing")}
+                        {getErrorText(item.error)}
                     </ErrorAlert>
                     :
                     <React.Fragment>

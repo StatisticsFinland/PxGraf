@@ -35,17 +35,17 @@ namespace PxGraf.Datasource.FileDatasource
         /// <summary>
         /// Returns tables in a database group.
         /// </summary>
-        /// <param name="groupHierarcy">Path to the group.</param>
+        /// <param name="groupHierarchy">Path to the group.</param>
         /// <returns>List of tables in the group.</returns>
-        public async Task<List<PxTableReference>> GetTablesAsync(IReadOnlyList<string> groupHierarcy)
+        public async Task<List<PxTableReference>> GetTablesAsync(IReadOnlyList<string> groupHierarchy)
         {
-            return await Task.Factory.StartNew(() => GetTables(groupHierarcy));
+            return await Task.Factory.StartNew(() => GetTables(groupHierarchy));
         }
 
-        private List<PxTableReference> GetTables(IReadOnlyList<string> groupHierarcy)
+        private List<PxTableReference> GetTables(IReadOnlyList<string> groupHierarchy)
         {
             List<PxTableReference> tables = [];
-            string path = PathUtils.BuildAndSanitizePath(config.DatabaseRootPath, groupHierarcy);
+            string path = PathUtils.BuildAndSanitizePath(config.DatabaseRootPath, groupHierarchy);
             foreach (string pxFile in Directory.EnumerateFiles(path, PxSyntaxConstants.PX_FILE_FILTER))
             {
                 tables.Add(new PxTableReference(Path.GetRelativePath(config.DatabaseRootPath, pxFile)));
@@ -53,16 +53,16 @@ namespace PxGraf.Datasource.FileDatasource
             return tables;
         }
 
-        public Task<List<DatabaseGroupHeader>> GetGroupHeadersAsync(IReadOnlyList<string> groupHierarcy)
+        public Task<List<DatabaseGroupHeader>> GetGroupHeadersAsync(IReadOnlyList<string> groupHierarchy)
         {
-            return Task.Factory.StartNew(() => GetGroupHeaders(groupHierarcy));
+            return Task.Factory.StartNew(() => GetGroupHeaders(groupHierarchy));
         }
 
-        public List<DatabaseGroupHeader> GetGroupHeaders(IReadOnlyList<string> groupHierarcy)
+        public List<DatabaseGroupHeader> GetGroupHeaders(IReadOnlyList<string> groupHierarchy)
         {
             List<DatabaseGroupHeader> headers = [];
 
-            string path = PathUtils.BuildAndSanitizePath(config.DatabaseRootPath, groupHierarcy);
+            string path = PathUtils.BuildAndSanitizePath(config.DatabaseRootPath, groupHierarchy);
             foreach (string directory in Directory.EnumerateDirectories(path))
             {
                 string code = new DirectoryInfo(directory).Name;
@@ -126,7 +126,9 @@ namespace PxGraf.Datasource.FileDatasource
             string path = PathUtils.BuildAndSanitizePath(config.DatabaseRootPath, tableReference);
             using Stream readStream = File.OpenRead(path);
             PxFileMetadataReader metadataReader = new();
-            IAsyncEnumerable<KeyValuePair<string, string>> entries = metadataReader.ReadMetadataAsync(readStream, config.Encoding);
+            Encoding encoding = await metadataReader.GetEncodingAsync(readStream);
+            readStream.Position = 0;
+            IAsyncEnumerable<KeyValuePair<string, string>> entries = metadataReader.ReadMetadataAsync(readStream, encoding);
             MatrixMetadataBuilder builder = new();
             MatrixMetadata meta = await builder.BuildAsync(entries);
             AssignOrdinalDimensionTypes(meta);
@@ -163,32 +165,34 @@ namespace PxGraf.Datasource.FileDatasource
         /// <exception cref="InvalidOperationException">Thrown if source property is not found from metadata.</exception>
         private static void AssignSourceToContentDimensionValues(MatrixMetadata meta)
         {
-            ContentDimension contentDimension = meta.GetContentDimension();
-            foreach (ContentDimensionValue cdv in contentDimension.Values)
+            if (meta.TryGetContentDimension(out ContentDimension? contentDimension))
             {
-                // Primarily use source information from the content dimension value.
-                if (cdv.AdditionalProperties.ContainsKey(PxSyntaxConstants.SOURCE_KEY)) continue;
-                
-                // If the value has no source, use the source of the content dimension.
-                if (contentDimension.AdditionalProperties.TryGetValue(PxSyntaxConstants.SOURCE_KEY, out MetaProperty? prop) &&
-                    prop is MultilanguageStringProperty dimMlsp)
+                foreach (ContentDimensionValue cdv in contentDimension.Values)
                 {
-                    cdv.AdditionalProperties.TryAdd(PxSyntaxConstants.SOURCE_KEY, dimMlsp);
-                }
-                // If the dimension has no source, use the source of the table.
-                else if (meta.AdditionalProperties.TryGetValue(PxSyntaxConstants.SOURCE_KEY, out MetaProperty? tableProp) &&
-                    tableProp is MultilanguageStringProperty tableMlsp)
-                {
-                    cdv.AdditionalProperties.TryAdd(PxSyntaxConstants.SOURCE_KEY, tableMlsp);
-                }
-                else
-                {
-                    throw new InvalidOperationException("Source property not found from metadata.");
-                }
-            }
+                    // Primarily use source information from the content dimension value.
+                    if (cdv.AdditionalProperties.ContainsKey(PxSyntaxConstants.SOURCE_KEY)) continue;
 
-            meta.AdditionalProperties.Remove(PxSyntaxConstants.SOURCE_KEY);
-            contentDimension.AdditionalProperties.Remove(PxSyntaxConstants.SOURCE_KEY);
+                    // If the value has no source, use the source of the content dimension.
+                    if (contentDimension.AdditionalProperties.TryGetValue(PxSyntaxConstants.SOURCE_KEY, out MetaProperty? prop) &&
+                        prop is MultilanguageStringProperty dimMlsp)
+                    {
+                        cdv.AdditionalProperties.TryAdd(PxSyntaxConstants.SOURCE_KEY, dimMlsp);
+                    }
+                    // If the dimension has no source, use the source of the table.
+                    else if (meta.AdditionalProperties.TryGetValue(PxSyntaxConstants.SOURCE_KEY, out MetaProperty? tableProp) &&
+                        tableProp is MultilanguageStringProperty tableMlsp)
+                    {
+                        cdv.AdditionalProperties.TryAdd(PxSyntaxConstants.SOURCE_KEY, tableMlsp);
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException("Source property not found from metadata.");
+                    }
+                }
+
+                meta.AdditionalProperties.Remove(PxSyntaxConstants.SOURCE_KEY);
+                contentDimension.AdditionalProperties.Remove(PxSyntaxConstants.SOURCE_KEY);
+            }
         }
 
         /// <summary>
@@ -228,13 +232,13 @@ namespace PxGraf.Datasource.FileDatasource
             {
                 int aliasFileSuffixLength = PxSyntaxConstants.ALIAS_FILE_PREFIX.Length + 1; // +1 for the underscore
                 string lang = new([.. Path.GetFileNameWithoutExtension(aliasFile).Skip(aliasFileSuffixLength)]);
-                string alias = GetAliasFronFile(aliasFile);
+                string alias = GetAliasFromFile(aliasFile);
                 translatedNames.Add(lang, alias.Trim());
             }
             return new MultilanguageString(translatedNames);
         }
 
-        private string GetAliasFronFile(string path)
+        private string GetAliasFromFile(string path)
         {
             using FileStream? fs = File.OpenRead(path);
             Encoding encoding = config.Encoding;

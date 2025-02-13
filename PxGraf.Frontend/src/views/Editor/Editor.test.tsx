@@ -304,6 +304,12 @@ const mockInvalidTableValidationResult: IValidateTableMetaDataResult = {
     }
 }
 
+const errorTableValidationResult: IValidateTableMetaDataResult = {
+    isLoading: false,
+    isError: true,
+    data: null
+}
+
 let mockResult: IValidateTableMetaDataResult;
 
 jest.mock('api/services/validate-table-metadata', () => ({
@@ -368,5 +374,22 @@ describe('Assertion tests', () => {
         );
 
         expect(screen.getByText('error.contentVariableMissing error.timeVariableMissing error.variablesMissingValues')).toBeInTheDocument();
+    });
+
+    it('renders errorContainer with generic message when tableValidityResponse is error', () => {
+        mockResult = errorTableValidationResult;
+        render(
+            <QueryClientProvider client={queryClient}>
+                <NavigationProvider>
+                    <HashRouter>
+                        <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
+                            <Editor />
+                        </UiLanguageContext.Provider>
+                    </HashRouter>
+                </NavigationProvider>
+            </QueryClientProvider>
+        );
+
+        expect(screen.getByText('error.contentLoad')).toBeInTheDocument();
     });
 });

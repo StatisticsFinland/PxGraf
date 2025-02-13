@@ -55,7 +55,8 @@ namespace PxGraf.Settings
                 LocalFilesystemDatabaseConfig = new LocalFilesystemDatabaseConfig(
                     configuration.GetSection("LocalFileSystemDatabaseConfig:Enabled").Get<bool>(),
                     configuration["LocalFilesystemDatabaseConfig:DatabaseRootPath"],
-                    Encoding.GetEncoding(configuration["LocalFilesystemDatabaseConfig:Encoding"])
+                    Encoding.GetEncoding(configuration["LocalFilesystemDatabaseConfig:Encoding"]),
+                    configuration.GetSection("LocalFilesystemDatabaseConfig:DatabaseWhitelist").Get<string[]>()
                 )
             };
 
