@@ -20,11 +20,11 @@ in the [HighCharts shop](https://shop.highsoft.com/?utm_source=npmjs&utm_medium=
 - **Saved query API:** Used for managing saved queries. Provides endpoints for fetching a saved query, saving a new query, archiving a query and re-archiving an existing query.
 - **Visualization API:** Provides an endpoint for fetching visualization data for a saved query given its ID. More information about the response format can be found in VISUALIZATION_RESPONSE.md
 
-#### More information about the APIs can be found [here](API_DOCUMENTATION.md).
+### More information about the APIs can be found [here](API_DOCUMENTATION.md).
 
-#### Instructions for local development can be found [here](LOCAL_SETUP.md).
+### Instructions for local development can be found [here](LOCAL_SETUP.md).
 
-#### Information about production setup can be found [here](PRODUCTION_SETUP.md).
+### Information about production setup can be found [here](PRODUCTION_SETUP.md).
 
 ## Configuration
 
@@ -44,7 +44,7 @@ Configuration for the default language and the available languages in the backen
 The address of the PxWeb server if in use.
 #### savedQueryDirectory
 The directory where saved query files are stored.
-#### arvhiveFileDirectory
+#### archiveFileDirectory
 The directory where archived query files are stored.
 #### FeatureManagement
 Grants or denies access to the Creation API.
@@ -57,7 +57,7 @@ The path to the database root directory.
 #### LocalFileSystemDatabaseConfig.Encoding
 Name of the encoding used in the database.
 #### LocalFileSystemDatabaseConfig.DatabaseWhitelist
-List of directory names that are allowed to be accessed as database root directories. If empty, all directories are allowed.
+List of directory names that are allowed to be accessed as database root directories. If empty, no directories are allowed.
 
 ## Translation files
 
