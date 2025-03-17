@@ -132,6 +132,7 @@ namespace PxGraf.Datasource.FileDatasource
             MatrixMetadata meta = await builder.BuildAsync(entries);
             AssignOrdinalDimensionTypes(meta);
             AssignSourceToContentDimensionValues(meta);
+            AssignLanguageToSingleLangProperties(meta, [PxSyntaxConstants.NOTE_KEY, PxSyntaxConstants.VALUENOTE_KEY]);
             return meta;
         }
 
@@ -192,6 +193,42 @@ namespace PxGraf.Datasource.FileDatasource
 
                 meta.AdditionalProperties.Remove(PxSyntaxConstants.SOURCE_KEY);
                 contentDimension.AdditionalProperties.Remove(PxSyntaxConstants.SOURCE_KEY);
+            }
+        }
+
+        private static void AssignLanguageToSingleLangProperties(MatrixMetadata meta, List<string> keys)
+        {
+            // Table level
+            foreach(string key in keys)
+            {
+                if (meta.AdditionalProperties.TryGetValue(key, out MetaProperty? prop))
+                {
+                    meta.AdditionalProperties[key] = prop.AsMultiLanguageProperty(meta.DefaultLanguage);
+                }
+            }
+
+            foreach (Dimension dim in meta.Dimensions)
+            {
+                // Dimension level
+                foreach (string key in keys)
+                {
+                    if (dim.AdditionalProperties.TryGetValue(key, out MetaProperty? prop))
+                    {
+                        dim.AdditionalProperties[key] = prop.AsMultiLanguageProperty(meta.DefaultLanguage);
+                    }
+                }
+
+                // Dimension value level
+                foreach (DimensionValue val in dim.Values)
+                {
+                    foreach (string key in keys)
+                    {
+                        if (val.AdditionalProperties.TryGetValue(key, out MetaProperty? prop))
+                        {
+                            val.AdditionalProperties[key] = prop.AsMultiLanguageProperty(meta.DefaultLanguage);
+                        }
+                    }
+                }
             }
         }
 
