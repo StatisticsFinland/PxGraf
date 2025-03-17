@@ -1,27 +1,26 @@
 ﻿#nullable enable
 using Px.Utils.Language;
 using Px.Utils.ModelBuilders;
-using Px.Utils.Models;
 using Px.Utils.Models.Data.DataValue;
-using Px.Utils.Models.Metadata;
 using Px.Utils.Models.Metadata.Dimensions;
 using Px.Utils.Models.Metadata.Enums;
 using Px.Utils.Models.Metadata.ExtensionMethods;
 using Px.Utils.Models.Metadata.MetaProperties;
+using Px.Utils.Models.Metadata;
+using Px.Utils.Models;
 using Px.Utils.PxFile.Data;
 using Px.Utils.PxFile.Metadata;
-using PxGraf.Datasource.DatabaseConnection;
 using PxGraf.Models.Queries;
 using PxGraf.Models.Responses.DatabaseItems;
 using PxGraf.Utility;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
+using System.Threading;
+using System;
 
 namespace PxGraf.Datasource.FileDatasource
 {
@@ -167,22 +166,23 @@ namespace PxGraf.Datasource.FileDatasource
         {
             if (meta.TryGetContentDimension(out ContentDimension? contentDimension))
             {
+                string defaultLang = meta.DefaultLanguage;
                 foreach (ContentDimensionValue cdv in contentDimension.Values)
                 {
                     // Primarily use source information from the content dimension value.
-                    if (cdv.AdditionalProperties.ContainsKey(PxSyntaxConstants.SOURCE_KEY)) continue;
-
-                    // If the value has no source, use the source of the content dimension.
-                    if (contentDimension.AdditionalProperties.TryGetValue(PxSyntaxConstants.SOURCE_KEY, out MetaProperty? prop) &&
-                        prop is MultilanguageStringProperty dimMlsp)
+                    if (cdv.AdditionalProperties.TryGetValue(PxSyntaxConstants.SOURCE_KEY, out MetaProperty? valueProp))
                     {
-                        cdv.AdditionalProperties.TryAdd(PxSyntaxConstants.SOURCE_KEY, dimMlsp);
+                        cdv.AdditionalProperties[PxSyntaxConstants.SOURCE_KEY] = valueProp.AsMultiLanguageProperty(defaultLang);
+                    }
+                    // If the value has no source, use the source of the content dimension.
+                    else if (contentDimension.AdditionalProperties.TryGetValue(PxSyntaxConstants.SOURCE_KEY, out MetaProperty? dimProp))
+                    {
+                        cdv.AdditionalProperties.TryAdd(PxSyntaxConstants.SOURCE_KEY, dimProp.AsMultiLanguageProperty(defaultLang));
                     }
                     // If the dimension has no source, use the source of the table.
-                    else if (meta.AdditionalProperties.TryGetValue(PxSyntaxConstants.SOURCE_KEY, out MetaProperty? tableProp) &&
-                        tableProp is MultilanguageStringProperty tableMlsp)
+                    else if (meta.AdditionalProperties.TryGetValue(PxSyntaxConstants.SOURCE_KEY, out MetaProperty? tableProp))
                     {
-                        cdv.AdditionalProperties.TryAdd(PxSyntaxConstants.SOURCE_KEY, tableMlsp);
+                        cdv.AdditionalProperties.TryAdd(PxSyntaxConstants.SOURCE_KEY, tableProp.AsMultiLanguageProperty(defaultLang));
                     }
                     else
                     {

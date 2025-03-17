@@ -79,7 +79,7 @@ namespace UnitTests.MatrixMetadataTests
             dimension.AdditionalProperties.Add(PxSyntaxConstants.NOTE_KEY, new MultilanguageStringProperty(new(note)));
 
             // Act
-            MultilanguageString? noteProperty = dimension.GetMultilanguageDimensionProperty(PxSyntaxConstants.NOTE_KEY);
+            MultilanguageString? noteProperty = dimension.GetMultilanguageDimensionProperty(PxSyntaxConstants.NOTE_KEY, "fi");
 
             // Assert
             Assert.That(noteProperty, Is.Not.Null);
@@ -95,7 +95,7 @@ namespace UnitTests.MatrixMetadataTests
             Dimension dimension = TestDataCubeBuilder.BuildTestDimension("foo", dimParams, ["fi", "en"]);
 
             // Act
-            MultilanguageString? noteProperty = dimension.GetMultilanguageDimensionProperty(PxSyntaxConstants.NOTE_KEY);
+            MultilanguageString? noteProperty = dimension.GetMultilanguageDimensionProperty(PxSyntaxConstants.NOTE_KEY, "fi");
 
             // Assert
             Assert.That(noteProperty, Is.Null);
@@ -111,7 +111,7 @@ namespace UnitTests.MatrixMetadataTests
             dimension.AdditionalProperties.Add(PxSyntaxConstants.META_ID_KEY, metaString);
 
             // Act
-            MultilanguageString? metaProperty = dimension.GetMultilanguageDimensionProperty(PxSyntaxConstants.META_ID_KEY);
+            MultilanguageString? metaProperty = dimension.GetMultilanguageDimensionProperty(PxSyntaxConstants.META_ID_KEY, "fi");
 
             // Assert
             Assert.That(metaProperty, Is.Not.Null);

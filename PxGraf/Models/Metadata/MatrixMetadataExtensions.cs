@@ -26,7 +26,7 @@ namespace PxGraf.Models.Metadata
             foreach (IReadOnlyDimension dimension in input.Dimensions)
             {
                 IValueFilter filter = query.DimensionQueries[dimension.Code].ValueFilter;
-                List<string> valueCodes = filter.Filter(dimension.Values).Select(v => v.Code).ToList();
+                List<string> valueCodes = [.. filter.Filter(dimension.Values).Select(v => v.Code)];
                 dimensionMaps.Add(new DimensionMap(dimension.Code, valueCodes));
             }
             return input.GetTransform(new MatrixMap(dimensionMaps));
@@ -46,9 +46,7 @@ namespace PxGraf.Models.Metadata
         /// </summary>
         public static IReadOnlyList<IReadOnlyDimension> GetMultivalueDimensions(this IReadOnlyMatrixMetadata cubeMeta)
         {
-            return cubeMeta.Dimensions
-                .Where(dimension => dimension.Values.Count > 1)
-                .ToList();
+            return [.. cubeMeta.Dimensions.Where(dimension => dimension.Values.Count > 1)];
         }
 
         /// <summary>
@@ -56,9 +54,7 @@ namespace PxGraf.Models.Metadata
         /// </summary>
         public static IReadOnlyList<IReadOnlyDimension> GetSinglevalueDimensions(this IReadOnlyMatrixMetadata cubeMeta)
         {
-            return cubeMeta.Dimensions
-                .Where(dimension => dimension.Values.Count == 1)
-                .ToList();
+            return [.. cubeMeta.Dimensions.Where(dimension => dimension.Values.Count == 1)];
         }
 
         /// <summary>

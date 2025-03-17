@@ -75,12 +75,11 @@ namespace PxGraf.Models.Metadata
                     langToHeader[language].AppendTimeValuePlaceholders(translation, timeDim.Values.Count > 1);
                 }
 
-                List<string> dimensionTexts = dimensions
+                List<string> dimensionTexts = [.. dimensions
                     .Where(v => v.Type != DimensionType.Time && v.Values.Count > 1)
                     // We want content dimension appear at the beginning [orderBy is stable so otherwise original order is maintained]
                     .OrderBy(v => v.Type == DimensionType.Content ? 0 : 1)
-                    .Select(v => GetDimensionNameEditForLanguage(query, v, language))
-                    .ToList();
+                    .Select(v => GetDimensionNameEditForLanguage(query, v, language))];
 
                 if (dimensionTexts.Count == 1)
                 {

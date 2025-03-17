@@ -9,7 +9,6 @@ using Px.Utils.Models.Metadata;
 using Px.Utils.Models;
 using PxGraf.Datasource.ApiDatasource;
 using PxGraf.Datasource.Cache;
-using PxGraf.Datasource.PxWebInterface;
 using PxGraf.Models.Queries;
 using PxGraf.Models.Responses.DatabaseItems;
 using PxGraf.Settings;

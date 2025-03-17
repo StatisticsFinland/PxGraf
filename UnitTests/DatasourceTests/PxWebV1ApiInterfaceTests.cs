@@ -9,7 +9,6 @@ using Px.Utils.Models.Metadata.Dimensions;
 using Px.Utils.Models.Metadata.Enums;
 using Px.Utils.Models.Metadata;
 using Px.Utils.Models;
-using PxGraf.Datasource.PxWebInterface;
 using PxGraf.Models.Queries;
 using PxGraf.Models.Responses.DatabaseItems;
 using PxGraf.Settings;
@@ -224,7 +223,7 @@ namespace UnitTests.DatasourceTests
             };
             mockConnection.Setup(mc => mc.PostAsync("api/v1/sv/mock/table/reference/FooBar", It.IsAny<string>())).ReturnsAsync(mockJsonStatResponseSv);
 
-            IEnumerable<string> expectedLangs = new[] { "en", "fi", "sv" };
+            IEnumerable<string> expectedLangs = ["en", "fi", "sv"];
             Dictionary<string, string> expectedUnitValues = new()
             {
                 ["en"] = "unit.en",
@@ -345,7 +344,7 @@ namespace UnitTests.DatasourceTests
 
             // Assert
             Assert.That(matrix, Is.InstanceOf<Matrix<DecimalDataValue>>());
-            decimal[] decimals = matrix.Data.Select(dv => dv.UnsafeValue).ToArray();
+            decimal[] decimals = [.. matrix.Data.Select(dv => dv.UnsafeValue)];
             Assert.That(decimals, Is.EqualTo(expectedData));
         }
 

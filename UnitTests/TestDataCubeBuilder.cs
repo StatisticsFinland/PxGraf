@@ -128,7 +128,7 @@ namespace UnitTests
         {
             IReadOnlyMatrixMetadata meta = BuildTestMeta(dimParams, languages);
             int dataSize = meta.Dimensions.Count == 0 ? 0 : meta.Dimensions.Aggregate(1, (acc, var) => acc * var.Values.Count);
-            return new Matrix<DecimalDataValue>(meta, BuildTestData(dataSize, negativeData, missingData).ToArray());
+            return new Matrix<DecimalDataValue>(meta, [.. BuildTestData(dataSize, negativeData, missingData)]);
         }
 
         public static MatrixMetadata BuildTestMeta(List<DimensionParameters> varParams, string[]? languages = null)
@@ -214,7 +214,7 @@ namespace UnitTests
         public static ArchiveCube BuildTestArchiveCube(List<DimensionParameters> metaParams, string[]? languages = null, string version = "1.0", Dictionary<int, MultilanguageString>? dataNotes = null)
         {
             MatrixMetadata meta = BuildTestMeta(metaParams, languages);
-            List<DecimalDataValue> data = BuildTestData(meta.Dimensions.Aggregate(1, (acc, var) => acc * var.Values.Count)).ToList();
+            List<DecimalDataValue> data = [.. BuildTestData(meta.Dimensions.Aggregate(1, (acc, var) => acc * var.Values.Count))];
 
             return new ArchiveCube
             (

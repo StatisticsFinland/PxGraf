@@ -15,8 +15,6 @@ using System.Linq;
 using System.Net.Http;
 using System;
 using PxGraf.Datasource;
-using PxGraf.Datasource.PxWebInterface;
-using PxGraf.Datasource.DatabaseConnection;
 using PxGraf.Datasource.Cache;
 using PxGraf.Models.Queries;
 using PxGraf.Datasource.FileDatasource;
