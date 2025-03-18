@@ -48,7 +48,7 @@ namespace PxGraf.Utility
         /// </summary>
         public static T UnambiguousOrDefault<T>(IEnumerable<T> items)
         {
-            List<T> uniqueItems = items.Distinct().ToList();
+            List<T> uniqueItems = [.. items.Distinct()];
             if (uniqueItems.Count == 1)
             {
                 return uniqueItems[0];

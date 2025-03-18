@@ -63,7 +63,7 @@ namespace PxGraf.Controllers
             // If listing databases, filter out databases that are not whitelisted
             if (hierarchy.Length == 0 && databaseWhitelist.Length > 0)
             {
-                List<DatabaseGroupHeader> filteredHeaders = result.Headers.Where(header => PathUtils.IsDatabaseWhitelisted(header.Code, databaseWhitelist)).ToList();
+                List<DatabaseGroupHeader> filteredHeaders = [.. result.Headers.Where(header => PathUtils.IsDatabaseWhitelisted(header.Code, databaseWhitelist))];
                 _logger.LogDebug("data-bases/{DbPath} result: {Result}", dbPath, result);
                 return new DatabaseGroupContents(filteredHeaders, result.Files);
             }
@@ -164,7 +164,7 @@ namespace PxGraf.Controllers
                     if (tableMeta.Dimensions.FirstOrDefault(dimension => dimension.Code == filter.Key) is IReadOnlyDimension dimension)
                     {
                         IEnumerable<IReadOnlyDimensionValue> filteredValues = filter.Value.Filter(dimension.Values);
-                        List<string> filteredValueCodes = filteredValues.Select(value => value.Code).ToList();
+                        List<string> filteredValueCodes = [.. filteredValues.Select(value => value.Code)];
                         _logger.LogDebug("filter-dimension result: {FilteredValueCodes}", filteredValueCodes);
                         return filteredValueCodes;
                     }
@@ -211,7 +211,7 @@ namespace PxGraf.Controllers
             Matrix<DecimalDataValue> matrix = await _datasource.GetMatrixCachedAsync(cubeQuery.TableReference, filteredMeta);
 
             IReadOnlyList<VisualizationType> validTypes = ChartTypeSelector.Selector.GetValidChartTypes(cubeQuery, matrix);
-            List<string> validTypesList = validTypes.Select(ChartTypeEnumConverter.ToJsonString).ToList();
+            List<string> validTypesList = [.. validTypes.Select(ChartTypeEnumConverter.ToJsonString)];
             _logger.LogDebug("valid-visualizations result: {ValidTypesList}", validTypesList);
             return validTypesList;
         }

@@ -37,7 +37,7 @@ namespace UnitTests.Utilities
                     newStr.Add(json[i]);
                 }
             }
-            return new(newStr.ToArray());
+            return new([.. newStr]);
         }
     }
 }

@@ -1,11 +1,9 @@
 ﻿using NUnit.Framework;
-using PxGraf.Datasource.DatabaseConnection;
 using PxGraf.Datasource.FileDatasource;
 using PxGraf.Models.Queries;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace UnitTests.DatasourceTests
 {

@@ -1,6 +1,5 @@
 ﻿using NUnit.Framework;
 using PxGraf.Datasource.ApiDatasource.SerializationModels;
-using PxGraf.Datasource.PxWebInterface.SerializationModels;
 using System.Text.Json;
 using UnitTests.PxWebInterfaceTests.Fixtures;
 

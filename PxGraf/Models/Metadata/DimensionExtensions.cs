@@ -35,13 +35,15 @@ namespace PxGraf.Models.Metadata
         /// </summary>
         /// <param name="dimension">The dimension to search the property from.</param>
         /// <param name="propertyKey">The key of the property to search for.</param>
+        /// <param name="backUpLang">For single language objects backup language is required.</param>
         /// <returns></returns>
-        public static MultilanguageString? GetMultilanguageDimensionProperty(this IReadOnlyDimension dimension, string propertyKey)
+        public static MultilanguageString? GetMultilanguageDimensionProperty(this IReadOnlyDimension dimension, string propertyKey, string backUpLang)
         {
-            if (dimension.AdditionalProperties.TryGetValue(propertyKey, out MetaProperty? prop) &&
-                prop is MultilanguageStringProperty mlsProp) 
+            if (dimension.AdditionalProperties.TryGetValue(propertyKey, out MetaProperty? prop))
             {
-                return mlsProp.Value;
+                if (prop is MultilanguageStringProperty mlsProp) return mlsProp.Value;
+                else if (prop is StringProperty sProp) return new MultilanguageString(sProp.Value, backUpLang);
+                else return null;
             }
             else return null;
         }
