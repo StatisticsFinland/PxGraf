@@ -41,11 +41,11 @@ namespace PxGraf.ChartTypeSelection
 
         public static VisualizationTypeSelectionObject FromQueryAndMatrix(MatrixQuery query, Matrix<DecimalDataValue> matrix)
         {
-            List<DimensionInfo> dimInfos = matrix.Metadata.Dimensions.Select(v =>
+            List<DimensionInfo> dimInfos = [.. matrix.Metadata.Dimensions.Select(v =>
             {
                 DimensionQuery dimQuery = query.DimensionQueries[v.Code];
                 return DimensionInfo.FromQueryAndDimension(dimQuery, v);
-            }).ToList();
+            })];
 
             VisualizationTypeSelectionObject result = new(dimInfos);
 

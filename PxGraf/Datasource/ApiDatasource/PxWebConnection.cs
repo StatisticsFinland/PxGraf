@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System;
 
-namespace PxGraf.Datasource.PxWebInterface
+namespace PxGraf.Datasource.ApiDatasource
 {
     [ExcludeFromCodeCoverage] // HTTP client object can not be mocked with reasonable effort
     public class PxWebConnection(IHttpClientFactory clientFactory) : IPxWebConnection

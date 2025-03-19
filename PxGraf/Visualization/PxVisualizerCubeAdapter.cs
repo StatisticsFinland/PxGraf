@@ -67,12 +67,11 @@ namespace PxGraf.Visualization
             DimensionLayout layout = GetDimensionLayout(matrix.Metadata, query, settings);
 
             MatrixMap finalMap = new(
-                layout.SingleValueDimensions
+                [.. layout.SingleValueDimensions
                     .Concat(layout.SelectableDimensionCodes)
                     .Concat(layout.RowDimensionCodes)
                     .Concat(layout.ColumnDimensionCodes)
-                    .Select(vc => matrix.Metadata.DimensionMaps.First(vm => vm.Code == vc))
-                    .ToList()
+                    .Select(vc => matrix.Metadata.DimensionMaps.First(vm => vm.Code == vc))]
                 );
 
             Matrix<DecimalDataValue> resultMatrix = matrix.GetTransform(finalMap);
@@ -108,7 +107,7 @@ namespace PxGraf.Visualization
         
         private static List<Variable> BuildVariableList(Dictionary<string, DimensionQuery> dimensionQueries, IReadOnlyMatrixMetadata meta)
         {
-            return meta.Dimensions.Select(dimension =>
+            return [.. meta.Dimensions.Select(dimension =>
             {
                 MultilanguageString name = dimension.Name;
                 if (dimensionQueries.TryGetValue(dimension.Code, out DimensionQuery query) &&
@@ -120,19 +119,18 @@ namespace PxGraf.Visualization
                 return new Variable(
                     code: dimension.Code,
                     name: name,
-                    note: dimension.GetMultilanguageDimensionProperty(PxSyntaxConstants.NOTE_KEY),
+                    note: dimension.GetMultilanguageDimensionProperty(PxSyntaxConstants.NOTE_KEY, meta.DefaultLanguage),
                     type: dimension.Type,
-                    values: dimension.Values.Select(v => v
-                        .ConvertToVariableValue(dimension.GetEliminationValueCode(), query))
-                        .ToList()
+                    values: [.. dimension.Values.Select(v =>
+                        v.ConvertToVariableValue(dimension.GetEliminationValueCode(), query))]
                     );
-            }).ToList();
+            })];
         }
 
         private static DimensionLayout GetDimensionLayout(IReadOnlyMatrixMetadata meta, MatrixQuery query, VisualizationSettings settings)
         {
             DimensionLayout layout = new();
-            List<string> remainingVars = meta.Dimensions.Select(v => v.Code).ToList();
+            List<string> remainingVars = [.. meta.Dimensions.Select(v => v.Code)];
 
             // Selectables are added first from multivalue dimensions, so that the data from each selection is grouped together
             foreach (string code in query.DimensionQueries

@@ -87,8 +87,7 @@ namespace PxGraf.Data
         private static List<SortingOption> GetMultiDimHorizontalBarChartOptions(VisualizationType visualization, IReadOnlyMatrixMetadata meta, VisualizationSettingsRequest request)
         {
             // Selectable dimensions are excluded from sorting, OBS: '!'
-            List<IReadOnlyDimension> multiselects = meta.GetMultivalueDimensions()
-                .Where(mvv => !request.Query.DimensionQueries[mvv.Code].Selectable).ToList();
+            List<IReadOnlyDimension> multiselects = [.. meta.GetMultivalueDimensions().Where(mvv => !request.Query.DimensionQueries[mvv.Code].Selectable)];
             IReadOnlyDimension sortingOptionsDimension = GetPivot(visualization, meta, request) ? multiselects[1] : multiselects[0];
 
             List<SortingOption> options = [.. GetDimensionSortingOptions(sortingOptionsDimension)];

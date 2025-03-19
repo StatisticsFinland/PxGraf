@@ -24,9 +24,7 @@ namespace PxGraf.Data
 
         public static Layout GetTwoDimensionalLayout(bool pivotRequested, VisualizationType visualizationType, IReadOnlyMatrixMetadata meta, MatrixQuery query)
         {
-            IReadOnlyDimension[] multiValueDims = meta.GetMultivalueDimensions()
-                .Where(v => !query.DimensionQueries[v.Code].Selectable)
-                .ToArray();
+            IReadOnlyDimension[] multiValueDims = [.. meta.GetMultivalueDimensions().Where(v => !query.DimensionQueries[v.Code].Selectable)];
 
             Debug.Assert(multiValueDims.Length == 2);
 
@@ -50,9 +48,7 @@ namespace PxGraf.Data
 
         public static Layout GetLineChartLayout(IReadOnlyMatrixMetadata meta, MatrixQuery query)
         {
-            IReadOnlyDimension[] multiValueDims = meta.GetMultivalueDimensions()
-                .Where(v => !query.DimensionQueries[v.Code].Selectable)
-                .ToArray();
+            IReadOnlyDimension[] multiValueDims = [.. meta.GetMultivalueDimensions().Where(v => !query.DimensionQueries[v.Code].Selectable)];
 
             // Prefer time dimension over ordinal dimension
             IReadOnlyDimension multiValueTimeDimension = Array.Find(multiValueDims, v => v.Type == DimensionType.Time);
@@ -62,7 +58,7 @@ namespace PxGraf.Data
                     .First(v => v.Type == DimensionType.Ordinal).Code;
 
             return new Layout(
-                multiValueDims.Select(d => d.Code).Where(vc => vc != columnDimensionCode).ToList(),
+                [.. multiValueDims.Select(d => d.Code).Where(vc => vc != columnDimensionCode)],
                 [columnDimensionCode]);
         }
 

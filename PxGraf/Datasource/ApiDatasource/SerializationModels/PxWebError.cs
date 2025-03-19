@@ -1,4 +1,4 @@
-﻿namespace PxGraf.Datasource.PxWebInterface.SerializationModels
+﻿namespace PxGraf.Datasource.ApiDatasource.SerializationModels
 {
     public class PxWebError
     {

@@ -1,7 +1,7 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace PxGraf.Datasource.PxWebInterface
+namespace PxGraf.Datasource.ApiDatasource
 {
     /// <summary>
     /// Interface for a connection to PxWeb.
