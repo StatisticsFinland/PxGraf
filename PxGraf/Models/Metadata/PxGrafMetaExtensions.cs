@@ -30,7 +30,7 @@ namespace PxGraf.Models.Metadata
                 matrixProperties[PxSyntaxConstants.NOTE_KEY] = new MultilanguageStringProperty(new(note));
             }
 
-            List<Dimension> dimensions = pxGrafMeta.Variables.Select(v => v.ConvertToDimension()).ToList();
+            List<Dimension> dimensions = [.. pxGrafMeta.Variables.Select(v => v.ConvertToDimension())];
             string defaultLang = pxGrafMeta.GetDefaultLanguage();
             MatrixMetadata meta = new(defaultLang, pxGrafMeta.Languages, dimensions, matrixProperties);
             return meta;
@@ -95,7 +95,7 @@ namespace PxGraf.Models.Metadata
                     DimensionValue tdv = new(dimValue.Code, dimValue.Name);
                     values.Add(tdv);
                 }
-                TimeDimensionInterval intervals = TimeDimensionIntervalParser.DetermineIntervalFromCodes(values.Select(v => v.Code).ToList());
+                TimeDimensionInterval intervals = TimeDimensionIntervalParser.DetermineIntervalFromCodes([.. values.Select(v => v.Code)]);
                 return new TimeDimension(input.Code, input.Name, dimensionProperties, values, intervals);
             }
             else

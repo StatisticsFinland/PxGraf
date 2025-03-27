@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using System;
 
-namespace PxGraf.Datasource.PxWebInterface
+namespace PxGraf.Datasource.ApiDatasource
 {
     /// <summary>
     /// Interface for accessing data from the PxWeb API.

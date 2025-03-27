@@ -5,10 +5,10 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using PxGraf.Controllers;
-using System;
 using System.IO;
+using System;
 
-namespace UnitTests.ControllerTests.ErrorControllerTests
+namespace UnitTests.ControllerTests
 {
     internal class ErrorControllerTests
     {

@@ -8,8 +8,6 @@ using Px.Utils.Models.Metadata.MetaProperties;
 using Px.Utils.Models.Metadata;
 using Px.Utils.Models;
 using PxGraf.Datasource.ApiDatasource.SerializationModels;
-using PxGraf.Datasource.PxWebInterface.SerializationModels;
-using PxGraf.Datasource.PxWebInterface;
 using PxGraf.Exceptions;
 using PxGraf.Models.Queries;
 using PxGraf.Models.Responses.DatabaseItems;
@@ -23,6 +21,8 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Threading;
 using System;
+
+
 
 #if DEBUG
 using System.Diagnostics;
@@ -196,7 +196,7 @@ namespace PxGraf.Datasource.ApiDatasource
             foreach (string dimensionId in dataResult.Id)
             {
                 JsonStat2.DimensionObj dimension = dataResult.Dimensions[dimensionId];
-                List<string> dimensionValueCodes = new(new string[dimension.Category.Index.Count]);
+                List<string> dimensionValueCodes = [.. new string[dimension.Category.Index.Count]];
 
                 foreach (KeyValuePair<string, int> p in dimension.Category.Index)
                 {
@@ -386,7 +386,7 @@ namespace PxGraf.Datasource.ApiDatasource
         {
             return new PxWebDataQueryPostParams()
             {
-                Query = queries.ToArray(),
+                Query = [.. queries],
                 Response = new PxWebDataQueryPostParams.ResponseInfo()
                 {
                     Format = "json-stat2"

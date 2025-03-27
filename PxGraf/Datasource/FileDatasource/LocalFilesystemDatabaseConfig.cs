@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace PxGraf.Datasource.DatabaseConnection
+namespace PxGraf.Datasource.FileDatasource
 {
     public class LocalFilesystemDatabaseConfig(bool enabled, string databaseRootPath, Encoding encoding, string[] databaseWhitelist)
     {

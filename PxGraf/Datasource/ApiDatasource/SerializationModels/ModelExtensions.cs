@@ -1,6 +1,4 @@
-﻿using PxGraf.Datasource.ApiDatasource.SerializationModels;
-
-namespace PxGraf.Datasource.PxWebInterface.SerializationModels
+﻿namespace PxGraf.Datasource.ApiDatasource.SerializationModels
 {
     public static class ModelExtensions
     {

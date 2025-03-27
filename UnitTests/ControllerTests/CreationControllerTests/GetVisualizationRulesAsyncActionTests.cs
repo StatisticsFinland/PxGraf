@@ -94,7 +94,7 @@ namespace UnitTests.ControllerTests.CreationControllerTests
             };
 
             ActionResult<VisualizationRules> actionResult = await testController.GetVisualizationRulesAsync(rulesRequest);
-            List<string> sortingOptionCodes = actionResult.Value.SortingOptions.Select(so => so.Code).ToList();
+            List<string> sortingOptionCodes = [.. actionResult.Value.SortingOptions.Select(so => so.Code)];
             List<string> expected = ["descending", "ascending", "no_sorting", "reversed"];
             Assert.That(sortingOptionCodes, Is.EqualTo(expected));
         }
@@ -130,7 +130,7 @@ namespace UnitTests.ControllerTests.CreationControllerTests
             };
 
             ActionResult<VisualizationRules> actionResult = await testController.GetVisualizationRulesAsync(rulesRequest);
-            List<string> sortingOptionCodes = actionResult.Value.SortingOptions.Select(so => so.Code).ToList();
+            List<string> sortingOptionCodes = [.. actionResult.Value.SortingOptions.Select(so => so.Code)];
             List<string> expected = ["value-0", "value-1", "value-2", "value-3", "sum", "no_sorting", "reversed"];
             Assert.That(sortingOptionCodes, Is.EqualTo(expected));
         }
@@ -166,7 +166,7 @@ namespace UnitTests.ControllerTests.CreationControllerTests
             };
 
             ActionResult<VisualizationRules> actionResult = await testController.GetVisualizationRulesAsync(rulesRequest);
-            List<string> sortingOptionCodes = actionResult.Value.SortingOptions.Select(so => so.Code).ToList();
+            List<string> sortingOptionCodes = [.. actionResult.Value.SortingOptions.Select(so => so.Code)];
             List<string> expected = ["value-0", "value-1", "value-2", "sum", "no_sorting", "reversed"];
             Assert.That(sortingOptionCodes, Is.EqualTo(expected));
         }
