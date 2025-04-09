@@ -3,32 +3,41 @@
 exports[`Header component should render correctly 1`] = `
 <DocumentFragment>
   <div
-    class="sc-cGXZpB dEvZan MuiBox-root css-0"
+    class="sc-cXawGu hKsbev MuiBox-root css-0"
   >
     <div
-      class="MuiStack-root sc-cZztgT gSFSUc css-m69qwo-MuiStack-root"
+      class="MuiStack-root sc-cUiCeM hAlVej css-m69qwo-MuiStack-root"
     >
       <a
-        class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-1ycpeoo-MuiButtonBase-root-MuiButton-root"
+        class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary Mui-focusVisible MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-1ycpeoo-MuiButtonBase-root-MuiButton-root"
         href="#"
         tabindex="0"
       >
         general.contentLink
         <span
           class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-        />
+        >
+          <span
+            class="css-y4cjyz-MuiTouchRipple-ripple MuiTouchRipple-ripple MuiTouchRipple-rippleVisible MuiTouchRipple-ripplePulsate"
+            style="width: 1px; height: 1px; top: -0.5px; left: -0.5px;"
+          >
+            <span
+              class="MuiTouchRipple-child MuiTouchRipple-childPulsate"
+            />
+          </span>
+        </span>
       </a>
       <a
         href="/"
       >
         <img
           alt="navbar.logoAlt"
-          class="sc-jHbxoU eknJQC"
+          class="sc-jMsorb eMJfRY"
           src="test-file-stub"
         />
       </a>
       <div
-        class="sc-cMHOsR exfFej"
+        class="sc-dcKlJK AXhBx"
       >
         <h1
           class="MuiTypography-root MuiTypography-h1 css-o2w69a-MuiTypography-root"
@@ -37,7 +46,7 @@ exports[`Header component should render correctly 1`] = `
         </h1>
       </div>
       <div
-        class="sc-jMLmsk dSUiKC"
+        class="sc-jScdur gQonCO"
       >
         <a
           class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-1e6y48t-MuiButtonBase-root-MuiButton-root"
@@ -61,22 +70,22 @@ exports[`Header component should render correctly 1`] = `
         </button>
       </div>
       <div
-        class="MuiStack-root sc-jZCRgm bUSqpf css-1os650h-MuiStack-root"
+        class="MuiStack-root sc-jJAtPt zjSQa css-1os650h-MuiStack-root"
       >
         <div
-          class="MuiStack-root sc-dDvxFM cpOGEN css-nen11g-MuiStack-root"
+          class="MuiStack-root sc-dIMoHT bLAcLM css-nen11g-MuiStack-root"
         >
           <div
-            class="sc-gTrWKq iDTSPi"
+            class="sc-gDpztx gmWdfc"
           >
             <p
-              class="MuiTypography-root MuiTypography-body2 sc-jqVXSH ceSgRq css-r40f8v-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body2 sc-iQQCXo dzRZkK css-r40f8v-MuiTypography-root"
             >
               general.uiLanguage
             </p>
             <button
               aria-label="tooltip.open: general.uiLanguage"
-              class="sc-gyycJP jHfhmG"
+              class="sc-fYsHOw lgeTOX"
             >
               <svg
                 aria-hidden="true"

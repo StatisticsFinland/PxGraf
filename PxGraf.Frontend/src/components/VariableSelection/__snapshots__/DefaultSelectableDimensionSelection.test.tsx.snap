@@ -3,7 +3,7 @@
 exports[`Rendering test renders correctly with default selectable 1`] = `
 <DocumentFragment>
   <div
-    class="MuiAutocomplete-root MuiAutocomplete-hasClearIcon MuiAutocomplete-hasPopupIcon sc-KXCwU enjZHH css-ka7ti6-MuiAutocomplete-root"
+    class="MuiAutocomplete-root MuiAutocomplete-hasClearIcon MuiAutocomplete-hasPopupIcon sc-Qotzb bdcDXc css-ka7ti6-MuiAutocomplete-root"
   >
     <div
       class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-wb57ya-MuiFormControl-root-MuiTextField-root"
@@ -101,7 +101,7 @@ exports[`Rendering test renders correctly with default selectable 1`] = `
 exports[`Rendering test renders correctly without default selectable 1`] = `
 <DocumentFragment>
   <div
-    class="MuiAutocomplete-root MuiAutocomplete-hasPopupIcon sc-KXCwU enjZHH css-ka7ti6-MuiAutocomplete-root"
+    class="MuiAutocomplete-root MuiAutocomplete-hasPopupIcon sc-Qotzb bdcDXc css-ka7ti6-MuiAutocomplete-root"
   >
     <div
       class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-wb57ya-MuiFormControl-root-MuiTextField-root"

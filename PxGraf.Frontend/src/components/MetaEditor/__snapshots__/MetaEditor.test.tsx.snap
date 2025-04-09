@@ -3,17 +3,17 @@
 exports[`Rendering test renders correctly 1`] = `
 <DocumentFragment>
   <div
-    class="sc-jZCRgm kbDuZB MuiBox-root css-0"
+    class="sc-jJAtPt fcYSSE MuiBox-root css-0"
   >
     <div
-      class="sc-cGXZpB cwagzp"
+      class="sc-cXawGu eIgiUZ"
     >
       <div
-        class="sc-jHbxoU heGoKK"
+        class="sc-jMsorb bPDcPk"
       >
         <button
           aria-label="tooltip.open: editMetadata.header"
-          class="sc-gTrWKq himEWs"
+          class="sc-gDpztx cfyTqi"
         >
           <svg
             aria-hidden="true"
@@ -41,7 +41,7 @@ exports[`Rendering test renders correctly 1`] = `
             </b>
           </label>
           <div
-            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd sc-gyycJP csQxYZ css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root"
+            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd sc-fYsHOw haRbkY css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root"
           >
             <input
               aria-invalid="false"
@@ -101,14 +101,14 @@ exports[`Rendering test renders correctly 1`] = `
       </div>
     </div>
     <div
-      class="sc-dfjikj ZrQyx"
+      class="sc-cZSric hYCtuM"
     >
       <div
-        class="sc-kfmGjC bvwHK"
+        class="sc-jPkiSJ jXuexO"
       >
         <button
           aria-label="tooltip.open: editMetadata.editorTitle"
-          class="sc-gTrWKq himEWs"
+          class="sc-gDpztx cfyTqi"
         >
           <svg
             aria-hidden="true"
@@ -123,7 +123,7 @@ exports[`Rendering test renders correctly 1`] = `
           </svg>
         </button>
         <div
-          class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiAccordion-root MuiAccordion-rounded Mui-expanded MuiAccordion-gutters sc-cZztgT gCdgkf css-1086bdv-MuiPaper-root-MuiAccordion-root"
+          class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiAccordion-root MuiAccordion-rounded Mui-expanded MuiAccordion-gutters sc-cUiCeM iJasQw css-1086bdv-MuiPaper-root-MuiAccordion-root"
         >
           <div
             aria-controls="panel1a-content"
@@ -176,10 +176,10 @@ exports[`Rendering test renders correctly 1`] = `
                   role="region"
                 >
                   <div
-                    class="MuiAccordionDetails-root sc-ldgYGE hmDIpa css-15v22id-MuiAccordionDetails-root"
+                    class="MuiAccordionDetails-root sc-lixPIL jiOYVN css-15v22id-MuiAccordionDetails-root"
                   >
                     <div
-                      class="sc-jMLmsk IERKi MuiBox-root css-1mc6bnb"
+                      class="sc-jScdur dQKvNq MuiBox-root css-1mc6bnb"
                     >
                       <div
                         class="MuiTabs-root css-1ujnqem-MuiTabs-root"
@@ -229,7 +229,7 @@ exports[`Rendering test renders correctly 1`] = `
                       </div>
                     </div>
                     <div
-                      class="sc-cMHOsR eYsgfB MuiBox-root css-0"
+                      class="sc-dcKlJK UkaPH MuiBox-root css-0"
                     >
                       <div
                         aria-labelledby="simple-tab-0"
@@ -237,7 +237,7 @@ exports[`Rendering test renders correctly 1`] = `
                         role="tabpanel"
                       >
                         <div
-                          class="sc-KXCwU fnZqRA MuiBox-root css-0"
+                          class="sc-Qotzb dvSRyf MuiBox-root css-0"
                         >
                           <div
                             class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-3 css-zow5z4-MuiGrid-root"
@@ -249,7 +249,7 @@ exports[`Rendering test renders correctly 1`] = `
                                 class="MuiPaper-root MuiPaper-outlined MuiPaper-rounded css-172kgz0-MuiPaper-root"
                               >
                                 <div
-                                  class="MuiStack-root sc-eaUbBy gIcjUf css-1sazv7p-MuiStack-root"
+                                  class="MuiStack-root sc-dKREkF fdWzrp css-1sazv7p-MuiStack-root"
                                 >
                                   <div
                                     class="MuiFormControl-root css-1nrlq1o-MuiFormControl-root"
@@ -262,7 +262,7 @@ exports[`Rendering test renders correctly 1`] = `
                                       editMetadata.valueName: fgfgfg
                                     </label>
                                     <div
-                                      class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl sc-gyycJP bHBzIL css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root"
+                                      class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl sc-fYsHOw cRLXqm css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root"
                                     >
                                       <input
                                         aria-invalid="false"
@@ -299,7 +299,7 @@ exports[`Rendering test renders correctly 1`] = `
                                       editMetadata.unit
                                     </label>
                                     <div
-                                      class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl sc-gyycJP bHBzIL css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root"
+                                      class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl sc-fYsHOw cRLXqm css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root"
                                     >
                                       <input
                                         aria-invalid="false"
@@ -336,7 +336,7 @@ exports[`Rendering test renders correctly 1`] = `
                                       editMetadata.source
                                     </label>
                                     <div
-                                      class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl sc-gyycJP bHBzIL css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root"
+                                      class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl sc-fYsHOw cRLXqm css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root"
                                     >
                                       <input
                                         aria-invalid="false"

@@ -3,7 +3,7 @@
 exports[`Rendering test renders correctly 1`] = `
 <DocumentFragment>
   <div
-    class="MuiStack-root sc-gyycJP hzToBq css-1sazv7p-MuiStack-root"
+    class="MuiStack-root sc-fYsHOw cWFuBX css-1sazv7p-MuiStack-root"
   >
     <div
       class="MuiFormControl-root css-1nrlq1o-MuiFormControl-root"
@@ -18,7 +18,7 @@ exports[`Rendering test renders correctly 1`] = `
         </b>
       </label>
       <div
-        class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd sc-KXCwU lmZjwF css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root"
+        class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd sc-Qotzb eOEgqK css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root"
       >
         <input
           aria-invalid="false"
