@@ -9,62 +9,62 @@ exports[`Rendering test renders correctly 1`] = `
       class="MuiBox-root css-0"
     >
       <p
-        class="MuiTypography-root MuiTypography-body1 MuiTypography-gutterBottom css-d3wcwz-MuiTypography-root"
+        class="MuiTypography-root MuiTypography-body1 MuiTypography-gutterBottom css-vjrxpc-MuiTypography-root"
         id="input-slider"
       >
         chartSettings.markerScale
       </p>
       <span
-        class="MuiSlider-root MuiSlider-marked MuiSlider-colorPrimary MuiSlider-sizeMedium sc-fYsHOw fIvNzQ css-ltlhnc-MuiSlider-root"
+        class="MuiSlider-root MuiSlider-marked MuiSlider-colorPrimary MuiSlider-sizeMedium sc-fYsHOw fIvNzQ css-1e45yg4-MuiSlider-root"
       >
         <span
-          class="MuiSlider-rail css-7o8aqz-MuiSlider-rail"
+          class="MuiSlider-rail css-r64h58-MuiSlider-rail"
         />
         <span
-          class="MuiSlider-track css-ttgsjq-MuiSlider-track"
+          class="MuiSlider-track css-xvk2i-MuiSlider-track"
           style="left: 0%; width: 49.74874371859296%;"
         />
         <span
-          class="MuiSlider-mark MuiSlider-markActive css-z5sdnj-MuiSlider-mark"
+          class="MuiSlider-mark MuiSlider-markActive css-16kozi8-MuiSlider-mark"
           data-index="0"
           style="left: 0%;"
         />
         <span
           aria-hidden="true"
-          class="MuiSlider-markLabel MuiSlider-markLabel MuiSlider-markLabelActive css-1ucwjgd-MuiSlider-markLabel"
+          class="MuiSlider-markLabel MuiSlider-markLabel MuiSlider-markLabelActive css-swtyag-MuiSlider-markLabel"
           data-index="0"
           style="left: 0%;"
         >
           1%
         </span>
         <span
-          class="MuiSlider-mark MuiSlider-markActive css-z5sdnj-MuiSlider-mark"
+          class="MuiSlider-mark MuiSlider-markActive css-16kozi8-MuiSlider-mark"
           data-index="1"
           style="left: 49.74874371859296%;"
         />
         <span
           aria-hidden="true"
-          class="MuiSlider-markLabel MuiSlider-markLabel MuiSlider-markLabelActive css-1ucwjgd-MuiSlider-markLabel"
+          class="MuiSlider-markLabel MuiSlider-markLabel MuiSlider-markLabelActive css-swtyag-MuiSlider-markLabel"
           data-index="1"
           style="left: 49.74874371859296%;"
         >
           100%
         </span>
         <span
-          class="MuiSlider-mark css-hzp7sc-MuiSlider-mark"
+          class="MuiSlider-mark css-lq5hqx-MuiSlider-mark"
           data-index="2"
           style="left: 100%;"
         />
         <span
           aria-hidden="true"
-          class="MuiSlider-markLabel MuiSlider-markLabel css-1bvr8oc-MuiSlider-markLabel"
+          class="MuiSlider-markLabel MuiSlider-markLabel css-1qb795b-MuiSlider-markLabel"
           data-index="2"
           style="left: 100%;"
         >
           200%
         </span>
         <span
-          class="MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary css-cp2j25-MuiSlider-thumb"
+          class="MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary css-1xcmt9q-MuiSlider-thumb"
           data-index="0"
           style="left: 49.74874371859296%;"
         >
@@ -84,7 +84,7 @@ exports[`Rendering test renders correctly 1`] = `
           />
           <span
             aria-hidden="true"
-            class="MuiSlider-valueLabel css-14gyywz-MuiSlider-valueLabel"
+            class="MuiSlider-valueLabel css-1asissc-MuiSlider-valueLabel"
           >
             <span
               class="MuiSlider-valueLabelCircle"

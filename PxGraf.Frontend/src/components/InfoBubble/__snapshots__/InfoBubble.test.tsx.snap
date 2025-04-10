@@ -8,7 +8,7 @@ exports[`Rendering test renders correctly with popper hidden 1`] = `
   >
     <svg
       aria-hidden="true"
-      class="MuiSvgIcon-root MuiSvgIcon-colorInfo MuiSvgIcon-fontSizeMedium css-1yq1soz-MuiSvgIcon-root"
+      class="MuiSvgIcon-root MuiSvgIcon-colorInfo MuiSvgIcon-fontSizeMedium css-ocq0ss-MuiSvgIcon-root"
       data-testid="InfoIcon"
       focusable="false"
       viewBox="0 0 24 24"

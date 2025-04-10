@@ -6,7 +6,7 @@ exports[`Rendering test renders correctly 1`] = `
     class="sc-Qotzb hUwrYH MuiBox-root css-0"
   >
     <p
-      class="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-body1 css-rizt0-MuiTypography-root"
     >
       variableSelect.allFilter
     </p>

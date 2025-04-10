@@ -17,7 +17,7 @@ exports[`Rendering test renders correctly 1`] = `
         >
           <svg
             aria-hidden="true"
-            class="MuiSvgIcon-root MuiSvgIcon-colorInfo MuiSvgIcon-fontSizeMedium css-1yq1soz-MuiSvgIcon-root"
+            class="MuiSvgIcon-root MuiSvgIcon-colorInfo MuiSvgIcon-fontSizeMedium css-ocq0ss-MuiSvgIcon-root"
             data-testid="InfoIcon"
             focusable="false"
             viewBox="0 0 24 24"
@@ -28,11 +28,11 @@ exports[`Rendering test renders correctly 1`] = `
           </svg>
         </button>
         <div
-          class="MuiFormControl-root css-1nrlq1o-MuiFormControl-root"
+          class="MuiFormControl-root css-1iw3t7y-MuiFormControl-root"
           style="width: 100%;"
         >
           <label
-            class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeMedium MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeMedium MuiInputLabel-outlined css-1jy569b-MuiFormLabel-root-MuiInputLabel-root"
+            class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined css-113d811-MuiFormLabel-root-MuiInputLabel-root"
             data-shrink="true"
             for=":r0:"
           >
@@ -41,17 +41,17 @@ exports[`Rendering test renders correctly 1`] = `
             </b>
           </label>
           <div
-            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd sc-fYsHOw haRbkY css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root"
+            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd sc-fYsHOw haRbkY css-jupps9-MuiInputBase-root-MuiOutlinedInput-root"
           >
             <input
               aria-invalid="false"
-              class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputAdornedEnd css-nxo287-MuiInputBase-input-MuiOutlinedInput-input"
+              class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputAdornedEnd css-1dune0f-MuiInputBase-input-MuiOutlinedInput-input"
               id=":r0:"
               type="text"
               value="foo"
             />
             <div
-              class="MuiInputAdornment-root MuiInputAdornment-positionEnd MuiInputAdornment-outlined MuiInputAdornment-sizeMedium css-1laqsz7-MuiInputAdornment-root"
+              class="MuiInputAdornment-root MuiInputAdornment-positionEnd MuiInputAdornment-outlined MuiInputAdornment-sizeMedium css-elo8k2-MuiInputAdornment-root"
             >
               <span
                 aria-label="editMetadata.discardChanges"
@@ -60,13 +60,13 @@ exports[`Rendering test renders correctly 1`] = `
               >
                 <button
                   aria-label="editMetadata.discardChanges"
-                  class="MuiButtonBase-root MuiIconButton-root MuiIconButton-edgeEnd MuiIconButton-sizeMedium css-1yq5fb3-MuiButtonBase-root-MuiIconButton-root"
+                  class="MuiButtonBase-root MuiIconButton-root MuiIconButton-edgeEnd MuiIconButton-sizeMedium css-1ysp02-MuiButtonBase-root-MuiIconButton-root"
                   tabindex="0"
                   type="button"
                 >
                   <svg
                     aria-hidden="true"
-                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1umw9bq-MuiSvgIcon-root"
                     data-testid="UndoIcon"
                     focusable="false"
                     viewBox="0 0 24 24"
@@ -75,18 +75,15 @@ exports[`Rendering test renders correctly 1`] = `
                       d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8"
                     />
                   </svg>
-                  <span
-                    class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-                  />
                 </button>
               </span>
             </div>
             <fieldset
               aria-hidden="true"
-              class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+              class="MuiOutlinedInput-notchedOutline css-1ll44ll-MuiOutlinedInput-notchedOutline"
             >
               <legend
-                class="css-14lo706"
+                class="css-w1u3ce"
               >
                 <span>
                   editMetadata.header
@@ -112,7 +109,7 @@ exports[`Rendering test renders correctly 1`] = `
         >
           <svg
             aria-hidden="true"
-            class="MuiSvgIcon-root MuiSvgIcon-colorInfo MuiSvgIcon-fontSizeMedium css-1yq1soz-MuiSvgIcon-root"
+            class="MuiSvgIcon-root MuiSvgIcon-colorInfo MuiSvgIcon-fontSizeMedium css-ocq0ss-MuiSvgIcon-root"
             data-testid="InfoIcon"
             focusable="false"
             viewBox="0 0 24 24"
@@ -123,51 +120,56 @@ exports[`Rendering test renders correctly 1`] = `
           </svg>
         </button>
         <div
-          class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiAccordion-root MuiAccordion-rounded Mui-expanded MuiAccordion-gutters sc-cUiCeM iJasQw css-1086bdv-MuiPaper-root-MuiAccordion-root"
+          class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiAccordion-root MuiAccordion-rounded Mui-expanded MuiAccordion-gutters sc-cUiCeM iJasQw css-1808mag-MuiPaper-root-MuiAccordion-root"
+          style="--Paper-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12);"
         >
-          <div
-            aria-controls="panel1a-content"
-            aria-expanded="true"
-            class="MuiButtonBase-root MuiAccordionSummary-root Mui-expanded MuiAccordionSummary-gutters css-1f773le-MuiButtonBase-root-MuiAccordionSummary-root"
-            id="panel1a-header"
-            role="button"
-            style="width: 100%;"
-            tabindex="0"
+          <h3
+            class="MuiAccordion-heading css-cy7rkm-MuiAccordion-heading"
           >
-            <div
-              class="MuiAccordionSummary-content Mui-expanded MuiAccordionSummary-contentGutters css-eqpfi5-MuiAccordionSummary-content"
+            <button
+              aria-controls="panel1a-content"
+              aria-expanded="true"
+              class="MuiButtonBase-root MuiAccordionSummary-root Mui-expanded MuiAccordionSummary-gutters css-1f1pi2l-MuiButtonBase-root-MuiAccordionSummary-root"
+              id="panel1a-header"
+              style="width: 100%;"
+              tabindex="0"
+              type="button"
             >
-              <p
-                class="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
+              <span
+                class="MuiAccordionSummary-content Mui-expanded MuiAccordionSummary-contentGutters css-yfrx4k-MuiAccordionSummary-content"
               >
-                editMetadata.editorTitle
-              </p>
-            </div>
-            <div
-              class="MuiAccordionSummary-expandIconWrapper Mui-expanded css-yw020d-MuiAccordionSummary-expandIconWrapper"
-            >
-              <svg
-                aria-hidden="true"
-                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
-                data-testid="ExpandMoreIcon"
-                focusable="false"
-                viewBox="0 0 24 24"
+                <p
+                  class="MuiTypography-root MuiTypography-body1 css-rizt0-MuiTypography-root"
+                >
+                  editMetadata.editorTitle
+                </p>
+              </span>
+              <span
+                class="MuiAccordionSummary-expandIconWrapper Mui-expanded css-1wqf3nl-MuiAccordionSummary-expandIconWrapper"
               >
-                <path
-                  d="M16.59 8.59 12 13.17 7.41 8.59 6 10l6 6 6-6z"
-                />
-              </svg>
-            </div>
-          </div>
+                <svg
+                  aria-hidden="true"
+                  class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1umw9bq-MuiSvgIcon-root"
+                  data-testid="ExpandMoreIcon"
+                  focusable="false"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M16.59 8.59 12 13.17 7.41 8.59 6 10l6 6 6-6z"
+                  />
+                </svg>
+              </span>
+            </button>
+          </h3>
           <div
-            class="MuiCollapse-root MuiCollapse-vertical MuiCollapse-entered css-pwcg7p-MuiCollapse-root"
+            class="MuiCollapse-root MuiCollapse-vertical MuiCollapse-entered css-qr6njo-MuiCollapse-root"
             style="min-height: 0px;"
           >
             <div
-              class="MuiCollapse-wrapper MuiCollapse-vertical css-smkl36-MuiCollapse-wrapper"
+              class="MuiCollapse-wrapper MuiCollapse-vertical css-1x6hinx-MuiCollapse-wrapper"
             >
               <div
-                class="MuiCollapse-wrapperInner MuiCollapse-vertical css-9l5vo-MuiCollapse-wrapperInner"
+                class="MuiCollapse-wrapperInner MuiCollapse-vertical css-1i4ywhz-MuiCollapse-wrapperInner"
               >
                 <div
                   aria-labelledby="panel1a-header"
@@ -176,53 +178,47 @@ exports[`Rendering test renders correctly 1`] = `
                   role="region"
                 >
                   <div
-                    class="MuiAccordionDetails-root sc-lixPIL jiOYVN css-15v22id-MuiAccordionDetails-root"
+                    class="MuiAccordionDetails-root sc-lixPIL jiOYVN css-1lj39kh-MuiAccordionDetails-root"
                   >
                     <div
                       class="sc-jScdur dQKvNq MuiBox-root css-1mc6bnb"
                     >
                       <div
-                        class="MuiTabs-root css-1ujnqem-MuiTabs-root"
+                        class="MuiTabs-root css-jhczcq-MuiTabs-root"
                       >
                         <div
-                          class="MuiTabs-scroller MuiTabs-fixed css-jpln7h-MuiTabs-scroller"
+                          class="MuiTabs-scroller MuiTabs-fixed css-s2t35c-MuiTabs-scroller"
                           style="overflow: hidden; margin-bottom: 0px;"
                         >
                           <div
-                            class="MuiTabs-flexContainer css-heg063-MuiTabs-flexContainer"
+                            class="MuiTabs-list MuiTabs-flexContainer css-hzcega-MuiTabs-list"
                             role="tablist"
                           >
                             <button
                               aria-controls="simple-tabpanel-0"
                               aria-selected="true"
-                              class="MuiButtonBase-root MuiTab-root MuiTab-textColorPrimary Mui-selected css-1h9z7r5-MuiButtonBase-root-MuiTab-root"
+                              class="MuiButtonBase-root MuiTab-root MuiTab-textColorPrimary Mui-selected css-1usuzwp-MuiButtonBase-root-MuiTab-root"
                               id="simple-tab-0"
                               role="tab"
                               tabindex="0"
                               type="button"
                             >
                               asd
-                              <span
-                                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-                              />
                             </button>
                             <button
                               aria-controls="simple-tabpanel-1"
                               aria-selected="false"
-                              class="MuiButtonBase-root MuiTab-root MuiTab-textColorPrimary css-1h9z7r5-MuiButtonBase-root-MuiTab-root"
+                              class="MuiButtonBase-root MuiTab-root MuiTab-textColorPrimary css-1usuzwp-MuiButtonBase-root-MuiTab-root"
                               id="simple-tab-1"
                               role="tab"
                               tabindex="-1"
                               type="button"
                             >
                               foo2
-                              <span
-                                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-                              />
                             </button>
                           </div>
                           <span
-                            class="MuiTabs-indicator css-1aquho2-MuiTabs-indicator"
+                            class="MuiTabs-indicator css-1qltlow-MuiTabs-indicator"
                             style="left: 0px; width: 0px;"
                           />
                         </div>
@@ -240,43 +236,43 @@ exports[`Rendering test renders correctly 1`] = `
                           class="sc-Qotzb dvSRyf MuiBox-root css-0"
                         >
                           <div
-                            class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-3 css-zow5z4-MuiGrid-root"
+                            class="MuiGrid-root MuiGrid-container MuiGrid-direction-xs-row MuiGrid-spacing-xs-3 css-1u8xl8z-MuiGrid-root"
                           >
                             <div
-                              class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 MuiGrid-grid-xl-12 css-1idn90j-MuiGrid-root"
+                              class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-12 MuiGrid-grid-xl-12 css-1w2294g-MuiGrid-root"
                             >
                               <div
-                                class="MuiPaper-root MuiPaper-outlined MuiPaper-rounded css-172kgz0-MuiPaper-root"
+                                class="MuiPaper-root MuiPaper-outlined MuiPaper-rounded css-i9zgug-MuiPaper-root"
                               >
                                 <div
                                   class="MuiStack-root sc-dKREkF fdWzrp css-1sazv7p-MuiStack-root"
                                 >
                                   <div
-                                    class="MuiFormControl-root css-1nrlq1o-MuiFormControl-root"
+                                    class="MuiFormControl-root css-1iw3t7y-MuiFormControl-root"
                                   >
                                     <label
-                                      class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeMedium MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeMedium MuiInputLabel-outlined css-1jy569b-MuiFormLabel-root-MuiInputLabel-root"
+                                      class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined css-113d811-MuiFormLabel-root-MuiInputLabel-root"
                                       data-shrink="true"
-                                      for=":r2:"
+                                      for=":r3:"
                                     >
                                       editMetadata.valueName: fgfgfg
                                     </label>
                                     <div
-                                      class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl sc-fYsHOw cRLXqm css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root"
+                                      class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl sc-fYsHOw cRLXqm css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
                                     >
                                       <input
                                         aria-invalid="false"
-                                        class="MuiInputBase-input MuiOutlinedInput-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
-                                        id=":r2:"
+                                        class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
+                                        id=":r3:"
                                         type="text"
                                         value="fgfgfg"
                                       />
                                       <fieldset
                                         aria-hidden="true"
-                                        class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+                                        class="MuiOutlinedInput-notchedOutline css-1ll44ll-MuiOutlinedInput-notchedOutline"
                                       >
                                         <legend
-                                          class="css-14lo706"
+                                          class="css-w1u3ce"
                                         >
                                           <span>
                                             editMetadata.valueName: fgfgfg
@@ -289,31 +285,31 @@ exports[`Rendering test renders correctly 1`] = `
                                     />
                                   </div>
                                   <div
-                                    class="MuiFormControl-root css-1nrlq1o-MuiFormControl-root"
+                                    class="MuiFormControl-root css-1iw3t7y-MuiFormControl-root"
                                   >
                                     <label
-                                      class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeMedium MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeMedium MuiInputLabel-outlined css-1jy569b-MuiFormLabel-root-MuiInputLabel-root"
+                                      class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined css-113d811-MuiFormLabel-root-MuiInputLabel-root"
                                       data-shrink="true"
-                                      for=":r3:"
+                                      for=":r4:"
                                     >
                                       editMetadata.unit
                                     </label>
                                     <div
-                                      class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl sc-fYsHOw cRLXqm css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root"
+                                      class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl sc-fYsHOw cRLXqm css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
                                     >
                                       <input
                                         aria-invalid="false"
-                                        class="MuiInputBase-input MuiOutlinedInput-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
-                                        id=":r3:"
+                                        class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
+                                        id=":r4:"
                                         type="text"
                                         value="yksikko"
                                       />
                                       <fieldset
                                         aria-hidden="true"
-                                        class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+                                        class="MuiOutlinedInput-notchedOutline css-1ll44ll-MuiOutlinedInput-notchedOutline"
                                       >
                                         <legend
-                                          class="css-14lo706"
+                                          class="css-w1u3ce"
                                         >
                                           <span>
                                             editMetadata.unit
@@ -326,31 +322,31 @@ exports[`Rendering test renders correctly 1`] = `
                                     />
                                   </div>
                                   <div
-                                    class="MuiFormControl-root css-1nrlq1o-MuiFormControl-root"
+                                    class="MuiFormControl-root css-1iw3t7y-MuiFormControl-root"
                                   >
                                     <label
-                                      class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeMedium MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeMedium MuiInputLabel-outlined css-1jy569b-MuiFormLabel-root-MuiInputLabel-root"
+                                      class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined css-113d811-MuiFormLabel-root-MuiInputLabel-root"
                                       data-shrink="true"
-                                      for=":r4:"
+                                      for=":r5:"
                                     >
                                       editMetadata.source
                                     </label>
                                     <div
-                                      class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl sc-fYsHOw cRLXqm css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root"
+                                      class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl sc-fYsHOw cRLXqm css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
                                     >
                                       <input
                                         aria-invalid="false"
-                                        class="MuiInputBase-input MuiOutlinedInput-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
-                                        id=":r4:"
+                                        class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
+                                        id=":r5:"
                                         type="text"
                                         value="lahde"
                                       />
                                       <fieldset
                                         aria-hidden="true"
-                                        class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+                                        class="MuiOutlinedInput-notchedOutline css-1ll44ll-MuiOutlinedInput-notchedOutline"
                                       >
                                         <legend
-                                          class="css-14lo706"
+                                          class="css-w1u3ce"
                                         >
                                           <span>
                                             editMetadata.source

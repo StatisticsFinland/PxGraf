@@ -3,20 +3,20 @@
 exports[`Rendering test renders correctly 1`] = `
 <DocumentFragment>
   <li
-    class="MuiListItem-root MuiListItem-gutters MuiListItem-padding css-1rki8sg-MuiListItem-root"
+    class="MuiListItem-root MuiListItem-gutters MuiListItem-padding css-1p4qrhw-MuiListItem-root"
   >
     <div
       aria-expanded="false"
-      class="MuiButtonBase-root MuiListItemButton-root MuiListItemButton-gutters MuiListItemButton-root MuiListItemButton-gutters css-1puyogp-MuiButtonBase-root-MuiListItemButton-root"
+      class="MuiButtonBase-root MuiListItemButton-root MuiListItemButton-gutters MuiListItemButton-root MuiListItemButton-gutters css-nlxtz9-MuiButtonBase-root-MuiListItemButton-root"
       role="button"
       tabindex="0"
     >
       <div
-        class="MuiListItemIcon-root css-16myrmq-MuiListItemIcon-root"
+        class="MuiListItemIcon-root css-sx7q2d-MuiListItemIcon-root"
       >
         <svg
           aria-hidden="true"
-          class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+          class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1umw9bq-MuiSvgIcon-root"
           data-testid="ExpandMoreIcon"
           focusable="false"
           viewBox="0 0 24 24"
@@ -27,31 +27,28 @@ exports[`Rendering test renders correctly 1`] = `
         </svg>
       </div>
       <div
-        class="MuiListItemText-root css-tlelie-MuiListItemText-root"
+        class="MuiListItemText-root css-cfq8qh-MuiListItemText-root"
       >
         <span
-          class="MuiTypography-root MuiTypography-body1 MuiListItemText-primary css-10hburv-MuiTypography-root"
+          class="MuiTypography-root MuiTypography-body1 MuiListItemText-primary css-rizt0-MuiTypography-root"
         >
           foo-fi (FI, EN, SV)
         </span>
       </div>
-      <span
-        class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-      />
     </div>
     <div
-      class="MuiListItemSecondaryAction-root css-518kzi-MuiListItemSecondaryAction-root"
+      class="MuiListItemSecondaryAction-root css-zezwi5-MuiListItemSecondaryAction-root"
     >
       <a
         aria-label="tableSelect.listView: foo-fi"
-        class="MuiButtonBase-root MuiIconButton-root MuiIconButton-edgeEnd MuiIconButton-sizeMedium css-1yq5fb3-MuiButtonBase-root-MuiIconButton-root"
+        class="MuiButtonBase-root MuiIconButton-root MuiIconButton-edgeEnd MuiIconButton-sizeMedium css-1ysp02-MuiButtonBase-root-MuiIconButton-root"
         data-mui-internal-clone-element="true"
         href="/table-list/foo/bar/baz/asd/"
         tabindex="0"
       >
         <svg
           aria-hidden="true"
-          class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+          class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1umw9bq-MuiSvgIcon-root"
           data-testid="ListAltOutlinedIcon"
           focusable="false"
           viewBox="0 0 24 24"
@@ -60,30 +57,27 @@ exports[`Rendering test renders correctly 1`] = `
             d="M11 7h6v2h-6zm0 4h6v2h-6zm0 4h6v2h-6zM7 7h2v2H7zm0 4h2v2H7zm0 4h2v2H7zM20.1 3H3.9c-.5 0-.9.4-.9.9v16.2c0 .4.4.9.9.9h16.2c.4 0 .9-.5.9-.9V3.9c0-.5-.5-.9-.9-.9M19 19H5V5h14z"
           />
         </svg>
-        <span
-          class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-        />
       </a>
     </div>
   </li>
   <hr
-    class="MuiDivider-root MuiDivider-fullWidth css-9mgopn-MuiDivider-root"
+    class="MuiDivider-root MuiDivider-fullWidth css-1jpc804-MuiDivider-root"
   />
   <li
-    class="MuiListItem-root MuiListItem-gutters MuiListItem-padding css-1rki8sg-MuiListItem-root"
+    class="MuiListItem-root MuiListItem-gutters MuiListItem-padding css-1p4qrhw-MuiListItem-root"
   >
     <div
       aria-expanded="false"
-      class="MuiButtonBase-root MuiListItemButton-root MuiListItemButton-gutters MuiListItemButton-root MuiListItemButton-gutters css-1puyogp-MuiButtonBase-root-MuiListItemButton-root"
+      class="MuiButtonBase-root MuiListItemButton-root MuiListItemButton-gutters MuiListItemButton-root MuiListItemButton-gutters css-nlxtz9-MuiButtonBase-root-MuiListItemButton-root"
       role="button"
       tabindex="0"
     >
       <div
-        class="MuiListItemIcon-root css-16myrmq-MuiListItemIcon-root"
+        class="MuiListItemIcon-root css-sx7q2d-MuiListItemIcon-root"
       >
         <svg
           aria-hidden="true"
-          class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+          class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1umw9bq-MuiSvgIcon-root"
           data-testid="ExpandMoreIcon"
           focusable="false"
           viewBox="0 0 24 24"
@@ -94,31 +88,28 @@ exports[`Rendering test renders correctly 1`] = `
         </svg>
       </div>
       <div
-        class="MuiListItemText-root css-tlelie-MuiListItemText-root"
+        class="MuiListItemText-root css-cfq8qh-MuiListItemText-root"
       >
         <span
-          class="MuiTypography-root MuiTypography-body1 MuiListItemText-primary css-10hburv-MuiTypography-root"
+          class="MuiTypography-root MuiTypography-body1 MuiListItemText-primary css-rizt0-MuiTypography-root"
         >
           foo3-fi (FI, EN)
         </span>
       </div>
-      <span
-        class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-      />
     </div>
     <div
-      class="MuiListItemSecondaryAction-root css-518kzi-MuiListItemSecondaryAction-root"
+      class="MuiListItemSecondaryAction-root css-zezwi5-MuiListItemSecondaryAction-root"
     >
       <a
         aria-label="tableSelect.listView: foo3-fi"
-        class="MuiButtonBase-root MuiIconButton-root MuiIconButton-edgeEnd MuiIconButton-sizeMedium css-1yq5fb3-MuiButtonBase-root-MuiIconButton-root"
+        class="MuiButtonBase-root MuiIconButton-root MuiIconButton-edgeEnd MuiIconButton-sizeMedium css-1ysp02-MuiButtonBase-root-MuiIconButton-root"
         data-mui-internal-clone-element="true"
         href="/table-list/foo/bar/baz/id/"
         tabindex="0"
       >
         <svg
           aria-hidden="true"
-          class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+          class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1umw9bq-MuiSvgIcon-root"
           data-testid="ListAltOutlinedIcon"
           focusable="false"
           viewBox="0 0 24 24"
@@ -127,30 +118,27 @@ exports[`Rendering test renders correctly 1`] = `
             d="M11 7h6v2h-6zm0 4h6v2h-6zm0 4h6v2h-6zM7 7h2v2H7zm0 4h2v2H7zm0 4h2v2H7zM20.1 3H3.9c-.5 0-.9.4-.9.9v16.2c0 .4.4.9.9.9h16.2c.4 0 .9-.5.9-.9V3.9c0-.5-.5-.9-.9-.9M19 19H5V5h14z"
           />
         </svg>
-        <span
-          class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-        />
       </a>
     </div>
   </li>
   <hr
-    class="MuiDivider-root MuiDivider-fullWidth css-9mgopn-MuiDivider-root"
+    class="MuiDivider-root MuiDivider-fullWidth css-1jpc804-MuiDivider-root"
   />
   <li
-    class="MuiListItem-root MuiListItem-gutters MuiListItem-padding sc-jHatCz bbCcAT css-1p823my-MuiListItem-root"
+    class="MuiListItem-root MuiListItem-gutters MuiListItem-padding sc-jHatCz bbCcAT css-cfd5wn-MuiListItem-root"
     id="foo-bar-baz-asd2.px"
   >
     <a
-      class="MuiButtonBase-root MuiListItemButton-root MuiListItemButton-gutters MuiListItemButton-root MuiListItemButton-gutters css-1skfnms-MuiButtonBase-root-MuiListItemButton-root"
+      class="MuiButtonBase-root MuiListItemButton-root MuiListItemButton-gutters MuiListItemButton-root MuiListItemButton-gutters css-1j5cvue-MuiButtonBase-root-MuiListItemButton-root"
       href="/editor/foo/bar/baz/asd2.px/"
       tabindex="0"
     >
       <div
-        class="MuiListItemIcon-root css-16myrmq-MuiListItemIcon-root"
+        class="MuiListItemIcon-root css-sx7q2d-MuiListItemIcon-root"
       >
         <svg
           aria-hidden="true"
-          class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+          class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1umw9bq-MuiSvgIcon-root"
           data-testid="InsertDriveFileOutlinedIcon"
           focusable="false"
           viewBox="0 0 24 24"
@@ -161,26 +149,23 @@ exports[`Rendering test renders correctly 1`] = `
         </svg>
       </div>
       <div
-        class="MuiListItemText-root MuiListItemText-multiline css-konndc-MuiListItemText-root"
+        class="MuiListItemText-root MuiListItemText-multiline css-14ln1j6-MuiListItemText-root"
       >
         <span
-          class="MuiTypography-root MuiTypography-body1 MuiListItemText-primary css-10hburv-MuiTypography-root"
+          class="MuiTypography-root MuiTypography-body1 MuiListItemText-primary css-rizt0-MuiTypography-root"
         >
           undefined (EN, SV)
         </span>
         <p
-          class="MuiTypography-root MuiTypography-body2 MuiListItemText-secondary css-83ijpv-MuiTypography-root"
+          class="MuiTypography-root MuiTypography-body2 MuiListItemText-secondary css-1a1whku-MuiTypography-root"
         >
           tableSelect.updated: 13.11.2021 klo 14.53.06
         </p>
       </div>
-      <span
-        class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-      />
     </a>
   </li>
   <hr
-    class="MuiDivider-root MuiDivider-fullWidth css-9mgopn-MuiDivider-root"
+    class="MuiDivider-root MuiDivider-fullWidth css-1jpc804-MuiDivider-root"
   />
 </DocumentFragment>
 `;
@@ -188,18 +173,19 @@ exports[`Rendering test renders correctly 1`] = `
 exports[`Rendering test renders correctly when table query  1`] = `
 <DocumentFragment>
   <li
-    class="MuiListItem-root MuiListItem-gutters MuiListItem-padding css-1p823my-MuiListItem-root"
+    class="MuiListItem-root MuiListItem-gutters MuiListItem-padding css-cfd5wn-MuiListItem-root"
   >
     <div
-      class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation0 MuiAlert-root MuiAlert-colorError MuiAlert-standardError MuiAlert-standard sc-hOTSeL hjjwaJ css-r1b7i3-MuiPaper-root-MuiAlert-root"
+      class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation0 MuiAlert-root MuiAlert-colorError MuiAlert-standardError MuiAlert-standard sc-hOTSeL hjjwaJ css-u8pub9-MuiPaper-root-MuiAlert-root"
       role="alert"
+      style="--Paper-shadow: none;"
     >
       <div
-        class="MuiAlert-icon css-1ytlwq5-MuiAlert-icon"
+        class="MuiAlert-icon css-vab54s-MuiAlert-icon"
       >
         <svg
           aria-hidden="true"
-          class="MuiSvgIcon-root MuiSvgIcon-fontSizeInherit css-1vooibu-MuiSvgIcon-root"
+          class="MuiSvgIcon-root MuiSvgIcon-fontSizeInherit css-1ckov0h-MuiSvgIcon-root"
           data-testid="ErrorOutlineIcon"
           focusable="false"
           viewBox="0 0 24 24"
@@ -210,14 +196,14 @@ exports[`Rendering test renders correctly when table query  1`] = `
         </svg>
       </div>
       <div
-        class="MuiAlert-message css-1pxa9xg-MuiAlert-message"
+        class="MuiAlert-message css-zioonp-MuiAlert-message"
       >
         error.contentLoad
       </div>
     </div>
   </li>
   <hr
-    class="MuiDivider-root MuiDivider-fullWidth css-9mgopn-MuiDivider-root"
+    class="MuiDivider-root MuiDivider-fullWidth css-1jpc804-MuiDivider-root"
   />
 </DocumentFragment>
 `;
@@ -225,29 +211,29 @@ exports[`Rendering test renders correctly when table query  1`] = `
 exports[`Rendering test renders correctly while loading data 1`] = `
 <DocumentFragment>
   <li
-    class="MuiListItem-root MuiListItem-gutters MuiListItem-padding css-1p823my-MuiListItem-root"
+    class="MuiListItem-root MuiListItem-gutters MuiListItem-padding css-cfd5wn-MuiListItem-root"
   >
     <div
-      class="MuiListItemIcon-root css-mbw9t7-MuiListItemIcon-root"
+      class="MuiListItemIcon-root css-1luiz03-MuiListItemIcon-root"
     >
       <span
-        class="MuiSkeleton-root MuiSkeleton-circular MuiSkeleton-pulse sc-jRueeR bhwWFP css-wkdwxb-MuiSkeleton-root"
+        class="MuiSkeleton-root MuiSkeleton-circular MuiSkeleton-pulse sc-jRueeR bhwWFP css-1epbneo-MuiSkeleton-root"
       />
     </div>
     <div
-      class="MuiListItemText-root sc-gjZUHa hWsfEH css-tlelie-MuiListItemText-root"
+      class="MuiListItemText-root sc-gjZUHa hWsfEH css-cfq8qh-MuiListItemText-root"
     >
       <span
-        class="MuiTypography-root MuiTypography-body1 MuiListItemText-primary css-10hburv-MuiTypography-root"
+        class="MuiTypography-root MuiTypography-body1 MuiListItemText-primary css-rizt0-MuiTypography-root"
       >
         <span
-          class="MuiSkeleton-root MuiSkeleton-text MuiSkeleton-pulse css-1e1x4vv-MuiSkeleton-root"
+          class="MuiSkeleton-root MuiSkeleton-text MuiSkeleton-pulse css-kkcbhd-MuiSkeleton-root"
         />
       </span>
     </div>
   </li>
   <hr
-    class="MuiDivider-root MuiDivider-fullWidth css-9mgopn-MuiDivider-root"
+    class="MuiDivider-root MuiDivider-fullWidth css-1jpc804-MuiDivider-root"
   />
 </DocumentFragment>
 `;
