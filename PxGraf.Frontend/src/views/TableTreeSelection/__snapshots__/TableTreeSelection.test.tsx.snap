@@ -3,7 +3,7 @@
 exports[`Rendering test renders correctly 1`] = `
 <DocumentFragment>
   <div
-    class="MuiContainer-root MuiContainer-maxWidthMd sc-goMbjt cQfrbF css-xdmu94-MuiContainer-root"
+    class="MuiContainer-root MuiContainer-maxWidthMd sc-gjZUHa cljyck css-xdmu94-MuiContainer-root"
   >
     <nav
       aria-labelledby="nested-list-subheader"
@@ -14,14 +14,14 @@ exports[`Rendering test renders correctly 1`] = `
         id="nested-list-subheader"
       >
         <div
-          class="sc-hoOxjs bMXVHB"
+          class="sc-hOTSeL hJbigK"
         >
           <div>
             tableSelect.title
           </div>
           <button
             aria-label="tooltip.open: tableSelect.title"
-            class="sc-cZztgT eEmkpU"
+            class="sc-cUiCeM cxsgJn"
             id="mainContent"
           >
             <svg
@@ -39,7 +39,7 @@ exports[`Rendering test renders correctly 1`] = `
         </div>
       </div>
       <li
-        class="MuiListItem-root MuiListItem-gutters MuiListItem-padding sc-jGYizi fSCJnI css-1p823my-MuiListItem-root"
+        class="MuiListItem-root MuiListItem-gutters MuiListItem-padding sc-jLKpbB gmrGoU css-1p823my-MuiListItem-root"
         id="id1.px"
       >
         <a
@@ -85,7 +85,7 @@ exports[`Rendering test renders correctly 1`] = `
         class="MuiDivider-root MuiDivider-fullWidth css-9mgopn-MuiDivider-root"
       />
       <li
-        class="MuiListItem-root MuiListItem-gutters MuiListItem-padding sc-jGYizi fSCJnI css-1p823my-MuiListItem-root"
+        class="MuiListItem-root MuiListItem-gutters MuiListItem-padding sc-jLKpbB gmrGoU css-1p823my-MuiListItem-root"
         id="id2.px"
       >
         <a
