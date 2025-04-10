@@ -42,6 +42,7 @@ exports[`Rendering test renders correctly 1`] = `
       <a
         aria-label="tableSelect.listView: foo-fi"
         class="MuiButtonBase-root MuiIconButton-root MuiIconButton-edgeEnd MuiIconButton-sizeMedium css-1ysp02-MuiButtonBase-root-MuiIconButton-root"
+        data-discover="true"
         data-mui-internal-clone-element="true"
         href="/table-list/foo/bar/baz/asd/"
         tabindex="0"
@@ -103,6 +104,7 @@ exports[`Rendering test renders correctly 1`] = `
       <a
         aria-label="tableSelect.listView: foo3-fi"
         class="MuiButtonBase-root MuiIconButton-root MuiIconButton-edgeEnd MuiIconButton-sizeMedium css-1ysp02-MuiButtonBase-root-MuiIconButton-root"
+        data-discover="true"
         data-mui-internal-clone-element="true"
         href="/table-list/foo/bar/baz/id/"
         tabindex="0"
@@ -130,6 +132,7 @@ exports[`Rendering test renders correctly 1`] = `
   >
     <a
       class="MuiButtonBase-root MuiListItemButton-root MuiListItemButton-gutters MuiListItemButton-root MuiListItemButton-gutters css-1j5cvue-MuiButtonBase-root-MuiListItemButton-root"
+      data-discover="true"
       href="/editor/foo/bar/baz/asd2.px/"
       tabindex="0"
     >

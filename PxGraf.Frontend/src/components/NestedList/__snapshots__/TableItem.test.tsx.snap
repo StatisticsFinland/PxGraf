@@ -8,6 +8,7 @@ exports[`Rendering test renders correctly 1`] = `
   >
     <a
       class="MuiButtonBase-root MuiListItemButton-root MuiListItemButton-gutters MuiListItemButton-root MuiListItemButton-gutters css-1j5cvue-MuiButtonBase-root-MuiListItemButton-root"
+      data-discover="true"
       href="/editor/foo/bar/baz/"
       tabindex="0"
     >

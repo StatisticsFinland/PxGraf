@@ -42,6 +42,7 @@ exports[`Rendering test renders correctly 1`] = `
       <a
         aria-label="tableSelect.listView: seppodbid"
         class="MuiButtonBase-root MuiIconButton-root MuiIconButton-edgeEnd MuiIconButton-sizeMedium css-1ysp02-MuiButtonBase-root-MuiIconButton-root"
+        data-discover="true"
         data-mui-internal-clone-element="true"
         href="/table-list/foo/bar/baz/"
         tabindex="0"

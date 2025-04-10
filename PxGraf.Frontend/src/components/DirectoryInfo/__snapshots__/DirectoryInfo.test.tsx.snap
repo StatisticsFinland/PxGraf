@@ -4,6 +4,7 @@ exports[`Rendering test renders correctly 1`] = `
 <DocumentFragment>
   <a
     class="MuiButtonBase-root MuiListItemButton-root MuiListItemButton-gutters MuiListItemButton-root MuiListItemButton-gutters css-4bx69l-MuiButtonBase-root-MuiListItemButton-root"
+    data-discover="true"
     href="/table-list/a/s/d/1/2/3/foo-group/"
     id="mainContent"
     tabindex="0"
