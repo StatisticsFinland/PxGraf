@@ -62,6 +62,6 @@ describe('Assertion tests', () => {
     it('Change event should fire when value has changed', () => {
         render(<HeaderEditor defaultHeaderResponse={mockDefaultResponse} editValue={mockEditValue} language={mockLang} onChange={mockFunction} style={{}} />);
         fireEvent.change(screen.getByDisplayValue(mockEditValue['fi']), { target: { value: 'editValue2' } });
-        expect(mockFunction).toBeCalledTimes(1);
+        expect(mockFunction).toHaveBeenCalledTimes(1);
     });
 });

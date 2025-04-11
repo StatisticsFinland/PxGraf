@@ -3,68 +3,62 @@
 exports[`Rendering test renders correctly 1`] = `
 <DocumentFragment>
   <div
-    class="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
+    class="MuiFormControl-root MuiFormControl-fullWidth css-ytlejw-MuiFormControl-root"
   >
     <div
-      class="MuiStack-root sc-gyycJP bQujGH css-m69qwo-MuiStack-root"
+      class="MuiStack-root sc-fYsHOw kZzpde css-m69qwo-MuiStack-root"
     >
       <ul
-        class="MuiList-root MuiList-padding MuiList-dense MuiList-subheader sc-KXCwU fWGnzY css-p64g7a-MuiList-root"
+        class="MuiList-root MuiList-padding MuiList-dense MuiList-subheader sc-Qotzb cEUZKv css-h1es49-MuiList-root"
       >
         <li
-          class="MuiListSubheader-root MuiListSubheader-gutters MuiListSubheader-sticky css-uob957-MuiListSubheader-root"
+          class="MuiListSubheader-root MuiListSubheader-gutters MuiListSubheader-sticky css-l328gy-MuiListSubheader-root"
         >
           chartSettings.rowVariables
         </li>
         <div
-          class="MuiButtonBase-root MuiListItemButton-root MuiListItemButton-dense MuiListItemButton-gutters MuiListItemButton-root MuiListItemButton-dense MuiListItemButton-gutters css-178cqt3-MuiButtonBase-root-MuiListItemButton-root"
+          class="MuiButtonBase-root MuiListItemButton-root MuiListItemButton-dense MuiListItemButton-gutters MuiListItemButton-root MuiListItemButton-dense MuiListItemButton-gutters css-2knotq-MuiButtonBase-root-MuiListItemButton-root"
           role="button"
           tabindex="0"
         >
           <div
-            class="MuiListItemText-root MuiListItemText-dense css-tlelie-MuiListItemText-root"
+            class="MuiListItemText-root MuiListItemText-dense css-cfq8qh-MuiListItemText-root"
           >
             <span
-              class="MuiTypography-root MuiTypography-body2 MuiListItemText-primary css-et1ao3-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body2 MuiListItemText-primary css-7ctihp-MuiTypography-root"
             >
               foo1 2
             </span>
           </div>
-          <span
-            class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-          />
         </div>
         <div
-          class="MuiButtonBase-root MuiListItemButton-root MuiListItemButton-dense MuiListItemButton-gutters MuiListItemButton-root MuiListItemButton-dense MuiListItemButton-gutters css-178cqt3-MuiButtonBase-root-MuiListItemButton-root"
+          class="MuiButtonBase-root MuiListItemButton-root MuiListItemButton-dense MuiListItemButton-gutters MuiListItemButton-root MuiListItemButton-dense MuiListItemButton-gutters css-2knotq-MuiButtonBase-root-MuiListItemButton-root"
           role="button"
           tabindex="0"
         >
           <div
-            class="MuiListItemText-root MuiListItemText-dense css-tlelie-MuiListItemText-root"
+            class="MuiListItemText-root MuiListItemText-dense css-cfq8qh-MuiListItemText-root"
           >
             <span
-              class="MuiTypography-root MuiTypography-body2 MuiListItemText-primary css-et1ao3-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body2 MuiListItemText-primary css-7ctihp-MuiTypography-root"
             >
               foo3 2
             </span>
           </div>
-          <span
-            class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-          />
         </div>
       </ul>
       <div
-        class="MuiStack-root sc-eaUbBy ktsarK css-nen11g-MuiStack-root"
+        class="MuiStack-root sc-dKREkF cfxFSg css-nen11g-MuiStack-root"
       >
         <button
           aria-label="tableSettings.up"
-          class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-78trlr-MuiButtonBase-root-MuiIconButton-root"
+          class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-53g0n7-MuiButtonBase-root-MuiIconButton-root"
           tabindex="0"
           type="button"
         >
           <svg
             aria-hidden="true"
-            class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+            class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1umw9bq-MuiSvgIcon-root"
             data-testid="ArrowUpwardIcon"
             focusable="false"
             viewBox="0 0 24 24"
@@ -73,19 +67,16 @@ exports[`Rendering test renders correctly 1`] = `
               d="m4 12 1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8z"
             />
           </svg>
-          <span
-            class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-          />
         </button>
         <button
           aria-label="tableSettings.down"
-          class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-78trlr-MuiButtonBase-root-MuiIconButton-root"
+          class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-53g0n7-MuiButtonBase-root-MuiIconButton-root"
           tabindex="0"
           type="button"
         >
           <svg
             aria-hidden="true"
-            class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+            class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1umw9bq-MuiSvgIcon-root"
             data-testid="ArrowDownwardIcon"
             focusable="false"
             viewBox="0 0 24 24"
@@ -94,19 +85,16 @@ exports[`Rendering test renders correctly 1`] = `
               d="m20 12-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8z"
             />
           </svg>
-          <span
-            class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-          />
         </button>
         <button
           aria-label="tableSettings.swap"
-          class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-78trlr-MuiButtonBase-root-MuiIconButton-root"
+          class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-53g0n7-MuiButtonBase-root-MuiIconButton-root"
           tabindex="0"
           type="button"
         >
           <svg
             aria-hidden="true"
-            class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+            class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1umw9bq-MuiSvgIcon-root"
             data-testid="SwapHorizIcon"
             focusable="false"
             viewBox="0 0 24 24"
@@ -115,54 +103,45 @@ exports[`Rendering test renders correctly 1`] = `
               d="M6.99 11 3 15l3.99 4v-3H14v-2H6.99zM21 9l-3.99-4v3H10v2h7.01v3z"
             />
           </svg>
-          <span
-            class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-          />
         </button>
       </div>
       <ul
-        class="MuiList-root MuiList-padding MuiList-dense MuiList-subheader sc-KXCwU fWGnzY css-p64g7a-MuiList-root"
+        class="MuiList-root MuiList-padding MuiList-dense MuiList-subheader sc-Qotzb cEUZKv css-h1es49-MuiList-root"
       >
         <li
-          class="MuiListSubheader-root MuiListSubheader-gutters MuiListSubheader-sticky css-uob957-MuiListSubheader-root"
+          class="MuiListSubheader-root MuiListSubheader-gutters MuiListSubheader-sticky css-l328gy-MuiListSubheader-root"
         >
           chartSettings.columnVariables
         </li>
         <div
-          class="MuiButtonBase-root MuiListItemButton-root MuiListItemButton-dense MuiListItemButton-gutters MuiListItemButton-root MuiListItemButton-dense MuiListItemButton-gutters css-178cqt3-MuiButtonBase-root-MuiListItemButton-root"
+          class="MuiButtonBase-root MuiListItemButton-root MuiListItemButton-dense MuiListItemButton-gutters MuiListItemButton-root MuiListItemButton-dense MuiListItemButton-gutters css-2knotq-MuiButtonBase-root-MuiListItemButton-root"
           role="button"
           tabindex="0"
         >
           <div
-            class="MuiListItemText-root MuiListItemText-dense css-tlelie-MuiListItemText-root"
+            class="MuiListItemText-root MuiListItemText-dense css-cfq8qh-MuiListItemText-root"
           >
             <span
-              class="MuiTypography-root MuiTypography-body2 MuiListItemText-primary css-et1ao3-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body2 MuiListItemText-primary css-7ctihp-MuiTypography-root"
             >
               foo2 2
             </span>
           </div>
-          <span
-            class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-          />
         </div>
         <div
-          class="MuiButtonBase-root MuiListItemButton-root MuiListItemButton-dense MuiListItemButton-gutters MuiListItemButton-root MuiListItemButton-dense MuiListItemButton-gutters css-178cqt3-MuiButtonBase-root-MuiListItemButton-root"
+          class="MuiButtonBase-root MuiListItemButton-root MuiListItemButton-dense MuiListItemButton-gutters MuiListItemButton-root MuiListItemButton-dense MuiListItemButton-gutters css-2knotq-MuiButtonBase-root-MuiListItemButton-root"
           role="button"
           tabindex="0"
         >
           <div
-            class="MuiListItemText-root MuiListItemText-dense css-tlelie-MuiListItemText-root"
+            class="MuiListItemText-root MuiListItemText-dense css-cfq8qh-MuiListItemText-root"
           >
             <span
-              class="MuiTypography-root MuiTypography-body2 MuiListItemText-primary css-et1ao3-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body2 MuiListItemText-primary css-7ctihp-MuiTypography-root"
             >
               foo4 2
             </span>
           </div>
-          <span
-            class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-          />
         </div>
       </ul>
     </div>
