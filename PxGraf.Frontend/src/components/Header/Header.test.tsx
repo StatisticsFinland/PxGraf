@@ -1,6 +1,6 @@
 import React from 'react';
-import { render } from "@testing-library/react";
 import Header from "./Header";
+import { act, render, waitFor } from '@testing-library/react';
 
 jest.mock('react-i18next', () => ({
     ...jest.requireActual('react-i18next'),
@@ -36,8 +36,10 @@ jest.mock('../../contexts/navigationContext', () => ({
 }))
 
 describe('Header component', () => {
-    it('should render correctly', () => {
+    it('should render correctly', async () => {
         const { asFragment } = render(<Header />);
-        expect(asFragment()).toMatchSnapshot();
+        await waitFor(() => {
+            expect(asFragment()).toMatchSnapshot();
+        });
     })
 });

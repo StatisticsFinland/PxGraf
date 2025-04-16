@@ -5,11 +5,11 @@ exports[`Rendering test renders grouphorizontalbarchart correctly 1`] = `
   <div>
     <button
       aria-label="tooltip.open: tooltip.visualizationConfig"
-      class="sc-jqVXSH gRmzVu"
+      class="sc-iQQCXo kcqxua"
     >
       <svg
         aria-hidden="true"
-        class="MuiSvgIcon-root MuiSvgIcon-colorInfo MuiSvgIcon-fontSizeMedium css-1yq1soz-MuiSvgIcon-root"
+        class="MuiSvgIcon-root MuiSvgIcon-colorInfo MuiSvgIcon-fontSizeMedium css-ocq0ss-MuiSvgIcon-root"
         data-testid="InfoIcon"
         focusable="false"
         viewBox="0 0 24 24"
@@ -20,71 +20,71 @@ exports[`Rendering test renders grouphorizontalbarchart correctly 1`] = `
       </svg>
     </button>
     <div
-      class="sc-cGXZpB hRkBxQ"
+      class="sc-cXawGu ehfJVs"
     >
       <div
-        class="MuiStack-root sc-gaZyOd erAlLv css-m69qwo-MuiStack-root"
+        class="MuiStack-root sc-fWnslK vwiSF css-m69qwo-MuiStack-root"
       >
         <div
           class="MuiBox-root css-0"
         >
           <p
-            class="MuiTypography-root MuiTypography-body1 MuiTypography-gutterBottom css-d3wcwz-MuiTypography-root"
+            class="MuiTypography-root MuiTypography-body1 MuiTypography-gutterBottom css-vjrxpc-MuiTypography-root"
             id="input-slider"
           >
             chartSettings.markerScale
           </p>
           <span
-            class="MuiSlider-root MuiSlider-marked MuiSlider-colorPrimary MuiSlider-sizeMedium sc-dDvxFM hhSmfW css-ltlhnc-MuiSlider-root"
+            class="MuiSlider-root MuiSlider-marked MuiSlider-colorPrimary MuiSlider-sizeMedium sc-dIMoHT keSCEP css-1e45yg4-MuiSlider-root"
           >
             <span
-              class="MuiSlider-rail css-7o8aqz-MuiSlider-rail"
+              class="MuiSlider-rail css-r64h58-MuiSlider-rail"
             />
             <span
-              class="MuiSlider-track css-ttgsjq-MuiSlider-track"
+              class="MuiSlider-track css-xvk2i-MuiSlider-track"
               style="left: 0%; width: 0%;"
             />
             <span
-              class="MuiSlider-mark MuiSlider-markActive css-z5sdnj-MuiSlider-mark"
+              class="MuiSlider-mark MuiSlider-markActive css-16kozi8-MuiSlider-mark"
               data-index="0"
               style="left: 0%;"
             />
             <span
               aria-hidden="true"
-              class="MuiSlider-markLabel MuiSlider-markLabel MuiSlider-markLabelActive css-1ucwjgd-MuiSlider-markLabel"
+              class="MuiSlider-markLabel MuiSlider-markLabel MuiSlider-markLabelActive css-swtyag-MuiSlider-markLabel"
               data-index="0"
               style="left: 0%;"
             >
               1%
             </span>
             <span
-              class="MuiSlider-mark css-hzp7sc-MuiSlider-mark"
+              class="MuiSlider-mark css-lq5hqx-MuiSlider-mark"
               data-index="1"
               style="left: 49.74874371859296%;"
             />
             <span
               aria-hidden="true"
-              class="MuiSlider-markLabel MuiSlider-markLabel css-1bvr8oc-MuiSlider-markLabel"
+              class="MuiSlider-markLabel MuiSlider-markLabel css-1qb795b-MuiSlider-markLabel"
               data-index="1"
               style="left: 49.74874371859296%;"
             >
               100%
             </span>
             <span
-              class="MuiSlider-mark css-hzp7sc-MuiSlider-mark"
+              class="MuiSlider-mark css-lq5hqx-MuiSlider-mark"
               data-index="2"
               style="left: 100%;"
             />
             <span
               aria-hidden="true"
-              class="MuiSlider-markLabel MuiSlider-markLabel css-1bvr8oc-MuiSlider-markLabel"
+              class="MuiSlider-markLabel MuiSlider-markLabel css-1qb795b-MuiSlider-markLabel"
               data-index="2"
               style="left: 100%;"
             >
               200%
             </span>
             <span
-              class="MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary css-cp2j25-MuiSlider-thumb"
+              class="MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary css-1xcmt9q-MuiSlider-thumb"
               data-index="0"
               style="left: 0%;"
             >
@@ -104,7 +104,7 @@ exports[`Rendering test renders grouphorizontalbarchart correctly 1`] = `
               />
               <span
                 aria-hidden="true"
-                class="MuiSlider-valueLabel css-14gyywz-MuiSlider-valueLabel"
+                class="MuiSlider-valueLabel css-1asissc-MuiSlider-valueLabel"
               >
                 <span
                   class="MuiSlider-valueLabelCircle"
@@ -122,40 +122,37 @@ exports[`Rendering test renders grouphorizontalbarchart correctly 1`] = `
       </div>
     </div>
     <div
-      class="sc-cGXZpB hRkBxQ"
+      class="sc-cXawGu ehfJVs"
     >
       <div
-        class="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
+        class="MuiFormControl-root MuiFormControl-fullWidth css-ytlejw-MuiFormControl-root"
       >
         <label
-          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-j204z7-MuiFormControlLabel-root"
+          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-19opgx6-MuiFormControlLabel-root"
         >
           <span
-            class="MuiSwitch-root MuiSwitch-sizeMedium css-julti5-MuiSwitch-root"
+            class="MuiSwitch-root MuiSwitch-sizeMedium css-rehya9-MuiSwitch-root"
           >
             <span
-              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-byenzh-MuiButtonBase-root-MuiSwitch-switchBase"
+              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
             >
               <input
-                class="PrivateSwitchBase-input MuiSwitch-input css-1m9pwf3"
+                class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
                 type="checkbox"
               />
               <span
-                class="MuiSwitch-thumb css-jsexje-MuiSwitch-thumb"
-              />
-              <span
-                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                class="MuiSwitch-thumb css-17jyosd-MuiSwitch-thumb"
               />
             </span>
             <span
-              class="MuiSwitch-track css-1yjjitx-MuiSwitch-track"
+              class="MuiSwitch-track css-tj8d99-MuiSwitch-track"
             />
           </span>
           <span
-            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
+            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-rizt0-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jHbxoU gMHYgW css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jMsorb jGUqRM css-rizt0-MuiTypography-root"
             >
               chartSettings.cutYAxis
             </p>
@@ -163,37 +160,34 @@ exports[`Rendering test renders grouphorizontalbarchart correctly 1`] = `
         </label>
       </div>
       <div
-        class="MuiFormControl-root MuiFormControl-fullWidth sc-hWWBcw hvCkYQ css-q8hpuo-MuiFormControl-root"
+        class="MuiFormControl-root MuiFormControl-fullWidth sc-icnseD gKDpJn css-ytlejw-MuiFormControl-root"
       >
         <label
-          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-j204z7-MuiFormControlLabel-root"
+          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-19opgx6-MuiFormControlLabel-root"
         >
           <span
-            class="MuiSwitch-root MuiSwitch-sizeMedium css-julti5-MuiSwitch-root"
+            class="MuiSwitch-root MuiSwitch-sizeMedium css-rehya9-MuiSwitch-root"
           >
             <span
-              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-byenzh-MuiButtonBase-root-MuiSwitch-switchBase"
+              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
             >
               <input
-                class="PrivateSwitchBase-input MuiSwitch-input css-1m9pwf3"
+                class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
                 type="checkbox"
               />
               <span
-                class="MuiSwitch-thumb css-jsexje-MuiSwitch-thumb"
-              />
-              <span
-                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                class="MuiSwitch-thumb css-17jyosd-MuiSwitch-thumb"
               />
             </span>
             <span
-              class="MuiSwitch-track css-1yjjitx-MuiSwitch-track"
+              class="MuiSwitch-track css-tj8d99-MuiSwitch-track"
             />
           </span>
           <span
-            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
+            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-rizt0-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jHbxoU gMHYgW css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jMsorb jGUqRM css-rizt0-MuiTypography-root"
             >
               chartSettings.matchXLabelsToEnd
             </p>
@@ -201,37 +195,34 @@ exports[`Rendering test renders grouphorizontalbarchart correctly 1`] = `
         </label>
       </div>
       <div
-        class="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
+        class="MuiFormControl-root MuiFormControl-fullWidth css-ytlejw-MuiFormControl-root"
       >
         <label
-          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-j204z7-MuiFormControlLabel-root"
+          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-19opgx6-MuiFormControlLabel-root"
         >
           <span
-            class="MuiSwitch-root MuiSwitch-sizeMedium css-julti5-MuiSwitch-root"
+            class="MuiSwitch-root MuiSwitch-sizeMedium css-rehya9-MuiSwitch-root"
           >
             <span
-              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-byenzh-MuiButtonBase-root-MuiSwitch-switchBase"
+              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
             >
               <input
-                class="PrivateSwitchBase-input MuiSwitch-input css-1m9pwf3"
+                class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
                 type="checkbox"
               />
               <span
-                class="MuiSwitch-thumb css-jsexje-MuiSwitch-thumb"
-              />
-              <span
-                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                class="MuiSwitch-thumb css-17jyosd-MuiSwitch-thumb"
               />
             </span>
             <span
-              class="MuiSwitch-track css-1yjjitx-MuiSwitch-track"
+              class="MuiSwitch-track css-tj8d99-MuiSwitch-track"
             />
           </span>
           <span
-            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
+            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-rizt0-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jHbxoU gMHYgW css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jMsorb jGUqRM css-rizt0-MuiTypography-root"
             >
               visualizationSettings.showDataPoints
             </p>
@@ -248,11 +239,11 @@ exports[`Rendering test renders groupverticalbarchart correctly 1`] = `
   <div>
     <button
       aria-label="tooltip.open: tooltip.visualizationConfig"
-      class="sc-jqVXSH gRmzVu"
+      class="sc-iQQCXo kcqxua"
     >
       <svg
         aria-hidden="true"
-        class="MuiSvgIcon-root MuiSvgIcon-colorInfo MuiSvgIcon-fontSizeMedium css-1yq1soz-MuiSvgIcon-root"
+        class="MuiSvgIcon-root MuiSvgIcon-colorInfo MuiSvgIcon-fontSizeMedium css-ocq0ss-MuiSvgIcon-root"
         data-testid="InfoIcon"
         focusable="false"
         viewBox="0 0 24 24"
@@ -263,71 +254,71 @@ exports[`Rendering test renders groupverticalbarchart correctly 1`] = `
       </svg>
     </button>
     <div
-      class="sc-cGXZpB hRkBxQ"
+      class="sc-cXawGu ehfJVs"
     >
       <div
-        class="MuiStack-root sc-gaZyOd erAlLv css-m69qwo-MuiStack-root"
+        class="MuiStack-root sc-fWnslK vwiSF css-m69qwo-MuiStack-root"
       >
         <div
           class="MuiBox-root css-0"
         >
           <p
-            class="MuiTypography-root MuiTypography-body1 MuiTypography-gutterBottom css-d3wcwz-MuiTypography-root"
+            class="MuiTypography-root MuiTypography-body1 MuiTypography-gutterBottom css-vjrxpc-MuiTypography-root"
             id="input-slider"
           >
             chartSettings.markerScale
           </p>
           <span
-            class="MuiSlider-root MuiSlider-marked MuiSlider-colorPrimary MuiSlider-sizeMedium sc-dDvxFM hhSmfW css-ltlhnc-MuiSlider-root"
+            class="MuiSlider-root MuiSlider-marked MuiSlider-colorPrimary MuiSlider-sizeMedium sc-dIMoHT keSCEP css-1e45yg4-MuiSlider-root"
           >
             <span
-              class="MuiSlider-rail css-7o8aqz-MuiSlider-rail"
+              class="MuiSlider-rail css-r64h58-MuiSlider-rail"
             />
             <span
-              class="MuiSlider-track css-ttgsjq-MuiSlider-track"
+              class="MuiSlider-track css-xvk2i-MuiSlider-track"
               style="left: 0%; width: 0%;"
             />
             <span
-              class="MuiSlider-mark MuiSlider-markActive css-z5sdnj-MuiSlider-mark"
+              class="MuiSlider-mark MuiSlider-markActive css-16kozi8-MuiSlider-mark"
               data-index="0"
               style="left: 0%;"
             />
             <span
               aria-hidden="true"
-              class="MuiSlider-markLabel MuiSlider-markLabel MuiSlider-markLabelActive css-1ucwjgd-MuiSlider-markLabel"
+              class="MuiSlider-markLabel MuiSlider-markLabel MuiSlider-markLabelActive css-swtyag-MuiSlider-markLabel"
               data-index="0"
               style="left: 0%;"
             >
               1%
             </span>
             <span
-              class="MuiSlider-mark css-hzp7sc-MuiSlider-mark"
+              class="MuiSlider-mark css-lq5hqx-MuiSlider-mark"
               data-index="1"
               style="left: 49.74874371859296%;"
             />
             <span
               aria-hidden="true"
-              class="MuiSlider-markLabel MuiSlider-markLabel css-1bvr8oc-MuiSlider-markLabel"
+              class="MuiSlider-markLabel MuiSlider-markLabel css-1qb795b-MuiSlider-markLabel"
               data-index="1"
               style="left: 49.74874371859296%;"
             >
               100%
             </span>
             <span
-              class="MuiSlider-mark css-hzp7sc-MuiSlider-mark"
+              class="MuiSlider-mark css-lq5hqx-MuiSlider-mark"
               data-index="2"
               style="left: 100%;"
             />
             <span
               aria-hidden="true"
-              class="MuiSlider-markLabel MuiSlider-markLabel css-1bvr8oc-MuiSlider-markLabel"
+              class="MuiSlider-markLabel MuiSlider-markLabel css-1qb795b-MuiSlider-markLabel"
               data-index="2"
               style="left: 100%;"
             >
               200%
             </span>
             <span
-              class="MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary css-cp2j25-MuiSlider-thumb"
+              class="MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary css-1xcmt9q-MuiSlider-thumb"
               data-index="0"
               style="left: 0%;"
             >
@@ -347,7 +338,7 @@ exports[`Rendering test renders groupverticalbarchart correctly 1`] = `
               />
               <span
                 aria-hidden="true"
-                class="MuiSlider-valueLabel css-14gyywz-MuiSlider-valueLabel"
+                class="MuiSlider-valueLabel css-1asissc-MuiSlider-valueLabel"
               >
                 <span
                   class="MuiSlider-valueLabelCircle"
@@ -365,40 +356,37 @@ exports[`Rendering test renders groupverticalbarchart correctly 1`] = `
       </div>
     </div>
     <div
-      class="sc-cGXZpB hRkBxQ"
+      class="sc-cXawGu ehfJVs"
     >
       <div
-        class="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
+        class="MuiFormControl-root MuiFormControl-fullWidth css-ytlejw-MuiFormControl-root"
       >
         <label
-          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-j204z7-MuiFormControlLabel-root"
+          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-19opgx6-MuiFormControlLabel-root"
         >
           <span
-            class="MuiSwitch-root MuiSwitch-sizeMedium css-julti5-MuiSwitch-root"
+            class="MuiSwitch-root MuiSwitch-sizeMedium css-rehya9-MuiSwitch-root"
           >
             <span
-              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-byenzh-MuiButtonBase-root-MuiSwitch-switchBase"
+              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
             >
               <input
-                class="PrivateSwitchBase-input MuiSwitch-input css-1m9pwf3"
+                class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
                 type="checkbox"
               />
               <span
-                class="MuiSwitch-thumb css-jsexje-MuiSwitch-thumb"
-              />
-              <span
-                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                class="MuiSwitch-thumb css-17jyosd-MuiSwitch-thumb"
               />
             </span>
             <span
-              class="MuiSwitch-track css-1yjjitx-MuiSwitch-track"
+              class="MuiSwitch-track css-tj8d99-MuiSwitch-track"
             />
           </span>
           <span
-            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
+            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-rizt0-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jHbxoU gMHYgW css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jMsorb jGUqRM css-rizt0-MuiTypography-root"
             >
               chartSettings.cutYAxis
             </p>
@@ -406,37 +394,34 @@ exports[`Rendering test renders groupverticalbarchart correctly 1`] = `
         </label>
       </div>
       <div
-        class="MuiFormControl-root MuiFormControl-fullWidth sc-hWWBcw hvCkYQ css-q8hpuo-MuiFormControl-root"
+        class="MuiFormControl-root MuiFormControl-fullWidth sc-icnseD gKDpJn css-ytlejw-MuiFormControl-root"
       >
         <label
-          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-j204z7-MuiFormControlLabel-root"
+          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-19opgx6-MuiFormControlLabel-root"
         >
           <span
-            class="MuiSwitch-root MuiSwitch-sizeMedium css-julti5-MuiSwitch-root"
+            class="MuiSwitch-root MuiSwitch-sizeMedium css-rehya9-MuiSwitch-root"
           >
             <span
-              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-byenzh-MuiButtonBase-root-MuiSwitch-switchBase"
+              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
             >
               <input
-                class="PrivateSwitchBase-input MuiSwitch-input css-1m9pwf3"
+                class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
                 type="checkbox"
               />
               <span
-                class="MuiSwitch-thumb css-jsexje-MuiSwitch-thumb"
-              />
-              <span
-                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                class="MuiSwitch-thumb css-17jyosd-MuiSwitch-thumb"
               />
             </span>
             <span
-              class="MuiSwitch-track css-1yjjitx-MuiSwitch-track"
+              class="MuiSwitch-track css-tj8d99-MuiSwitch-track"
             />
           </span>
           <span
-            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
+            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-rizt0-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jHbxoU gMHYgW css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jMsorb jGUqRM css-rizt0-MuiTypography-root"
             >
               chartSettings.matchXLabelsToEnd
             </p>
@@ -444,37 +429,34 @@ exports[`Rendering test renders groupverticalbarchart correctly 1`] = `
         </label>
       </div>
       <div
-        class="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
+        class="MuiFormControl-root MuiFormControl-fullWidth css-ytlejw-MuiFormControl-root"
       >
         <label
-          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-j204z7-MuiFormControlLabel-root"
+          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-19opgx6-MuiFormControlLabel-root"
         >
           <span
-            class="MuiSwitch-root MuiSwitch-sizeMedium css-julti5-MuiSwitch-root"
+            class="MuiSwitch-root MuiSwitch-sizeMedium css-rehya9-MuiSwitch-root"
           >
             <span
-              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-byenzh-MuiButtonBase-root-MuiSwitch-switchBase"
+              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
             >
               <input
-                class="PrivateSwitchBase-input MuiSwitch-input css-1m9pwf3"
+                class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
                 type="checkbox"
               />
               <span
-                class="MuiSwitch-thumb css-jsexje-MuiSwitch-thumb"
-              />
-              <span
-                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                class="MuiSwitch-thumb css-17jyosd-MuiSwitch-thumb"
               />
             </span>
             <span
-              class="MuiSwitch-track css-1yjjitx-MuiSwitch-track"
+              class="MuiSwitch-track css-tj8d99-MuiSwitch-track"
             />
           </span>
           <span
-            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
+            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-rizt0-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jHbxoU gMHYgW css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jMsorb jGUqRM css-rizt0-MuiTypography-root"
             >
               visualizationSettings.showDataPoints
             </p>
@@ -491,11 +473,11 @@ exports[`Rendering test renders horizontalbarchart correctly 1`] = `
   <div>
     <button
       aria-label="tooltip.open: tooltip.visualizationConfig"
-      class="sc-jqVXSH gRmzVu"
+      class="sc-iQQCXo kcqxua"
     >
       <svg
         aria-hidden="true"
-        class="MuiSvgIcon-root MuiSvgIcon-colorInfo MuiSvgIcon-fontSizeMedium css-1yq1soz-MuiSvgIcon-root"
+        class="MuiSvgIcon-root MuiSvgIcon-colorInfo MuiSvgIcon-fontSizeMedium css-ocq0ss-MuiSvgIcon-root"
         data-testid="InfoIcon"
         focusable="false"
         viewBox="0 0 24 24"
@@ -506,71 +488,71 @@ exports[`Rendering test renders horizontalbarchart correctly 1`] = `
       </svg>
     </button>
     <div
-      class="sc-cGXZpB hRkBxQ"
+      class="sc-cXawGu ehfJVs"
     >
       <div
-        class="MuiStack-root sc-gaZyOd erAlLv css-m69qwo-MuiStack-root"
+        class="MuiStack-root sc-fWnslK vwiSF css-m69qwo-MuiStack-root"
       >
         <div
           class="MuiBox-root css-0"
         >
           <p
-            class="MuiTypography-root MuiTypography-body1 MuiTypography-gutterBottom css-d3wcwz-MuiTypography-root"
+            class="MuiTypography-root MuiTypography-body1 MuiTypography-gutterBottom css-vjrxpc-MuiTypography-root"
             id="input-slider"
           >
             chartSettings.markerScale
           </p>
           <span
-            class="MuiSlider-root MuiSlider-marked MuiSlider-colorPrimary MuiSlider-sizeMedium sc-dDvxFM hhSmfW css-ltlhnc-MuiSlider-root"
+            class="MuiSlider-root MuiSlider-marked MuiSlider-colorPrimary MuiSlider-sizeMedium sc-dIMoHT keSCEP css-1e45yg4-MuiSlider-root"
           >
             <span
-              class="MuiSlider-rail css-7o8aqz-MuiSlider-rail"
+              class="MuiSlider-rail css-r64h58-MuiSlider-rail"
             />
             <span
-              class="MuiSlider-track css-ttgsjq-MuiSlider-track"
+              class="MuiSlider-track css-xvk2i-MuiSlider-track"
               style="left: 0%; width: 0%;"
             />
             <span
-              class="MuiSlider-mark MuiSlider-markActive css-z5sdnj-MuiSlider-mark"
+              class="MuiSlider-mark MuiSlider-markActive css-16kozi8-MuiSlider-mark"
               data-index="0"
               style="left: 0%;"
             />
             <span
               aria-hidden="true"
-              class="MuiSlider-markLabel MuiSlider-markLabel MuiSlider-markLabelActive css-1ucwjgd-MuiSlider-markLabel"
+              class="MuiSlider-markLabel MuiSlider-markLabel MuiSlider-markLabelActive css-swtyag-MuiSlider-markLabel"
               data-index="0"
               style="left: 0%;"
             >
               1%
             </span>
             <span
-              class="MuiSlider-mark css-hzp7sc-MuiSlider-mark"
+              class="MuiSlider-mark css-lq5hqx-MuiSlider-mark"
               data-index="1"
               style="left: 49.74874371859296%;"
             />
             <span
               aria-hidden="true"
-              class="MuiSlider-markLabel MuiSlider-markLabel css-1bvr8oc-MuiSlider-markLabel"
+              class="MuiSlider-markLabel MuiSlider-markLabel css-1qb795b-MuiSlider-markLabel"
               data-index="1"
               style="left: 49.74874371859296%;"
             >
               100%
             </span>
             <span
-              class="MuiSlider-mark css-hzp7sc-MuiSlider-mark"
+              class="MuiSlider-mark css-lq5hqx-MuiSlider-mark"
               data-index="2"
               style="left: 100%;"
             />
             <span
               aria-hidden="true"
-              class="MuiSlider-markLabel MuiSlider-markLabel css-1bvr8oc-MuiSlider-markLabel"
+              class="MuiSlider-markLabel MuiSlider-markLabel css-1qb795b-MuiSlider-markLabel"
               data-index="2"
               style="left: 100%;"
             >
               200%
             </span>
             <span
-              class="MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary css-cp2j25-MuiSlider-thumb"
+              class="MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary css-1xcmt9q-MuiSlider-thumb"
               data-index="0"
               style="left: 0%;"
             >
@@ -590,7 +572,7 @@ exports[`Rendering test renders horizontalbarchart correctly 1`] = `
               />
               <span
                 aria-hidden="true"
-                class="MuiSlider-valueLabel css-14gyywz-MuiSlider-valueLabel"
+                class="MuiSlider-valueLabel css-1asissc-MuiSlider-valueLabel"
               >
                 <span
                   class="MuiSlider-valueLabelCircle"
@@ -608,40 +590,37 @@ exports[`Rendering test renders horizontalbarchart correctly 1`] = `
       </div>
     </div>
     <div
-      class="sc-cGXZpB hRkBxQ"
+      class="sc-cXawGu ehfJVs"
     >
       <div
-        class="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
+        class="MuiFormControl-root MuiFormControl-fullWidth css-ytlejw-MuiFormControl-root"
       >
         <label
-          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-j204z7-MuiFormControlLabel-root"
+          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-19opgx6-MuiFormControlLabel-root"
         >
           <span
-            class="MuiSwitch-root MuiSwitch-sizeMedium css-julti5-MuiSwitch-root"
+            class="MuiSwitch-root MuiSwitch-sizeMedium css-rehya9-MuiSwitch-root"
           >
             <span
-              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-byenzh-MuiButtonBase-root-MuiSwitch-switchBase"
+              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
             >
               <input
-                class="PrivateSwitchBase-input MuiSwitch-input css-1m9pwf3"
+                class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
                 type="checkbox"
               />
               <span
-                class="MuiSwitch-thumb css-jsexje-MuiSwitch-thumb"
-              />
-              <span
-                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                class="MuiSwitch-thumb css-17jyosd-MuiSwitch-thumb"
               />
             </span>
             <span
-              class="MuiSwitch-track css-1yjjitx-MuiSwitch-track"
+              class="MuiSwitch-track css-tj8d99-MuiSwitch-track"
             />
           </span>
           <span
-            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
+            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-rizt0-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jHbxoU gMHYgW css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jMsorb jGUqRM css-rizt0-MuiTypography-root"
             >
               chartSettings.cutYAxis
             </p>
@@ -649,37 +628,34 @@ exports[`Rendering test renders horizontalbarchart correctly 1`] = `
         </label>
       </div>
       <div
-        class="MuiFormControl-root MuiFormControl-fullWidth sc-hWWBcw hvCkYQ css-q8hpuo-MuiFormControl-root"
+        class="MuiFormControl-root MuiFormControl-fullWidth sc-icnseD gKDpJn css-ytlejw-MuiFormControl-root"
       >
         <label
-          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-j204z7-MuiFormControlLabel-root"
+          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-19opgx6-MuiFormControlLabel-root"
         >
           <span
-            class="MuiSwitch-root MuiSwitch-sizeMedium css-julti5-MuiSwitch-root"
+            class="MuiSwitch-root MuiSwitch-sizeMedium css-rehya9-MuiSwitch-root"
           >
             <span
-              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-byenzh-MuiButtonBase-root-MuiSwitch-switchBase"
+              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
             >
               <input
-                class="PrivateSwitchBase-input MuiSwitch-input css-1m9pwf3"
+                class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
                 type="checkbox"
               />
               <span
-                class="MuiSwitch-thumb css-jsexje-MuiSwitch-thumb"
-              />
-              <span
-                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                class="MuiSwitch-thumb css-17jyosd-MuiSwitch-thumb"
               />
             </span>
             <span
-              class="MuiSwitch-track css-1yjjitx-MuiSwitch-track"
+              class="MuiSwitch-track css-tj8d99-MuiSwitch-track"
             />
           </span>
           <span
-            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
+            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-rizt0-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jHbxoU gMHYgW css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jMsorb jGUqRM css-rizt0-MuiTypography-root"
             >
               chartSettings.matchXLabelsToEnd
             </p>
@@ -687,37 +663,34 @@ exports[`Rendering test renders horizontalbarchart correctly 1`] = `
         </label>
       </div>
       <div
-        class="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
+        class="MuiFormControl-root MuiFormControl-fullWidth css-ytlejw-MuiFormControl-root"
       >
         <label
-          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-j204z7-MuiFormControlLabel-root"
+          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-19opgx6-MuiFormControlLabel-root"
         >
           <span
-            class="MuiSwitch-root MuiSwitch-sizeMedium css-julti5-MuiSwitch-root"
+            class="MuiSwitch-root MuiSwitch-sizeMedium css-rehya9-MuiSwitch-root"
           >
             <span
-              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-byenzh-MuiButtonBase-root-MuiSwitch-switchBase"
+              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
             >
               <input
-                class="PrivateSwitchBase-input MuiSwitch-input css-1m9pwf3"
+                class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
                 type="checkbox"
               />
               <span
-                class="MuiSwitch-thumb css-jsexje-MuiSwitch-thumb"
-              />
-              <span
-                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                class="MuiSwitch-thumb css-17jyosd-MuiSwitch-thumb"
               />
             </span>
             <span
-              class="MuiSwitch-track css-1yjjitx-MuiSwitch-track"
+              class="MuiSwitch-track css-tj8d99-MuiSwitch-track"
             />
           </span>
           <span
-            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
+            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-rizt0-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jHbxoU gMHYgW css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jMsorb jGUqRM css-rizt0-MuiTypography-root"
             >
               visualizationSettings.showDataPoints
             </p>
@@ -734,11 +707,11 @@ exports[`Rendering test renders linechart correctly 1`] = `
   <div>
     <button
       aria-label="tooltip.open: tooltip.visualizationConfig"
-      class="sc-jqVXSH gRmzVu"
+      class="sc-iQQCXo kcqxua"
     >
       <svg
         aria-hidden="true"
-        class="MuiSvgIcon-root MuiSvgIcon-colorInfo MuiSvgIcon-fontSizeMedium css-1yq1soz-MuiSvgIcon-root"
+        class="MuiSvgIcon-root MuiSvgIcon-colorInfo MuiSvgIcon-fontSizeMedium css-ocq0ss-MuiSvgIcon-root"
         data-testid="InfoIcon"
         focusable="false"
         viewBox="0 0 24 24"
@@ -749,71 +722,71 @@ exports[`Rendering test renders linechart correctly 1`] = `
       </svg>
     </button>
     <div
-      class="sc-cGXZpB hRkBxQ"
+      class="sc-cXawGu ehfJVs"
     >
       <div
-        class="MuiStack-root sc-gaZyOd erAlLv css-m69qwo-MuiStack-root"
+        class="MuiStack-root sc-fWnslK vwiSF css-m69qwo-MuiStack-root"
       >
         <div
           class="MuiBox-root css-0"
         >
           <p
-            class="MuiTypography-root MuiTypography-body1 MuiTypography-gutterBottom css-d3wcwz-MuiTypography-root"
+            class="MuiTypography-root MuiTypography-body1 MuiTypography-gutterBottom css-vjrxpc-MuiTypography-root"
             id="input-slider"
           >
             chartSettings.markerScale
           </p>
           <span
-            class="MuiSlider-root MuiSlider-marked MuiSlider-colorPrimary MuiSlider-sizeMedium sc-dDvxFM hhSmfW css-ltlhnc-MuiSlider-root"
+            class="MuiSlider-root MuiSlider-marked MuiSlider-colorPrimary MuiSlider-sizeMedium sc-dIMoHT keSCEP css-1e45yg4-MuiSlider-root"
           >
             <span
-              class="MuiSlider-rail css-7o8aqz-MuiSlider-rail"
+              class="MuiSlider-rail css-r64h58-MuiSlider-rail"
             />
             <span
-              class="MuiSlider-track css-ttgsjq-MuiSlider-track"
+              class="MuiSlider-track css-xvk2i-MuiSlider-track"
               style="left: 0%; width: 0%;"
             />
             <span
-              class="MuiSlider-mark MuiSlider-markActive css-z5sdnj-MuiSlider-mark"
+              class="MuiSlider-mark MuiSlider-markActive css-16kozi8-MuiSlider-mark"
               data-index="0"
               style="left: 0%;"
             />
             <span
               aria-hidden="true"
-              class="MuiSlider-markLabel MuiSlider-markLabel MuiSlider-markLabelActive css-1ucwjgd-MuiSlider-markLabel"
+              class="MuiSlider-markLabel MuiSlider-markLabel MuiSlider-markLabelActive css-swtyag-MuiSlider-markLabel"
               data-index="0"
               style="left: 0%;"
             >
               1%
             </span>
             <span
-              class="MuiSlider-mark css-hzp7sc-MuiSlider-mark"
+              class="MuiSlider-mark css-lq5hqx-MuiSlider-mark"
               data-index="1"
               style="left: 49.74874371859296%;"
             />
             <span
               aria-hidden="true"
-              class="MuiSlider-markLabel MuiSlider-markLabel css-1bvr8oc-MuiSlider-markLabel"
+              class="MuiSlider-markLabel MuiSlider-markLabel css-1qb795b-MuiSlider-markLabel"
               data-index="1"
               style="left: 49.74874371859296%;"
             >
               100%
             </span>
             <span
-              class="MuiSlider-mark css-hzp7sc-MuiSlider-mark"
+              class="MuiSlider-mark css-lq5hqx-MuiSlider-mark"
               data-index="2"
               style="left: 100%;"
             />
             <span
               aria-hidden="true"
-              class="MuiSlider-markLabel MuiSlider-markLabel css-1bvr8oc-MuiSlider-markLabel"
+              class="MuiSlider-markLabel MuiSlider-markLabel css-1qb795b-MuiSlider-markLabel"
               data-index="2"
               style="left: 100%;"
             >
               200%
             </span>
             <span
-              class="MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary css-cp2j25-MuiSlider-thumb"
+              class="MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary css-1xcmt9q-MuiSlider-thumb"
               data-index="0"
               style="left: 0%;"
             >
@@ -833,7 +806,7 @@ exports[`Rendering test renders linechart correctly 1`] = `
               />
               <span
                 aria-hidden="true"
-                class="MuiSlider-valueLabel css-14gyywz-MuiSlider-valueLabel"
+                class="MuiSlider-valueLabel css-1asissc-MuiSlider-valueLabel"
               >
                 <span
                   class="MuiSlider-valueLabelCircle"
@@ -851,40 +824,37 @@ exports[`Rendering test renders linechart correctly 1`] = `
       </div>
     </div>
     <div
-      class="sc-cGXZpB hRkBxQ"
+      class="sc-cXawGu ehfJVs"
     >
       <div
-        class="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
+        class="MuiFormControl-root MuiFormControl-fullWidth css-ytlejw-MuiFormControl-root"
       >
         <label
-          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-j204z7-MuiFormControlLabel-root"
+          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-19opgx6-MuiFormControlLabel-root"
         >
           <span
-            class="MuiSwitch-root MuiSwitch-sizeMedium css-julti5-MuiSwitch-root"
+            class="MuiSwitch-root MuiSwitch-sizeMedium css-rehya9-MuiSwitch-root"
           >
             <span
-              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-byenzh-MuiButtonBase-root-MuiSwitch-switchBase"
+              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
             >
               <input
-                class="PrivateSwitchBase-input MuiSwitch-input css-1m9pwf3"
+                class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
                 type="checkbox"
               />
               <span
-                class="MuiSwitch-thumb css-jsexje-MuiSwitch-thumb"
-              />
-              <span
-                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                class="MuiSwitch-thumb css-17jyosd-MuiSwitch-thumb"
               />
             </span>
             <span
-              class="MuiSwitch-track css-1yjjitx-MuiSwitch-track"
+              class="MuiSwitch-track css-tj8d99-MuiSwitch-track"
             />
           </span>
           <span
-            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
+            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-rizt0-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jHbxoU gMHYgW css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jMsorb jGUqRM css-rizt0-MuiTypography-root"
             >
               chartSettings.cutYAxis
             </p>
@@ -892,37 +862,34 @@ exports[`Rendering test renders linechart correctly 1`] = `
         </label>
       </div>
       <div
-        class="MuiFormControl-root MuiFormControl-fullWidth sc-hWWBcw hvCkYQ css-q8hpuo-MuiFormControl-root"
+        class="MuiFormControl-root MuiFormControl-fullWidth sc-icnseD gKDpJn css-ytlejw-MuiFormControl-root"
       >
         <label
-          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-j204z7-MuiFormControlLabel-root"
+          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-19opgx6-MuiFormControlLabel-root"
         >
           <span
-            class="MuiSwitch-root MuiSwitch-sizeMedium css-julti5-MuiSwitch-root"
+            class="MuiSwitch-root MuiSwitch-sizeMedium css-rehya9-MuiSwitch-root"
           >
             <span
-              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-byenzh-MuiButtonBase-root-MuiSwitch-switchBase"
+              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
             >
               <input
-                class="PrivateSwitchBase-input MuiSwitch-input css-1m9pwf3"
+                class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
                 type="checkbox"
               />
               <span
-                class="MuiSwitch-thumb css-jsexje-MuiSwitch-thumb"
-              />
-              <span
-                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                class="MuiSwitch-thumb css-17jyosd-MuiSwitch-thumb"
               />
             </span>
             <span
-              class="MuiSwitch-track css-1yjjitx-MuiSwitch-track"
+              class="MuiSwitch-track css-tj8d99-MuiSwitch-track"
             />
           </span>
           <span
-            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
+            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-rizt0-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jHbxoU gMHYgW css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jMsorb jGUqRM css-rizt0-MuiTypography-root"
             >
               chartSettings.matchXLabelsToEnd
             </p>
@@ -930,37 +897,34 @@ exports[`Rendering test renders linechart correctly 1`] = `
         </label>
       </div>
       <div
-        class="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
+        class="MuiFormControl-root MuiFormControl-fullWidth css-ytlejw-MuiFormControl-root"
       >
         <label
-          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-j204z7-MuiFormControlLabel-root"
+          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-19opgx6-MuiFormControlLabel-root"
         >
           <span
-            class="MuiSwitch-root MuiSwitch-sizeMedium css-julti5-MuiSwitch-root"
+            class="MuiSwitch-root MuiSwitch-sizeMedium css-rehya9-MuiSwitch-root"
           >
             <span
-              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-byenzh-MuiButtonBase-root-MuiSwitch-switchBase"
+              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
             >
               <input
-                class="PrivateSwitchBase-input MuiSwitch-input css-1m9pwf3"
+                class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
                 type="checkbox"
               />
               <span
-                class="MuiSwitch-thumb css-jsexje-MuiSwitch-thumb"
-              />
-              <span
-                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                class="MuiSwitch-thumb css-17jyosd-MuiSwitch-thumb"
               />
             </span>
             <span
-              class="MuiSwitch-track css-1yjjitx-MuiSwitch-track"
+              class="MuiSwitch-track css-tj8d99-MuiSwitch-track"
             />
           </span>
           <span
-            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
+            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-rizt0-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jHbxoU gMHYgW css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jMsorb jGUqRM css-rizt0-MuiTypography-root"
             >
               visualizationSettings.showDataPoints
             </p>
@@ -977,11 +941,11 @@ exports[`Rendering test renders percenthorizontalbarchart correctly 1`] = `
   <div>
     <button
       aria-label="tooltip.open: tooltip.visualizationConfig"
-      class="sc-jqVXSH gRmzVu"
+      class="sc-iQQCXo kcqxua"
     >
       <svg
         aria-hidden="true"
-        class="MuiSvgIcon-root MuiSvgIcon-colorInfo MuiSvgIcon-fontSizeMedium css-1yq1soz-MuiSvgIcon-root"
+        class="MuiSvgIcon-root MuiSvgIcon-colorInfo MuiSvgIcon-fontSizeMedium css-ocq0ss-MuiSvgIcon-root"
         data-testid="InfoIcon"
         focusable="false"
         viewBox="0 0 24 24"
@@ -992,71 +956,71 @@ exports[`Rendering test renders percenthorizontalbarchart correctly 1`] = `
       </svg>
     </button>
     <div
-      class="sc-cGXZpB hRkBxQ"
+      class="sc-cXawGu ehfJVs"
     >
       <div
-        class="MuiStack-root sc-gaZyOd erAlLv css-m69qwo-MuiStack-root"
+        class="MuiStack-root sc-fWnslK vwiSF css-m69qwo-MuiStack-root"
       >
         <div
           class="MuiBox-root css-0"
         >
           <p
-            class="MuiTypography-root MuiTypography-body1 MuiTypography-gutterBottom css-d3wcwz-MuiTypography-root"
+            class="MuiTypography-root MuiTypography-body1 MuiTypography-gutterBottom css-vjrxpc-MuiTypography-root"
             id="input-slider"
           >
             chartSettings.markerScale
           </p>
           <span
-            class="MuiSlider-root MuiSlider-marked MuiSlider-colorPrimary MuiSlider-sizeMedium sc-dDvxFM hhSmfW css-ltlhnc-MuiSlider-root"
+            class="MuiSlider-root MuiSlider-marked MuiSlider-colorPrimary MuiSlider-sizeMedium sc-dIMoHT keSCEP css-1e45yg4-MuiSlider-root"
           >
             <span
-              class="MuiSlider-rail css-7o8aqz-MuiSlider-rail"
+              class="MuiSlider-rail css-r64h58-MuiSlider-rail"
             />
             <span
-              class="MuiSlider-track css-ttgsjq-MuiSlider-track"
+              class="MuiSlider-track css-xvk2i-MuiSlider-track"
               style="left: 0%; width: 0%;"
             />
             <span
-              class="MuiSlider-mark MuiSlider-markActive css-z5sdnj-MuiSlider-mark"
+              class="MuiSlider-mark MuiSlider-markActive css-16kozi8-MuiSlider-mark"
               data-index="0"
               style="left: 0%;"
             />
             <span
               aria-hidden="true"
-              class="MuiSlider-markLabel MuiSlider-markLabel MuiSlider-markLabelActive css-1ucwjgd-MuiSlider-markLabel"
+              class="MuiSlider-markLabel MuiSlider-markLabel MuiSlider-markLabelActive css-swtyag-MuiSlider-markLabel"
               data-index="0"
               style="left: 0%;"
             >
               1%
             </span>
             <span
-              class="MuiSlider-mark css-hzp7sc-MuiSlider-mark"
+              class="MuiSlider-mark css-lq5hqx-MuiSlider-mark"
               data-index="1"
               style="left: 49.74874371859296%;"
             />
             <span
               aria-hidden="true"
-              class="MuiSlider-markLabel MuiSlider-markLabel css-1bvr8oc-MuiSlider-markLabel"
+              class="MuiSlider-markLabel MuiSlider-markLabel css-1qb795b-MuiSlider-markLabel"
               data-index="1"
               style="left: 49.74874371859296%;"
             >
               100%
             </span>
             <span
-              class="MuiSlider-mark css-hzp7sc-MuiSlider-mark"
+              class="MuiSlider-mark css-lq5hqx-MuiSlider-mark"
               data-index="2"
               style="left: 100%;"
             />
             <span
               aria-hidden="true"
-              class="MuiSlider-markLabel MuiSlider-markLabel css-1bvr8oc-MuiSlider-markLabel"
+              class="MuiSlider-markLabel MuiSlider-markLabel css-1qb795b-MuiSlider-markLabel"
               data-index="2"
               style="left: 100%;"
             >
               200%
             </span>
             <span
-              class="MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary css-cp2j25-MuiSlider-thumb"
+              class="MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary css-1xcmt9q-MuiSlider-thumb"
               data-index="0"
               style="left: 0%;"
             >
@@ -1076,7 +1040,7 @@ exports[`Rendering test renders percenthorizontalbarchart correctly 1`] = `
               />
               <span
                 aria-hidden="true"
-                class="MuiSlider-valueLabel css-14gyywz-MuiSlider-valueLabel"
+                class="MuiSlider-valueLabel css-1asissc-MuiSlider-valueLabel"
               >
                 <span
                   class="MuiSlider-valueLabelCircle"
@@ -1094,40 +1058,37 @@ exports[`Rendering test renders percenthorizontalbarchart correctly 1`] = `
       </div>
     </div>
     <div
-      class="sc-cGXZpB hRkBxQ"
+      class="sc-cXawGu ehfJVs"
     >
       <div
-        class="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
+        class="MuiFormControl-root MuiFormControl-fullWidth css-ytlejw-MuiFormControl-root"
       >
         <label
-          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-j204z7-MuiFormControlLabel-root"
+          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-19opgx6-MuiFormControlLabel-root"
         >
           <span
-            class="MuiSwitch-root MuiSwitch-sizeMedium css-julti5-MuiSwitch-root"
+            class="MuiSwitch-root MuiSwitch-sizeMedium css-rehya9-MuiSwitch-root"
           >
             <span
-              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-byenzh-MuiButtonBase-root-MuiSwitch-switchBase"
+              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
             >
               <input
-                class="PrivateSwitchBase-input MuiSwitch-input css-1m9pwf3"
+                class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
                 type="checkbox"
               />
               <span
-                class="MuiSwitch-thumb css-jsexje-MuiSwitch-thumb"
-              />
-              <span
-                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                class="MuiSwitch-thumb css-17jyosd-MuiSwitch-thumb"
               />
             </span>
             <span
-              class="MuiSwitch-track css-1yjjitx-MuiSwitch-track"
+              class="MuiSwitch-track css-tj8d99-MuiSwitch-track"
             />
           </span>
           <span
-            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
+            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-rizt0-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jHbxoU gMHYgW css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jMsorb jGUqRM css-rizt0-MuiTypography-root"
             >
               chartSettings.cutYAxis
             </p>
@@ -1135,37 +1096,34 @@ exports[`Rendering test renders percenthorizontalbarchart correctly 1`] = `
         </label>
       </div>
       <div
-        class="MuiFormControl-root MuiFormControl-fullWidth sc-hWWBcw hvCkYQ css-q8hpuo-MuiFormControl-root"
+        class="MuiFormControl-root MuiFormControl-fullWidth sc-icnseD gKDpJn css-ytlejw-MuiFormControl-root"
       >
         <label
-          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-j204z7-MuiFormControlLabel-root"
+          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-19opgx6-MuiFormControlLabel-root"
         >
           <span
-            class="MuiSwitch-root MuiSwitch-sizeMedium css-julti5-MuiSwitch-root"
+            class="MuiSwitch-root MuiSwitch-sizeMedium css-rehya9-MuiSwitch-root"
           >
             <span
-              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-byenzh-MuiButtonBase-root-MuiSwitch-switchBase"
+              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
             >
               <input
-                class="PrivateSwitchBase-input MuiSwitch-input css-1m9pwf3"
+                class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
                 type="checkbox"
               />
               <span
-                class="MuiSwitch-thumb css-jsexje-MuiSwitch-thumb"
-              />
-              <span
-                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                class="MuiSwitch-thumb css-17jyosd-MuiSwitch-thumb"
               />
             </span>
             <span
-              class="MuiSwitch-track css-1yjjitx-MuiSwitch-track"
+              class="MuiSwitch-track css-tj8d99-MuiSwitch-track"
             />
           </span>
           <span
-            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
+            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-rizt0-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jHbxoU gMHYgW css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jMsorb jGUqRM css-rizt0-MuiTypography-root"
             >
               chartSettings.matchXLabelsToEnd
             </p>
@@ -1173,37 +1131,34 @@ exports[`Rendering test renders percenthorizontalbarchart correctly 1`] = `
         </label>
       </div>
       <div
-        class="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
+        class="MuiFormControl-root MuiFormControl-fullWidth css-ytlejw-MuiFormControl-root"
       >
         <label
-          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-j204z7-MuiFormControlLabel-root"
+          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-19opgx6-MuiFormControlLabel-root"
         >
           <span
-            class="MuiSwitch-root MuiSwitch-sizeMedium css-julti5-MuiSwitch-root"
+            class="MuiSwitch-root MuiSwitch-sizeMedium css-rehya9-MuiSwitch-root"
           >
             <span
-              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-byenzh-MuiButtonBase-root-MuiSwitch-switchBase"
+              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
             >
               <input
-                class="PrivateSwitchBase-input MuiSwitch-input css-1m9pwf3"
+                class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
                 type="checkbox"
               />
               <span
-                class="MuiSwitch-thumb css-jsexje-MuiSwitch-thumb"
-              />
-              <span
-                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                class="MuiSwitch-thumb css-17jyosd-MuiSwitch-thumb"
               />
             </span>
             <span
-              class="MuiSwitch-track css-1yjjitx-MuiSwitch-track"
+              class="MuiSwitch-track css-tj8d99-MuiSwitch-track"
             />
           </span>
           <span
-            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
+            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-rizt0-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jHbxoU gMHYgW css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jMsorb jGUqRM css-rizt0-MuiTypography-root"
             >
               visualizationSettings.showDataPoints
             </p>
@@ -1220,11 +1175,11 @@ exports[`Rendering test renders percentverticalbarchart correctly 1`] = `
   <div>
     <button
       aria-label="tooltip.open: tooltip.visualizationConfig"
-      class="sc-jqVXSH gRmzVu"
+      class="sc-iQQCXo kcqxua"
     >
       <svg
         aria-hidden="true"
-        class="MuiSvgIcon-root MuiSvgIcon-colorInfo MuiSvgIcon-fontSizeMedium css-1yq1soz-MuiSvgIcon-root"
+        class="MuiSvgIcon-root MuiSvgIcon-colorInfo MuiSvgIcon-fontSizeMedium css-ocq0ss-MuiSvgIcon-root"
         data-testid="InfoIcon"
         focusable="false"
         viewBox="0 0 24 24"
@@ -1235,71 +1190,71 @@ exports[`Rendering test renders percentverticalbarchart correctly 1`] = `
       </svg>
     </button>
     <div
-      class="sc-cGXZpB hRkBxQ"
+      class="sc-cXawGu ehfJVs"
     >
       <div
-        class="MuiStack-root sc-gaZyOd erAlLv css-m69qwo-MuiStack-root"
+        class="MuiStack-root sc-fWnslK vwiSF css-m69qwo-MuiStack-root"
       >
         <div
           class="MuiBox-root css-0"
         >
           <p
-            class="MuiTypography-root MuiTypography-body1 MuiTypography-gutterBottom css-d3wcwz-MuiTypography-root"
+            class="MuiTypography-root MuiTypography-body1 MuiTypography-gutterBottom css-vjrxpc-MuiTypography-root"
             id="input-slider"
           >
             chartSettings.markerScale
           </p>
           <span
-            class="MuiSlider-root MuiSlider-marked MuiSlider-colorPrimary MuiSlider-sizeMedium sc-dDvxFM hhSmfW css-ltlhnc-MuiSlider-root"
+            class="MuiSlider-root MuiSlider-marked MuiSlider-colorPrimary MuiSlider-sizeMedium sc-dIMoHT keSCEP css-1e45yg4-MuiSlider-root"
           >
             <span
-              class="MuiSlider-rail css-7o8aqz-MuiSlider-rail"
+              class="MuiSlider-rail css-r64h58-MuiSlider-rail"
             />
             <span
-              class="MuiSlider-track css-ttgsjq-MuiSlider-track"
+              class="MuiSlider-track css-xvk2i-MuiSlider-track"
               style="left: 0%; width: 0%;"
             />
             <span
-              class="MuiSlider-mark MuiSlider-markActive css-z5sdnj-MuiSlider-mark"
+              class="MuiSlider-mark MuiSlider-markActive css-16kozi8-MuiSlider-mark"
               data-index="0"
               style="left: 0%;"
             />
             <span
               aria-hidden="true"
-              class="MuiSlider-markLabel MuiSlider-markLabel MuiSlider-markLabelActive css-1ucwjgd-MuiSlider-markLabel"
+              class="MuiSlider-markLabel MuiSlider-markLabel MuiSlider-markLabelActive css-swtyag-MuiSlider-markLabel"
               data-index="0"
               style="left: 0%;"
             >
               1%
             </span>
             <span
-              class="MuiSlider-mark css-hzp7sc-MuiSlider-mark"
+              class="MuiSlider-mark css-lq5hqx-MuiSlider-mark"
               data-index="1"
               style="left: 49.74874371859296%;"
             />
             <span
               aria-hidden="true"
-              class="MuiSlider-markLabel MuiSlider-markLabel css-1bvr8oc-MuiSlider-markLabel"
+              class="MuiSlider-markLabel MuiSlider-markLabel css-1qb795b-MuiSlider-markLabel"
               data-index="1"
               style="left: 49.74874371859296%;"
             >
               100%
             </span>
             <span
-              class="MuiSlider-mark css-hzp7sc-MuiSlider-mark"
+              class="MuiSlider-mark css-lq5hqx-MuiSlider-mark"
               data-index="2"
               style="left: 100%;"
             />
             <span
               aria-hidden="true"
-              class="MuiSlider-markLabel MuiSlider-markLabel css-1bvr8oc-MuiSlider-markLabel"
+              class="MuiSlider-markLabel MuiSlider-markLabel css-1qb795b-MuiSlider-markLabel"
               data-index="2"
               style="left: 100%;"
             >
               200%
             </span>
             <span
-              class="MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary css-cp2j25-MuiSlider-thumb"
+              class="MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary css-1xcmt9q-MuiSlider-thumb"
               data-index="0"
               style="left: 0%;"
             >
@@ -1319,7 +1274,7 @@ exports[`Rendering test renders percentverticalbarchart correctly 1`] = `
               />
               <span
                 aria-hidden="true"
-                class="MuiSlider-valueLabel css-14gyywz-MuiSlider-valueLabel"
+                class="MuiSlider-valueLabel css-1asissc-MuiSlider-valueLabel"
               >
                 <span
                   class="MuiSlider-valueLabelCircle"
@@ -1337,40 +1292,37 @@ exports[`Rendering test renders percentverticalbarchart correctly 1`] = `
       </div>
     </div>
     <div
-      class="sc-cGXZpB hRkBxQ"
+      class="sc-cXawGu ehfJVs"
     >
       <div
-        class="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
+        class="MuiFormControl-root MuiFormControl-fullWidth css-ytlejw-MuiFormControl-root"
       >
         <label
-          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-j204z7-MuiFormControlLabel-root"
+          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-19opgx6-MuiFormControlLabel-root"
         >
           <span
-            class="MuiSwitch-root MuiSwitch-sizeMedium css-julti5-MuiSwitch-root"
+            class="MuiSwitch-root MuiSwitch-sizeMedium css-rehya9-MuiSwitch-root"
           >
             <span
-              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-byenzh-MuiButtonBase-root-MuiSwitch-switchBase"
+              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
             >
               <input
-                class="PrivateSwitchBase-input MuiSwitch-input css-1m9pwf3"
+                class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
                 type="checkbox"
               />
               <span
-                class="MuiSwitch-thumb css-jsexje-MuiSwitch-thumb"
-              />
-              <span
-                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                class="MuiSwitch-thumb css-17jyosd-MuiSwitch-thumb"
               />
             </span>
             <span
-              class="MuiSwitch-track css-1yjjitx-MuiSwitch-track"
+              class="MuiSwitch-track css-tj8d99-MuiSwitch-track"
             />
           </span>
           <span
-            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
+            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-rizt0-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jHbxoU gMHYgW css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jMsorb jGUqRM css-rizt0-MuiTypography-root"
             >
               chartSettings.cutYAxis
             </p>
@@ -1378,37 +1330,34 @@ exports[`Rendering test renders percentverticalbarchart correctly 1`] = `
         </label>
       </div>
       <div
-        class="MuiFormControl-root MuiFormControl-fullWidth sc-hWWBcw hvCkYQ css-q8hpuo-MuiFormControl-root"
+        class="MuiFormControl-root MuiFormControl-fullWidth sc-icnseD gKDpJn css-ytlejw-MuiFormControl-root"
       >
         <label
-          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-j204z7-MuiFormControlLabel-root"
+          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-19opgx6-MuiFormControlLabel-root"
         >
           <span
-            class="MuiSwitch-root MuiSwitch-sizeMedium css-julti5-MuiSwitch-root"
+            class="MuiSwitch-root MuiSwitch-sizeMedium css-rehya9-MuiSwitch-root"
           >
             <span
-              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-byenzh-MuiButtonBase-root-MuiSwitch-switchBase"
+              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
             >
               <input
-                class="PrivateSwitchBase-input MuiSwitch-input css-1m9pwf3"
+                class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
                 type="checkbox"
               />
               <span
-                class="MuiSwitch-thumb css-jsexje-MuiSwitch-thumb"
-              />
-              <span
-                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                class="MuiSwitch-thumb css-17jyosd-MuiSwitch-thumb"
               />
             </span>
             <span
-              class="MuiSwitch-track css-1yjjitx-MuiSwitch-track"
+              class="MuiSwitch-track css-tj8d99-MuiSwitch-track"
             />
           </span>
           <span
-            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
+            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-rizt0-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jHbxoU gMHYgW css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jMsorb jGUqRM css-rizt0-MuiTypography-root"
             >
               chartSettings.matchXLabelsToEnd
             </p>
@@ -1416,37 +1365,34 @@ exports[`Rendering test renders percentverticalbarchart correctly 1`] = `
         </label>
       </div>
       <div
-        class="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
+        class="MuiFormControl-root MuiFormControl-fullWidth css-ytlejw-MuiFormControl-root"
       >
         <label
-          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-j204z7-MuiFormControlLabel-root"
+          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-19opgx6-MuiFormControlLabel-root"
         >
           <span
-            class="MuiSwitch-root MuiSwitch-sizeMedium css-julti5-MuiSwitch-root"
+            class="MuiSwitch-root MuiSwitch-sizeMedium css-rehya9-MuiSwitch-root"
           >
             <span
-              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-byenzh-MuiButtonBase-root-MuiSwitch-switchBase"
+              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
             >
               <input
-                class="PrivateSwitchBase-input MuiSwitch-input css-1m9pwf3"
+                class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
                 type="checkbox"
               />
               <span
-                class="MuiSwitch-thumb css-jsexje-MuiSwitch-thumb"
-              />
-              <span
-                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                class="MuiSwitch-thumb css-17jyosd-MuiSwitch-thumb"
               />
             </span>
             <span
-              class="MuiSwitch-track css-1yjjitx-MuiSwitch-track"
+              class="MuiSwitch-track css-tj8d99-MuiSwitch-track"
             />
           </span>
           <span
-            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
+            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-rizt0-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jHbxoU gMHYgW css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jMsorb jGUqRM css-rizt0-MuiTypography-root"
             >
               visualizationSettings.showDataPoints
             </p>
@@ -1463,11 +1409,11 @@ exports[`Rendering test renders piechart correctly 1`] = `
   <div>
     <button
       aria-label="tooltip.open: tooltip.visualizationConfig"
-      class="sc-jqVXSH gRmzVu"
+      class="sc-iQQCXo kcqxua"
     >
       <svg
         aria-hidden="true"
-        class="MuiSvgIcon-root MuiSvgIcon-colorInfo MuiSvgIcon-fontSizeMedium css-1yq1soz-MuiSvgIcon-root"
+        class="MuiSvgIcon-root MuiSvgIcon-colorInfo MuiSvgIcon-fontSizeMedium css-ocq0ss-MuiSvgIcon-root"
         data-testid="InfoIcon"
         focusable="false"
         viewBox="0 0 24 24"
@@ -1478,71 +1424,71 @@ exports[`Rendering test renders piechart correctly 1`] = `
       </svg>
     </button>
     <div
-      class="sc-cGXZpB hRkBxQ"
+      class="sc-cXawGu ehfJVs"
     >
       <div
-        class="MuiStack-root sc-gaZyOd erAlLv css-m69qwo-MuiStack-root"
+        class="MuiStack-root sc-fWnslK vwiSF css-m69qwo-MuiStack-root"
       >
         <div
           class="MuiBox-root css-0"
         >
           <p
-            class="MuiTypography-root MuiTypography-body1 MuiTypography-gutterBottom css-d3wcwz-MuiTypography-root"
+            class="MuiTypography-root MuiTypography-body1 MuiTypography-gutterBottom css-vjrxpc-MuiTypography-root"
             id="input-slider"
           >
             chartSettings.markerScale
           </p>
           <span
-            class="MuiSlider-root MuiSlider-marked MuiSlider-colorPrimary MuiSlider-sizeMedium sc-dDvxFM hhSmfW css-ltlhnc-MuiSlider-root"
+            class="MuiSlider-root MuiSlider-marked MuiSlider-colorPrimary MuiSlider-sizeMedium sc-dIMoHT keSCEP css-1e45yg4-MuiSlider-root"
           >
             <span
-              class="MuiSlider-rail css-7o8aqz-MuiSlider-rail"
+              class="MuiSlider-rail css-r64h58-MuiSlider-rail"
             />
             <span
-              class="MuiSlider-track css-ttgsjq-MuiSlider-track"
+              class="MuiSlider-track css-xvk2i-MuiSlider-track"
               style="left: 0%; width: 0%;"
             />
             <span
-              class="MuiSlider-mark MuiSlider-markActive css-z5sdnj-MuiSlider-mark"
+              class="MuiSlider-mark MuiSlider-markActive css-16kozi8-MuiSlider-mark"
               data-index="0"
               style="left: 0%;"
             />
             <span
               aria-hidden="true"
-              class="MuiSlider-markLabel MuiSlider-markLabel MuiSlider-markLabelActive css-1ucwjgd-MuiSlider-markLabel"
+              class="MuiSlider-markLabel MuiSlider-markLabel MuiSlider-markLabelActive css-swtyag-MuiSlider-markLabel"
               data-index="0"
               style="left: 0%;"
             >
               1%
             </span>
             <span
-              class="MuiSlider-mark css-hzp7sc-MuiSlider-mark"
+              class="MuiSlider-mark css-lq5hqx-MuiSlider-mark"
               data-index="1"
               style="left: 49.74874371859296%;"
             />
             <span
               aria-hidden="true"
-              class="MuiSlider-markLabel MuiSlider-markLabel css-1bvr8oc-MuiSlider-markLabel"
+              class="MuiSlider-markLabel MuiSlider-markLabel css-1qb795b-MuiSlider-markLabel"
               data-index="1"
               style="left: 49.74874371859296%;"
             >
               100%
             </span>
             <span
-              class="MuiSlider-mark css-hzp7sc-MuiSlider-mark"
+              class="MuiSlider-mark css-lq5hqx-MuiSlider-mark"
               data-index="2"
               style="left: 100%;"
             />
             <span
               aria-hidden="true"
-              class="MuiSlider-markLabel MuiSlider-markLabel css-1bvr8oc-MuiSlider-markLabel"
+              class="MuiSlider-markLabel MuiSlider-markLabel css-1qb795b-MuiSlider-markLabel"
               data-index="2"
               style="left: 100%;"
             >
               200%
             </span>
             <span
-              class="MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary css-cp2j25-MuiSlider-thumb"
+              class="MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary css-1xcmt9q-MuiSlider-thumb"
               data-index="0"
               style="left: 0%;"
             >
@@ -1562,7 +1508,7 @@ exports[`Rendering test renders piechart correctly 1`] = `
               />
               <span
                 aria-hidden="true"
-                class="MuiSlider-valueLabel css-14gyywz-MuiSlider-valueLabel"
+                class="MuiSlider-valueLabel css-1asissc-MuiSlider-valueLabel"
               >
                 <span
                   class="MuiSlider-valueLabelCircle"
@@ -1580,40 +1526,37 @@ exports[`Rendering test renders piechart correctly 1`] = `
       </div>
     </div>
     <div
-      class="sc-cGXZpB hRkBxQ"
+      class="sc-cXawGu ehfJVs"
     >
       <div
-        class="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
+        class="MuiFormControl-root MuiFormControl-fullWidth css-ytlejw-MuiFormControl-root"
       >
         <label
-          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-j204z7-MuiFormControlLabel-root"
+          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-19opgx6-MuiFormControlLabel-root"
         >
           <span
-            class="MuiSwitch-root MuiSwitch-sizeMedium css-julti5-MuiSwitch-root"
+            class="MuiSwitch-root MuiSwitch-sizeMedium css-rehya9-MuiSwitch-root"
           >
             <span
-              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-byenzh-MuiButtonBase-root-MuiSwitch-switchBase"
+              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
             >
               <input
-                class="PrivateSwitchBase-input MuiSwitch-input css-1m9pwf3"
+                class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
                 type="checkbox"
               />
               <span
-                class="MuiSwitch-thumb css-jsexje-MuiSwitch-thumb"
-              />
-              <span
-                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                class="MuiSwitch-thumb css-17jyosd-MuiSwitch-thumb"
               />
             </span>
             <span
-              class="MuiSwitch-track css-1yjjitx-MuiSwitch-track"
+              class="MuiSwitch-track css-tj8d99-MuiSwitch-track"
             />
           </span>
           <span
-            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
+            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-rizt0-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jHbxoU gMHYgW css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jMsorb jGUqRM css-rizt0-MuiTypography-root"
             >
               chartSettings.cutYAxis
             </p>
@@ -1621,37 +1564,34 @@ exports[`Rendering test renders piechart correctly 1`] = `
         </label>
       </div>
       <div
-        class="MuiFormControl-root MuiFormControl-fullWidth sc-hWWBcw hvCkYQ css-q8hpuo-MuiFormControl-root"
+        class="MuiFormControl-root MuiFormControl-fullWidth sc-icnseD gKDpJn css-ytlejw-MuiFormControl-root"
       >
         <label
-          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-j204z7-MuiFormControlLabel-root"
+          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-19opgx6-MuiFormControlLabel-root"
         >
           <span
-            class="MuiSwitch-root MuiSwitch-sizeMedium css-julti5-MuiSwitch-root"
+            class="MuiSwitch-root MuiSwitch-sizeMedium css-rehya9-MuiSwitch-root"
           >
             <span
-              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-byenzh-MuiButtonBase-root-MuiSwitch-switchBase"
+              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
             >
               <input
-                class="PrivateSwitchBase-input MuiSwitch-input css-1m9pwf3"
+                class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
                 type="checkbox"
               />
               <span
-                class="MuiSwitch-thumb css-jsexje-MuiSwitch-thumb"
-              />
-              <span
-                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                class="MuiSwitch-thumb css-17jyosd-MuiSwitch-thumb"
               />
             </span>
             <span
-              class="MuiSwitch-track css-1yjjitx-MuiSwitch-track"
+              class="MuiSwitch-track css-tj8d99-MuiSwitch-track"
             />
           </span>
           <span
-            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
+            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-rizt0-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jHbxoU gMHYgW css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jMsorb jGUqRM css-rizt0-MuiTypography-root"
             >
               chartSettings.matchXLabelsToEnd
             </p>
@@ -1659,37 +1599,34 @@ exports[`Rendering test renders piechart correctly 1`] = `
         </label>
       </div>
       <div
-        class="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
+        class="MuiFormControl-root MuiFormControl-fullWidth css-ytlejw-MuiFormControl-root"
       >
         <label
-          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-j204z7-MuiFormControlLabel-root"
+          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-19opgx6-MuiFormControlLabel-root"
         >
           <span
-            class="MuiSwitch-root MuiSwitch-sizeMedium css-julti5-MuiSwitch-root"
+            class="MuiSwitch-root MuiSwitch-sizeMedium css-rehya9-MuiSwitch-root"
           >
             <span
-              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-byenzh-MuiButtonBase-root-MuiSwitch-switchBase"
+              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
             >
               <input
-                class="PrivateSwitchBase-input MuiSwitch-input css-1m9pwf3"
+                class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
                 type="checkbox"
               />
               <span
-                class="MuiSwitch-thumb css-jsexje-MuiSwitch-thumb"
-              />
-              <span
-                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                class="MuiSwitch-thumb css-17jyosd-MuiSwitch-thumb"
               />
             </span>
             <span
-              class="MuiSwitch-track css-1yjjitx-MuiSwitch-track"
+              class="MuiSwitch-track css-tj8d99-MuiSwitch-track"
             />
           </span>
           <span
-            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
+            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-rizt0-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jHbxoU gMHYgW css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jMsorb jGUqRM css-rizt0-MuiTypography-root"
             >
               visualizationSettings.showDataPoints
             </p>
@@ -1706,11 +1643,11 @@ exports[`Rendering test renders scatterplot correctly 1`] = `
   <div>
     <button
       aria-label="tooltip.open: tooltip.visualizationConfig"
-      class="sc-jqVXSH gRmzVu"
+      class="sc-iQQCXo kcqxua"
     >
       <svg
         aria-hidden="true"
-        class="MuiSvgIcon-root MuiSvgIcon-colorInfo MuiSvgIcon-fontSizeMedium css-1yq1soz-MuiSvgIcon-root"
+        class="MuiSvgIcon-root MuiSvgIcon-colorInfo MuiSvgIcon-fontSizeMedium css-ocq0ss-MuiSvgIcon-root"
         data-testid="InfoIcon"
         focusable="false"
         viewBox="0 0 24 24"
@@ -1721,71 +1658,71 @@ exports[`Rendering test renders scatterplot correctly 1`] = `
       </svg>
     </button>
     <div
-      class="sc-cGXZpB hRkBxQ"
+      class="sc-cXawGu ehfJVs"
     >
       <div
-        class="MuiStack-root sc-gaZyOd erAlLv css-m69qwo-MuiStack-root"
+        class="MuiStack-root sc-fWnslK vwiSF css-m69qwo-MuiStack-root"
       >
         <div
           class="MuiBox-root css-0"
         >
           <p
-            class="MuiTypography-root MuiTypography-body1 MuiTypography-gutterBottom css-d3wcwz-MuiTypography-root"
+            class="MuiTypography-root MuiTypography-body1 MuiTypography-gutterBottom css-vjrxpc-MuiTypography-root"
             id="input-slider"
           >
             chartSettings.markerScale
           </p>
           <span
-            class="MuiSlider-root MuiSlider-marked MuiSlider-colorPrimary MuiSlider-sizeMedium sc-dDvxFM hhSmfW css-ltlhnc-MuiSlider-root"
+            class="MuiSlider-root MuiSlider-marked MuiSlider-colorPrimary MuiSlider-sizeMedium sc-dIMoHT keSCEP css-1e45yg4-MuiSlider-root"
           >
             <span
-              class="MuiSlider-rail css-7o8aqz-MuiSlider-rail"
+              class="MuiSlider-rail css-r64h58-MuiSlider-rail"
             />
             <span
-              class="MuiSlider-track css-ttgsjq-MuiSlider-track"
+              class="MuiSlider-track css-xvk2i-MuiSlider-track"
               style="left: 0%; width: 0%;"
             />
             <span
-              class="MuiSlider-mark MuiSlider-markActive css-z5sdnj-MuiSlider-mark"
+              class="MuiSlider-mark MuiSlider-markActive css-16kozi8-MuiSlider-mark"
               data-index="0"
               style="left: 0%;"
             />
             <span
               aria-hidden="true"
-              class="MuiSlider-markLabel MuiSlider-markLabel MuiSlider-markLabelActive css-1ucwjgd-MuiSlider-markLabel"
+              class="MuiSlider-markLabel MuiSlider-markLabel MuiSlider-markLabelActive css-swtyag-MuiSlider-markLabel"
               data-index="0"
               style="left: 0%;"
             >
               1%
             </span>
             <span
-              class="MuiSlider-mark css-hzp7sc-MuiSlider-mark"
+              class="MuiSlider-mark css-lq5hqx-MuiSlider-mark"
               data-index="1"
               style="left: 49.74874371859296%;"
             />
             <span
               aria-hidden="true"
-              class="MuiSlider-markLabel MuiSlider-markLabel css-1bvr8oc-MuiSlider-markLabel"
+              class="MuiSlider-markLabel MuiSlider-markLabel css-1qb795b-MuiSlider-markLabel"
               data-index="1"
               style="left: 49.74874371859296%;"
             >
               100%
             </span>
             <span
-              class="MuiSlider-mark css-hzp7sc-MuiSlider-mark"
+              class="MuiSlider-mark css-lq5hqx-MuiSlider-mark"
               data-index="2"
               style="left: 100%;"
             />
             <span
               aria-hidden="true"
-              class="MuiSlider-markLabel MuiSlider-markLabel css-1bvr8oc-MuiSlider-markLabel"
+              class="MuiSlider-markLabel MuiSlider-markLabel css-1qb795b-MuiSlider-markLabel"
               data-index="2"
               style="left: 100%;"
             >
               200%
             </span>
             <span
-              class="MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary css-cp2j25-MuiSlider-thumb"
+              class="MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary css-1xcmt9q-MuiSlider-thumb"
               data-index="0"
               style="left: 0%;"
             >
@@ -1805,7 +1742,7 @@ exports[`Rendering test renders scatterplot correctly 1`] = `
               />
               <span
                 aria-hidden="true"
-                class="MuiSlider-valueLabel css-14gyywz-MuiSlider-valueLabel"
+                class="MuiSlider-valueLabel css-1asissc-MuiSlider-valueLabel"
               >
                 <span
                   class="MuiSlider-valueLabelCircle"
@@ -1823,40 +1760,37 @@ exports[`Rendering test renders scatterplot correctly 1`] = `
       </div>
     </div>
     <div
-      class="sc-cGXZpB hRkBxQ"
+      class="sc-cXawGu ehfJVs"
     >
       <div
-        class="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
+        class="MuiFormControl-root MuiFormControl-fullWidth css-ytlejw-MuiFormControl-root"
       >
         <label
-          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-j204z7-MuiFormControlLabel-root"
+          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-19opgx6-MuiFormControlLabel-root"
         >
           <span
-            class="MuiSwitch-root MuiSwitch-sizeMedium css-julti5-MuiSwitch-root"
+            class="MuiSwitch-root MuiSwitch-sizeMedium css-rehya9-MuiSwitch-root"
           >
             <span
-              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-byenzh-MuiButtonBase-root-MuiSwitch-switchBase"
+              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
             >
               <input
-                class="PrivateSwitchBase-input MuiSwitch-input css-1m9pwf3"
+                class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
                 type="checkbox"
               />
               <span
-                class="MuiSwitch-thumb css-jsexje-MuiSwitch-thumb"
-              />
-              <span
-                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                class="MuiSwitch-thumb css-17jyosd-MuiSwitch-thumb"
               />
             </span>
             <span
-              class="MuiSwitch-track css-1yjjitx-MuiSwitch-track"
+              class="MuiSwitch-track css-tj8d99-MuiSwitch-track"
             />
           </span>
           <span
-            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
+            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-rizt0-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jHbxoU gMHYgW css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jMsorb jGUqRM css-rizt0-MuiTypography-root"
             >
               chartSettings.cutYAxis
             </p>
@@ -1864,37 +1798,34 @@ exports[`Rendering test renders scatterplot correctly 1`] = `
         </label>
       </div>
       <div
-        class="MuiFormControl-root MuiFormControl-fullWidth sc-hWWBcw hvCkYQ css-q8hpuo-MuiFormControl-root"
+        class="MuiFormControl-root MuiFormControl-fullWidth sc-icnseD gKDpJn css-ytlejw-MuiFormControl-root"
       >
         <label
-          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-j204z7-MuiFormControlLabel-root"
+          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-19opgx6-MuiFormControlLabel-root"
         >
           <span
-            class="MuiSwitch-root MuiSwitch-sizeMedium css-julti5-MuiSwitch-root"
+            class="MuiSwitch-root MuiSwitch-sizeMedium css-rehya9-MuiSwitch-root"
           >
             <span
-              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-byenzh-MuiButtonBase-root-MuiSwitch-switchBase"
+              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
             >
               <input
-                class="PrivateSwitchBase-input MuiSwitch-input css-1m9pwf3"
+                class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
                 type="checkbox"
               />
               <span
-                class="MuiSwitch-thumb css-jsexje-MuiSwitch-thumb"
-              />
-              <span
-                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                class="MuiSwitch-thumb css-17jyosd-MuiSwitch-thumb"
               />
             </span>
             <span
-              class="MuiSwitch-track css-1yjjitx-MuiSwitch-track"
+              class="MuiSwitch-track css-tj8d99-MuiSwitch-track"
             />
           </span>
           <span
-            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
+            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-rizt0-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jHbxoU gMHYgW css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jMsorb jGUqRM css-rizt0-MuiTypography-root"
             >
               chartSettings.matchXLabelsToEnd
             </p>
@@ -1902,37 +1833,34 @@ exports[`Rendering test renders scatterplot correctly 1`] = `
         </label>
       </div>
       <div
-        class="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
+        class="MuiFormControl-root MuiFormControl-fullWidth css-ytlejw-MuiFormControl-root"
       >
         <label
-          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-j204z7-MuiFormControlLabel-root"
+          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-19opgx6-MuiFormControlLabel-root"
         >
           <span
-            class="MuiSwitch-root MuiSwitch-sizeMedium css-julti5-MuiSwitch-root"
+            class="MuiSwitch-root MuiSwitch-sizeMedium css-rehya9-MuiSwitch-root"
           >
             <span
-              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-byenzh-MuiButtonBase-root-MuiSwitch-switchBase"
+              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
             >
               <input
-                class="PrivateSwitchBase-input MuiSwitch-input css-1m9pwf3"
+                class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
                 type="checkbox"
               />
               <span
-                class="MuiSwitch-thumb css-jsexje-MuiSwitch-thumb"
-              />
-              <span
-                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                class="MuiSwitch-thumb css-17jyosd-MuiSwitch-thumb"
               />
             </span>
             <span
-              class="MuiSwitch-track css-1yjjitx-MuiSwitch-track"
+              class="MuiSwitch-track css-tj8d99-MuiSwitch-track"
             />
           </span>
           <span
-            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
+            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-rizt0-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jHbxoU gMHYgW css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jMsorb jGUqRM css-rizt0-MuiTypography-root"
             >
               visualizationSettings.showDataPoints
             </p>
@@ -1949,11 +1877,11 @@ exports[`Rendering test renders stackedhorizontalbarchart correctly 1`] = `
   <div>
     <button
       aria-label="tooltip.open: tooltip.visualizationConfig"
-      class="sc-jqVXSH gRmzVu"
+      class="sc-iQQCXo kcqxua"
     >
       <svg
         aria-hidden="true"
-        class="MuiSvgIcon-root MuiSvgIcon-colorInfo MuiSvgIcon-fontSizeMedium css-1yq1soz-MuiSvgIcon-root"
+        class="MuiSvgIcon-root MuiSvgIcon-colorInfo MuiSvgIcon-fontSizeMedium css-ocq0ss-MuiSvgIcon-root"
         data-testid="InfoIcon"
         focusable="false"
         viewBox="0 0 24 24"
@@ -1964,71 +1892,71 @@ exports[`Rendering test renders stackedhorizontalbarchart correctly 1`] = `
       </svg>
     </button>
     <div
-      class="sc-cGXZpB hRkBxQ"
+      class="sc-cXawGu ehfJVs"
     >
       <div
-        class="MuiStack-root sc-gaZyOd erAlLv css-m69qwo-MuiStack-root"
+        class="MuiStack-root sc-fWnslK vwiSF css-m69qwo-MuiStack-root"
       >
         <div
           class="MuiBox-root css-0"
         >
           <p
-            class="MuiTypography-root MuiTypography-body1 MuiTypography-gutterBottom css-d3wcwz-MuiTypography-root"
+            class="MuiTypography-root MuiTypography-body1 MuiTypography-gutterBottom css-vjrxpc-MuiTypography-root"
             id="input-slider"
           >
             chartSettings.markerScale
           </p>
           <span
-            class="MuiSlider-root MuiSlider-marked MuiSlider-colorPrimary MuiSlider-sizeMedium sc-dDvxFM hhSmfW css-ltlhnc-MuiSlider-root"
+            class="MuiSlider-root MuiSlider-marked MuiSlider-colorPrimary MuiSlider-sizeMedium sc-dIMoHT keSCEP css-1e45yg4-MuiSlider-root"
           >
             <span
-              class="MuiSlider-rail css-7o8aqz-MuiSlider-rail"
+              class="MuiSlider-rail css-r64h58-MuiSlider-rail"
             />
             <span
-              class="MuiSlider-track css-ttgsjq-MuiSlider-track"
+              class="MuiSlider-track css-xvk2i-MuiSlider-track"
               style="left: 0%; width: 0%;"
             />
             <span
-              class="MuiSlider-mark MuiSlider-markActive css-z5sdnj-MuiSlider-mark"
+              class="MuiSlider-mark MuiSlider-markActive css-16kozi8-MuiSlider-mark"
               data-index="0"
               style="left: 0%;"
             />
             <span
               aria-hidden="true"
-              class="MuiSlider-markLabel MuiSlider-markLabel MuiSlider-markLabelActive css-1ucwjgd-MuiSlider-markLabel"
+              class="MuiSlider-markLabel MuiSlider-markLabel MuiSlider-markLabelActive css-swtyag-MuiSlider-markLabel"
               data-index="0"
               style="left: 0%;"
             >
               1%
             </span>
             <span
-              class="MuiSlider-mark css-hzp7sc-MuiSlider-mark"
+              class="MuiSlider-mark css-lq5hqx-MuiSlider-mark"
               data-index="1"
               style="left: 49.74874371859296%;"
             />
             <span
               aria-hidden="true"
-              class="MuiSlider-markLabel MuiSlider-markLabel css-1bvr8oc-MuiSlider-markLabel"
+              class="MuiSlider-markLabel MuiSlider-markLabel css-1qb795b-MuiSlider-markLabel"
               data-index="1"
               style="left: 49.74874371859296%;"
             >
               100%
             </span>
             <span
-              class="MuiSlider-mark css-hzp7sc-MuiSlider-mark"
+              class="MuiSlider-mark css-lq5hqx-MuiSlider-mark"
               data-index="2"
               style="left: 100%;"
             />
             <span
               aria-hidden="true"
-              class="MuiSlider-markLabel MuiSlider-markLabel css-1bvr8oc-MuiSlider-markLabel"
+              class="MuiSlider-markLabel MuiSlider-markLabel css-1qb795b-MuiSlider-markLabel"
               data-index="2"
               style="left: 100%;"
             >
               200%
             </span>
             <span
-              class="MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary css-cp2j25-MuiSlider-thumb"
+              class="MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary css-1xcmt9q-MuiSlider-thumb"
               data-index="0"
               style="left: 0%;"
             >
@@ -2048,7 +1976,7 @@ exports[`Rendering test renders stackedhorizontalbarchart correctly 1`] = `
               />
               <span
                 aria-hidden="true"
-                class="MuiSlider-valueLabel css-14gyywz-MuiSlider-valueLabel"
+                class="MuiSlider-valueLabel css-1asissc-MuiSlider-valueLabel"
               >
                 <span
                   class="MuiSlider-valueLabelCircle"
@@ -2066,40 +1994,37 @@ exports[`Rendering test renders stackedhorizontalbarchart correctly 1`] = `
       </div>
     </div>
     <div
-      class="sc-cGXZpB hRkBxQ"
+      class="sc-cXawGu ehfJVs"
     >
       <div
-        class="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
+        class="MuiFormControl-root MuiFormControl-fullWidth css-ytlejw-MuiFormControl-root"
       >
         <label
-          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-j204z7-MuiFormControlLabel-root"
+          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-19opgx6-MuiFormControlLabel-root"
         >
           <span
-            class="MuiSwitch-root MuiSwitch-sizeMedium css-julti5-MuiSwitch-root"
+            class="MuiSwitch-root MuiSwitch-sizeMedium css-rehya9-MuiSwitch-root"
           >
             <span
-              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-byenzh-MuiButtonBase-root-MuiSwitch-switchBase"
+              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
             >
               <input
-                class="PrivateSwitchBase-input MuiSwitch-input css-1m9pwf3"
+                class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
                 type="checkbox"
               />
               <span
-                class="MuiSwitch-thumb css-jsexje-MuiSwitch-thumb"
-              />
-              <span
-                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                class="MuiSwitch-thumb css-17jyosd-MuiSwitch-thumb"
               />
             </span>
             <span
-              class="MuiSwitch-track css-1yjjitx-MuiSwitch-track"
+              class="MuiSwitch-track css-tj8d99-MuiSwitch-track"
             />
           </span>
           <span
-            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
+            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-rizt0-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jHbxoU gMHYgW css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jMsorb jGUqRM css-rizt0-MuiTypography-root"
             >
               chartSettings.cutYAxis
             </p>
@@ -2107,37 +2032,34 @@ exports[`Rendering test renders stackedhorizontalbarchart correctly 1`] = `
         </label>
       </div>
       <div
-        class="MuiFormControl-root MuiFormControl-fullWidth sc-hWWBcw hvCkYQ css-q8hpuo-MuiFormControl-root"
+        class="MuiFormControl-root MuiFormControl-fullWidth sc-icnseD gKDpJn css-ytlejw-MuiFormControl-root"
       >
         <label
-          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-j204z7-MuiFormControlLabel-root"
+          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-19opgx6-MuiFormControlLabel-root"
         >
           <span
-            class="MuiSwitch-root MuiSwitch-sizeMedium css-julti5-MuiSwitch-root"
+            class="MuiSwitch-root MuiSwitch-sizeMedium css-rehya9-MuiSwitch-root"
           >
             <span
-              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-byenzh-MuiButtonBase-root-MuiSwitch-switchBase"
+              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
             >
               <input
-                class="PrivateSwitchBase-input MuiSwitch-input css-1m9pwf3"
+                class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
                 type="checkbox"
               />
               <span
-                class="MuiSwitch-thumb css-jsexje-MuiSwitch-thumb"
-              />
-              <span
-                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                class="MuiSwitch-thumb css-17jyosd-MuiSwitch-thumb"
               />
             </span>
             <span
-              class="MuiSwitch-track css-1yjjitx-MuiSwitch-track"
+              class="MuiSwitch-track css-tj8d99-MuiSwitch-track"
             />
           </span>
           <span
-            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
+            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-rizt0-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jHbxoU gMHYgW css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jMsorb jGUqRM css-rizt0-MuiTypography-root"
             >
               chartSettings.matchXLabelsToEnd
             </p>
@@ -2145,37 +2067,34 @@ exports[`Rendering test renders stackedhorizontalbarchart correctly 1`] = `
         </label>
       </div>
       <div
-        class="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
+        class="MuiFormControl-root MuiFormControl-fullWidth css-ytlejw-MuiFormControl-root"
       >
         <label
-          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-j204z7-MuiFormControlLabel-root"
+          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-19opgx6-MuiFormControlLabel-root"
         >
           <span
-            class="MuiSwitch-root MuiSwitch-sizeMedium css-julti5-MuiSwitch-root"
+            class="MuiSwitch-root MuiSwitch-sizeMedium css-rehya9-MuiSwitch-root"
           >
             <span
-              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-byenzh-MuiButtonBase-root-MuiSwitch-switchBase"
+              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
             >
               <input
-                class="PrivateSwitchBase-input MuiSwitch-input css-1m9pwf3"
+                class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
                 type="checkbox"
               />
               <span
-                class="MuiSwitch-thumb css-jsexje-MuiSwitch-thumb"
-              />
-              <span
-                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                class="MuiSwitch-thumb css-17jyosd-MuiSwitch-thumb"
               />
             </span>
             <span
-              class="MuiSwitch-track css-1yjjitx-MuiSwitch-track"
+              class="MuiSwitch-track css-tj8d99-MuiSwitch-track"
             />
           </span>
           <span
-            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
+            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-rizt0-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jHbxoU gMHYgW css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jMsorb jGUqRM css-rizt0-MuiTypography-root"
             >
               visualizationSettings.showDataPoints
             </p>
@@ -2192,11 +2111,11 @@ exports[`Rendering test renders stackedverticalbarchart correctly 1`] = `
   <div>
     <button
       aria-label="tooltip.open: tooltip.visualizationConfig"
-      class="sc-jqVXSH gRmzVu"
+      class="sc-iQQCXo kcqxua"
     >
       <svg
         aria-hidden="true"
-        class="MuiSvgIcon-root MuiSvgIcon-colorInfo MuiSvgIcon-fontSizeMedium css-1yq1soz-MuiSvgIcon-root"
+        class="MuiSvgIcon-root MuiSvgIcon-colorInfo MuiSvgIcon-fontSizeMedium css-ocq0ss-MuiSvgIcon-root"
         data-testid="InfoIcon"
         focusable="false"
         viewBox="0 0 24 24"
@@ -2207,71 +2126,71 @@ exports[`Rendering test renders stackedverticalbarchart correctly 1`] = `
       </svg>
     </button>
     <div
-      class="sc-cGXZpB hRkBxQ"
+      class="sc-cXawGu ehfJVs"
     >
       <div
-        class="MuiStack-root sc-gaZyOd erAlLv css-m69qwo-MuiStack-root"
+        class="MuiStack-root sc-fWnslK vwiSF css-m69qwo-MuiStack-root"
       >
         <div
           class="MuiBox-root css-0"
         >
           <p
-            class="MuiTypography-root MuiTypography-body1 MuiTypography-gutterBottom css-d3wcwz-MuiTypography-root"
+            class="MuiTypography-root MuiTypography-body1 MuiTypography-gutterBottom css-vjrxpc-MuiTypography-root"
             id="input-slider"
           >
             chartSettings.markerScale
           </p>
           <span
-            class="MuiSlider-root MuiSlider-marked MuiSlider-colorPrimary MuiSlider-sizeMedium sc-dDvxFM hhSmfW css-ltlhnc-MuiSlider-root"
+            class="MuiSlider-root MuiSlider-marked MuiSlider-colorPrimary MuiSlider-sizeMedium sc-dIMoHT keSCEP css-1e45yg4-MuiSlider-root"
           >
             <span
-              class="MuiSlider-rail css-7o8aqz-MuiSlider-rail"
+              class="MuiSlider-rail css-r64h58-MuiSlider-rail"
             />
             <span
-              class="MuiSlider-track css-ttgsjq-MuiSlider-track"
+              class="MuiSlider-track css-xvk2i-MuiSlider-track"
               style="left: 0%; width: 0%;"
             />
             <span
-              class="MuiSlider-mark MuiSlider-markActive css-z5sdnj-MuiSlider-mark"
+              class="MuiSlider-mark MuiSlider-markActive css-16kozi8-MuiSlider-mark"
               data-index="0"
               style="left: 0%;"
             />
             <span
               aria-hidden="true"
-              class="MuiSlider-markLabel MuiSlider-markLabel MuiSlider-markLabelActive css-1ucwjgd-MuiSlider-markLabel"
+              class="MuiSlider-markLabel MuiSlider-markLabel MuiSlider-markLabelActive css-swtyag-MuiSlider-markLabel"
               data-index="0"
               style="left: 0%;"
             >
               1%
             </span>
             <span
-              class="MuiSlider-mark css-hzp7sc-MuiSlider-mark"
+              class="MuiSlider-mark css-lq5hqx-MuiSlider-mark"
               data-index="1"
               style="left: 49.74874371859296%;"
             />
             <span
               aria-hidden="true"
-              class="MuiSlider-markLabel MuiSlider-markLabel css-1bvr8oc-MuiSlider-markLabel"
+              class="MuiSlider-markLabel MuiSlider-markLabel css-1qb795b-MuiSlider-markLabel"
               data-index="1"
               style="left: 49.74874371859296%;"
             >
               100%
             </span>
             <span
-              class="MuiSlider-mark css-hzp7sc-MuiSlider-mark"
+              class="MuiSlider-mark css-lq5hqx-MuiSlider-mark"
               data-index="2"
               style="left: 100%;"
             />
             <span
               aria-hidden="true"
-              class="MuiSlider-markLabel MuiSlider-markLabel css-1bvr8oc-MuiSlider-markLabel"
+              class="MuiSlider-markLabel MuiSlider-markLabel css-1qb795b-MuiSlider-markLabel"
               data-index="2"
               style="left: 100%;"
             >
               200%
             </span>
             <span
-              class="MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary css-cp2j25-MuiSlider-thumb"
+              class="MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary css-1xcmt9q-MuiSlider-thumb"
               data-index="0"
               style="left: 0%;"
             >
@@ -2291,7 +2210,7 @@ exports[`Rendering test renders stackedverticalbarchart correctly 1`] = `
               />
               <span
                 aria-hidden="true"
-                class="MuiSlider-valueLabel css-14gyywz-MuiSlider-valueLabel"
+                class="MuiSlider-valueLabel css-1asissc-MuiSlider-valueLabel"
               >
                 <span
                   class="MuiSlider-valueLabelCircle"
@@ -2309,40 +2228,37 @@ exports[`Rendering test renders stackedverticalbarchart correctly 1`] = `
       </div>
     </div>
     <div
-      class="sc-cGXZpB hRkBxQ"
+      class="sc-cXawGu ehfJVs"
     >
       <div
-        class="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
+        class="MuiFormControl-root MuiFormControl-fullWidth css-ytlejw-MuiFormControl-root"
       >
         <label
-          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-j204z7-MuiFormControlLabel-root"
+          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-19opgx6-MuiFormControlLabel-root"
         >
           <span
-            class="MuiSwitch-root MuiSwitch-sizeMedium css-julti5-MuiSwitch-root"
+            class="MuiSwitch-root MuiSwitch-sizeMedium css-rehya9-MuiSwitch-root"
           >
             <span
-              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-byenzh-MuiButtonBase-root-MuiSwitch-switchBase"
+              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
             >
               <input
-                class="PrivateSwitchBase-input MuiSwitch-input css-1m9pwf3"
+                class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
                 type="checkbox"
               />
               <span
-                class="MuiSwitch-thumb css-jsexje-MuiSwitch-thumb"
-              />
-              <span
-                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                class="MuiSwitch-thumb css-17jyosd-MuiSwitch-thumb"
               />
             </span>
             <span
-              class="MuiSwitch-track css-1yjjitx-MuiSwitch-track"
+              class="MuiSwitch-track css-tj8d99-MuiSwitch-track"
             />
           </span>
           <span
-            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
+            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-rizt0-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jHbxoU gMHYgW css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jMsorb jGUqRM css-rizt0-MuiTypography-root"
             >
               chartSettings.cutYAxis
             </p>
@@ -2350,37 +2266,34 @@ exports[`Rendering test renders stackedverticalbarchart correctly 1`] = `
         </label>
       </div>
       <div
-        class="MuiFormControl-root MuiFormControl-fullWidth sc-hWWBcw hvCkYQ css-q8hpuo-MuiFormControl-root"
+        class="MuiFormControl-root MuiFormControl-fullWidth sc-icnseD gKDpJn css-ytlejw-MuiFormControl-root"
       >
         <label
-          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-j204z7-MuiFormControlLabel-root"
+          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-19opgx6-MuiFormControlLabel-root"
         >
           <span
-            class="MuiSwitch-root MuiSwitch-sizeMedium css-julti5-MuiSwitch-root"
+            class="MuiSwitch-root MuiSwitch-sizeMedium css-rehya9-MuiSwitch-root"
           >
             <span
-              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-byenzh-MuiButtonBase-root-MuiSwitch-switchBase"
+              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
             >
               <input
-                class="PrivateSwitchBase-input MuiSwitch-input css-1m9pwf3"
+                class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
                 type="checkbox"
               />
               <span
-                class="MuiSwitch-thumb css-jsexje-MuiSwitch-thumb"
-              />
-              <span
-                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                class="MuiSwitch-thumb css-17jyosd-MuiSwitch-thumb"
               />
             </span>
             <span
-              class="MuiSwitch-track css-1yjjitx-MuiSwitch-track"
+              class="MuiSwitch-track css-tj8d99-MuiSwitch-track"
             />
           </span>
           <span
-            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
+            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-rizt0-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jHbxoU gMHYgW css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jMsorb jGUqRM css-rizt0-MuiTypography-root"
             >
               chartSettings.matchXLabelsToEnd
             </p>
@@ -2388,37 +2301,34 @@ exports[`Rendering test renders stackedverticalbarchart correctly 1`] = `
         </label>
       </div>
       <div
-        class="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
+        class="MuiFormControl-root MuiFormControl-fullWidth css-ytlejw-MuiFormControl-root"
       >
         <label
-          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-j204z7-MuiFormControlLabel-root"
+          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-19opgx6-MuiFormControlLabel-root"
         >
           <span
-            class="MuiSwitch-root MuiSwitch-sizeMedium css-julti5-MuiSwitch-root"
+            class="MuiSwitch-root MuiSwitch-sizeMedium css-rehya9-MuiSwitch-root"
           >
             <span
-              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-byenzh-MuiButtonBase-root-MuiSwitch-switchBase"
+              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
             >
               <input
-                class="PrivateSwitchBase-input MuiSwitch-input css-1m9pwf3"
+                class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
                 type="checkbox"
               />
               <span
-                class="MuiSwitch-thumb css-jsexje-MuiSwitch-thumb"
-              />
-              <span
-                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                class="MuiSwitch-thumb css-17jyosd-MuiSwitch-thumb"
               />
             </span>
             <span
-              class="MuiSwitch-track css-1yjjitx-MuiSwitch-track"
+              class="MuiSwitch-track css-tj8d99-MuiSwitch-track"
             />
           </span>
           <span
-            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
+            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-rizt0-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jHbxoU gMHYgW css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jMsorb jGUqRM css-rizt0-MuiTypography-root"
             >
               visualizationSettings.showDataPoints
             </p>
@@ -2435,11 +2345,11 @@ exports[`Rendering test renders table correctly 1`] = `
   <div>
     <button
       aria-label="tooltip.open: tooltip.visualizationConfig"
-      class="sc-jqVXSH gRmzVu"
+      class="sc-iQQCXo kcqxua"
     >
       <svg
         aria-hidden="true"
-        class="MuiSvgIcon-root MuiSvgIcon-colorInfo MuiSvgIcon-fontSizeMedium css-1yq1soz-MuiSvgIcon-root"
+        class="MuiSvgIcon-root MuiSvgIcon-colorInfo MuiSvgIcon-fontSizeMedium css-ocq0ss-MuiSvgIcon-root"
         data-testid="InfoIcon"
         focusable="false"
         viewBox="0 0 24 24"
@@ -2450,71 +2360,65 @@ exports[`Rendering test renders table correctly 1`] = `
       </svg>
     </button>
     <div
-      class="sc-cGXZpB hRkBxQ"
+      class="sc-cXawGu ehfJVs"
     >
       <div
-        class="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
+        class="MuiFormControl-root MuiFormControl-fullWidth css-ytlejw-MuiFormControl-root"
       >
         <div
-          class="MuiStack-root sc-gyycJP bQujGH css-m69qwo-MuiStack-root"
+          class="MuiStack-root sc-fYsHOw kZzpde css-m69qwo-MuiStack-root"
         >
           <ul
-            class="MuiList-root MuiList-padding MuiList-dense MuiList-subheader sc-KXCwU fWGnzY css-p64g7a-MuiList-root"
+            class="MuiList-root MuiList-padding MuiList-dense MuiList-subheader sc-Qotzb cEUZKv css-h1es49-MuiList-root"
           >
             <li
-              class="MuiListSubheader-root MuiListSubheader-gutters MuiListSubheader-sticky css-uob957-MuiListSubheader-root"
+              class="MuiListSubheader-root MuiListSubheader-gutters MuiListSubheader-sticky css-l328gy-MuiListSubheader-root"
             >
               chartSettings.rowVariables
             </li>
             <div
-              class="MuiButtonBase-root MuiListItemButton-root MuiListItemButton-dense MuiListItemButton-gutters MuiListItemButton-root MuiListItemButton-dense MuiListItemButton-gutters css-178cqt3-MuiButtonBase-root-MuiListItemButton-root"
+              class="MuiButtonBase-root MuiListItemButton-root MuiListItemButton-dense MuiListItemButton-gutters MuiListItemButton-root MuiListItemButton-dense MuiListItemButton-gutters css-2knotq-MuiButtonBase-root-MuiListItemButton-root"
               role="button"
               tabindex="0"
             >
               <div
-                class="MuiListItemText-root MuiListItemText-dense css-tlelie-MuiListItemText-root"
+                class="MuiListItemText-root MuiListItemText-dense css-cfq8qh-MuiListItemText-root"
               >
                 <span
-                  class="MuiTypography-root MuiTypography-body2 MuiListItemText-primary css-et1ao3-MuiTypography-root"
+                  class="MuiTypography-root MuiTypography-body2 MuiListItemText-primary css-7ctihp-MuiTypography-root"
                 >
                   foobar1 2
                 </span>
               </div>
-              <span
-                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-              />
             </div>
             <div
-              class="MuiButtonBase-root MuiListItemButton-root MuiListItemButton-dense MuiListItemButton-gutters MuiListItemButton-root MuiListItemButton-dense MuiListItemButton-gutters css-178cqt3-MuiButtonBase-root-MuiListItemButton-root"
+              class="MuiButtonBase-root MuiListItemButton-root MuiListItemButton-dense MuiListItemButton-gutters MuiListItemButton-root MuiListItemButton-dense MuiListItemButton-gutters css-2knotq-MuiButtonBase-root-MuiListItemButton-root"
               role="button"
               tabindex="0"
             >
               <div
-                class="MuiListItemText-root MuiListItemText-dense css-tlelie-MuiListItemText-root"
+                class="MuiListItemText-root MuiListItemText-dense css-cfq8qh-MuiListItemText-root"
               >
                 <span
-                  class="MuiTypography-root MuiTypography-body2 MuiListItemText-primary css-et1ao3-MuiTypography-root"
+                  class="MuiTypography-root MuiTypography-body2 MuiListItemText-primary css-7ctihp-MuiTypography-root"
                 >
                   foobar3 2
                 </span>
               </div>
-              <span
-                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-              />
             </div>
           </ul>
           <div
-            class="MuiStack-root sc-eaUbBy ktsarK css-nen11g-MuiStack-root"
+            class="MuiStack-root sc-dKREkF cfxFSg css-nen11g-MuiStack-root"
           >
             <button
               aria-label="tableSettings.up"
-              class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-78trlr-MuiButtonBase-root-MuiIconButton-root"
+              class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-53g0n7-MuiButtonBase-root-MuiIconButton-root"
               tabindex="0"
               type="button"
             >
               <svg
                 aria-hidden="true"
-                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1umw9bq-MuiSvgIcon-root"
                 data-testid="ArrowUpwardIcon"
                 focusable="false"
                 viewBox="0 0 24 24"
@@ -2523,19 +2427,16 @@ exports[`Rendering test renders table correctly 1`] = `
                   d="m4 12 1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8z"
                 />
               </svg>
-              <span
-                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-              />
             </button>
             <button
               aria-label="tableSettings.down"
-              class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-78trlr-MuiButtonBase-root-MuiIconButton-root"
+              class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-53g0n7-MuiButtonBase-root-MuiIconButton-root"
               tabindex="0"
               type="button"
             >
               <svg
                 aria-hidden="true"
-                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1umw9bq-MuiSvgIcon-root"
                 data-testid="ArrowDownwardIcon"
                 focusable="false"
                 viewBox="0 0 24 24"
@@ -2544,19 +2445,16 @@ exports[`Rendering test renders table correctly 1`] = `
                   d="m20 12-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8z"
                 />
               </svg>
-              <span
-                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-              />
             </button>
             <button
               aria-label="tableSettings.swap"
-              class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-78trlr-MuiButtonBase-root-MuiIconButton-root"
+              class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-53g0n7-MuiButtonBase-root-MuiIconButton-root"
               tabindex="0"
               type="button"
             >
               <svg
                 aria-hidden="true"
-                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1umw9bq-MuiSvgIcon-root"
                 data-testid="SwapHorizIcon"
                 focusable="false"
                 viewBox="0 0 24 24"
@@ -2565,121 +2463,112 @@ exports[`Rendering test renders table correctly 1`] = `
                   d="M6.99 11 3 15l3.99 4v-3H14v-2H6.99zM21 9l-3.99-4v3H10v2h7.01v3z"
                 />
               </svg>
-              <span
-                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-              />
             </button>
           </div>
           <ul
-            class="MuiList-root MuiList-padding MuiList-dense MuiList-subheader sc-KXCwU fWGnzY css-p64g7a-MuiList-root"
+            class="MuiList-root MuiList-padding MuiList-dense MuiList-subheader sc-Qotzb cEUZKv css-h1es49-MuiList-root"
           >
             <li
-              class="MuiListSubheader-root MuiListSubheader-gutters MuiListSubheader-sticky css-uob957-MuiListSubheader-root"
+              class="MuiListSubheader-root MuiListSubheader-gutters MuiListSubheader-sticky css-l328gy-MuiListSubheader-root"
             >
               chartSettings.columnVariables
             </li>
             <div
-              class="MuiButtonBase-root MuiListItemButton-root MuiListItemButton-dense MuiListItemButton-gutters MuiListItemButton-root MuiListItemButton-dense MuiListItemButton-gutters css-178cqt3-MuiButtonBase-root-MuiListItemButton-root"
+              class="MuiButtonBase-root MuiListItemButton-root MuiListItemButton-dense MuiListItemButton-gutters MuiListItemButton-root MuiListItemButton-dense MuiListItemButton-gutters css-2knotq-MuiButtonBase-root-MuiListItemButton-root"
               role="button"
               tabindex="0"
             >
               <div
-                class="MuiListItemText-root MuiListItemText-dense css-tlelie-MuiListItemText-root"
+                class="MuiListItemText-root MuiListItemText-dense css-cfq8qh-MuiListItemText-root"
               >
                 <span
-                  class="MuiTypography-root MuiTypography-body2 MuiListItemText-primary css-et1ao3-MuiTypography-root"
+                  class="MuiTypography-root MuiTypography-body2 MuiListItemText-primary css-7ctihp-MuiTypography-root"
                 >
                   foobar2 2
                 </span>
               </div>
-              <span
-                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-              />
             </div>
             <div
-              class="MuiButtonBase-root MuiListItemButton-root MuiListItemButton-dense MuiListItemButton-gutters MuiListItemButton-root MuiListItemButton-dense MuiListItemButton-gutters css-178cqt3-MuiButtonBase-root-MuiListItemButton-root"
+              class="MuiButtonBase-root MuiListItemButton-root MuiListItemButton-dense MuiListItemButton-gutters MuiListItemButton-root MuiListItemButton-dense MuiListItemButton-gutters css-2knotq-MuiButtonBase-root-MuiListItemButton-root"
               role="button"
               tabindex="0"
             >
               <div
-                class="MuiListItemText-root MuiListItemText-dense css-tlelie-MuiListItemText-root"
+                class="MuiListItemText-root MuiListItemText-dense css-cfq8qh-MuiListItemText-root"
               >
                 <span
-                  class="MuiTypography-root MuiTypography-body2 MuiListItemText-primary css-et1ao3-MuiTypography-root"
+                  class="MuiTypography-root MuiTypography-body2 MuiListItemText-primary css-7ctihp-MuiTypography-root"
                 >
                   foobar4 2
                 </span>
               </div>
-              <span
-                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-              />
             </div>
           </ul>
         </div>
       </div>
       <div
-        class="MuiStack-root sc-gaZyOd erAlLv css-m69qwo-MuiStack-root"
+        class="MuiStack-root sc-fWnslK vwiSF css-m69qwo-MuiStack-root"
       >
         <div
           class="MuiBox-root css-0"
         >
           <p
-            class="MuiTypography-root MuiTypography-body1 MuiTypography-gutterBottom css-d3wcwz-MuiTypography-root"
+            class="MuiTypography-root MuiTypography-body1 MuiTypography-gutterBottom css-vjrxpc-MuiTypography-root"
             id="input-slider"
           >
             chartSettings.markerScale
           </p>
           <span
-            class="MuiSlider-root MuiSlider-marked MuiSlider-colorPrimary MuiSlider-sizeMedium sc-dDvxFM hhSmfW css-ltlhnc-MuiSlider-root"
+            class="MuiSlider-root MuiSlider-marked MuiSlider-colorPrimary MuiSlider-sizeMedium sc-dIMoHT keSCEP css-1e45yg4-MuiSlider-root"
           >
             <span
-              class="MuiSlider-rail css-7o8aqz-MuiSlider-rail"
+              class="MuiSlider-rail css-r64h58-MuiSlider-rail"
             />
             <span
-              class="MuiSlider-track css-ttgsjq-MuiSlider-track"
+              class="MuiSlider-track css-xvk2i-MuiSlider-track"
               style="left: 0%; width: 0%;"
             />
             <span
-              class="MuiSlider-mark MuiSlider-markActive css-z5sdnj-MuiSlider-mark"
+              class="MuiSlider-mark MuiSlider-markActive css-16kozi8-MuiSlider-mark"
               data-index="0"
               style="left: 0%;"
             />
             <span
               aria-hidden="true"
-              class="MuiSlider-markLabel MuiSlider-markLabel MuiSlider-markLabelActive css-1ucwjgd-MuiSlider-markLabel"
+              class="MuiSlider-markLabel MuiSlider-markLabel MuiSlider-markLabelActive css-swtyag-MuiSlider-markLabel"
               data-index="0"
               style="left: 0%;"
             >
               1%
             </span>
             <span
-              class="MuiSlider-mark css-hzp7sc-MuiSlider-mark"
+              class="MuiSlider-mark css-lq5hqx-MuiSlider-mark"
               data-index="1"
               style="left: 49.74874371859296%;"
             />
             <span
               aria-hidden="true"
-              class="MuiSlider-markLabel MuiSlider-markLabel css-1bvr8oc-MuiSlider-markLabel"
+              class="MuiSlider-markLabel MuiSlider-markLabel css-1qb795b-MuiSlider-markLabel"
               data-index="1"
               style="left: 49.74874371859296%;"
             >
               100%
             </span>
             <span
-              class="MuiSlider-mark css-hzp7sc-MuiSlider-mark"
+              class="MuiSlider-mark css-lq5hqx-MuiSlider-mark"
               data-index="2"
               style="left: 100%;"
             />
             <span
               aria-hidden="true"
-              class="MuiSlider-markLabel MuiSlider-markLabel css-1bvr8oc-MuiSlider-markLabel"
+              class="MuiSlider-markLabel MuiSlider-markLabel css-1qb795b-MuiSlider-markLabel"
               data-index="2"
               style="left: 100%;"
             >
               200%
             </span>
             <span
-              class="MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary css-cp2j25-MuiSlider-thumb"
+              class="MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary css-1xcmt9q-MuiSlider-thumb"
               data-index="0"
               style="left: 0%;"
             >
@@ -2699,7 +2588,7 @@ exports[`Rendering test renders table correctly 1`] = `
               />
               <span
                 aria-hidden="true"
-                class="MuiSlider-valueLabel css-14gyywz-MuiSlider-valueLabel"
+                class="MuiSlider-valueLabel css-1asissc-MuiSlider-valueLabel"
               >
                 <span
                   class="MuiSlider-valueLabelCircle"
@@ -2717,40 +2606,37 @@ exports[`Rendering test renders table correctly 1`] = `
       </div>
     </div>
     <div
-      class="sc-cGXZpB hRkBxQ"
+      class="sc-cXawGu ehfJVs"
     >
       <div
-        class="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
+        class="MuiFormControl-root MuiFormControl-fullWidth css-ytlejw-MuiFormControl-root"
       >
         <label
-          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-j204z7-MuiFormControlLabel-root"
+          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-19opgx6-MuiFormControlLabel-root"
         >
           <span
-            class="MuiSwitch-root MuiSwitch-sizeMedium css-julti5-MuiSwitch-root"
+            class="MuiSwitch-root MuiSwitch-sizeMedium css-rehya9-MuiSwitch-root"
           >
             <span
-              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-byenzh-MuiButtonBase-root-MuiSwitch-switchBase"
+              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
             >
               <input
-                class="PrivateSwitchBase-input MuiSwitch-input css-1m9pwf3"
+                class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
                 type="checkbox"
               />
               <span
-                class="MuiSwitch-thumb css-jsexje-MuiSwitch-thumb"
-              />
-              <span
-                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                class="MuiSwitch-thumb css-17jyosd-MuiSwitch-thumb"
               />
             </span>
             <span
-              class="MuiSwitch-track css-1yjjitx-MuiSwitch-track"
+              class="MuiSwitch-track css-tj8d99-MuiSwitch-track"
             />
           </span>
           <span
-            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
+            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-rizt0-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jHbxoU gMHYgW css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jMsorb jGUqRM css-rizt0-MuiTypography-root"
             >
               chartSettings.cutYAxis
             </p>
@@ -2758,37 +2644,34 @@ exports[`Rendering test renders table correctly 1`] = `
         </label>
       </div>
       <div
-        class="MuiFormControl-root MuiFormControl-fullWidth sc-hWWBcw hvCkYQ css-q8hpuo-MuiFormControl-root"
+        class="MuiFormControl-root MuiFormControl-fullWidth sc-icnseD gKDpJn css-ytlejw-MuiFormControl-root"
       >
         <label
-          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-j204z7-MuiFormControlLabel-root"
+          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-19opgx6-MuiFormControlLabel-root"
         >
           <span
-            class="MuiSwitch-root MuiSwitch-sizeMedium css-julti5-MuiSwitch-root"
+            class="MuiSwitch-root MuiSwitch-sizeMedium css-rehya9-MuiSwitch-root"
           >
             <span
-              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-byenzh-MuiButtonBase-root-MuiSwitch-switchBase"
+              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
             >
               <input
-                class="PrivateSwitchBase-input MuiSwitch-input css-1m9pwf3"
+                class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
                 type="checkbox"
               />
               <span
-                class="MuiSwitch-thumb css-jsexje-MuiSwitch-thumb"
-              />
-              <span
-                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                class="MuiSwitch-thumb css-17jyosd-MuiSwitch-thumb"
               />
             </span>
             <span
-              class="MuiSwitch-track css-1yjjitx-MuiSwitch-track"
+              class="MuiSwitch-track css-tj8d99-MuiSwitch-track"
             />
           </span>
           <span
-            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
+            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-rizt0-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jHbxoU gMHYgW css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jMsorb jGUqRM css-rizt0-MuiTypography-root"
             >
               chartSettings.matchXLabelsToEnd
             </p>
@@ -2796,37 +2679,34 @@ exports[`Rendering test renders table correctly 1`] = `
         </label>
       </div>
       <div
-        class="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
+        class="MuiFormControl-root MuiFormControl-fullWidth css-ytlejw-MuiFormControl-root"
       >
         <label
-          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-j204z7-MuiFormControlLabel-root"
+          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-19opgx6-MuiFormControlLabel-root"
         >
           <span
-            class="MuiSwitch-root MuiSwitch-sizeMedium css-julti5-MuiSwitch-root"
+            class="MuiSwitch-root MuiSwitch-sizeMedium css-rehya9-MuiSwitch-root"
           >
             <span
-              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-byenzh-MuiButtonBase-root-MuiSwitch-switchBase"
+              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
             >
               <input
-                class="PrivateSwitchBase-input MuiSwitch-input css-1m9pwf3"
+                class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
                 type="checkbox"
               />
               <span
-                class="MuiSwitch-thumb css-jsexje-MuiSwitch-thumb"
-              />
-              <span
-                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                class="MuiSwitch-thumb css-17jyosd-MuiSwitch-thumb"
               />
             </span>
             <span
-              class="MuiSwitch-track css-1yjjitx-MuiSwitch-track"
+              class="MuiSwitch-track css-tj8d99-MuiSwitch-track"
             />
           </span>
           <span
-            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
+            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-rizt0-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jHbxoU gMHYgW css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jMsorb jGUqRM css-rizt0-MuiTypography-root"
             >
               visualizationSettings.showDataPoints
             </p>
@@ -2843,11 +2723,11 @@ exports[`Rendering test renders verticalbarchart correctly 1`] = `
   <div>
     <button
       aria-label="tooltip.open: tooltip.visualizationConfig"
-      class="sc-jqVXSH gRmzVu"
+      class="sc-iQQCXo kcqxua"
     >
       <svg
         aria-hidden="true"
-        class="MuiSvgIcon-root MuiSvgIcon-colorInfo MuiSvgIcon-fontSizeMedium css-1yq1soz-MuiSvgIcon-root"
+        class="MuiSvgIcon-root MuiSvgIcon-colorInfo MuiSvgIcon-fontSizeMedium css-ocq0ss-MuiSvgIcon-root"
         data-testid="InfoIcon"
         focusable="false"
         viewBox="0 0 24 24"
@@ -2858,71 +2738,71 @@ exports[`Rendering test renders verticalbarchart correctly 1`] = `
       </svg>
     </button>
     <div
-      class="sc-cGXZpB hRkBxQ"
+      class="sc-cXawGu ehfJVs"
     >
       <div
-        class="MuiStack-root sc-gaZyOd erAlLv css-m69qwo-MuiStack-root"
+        class="MuiStack-root sc-fWnslK vwiSF css-m69qwo-MuiStack-root"
       >
         <div
           class="MuiBox-root css-0"
         >
           <p
-            class="MuiTypography-root MuiTypography-body1 MuiTypography-gutterBottom css-d3wcwz-MuiTypography-root"
+            class="MuiTypography-root MuiTypography-body1 MuiTypography-gutterBottom css-vjrxpc-MuiTypography-root"
             id="input-slider"
           >
             chartSettings.markerScale
           </p>
           <span
-            class="MuiSlider-root MuiSlider-marked MuiSlider-colorPrimary MuiSlider-sizeMedium sc-dDvxFM hhSmfW css-ltlhnc-MuiSlider-root"
+            class="MuiSlider-root MuiSlider-marked MuiSlider-colorPrimary MuiSlider-sizeMedium sc-dIMoHT keSCEP css-1e45yg4-MuiSlider-root"
           >
             <span
-              class="MuiSlider-rail css-7o8aqz-MuiSlider-rail"
+              class="MuiSlider-rail css-r64h58-MuiSlider-rail"
             />
             <span
-              class="MuiSlider-track css-ttgsjq-MuiSlider-track"
+              class="MuiSlider-track css-xvk2i-MuiSlider-track"
               style="left: 0%; width: 0%;"
             />
             <span
-              class="MuiSlider-mark MuiSlider-markActive css-z5sdnj-MuiSlider-mark"
+              class="MuiSlider-mark MuiSlider-markActive css-16kozi8-MuiSlider-mark"
               data-index="0"
               style="left: 0%;"
             />
             <span
               aria-hidden="true"
-              class="MuiSlider-markLabel MuiSlider-markLabel MuiSlider-markLabelActive css-1ucwjgd-MuiSlider-markLabel"
+              class="MuiSlider-markLabel MuiSlider-markLabel MuiSlider-markLabelActive css-swtyag-MuiSlider-markLabel"
               data-index="0"
               style="left: 0%;"
             >
               1%
             </span>
             <span
-              class="MuiSlider-mark css-hzp7sc-MuiSlider-mark"
+              class="MuiSlider-mark css-lq5hqx-MuiSlider-mark"
               data-index="1"
               style="left: 49.74874371859296%;"
             />
             <span
               aria-hidden="true"
-              class="MuiSlider-markLabel MuiSlider-markLabel css-1bvr8oc-MuiSlider-markLabel"
+              class="MuiSlider-markLabel MuiSlider-markLabel css-1qb795b-MuiSlider-markLabel"
               data-index="1"
               style="left: 49.74874371859296%;"
             >
               100%
             </span>
             <span
-              class="MuiSlider-mark css-hzp7sc-MuiSlider-mark"
+              class="MuiSlider-mark css-lq5hqx-MuiSlider-mark"
               data-index="2"
               style="left: 100%;"
             />
             <span
               aria-hidden="true"
-              class="MuiSlider-markLabel MuiSlider-markLabel css-1bvr8oc-MuiSlider-markLabel"
+              class="MuiSlider-markLabel MuiSlider-markLabel css-1qb795b-MuiSlider-markLabel"
               data-index="2"
               style="left: 100%;"
             >
               200%
             </span>
             <span
-              class="MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary css-cp2j25-MuiSlider-thumb"
+              class="MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary css-1xcmt9q-MuiSlider-thumb"
               data-index="0"
               style="left: 0%;"
             >
@@ -2942,7 +2822,7 @@ exports[`Rendering test renders verticalbarchart correctly 1`] = `
               />
               <span
                 aria-hidden="true"
-                class="MuiSlider-valueLabel css-14gyywz-MuiSlider-valueLabel"
+                class="MuiSlider-valueLabel css-1asissc-MuiSlider-valueLabel"
               >
                 <span
                   class="MuiSlider-valueLabelCircle"
@@ -2960,40 +2840,37 @@ exports[`Rendering test renders verticalbarchart correctly 1`] = `
       </div>
     </div>
     <div
-      class="sc-cGXZpB hRkBxQ"
+      class="sc-cXawGu ehfJVs"
     >
       <div
-        class="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
+        class="MuiFormControl-root MuiFormControl-fullWidth css-ytlejw-MuiFormControl-root"
       >
         <label
-          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-j204z7-MuiFormControlLabel-root"
+          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-19opgx6-MuiFormControlLabel-root"
         >
           <span
-            class="MuiSwitch-root MuiSwitch-sizeMedium css-julti5-MuiSwitch-root"
+            class="MuiSwitch-root MuiSwitch-sizeMedium css-rehya9-MuiSwitch-root"
           >
             <span
-              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-byenzh-MuiButtonBase-root-MuiSwitch-switchBase"
+              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
             >
               <input
-                class="PrivateSwitchBase-input MuiSwitch-input css-1m9pwf3"
+                class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
                 type="checkbox"
               />
               <span
-                class="MuiSwitch-thumb css-jsexje-MuiSwitch-thumb"
-              />
-              <span
-                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                class="MuiSwitch-thumb css-17jyosd-MuiSwitch-thumb"
               />
             </span>
             <span
-              class="MuiSwitch-track css-1yjjitx-MuiSwitch-track"
+              class="MuiSwitch-track css-tj8d99-MuiSwitch-track"
             />
           </span>
           <span
-            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
+            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-rizt0-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jHbxoU gMHYgW css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jMsorb jGUqRM css-rizt0-MuiTypography-root"
             >
               chartSettings.cutYAxis
             </p>
@@ -3001,37 +2878,34 @@ exports[`Rendering test renders verticalbarchart correctly 1`] = `
         </label>
       </div>
       <div
-        class="MuiFormControl-root MuiFormControl-fullWidth sc-hWWBcw hvCkYQ css-q8hpuo-MuiFormControl-root"
+        class="MuiFormControl-root MuiFormControl-fullWidth sc-icnseD gKDpJn css-ytlejw-MuiFormControl-root"
       >
         <label
-          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-j204z7-MuiFormControlLabel-root"
+          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-19opgx6-MuiFormControlLabel-root"
         >
           <span
-            class="MuiSwitch-root MuiSwitch-sizeMedium css-julti5-MuiSwitch-root"
+            class="MuiSwitch-root MuiSwitch-sizeMedium css-rehya9-MuiSwitch-root"
           >
             <span
-              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-byenzh-MuiButtonBase-root-MuiSwitch-switchBase"
+              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
             >
               <input
-                class="PrivateSwitchBase-input MuiSwitch-input css-1m9pwf3"
+                class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
                 type="checkbox"
               />
               <span
-                class="MuiSwitch-thumb css-jsexje-MuiSwitch-thumb"
-              />
-              <span
-                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                class="MuiSwitch-thumb css-17jyosd-MuiSwitch-thumb"
               />
             </span>
             <span
-              class="MuiSwitch-track css-1yjjitx-MuiSwitch-track"
+              class="MuiSwitch-track css-tj8d99-MuiSwitch-track"
             />
           </span>
           <span
-            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
+            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-rizt0-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jHbxoU gMHYgW css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jMsorb jGUqRM css-rizt0-MuiTypography-root"
             >
               chartSettings.matchXLabelsToEnd
             </p>
@@ -3039,37 +2913,34 @@ exports[`Rendering test renders verticalbarchart correctly 1`] = `
         </label>
       </div>
       <div
-        class="MuiFormControl-root MuiFormControl-fullWidth css-q8hpuo-MuiFormControl-root"
+        class="MuiFormControl-root MuiFormControl-fullWidth css-ytlejw-MuiFormControl-root"
       >
         <label
-          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-j204z7-MuiFormControlLabel-root"
+          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-19opgx6-MuiFormControlLabel-root"
         >
           <span
-            class="MuiSwitch-root MuiSwitch-sizeMedium css-julti5-MuiSwitch-root"
+            class="MuiSwitch-root MuiSwitch-sizeMedium css-rehya9-MuiSwitch-root"
           >
             <span
-              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-byenzh-MuiButtonBase-root-MuiSwitch-switchBase"
+              class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
             >
               <input
-                class="PrivateSwitchBase-input MuiSwitch-input css-1m9pwf3"
+                class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
                 type="checkbox"
               />
               <span
-                class="MuiSwitch-thumb css-jsexje-MuiSwitch-thumb"
-              />
-              <span
-                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                class="MuiSwitch-thumb css-17jyosd-MuiSwitch-thumb"
               />
             </span>
             <span
-              class="MuiSwitch-track css-1yjjitx-MuiSwitch-track"
+              class="MuiSwitch-track css-tj8d99-MuiSwitch-track"
             />
           </span>
           <span
-            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-ahj2mt-MuiTypography-root"
+            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-rizt0-MuiTypography-root"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 sc-jHbxoU gMHYgW css-ahj2mt-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 sc-jMsorb jGUqRM css-rizt0-MuiTypography-root"
             >
               visualizationSettings.showDataPoints
             </p>
