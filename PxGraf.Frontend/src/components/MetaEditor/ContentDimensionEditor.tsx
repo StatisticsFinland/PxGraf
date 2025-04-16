@@ -1,6 +1,6 @@
 import { Grid } from '@mui/material';
 import React from 'react';
-import { IDimension } from 'types/cubeMeta';
+import { IContentDimensionValue, IDimension } from 'types/cubeMeta';
 import { IDimensionEditions, IDimensionValueEditions } from 'types/query';
 import { ContentDimensionValueEditor } from './ContentDimensionValueEditor';
 
@@ -27,14 +27,14 @@ export const ContentDimensionEditor: React.FC<IContentDimensionEditorProps> = ({
 
     return (
         <Grid container spacing={3}>
-            {dimension.values.map((value) => {
+            {dimension.values.map((value: IContentDimensionValue) => {
                 const valueEdits = dimensionEdits?.valueEdits[value.code];
 
                 return (
-                    <Grid item
+                    <Grid 
                         key={value.code}
-                        xs={12}
-                        xl={dimension.values.length > 1 ? 6 : 12 /* Use two columns layout when screen is big enought and there is more than one value */}
+                        size={{ xs: 12, xl: dimension.values.length > 1 ? 6 : 12 }}
+                        columns={dimension.values.length > 1 ? 1 : 2}
                     >
                         <ContentDimensionValueEditor
                             key={value.code}
