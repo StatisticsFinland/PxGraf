@@ -7,8 +7,6 @@ import { DimensionEditor } from './DimensionEditor';
 import { HeaderEditor } from './HeaderEditor';
 import { a11yProps } from 'utils/componentHelpers';
 import styled from 'styled-components';
-import { ICubeQuery } from 'types/query';
-import { MultiLanguageString } from 'types/multiLanguageString';
 import { IDimension } from 'types/cubeMeta';
 import { IHeaderResult } from 'api/services/default-header';
 import InfoBubble from 'components/InfoBubble/InfoBubble';
