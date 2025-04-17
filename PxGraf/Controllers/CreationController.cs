@@ -197,26 +197,6 @@ namespace PxGraf.Controllers
         }
 
         /// <summary>
-        /// Returns a list of valid visualization type names.
-        /// </summary>
-        /// <param name="cubeQuery"><see cref="MatrixQuery"/> object containing the table reference and the query.</param>
-        /// <returns>List of strings of valid visualization type names.</returns>
-        [HttpPost("valid-visualizations")]
-        public async Task<ActionResult<List<string>>> GetValidVisualizationTypesAsync([FromBody] MatrixQuery cubeQuery)
-        {
-            _logger.LogDebug("Requesting valid visualizations for {CubeQuery} POST: api/creation/valid-visualization", cubeQuery);
-            IReadOnlyMatrixMetadata tableMeta = await _datasource.GetMatrixMetadataCachedAsync(cubeQuery.TableReference);
-            IReadOnlyMatrixMetadata filteredMeta = tableMeta.FilterDimensionValues(cubeQuery);
-
-            Matrix<DecimalDataValue> matrix = await _datasource.GetMatrixCachedAsync(cubeQuery.TableReference, filteredMeta);
-
-            IReadOnlyList<VisualizationType> validTypes = ChartTypeSelector.Selector.GetValidChartTypes(cubeQuery, matrix);
-            List<string> validTypesList = [.. validTypes.Select(ChartTypeEnumConverter.ToJsonString)];
-            _logger.LogDebug("valid-visualizations result: {ValidTypesList}", validTypesList);
-            return validTypesList;
-        }
-
-        /// <summary>
         /// Returns information about valid and rejected visualization types and query size and size limits.
         /// </summary>
         /// <param name="cubeQuery"><see cref="MatrixQuery"/> object containing the table reference and the query.</param>
