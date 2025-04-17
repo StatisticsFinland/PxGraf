@@ -59,9 +59,7 @@ export interface INewEditMetaEditor {
 interface IMetaEditorProps {
     language: string;
     resolvedDimensions: IDimension[];
-    cubeQuery: ICubeQuery;
     defaultHeaderResponse: IHeaderResult;
-    onChange: (newEdit: ICubeQuery) => void;
     isMetaAccordionOpen: boolean;
     onMetaAccordionOpenChange: () => void;
     titleMaxLength?: number;
@@ -71,9 +69,7 @@ interface IMetaEditorProps {
 export const MetaEditor: React.FC<IMetaEditorProps> = ({
     language,
     resolvedDimensions,
-    cubeQuery,
     defaultHeaderResponse,
-    onChange,
     isMetaAccordionOpen,
     onMetaAccordionOpenChange,
     titleMaxLength,
@@ -87,9 +83,7 @@ export const MetaEditor: React.FC<IMetaEditorProps> = ({
             <HeaderEditor
                 style={{ width: '100%' }}
                 defaultHeaderResponse={defaultHeaderResponse}
-                editValue={cubeQuery?.chartHeaderEdit}
                 language={language}
-                onChange={(title: MultiLanguageString) => onChange({ ...cubeQuery, chartHeaderEdit: title })}
                 maxLength={titleMaxLength}
             />
             <GridFixer>
@@ -119,22 +113,6 @@ export const MetaEditor: React.FC<IMetaEditorProps> = ({
                                             <DimensionEditor
                                                 dimension={dimension}
                                                 language={language}
-                                                dimensionEdits={cubeQuery?.variableQueries[dimension.code]}
-                                                onChange={newEdit => {
-                                                    onChange({
-                                                        ...cubeQuery,
-                                                        variableQueries: {
-                                                            ...cubeQuery?.variableQueries,
-                                                            [dimension.code]: {
-                                                                ...cubeQuery?.variableQueries[dimension.code],
-                                                                valueEdits: {
-                                                                    ...cubeQuery?.variableQueries[dimension.code]?.valueEdits,
-                                                                    ...newEdit.valueEdits
-                                                                }
-                                                            }
-                                                        }
-                                                    })
-                                                }}
                                             />
                                         </TabPanel>
                                     );

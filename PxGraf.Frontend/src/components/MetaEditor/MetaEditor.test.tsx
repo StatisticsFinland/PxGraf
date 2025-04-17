@@ -148,7 +148,6 @@ const mockCubeQuery: ICubeQuery = {
 
 const defaultSelectables = { foo: ['2018'] };
 const setDefaultSelectables = jest.fn();
-const cubeQuery = null;
 const setCubeQuery = jest.fn();
 const query = null;
 const setQuery = jest.fn();
@@ -163,14 +162,12 @@ describe('Rendering test', () => {
     it('renders correctly', () => {
         const { asFragment } = render(
             <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
-                <EditorContext.Provider value={{ cubeQuery, setCubeQuery, query, setQuery, saveDialogOpen, setSaveDialogOpen, selectedVisualizationUserInput, setSelectedVisualizationUserInput, visualizationSettingsUserInput, setVisualizationSettingsUserInput, defaultSelectables, setDefaultSelectables }}>
+                <EditorContext.Provider value={{ cubeQuery: mockCubeQuery, setCubeQuery, query, setQuery, saveDialogOpen, setSaveDialogOpen, selectedVisualizationUserInput, setSelectedVisualizationUserInput, visualizationSettingsUserInput, setVisualizationSettingsUserInput, defaultSelectables, setDefaultSelectables }}>
                     <MetaEditor
                         resolvedDimensions={mockDimensions}
-                        cubeQuery={mockCubeQuery}
                         defaultHeaderResponse={defaultHeaderResponseMock}
                         isMetaAccordionOpen={isMetaAccordionOpenMock}
                         language={mockLang}
-                        onChange={mockFunction}
                         onMetaAccordionOpenChange={mockFunction}
                     />
                 </EditorContext.Provider>

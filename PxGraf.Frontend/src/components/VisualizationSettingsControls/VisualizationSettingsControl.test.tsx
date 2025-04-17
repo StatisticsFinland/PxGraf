@@ -6,6 +6,8 @@ import VisualizationSettingControl from "./VisualizationSettingsControl";
 import { FilterType, Query } from "types/query";
 import { ITypeSpecificVisualizationRules, IVisualizationRules } from '../../types/visualizationRules';
 import { IVisualizationSettings } from '../../types/visualizationSettings';
+import { EditorContext } from '../../contexts/editorContext';
+import { VisualizationType } from '../../types/visualizationType';
 
 jest.mock('react-i18next', () => ({
     ...jest.requireActual('react-i18next'),
@@ -174,7 +176,6 @@ describe('Rendering test', () => {
             dimensions={mockDimensions}
             visualizationRules={mockVisualizationRules}
             visualizationSettings={mockVisualizationSettings}
-            settingsChangedHandler={mockSettingsChangedHandler}
         />);
         expect(asFragment()).toMatchSnapshot();
     });
@@ -185,7 +186,6 @@ describe('Rendering test', () => {
             dimensions={mockDimensions}
             visualizationRules={mockVisualizationRules}
             visualizationSettings={mockVisualizationSettings}
-            settingsChangedHandler={mockSettingsChangedHandler}
         />);
         expect(asFragment()).toMatchSnapshot();
     });
@@ -196,7 +196,6 @@ describe('Rendering test', () => {
             dimensions={mockDimensions}
             visualizationRules={mockVisualizationRules}
             visualizationSettings={mockVisualizationSettings}
-            settingsChangedHandler={mockSettingsChangedHandler}
         />);
         expect(asFragment()).toMatchSnapshot();
     });
@@ -207,7 +206,6 @@ describe('Rendering test', () => {
             dimensions={mockDimensions}
             visualizationRules={mockVisualizationRules}
             visualizationSettings={mockVisualizationSettings}
-            settingsChangedHandler={mockSettingsChangedHandler}
         />);
         expect(asFragment()).toMatchSnapshot();
     });
@@ -218,7 +216,6 @@ describe('Rendering test', () => {
             dimensions={mockDimensions}
             visualizationRules={mockVisualizationRules}
             visualizationSettings={mockVisualizationSettings}
-            settingsChangedHandler={mockSettingsChangedHandler}
         />);
         expect(asFragment()).toMatchSnapshot();
     });
@@ -229,7 +226,6 @@ describe('Rendering test', () => {
             dimensions={mockDimensions}
             visualizationRules={mockVisualizationRules}
             visualizationSettings={mockVisualizationSettings}
-            settingsChangedHandler={mockSettingsChangedHandler}
         />);
         expect(asFragment()).toMatchSnapshot();
     });
@@ -240,7 +236,6 @@ describe('Rendering test', () => {
             dimensions={mockDimensions}
             visualizationRules={mockVisualizationRules}
             visualizationSettings={mockVisualizationSettings}
-            settingsChangedHandler={mockSettingsChangedHandler}
         />);
         expect(asFragment()).toMatchSnapshot();
     });
@@ -251,7 +246,6 @@ describe('Rendering test', () => {
             dimensions={mockDimensions}
             visualizationRules={mockVisualizationRules}
             visualizationSettings={mockVisualizationSettings}
-            settingsChangedHandler={mockSettingsChangedHandler}
         />);
         expect(asFragment()).toMatchSnapshot();
     });
@@ -262,7 +256,6 @@ describe('Rendering test', () => {
             dimensions={mockDimensions}
             visualizationRules={mockVisualizationRules}
             visualizationSettings={mockVisualizationSettings}
-            settingsChangedHandler={mockSettingsChangedHandler}
         />);
         expect(asFragment()).toMatchSnapshot();
     });
@@ -273,7 +266,6 @@ describe('Rendering test', () => {
             dimensions={mockDimensions}
             visualizationRules={mockVisualizationRules}
             visualizationSettings={mockVisualizationSettings}
-            settingsChangedHandler={mockSettingsChangedHandler}
         />);
         expect(asFragment()).toMatchSnapshot();
     });
@@ -284,7 +276,6 @@ describe('Rendering test', () => {
             dimensions={mockDimensions}
             visualizationRules={mockVisualizationRules}
             visualizationSettings={mockVisualizationSettings}
-            settingsChangedHandler={mockSettingsChangedHandler}
         />);
         expect(asFragment()).toMatchSnapshot();
     });
@@ -295,7 +286,6 @@ describe('Rendering test', () => {
             dimensions={mockDimensions}
             visualizationRules={mockVisualizationRules}
             visualizationSettings={mockVisualizationSettings}
-            settingsChangedHandler={mockSettingsChangedHandler}
         />);
         expect(asFragment()).toMatchSnapshot();
     });
@@ -319,7 +309,6 @@ describe('Assertion tests', () => {
                 dimensions={mockDimensions}
                 visualizationRules={modifiedVisualizationRules}
                 visualizationSettings={mockVisualizationSettings}
-                settingsChangedHandler={mockSettingsChangedHandler}
             />
         );
         expect(getByLabelText('chartSettings.cutYAxis')).toBeInTheDocument();
@@ -331,14 +320,28 @@ describe('Assertion tests', () => {
 
     it('updates values properly when user changes switches', () => {
         const { getByLabelText } = render(
-            <VisualizationSettingControl
-                selectedVisualization="Table"
-                dimensionQuery={mockDimensionQuery}
-                dimensions={mockDimensions}
-                visualizationRules={mockVisualizationRules}
-                visualizationSettings={mockVisualizationSettings}
-                settingsChangedHandler={mockSettingsChangedHandler}
-            />
+            <EditorContext.Provider value={{
+                defaultSelectables: {},
+                setDefaultSelectables: jest.fn(),
+                cubeQuery: null,
+                setCubeQuery: jest.fn(),
+                query: {},
+                setQuery: jest.fn(),
+                saveDialogOpen: false,
+                setSaveDialogOpen: jest.fn(),
+                selectedVisualizationUserInput: VisualizationType.VerticalBarChart,
+                setSelectedVisualizationUserInput: jest.fn(),
+                visualizationSettingsUserInput: {},
+                setVisualizationSettingsUserInput: mockSettingsChangedHandler
+            }}>
+                <VisualizationSettingControl
+                    selectedVisualization="Table"
+                    dimensionQuery={mockDimensionQuery}
+                    dimensions={mockDimensions}
+                    visualizationRules={mockVisualizationRules}
+                    visualizationSettings={mockVisualizationSettings}
+                />
+            </EditorContext.Provider>
         );
 
         fireEvent.click(getByLabelText('visualizationSettings.showDataPoints'));

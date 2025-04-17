@@ -3,13 +3,15 @@ import { CircularProgress, Alert, ToggleButton, ToggleButtonGroup } from '@mui/m
 import { SelectableDimensionMenus } from 'components/SelectableVariableMenus/SelectableDimensionMenus';
 import styled from 'styled-components';
 import React from 'react';
-import { ICubeQuery, Query } from 'types/query';
+import { Query } from 'types/query';
 import { IVisualizationSettings } from 'types/visualizationSettings';
 import { useVisualizationQuery } from 'api/services/visualization';
 import { Chart } from '@statisticsfinland/pxvisualizer';
 import useSelections from 'components/SelectableVariableMenus/hooks/useSelections';
 import InfoBubble from 'components/InfoBubble/InfoBubble';
 import { IVariable } from '../../types/visualizationResponse';
+import { EditorContext } from '../../contexts/editorContext';
+import UiLanguageContext from '../../contexts/uiLanguageContext';
 
 export interface ISelectabilityInfo {
     dimension: IVariable;
@@ -19,8 +21,6 @@ export interface ISelectabilityInfo {
 interface IPreviewProps {
     path: string[];
     query: Query;
-    language: string;
-    cubeQueryTextEdits: ICubeQuery;
     selectedVisualization: string;
     visualizationSettings: IVisualizationSettings;
 }
@@ -68,18 +68,17 @@ enum EPreviewSize {
  * Additionally, in this view the user can pick values for the selectable dimensions and choose a size for the visualization.
  * @param {string[]} path Path to the table subject to visualization in the Px file system.
  * @param {Query} query Object that represents the current query.
- * @param {string} language Content language used for displaying the visualization meta data.
- * @param {ICubeQuery} cubeQueryTextEdits Edited header and meta data texts for the query.
  * @param {string} selectedVisualization Name of the visualization type selected for the visualization.
  * @param {IVisualizationSettings} visualizationSettings Visualization settings object.
  */
-export const Preview: React.FC<IPreviewProps> = ({ path, query, language, cubeQueryTextEdits, selectedVisualization, visualizationSettings }) => {
+export const Preview: React.FC<IPreviewProps> = ({ path, query, selectedVisualization, visualizationSettings }) => {
     const { t } = useTranslation();
+    const { languageTab } = React.useContext(UiLanguageContext);
+    const { cubeQuery } = React.useContext(EditorContext);
 
-    const { data, isLoading, isError } = useVisualizationQuery(path, query, cubeQueryTextEdits, language, selectedVisualization, visualizationSettings);
+    const { data, isLoading, isError } = useVisualizationQuery(path, query, cubeQuery, languageTab, selectedVisualization, visualizationSettings);
 
     const showVisualization = data && !isLoading && !isError;
-
     const { selections, setSelections } = useSelections();
     const [size, setSize] = React.useState<EPreviewSize>(EPreviewSize.XL);
 
@@ -117,7 +116,7 @@ export const Preview: React.FC<IPreviewProps> = ({ path, query, language, cubeQu
                 data={data}
                 selectedVisualization={selectedVisualization}
                 visualizationSettings={visualizationSettings} />
-            {showVisualization && <ChartWrapper className='tk-table' $previewSize={size}><Chart locale={language} pxGraphData={data} selectedVariableCodes={selections} /></ChartWrapper>}
+            {showVisualization && <ChartWrapper className='tk-table' $previewSize={size}><Chart locale={languageTab} pxGraphData={data} selectedVariableCodes={selections} /></ChartWrapper>}
         </>
     );
 }

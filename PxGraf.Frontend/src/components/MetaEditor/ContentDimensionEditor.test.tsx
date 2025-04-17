@@ -2,9 +2,11 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { EMetaPropertyType, IDimension, EDimensionType } from 'types/cubeMeta';
-import { IDimensionEditions } from 'types/query';
+import { ICubeQuery, IDimensionEditions } from 'types/query';
 import { ContentDimensionEditor } from './ContentDimensionEditor';
 import UiLanguageContext from 'contexts/uiLanguageContext';
+import { EditorContext } from '../../contexts/editorContext';
+import { VisualizationType } from '../../types/visualizationType';
 
 jest.mock('react-i18next', () => ({
     ...jest.requireActual('react-i18next'),
@@ -65,7 +67,6 @@ const mockDimension: IDimension = {
 }
 const mockLang = 'fi';
 const mockFunction = jest.fn();
-
 const mockDimensionEdits: IDimensionEditions = {
     valueEdits: {
         'bar': {
@@ -77,12 +78,33 @@ const mockDimensionEdits: IDimensionEditions = {
         }
     }
 };
+const mockCubeQuery: ICubeQuery = {
+    chartHeaderEdit: {},
+    variableQueries: {
+        foo: mockDimensionEdits
+    }
+};
 
 describe('Rendering test', () => {
     it('renders correctly', () => {
         const { asFragment } = render(
             <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
-                <ContentDimensionEditor language={mockLang} onChange={mockFunction} dimension={mockDimension} dimensionEdits={mockDimensionEdits} />
+                <EditorContext.Provider value={{
+                    defaultSelectables: {},
+                    setDefaultSelectables: jest.fn(),
+                    cubeQuery: mockCubeQuery,
+                    setCubeQuery: mockFunction,
+                    query: {},
+                    setQuery: jest.fn(),
+                    saveDialogOpen: false,
+                    setSaveDialogOpen: jest.fn(),
+                    selectedVisualizationUserInput: VisualizationType.VerticalBarChart,
+                    setSelectedVisualizationUserInput: jest.fn(),
+                    visualizationSettingsUserInput: {},
+                    setVisualizationSettingsUserInput: jest.fn()
+                }}>
+                    <ContentDimensionEditor language={mockLang} dimension={mockDimension} />
+                </EditorContext.Provider>
             </UiLanguageContext.Provider>
         );
         expect(asFragment()).toMatchSnapshot();

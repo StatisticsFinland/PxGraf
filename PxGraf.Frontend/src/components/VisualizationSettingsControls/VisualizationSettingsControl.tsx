@@ -15,19 +15,15 @@ import { MultiselectableSelector } from "./TypeSpecificControls/MultiselectableS
 
 export interface IVisualizationSettingControlProps {
     selectedVisualization: string,
-    visualizationSettings: IVisualizationSettings,
     visualizationRules: IVisualizationRules,
-    settingsChangedHandler: SettingsChangedHandler,
     dimensions: IDimension[],
     dimensionQuery: Query,
+    visualizationSettings: IVisualizationSettings
 }
-
-export type SettingsChangedHandler = (newSettings: IVisualizationSettings) => void;
 
 export interface IVisualizationSettingsProps {
     visualizationRules: IVisualizationRules,
-    visualizationSettings: IVisualizationSettings
-    settingsChangedHandler: SettingsChangedHandler
+    visualizationSettings: IVisualizationSettings,
 }
 
 const SettingsWrapper = styled.div`
@@ -38,13 +34,11 @@ const SettingsWrapper = styled.div`
 
 export const VisualizationSettingControl: React.FC<IVisualizationSettingControlProps> = ({
     selectedVisualization,
-    visualizationSettings,
     visualizationRules,
-    settingsChangedHandler,
     dimensions,
     dimensionQuery,
+    visualizationSettings
 }) => {
-
     const showTableSettings: boolean = selectedVisualization === VisualizationType.Table;
     const showSortingOptions: boolean = (visualizationRules.sortingOptions?.length > 0);
     const showMarkerScaler: boolean = visualizationRules.visualizationTypeSpecificRules.allowSetMarkerScale;
@@ -66,33 +60,29 @@ export const VisualizationSettingControl: React.FC<IVisualizationSettingControlP
                     {showTableSettings && (
                         <TablePivotSettings
                             visualizationRules={visualizationRules}
-                            visualizationSettings={visualizationSettings}
-                            settingsChangedHandler={settingsChangedHandler}
                             dimensions={dimensions}
                             selectableDimensions={selectableDimensions}
                             query={dimensionQuery}
+                            visualizationSettings={visualizationSettings}
                         />
                     )}
                     {showSortingOptions && (
                         <SortingSelector
+                            visualizationSettings={visualizationSettings}
                             sortingOptions={visualizationRules.sortingOptions}
-                            activeSortingCode={visualizationSettings.sorting}
-                            sortingChangedHandler={(sorting) => settingsChangedHandler({ ...visualizationSettings, sorting: sorting })}
                         />
                     )}
                     {showMarkerScaler && (
                         <MarkerScaler
                             visualizationRules={visualizationRules}
                             visualizationSettings={visualizationSettings}
-                            settingsChangedHandler={settingsChangedHandler}
                         />
                     )}
                     {showMultiselectableSelector && (
                         <MultiselectableSelector
                             visualizationRules={visualizationRules}
-                            settingsChangedHandler={settingsChangedHandler}
-                            visualizationSettings={visualizationSettings}
                             dimensions={selectableDimensionsExcludingContent}
+                            visualizationSettings={visualizationSettings}
                         />
                     )}
                 </SettingsWrapper>
@@ -102,38 +92,34 @@ export const VisualizationSettingControl: React.FC<IVisualizationSettingControlP
                     {showYAxisCutting && (
                         <VisualizationSettingsSwitch
                             selected={visualizationSettings.cutYAxis}
-                            visualizationSettings={visualizationSettings}
-                            settingsChangedHandler={settingsChangedHandler}
                             label="chartSettings.cutYAxis"
                             changeProperty="cutYAxis"
+                            visualizationSettings={visualizationSettings}
                         />
                     )}
                     {showMatchXLabelsToEnd && (
                         <VisualizationSettingsSwitch
                             selected={visualizationSettings.matchXLabelsToEnd}
-                            visualizationSettings={visualizationSettings}
-                            settingsChangedHandler={settingsChangedHandler}
                             label="chartSettings.matchXLabelsToEnd"
                             changeProperty="matchXLabelsToEnd"
                             hidden={true}
+                            visualizationSettings={visualizationSettings}
                         />
                     )}
                     {(showPivot) && (
                         <VisualizationSettingsSwitch
                             selected={visualizationSettings.pivotRequested}
-                            visualizationSettings={visualizationSettings}
-                            settingsChangedHandler={settingsChangedHandler}
                             label="chartSettings.pivot"
                             changeProperty="pivotRequested"
+                            visualizationSettings={visualizationSettings}
                         />
                     )}
                     {showDataPoints && (
                         <VisualizationSettingsSwitch
                             selected={visualizationSettings.showDataPoints}
-                            visualizationSettings={visualizationSettings}
-                            settingsChangedHandler={settingsChangedHandler}
                             label="visualizationSettings.showDataPoints"
                             changeProperty="showDataPoints"
+                            visualizationSettings={visualizationSettings}
                         />
                     )}
                 </SettingsWrapper>

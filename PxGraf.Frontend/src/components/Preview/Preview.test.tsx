@@ -1,12 +1,14 @@
 import { render } from "@testing-library/react";
 import React from 'react';
-import { FilterType, ICubeQuery, IDimensionEditions, IDimensionQuery, Query } from "types/query";
+import { FilterType, ICubeQuery, Query } from "types/query";
 import { IVisualizationSettings } from "types/visualizationSettings";
 import Preview from "./Preview";
 import { EVariableType, EVisualizationType, ETimeVariableInterval } from "@statisticsfinland/pxvisualizer";
 import { IVisualizationResult } from "api/services/visualization";
 
 import serializer from "../../testUtils/stripHighchartsHashes";
+import UiLanguageContext from "../../contexts/uiLanguageContext";
+import { EditorContext } from "../../contexts/editorContext";
 
 function mockComponentMocker(name) {
     return function MockComponent(...args) {
@@ -208,6 +210,18 @@ jest.mock('api/services/visualization', () => ({
     },
 }));
 
+const defaultSelectables = { foo: ['2018'] };
+const setDefaultSelectables = jest.fn();
+const setCubeQuery = jest.fn();
+const query = null;
+const setQuery = jest.fn();
+const saveDialogOpen = false;
+const setSaveDialogOpen = jest.fn();
+const selectedVisualizationUserInput = null;
+const setSelectedVisualizationUserInput = jest.fn();
+const visualizationSettingsUserInput = null;
+const setVisualizationSettingsUserInput = jest.fn();
+
 describe('Rendering test', () => {
     beforeAll(() => {
         expect.addSnapshotSerializer(serializer);
@@ -215,14 +229,24 @@ describe('Rendering test', () => {
 
     it('renders correctly', () => {
         const { asFragment } = render(
-            <Preview
-                path={mockPath}
-                query={mockQuery}
-                language={mockLanguage}
-                cubeQueryTextEdits={mockCubeQueryTextEdits}
-                selectedVisualization={mockSelectedVisualization}
-                visualizationSettings={mockVisualizationSettings}
-            />);
+            <UiLanguageContext.Provider value={{
+                language: mockLanguage,
+                setLanguage: jest.fn(),
+                languageTab: mockLanguage,
+                setLanguageTab: jest.fn(),
+                uiContentLanguage: mockLanguage,
+                setUiContentLanguage: jest.fn(),
+                availableUiLanguages: ['fi', 'en', 'sv'],
+            }}>
+                <EditorContext.Provider value={{ cubeQuery: mockCubeQueryTextEdits, setCubeQuery, query, setQuery, saveDialogOpen, setSaveDialogOpen, selectedVisualizationUserInput, setSelectedVisualizationUserInput, visualizationSettingsUserInput, setVisualizationSettingsUserInput, defaultSelectables, setDefaultSelectables }}>
+                    <Preview
+                        path={mockPath}
+                        query={mockQuery}
+                        selectedVisualization={mockSelectedVisualization}
+                        visualizationSettings={mockVisualizationSettings}
+                    />
+                </EditorContext.Provider>
+            </UiLanguageContext.Provider>);
 
         expect(asFragment()).toMatchSnapshot();
     });

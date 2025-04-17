@@ -7,6 +7,8 @@ import { Query, FilterType } from "types/query";
 import '@testing-library/jest-dom';
 import { IVisualizationRules } from '../../../types/visualizationRules';
 import { IVisualizationSettings } from '../../../types/visualizationSettings';
+import { EditorContext } from '../../../contexts/editorContext';
+import { VisualizationType } from '../../../types/visualizationType';
 
 jest.mock('react-i18next', () => ({
     ...jest.requireActual('react-i18next'),
@@ -172,16 +174,26 @@ const availableUiLanguages = ['fi', 'en', 'sv'];
 const uiContentLanguage = 'fi';
 const setUiContentLanguage = jest.fn();
 
+const defaultSelectables = {};
+const setDefaultSelectables = jest.fn();
+const cubeQuery = null;
+const setCubeQuery = jest.fn();
+const query = {};
+const setQuery = jest.fn();
+const saveDialogOpen = false;
+const setSaveDialogOpen = jest.fn();
+const selectedVisualizationUserInput = VisualizationType.VerticalBarChart;
+const setSelectedVisualizationUserInput = jest.fn();
+const visualizationSettingsUserInput = {};
+
 describe('Rendering test', () => {
     it('renders correctly', () => {
-        const mockSettingsChangedHandler = jest.fn();
         const { asFragment } = render(
             <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
                 <TablePivotSettings
                     dimensions={mockDimensions}
                     visualizationRules={mockVisualizationRules}
                     visualizationSettings={mockVisualizationSettings}
-                    settingsChangedHandler={mockSettingsChangedHandler}
                     query={mockQuery}
                 ></TablePivotSettings>
             </UiLanguageContext.Provider>);
@@ -191,14 +203,12 @@ describe('Rendering test', () => {
 
 describe('Assertion tests', () => {
     it('table settings component should have 3 buttons, up, down and switch', () => {
-        const mockSettingsChangedHandler = jest.fn();
         render(
             <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
                 <TablePivotSettings
                     dimensions={mockDimensions}
                     visualizationRules={mockVisualizationRules}
                     visualizationSettings={mockVisualizationSettings}
-                    settingsChangedHandler={mockSettingsChangedHandler}
                     query={mockQuery}
                 ></TablePivotSettings>
             </UiLanguageContext.Provider>);
@@ -209,18 +219,32 @@ describe('Assertion tests', () => {
         const mockSettingsChangedHandler = jest.fn();
         render(
             <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
-                <TablePivotSettings
-                    dimensions={mockDimensions}
-                    visualizationRules={mockVisualizationRules}
-                    visualizationSettings={mockVisualizationSettings}
-                    settingsChangedHandler={mockSettingsChangedHandler}
-                    query={mockQuery}
-                ></TablePivotSettings>
+                <EditorContext.Provider value={{
+                    defaultSelectables,
+                    setDefaultSelectables,
+                    cubeQuery,
+                    setCubeQuery,
+                    query,
+                    setQuery,
+                    saveDialogOpen,
+                    setSaveDialogOpen,
+                    selectedVisualizationUserInput,
+                    setSelectedVisualizationUserInput,
+                    visualizationSettingsUserInput,
+                    setVisualizationSettingsUserInput: mockSettingsChangedHandler
+                }}>
+                    <TablePivotSettings
+                        dimensions={mockDimensions}
+                        visualizationRules={mockVisualizationRules}
+                        visualizationSettings={mockVisualizationSettings}
+                        query={mockQuery}
+                    ></TablePivotSettings>
+                </EditorContext.Provider>
             </UiLanguageContext.Provider>);
         fireEvent.click(screen.getByText('foo3 2'));
         fireEvent.click(screen.getAllByText((_content, element) => element.tagName.toLowerCase() === 'button')[0]);
         await waitFor(() => {
-            expect(mockSettingsChangedHandler).toBeCalled();
+            expect(mockSettingsChangedHandler).toHaveBeenCalled();
         });
     });
 
@@ -228,18 +252,32 @@ describe('Assertion tests', () => {
         const mockSettingsChangedHandler = jest.fn();
         render(
             <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
-                <TablePivotSettings
-                    dimensions={mockDimensions}
-                    visualizationRules={mockVisualizationRules}
-                    visualizationSettings={mockVisualizationSettings}
-                    settingsChangedHandler={mockSettingsChangedHandler}
-                    query={mockQuery}
-                ></TablePivotSettings>
+                <EditorContext.Provider value={{
+                    defaultSelectables,
+                    setDefaultSelectables,
+                    cubeQuery,
+                    setCubeQuery,
+                    query,
+                    setQuery,
+                    saveDialogOpen,
+                    setSaveDialogOpen,
+                    selectedVisualizationUserInput,
+                    setSelectedVisualizationUserInput,
+                    visualizationSettingsUserInput,
+                    setVisualizationSettingsUserInput: mockSettingsChangedHandler
+                }}>
+                    <TablePivotSettings
+                        dimensions={mockDimensions}
+                        visualizationRules={mockVisualizationRules}
+                        visualizationSettings={mockVisualizationSettings}
+                        query={mockQuery}
+                    ></TablePivotSettings>
+                </EditorContext.Provider>
             </UiLanguageContext.Provider>);
         fireEvent.click(screen.getByText('foo4 2'));
         fireEvent.click(screen.getAllByText((_content, element) => element.tagName.toLowerCase() === 'button')[0]);
         await waitFor(() => {
-            expect(mockSettingsChangedHandler).toBeCalled();
+            expect(mockSettingsChangedHandler).toHaveBeenCalled();
         });
     });
 
@@ -247,18 +285,32 @@ describe('Assertion tests', () => {
         const mockSettingsChangedHandler = jest.fn();
         render(
             <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
-                <TablePivotSettings
-                    dimensions={mockDimensions}
-                    visualizationRules={mockVisualizationRules}
-                    visualizationSettings={mockVisualizationSettings}
-                    settingsChangedHandler={mockSettingsChangedHandler}
-                    query={mockQuery}
-                ></TablePivotSettings>
+                <EditorContext.Provider value={{
+                    defaultSelectables,
+                    setDefaultSelectables,
+                    cubeQuery,
+                    setCubeQuery,
+                    query,
+                    setQuery,
+                    saveDialogOpen,
+                    setSaveDialogOpen,
+                    selectedVisualizationUserInput,
+                    setSelectedVisualizationUserInput,
+                    visualizationSettingsUserInput,
+                    setVisualizationSettingsUserInput: mockSettingsChangedHandler
+                }}>
+                    <TablePivotSettings
+                        dimensions={mockDimensions}
+                        visualizationRules={mockVisualizationRules}
+                        visualizationSettings={mockVisualizationSettings}
+                        query={mockQuery}
+                    ></TablePivotSettings>
+                </EditorContext.Provider>
             </UiLanguageContext.Provider>);
         fireEvent.click(screen.getByText('foo1 2'));
         fireEvent.click(screen.getAllByText((_content, element) => element.tagName.toLowerCase() === 'button')[1]);
         await waitFor(() => {
-            expect(mockSettingsChangedHandler).toBeCalled();
+            expect(mockSettingsChangedHandler).toHaveBeenCalled();
         });
     });
 
@@ -266,18 +318,32 @@ describe('Assertion tests', () => {
         const mockSettingsChangedHandler = jest.fn();
         render(
             <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
-                <TablePivotSettings
-                    dimensions={mockDimensions}
-                    visualizationRules={mockVisualizationRules}
-                    visualizationSettings={mockVisualizationSettings}
-                    settingsChangedHandler={mockSettingsChangedHandler}
-                    query={mockQuery}
-                ></TablePivotSettings>
+                <EditorContext.Provider value={{
+                    defaultSelectables,
+                    setDefaultSelectables,
+                    cubeQuery,
+                    setCubeQuery,
+                    query,
+                    setQuery,
+                    saveDialogOpen,
+                    setSaveDialogOpen,
+                    selectedVisualizationUserInput,
+                    setSelectedVisualizationUserInput,
+                    visualizationSettingsUserInput,
+                    setVisualizationSettingsUserInput: mockSettingsChangedHandler
+                }}>
+                    <TablePivotSettings
+                        dimensions={mockDimensions}
+                        visualizationRules={mockVisualizationRules}
+                        visualizationSettings={mockVisualizationSettings}
+                        query={mockQuery}
+                    ></TablePivotSettings>
+                </EditorContext.Provider>
             </UiLanguageContext.Provider>);
         fireEvent.click(screen.getByText('foo2 2'));
         fireEvent.click(screen.getAllByText((_content, element) => element.tagName.toLowerCase() === 'button')[1]);
         await waitFor(() => {
-            expect(mockSettingsChangedHandler).toBeCalled();
+            expect(mockSettingsChangedHandler).toHaveBeenCalled();
         });
     });
 
@@ -285,18 +351,32 @@ describe('Assertion tests', () => {
         const mockSettingsChangedHandler = jest.fn();
         render(
             <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
-                <TablePivotSettings
-                    dimensions={mockDimensions}
-                    visualizationRules={mockVisualizationRules}
-                    visualizationSettings={mockVisualizationSettings}
-                    settingsChangedHandler={mockSettingsChangedHandler}
-                    query={mockQuery}
-                ></TablePivotSettings>
+                <EditorContext.Provider value={{
+                    defaultSelectables,
+                    setDefaultSelectables,
+                    cubeQuery,
+                    setCubeQuery,
+                    query,
+                    setQuery,
+                    saveDialogOpen,
+                    setSaveDialogOpen,
+                    selectedVisualizationUserInput,
+                    setSelectedVisualizationUserInput,
+                    visualizationSettingsUserInput,
+                    setVisualizationSettingsUserInput: mockSettingsChangedHandler
+                }}>
+                    <TablePivotSettings
+                        dimensions={mockDimensions}
+                        visualizationRules={mockVisualizationRules}
+                        visualizationSettings={mockVisualizationSettings}
+                        query={mockQuery}
+                    ></TablePivotSettings>
+                </EditorContext.Provider>
             </UiLanguageContext.Provider>);
         fireEvent.click(screen.getByText('foo3 2'));
         fireEvent.click(screen.getAllByText((_content, element) => element.tagName.toLowerCase() === 'button')[2]);
         await waitFor(() => {
-            expect(mockSettingsChangedHandler).toBeCalled();
+            expect(mockSettingsChangedHandler).toHaveBeenCalled();
         });
     });
 
@@ -304,18 +384,32 @@ describe('Assertion tests', () => {
         const mockSettingsChangedHandler = jest.fn();
         render(
             <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
-                <TablePivotSettings
-                    dimensions={mockDimensions}
-                    visualizationRules={mockVisualizationRules}
-                    visualizationSettings={mockVisualizationSettings}
-                    settingsChangedHandler={mockSettingsChangedHandler}
-                    query={mockQuery}
-                ></TablePivotSettings>
+                <EditorContext.Provider value={{
+                    defaultSelectables,
+                    setDefaultSelectables,
+                    cubeQuery,
+                    setCubeQuery,
+                    query,
+                    setQuery,
+                    saveDialogOpen,
+                    setSaveDialogOpen,
+                    selectedVisualizationUserInput,
+                    setSelectedVisualizationUserInput,
+                    visualizationSettingsUserInput,
+                    setVisualizationSettingsUserInput: mockSettingsChangedHandler
+                }}>
+                    <TablePivotSettings
+                        dimensions={mockDimensions}
+                        visualizationRules={mockVisualizationRules}
+                        visualizationSettings={mockVisualizationSettings}
+                        query={mockQuery}
+                    ></TablePivotSettings>
+                </EditorContext.Provider>
             </UiLanguageContext.Provider>);
         fireEvent.click(screen.getByText('foo4 2'));
         fireEvent.click(screen.getAllByText((_content, element) => element.tagName.toLowerCase() === 'button')[2]);
         await waitFor(() => {
-            expect(mockSettingsChangedHandler).toBeCalled();
+            expect(mockSettingsChangedHandler).toHaveBeenCalled();
         });
     });
 
@@ -323,17 +417,31 @@ describe('Assertion tests', () => {
         const mockSettingsChangedHandler = jest.fn();
         render(
             <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
-                <TablePivotSettings
-                    dimensions={mockDimensions}
-                    visualizationRules={mockVisualizationRules}
-                    visualizationSettings={mockVisualizationSettings}
-                    settingsChangedHandler={mockSettingsChangedHandler}
-                    query={mockQuery}
-                ></TablePivotSettings>
+                <EditorContext.Provider value={{
+                    defaultSelectables,
+                    setDefaultSelectables,
+                    cubeQuery,
+                    setCubeQuery,
+                    query,
+                    setQuery,
+                    saveDialogOpen,
+                    setSaveDialogOpen,
+                    selectedVisualizationUserInput,
+                    setSelectedVisualizationUserInput,
+                    visualizationSettingsUserInput,
+                    setVisualizationSettingsUserInput: mockSettingsChangedHandler
+                }}>
+                    <TablePivotSettings
+                        dimensions={mockDimensions}
+                        visualizationRules={mockVisualizationRules}
+                        visualizationSettings={mockVisualizationSettings}
+                        query={mockQuery}
+                    ></TablePivotSettings>
+                </EditorContext.Provider>
             </UiLanguageContext.Provider>);
         fireEvent.click(screen.getAllByText((_content, element) => element.tagName.toLowerCase() === 'button')[0]);
         await waitFor(() => {
-            expect(mockSettingsChangedHandler).not.toBeCalled();
+            expect(mockSettingsChangedHandler).not.toHaveBeenCalled();
         });
     });
 
@@ -342,13 +450,27 @@ describe('Assertion tests', () => {
         const toggledMockSettings = { ...mockVisualizationSettings, cutYAxis: true }
         render(
             <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
-                <TablePivotSettings
-                    dimensions={mockDimensions}
-                    visualizationRules={mockVisualizationRules}
-                    visualizationSettings={toggledMockSettings}
-                    settingsChangedHandler={mockSettingsChangedHandler}
-                    query={mockQuery}
-                ></TablePivotSettings>
+                <EditorContext.Provider value={{
+                    defaultSelectables,
+                    setDefaultSelectables,
+                    cubeQuery,
+                    setCubeQuery,
+                    query,
+                    setQuery,
+                    saveDialogOpen,
+                    setSaveDialogOpen,
+                    selectedVisualizationUserInput,
+                    setSelectedVisualizationUserInput,
+                    visualizationSettingsUserInput,
+                    setVisualizationSettingsUserInput: mockSettingsChangedHandler
+                }}>
+                    <TablePivotSettings
+                        dimensions={mockDimensions}
+                        visualizationRules={mockVisualizationRules}
+                        visualizationSettings={toggledMockSettings}
+                        query={mockQuery}
+                    ></TablePivotSettings>
+                </EditorContext.Provider>
             </UiLanguageContext.Provider>);
         expect(screen.getByText('chartSettings.columnVariables').parentElement).toContainElement(screen.getByText("foo2 2"));
     });
@@ -358,13 +480,27 @@ describe('Assertion tests', () => {
         const toggledMockSettings = { ...mockVisualizationSettings, cutYAxis: true }
         render(
             <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
-                <TablePivotSettings
-                    dimensions={mockDimensions}
-                    visualizationRules={mockVisualizationRules}
-                    visualizationSettings={toggledMockSettings}
-                    settingsChangedHandler={mockSettingsChangedHandler}
-                    query={mockQuery}
-                ></TablePivotSettings>
+                <EditorContext.Provider value={{
+                    defaultSelectables,
+                    setDefaultSelectables,
+                    cubeQuery,
+                    setCubeQuery,
+                    query,
+                    setQuery,
+                    saveDialogOpen,
+                    setSaveDialogOpen,
+                    selectedVisualizationUserInput,
+                    setSelectedVisualizationUserInput,
+                    visualizationSettingsUserInput,
+                    setVisualizationSettingsUserInput: mockSettingsChangedHandler
+                }}>
+                    <TablePivotSettings
+                        dimensions={mockDimensions}
+                        visualizationRules={mockVisualizationRules}
+                        visualizationSettings={toggledMockSettings}
+                        query={mockQuery}
+                    ></TablePivotSettings>
+                </EditorContext.Provider>
             </UiLanguageContext.Provider>);
         expect(screen.getByText('chartSettings.rowVariables').parentElement).toContainElement(screen.getByText("foo1 2"));
     });
@@ -374,13 +510,27 @@ describe('Assertion tests', () => {
         const toggledMockSettings = { ...mockVisualizationSettings, columnVariableCodes: ["foobar2", "foobar5"] }
         render(
             <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
-                <TablePivotSettings
-                    dimensions={mockDimensions}
-                    visualizationRules={mockVisualizationRules}
-                    visualizationSettings={toggledMockSettings}
-                    settingsChangedHandler={mockSettingsChangedHandler}
-                    query={mockQuery}
-                ></TablePivotSettings>
+                <EditorContext.Provider value={{
+                    defaultSelectables,
+                    setDefaultSelectables,
+                    cubeQuery,
+                    setCubeQuery,
+                    query,
+                    setQuery,
+                    saveDialogOpen,
+                    setSaveDialogOpen,
+                    selectedVisualizationUserInput,
+                    setSelectedVisualizationUserInput,
+                    visualizationSettingsUserInput,
+                    setVisualizationSettingsUserInput: mockSettingsChangedHandler
+                }}>
+                    <TablePivotSettings
+                        dimensions={mockDimensions}
+                        visualizationRules={mockVisualizationRules}
+                        visualizationSettings={toggledMockSettings}
+                        query={mockQuery}
+                    ></TablePivotSettings>
+                </EditorContext.Provider>
             </UiLanguageContext.Provider>);
         expect(screen.getByText('chartSettings.columnVariables').parentElement).toHaveTextContent("foo2 2");
         expect(screen.getByText('chartSettings.columnVariables').parentElement).not.toHaveTextContent("foo5 1");
@@ -390,14 +540,28 @@ describe('Assertion tests', () => {
         const mockSettingsChangedHandler = jest.fn();
         render(
             <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
-                <TablePivotSettings
-                    dimensions={mockDimensions}
-                    visualizationRules={mockVisualizationRules}
-                    visualizationSettings={mockVisualizationSettings}
-                    settingsChangedHandler={mockSettingsChangedHandler}
-                    selectableDimensions={[mockDimensions[1]]}
-                    query={mockQuery}
-                ></TablePivotSettings>
+                <EditorContext.Provider value={{
+                    defaultSelectables,
+                    setDefaultSelectables,
+                    cubeQuery,
+                    setCubeQuery,
+                    query,
+                    setQuery,
+                    saveDialogOpen,
+                    setSaveDialogOpen,
+                    selectedVisualizationUserInput,
+                    setSelectedVisualizationUserInput,
+                    visualizationSettingsUserInput,
+                    setVisualizationSettingsUserInput: mockSettingsChangedHandler
+                }}>
+                    <TablePivotSettings
+                        dimensions={mockDimensions}
+                        visualizationRules={mockVisualizationRules}
+                        visualizationSettings={mockVisualizationSettings}
+                        selectableDimensions={[mockDimensions[1]]}
+                        query={mockQuery}
+                    ></TablePivotSettings>
+                </EditorContext.Provider>
             </UiLanguageContext.Provider>);
         expect(screen.getByText('chartSettings.columnVariables').parentElement).not.toHaveTextContent("foo2 2");
     });
@@ -408,13 +572,27 @@ describe('Assertion tests', () => {
         const mockQueryWithPotentiallyGrowingVariable = { ...mockQuery, foobar5: { ...mockQuery.foobar5, valueFilter: { type: FilterType.All } } }
         render(
             <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
-                <TablePivotSettings
-                    dimensions={mockDimensions}
-                    visualizationRules={mockVisualizationRules}
-                    visualizationSettings={toggledMockSettings}
-                    settingsChangedHandler={mockSettingsChangedHandler}
-                    query={mockQueryWithPotentiallyGrowingVariable}
-                ></TablePivotSettings>
+                <EditorContext.Provider value={{
+                    defaultSelectables,
+                    setDefaultSelectables,
+                    cubeQuery,
+                    setCubeQuery,
+                    query,
+                    setQuery,
+                    saveDialogOpen,
+                    setSaveDialogOpen,
+                    selectedVisualizationUserInput,
+                    setSelectedVisualizationUserInput,
+                    visualizationSettingsUserInput,
+                    setVisualizationSettingsUserInput: mockSettingsChangedHandler
+                }}>
+                    <TablePivotSettings
+                        dimensions={mockDimensions}
+                        visualizationRules={mockVisualizationRules}
+                        visualizationSettings={toggledMockSettings}
+                        query={mockQueryWithPotentiallyGrowingVariable}
+                    ></TablePivotSettings>
+                </EditorContext.Provider>
             </UiLanguageContext.Provider>);
         expect(screen.getByText('chartSettings.columnVariables').parentElement).toHaveTextContent("foo2 2");
         expect(screen.getByText('chartSettings.columnVariables').parentElement).toHaveTextContent("foo5 1");
@@ -426,13 +604,27 @@ describe('Assertion tests', () => {
         const multiselectableVisualizatioRules = { ...mockVisualizationRules, multiselectVariableAllowed: true };
         render(
             <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
-                <TablePivotSettings
-                    dimensions={mockDimensions}
-                    visualizationRules={multiselectableVisualizatioRules}
-                    visualizationSettings={multiselectableMockSettings}
-                    settingsChangedHandler={mockSettingsChangedHandler}
-                    query={mockQuery}
-                ></TablePivotSettings>
+                <EditorContext.Provider value={{
+                    defaultSelectables,
+                    setDefaultSelectables,
+                    cubeQuery,
+                    setCubeQuery,
+                    query,
+                    setQuery,
+                    saveDialogOpen,
+                    setSaveDialogOpen,
+                    selectedVisualizationUserInput,
+                    setSelectedVisualizationUserInput,
+                    visualizationSettingsUserInput,
+                    setVisualizationSettingsUserInput: mockSettingsChangedHandler
+                }}>
+                    <TablePivotSettings
+                        dimensions={mockDimensions}
+                        visualizationRules={multiselectableVisualizatioRules}
+                        visualizationSettings={multiselectableMockSettings}
+                        query={mockQuery}
+                    ></TablePivotSettings>
+                </EditorContext.Provider>
             </UiLanguageContext.Provider>);
         expect(screen.getByText('chartSettings.columnVariables').parentElement).toHaveTextContent("foo2 2");
     });

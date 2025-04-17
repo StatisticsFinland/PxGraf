@@ -10,12 +10,12 @@ import styled from 'styled-components';
 import { useTheme } from '@mui/material/styles';
 import { UiLanguageContext } from 'contexts/uiLanguageContext';
 import { sortedDimensions } from 'utils/sortingHelpers';
+import { EditorContext } from '../../contexts/editorContext';
 
 interface DimensionSelectionListProps {
     dimensions: IDimension[],
     resolvedDimensionCodes: { [key: string]: string[] },
-    query: Query,
-    onQueryChanged: (newQuery: Query) => void
+    query: Query
 }
 
 const TitleWrapper = styled.div`
@@ -39,12 +39,12 @@ const StyledAccordion = styled(Accordion)`
  * @param {IDimension[]} dimensions Dimensions for the table in question.
  * @param {{ [key: string]: string[] }} resolvedDimensionCodes Resolved dimension value codes.
  * @param {Query} query Dimension queries.
- * @param {(newQuery: Query) => void} onQueryChanged Callback function for when a dimension query is edited.
  */
-export const DimensionSelectionList: React.FC<DimensionSelectionListProps> = ({ dimensions, resolvedDimensionCodes, query, onQueryChanged }) => {
+export const DimensionSelectionList: React.FC<DimensionSelectionListProps> = ({ dimensions, resolvedDimensionCodes, query }) => {
     const { t } = useTranslation();
     const theme = useTheme();
     const { uiContentLanguage } = React.useContext(UiLanguageContext);
+    const { setQuery } = React.useContext(EditorContext);
 
     const infoContent = (
         <>
@@ -80,7 +80,7 @@ export const DimensionSelectionList: React.FC<DimensionSelectionListProps> = ({ 
                                 dimension={dimension}
                                 resolvedDimensionValueCodes={resolvedDimensionCodes?.[dimension.code]}
                                 query={query[dimension.code]}
-                                onQueryChanged={newQuery => onQueryChanged({ ...query, [dimension.code]: newQuery })}
+                                onQueryChanged={newQuery => setQuery({ ...query, [dimension.code]: newQuery })}
                             />
                         </StyledAccordionDetails>
                     </StyledAccordion>

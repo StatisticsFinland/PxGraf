@@ -4,7 +4,6 @@ import { useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import MetaEditor from 'components/MetaEditor/MetaEditor';
 import ChartTypeSelector from 'components/ChartTypeSelector/ChartTypeSelector';
-import { EditorContext } from 'contexts/editorContext';
 import { useTranslation } from 'react-i18next';
 import { a11yProps } from 'utils/componentHelpers';
 import TabPanel from 'components/TabPanel/TabPanel';
@@ -14,7 +13,7 @@ import { IDimension } from 'types/cubeMeta';
 import { IHeaderResult } from 'api/services/default-header';
 import { VisualizationType } from 'types/visualizationType';
 import { IVisualizationSettings } from 'types/visualizationSettings';
-import { ICubeQuery, IQueryInfo, Query } from 'types/query';
+import { IQueryInfo, Query } from 'types/query';
 import { IVisualizationSettingsResult } from 'api/services/visualization-rules';
 import ChartTypeRejectionReasons from 'components/ChartTypeRejectionReasons/ChartTypeRejectionReasons';
 import CellCount from 'components/CellCount/CellCount';
@@ -112,8 +111,6 @@ const TitleWrapper = styled.div`
  * @param {IQueryInfo} queryInfo Information about the query.
  */
 export const EditorMetaSection: React.FC<IEditorMetaSectionProps> = ({ defaultHeaderResponse, selectedVisualization, settings, resolvedDimensions, dimensionQuery, visualizationRulesResponse, queryInfo, contentLanguages }) => {
-
-    const { setSelectedVisualizationUserInput, setVisualizationSettingsUserInput, setCubeQuery, cubeQuery } = React.useContext(EditorContext);
     const { language, languageTab, setLanguageTab } = React.useContext(UiLanguageContext);
     const [isMetaAccordionOpen, setIsMetaAccordionOpen] = React.useState(false);
 
@@ -126,10 +123,6 @@ export const EditorMetaSection: React.FC<IEditorMetaSectionProps> = ({ defaultHe
 
     const { t } = useTranslation();
     const theme = useTheme();
-
-    const handleDimensionValueChange = (newEdits: ICubeQuery) => {
-        setCubeQuery(newEdits);
-    }
 
     const handleMetaAccordionOpenChange = () => {
         setIsMetaAccordionOpen(!isMetaAccordionOpen);
@@ -178,9 +171,7 @@ export const EditorMetaSection: React.FC<IEditorMetaSectionProps> = ({ defaultHe
                         <MetaEditor
                             language={editLanguage}
                             resolvedDimensions={resolvedDimensions}
-                            cubeQuery={cubeQuery}
                             defaultHeaderResponse={defaultHeaderResponse}
-                            onChange={handleDimensionValueChange}
                             isMetaAccordionOpen={isMetaAccordionOpen}
                             onMetaAccordionOpenChange={handleMetaAccordionOpenChange}
                             titleMaxLength={queryInfo ? queryInfo.maximumHeaderLength : undefined}
@@ -196,7 +187,6 @@ export const EditorMetaSection: React.FC<IEditorMetaSectionProps> = ({ defaultHe
                             <ChartTypeSelector
                                 possibleTypes={queryInfo?.validVisualizations}
                                 selectedType={selectedVisualization}
-                                onTypeSelected={setSelectedVisualizationUserInput}
                             />
                         </ButtonGroupWrapper>
                         {(queryInfo?.visualizationRejectionReasons && Object.keys(queryInfo.visualizationRejectionReasons).length > 0) ? <ChartTypeRejectionReasons rejectionReasons={queryInfo.visualizationRejectionReasons} /> : <></>}
@@ -210,7 +200,6 @@ export const EditorMetaSection: React.FC<IEditorMetaSectionProps> = ({ defaultHe
                     selectedVisualization={selectedVisualization}
                     visualizationSettings={settings}
                     visualizationRules={visualizationRulesResponse.data}
-                    settingsChangedHandler={setVisualizationSettingsUserInput}
                     dimensions={resolvedDimensions}
                     dimensionQuery={dimensionQuery}
                 />}

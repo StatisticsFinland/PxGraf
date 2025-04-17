@@ -4,14 +4,16 @@ import { IVisualizationSettingsProps } from '../VisualizationSettingsControl';
 import { IDimension } from "types/cubeMeta";
 import { UiLanguageContext } from 'contexts/uiLanguageContext';
 import { useTranslation } from 'react-i18next';
+import { EditorContext } from '../../../contexts/editorContext';
 
 interface MultiselectableSelectorProps extends IVisualizationSettingsProps {
     dimensions: IDimension[]
 }
 
-export const MultiselectableSelector: React.FC<MultiselectableSelectorProps> = ({ settingsChangedHandler, visualizationSettings, dimensions  }) => {
+export const MultiselectableSelector: React.FC<MultiselectableSelectorProps> = ({ visualizationSettings, dimensions  }) => {
     const { t } = useTranslation();
     const { language, languageTab } = React.useContext(UiLanguageContext);
+    const { setVisualizationSettingsUserInput } = React.useContext(EditorContext);
 
     return (
         <FormControl>
@@ -23,7 +25,7 @@ export const MultiselectableSelector: React.FC<MultiselectableSelectorProps> = (
                 label={"Monivalitaselausmuuttuja"}
                 value={visualizationSettings.multiselectableVariableCode ?? "noMultiselectable"}
                 defaultValue={"noMultiselectable"}
-                onChange={(event) => settingsChangedHandler({
+                onChange={(event) => setVisualizationSettingsUserInput({
                     ...visualizationSettings,
                     multiselectableVariableCode: event.target.value !== "noMultiselectable" ? event.target.value : null
                 })}
