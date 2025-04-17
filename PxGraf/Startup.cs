@@ -160,12 +160,12 @@ namespace PxGraf
             // Swagger requires this seemingly redundant setup to work properly with a custom api route prefix.
             app.UseSwagger(c =>
             {
-                c.RouteTemplate = "/{documentName}/swagger.json";
+                c.RouteTemplate = "{documentName}/swagger/swagger.json";
             });
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint($"{swaggerDocName}/swagger.json", "PxGraf");
-                c.RoutePrefix = string.Empty;
+                c.SwaggerEndpoint("swagger.json", "PxGraf");
+                c.RoutePrefix = $"{swaggerDocName}/swagger";
             });
 
             app.UseExceptionHandler("/api/error");
