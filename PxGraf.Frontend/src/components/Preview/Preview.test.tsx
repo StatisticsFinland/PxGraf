@@ -2,7 +2,7 @@ import { render } from "@testing-library/react";
 import React from 'react';
 import { FilterType, ICubeQuery, Query } from "types/query";
 import { IVisualizationSettings } from "types/visualizationSettings";
-import Preview, { ISelectabilityInfo, getSelectables, getInitialSelections } from "./Preview";
+import Preview, { ISelectabilityInfo, getSelectables, getResolvedSelections } from "./Preview";
 import { EVariableType, EVisualizationType, ETimeVariableInterval, IQueryVisualizationResponse } from "@statisticsfinland/pxvisualizer";
 import { IVisualizationResult } from "api/services/visualization";
 import serializer from "../../testUtils/stripHighchartsHashes";
@@ -282,48 +282,48 @@ const mockSelectables: ISelectabilityInfo[] = [
 ]
 
 describe('Assertion tests', () => {
-    it('getSelections applies default selectable variable value if selections have not been manually changed', () => {
+    it('getResolvedSelections applies default selectable variable value if selections have not been manually changed', () => {
         const mockSelections: ISelectableSelections = {
         };
         const defaultSelectables: ISelectableSelections = {};
-        const result = getInitialSelections(mockSelections, mockSelectables, defaultSelectables, null, jest.fn());
+        const result = getResolvedSelections(mockSelectables, mockSelections, defaultSelectables);
         expect(result).toEqual({
             foobar1: ['barfoo1']
         });
     });
 
-    it('getSelections applies first available variable value if default value has not been set', () => {
+    it('getResolvedSelections applies first available variable value if default value has not been set', () => {
         const mockSelections: ISelectableSelections = {};
         const defaultSelectables: ISelectableSelections = {
             foobar1: ['barfoo2']
         };
-        const result = getInitialSelections(mockSelections, mockSelectables, defaultSelectables, null, jest.fn());
+        const result = getResolvedSelections(mockSelectables, mockSelections, defaultSelectables);
         expect(result).toEqual({
             foobar1: ['barfoo2']
         });
     });
 
-    it('getSelections retains manually changed selections over default selectable variable values', () => {
+    it('getResolvedSelections retains manually changed selections over default selectable variable values', () => {
         const mockSelections: ISelectableSelections = {
             foobar1: ['barfoo1', 'barfoo2']
         };
         const defaultSelectables: ISelectableSelections = {
             foobar1: ['barfoo2']
         };
-        const result = getInitialSelections(mockSelections, mockSelectables, defaultSelectables, 'foobar1', jest.fn());
+        const result = getResolvedSelections(mockSelectables, mockSelections, defaultSelectables, 'foobar1');
         expect(result).toEqual({
             foobar1: ['barfoo1', 'barfoo2']
         });
     });
 
-    it('getSelections returns only first selected value if multiple values are selected from non-multiselectable dimension', () => {
+    it('getResolvedSelections returns only first selected value if multiple values are selected from non-multiselectable dimension', () => {
         const mockSelections: ISelectableSelections = {
             foobar1: ['barfoo1', 'barfoo2']
         };
         const defaultSelectables: ISelectableSelections = {
             foobar1: ['barfoo2']
         };
-        const result = getInitialSelections(mockSelections, mockSelectables, defaultSelectables, null, jest.fn());
+        const result = getResolvedSelections(mockSelectables, mockSelections, defaultSelectables);
         expect(result).toEqual({
             foobar1: ['barfoo1']
         });

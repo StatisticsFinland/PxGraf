@@ -44,7 +44,6 @@ export const DimensionSelectionList: React.FC<DimensionSelectionListProps> = ({ 
     const { t } = useTranslation();
     const theme = useTheme();
     const { uiContentLanguage } = React.useContext(UiLanguageContext);
-    const { setQuery } = React.useContext(EditorContext);
 
     const infoContent = (
         <>
@@ -79,8 +78,7 @@ export const DimensionSelectionList: React.FC<DimensionSelectionListProps> = ({ 
                             <DimensionSelection
                                 dimension={dimension}
                                 resolvedDimensionValueCodes={resolvedDimensionCodes?.[dimension.code]}
-                                dimensionQuery={query[dimension.code]}
-                                onQueryChanged={newQuery => setQuery({ ...query, [dimension.code]: newQuery })}
+                                query={query}
                             />
                         </StyledAccordionDetails>
                     </StyledAccordion>

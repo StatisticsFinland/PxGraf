@@ -79,22 +79,15 @@ export const getSelectables = (visualizationResponse: IQueryVisualizationRespons
     }) ?? [];
 };
 
-export const getInitialSelections = (
-    selections: ISelectableSelections,
-    selectables: ISelectabilityInfo[],
-    defaultSelectables: ISelectableSelections,
-    multiSelectableDimensionCode: string | null,
-    setSelections: Dispatch<SetStateAction<ISelectableSelections>>
-): ISelectableSelections => {
+export const getResolvedSelections = (selectables: ISelectabilityInfo[], selections: ISelectableSelections, defaultSelectables: ISelectableSelections, multiselectableVariableCode?: string): ISelectableSelections => {
     const newSelections: ISelectableSelections = {};
     selectables.forEach((selectable) => {
         const { dimension } = selectable;
-        const selection = selections[dimension.code] ?? defaultSelectables[dimension.code] ?? [dimension.values[0].code];
-        newSelections[dimension.code] = multiSelectableDimensionCode === dimension.code ? selection : [selection[0]];
+        const selection = selections[dimension.code] ?? defaultSelectables?.[dimension.code] ?? [dimension.values[0].code];
+        newSelections[dimension.code] = multiselectableVariableCode === dimension.code ? selection : [selection[0]];
     });
-    setSelections(newSelections);
     return newSelections;
-}
+};
 
 /**
  * Preview component for visualizing the chart using the selected visualization type and settings. Visualization is rendered using @see {@link Chart} component from the PxVisualizer library.
@@ -114,12 +107,9 @@ export const Preview: React.FC<IPreviewProps> = ({ path, query, selectedVisualiz
     const [size, setSize] = React.useState<EPreviewSize>(EPreviewSize.XL);
     const selectables = getSelectables(data, visualizationSettings);
 
-    React.useEffect(() => {
-        if (selectables.length > 0) {
-            getInitialSelections(selections, selectables, defaultSelectables ?? {}, visualizationSettings?.multiselectableVariableCode, setSelections);
-        }
-    }, [data, visualizationSettings?.multiselectableVariableCode]);
-
+    const resolvedSelections = React.useMemo(() => {
+        return getResolvedSelections(selectables, selections, defaultSelectables, visualizationSettings?.multiselectableVariableCode);
+    }, [selectables, selections, defaultSelectables, visualizationSettings]);
 
     const buttons = Object.values(EPreviewSize).map((value) =>
         <ToggleButton selected={size === value} value={value} key={value} onClick={() => setSize(value)}>
@@ -152,11 +142,11 @@ export const Preview: React.FC<IPreviewProps> = ({ path, query, selectedVisualiz
                 </FlexContentWrapper>}
             <SelectableDimensionMenus
                 setSelections={setSelections}
-                selections={selections}
+                selections={resolvedSelections}
                 selectables={selectables}
                 multiselectableDimensionCode={visualizationSettings?.multiselectableVariableCode}
             />
-            {showVisualization && <ChartWrapper className='tk-table' $previewSize={size}><Chart locale={languageTab} pxGraphData={data} selectedVariableCodes={selections} /></ChartWrapper>}
+            {showVisualization && <ChartWrapper className='tk-table' $previewSize={size}><Chart locale={languageTab} pxGraphData={data} selectedVariableCodes={resolvedSelections} /></ChartWrapper>}
         </>
     );
 }

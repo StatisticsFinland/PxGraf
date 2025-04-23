@@ -17,14 +17,14 @@ import StartingFromDimensionSelection from './FilterComponents/StartingFromDimen
 import TopNDimensionSelection from './FilterComponents/TopNDimensionSelection';
 import styled from 'styled-components';
 import { IDimension } from 'types/cubeMeta';
-import { FilterType, IDimensionQuery } from 'types/query';
+import { FilterType, IDimensionQuery, Query } from 'types/query';
 import DefaultSelectableDimensionSelection from './DefaultSelectableDimensionSelection';
+import { EditorContext } from '../../contexts/editorContext';
 
 interface IDimensionSelectionProps {
     dimension: IDimension
     resolvedDimensionValueCodes: string[]
-    dimensionQuery: IDimensionQuery
-    onQueryChanged: (newDimQuery: IDimensionQuery) => void
+    query: Query
 }
 
 const SelectorWrapper = styled(Stack)`
@@ -37,9 +37,18 @@ const ComponentWrapper = styled(Stack)`
     align-items: flex-start;
 `;
 
-export const DimensionSelection: React.FC<IDimensionSelectionProps> = ({ dimension, resolvedDimensionValueCodes, dimensionQuery, onQueryChanged }) => {
+export const DimensionSelection: React.FC<IDimensionSelectionProps> = ({ dimension, resolvedDimensionValueCodes, query }) => {
     const [anchorEl, setAnchorEl] = useState(null);
     const { t } = useTranslation();
+    const { setQuery } = React.useContext(EditorContext);
+    const dimensionQuery = query[dimension.code];
+
+    const onQueryChanged = (newQuery: IDimensionQuery) => {
+        setQuery({
+            ...query,
+            [dimension.code]: newQuery
+        });
+    };
 
     const handleOpenMenuClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -74,9 +83,7 @@ export const DimensionSelection: React.FC<IDimensionSelectionProps> = ({ dimensi
     }
 
     let filterComponent = null;
-
     let selectedValues = null;
-
 
     switch (dimensionQuery.valueFilter.type) {
         case FilterType.Item:
@@ -86,9 +93,9 @@ export const DimensionSelection: React.FC<IDimensionSelectionProps> = ({ dimensi
             }
             filterComponent =
                 <ManualPickDimensionSelection
-                options={dimension.values}
-                selectedValues={selectedValues}
-                onQueryChanged={handleFilterValueChanged}
+                    options={dimension.values}
+                    selectedValues={selectedValues}
+                    onQueryChanged={handleFilterValueChanged}
                 />
             break;
         case FilterType.All:
@@ -98,9 +105,9 @@ export const DimensionSelection: React.FC<IDimensionSelectionProps> = ({ dimensi
         case FilterType.From:
             filterComponent =
                 <StartingFromDimensionSelection
-                options={dimension.values}
-                startingCode={dimensionQuery.valueFilter.query as string}
-                onQueryChanged={handleFilterValueChanged}
+                    options={dimension.values}
+                    startingCode={dimensionQuery.valueFilter.query as string}
+                    onQueryChanged={handleFilterValueChanged}
                 />
             break;
         case FilterType.Top:

@@ -25,8 +25,12 @@ export const DefaultSelectableDimensionSelection: React.FC<IDefaultSelectableDim
     const { t } = useTranslation();
 
     // Note: array filtering to support selecting multiple values in the future
-    const defaultOptionValues = defaultSelectables?.[dimensionCode] ? options.filter((option) => defaultSelectables[dimensionCode].includes(option.code)) : [];
-    const [value, setValue] = React.useState<IDimensionValue>(defaultOptionValues[0] ? defaultOptionValues[0] : null);
+    const value: IDimensionValue = React.useMemo(() => {
+        const defaultOptionValues = defaultSelectables?.[dimensionCode]
+            ? options.filter((option) => defaultSelectables[dimensionCode].includes(option.code))
+            : [];
+        return defaultOptionValues[0] ?? null;
+    }, [defaultSelectables, dimensionCode, options]);
 
     React.useEffect(() => {
         if (value && resolvedDimensionValueCodes.length > 0) {
@@ -34,7 +38,6 @@ export const DefaultSelectableDimensionSelection: React.FC<IDefaultSelectableDim
                 const defaultSelectablesCopy = { ...defaultSelectables };
                 delete defaultSelectablesCopy[dimensionCode];
                 setDefaultSelectables(defaultSelectablesCopy);
-                setValue(null);
             }
         }
     }, [resolvedDimensionValueCodes]);
@@ -50,13 +53,12 @@ export const DefaultSelectableDimensionSelection: React.FC<IDefaultSelectableDim
             delete defaultSelectablesCopy[dimensionCode];
             setDefaultSelectables(defaultSelectablesCopy);
         }
-        setValue(value);
     };
 
     return (<StyledAutocomplete
         options={options.filter(option => resolvedDimensionValueCodes.indexOf(option.code) > -1)}
         getOptionLabel={(option: IDimensionValue) => option?.name[language] ?? option.code}
-        isOptionEqualToValue={() => true}
+        isOptionEqualToValue={(option, value) => value?.code === option.code}
         value={value}
         onChange={handleChange}
         noOptionsText={t("selectable.noSelections")}
