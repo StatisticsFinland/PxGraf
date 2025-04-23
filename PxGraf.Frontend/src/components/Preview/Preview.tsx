@@ -1,17 +1,18 @@
 import { useTranslation } from 'react-i18next';
 import { CircularProgress, Alert, ToggleButton, ToggleButtonGroup } from '@mui/material';
-import { SelectableDimensionMenus } from 'components/SelectableVariableMenus/SelectableDimensionMenus';
+import { ISelectableSelections, SelectableDimensionMenus } from 'components/SelectableVariableMenus/SelectableDimensionMenus';
 import styled from 'styled-components';
-import React from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import { Query } from 'types/query';
 import { IVisualizationSettings } from 'types/visualizationSettings';
 import { useVisualizationQuery } from 'api/services/visualization';
-import { Chart } from '@statisticsfinland/pxvisualizer';
+import { Chart, IQueryVisualizationResponse } from '@statisticsfinland/pxvisualizer';
 import useSelections from 'components/SelectableVariableMenus/hooks/useSelections';
 import InfoBubble from 'components/InfoBubble/InfoBubble';
 import { IVariable } from '../../types/visualizationResponse';
 import { EditorContext } from '../../contexts/editorContext';
 import UiLanguageContext from '../../contexts/uiLanguageContext';
+import { EDimensionType } from '../../types/cubeMeta';
 
 export interface ISelectabilityInfo {
     dimension: IVariable;
@@ -63,6 +64,38 @@ enum EPreviewSize {
     XXXXS = '320px'
 }
 
+export const getSelectables = (visualizationResponse: IQueryVisualizationResponse, visualizationSettings?: IVisualizationSettings): ISelectabilityInfo[] => {
+    if (!visualizationResponse) return [];
+    const { selectableVariableCodes, metaData } = visualizationResponse;
+
+    return selectableVariableCodes.map((code: string) => {
+        const metaDataItem = metaData.find(item => item.code === code);
+        const dimension = { ...metaDataItem, type: EDimensionType[metaDataItem.type] };
+
+        return {
+            dimension,
+            multiselectable: visualizationSettings?.multiselectableVariableCode === dimension.code,
+        };
+    }) ?? [];
+};
+
+export const getInitialSelections = (
+    selections: ISelectableSelections,
+    selectables: ISelectabilityInfo[],
+    defaultSelectables: ISelectableSelections,
+    multiSelectableDimensionCode: string | null,
+    setSelections: Dispatch<SetStateAction<ISelectableSelections>>
+): ISelectableSelections => {
+    const newSelections: ISelectableSelections = {};
+    selectables.forEach((selectable) => {
+        const { dimension } = selectable;
+        const selection = selections[dimension.code] ?? defaultSelectables[dimension.code] ?? [dimension.values[0].code];
+        newSelections[dimension.code] = multiSelectableDimensionCode === dimension.code ? selection : [selection[0]];
+    });
+    setSelections(newSelections);
+    return newSelections;
+}
+
 /**
  * Preview component for visualizing the chart using the selected visualization type and settings. Visualization is rendered using @see {@link Chart} component from the PxVisualizer library.
  * Additionally, in this view the user can pick values for the selectable dimensions and choose a size for the visualization.
@@ -74,13 +107,19 @@ enum EPreviewSize {
 export const Preview: React.FC<IPreviewProps> = ({ path, query, selectedVisualization, visualizationSettings }) => {
     const { t } = useTranslation();
     const { languageTab } = React.useContext(UiLanguageContext);
-    const { cubeQuery } = React.useContext(EditorContext);
-
+    const { cubeQuery, defaultSelectables } = React.useContext(EditorContext);
     const { data, isLoading, isError } = useVisualizationQuery(path, query, cubeQuery, languageTab, selectedVisualization, visualizationSettings);
-
     const showVisualization = data && !isLoading && !isError;
     const { selections, setSelections } = useSelections();
     const [size, setSize] = React.useState<EPreviewSize>(EPreviewSize.XL);
+    const selectables = getSelectables(data, visualizationSettings);
+
+    React.useEffect(() => {
+        if (selectables.length > 0) {
+            getInitialSelections(selections, selectables, defaultSelectables ?? {}, visualizationSettings?.multiselectableVariableCode, setSelections);
+        }
+    }, [data, visualizationSettings?.multiselectableVariableCode]);
+
 
     const buttons = Object.values(EPreviewSize).map((value) =>
         <ToggleButton selected={size === value} value={value} key={value} onClick={() => setSize(value)}>
@@ -113,9 +152,10 @@ export const Preview: React.FC<IPreviewProps> = ({ path, query, selectedVisualiz
                 </FlexContentWrapper>}
             <SelectableDimensionMenus
                 setSelections={setSelections}
-                data={data}
-                selectedVisualization={selectedVisualization}
-                visualizationSettings={visualizationSettings} />
+                selections={selections}
+                selectables={selectables}
+                multiselectableDimensionCode={visualizationSettings?.multiselectableVariableCode}
+            />
             {showVisualization && <ChartWrapper className='tk-table' $previewSize={size}><Chart locale={languageTab} pxGraphData={data} selectedVariableCodes={selections} /></ChartWrapper>}
         </>
     );

@@ -92,7 +92,7 @@ describe('Rendering test', () => {
             <DimensionSelection
                 dimension={mockDimension}
                 resolvedDimensionValueCodes={["2018", "2019", "2020", "2021*"]}
-                query={mockQuery}
+                dimensionQuery={mockQuery}
                 onQueryChanged={(newValues) => {}}/>
         </UiLanguageContext.Provider>
         );

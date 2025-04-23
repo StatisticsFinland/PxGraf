@@ -79,7 +79,7 @@ export const DimensionSelectionList: React.FC<DimensionSelectionListProps> = ({ 
                             <DimensionSelection
                                 dimension={dimension}
                                 resolvedDimensionValueCodes={resolvedDimensionCodes?.[dimension.code]}
-                                query={query[dimension.code]}
+                                dimensionQuery={query[dimension.code]}
                                 onQueryChanged={newQuery => setQuery({ ...query, [dimension.code]: newQuery })}
                             />
                         </StyledAccordionDetails>

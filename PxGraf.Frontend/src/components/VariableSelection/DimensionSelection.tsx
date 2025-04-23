@@ -23,7 +23,7 @@ import DefaultSelectableDimensionSelection from './DefaultSelectableDimensionSel
 interface IDimensionSelectionProps {
     dimension: IDimension
     resolvedDimensionValueCodes: string[]
-    query: IDimensionQuery
+    dimensionQuery: IDimensionQuery
     onQueryChanged: (newDimQuery: IDimensionQuery) => void
 }
 
@@ -37,7 +37,7 @@ const ComponentWrapper = styled(Stack)`
     align-items: flex-start;
 `;
 
-export const DimensionSelection: React.FC<IDimensionSelectionProps> = ({ dimension, resolvedDimensionValueCodes, query, onQueryChanged }) => {
+export const DimensionSelection: React.FC<IDimensionSelectionProps> = ({ dimension, resolvedDimensionValueCodes, dimensionQuery, onQueryChanged }) => {
     const [anchorEl, setAnchorEl] = useState(null);
     const { t } = useTranslation();
 
@@ -52,16 +52,16 @@ export const DimensionSelection: React.FC<IDimensionSelectionProps> = ({ dimensi
     const handleMenuClick = (newFilterType: FilterType) => {
         closeMenu();
         onQueryChanged({
-            ...query,
+            ...dimensionQuery,
             valueFilter: getDefaultFilter(newFilterType)
         });
     };
 
     const handleFilterValueChanged = (newFilterValue: string | string[] | number) => {
         onQueryChanged({
-            ...query,
+            ...dimensionQuery,
             valueFilter: {
-                type: query.valueFilter.type,
+                type: dimensionQuery.valueFilter.type,
                 query: newFilterValue
             }
         });
@@ -78,10 +78,10 @@ export const DimensionSelection: React.FC<IDimensionSelectionProps> = ({ dimensi
     let selectedValues = null;
 
 
-    switch (query.valueFilter.type) {
+    switch (dimensionQuery.valueFilter.type) {
         case FilterType.Item:
-            if (query?.valueFilter?.query && dimension?.values) {
-                const stringArray = query.valueFilter.query as string[];
+            if (dimensionQuery?.valueFilter?.query && dimension?.values) {
+                const stringArray = dimensionQuery.valueFilter.query as string[];
                 selectedValues = stringArray.map(code => dimension.values.find(o => o.code === code));
             }
             filterComponent =
@@ -99,14 +99,14 @@ export const DimensionSelection: React.FC<IDimensionSelectionProps> = ({ dimensi
             filterComponent =
                 <StartingFromDimensionSelection
                 options={dimension.values}
-                startingCode={query.valueFilter.query as string}
+                startingCode={dimensionQuery.valueFilter.query as string}
                 onQueryChanged={handleFilterValueChanged}
                 />
             break;
         case FilterType.Top:
             filterComponent =
                 <TopNDimensionSelection
-                    numberOfItems={query.valueFilter.query as number}
+                    numberOfItems={dimensionQuery.valueFilter.query as number}
                     onNumberChanged={handleFilterValueChanged}
                 />
             break;
@@ -122,20 +122,20 @@ export const DimensionSelection: React.FC<IDimensionSelectionProps> = ({ dimensi
             </SelectorWrapper>
 
             {
-                query.valueFilter.type !== FilterType.Item ? (
+                dimensionQuery.valueFilter.type !== FilterType.Item ? (
                     <ResultList dimensionValues={dimension.values} resolvedDimensionValueCodes={resolvedDimensionValueCodes} />
                 ) : null
             }
 
-            <SelectabilitySwitch onChange={value => onChangeMUIWrapper({ ...query, selectable: value })} selected={query.selectable} />
+            <SelectabilitySwitch onChange={value => onChangeMUIWrapper({ ...dimensionQuery, selectable: value })} selected={dimensionQuery.selectable} />
             {
-                query.selectable && <DefaultSelectableDimensionSelection dimensionCode={dimension.code} resolvedDimensionValueCodes={resolvedDimensionValueCodes} options={dimension.values} />
+                dimensionQuery.selectable && <DefaultSelectableDimensionSelection dimensionCode={dimension.code} resolvedDimensionValueCodes={resolvedDimensionValueCodes} options={dimension.values} />
             }
 
             <Menu open={anchorEl != null} anchorEl={anchorEl} onClose={closeMenu}>
                 {
                     (Object.values(FilterType) as Array<FilterType>).map(queryType => {
-                        const selected = query.valueFilter.type === queryType;
+                        const selected = dimensionQuery.valueFilter.type === queryType;
                         return (
                             <MenuItem key={queryType} selected={selected} onClick={() => handleMenuClick(queryType)}>
                                 {selected ?
