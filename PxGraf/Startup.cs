@@ -164,7 +164,8 @@ namespace PxGraf
             });
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint($"../{swaggerDocName}/swagger/swagger.json", "PxGraf");
+                c.SwaggerEndpoint("swagger.json", "PxGraf");
+                c.RoutePrefix = $"{swaggerDocName}/swagger";
             });
 
             app.UseExceptionHandler("/api/error");

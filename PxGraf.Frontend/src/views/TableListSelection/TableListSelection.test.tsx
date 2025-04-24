@@ -81,7 +81,12 @@ jest.mock('api/services/table', () => ({
 
 describe('Rendering test', () => {
     it('renders correctly', () => {
-        const { asFragment } = render(<MemoryRouter><UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}><TableListSelection /></UiLanguageContext.Provider></MemoryRouter>);
+        const { asFragment } = render(
+            <MemoryRouter>
+                <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
+                    <TableListSelection />
+                </UiLanguageContext.Provider>
+            </MemoryRouter>);
         expect(asFragment()).toMatchSnapshot();
     });
 });

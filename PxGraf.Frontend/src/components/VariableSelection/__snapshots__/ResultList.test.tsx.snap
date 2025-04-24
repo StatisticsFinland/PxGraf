@@ -3,37 +3,37 @@
 exports[`Rendering test renders correctly 1`] = `
 <DocumentFragment>
   <div
-    class="MuiStack-root sc-dDvxFM iMGeXy css-nen11g-MuiStack-root"
+    class="MuiStack-root sc-dIMoHT gaCGej css-nen11g-MuiStack-root"
   >
     <p
-      class="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-body1 css-rizt0-MuiTypography-root"
     >
       general.results:
     </p>
     <ul
-      class="MuiList-root MuiList-padding MuiList-dense sc-KXCwU cdeNQX css-1f8gdww-MuiList-root"
+      class="MuiList-root MuiList-padding MuiList-dense sc-Qotzb kfVHXg css-st2ob2-MuiList-root"
     >
       <li
-        class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding sc-gyycJP itbmxE css-6lnq02-MuiListItem-root"
+        class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding sc-fYsHOw clBvbN css-qyw6ft-MuiListItem-root"
       >
         <div
-          class="MuiListItemText-root MuiListItemText-dense css-tlelie-MuiListItemText-root"
+          class="MuiListItemText-root MuiListItemText-dense css-cfq8qh-MuiListItemText-root"
         >
           <span
-            class="MuiTypography-root MuiTypography-body2 MuiListItemText-primary css-et1ao3-MuiTypography-root"
+            class="MuiTypography-root MuiTypography-body2 MuiListItemText-primary css-7ctihp-MuiTypography-root"
           >
             2019
           </span>
         </div>
       </li>
       <li
-        class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding sc-gyycJP itbmxE css-6lnq02-MuiListItem-root"
+        class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding sc-fYsHOw clBvbN css-qyw6ft-MuiListItem-root"
       >
         <div
-          class="MuiListItemText-root MuiListItemText-dense css-tlelie-MuiListItemText-root"
+          class="MuiListItemText-root MuiListItemText-dense css-cfq8qh-MuiListItemText-root"
         >
           <span
-            class="MuiTypography-root MuiTypography-body2 MuiListItemText-primary css-et1ao3-MuiTypography-root"
+            class="MuiTypography-root MuiTypography-body2 MuiListItemText-primary css-7ctihp-MuiTypography-root"
           >
             2020
           </span>
