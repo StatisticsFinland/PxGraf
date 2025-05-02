@@ -34,15 +34,9 @@ namespace UnitTests.SortingTests
             IReadOnlyMatrixMetadata meta = TestDataCubeBuilder.BuildTestMeta(varParams);
             MatrixQuery query = TestDataCubeBuilder.BuildTestCubeQuery(varParams);
 
-            VisualizationSettingsRequest settingsRequest = new()
-            {
-                SelectedVisualization = VisualizationType.HorizontalBarChart,
-                PivotRequested = false,
-                Query = query
-            };
-            IReadOnlyList<SortingOption> sortingOptions = CubeSorting.Get(meta, settingsRequest);
+            VisualizationOption.SortingOptionsCollection sortingOptions = CubeSorting.Get(VisualizationType.HorizontalBarChart, meta, true, query);
             List<string> expected = ["descending", "ascending", "no_sorting", "reversed"];
-            Assert.That(sortingOptions.Select(so => so.Code).ToList(), Is.EqualTo(expected));
+            Assert.That(sortingOptions.Default.Select(so => so.Code).ToList(), Is.EqualTo(expected));
         }
 
         [Test]
@@ -58,15 +52,11 @@ namespace UnitTests.SortingTests
             IReadOnlyMatrixMetadata meta = TestDataCubeBuilder.BuildTestMeta(varParams);
             MatrixQuery query = TestDataCubeBuilder.BuildTestCubeQuery(varParams);
 
-            VisualizationSettingsRequest settingsRequest = new()
-            {
-                SelectedVisualization = VisualizationType.GroupHorizontalBarChart,
-                PivotRequested = false,
-                Query = query
-            };
-            IReadOnlyList<SortingOption> sortingOptions = CubeSorting.Get(meta, settingsRequest);
-            List<string> expected = ["value-0", "value-1", "value-2", "sum", "no_sorting", "reversed"];
-            Assert.That(sortingOptions.Select(so => so.Code).ToList(), Is.EqualTo(expected));
+            VisualizationOption.SortingOptionsCollection sortingOptions = CubeSorting.Get(VisualizationType.GroupHorizontalBarChart, meta, true, query);
+            List<string> defaultExpected = ["value-0", "value-1", "value-2", "sum", "no_sorting", "reversed"];
+            Assert.That(sortingOptions.Default.Select(so => so.Code).ToList(), Is.EqualTo(defaultExpected));
+            List<string> pivotedExpected = ["value-0", "value-1", "value-2", "value-3", "sum", "no_sorting", "reversed"];
+            Assert.That(sortingOptions.Default.Select(so => so.Code).ToList(), Is.EqualTo(pivotedExpected));
         }
 
         [Test]
@@ -82,15 +72,10 @@ namespace UnitTests.SortingTests
             IReadOnlyMatrixMetadata meta = TestDataCubeBuilder.BuildTestMeta(varParams);
             MatrixQuery query = TestDataCubeBuilder.BuildTestCubeQuery(varParams);
 
-            VisualizationSettingsRequest settingsRequest = new()
-            {
-                SelectedVisualization = VisualizationType.HorizontalBarChart,
-                PivotRequested = false,
-                Query = query
-            };
-            IReadOnlyList<SortingOption> sortingOptions = CubeSorting.Get(meta, settingsRequest);
+            VisualizationOption.SortingOptionsCollection sortingOptions = CubeSorting.Get(VisualizationType.HorizontalBarChart, meta, true, query);
             List<string> expected = ["descending", "ascending", "no_sorting", "reversed"];
-            Assert.That(sortingOptions.Select(so => so.Code).ToList(), Is.EqualTo(expected));
+            Assert.That(sortingOptions.Default.Select(so => so.Code).ToList(), Is.EqualTo(expected));
+            Assert.That(sortingOptions.Pivoted.Select(so => so.Code).ToList(), Is.EqualTo(expected));
         }
 
         [Test]
@@ -113,9 +98,11 @@ namespace UnitTests.SortingTests
                 PivotRequested = false,
                 Query = query
             };
-            IReadOnlyList<SortingOption> sortingOptions = CubeSorting.Get(meta, settingsRequest);
-            List<string> expected = ["value-0", "value-1", "value-2", "sum", "no_sorting", "reversed"];
-            Assert.That(sortingOptions.Select(so => so.Code).ToList(), Is.EqualTo(expected));
+            VisualizationOption.SortingOptionsCollection sortingOptions = CubeSorting.Get(VisualizationType.GroupHorizontalBarChart, meta, true, query);
+            List<string> defaultExpected = ["value-0", "value-1", "value-2", "sum", "no_sorting", "reversed"];
+            Assert.That(sortingOptions.Default.Select(so => so.Code).ToList(), Is.EqualTo(defaultExpected));
+            List<string> pivotedExpected = ["value-0", "value-1", "value-2", "value-3", "sum", "no_sorting", "reversed"];
+            Assert.That(sortingOptions.Pivoted.Select(so => so.Code).ToList(), Is.EqualTo(pivotedExpected));
         }
 
         [Test]
@@ -133,15 +120,11 @@ namespace UnitTests.SortingTests
             IReadOnlyMatrixMetadata meta = TestDataCubeBuilder.BuildTestMeta(varParams);
             MatrixQuery query = TestDataCubeBuilder.BuildTestCubeQuery(varParams);
 
-            VisualizationSettingsRequest settingsRequest = new()
-            {
-                SelectedVisualization = VisualizationType.GroupHorizontalBarChart,
-                PivotRequested = false,
-                Query = query
-            };
-            IReadOnlyList<SortingOption> sortingOptions = CubeSorting.Get(meta, settingsRequest);
-            List<string> expected = ["value-0", "value-1", "value-2", "sum", "no_sorting", "reversed"];
-            Assert.That(sortingOptions.Select(so => so.Code).ToList(), Is.EqualTo(expected));
+            VisualizationOption.SortingOptionsCollection sortingOptions = CubeSorting.Get(VisualizationType.GroupHorizontalBarChart, meta, true, query);
+            List<string> defaultExpected = ["value-0", "value-1", "value-2", "sum", "no_sorting", "reversed"];
+            Assert.That(sortingOptions.Default.Select(so => so.Code).ToList(), Is.EqualTo(defaultExpected));
+            List<string> pivotedExpected = ["value-0", "value-1", "value-2", "value-3", "sum", "no_sorting", "reversed"];
+            Assert.That(sortingOptions.Default.Select(so => so.Code).ToList(), Is.EqualTo(pivotedExpected));
         }
 
         [Test]
@@ -157,15 +140,11 @@ namespace UnitTests.SortingTests
             IReadOnlyMatrixMetadata meta = TestDataCubeBuilder.BuildTestMeta(varParams);
             MatrixQuery query = TestDataCubeBuilder.BuildTestCubeQuery(varParams);
 
-            VisualizationSettingsRequest settingsRequest = new()
-            {
-                SelectedVisualization = VisualizationType.GroupHorizontalBarChart,
-                PivotRequested = true,
-                Query = query
-            };
-            IReadOnlyList<SortingOption> sortingOptions = CubeSorting.Get(meta, settingsRequest);
-            List<string> expected = ["2001", "2000", "sum", "no_sorting", "reversed"];
-            Assert.That(sortingOptions.Select(so => so.Code).ToList(), Is.EqualTo(expected));
+            VisualizationOption.SortingOptionsCollection sortingOptions = CubeSorting.Get(VisualizationType.GroupHorizontalBarChart, meta, true, query);
+            List<string> defaultExpected = ["2001", "2000", "sum", "no_sorting", "reversed"];
+            Assert.That(sortingOptions.Default.Select(so => so.Code).ToList(), Is.EqualTo(defaultExpected));
+            List<string> pivotedExpected = ["2001", "2000", "sum", "no_sorting", "reversed"];
+            Assert.That(sortingOptions.Pivoted.Select(so => so.Code).ToList(), Is.EqualTo(pivotedExpected));
         }
 
         [Test]
@@ -187,9 +166,11 @@ namespace UnitTests.SortingTests
                 PivotRequested = false,
                 Query = query
             };
-            IReadOnlyList<SortingOption> sortingOptions = CubeSorting.Get(meta, settingsRequest);
-            List<string> expected = ["value-0", "value-1", "value-2", "sum", "no_sorting", "reversed"];
-            Assert.That(sortingOptions.Select(so => so.Code).ToList(), Is.EqualTo(expected));
+            VisualizationOption.SortingOptionsCollection sortingOptions = CubeSorting.Get(VisualizationType.StackedHorizontalBarChart, meta, true, query);
+            List<string> defaultExpected = ["value-0", "value-1", "value-2", "sum", "no_sorting", "reversed"];
+            Assert.That(sortingOptions.Default.Select(so => so.Code).ToList(), Is.EqualTo(defaultExpected));
+            List<string> pivotedExpected = ["value-0", "value-1", "value-2", "sum", "no_sorting", "reversed"];
+            Assert.That(sortingOptions.Pivoted.Select(so => so.Code).ToList(), Is.EqualTo(pivotedExpected));
         }
     }
 }

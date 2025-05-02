@@ -4,7 +4,7 @@ using Px.Utils.Models.Metadata;
 using PxGraf.Enums;
 using PxGraf.Language;
 using PxGraf.Models.Metadata;
-using PxGraf.Models.Requests;
+using PxGraf.Models.Queries;
 using PxGraf.Models.Responses;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,79 +44,105 @@ namespace PxGraf.Data
         /// <summary>
         /// Provides all valid sorting options for a visualization. Languages are based on the languages of the cube meta object.
         /// </summary>
-        public static IReadOnlyList<SortingOption> Get(IReadOnlyMatrixMetadata meta, VisualizationSettingsRequest request)
+        public static VisualizationOption.SortingOptionsCollection Get(VisualizationType type, IReadOnlyMatrixMetadata meta, bool allowPivot, MatrixQuery query)
         {
-            return request.SelectedVisualization switch
+            return type switch
             {
                 VisualizationType.VerticalBarChart => GetVerticalBarChartOptions(),
                 VisualizationType.GroupVerticalBarChart => GetGroupVerticalBarChartOptions(),
                 VisualizationType.StackedVerticalBarChart => GetStackedVerticalBarChartOptions(),
                 VisualizationType.PercentVerticalBarChart => GetStackedVerticalBarChartOptions(),
-                VisualizationType.HorizontalBarChart => GetHorizontalBarChartOptions(meta.AvailableLanguages),
+                VisualizationType.HorizontalBarChart => GetHorizontalBarChartOptions(meta.AvailableLanguages, allowPivot),
                 VisualizationType.GroupHorizontalBarChart or
                 VisualizationType.StackedHorizontalBarChart or
-                VisualizationType.PercentHorizontalBarChart => GetMultiDimHorizontalBarChartOptions(request.SelectedVisualization, meta, request),
+                VisualizationType.PercentHorizontalBarChart => GetMultiDimHorizontalBarChartOptions(type, meta, allowPivot, query),
                 VisualizationType.PyramidChart => GetPyramidChartOptions(),
-                VisualizationType.PieChart => GetPieChartOptions(meta.AvailableLanguages),
+                VisualizationType.PieChart => GetPieChartOptions(meta.AvailableLanguages, allowPivot),
                 VisualizationType.LineChart => GetLineChartOptions(),
                 VisualizationType.ScatterPlot => GetScatterPlotOptions(),
-                _ => [],
+                _ => new() { Default = null, Pivoted = null }
             };
         }
 
         #region SORTING_OPTIONS
 
         // Not sortable at the moment
-        private static List<SortingOption> GetVerticalBarChartOptions() => [];
+        private static VisualizationOption.SortingOptionsCollection GetVerticalBarChartOptions() => new() { Default = null, Pivoted = null };
 
         // Not sortable at the moment
-        private static List<SortingOption> GetGroupVerticalBarChartOptions() => [];
+        private static VisualizationOption.SortingOptionsCollection GetGroupVerticalBarChartOptions() => new() { Default = null, Pivoted = null };
 
         // Not sortable at the moment
-        private static List<SortingOption> GetStackedVerticalBarChartOptions() => [];
+        private static VisualizationOption.SortingOptionsCollection GetStackedVerticalBarChartOptions() => new() { Default = null, Pivoted = null };
 
-        private static List<SortingOption> GetHorizontalBarChartOptions(IEnumerable<string> languages)
-            =>
-            [
-                GetDescendingSorting(languages),
-                GetAscendingSorting(languages),
-                GetSameAsDataSorting(languages),
-                GetReversedFromDataSorting(languages)
-            ];
-
-        private static List<SortingOption> GetMultiDimHorizontalBarChartOptions(VisualizationType visualization, IReadOnlyMatrixMetadata meta, VisualizationSettingsRequest request)
+        private static VisualizationOption.SortingOptionsCollection GetHorizontalBarChartOptions(IEnumerable<string> languages, bool allowPivot)
         {
-            // Selectable dimensions are excluded from sorting, OBS: '!'
-            List<IReadOnlyDimension> multiselects = [.. meta.GetMultivalueDimensions().Where(mvv => !request.Query.DimensionQueries[mvv.Code].Selectable)];
-            IReadOnlyDimension sortingOptionsDimension = GetPivot(visualization, meta, request) ? multiselects[1] : multiselects[0];
+            List<SortingOption> sorting = 
+                [
+                    GetDescendingSorting(languages),
+                    GetAscendingSorting(languages),
+                    GetSameAsDataSorting(languages),
+                    GetReversedFromDataSorting(languages)
+                ];
 
-            List<SortingOption> options = [.. GetDimensionSortingOptions(sortingOptionsDimension)];
-            // Sort time dimensions descendingly for GroupHorizontalBarChart
-            if (request.SelectedVisualization == VisualizationType.GroupHorizontalBarChart && sortingOptionsDimension.Type == DimensionType.Time)
+            return new()
             {
-                options.Reverse();
+                Default = sorting,
+                Pivoted = allowPivot ? sorting : null
+            };
+        }
+
+        private static VisualizationOption.SortingOptionsCollection GetMultiDimHorizontalBarChartOptions(VisualizationType visualization, IReadOnlyMatrixMetadata meta, bool allowPivot, MatrixQuery query)
+        {
+            List<IReadOnlyDimension> multiselects = [.. meta.GetMultivalueDimensions().Where(mvv => !query.DimensionQueries[mvv.Code].Selectable)];
+            return new VisualizationOption.SortingOptionsCollection
+            {
+                Default = GetOptions(multiselects[0]),
+                Pivoted = allowPivot ? GetOptions(multiselects[1]) : null
+            };
+
+            List<SortingOption> GetOptions(IReadOnlyDimension sortingDimension)
+            {
+                List<SortingOption> options = [.. GetDimensionSortingOptions(sortingDimension)];
+                // Sort time dimensions descendingly for GroupHorizontalBarChart
+                if (visualization == VisualizationType.GroupHorizontalBarChart && sortingDimension.Type == DimensionType.Time)
+                {
+                    options.Reverse();
+                }
+                options.Add(GetSumSorting(meta.AvailableLanguages));
+                options.Add(GetSameAsDataSorting(meta.AvailableLanguages));
+                options.Add(GetReversedFromDataSorting(meta.AvailableLanguages));
+                return options;
             }
-            options.Add(GetSumSorting(meta.AvailableLanguages));
-            options.Add(GetSameAsDataSorting(meta.AvailableLanguages));
-            options.Add(GetReversedFromDataSorting(meta.AvailableLanguages));
-            return options;
         }
 
         // Not sortable at the moment
-        private static List<SortingOption> GetLineChartOptions() => [];
+        private static VisualizationOption.SortingOptionsCollection GetLineChartOptions() => new() { Default = null, Pivoted = null };
 
-        private static List<SortingOption> GetPieChartOptions(IEnumerable<string> languages)
-            =>
-            [
-                GetDescendingSorting(languages),
-                GetAscendingSorting(languages),
-                GetSameAsDataSorting(languages)
-            ];
+        private static VisualizationOption.SortingOptionsCollection GetPieChartOptions(IEnumerable<string> languages, bool allowPivot)
+        {
+            return new()
+            {
+                Default =
+                [
+                    GetDescendingSorting(languages),
+                    GetAscendingSorting(languages),
+                    GetSameAsDataSorting(languages)
+                ],
+                Pivoted = allowPivot ?
+                [
+                    GetDescendingSorting(languages),
+                    GetAscendingSorting(languages),
+                    GetSameAsDataSorting(languages)
+                ] 
+                : null
+            };
+        }
 
         // Not sortable at the moment
-        private static List<SortingOption> GetPyramidChartOptions() => [];
+        private static VisualizationOption.SortingOptionsCollection GetPyramidChartOptions() => new() { Default = null, Pivoted = null };
 
-        private static List<SortingOption> GetScatterPlotOptions() => [];
+        private static VisualizationOption.SortingOptionsCollection GetScatterPlotOptions() => new() { Default = null, Pivoted = null };
 
         #endregion
 
@@ -129,13 +155,6 @@ namespace PxGraf.Data
             }
 
             return options;
-        }
-
-        private static bool GetPivot(VisualizationType visualization, IReadOnlyMatrixMetadata meta, VisualizationSettingsRequest request)
-        {
-            bool autoPivot = AutoPivotRules.GetAutoPivot(visualization, meta, request.Query);
-            bool manualPivot = ManualPivotRules.GetManualPivotability(visualization, meta, request.Query) && request.PivotRequested;
-            return autoPivot ^ manualPivot;
         }
 
         #region SORTING_TYPES

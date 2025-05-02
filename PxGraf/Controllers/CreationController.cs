@@ -18,7 +18,6 @@ using PxGraf.Models.Requests;
 using PxGraf.Models.Responses.DatabaseItems;
 using PxGraf.Models.Responses;
 using PxGraf.Settings;
-using PxGraf.Utility;
 using PxGraf.Visualization;
 using System.Collections.Generic;
 using System.Linq;
@@ -291,7 +290,8 @@ namespace PxGraf.Controllers
 
             bool manualPivotability = ManualPivotRules.GetManualPivotability(rulesQuery.SelectedVisualization, filteredMeta, rulesQuery.Query);
             bool multiSelDim = IsMultivalueSelectableAllowed(rulesQuery.SelectedVisualization, rulesQuery.Query.DimensionQueries.Values);
-            IReadOnlyList<SortingOption> sortingOptions = CubeSorting.Get(filteredMeta, rulesQuery);
+            var options = CubeSorting.Get(rulesQuery.SelectedVisualization, filteredMeta, manualPivotability, rulesQuery.Query);
+            IReadOnlyList<SortingOption> sortingOptions = rulesQuery.PivotRequested ? options.Pivoted : options.Default;
             VisualizationRules.TypeSpecificVisualizationRules typeSpecificRules = new (rulesQuery.SelectedVisualization);
             VisualizationRules visualizationRules = new (manualPivotability, multiSelDim, typeSpecificRules, sortingOptions);
             _logger.LogDebug("visualization-rules result: {VisualizationRules}", visualizationRules);
@@ -304,6 +304,54 @@ namespace PxGraf.Controllers
                     && dimQueries.Any(vq => vq.Selectable);
             }
         }
+
+#nullable enable
+        [HttpPost("editor-contents")]
+        public async Task<ActionResult<EditorContentsResponse>> GetEditorContents([FromBody] MatrixQuery query)
+        {
+            _logger.LogDebug("GetEditorContents called with {Query} POST: api/creation/query-info", query);
+            int maxQuerySize = Configuration.Current.QueryOptions.MaxQuerySize;
+
+            IReadOnlyMatrixMetadata tableMeta = await _datasource.GetMatrixMetadataCachedAsync(query.TableReference);
+            IReadOnlyMatrixMetadata filteredMeta = tableMeta.FilterDimensionValues(query);
+
+            int includedValuesCount = filteredMeta.Dimensions.Select(x => x.Values.Count).Aggregate((a, x) => a * x);
+            Matrix<DecimalDataValue> matrix = await _datasource.GetMatrixCachedAsync(query.TableReference, filteredMeta);
+
+            Dictionary<VisualizationType, MultilanguageString> rejectionReasons = [];
+            List<VisualizationOption> visualizationOptions = [];
+
+            foreach (KeyValuePair<VisualizationType, IReadOnlyList<ChartRejectionInfo>> reasonKvp in
+                ChartTypeSelector.Selector.GetRejectionReasons(query, matrix))
+            {
+                if (reasonKvp.Value.Any())
+                {
+                    Dictionary<string, string> translations = [];
+                    foreach (string language in Localization.GetAllAvailableLanguages())
+                    {
+                        translations[language] = Localization.FromLanguage(language)
+                            .Translation.RejectionReasons.GetTranslation(reasonKvp.Value[0]);
+                    }
+                    rejectionReasons[reasonKvp.Key] = new (translations);
+                }
+                else  // no rejection reasons == valid visualization type
+                {
+                    visualizationOptions.Add(GetVisualizationOption(reasonKvp.Key, filteredMeta, query));
+                }
+            }
+
+            return new EditorContentsResponse()
+            {
+                Size = includedValuesCount,
+                MaximumSupportedSize = maxQuerySize,
+                SizeWarningLimit = Convert.ToInt32(maxQuerySize * 0.75),
+                HeaderText = HeaderBuildingUtilities.GetHeader(tableMeta, query),
+                MaximumHeaderLength = Configuration.Current.QueryOptions.MaxHeaderLength,
+                VisualizationOptions = visualizationOptions,
+                VisualizationRejectionReasons = rejectionReasons
+            };
+        }
+#nullable disable
 
         /// <summary>
         /// Returns visualization object matching the request.
@@ -346,5 +394,34 @@ namespace PxGraf.Controllers
                 return BadRequest();
             }
         }
+
+#nullable enable
+        private static VisualizationOption GetVisualizationOption(VisualizationType type, IReadOnlyMatrixMetadata meta, MatrixQuery query)
+        {
+            bool manualPivotability = ManualPivotRules.GetManualPivotability(type, meta, query);
+
+            bool AllowCuttingYAxis =
+                type == VisualizationType.LineChart ||
+                type == VisualizationType.ScatterPlot;
+
+            bool AllowMatchXLabelsToEnd =
+                type == VisualizationType.VerticalBarChart ||
+                type == VisualizationType.GroupVerticalBarChart ||
+                type == VisualizationType.PercentVerticalBarChart ||
+                type == VisualizationType.StackedVerticalBarChart;
+
+            return new VisualizationOption()
+            {
+                Type = type,
+                AllowManualPivot = manualPivotability,
+                AllowMultiselect = (type == VisualizationType.LineChart) && query.DimensionQueries.Any(vq => vq.Value.Selectable),
+                AllowShowingDataPoints = type == VisualizationType.VerticalBarChart,
+                AllowCuttingYAxis = AllowCuttingYAxis,
+                AllowMatchXLabelsToEnd = AllowMatchXLabelsToEnd,
+                AllowSetMarkerScale = type == VisualizationType.ScatterPlot,
+                SortingOptions = CubeSorting.Get(type, meta, manualPivotability, query)
+            };
+        }
+#nullable disable
     }
 }
