@@ -100,7 +100,7 @@ namespace UnitTests.ControllerTests.CreationControllerTests
         }
 
         [Test]
-        public async Task SortingMultidimWithManualPivotTest_Success()
+        public async Task SortingMultidimensionalWithManualPivotTest_Success()
         {
             List<DimensionParameters> cubeParams =
             [
@@ -131,12 +131,12 @@ namespace UnitTests.ControllerTests.CreationControllerTests
 
             ActionResult<VisualizationRules> actionResult = await testController.GetVisualizationRulesAsync(rulesRequest);
             List<string> sortingOptionCodes = [.. actionResult.Value.SortingOptions.Select(so => so.Code)];
-            List<string> expected = ["value-0", "value-1", "value-2", "value-3", "sum", "no_sorting", "reversed"];
+            List<string> expected = ["value-0", "value-1", "value-2", "sum", "no_sorting", "reversed"];
             Assert.That(sortingOptionCodes, Is.EqualTo(expected));
         }
 
         [Test]
-        public async Task SortingMultidimNoManualPivotTest_Success()
+        public async Task SortingMultidimensionalNoManualPivotTest_Success()
         {
             List<DimensionParameters> cubeParams =
             [
@@ -167,7 +167,7 @@ namespace UnitTests.ControllerTests.CreationControllerTests
 
             ActionResult<VisualizationRules> actionResult = await testController.GetVisualizationRulesAsync(rulesRequest);
             List<string> sortingOptionCodes = [.. actionResult.Value.SortingOptions.Select(so => so.Code)];
-            List<string> expected = ["value-0", "value-1", "value-2", "sum", "no_sorting", "reversed"];
+            List<string> expected = ["value-0", "value-1", "value-2", "value-3", "sum", "no_sorting", "reversed"];
             Assert.That(sortingOptionCodes, Is.EqualTo(expected));
         }
 

@@ -290,7 +290,7 @@ namespace PxGraf.Controllers
 
             bool manualPivotability = ManualPivotRules.GetManualPivotability(rulesQuery.SelectedVisualization, filteredMeta, rulesQuery.Query);
             bool multiSelDim = IsMultivalueSelectableAllowed(rulesQuery.SelectedVisualization, rulesQuery.Query.DimensionQueries.Values);
-            var options = CubeSorting.Get(rulesQuery.SelectedVisualization, filteredMeta, manualPivotability, rulesQuery.Query);
+            VisualizationOption.SortingOptionsCollection options = CubeSorting.Get(rulesQuery.SelectedVisualization, filteredMeta, manualPivotability, rulesQuery.Query);
             IReadOnlyList<SortingOption> sortingOptions = rulesQuery.PivotRequested ? options.Pivoted : options.Default;
             VisualizationRules.TypeSpecificVisualizationRules typeSpecificRules = new (rulesQuery.SelectedVisualization);
             VisualizationRules visualizationRules = new (manualPivotability, multiSelDim, typeSpecificRules, sortingOptions);

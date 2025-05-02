@@ -104,7 +104,7 @@ namespace PxGraf.Data
             List<SortingOption> GetOptions(IReadOnlyDimension sortingDimension)
             {
                 List<SortingOption> options = [.. GetDimensionSortingOptions(sortingDimension)];
-                // Sort time dimensions descendingly for GroupHorizontalBarChart
+                // Sort time dimensions descending for GroupHorizontalBarChart
                 if (visualization == VisualizationType.GroupHorizontalBarChart && sortingDimension.Type == DimensionType.Time)
                 {
                     options.Reverse();
