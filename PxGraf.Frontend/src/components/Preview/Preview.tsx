@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { CircularProgress, Alert, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { ISelectableSelections, SelectableDimensionMenus } from 'components/SelectableVariableMenus/SelectableDimensionMenus';
 import styled from 'styled-components';
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 import { Query } from 'types/query';
 import { IVisualizationSettings } from 'types/visualizationSettings';
 import { useVisualizationQuery } from 'api/services/visualization';

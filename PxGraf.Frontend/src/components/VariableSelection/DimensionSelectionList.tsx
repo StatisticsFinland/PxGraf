@@ -10,7 +10,6 @@ import styled from 'styled-components';
 import { useTheme } from '@mui/material/styles';
 import { UiLanguageContext } from 'contexts/uiLanguageContext';
 import { sortedDimensions } from 'utils/sortingHelpers';
-import { EditorContext } from '../../contexts/editorContext';
 
 interface DimensionSelectionListProps {
     dimensions: IDimension[],

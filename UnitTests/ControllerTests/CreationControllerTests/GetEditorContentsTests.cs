@@ -1,21 +1,30 @@
 ﻿using NUnit.Framework;
-using Px.Utils.Models.Data.DataValue;
 using Px.Utils.Models.Metadata.Enums;
-using Px.Utils.Models.Metadata;
-using Px.Utils.Models;
 using PxGraf.Controllers;
-using PxGraf.Models.Metadata;
 using PxGraf.Models.Queries;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using PxGraf.Models.Responses;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using PxGraf.Language;
+using UnitTests.Fixtures;
+using PxGraf.Settings;
 
 namespace UnitTests.ControllerTests.CreationControllerTests
 {
     public class GetEditorContentsTests
     {
+        [OneTimeSetUp]
+        public void DoSetup()
+        {
+            Localization.Load(TranslationFixture.DefaultLanguage, TranslationFixture.Translations);
+
+            IConfiguration configuration = new ConfigurationBuilder()
+                .AddInMemoryCollection(TestInMemoryConfiguration.Get())
+                .Build();
+            Configuration.Load(configuration);
+        }
 
         [Test]
         public async Task GetEditorContents_SimpleSuccessTest_LineChart()
@@ -23,7 +32,7 @@ namespace UnitTests.ControllerTests.CreationControllerTests
             List<DimensionParameters> cubeParams =
             [
                 new DimensionParameters(DimensionType.Content, 1),
-                new DimensionParameters(DimensionType.Time, 1),
+                new DimensionParameters(DimensionType.Time, 8),
                 new DimensionParameters(DimensionType.Other, 3),
                 new DimensionParameters(DimensionType.Other, 3),
                 new DimensionParameters(DimensionType.Other, 2) { Selectable = true},

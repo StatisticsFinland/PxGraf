@@ -1,4 +1,4 @@
-import { EDimensionType, IDimension } from 'types/cubeMeta';
+import { IDimension } from 'types/cubeMeta';
 import { FilterType, IDimensionQuery } from 'types/query';
 import { getDefaultFilter } from './dimensionSelectionHelpers';
 import { useTranslation } from 'react-i18next';
