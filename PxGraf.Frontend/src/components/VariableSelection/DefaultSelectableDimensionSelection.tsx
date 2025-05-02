@@ -58,7 +58,7 @@ export const DefaultSelectableDimensionSelection: React.FC<IDefaultSelectableDim
     return (<StyledAutocomplete
         options={options.filter(option => resolvedDimensionValueCodes.indexOf(option.code) > -1)}
         getOptionLabel={(option: IDimensionValue) => option?.name[language] ?? option.code}
-        isOptionEqualToValue={(option, value) => value?.code === option.code}
+        isOptionEqualToValue={(option: IDimensionValue, value: IDimensionValue) => value?.code === option.code}
         value={value}
         onChange={handleChange}
         noOptionsText={t("selectable.noSelections")}
