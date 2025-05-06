@@ -126,7 +126,6 @@ export const EditorMetaSection: React.FC<IEditorMetaSectionProps> = ({ editorCon
         setIsMetaAccordionOpen(!isMetaAccordionOpen);
     }
 
-    // TODO: tää ehkä pois koska on error ennenkun on asiat kasassa. Ehkä voi previewsectionista myös katsoa?
     if (editorContentsResponse.isError) {
         return (
             <ResponseWrapper>
