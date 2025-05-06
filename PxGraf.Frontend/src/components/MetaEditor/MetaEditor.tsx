@@ -8,9 +8,9 @@ import { HeaderEditor } from './HeaderEditor';
 import { a11yProps } from 'utils/componentHelpers';
 import styled from 'styled-components';
 import { IDimension } from 'types/cubeMeta';
-import { IHeaderResult } from 'api/services/default-header';
 import InfoBubble from 'components/InfoBubble/InfoBubble';
 import { UiLanguageContext } from 'contexts/uiLanguageContext';
+import { IEditorContentsResult } from '../../api/services/editor-contents';
 
 const MetaEditorWrapper = styled(Box)`
   grid-area: 'parameters';
@@ -57,7 +57,7 @@ export interface INewEditMetaEditor {
 interface IMetaEditorProps {
     language: string;
     resolvedDimensions: IDimension[];
-    defaultHeaderResponse: IHeaderResult;
+    editorContentsResponse: IEditorContentsResult;
     isMetaAccordionOpen: boolean;
     onMetaAccordionOpenChange: () => void;
     titleMaxLength?: number;
@@ -67,7 +67,7 @@ interface IMetaEditorProps {
 export const MetaEditor: React.FC<IMetaEditorProps> = ({
     language,
     resolvedDimensions,
-    defaultHeaderResponse,
+    editorContentsResponse,
     isMetaAccordionOpen,
     onMetaAccordionOpenChange,
     titleMaxLength,
@@ -80,7 +80,7 @@ export const MetaEditor: React.FC<IMetaEditorProps> = ({
         <MetaEditorWrapper>
             <HeaderEditor
                 style={{ width: '100%' }}
-                defaultHeaderResponse={defaultHeaderResponse}
+                editorContentResponse={editorContentsResponse}
                 language={language}
                 maxLength={titleMaxLength}
             />

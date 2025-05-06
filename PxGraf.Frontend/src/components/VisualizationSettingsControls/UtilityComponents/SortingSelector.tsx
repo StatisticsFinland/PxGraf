@@ -4,9 +4,9 @@ import {
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { UiLanguageContext } from 'contexts/uiLanguageContext';
-import { ISortingOption } from 'types/visualizationRules';
 import { IVisualizationSettings } from '../../../types/visualizationSettings';
 import { EditorContext } from '../../../contexts/editorContext';
+import { ISortingOption } from '../../../types/editorContentsResponse';
 
 interface ISortingSelectorProps {
     sortingOptions: ISortingOption[],

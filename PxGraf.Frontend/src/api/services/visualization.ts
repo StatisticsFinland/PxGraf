@@ -52,7 +52,6 @@ export const useVisualizationQuery = (
     selectedVisualization: string,
     visualizationSettings: IVisualizationSettings
 ): IVisualizationResult => {
-
     [idStack, query, cubeQuery, language, selectedVisualization, visualizationSettings] = useDebounceState(1000, idStack, query, cubeQuery, language, selectedVisualization, visualizationSettings);
     const queryKey = ['chart', ...idStack, query, cubeQuery, language, selectedVisualization, visualizationSettings];
 

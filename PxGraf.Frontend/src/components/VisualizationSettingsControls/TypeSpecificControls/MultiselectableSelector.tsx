@@ -6,11 +6,11 @@ import { UiLanguageContext } from 'contexts/uiLanguageContext';
 import { useTranslation } from 'react-i18next';
 import { EditorContext } from '../../../contexts/editorContext';
 
-interface MultiselectableSelectorProps extends IVisualizationSettingsProps {
+interface IMultiselectableSelectorProps extends IVisualizationSettingsProps {
     dimensions: IDimension[]
 }
 
-export const MultiselectableSelector: React.FC<MultiselectableSelectorProps> = ({ visualizationSettings, dimensions  }) => {
+export const MultiselectableSelector: React.FC<IMultiselectableSelectorProps> = ({ visualizationSettings, dimensions  }) => {
     const { t } = useTranslation();
     const { language, languageTab } = React.useContext(UiLanguageContext);
     const { setVisualizationSettingsUserInput } = React.useContext(EditorContext);

@@ -4,10 +4,10 @@ import { queryByLabelText, render, fireEvent } from '@testing-library/react';
 import { IDimension, EDimensionType } from "types/cubeMeta";
 import VisualizationSettingControl from "./VisualizationSettingsControl";
 import { FilterType, Query } from "types/query";
-import { ITypeSpecificVisualizationRules, IVisualizationRules } from '../../types/visualizationRules';
 import { IVisualizationSettings } from '../../types/visualizationSettings';
 import { EditorContext } from '../../contexts/editorContext';
 import { VisualizationType } from '../../types/visualizationType';
+import { IVisualizationOptions } from '../../types/editorContentsResponse';
 
 jest.mock('react-i18next', () => ({
     ...jest.requireActual('react-i18next'),
@@ -21,18 +21,18 @@ jest.mock('react-i18next', () => ({
     },
 }));
 
-const mockTypeSpecificVisualizationRules: ITypeSpecificVisualizationRules = {
+const mockVisualizationRules: IVisualizationOptions = {
+    allowManualPivot: false,
+    sortingOptions: {
+        default: [],
+        pivoted: []
+    },
+    allowMultiselect: false,
     allowShowingDataPoints: true,
     allowCuttingYAxis: true,
     allowMatchXLabelsToEnd: true,
-    allowSetMarkerScale: true
-}
-
-const mockVisualizationRules: IVisualizationRules = {
-    allowManualPivot: false,
-    sortingOptions: null,
-    multiselectDimensionAllowed: false,
-    visualizationTypeSpecificRules: mockTypeSpecificVisualizationRules
+    allowSetMarkerScale: true,
+    type: VisualizationType.VerticalBarChart
 };
 
 const mockVisualizationSettings: IVisualizationSettings = {
@@ -174,7 +174,7 @@ describe('Rendering test', () => {
             selectedVisualization="Table"
             dimensionQuery={mockDimensionQuery}
             dimensions={mockDimensions}
-            visualizationRules={mockVisualizationRules}
+            visualizationOptions={mockVisualizationRules}
             visualizationSettings={mockVisualizationSettings}
         />);
         expect(asFragment()).toMatchSnapshot();
@@ -184,7 +184,7 @@ describe('Rendering test', () => {
             selectedVisualization="LineChart"
             dimensionQuery={mockDimensionQuery}
             dimensions={mockDimensions}
-            visualizationRules={mockVisualizationRules}
+            visualizationOptions={mockVisualizationRules}
             visualizationSettings={mockVisualizationSettings}
         />);
         expect(asFragment()).toMatchSnapshot();
@@ -194,7 +194,7 @@ describe('Rendering test', () => {
             selectedVisualization="PieChart"
             dimensionQuery={mockDimensionQuery}
             dimensions={mockDimensions}
-            visualizationRules={mockVisualizationRules}
+            visualizationOptions={mockVisualizationRules}
             visualizationSettings={mockVisualizationSettings}
         />);
         expect(asFragment()).toMatchSnapshot();
@@ -204,7 +204,7 @@ describe('Rendering test', () => {
             selectedVisualization="VerticalBarChart"
             dimensionQuery={mockDimensionQuery}
             dimensions={mockDimensions}
-            visualizationRules={mockVisualizationRules}
+            visualizationOptions={mockVisualizationRules}
             visualizationSettings={mockVisualizationSettings}
         />);
         expect(asFragment()).toMatchSnapshot();
@@ -214,7 +214,7 @@ describe('Rendering test', () => {
             selectedVisualization="GroupVerticalBarChart"
             dimensionQuery={mockDimensionQuery}
             dimensions={mockDimensions}
-            visualizationRules={mockVisualizationRules}
+            visualizationOptions={mockVisualizationRules}
             visualizationSettings={mockVisualizationSettings}
         />);
         expect(asFragment()).toMatchSnapshot();
@@ -224,7 +224,7 @@ describe('Rendering test', () => {
             selectedVisualization="StackedVerticalBarChart"
             dimensionQuery={mockDimensionQuery}
             dimensions={mockDimensions}
-            visualizationRules={mockVisualizationRules}
+            visualizationOptions={mockVisualizationRules}
             visualizationSettings={mockVisualizationSettings}
         />);
         expect(asFragment()).toMatchSnapshot();
@@ -234,7 +234,7 @@ describe('Rendering test', () => {
             selectedVisualization="PercentVerticalBarChart"
             dimensionQuery={mockDimensionQuery}
             dimensions={mockDimensions}
-            visualizationRules={mockVisualizationRules}
+            visualizationOptions={mockVisualizationRules}
             visualizationSettings={mockVisualizationSettings}
         />);
         expect(asFragment()).toMatchSnapshot();
@@ -244,7 +244,7 @@ describe('Rendering test', () => {
             selectedVisualization="HorizontalBarChart"
             dimensionQuery={mockDimensionQuery}
             dimensions={mockDimensions}
-            visualizationRules={mockVisualizationRules}
+            visualizationOptions={mockVisualizationRules}
             visualizationSettings={mockVisualizationSettings}
         />);
         expect(asFragment()).toMatchSnapshot();
@@ -254,7 +254,7 @@ describe('Rendering test', () => {
             selectedVisualization="GroupHorizontalBarChart"
             dimensionQuery={mockDimensionQuery}
             dimensions={mockDimensions}
-            visualizationRules={mockVisualizationRules}
+            visualizationOptions={mockVisualizationRules}
             visualizationSettings={mockVisualizationSettings}
         />);
         expect(asFragment()).toMatchSnapshot();
@@ -264,7 +264,7 @@ describe('Rendering test', () => {
             selectedVisualization="StackedHorizontalBarChart"
             dimensionQuery={mockDimensionQuery}
             dimensions={mockDimensions}
-            visualizationRules={mockVisualizationRules}
+            visualizationOptions={mockVisualizationRules}
             visualizationSettings={mockVisualizationSettings}
         />);
         expect(asFragment()).toMatchSnapshot();
@@ -274,7 +274,7 @@ describe('Rendering test', () => {
             selectedVisualization="PercentHorizontalBarChart"
             dimensionQuery={mockDimensionQuery}
             dimensions={mockDimensions}
-            visualizationRules={mockVisualizationRules}
+            visualizationOptions={mockVisualizationRules}
             visualizationSettings={mockVisualizationSettings}
         />);
         expect(asFragment()).toMatchSnapshot();
@@ -284,7 +284,7 @@ describe('Rendering test', () => {
             selectedVisualization="ScatterPlot"
             dimensionQuery={mockDimensionQuery}
             dimensions={mockDimensions}
-            visualizationRules={mockVisualizationRules}
+            visualizationOptions={mockVisualizationRules}
             visualizationSettings={mockVisualizationSettings}
         />);
         expect(asFragment()).toMatchSnapshot();
@@ -295,11 +295,8 @@ describe('Assertion tests', () => {
     it('shows the proper components based on visualizationRules', () => {
         const modifiedVisualizationRules = {
             ...mockVisualizationRules,
-            visualizationTypeSpecificRules: {
-                ...mockVisualizationRules.visualizationTypeSpecificRules,
-                allowShowingDataPoints: false,
-                allowSetMarkerScale: false
-            }
+            allowShowingDataPoints: false,
+            allowSetMarkerScale: false
         };
 
         const { getByLabelText } = render(
@@ -307,7 +304,7 @@ describe('Assertion tests', () => {
                 selectedVisualization="Table"
                 dimensionQuery={mockDimensionQuery}
                 dimensions={mockDimensions}
-                visualizationRules={modifiedVisualizationRules}
+                visualizationOptions={modifiedVisualizationRules}
                 visualizationSettings={mockVisualizationSettings}
             />
         );
@@ -338,7 +335,7 @@ describe('Assertion tests', () => {
                     selectedVisualization="Table"
                     dimensionQuery={mockDimensionQuery}
                     dimensions={mockDimensions}
-                    visualizationRules={mockVisualizationRules}
+                    visualizationOptions={mockVisualizationRules}
                     visualizationSettings={mockVisualizationSettings}
                 />
             </EditorContext.Provider>

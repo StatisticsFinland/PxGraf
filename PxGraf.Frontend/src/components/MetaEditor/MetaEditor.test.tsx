@@ -1,12 +1,13 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import { IHeaderResult } from 'api/services/default-header';
 import '@testing-library/jest-dom';
 import { EMetaPropertyType, IDimension, EDimensionType } from 'types/cubeMeta';
 import { ICubeQuery } from 'types/query';
 import MetaEditor from './MetaEditor';
 import UiLanguageContext from 'contexts/uiLanguageContext';
 import { EditorContext } from 'contexts/editorContext';
+import { IEditorContentsResult } from '../../api/services/editor-contents';
+import { IEditorContentsResponse } from '../../types/editorContentsResponse';
 
 jest.mock('react-i18next', () => ({
     ...jest.requireActual('react-i18next'),
@@ -108,14 +109,18 @@ const mockFunction = jest.fn();
 
 const isMetaAccordionOpenMock = true;
 
-const defaultHeaderResponseMock: IHeaderResult = {
-    isLoading: false,
-    isError: false,
-    data: {
+const data: IEditorContentsResponse = {
+    headerText: {
         'fi': 'asd',
         'en': 'asd',
         'sv': 'asd'
     }
+} as unknown as IEditorContentsResponse;
+
+const defaultHeaderResponseMock: IEditorContentsResult = {
+    isLoading: false,
+    isError: false,
+    data: data
 }
 
 const mockCubeQuery: ICubeQuery = {
@@ -165,7 +170,7 @@ describe('Rendering test', () => {
                 <EditorContext.Provider value={{ cubeQuery: mockCubeQuery, setCubeQuery, query, setQuery, saveDialogOpen, setSaveDialogOpen, selectedVisualizationUserInput, setSelectedVisualizationUserInput, visualizationSettingsUserInput, setVisualizationSettingsUserInput, defaultSelectables, setDefaultSelectables }}>
                     <MetaEditor
                         resolvedDimensions={mockDimensions}
-                        defaultHeaderResponse={defaultHeaderResponseMock}
+                        editorContentsResponse={defaultHeaderResponseMock}
                         isMetaAccordionOpen={isMetaAccordionOpenMock}
                         language={mockLang}
                         onMetaAccordionOpenChange={mockFunction}

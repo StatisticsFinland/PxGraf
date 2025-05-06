@@ -1,6 +1,7 @@
 ﻿#nullable enable
 using Px.Utils.Language;
 using PxGraf.Enums;
+using System;
 using System.Collections.Generic;
 
 namespace PxGraf.Models.Responses
@@ -71,7 +72,7 @@ namespace PxGraf.Models.Responses
         /// <summary>
         /// Whether the user is allowed to define dimensions with multiple selectable values displayed simultaneously.
         /// </summary>
-        public required bool AllowMultiselect { get; set; }
+        public required bool allowMultiselect { get; set; }
     }
 }
 #nullable disable

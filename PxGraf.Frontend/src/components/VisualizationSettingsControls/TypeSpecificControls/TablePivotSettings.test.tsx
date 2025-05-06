@@ -5,10 +5,10 @@ import { IDimension, EDimensionType } from "types/cubeMeta";
 import UiLanguageContext from 'contexts/uiLanguageContext';
 import { Query, FilterType } from "types/query";
 import '@testing-library/jest-dom';
-import { IVisualizationRules } from '../../../types/visualizationRules';
 import { IVisualizationSettings } from '../../../types/visualizationSettings';
 import { EditorContext } from '../../../contexts/editorContext';
 import { VisualizationType } from '../../../types/visualizationType';
+import { IVisualizationOptions } from '../../../types/editorContentsResponse';
 
 jest.mock('react-i18next', () => ({
     ...jest.requireActual('react-i18next'),
@@ -22,11 +22,11 @@ jest.mock('react-i18next', () => ({
     },
 }));
 
-const mockVisualizationRules: IVisualizationRules = {
+const mockVisualizationRules: IVisualizationOptions = {
     allowManualPivot: false,
     sortingOptions: null,
-    multiselectDimensionAllowed: false
-};
+    allowMultiselect: false
+} as unknown as IVisualizationOptions;
 
 const mockVisualizationSettings: IVisualizationSettings = {
     defaultSelectableVariableCodes: null,
@@ -192,7 +192,7 @@ describe('Rendering test', () => {
             <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
                 <TablePivotSettings
                     dimensions={mockDimensions}
-                    visualizationRules={mockVisualizationRules}
+                    visualizationOptions={mockVisualizationRules}
                     visualizationSettings={mockVisualizationSettings}
                     query={mockQuery}
                 ></TablePivotSettings>
@@ -207,7 +207,7 @@ describe('Assertion tests', () => {
             <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
                 <TablePivotSettings
                     dimensions={mockDimensions}
-                    visualizationRules={mockVisualizationRules}
+                    visualizationOptions={mockVisualizationRules}
                     visualizationSettings={mockVisualizationSettings}
                     query={mockQuery}
                 ></TablePivotSettings>
@@ -235,7 +235,7 @@ describe('Assertion tests', () => {
                 }}>
                     <TablePivotSettings
                         dimensions={mockDimensions}
-                        visualizationRules={mockVisualizationRules}
+                        visualizationOptions={mockVisualizationRules}
                         visualizationSettings={mockVisualizationSettings}
                         query={mockQuery}
                     ></TablePivotSettings>
@@ -268,7 +268,7 @@ describe('Assertion tests', () => {
                 }}>
                     <TablePivotSettings
                         dimensions={mockDimensions}
-                        visualizationRules={mockVisualizationRules}
+                        visualizationOptions={mockVisualizationRules}
                         visualizationSettings={mockVisualizationSettings}
                         query={mockQuery}
                     ></TablePivotSettings>
@@ -301,7 +301,7 @@ describe('Assertion tests', () => {
                 }}>
                     <TablePivotSettings
                         dimensions={mockDimensions}
-                        visualizationRules={mockVisualizationRules}
+                        visualizationOptions={mockVisualizationRules}
                         visualizationSettings={mockVisualizationSettings}
                         query={mockQuery}
                     ></TablePivotSettings>
@@ -334,7 +334,7 @@ describe('Assertion tests', () => {
                 }}>
                     <TablePivotSettings
                         dimensions={mockDimensions}
-                        visualizationRules={mockVisualizationRules}
+                        visualizationOptions={mockVisualizationRules}
                         visualizationSettings={mockVisualizationSettings}
                         query={mockQuery}
                     ></TablePivotSettings>
@@ -367,7 +367,7 @@ describe('Assertion tests', () => {
                 }}>
                     <TablePivotSettings
                         dimensions={mockDimensions}
-                        visualizationRules={mockVisualizationRules}
+                        visualizationOptions={mockVisualizationRules}
                         visualizationSettings={mockVisualizationSettings}
                         query={mockQuery}
                     ></TablePivotSettings>
@@ -400,7 +400,7 @@ describe('Assertion tests', () => {
                 }}>
                     <TablePivotSettings
                         dimensions={mockDimensions}
-                        visualizationRules={mockVisualizationRules}
+                        visualizationOptions={mockVisualizationRules}
                         visualizationSettings={mockVisualizationSettings}
                         query={mockQuery}
                     ></TablePivotSettings>
@@ -433,7 +433,7 @@ describe('Assertion tests', () => {
                 }}>
                     <TablePivotSettings
                         dimensions={mockDimensions}
-                        visualizationRules={mockVisualizationRules}
+                        visualizationOptions={mockVisualizationRules}
                         visualizationSettings={mockVisualizationSettings}
                         query={mockQuery}
                     ></TablePivotSettings>
@@ -466,7 +466,7 @@ describe('Assertion tests', () => {
                 }}>
                     <TablePivotSettings
                         dimensions={mockDimensions}
-                        visualizationRules={mockVisualizationRules}
+                        visualizationOptions={mockVisualizationRules}
                         visualizationSettings={toggledMockSettings}
                         query={mockQuery}
                     ></TablePivotSettings>
@@ -496,7 +496,7 @@ describe('Assertion tests', () => {
                 }}>
                     <TablePivotSettings
                         dimensions={mockDimensions}
-                        visualizationRules={mockVisualizationRules}
+                        visualizationOptions={mockVisualizationRules}
                         visualizationSettings={toggledMockSettings}
                         query={mockQuery}
                     ></TablePivotSettings>
@@ -526,7 +526,7 @@ describe('Assertion tests', () => {
                 }}>
                     <TablePivotSettings
                         dimensions={mockDimensions}
-                        visualizationRules={mockVisualizationRules}
+                        visualizationOptions={mockVisualizationRules}
                         visualizationSettings={toggledMockSettings}
                         query={mockQuery}
                     ></TablePivotSettings>
@@ -556,7 +556,7 @@ describe('Assertion tests', () => {
                 }}>
                     <TablePivotSettings
                         dimensions={mockDimensions}
-                        visualizationRules={mockVisualizationRules}
+                        visualizationOptions={mockVisualizationRules}
                         visualizationSettings={mockVisualizationSettings}
                         selectableDimensions={[mockDimensions[1]]}
                         query={mockQuery}
@@ -588,7 +588,7 @@ describe('Assertion tests', () => {
                 }}>
                     <TablePivotSettings
                         dimensions={mockDimensions}
-                        visualizationRules={mockVisualizationRules}
+                        visualizationOptions={mockVisualizationRules}
                         visualizationSettings={toggledMockSettings}
                         query={mockQueryWithPotentiallyGrowingVariable}
                     ></TablePivotSettings>
@@ -620,7 +620,7 @@ describe('Assertion tests', () => {
                 }}>
                     <TablePivotSettings
                         dimensions={mockDimensions}
-                        visualizationRules={multiselectableVisualizatioRules}
+                        visualizationOptions={multiselectableVisualizatioRules}
                         visualizationSettings={multiselectableMockSettings}
                         query={mockQuery}
                     ></TablePivotSettings>

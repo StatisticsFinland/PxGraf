@@ -5,6 +5,8 @@ import HeaderEditor from './HeaderEditor';
 import { EditorContext } from '../../contexts/editorContext';
 import { VisualizationType } from '../../types/visualizationType';
 import { ICubeQuery } from '../../types/query';
+import { IEditorContentsResult } from '../../api/services/editor-contents';
+import { IEditorContentsResponse } from '../../types/editorContentsResponse';
 
 jest.mock('react-i18next', () => ({
     ...jest.requireActual('react-i18next'),
@@ -18,28 +20,29 @@ jest.mock('react-i18next', () => ({
     },
 }));
 
-const mockDefaultResponse = {
-    isLoading: false,
-    isError: false,
-    data: {
+const data: IEditorContentsResponse = {
+    headerText:
+    {
         'fi': 'foo'
     }
+} as unknown as IEditorContentsResponse;
+
+const mockDefaultResponse: IEditorContentsResult = {
+    isLoading: false,
+    isError: false,
+    data: data
 };
 
-const mockDefaultResponseLoading = {
+const mockDefaultResponseLoading: IEditorContentsResult = {
     isLoading: true,
     isError: false,
-    data: {
-        'fi': 'foo'
-    }
+    data: data
 };
 
-const mockDefaultResponseError = {
+const mockDefaultResponseError: IEditorContentsResult = {
     isLoading: false,
     isError: true,
-    data: {
-        'fi': 'foo'
-    }
+    data: data
 };
 
 const mockLang = 'fi';
@@ -66,7 +69,7 @@ describe('Rendering test', () => {
                 visualizationSettingsUserInput: {},
                 setVisualizationSettingsUserInput: jest.fn()
             }}>
-                <HeaderEditor defaultHeaderResponse={mockDefaultResponse} language={mockLang} style={{}} />
+                <HeaderEditor editorContentResponse={mockDefaultResponse} language={mockLang} style={{}} />
             </EditorContext.Provider>
         );
         expect(asFragment()).toMatchSnapshot();
@@ -87,7 +90,7 @@ describe('Rendering test', () => {
                     visualizationSettingsUserInput: {},
                     setVisualizationSettingsUserInput: jest.fn()
                 }}>
-                    <HeaderEditor defaultHeaderResponse={mockDefaultResponseLoading} language={mockLang} style={{}} />
+                    <HeaderEditor editorContentResponse={mockDefaultResponseLoading} language={mockLang} style={{}} />
                 </EditorContext.Provider>
 
         );
@@ -109,7 +112,7 @@ describe('Rendering test', () => {
                         visualizationSettingsUserInput: {},
                         setVisualizationSettingsUserInput: jest.fn()
                     }}>
-                        <HeaderEditor defaultHeaderResponse={mockDefaultResponseError} language={mockLang} style={{}} />
+                        <HeaderEditor editorContentResponse={mockDefaultResponseError} language={mockLang} style={{}} />
                     </EditorContext.Provider>
 
         );
@@ -134,7 +137,7 @@ describe('Assertion tests', () => {
                 visualizationSettingsUserInput: {},
                 setVisualizationSettingsUserInput: jest.fn()
             }}>
-                <HeaderEditor defaultHeaderResponse={mockDefaultResponse} language={mockLang} style={{}} />
+                <HeaderEditor editorContentResponse={mockDefaultResponse} language={mockLang} style={{}} />
             </EditorContext.Provider>
         );
         fireEvent.change(screen.getByDisplayValue(mockCubeQuery.chartHeaderEdit['fi']), { target: { value: 'editValue2' } });

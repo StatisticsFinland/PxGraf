@@ -2,10 +2,10 @@ import React from 'react';
 import '@testing-library/jest-dom';
 import { render, screen, fireEvent } from '@testing-library/react';
 import MarkerScaler from "./MarkerScaler";
-import { IVisualizationRules } from '../../../types/visualizationRules';
 import { IVisualizationSettings } from '../../../types/visualizationSettings';
 import { EditorContext } from '../../../contexts/editorContext';
 import { VisualizationType } from '../../../types/visualizationType';
+import { IVisualizationOptions } from '../../../types/editorContentsResponse';
 
 jest.mock('react-i18next', () => ({
     ...jest.requireActual('react-i18next'),
@@ -19,11 +19,11 @@ jest.mock('react-i18next', () => ({
     },
 }));
 
-const mockVisualizationRules: IVisualizationRules = {
+const mockVisualizationRules: IVisualizationOptions = {
     allowManualPivot: null,
     sortingOptions: null,
-    multiselectDimensionAllowed: null
-};
+    allowMultiselect: null
+} as unknown as IVisualizationOptions;
 
 const mockVisualizationSettings: IVisualizationSettings = {
     defaultSelectableVariableCodes: null,
@@ -41,7 +41,7 @@ describe('Rendering test', () => {
     it('renders correctly', () => {
         const { asFragment } = render(
             <MarkerScaler
-                visualizationRules={mockVisualizationRules}
+                visualizationOptions={mockVisualizationRules}
                 visualizationSettings={mockVisualizationSettings}
             />);
         expect(asFragment()).toMatchSnapshot();
@@ -53,7 +53,7 @@ describe('Assertion tests', () => {
         const toggledMockSettings = { ...mockVisualizationSettings, markerSize: 123 }
         render(
             <MarkerScaler
-                visualizationRules={mockVisualizationRules}
+                visualizationOptions={mockVisualizationRules}
                 visualizationSettings={toggledMockSettings}
             />);
         expect(screen.getByDisplayValue('123')).toHaveValue('123');
@@ -77,7 +77,7 @@ describe('Assertion tests', () => {
                 setVisualizationSettingsUserInput: mockSettingsChangedHandler
             }}>
                 <MarkerScaler
-                    visualizationRules={mockVisualizationRules}
+                    visualizationOptions={mockVisualizationRules}
                     visualizationSettings={mockVisualizationSettings}
                 />
             </EditorContext.Provider>
