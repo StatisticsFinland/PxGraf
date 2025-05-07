@@ -184,7 +184,7 @@ export const Editor = () => {
 
     const visualizationSettings = React.useMemo(() => {
         if (selectedVisualization != null && visualizationOptions?.sortingOptions != null && resolvedDimensions != null) {
-            const sortingOptions = visualizationOptions?.allowManualPivot && visualizationSettingsUserInput.pivotRequested ? visualizationOptions?.sortingOptions.pivoted : visualizationOptions?.sortingOptions.default;
+            const sortingOptions = visualizationOptions?.allowManualPivot && visualizationSettingsUserInput?.pivotRequested ? visualizationOptions?.sortingOptions.pivoted : visualizationOptions?.sortingOptions.default;
             const result = getValidatedSettings(visualizationSettingsUserInput, selectedVisualization, sortingOptions, resolvedDimensions, modifiedQuery);
             if (defaultSelectables && Object.keys(defaultSelectables).length > 0) {
                 result.defaultSelectableVariableCodes = defaultSelectables;
