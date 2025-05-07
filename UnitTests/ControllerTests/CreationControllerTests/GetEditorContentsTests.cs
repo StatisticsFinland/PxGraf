@@ -53,5 +53,59 @@ namespace UnitTests.ControllerTests.CreationControllerTests
             ActionResult<EditorContentsResponse> editorContent = await testController.GetEditorContents(cubeQuery);
             Assert.That(editorContent, Is.Not.Null);
         }
+
+        [Test]
+        public async Task GetEditorContents_QueryWithoutDimensions_ReturnsEmpty()
+        {
+            List<DimensionParameters> metaParams =
+            [
+                new DimensionParameters(DimensionType.Content, 5),
+                new DimensionParameters(DimensionType.Time, 5),
+                new DimensionParameters(DimensionType.Other, 6),
+                new DimensionParameters(DimensionType.Other, 7),
+                new DimensionParameters(DimensionType.Other, 4),
+            ];
+
+            CreationController testController = TestCreationControllerBuilder.BuildController([], metaParams);
+            MatrixQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery([]);
+
+            ActionResult<EditorContentsResponse> editorContent = await testController.GetEditorContents(cubeQuery);
+
+            Assert.That(editorContent, Is.Not.Null);
+            Assert.That(editorContent.Value, Is.Not.Null);
+            Assert.That(editorContent.Value.Size.Equals(0), Is.True);
+        }
+
+        [Test]
+        public async Task GetEditorContents_QueryWithZeroSize_ReturnsEmpty()
+        {
+            List<DimensionParameters> cubeParams =
+            [
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 8),
+                new DimensionParameters(DimensionType.Other, 3),
+                new DimensionParameters(DimensionType.Other, 0), // Zero size dimension query
+                new DimensionParameters(DimensionType.Other, 2) { Selectable = true},
+            ];
+
+            List<DimensionParameters> metaParams =
+            [
+                new DimensionParameters(DimensionType.Content, 5),
+                new DimensionParameters(DimensionType.Time, 5),
+                new DimensionParameters(DimensionType.Other, 6),
+                new DimensionParameters(DimensionType.Other, 7),
+                new DimensionParameters(DimensionType.Other, 4),
+            ];
+
+
+            CreationController testController = TestCreationControllerBuilder.BuildController(cubeParams, metaParams);
+            MatrixQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
+
+            ActionResult<EditorContentsResponse> editorContent = await testController.GetEditorContents(cubeQuery);
+
+            Assert.That(editorContent, Is.Not.Null);
+            Assert.That(editorContent.Value, Is.Not.Null);
+            Assert.That(editorContent.Value.Size.Equals(0), Is.True);
+        }
     }
 }
