@@ -53,13 +53,6 @@ export const VisualizationSettingControl: React.FC<IVisualizationSettingControlP
     const selectableDimensionsExcludingContent: IDimension[] = selectableDimensions?.filter(fv => fv.type !== EDimensionType.Content);
     const showMultiselectableSelector: boolean = visualizationOptions?.allowMultiselect && selectableDimensionsExcludingContent.length > 0;
 
-    React.useEffect(() => {
-        console.log('showMulti', showMultiselectableSelector);
-        console.log('allowMulti', visualizationOptions?.allowMultiselect);
-        console.log('selectables', selectableDimensionsExcludingContent.length);
-        console.log('visualizationopt', visualizationOptions);
-    }, [visualizationOptions]);
-
     return (
         <div>
             <InfoBubble info={t('infoText.visualizationConfiguration')} ariaLabel={t('tooltip.visualizationConfig')} />

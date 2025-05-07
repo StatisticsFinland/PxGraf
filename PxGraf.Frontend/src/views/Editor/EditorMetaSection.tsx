@@ -101,12 +101,12 @@ const TitleWrapper = styled.div`
 /**
  * Component for editing meta data information for the visualization. Used in @see {@link Editor} view.
  * In this view the user can change the visualization type and settings and edit the meta data information such as the chart header for the visualization.
- * @param {IHeaderResult} defaultHeaderResponse Default header retrieved for the table.
+ * @param {IEditorMetaSectionProps} editorContentsResponse Editor contents response from the API.
  * @param {VisualizationType} selectedVisualization Currently selected visualization type.
  * @param {IVisualizationSettings} settings Visualization settings.
  * @param {IDimension[]} resolvedDimensions: Resolved dimension codes.
- * @param {IVisualizationSettingsResult} visualizationRulesResponse Response object for rules based on the selected visualization type.
- * @param {IQueryInfo} queryInfo Information about the query.
+ * @param {Query} dimensionQuery: Query object containing the selected values for each dimension.
+ * @param {string[]} contentLanguages: List of available content languages.
  */
 export const EditorMetaSection: React.FC<IEditorMetaSectionProps> = ({ editorContentsResponse, selectedVisualization, settings, resolvedDimensions, dimensionQuery, contentLanguages }) => {
     const { language, languageTab, setLanguageTab } = React.useContext(UiLanguageContext);
