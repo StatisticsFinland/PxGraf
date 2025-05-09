@@ -1,32 +1,30 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-
 import {
     FormControlLabel, FormControl, Button, Dialog, DialogTitle,
     DialogContent, DialogActions, FormLabel, RadioGroup, Radio,
 } from '@mui/material';
-
 import SaveIcon from '@mui/icons-material/Save';
+import { EditorContext } from '../../contexts/editorContext';
 
 interface ISaveDialogProps {
-    open: boolean;
-    onClose: () => void;
     onSave: (archive: boolean) => void;
 }
 
-export const SaveDialog: React.FC<ISaveDialogProps> = ({ open, onClose, onSave }) => {
+export const SaveDialog: React.FC<ISaveDialogProps> = ({ onSave }) => {
     const { t } = useTranslation();
     const [selected, setSelected] = useState("dynamic");
+    const { saveDialogOpen, setSaveDialogOpen } = React.useContext(EditorContext);
 
     const saveAndClose = () => {
         onSave(selected === "static");
-        onClose();
+        setSaveDialogOpen(false);
     };
 
     return (
         <Dialog
-            open={open}
-            onClose={onClose}
+            open={saveDialogOpen}
+            onClose={() => setSaveDialogOpen(false)}
             scroll='paper'
             aria-labelledby="scroll-dialog-title"
             aria-describedby="scroll-dialog-description"
@@ -48,7 +46,7 @@ export const SaveDialog: React.FC<ISaveDialogProps> = ({ open, onClose, onSave }
                 </FormControl>
             </DialogContent>
             <DialogActions>
-                <Button onClick={onClose}>{t("saveDialog.cancel")}</Button>
+                <Button onClick={() => setSaveDialogOpen(false)}>{t("saveDialog.cancel")}</Button>
                 <Button onClick={saveAndClose} variant="contained" startIcon={<SaveIcon />}>{t("saveDialog.save")}</Button>
             </DialogActions>
         </Dialog>

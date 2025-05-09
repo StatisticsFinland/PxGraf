@@ -27,10 +27,14 @@ export const EditorField: React.FC<IEditorFieldProps> = ({ label, defaultValue, 
     const { t } = useTranslation();
     const inputId = useId();
     const ALERT_TRESHOLD = 0.556;
-
-    const value: string = editValue ?? defaultValue;
+    const [localValue, setLocalValue] = React.useState(editValue ?? defaultValue);
     const isEdited: boolean = editValue != null;
-    const showAlert = maxLength && (value.length / maxLength) > ALERT_TRESHOLD;
+    const showAlert = maxLength && (localValue.length / maxLength) > ALERT_TRESHOLD;
+
+    React.useEffect(() => {
+        const value = editValue ?? defaultValue;
+        setLocalValue(value);
+    }, [defaultValue, editValue]);
 
     return (
         <FormControl variant="outlined" style={style}>
@@ -38,15 +42,19 @@ export const EditorField: React.FC<IEditorFieldProps> = ({ label, defaultValue, 
             <StyledOutlinedInput
                 id={inputId}
                 type='text'
-                value={value.substring(0, maxLength || value.length)}
+                value={localValue}
                 onChange={evt => {
                     const parsedValue = evt.target.value.substring(0, maxLength || evt.target.value.length);
-                    onChange(parsedValue);
+                    setLocalValue(parsedValue);
                 }}
+                onBlur={() => onChange(localValue)}
                 endAdornment={
                     isEdited && (
                         <InputAdornment position="end">
-                            <RevertButton onClick={onChange} />
+                            <RevertButton onClick={() => {
+                                setLocalValue(defaultValue);
+                                onChange();
+                            }}/>
                         </InputAdornment>
                     )
                 }
@@ -56,8 +64,8 @@ export const EditorField: React.FC<IEditorFieldProps> = ({ label, defaultValue, 
             <div aria-live='polite'>
             {
                 showAlert &&
-                <Alert severity={(value.length / maxLength) < 1 ? 'warning' : 'error'}>
-                    {`${t('titleWarning.maxLengthText')} ${maxLength} ${t('titleWarning.charactersText')}. ${t('titleWarning.usedLengthText')} ${value.length} ${t('titleWarning.charactersText')}.`}
+                    <Alert severity={(localValue.length / maxLength) < 1 ? 'warning' : 'error'}>
+                        {`${t('titleWarning.maxLengthText')} ${maxLength} ${t('titleWarning.charactersText')}. ${t('titleWarning.usedLengthText')} ${localValue.length} ${t('titleWarning.charactersText')}.`}
                 </Alert>
             }
             </div>

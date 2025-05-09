@@ -18,12 +18,12 @@ export const EditorDialogs: React.FC<IEditorDialogsProps> = ({saveQueryMutation}
         setSaveResultDialogOpen(true);
     }
 
-    const {saveDialogOpen, setSaveDialogOpen} = React.useContext(EditorContext);
+    const {setSaveDialogOpen} = React.useContext(EditorContext);
     const [saveResultDialogOpen, setSaveResultDialogOpen] = React.useState(false);
     
     return (
         <>
-            <SaveDialog open={saveDialogOpen} onClose={() => setSaveDialogOpen(false)} onSave = {saveQueryAndShowResult}/>
+            <SaveDialog onSave = {saveQueryAndShowResult}/>
             <SaveResultDialog
             open={saveResultDialogOpen}
             onClose={() => setSaveResultDialogOpen(false)}

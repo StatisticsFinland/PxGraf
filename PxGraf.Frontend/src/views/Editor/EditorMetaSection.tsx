@@ -4,22 +4,21 @@ import { useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import MetaEditor from 'components/MetaEditor/MetaEditor';
 import ChartTypeSelector from 'components/ChartTypeSelector/ChartTypeSelector';
-import { EditorContext } from 'contexts/editorContext';
 import { useTranslation } from 'react-i18next';
 import { a11yProps } from 'utils/componentHelpers';
 import TabPanel from 'components/TabPanel/TabPanel';
 import VisualizationSettingControl from 'components/VisualizationSettingsControls/VisualizationSettingsControl';
 import styled from 'styled-components';
 import { IDimension } from 'types/cubeMeta';
-import { IHeaderResult } from 'api/services/default-header';
 import { VisualizationType } from 'types/visualizationType';
 import { IVisualizationSettings } from 'types/visualizationSettings';
-import { ICubeQuery, IQueryInfo, Query } from 'types/query';
-import { IVisualizationSettingsResult } from 'api/services/visualization-rules';
+import { Query } from 'types/query';
 import ChartTypeRejectionReasons from 'components/ChartTypeRejectionReasons/ChartTypeRejectionReasons';
 import CellCount from 'components/CellCount/CellCount';
 import InfoBubble from 'components/InfoBubble/InfoBubble';
 import UiLanguageContext from 'contexts/uiLanguageContext';
+import { IEditorContentsResult } from '../../api/services/editor-contents';
+import { getVisualizationOptionsForType } from '../../utils/editorHelpers';
 
 const MetaWrapper = styled(Box)`
   grid-area: 'parameters';
@@ -86,13 +85,11 @@ const FlexContentWrapper = styled.div`
 `;
 
 interface IEditorMetaSectionProps {
-    defaultHeaderResponse: IHeaderResult;
+    editorContentsResponse: IEditorContentsResult;
     selectedVisualization: VisualizationType;
     settings: IVisualizationSettings;
     resolvedDimensions: IDimension[];
     dimensionQuery: Query;
-    visualizationRulesResponse: IVisualizationSettingsResult;
-    queryInfo: IQueryInfo;
     contentLanguages: string[];
 }
 
@@ -104,16 +101,14 @@ const TitleWrapper = styled.div`
 /**
  * Component for editing meta data information for the visualization. Used in @see {@link Editor} view.
  * In this view the user can change the visualization type and settings and edit the meta data information such as the chart header for the visualization.
- * @param {IHeaderResult} defaultHeaderResponse Default header retrieved for the table.
+ * @param {IEditorMetaSectionProps} editorContentsResponse Editor contents response from the API.
  * @param {VisualizationType} selectedVisualization Currently selected visualization type.
  * @param {IVisualizationSettings} settings Visualization settings.
  * @param {IDimension[]} resolvedDimensions: Resolved dimension codes.
- * @param {IVisualizationSettingsResult} visualizationRulesResponse Response object for rules based on the selected visualization type.
- * @param {IQueryInfo} queryInfo Information about the query.
+ * @param {Query} dimensionQuery: Query object containing the selected values for each dimension.
+ * @param {string[]} contentLanguages: List of available content languages.
  */
-export const EditorMetaSection: React.FC<IEditorMetaSectionProps> = ({ defaultHeaderResponse, selectedVisualization, settings, resolvedDimensions, dimensionQuery, visualizationRulesResponse, queryInfo, contentLanguages }) => {
-
-    const { setSelectedVisualizationUserInput, setVisualizationSettingsUserInput, setCubeQuery, cubeQuery } = React.useContext(EditorContext);
+export const EditorMetaSection: React.FC<IEditorMetaSectionProps> = ({ editorContentsResponse, selectedVisualization, settings, resolvedDimensions, dimensionQuery, contentLanguages }) => {
     const { language, languageTab, setLanguageTab } = React.useContext(UiLanguageContext);
     const [isMetaAccordionOpen, setIsMetaAccordionOpen] = React.useState(false);
 
@@ -127,15 +122,11 @@ export const EditorMetaSection: React.FC<IEditorMetaSectionProps> = ({ defaultHe
     const { t } = useTranslation();
     const theme = useTheme();
 
-    const handleDimensionValueChange = (newEdits: ICubeQuery) => {
-        setCubeQuery(newEdits);
-    }
-
     const handleMetaAccordionOpenChange = () => {
         setIsMetaAccordionOpen(!isMetaAccordionOpen);
     }
 
-    if (visualizationRulesResponse.isError || defaultHeaderResponse.isError) {
+    if (editorContentsResponse.isError) {
         return (
             <ResponseWrapper>
                 <Alert severity="error">{t("error.contentLoad")}</Alert>
@@ -178,12 +169,10 @@ export const EditorMetaSection: React.FC<IEditorMetaSectionProps> = ({ defaultHe
                         <MetaEditor
                             language={editLanguage}
                             resolvedDimensions={resolvedDimensions}
-                            cubeQuery={cubeQuery}
-                            defaultHeaderResponse={defaultHeaderResponse}
-                            onChange={handleDimensionValueChange}
+                            editorContentsResponse={editorContentsResponse}
                             isMetaAccordionOpen={isMetaAccordionOpen}
                             onMetaAccordionOpenChange={handleMetaAccordionOpenChange}
-                            titleMaxLength={queryInfo ? queryInfo.maximumHeaderLength : undefined}
+                            titleMaxLength={editorContentsResponse.data ? editorContentsResponse.data.maximumHeaderLength : undefined}
                         />
                     </TabPanel>
                 )}
@@ -194,23 +183,21 @@ export const EditorMetaSection: React.FC<IEditorMetaSectionProps> = ({ defaultHe
                         <InfoBubble info={buttonInfo} ariaLabel={t('tooltip.visualizationType')} />
                         <ButtonGroupWrapper>
                             <ChartTypeSelector
-                                possibleTypes={queryInfo?.validVisualizations}
+                                possibleTypes={editorContentsResponse.data?.visualizationOptions.map(options => options.type.toString())}
                                 selectedType={selectedVisualization}
-                                onTypeSelected={setSelectedVisualizationUserInput}
                             />
                         </ButtonGroupWrapper>
-                        {(queryInfo?.visualizationRejectionReasons && Object.keys(queryInfo.visualizationRejectionReasons).length > 0) ? <ChartTypeRejectionReasons rejectionReasons={queryInfo.visualizationRejectionReasons} /> : <></>}
+                        {(editorContentsResponse.data?.visualizationRejectionReasons && Object.keys(editorContentsResponse.data?.visualizationRejectionReasons).length > 0) ? <ChartTypeRejectionReasons rejectionReasons={editorContentsResponse.data?.visualizationRejectionReasons} /> : <></>}
                     </FlexContentWrapper>
                     <FlexContentWrapper>
-                        {(queryInfo?.size && queryInfo?.maximumSupportedSize && queryInfo?.sizeWarningLimit) ? <CellCount size={queryInfo.size} maximumSize={queryInfo.maximumSupportedSize} warningLimit={queryInfo.sizeWarningLimit} /> : <></>}
+                        {(editorContentsResponse.data?.size && editorContentsResponse.data?.maximumSupportedSize && editorContentsResponse.data?.sizeWarningLimit) ? <CellCount size={editorContentsResponse.data?.size} maximumSize={editorContentsResponse.data?.maximumSupportedSize} warningLimit={editorContentsResponse.data?.sizeWarningLimit} /> : <></>}
                     </FlexContentWrapper>
                 </ChartTypeSelectorWrapper>
             </GridFixer>
                 {selectedVisualization != null && settings != null && <VisualizationSettingControl
                     selectedVisualization={selectedVisualization}
                     visualizationSettings={settings}
-                    visualizationRules={visualizationRulesResponse.data}
-                    settingsChangedHandler={setVisualizationSettingsUserInput}
+                    visualizationOptions={getVisualizationOptionsForType(editorContentsResponse.data.visualizationOptions, selectedVisualization)}
                     dimensions={resolvedDimensions}
                     dimensionQuery={dimensionQuery}
                 />}

@@ -1,7 +1,6 @@
 import DimensionSelectionList from 'components/VariableSelection/DimensionSelectionList';
 import React from 'react';
 import { Box } from '@mui/material';
-import { EditorContext } from 'contexts/editorContext';
 import styled from 'styled-components';
 import { IDimension } from 'types/cubeMeta';
 import { Query } from 'types/query';
@@ -43,15 +42,12 @@ const SelectorWrapper = styled(Box)<{width: number, $maxWidthPercentage: number}
  */
 export const EditorFilterSection: React.FC<EditorFilterSectionProps> = ({ dimensions, resolvedDimensionCodes, queries, width, maxWidthPercentage }) => {
     
-    const { setQuery } = React.useContext(EditorContext);
-
     return (
         <SelectorWrapper width={width} $maxWidthPercentage={maxWidthPercentage}>
             <DimensionSelectionList
                 dimensions={dimensions}
                 resolvedDimensionCodes={resolvedDimensionCodes}
                 query={queries}
-                onQueryChanged={setQuery}
             />
         </SelectorWrapper>
     )

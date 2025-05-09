@@ -1,5 +1,7 @@
 import { IDimension, EDimensionType } from "types/cubeMeta";
-import { getDefaultQueries, resolveDimensions } from "./editorHelpers";
+import { getDefaultQueries, getVisualizationOptionsForType, resolveDimensions } from "./editorHelpers";
+import { IVisualizationOptions } from "../types/editorContentsResponse";
+import { VisualizationType } from "../types/visualizationType";
 
 const mockDimensions: IDimension[] = [
     {
@@ -47,5 +49,39 @@ describe('resolveVariables tests', () => {
         const result = resolveDimensions(mockDimensions, {'foo': ['bar', 'baz']});
         expect(result).toBeTruthy();
         expect(result).toEqual(expected);
+    });
+});
+
+describe('getVisualizationOptionsForType tests', () => {
+    it('Should return the correct object', () => {
+        const mockVisualizationOptions: IVisualizationOptions[] = [
+            {
+                type: VisualizationType.LineChart,
+                allowManualPivot: false,
+                allowMultiselect: true,
+                sortingOptions: {
+                    default: null,
+                    pivoted: null
+                }
+            },
+            {
+                type: VisualizationType.Table,
+                allowManualPivot: true,
+                allowMultiselect: false,
+                sortingOptions: {
+                    default: null,
+                    pivoted: null
+                }
+            }
+        ];
+        const result = getVisualizationOptionsForType(mockVisualizationOptions, VisualizationType.LineChart);
+        expect(result).toBeTruthy();
+        expect(result).toEqual(mockVisualizationOptions[0]);
+    });
+
+    it('Should return undefined if type not found', () => {
+        const mockVisualizationOptions: IVisualizationOptions[] = [];
+        const result = getVisualizationOptionsForType(mockVisualizationOptions, VisualizationType.LineChart);
+        expect(result).toEqual(undefined);
     });
 });

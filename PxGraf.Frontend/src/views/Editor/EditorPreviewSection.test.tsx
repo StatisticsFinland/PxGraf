@@ -7,6 +7,7 @@ import { FilterType, ICubeQuery, Query } from "types/query";
 import { IVisualizationSettings } from "types/visualizationSettings";
 import { VisualizationType } from "types/visualizationType";
 import serializer from "../../testUtils/stripHighchartsHashes";
+import { IEditorContentsResult } from '../../api/services/editor-contents';
 
 jest.mock('envVars', () => ({
     PxGrafUrl: 'pxGrafUrl.fi/',
@@ -167,39 +168,75 @@ const mockVisualizationSettings: IVisualizationSettings = {
     ]
 };
 
-const mockQueryInfo = {
-    maximumHeaderLength: 120,
-    maximumSupportedSize: 100,
-    size: 5,
-    sizeWarningLimit: 75,
-    validVisualizations: ['VerticalBarChart', 'HorizontalBarChart'],
-    visualizationRejectionReasons: {
-        'pieChart': {
-            'fi': 'huono kaavio'
+const mockEditorContents: IEditorContentsResult = {
+    isError: false,
+    isLoading: false,
+    data: {
+        maximumHeaderLength: 120,
+        maximumSupportedSize: 100,
+        size: 5,
+        sizeWarningLimit: 75,
+        visualizationRejectionReasons: {
+            'pieChart': {
+                'fi': 'huono kaavio'
+            }
+        },
+        visualizationOptions: [
+            {
+                allowManualPivot: false,
+                sortingOptions: null,
+                allowMultiselect: false,
+                allowShowingDataPoints: true,
+                type: VisualizationType.VerticalBarChart
+            },
+            {
+                allowManualPivot: false,
+                sortingOptions: null,
+                allowMultiselect: false,
+                allowShowingDataPoints: false,
+                type: VisualizationType.HorizontalBarChart
+            }
+        ],
+        headerText: {
+            'fi': 'foo'
         }
     }
 };
 
-const mockQueryInfoNoValidVisualizations = {
-    maximumHeaderLength: 120,
-    maximumSupportedSize: 100,
-    size: 5,
-    sizeWarningLimit: 75,
-    validVisualizations: [],
-    visualizationRejectionReasons: {
-        'pieChart': {
-            'fi': 'huono kaavio'
+const mockEditorContentsNoValidVisualization: IEditorContentsResult = {
+    isError: false,
+    isLoading: false,
+    data: {
+        maximumHeaderLength: 120,
+        maximumSupportedSize: 100,
+        size: 5,
+        sizeWarningLimit: 75,
+        visualizationRejectionReasons: {
+            'pieChart': {
+                'fi': 'huono kaavio'
+            }
+        },
+        visualizationOptions: [],
+        headerText: {
+            'fi': 'foo'
         }
     }
 };
 
-const mockQueryInfoNoRejectionsOrVisualizations = {
-    maximumHeaderLength: 120,
-    maximumSupportedSize: 100,
-    size: 5,
-    sizeWarningLimit: 75,
-    validVisualizations: [],
-    visualizationRejectionReasons: {}
+const mockEditorContentsEmptyVisualizationsAndRejections: IEditorContentsResult = {
+    isError: false,
+    isLoading: false,
+    data: {
+        maximumHeaderLength: 120,
+        maximumSupportedSize: 100,
+        size: 5,
+        sizeWarningLimit: 75,
+        visualizationRejectionReasons: {},
+        visualizationOptions: [],
+        headerText: {
+            'fi': 'foo'
+        }
+    }
 };
 
 jest.mock('react-i18next', () => ({
@@ -257,7 +294,7 @@ describe('Rendering test', () => {
                 query={mockQuery}
                 selectedVisualization={mockSelectedVisualization as VisualizationType}
                 visualizationSettings={mockVisualizationSettings}
-                queryInfo={mockQueryInfo}
+                editorContents={mockEditorContents}
             />);
         expect(asFragment()).toMatchSnapshot();
     });
@@ -268,7 +305,7 @@ describe('Rendering test', () => {
                 query={mockQuery}
                 selectedVisualization={mockSelectedVisualization as VisualizationType}
                 visualizationSettings={mockVisualizationSettings}
-                queryInfo={mockQueryInfoNoValidVisualizations}
+                editorContents={mockEditorContentsNoValidVisualization}
             />);
         expect(asFragment()).toMatchSnapshot();
     });
@@ -279,7 +316,7 @@ describe('Rendering test', () => {
                 query={mockQuery}
                 selectedVisualization={mockSelectedVisualization as VisualizationType}
                 visualizationSettings={mockVisualizationSettings}
-                queryInfo={mockQueryInfoNoRejectionsOrVisualizations}
+                editorContents={mockEditorContentsEmptyVisualizationsAndRejections}
             />);
         expect(asFragment()).toMatchSnapshot();
     });

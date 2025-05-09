@@ -107,4 +107,18 @@ describe('Rendering test', () => {
             </UiLanguageContext.Provider>);
         expect(asFragment()).toMatchSnapshot();
     });
+
+    it('renders correctly without resolved dimension value codes', () => {
+        const { asFragment } = render(
+            <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
+                <EditorContext.Provider value={{ cubeQuery, setCubeQuery, query, setQuery, saveDialogOpen, setSaveDialogOpen, selectedVisualizationUserInput, setSelectedVisualizationUserInput, visualizationSettingsUserInput, setVisualizationSettingsUserInput, defaultSelectables, setDefaultSelectables }}>
+                    <DefaultSelectableDimensionSelection
+                        options={mockDimensionValues}
+                        resolvedDimensionValueCodes={[]}
+                        dimensionCode={'foo'}
+                    />
+                </EditorContext.Provider>
+            </UiLanguageContext.Provider>);
+        expect(asFragment()).toMatchSnapshot();
+    });
 });

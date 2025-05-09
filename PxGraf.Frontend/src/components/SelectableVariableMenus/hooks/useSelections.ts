@@ -1,10 +1,9 @@
 import { useState } from 'react';
-import { IMenuProps } from '../SelectableDimensionMenus';
+import { ISelectableSelections } from '../SelectableDimensionMenus';
 
-const useSelections = (initialSelections: IMenuProps = {}) => {
-  const [selections, setSelections] = useState(initialSelections);
-
-  return {selections, setSelections};
+const useSelections = (initialSelections: ISelectableSelections = {}) => {
+    const [selections, setSelections] = useState(initialSelections);
+    return {selections, setSelections};
 }
 
 export default useSelections;

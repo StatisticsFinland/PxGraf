@@ -47,6 +47,7 @@ describe('Assertion tests', () => {
     it('Change event should fire when value has changed', () => {
         render(<EditorField defaultValue={mockDefaultValue} editValue={mockEditValue} label={mockLabel} onChange={mockFunction} />);
         fireEvent.change(screen.getByDisplayValue(mockEditValue), { target: { value: 'editValue2' } });
+        fireEvent.blur(screen.getByDisplayValue('editValue2'));
         expect(mockFunction).toHaveBeenCalledTimes(1);
     });
 });

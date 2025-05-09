@@ -1,6 +1,5 @@
 ﻿using PxGraf.Enums;
 using PxGraf.Models.Queries;
-using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 namespace PxGraf.Models.Requests

@@ -1,17 +1,18 @@
 import { Grid } from '@mui/material';
 import React from 'react';
 import { IContentDimensionValue, IDimension } from 'types/cubeMeta';
-import { IDimensionEditions, IDimensionValueEditions } from 'types/query';
+import { IDimensionValueEditions } from 'types/query';
 import { ContentDimensionValueEditor } from './ContentDimensionValueEditor';
+import { EditorContext } from '../../contexts/editorContext';
 
 interface IContentDimensionEditorProps {
     dimension: IDimension;
     language: string;
-    dimensionEdits: IDimensionEditions;
-    onChange: (newEdit: IDimensionEditions) => void;
 }
 
-export const ContentDimensionEditor: React.FC<IContentDimensionEditorProps> = ({ dimension, language, dimensionEdits, onChange }) => {
+export const ContentDimensionEditor: React.FC<IContentDimensionEditorProps> = ({ dimension, language }) => {
+    const { cubeQuery, setCubeQuery } = React.useContext(EditorContext);
+    const dimensionEdits = cubeQuery?.variableQueries[dimension.code];
 
     const handleChange = (newValueEdits: IDimensionValueEditions, code: string) => {
         const newDimensionEdit = {
@@ -22,7 +23,13 @@ export const ContentDimensionEditor: React.FC<IContentDimensionEditorProps> = ({
             }
         };
 
-        onChange(newDimensionEdit);
+        setCubeQuery({
+            ...cubeQuery,
+            variableQueries: {
+                ...cubeQuery?.variableQueries,
+                [dimension.code]: newDimensionEdit
+            }
+        });
     };
 
     return (

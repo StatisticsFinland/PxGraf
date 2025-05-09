@@ -14,7 +14,7 @@ in the [HighCharts shop](https://shop.highsoft.com/?utm_source=npmjs&utm_medium=
 - **APIs:** PxGraf's APIs provide functionality for processing the data for visualization and saving and loading queries.
 
 ## APIs
-- **Creation API:** Provides endpoints for fetching database listings, available languages and Px table metadata. It also provides functionality for metadata validation, filtering dimensions, generating default headers and determining which visualization types are valid for the given query. Can be disabled in the appsettings.json file.
+- **Creation API:** Provides endpoints for fetching database listings and Px table metadata. It also provides functionality for metadata validation and providing required contents for the visualization editor. Can be disabled in the appsettings.json file.
 - **Info API:** Provides information about the application. Its single endpoint returns the application's name, version and the environment it is running in.
 - **Query meta API:** Provides an endpoint that returns the metadata for a saved query given its ID.
 - **Saved query API:** Used for managing saved queries. Provides endpoints for fetching a saved query, saving a new query, archiving a query and re-archiving an existing query.

@@ -93,5 +93,5 @@ export enum EDimensionType {
     Ordinal = 'Ordinal',
     Nominal = 'Nominal',
     Other = 'Other',
-    Unknow = 'Unknown'
+    Unknown = 'Unknown'
 }

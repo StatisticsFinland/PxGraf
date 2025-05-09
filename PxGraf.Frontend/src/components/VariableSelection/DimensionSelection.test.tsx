@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from "@testing-library/react";
 import { IDimension, EDimensionType } from "types/cubeMeta";
-import { FilterType, IDimensionQuery } from "types/query";
+import { FilterType, Query } from "types/query";
 import DimensionSelection from "./DimensionSelection";
 import UiLanguageContext from "contexts/uiLanguageContext";
 
@@ -54,13 +54,15 @@ const mockDimension: IDimension =
     ]
 }
 
-const mockQuery: IDimensionQuery = {
-    valueFilter: {
-        type: FilterType.Top,
-        query: 4
-    },
-    selectable: false,
-    virtualValueDefinitions: null
+const mockQuery: Query = {
+    Vuosi: {
+        valueFilter: {
+            type: FilterType.Top,
+            query: 4
+        },
+        selectable: false,
+        virtualValueDefinitions: null
+    }
 };
 
 const setLanguage = jest.fn();
@@ -92,8 +94,7 @@ describe('Rendering test', () => {
             <DimensionSelection
                 dimension={mockDimension}
                 resolvedDimensionValueCodes={["2018", "2019", "2020", "2021*"]}
-                query={mockQuery}
-                onQueryChanged={(newValues) => {}}/>
+                query={mockQuery}/>
         </UiLanguageContext.Provider>
         );
         expect(asFragment()).toMatchSnapshot();

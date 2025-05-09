@@ -1,12 +1,13 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import { IHeaderResult } from 'api/services/default-header';
 import '@testing-library/jest-dom';
 import { EMetaPropertyType, IDimension, EDimensionType } from 'types/cubeMeta';
 import { ICubeQuery } from 'types/query';
 import MetaEditor from './MetaEditor';
 import UiLanguageContext from 'contexts/uiLanguageContext';
 import { EditorContext } from 'contexts/editorContext';
+import { IEditorContentsResult } from '../../api/services/editor-contents';
+import { IEditorContentsResponse } from '../../types/editorContentsResponse';
 
 jest.mock('react-i18next', () => ({
     ...jest.requireActual('react-i18next'),
@@ -108,14 +109,18 @@ const mockFunction = jest.fn();
 
 const isMetaAccordionOpenMock = true;
 
-const defaultHeaderResponseMock: IHeaderResult = {
-    isLoading: false,
-    isError: false,
-    data: {
+const data: IEditorContentsResponse = {
+    headerText: {
         'fi': 'asd',
         'en': 'asd',
         'sv': 'asd'
     }
+} as unknown as IEditorContentsResponse;
+
+const defaultHeaderResponseMock: IEditorContentsResult = {
+    isLoading: false,
+    isError: false,
+    data: data
 }
 
 const mockCubeQuery: ICubeQuery = {
@@ -148,7 +153,6 @@ const mockCubeQuery: ICubeQuery = {
 
 const defaultSelectables = { foo: ['2018'] };
 const setDefaultSelectables = jest.fn();
-const cubeQuery = null;
 const setCubeQuery = jest.fn();
 const query = null;
 const setQuery = jest.fn();
@@ -163,14 +167,12 @@ describe('Rendering test', () => {
     it('renders correctly', () => {
         const { asFragment } = render(
             <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
-                <EditorContext.Provider value={{ cubeQuery, setCubeQuery, query, setQuery, saveDialogOpen, setSaveDialogOpen, selectedVisualizationUserInput, setSelectedVisualizationUserInput, visualizationSettingsUserInput, setVisualizationSettingsUserInput, defaultSelectables, setDefaultSelectables }}>
+                <EditorContext.Provider value={{ cubeQuery: mockCubeQuery, setCubeQuery, query, setQuery, saveDialogOpen, setSaveDialogOpen, selectedVisualizationUserInput, setSelectedVisualizationUserInput, visualizationSettingsUserInput, setVisualizationSettingsUserInput, defaultSelectables, setDefaultSelectables }}>
                     <MetaEditor
                         resolvedDimensions={mockDimensions}
-                        cubeQuery={mockCubeQuery}
-                        defaultHeaderResponse={defaultHeaderResponseMock}
+                        editorContentsResponse={defaultHeaderResponseMock}
                         isMetaAccordionOpen={isMetaAccordionOpenMock}
                         language={mockLang}
-                        onChange={mockFunction}
                         onMetaAccordionOpenChange={mockFunction}
                     />
                 </EditorContext.Provider>

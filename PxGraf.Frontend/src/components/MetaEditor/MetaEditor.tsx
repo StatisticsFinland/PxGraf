@@ -7,12 +7,10 @@ import { DimensionEditor } from './DimensionEditor';
 import { HeaderEditor } from './HeaderEditor';
 import { a11yProps } from 'utils/componentHelpers';
 import styled from 'styled-components';
-import { ICubeQuery } from 'types/query';
-import { MultiLanguageString } from 'types/multiLanguageString';
 import { IDimension } from 'types/cubeMeta';
-import { IHeaderResult } from 'api/services/default-header';
 import InfoBubble from 'components/InfoBubble/InfoBubble';
 import { UiLanguageContext } from 'contexts/uiLanguageContext';
+import { IEditorContentsResult } from '../../api/services/editor-contents';
 
 const MetaEditorWrapper = styled(Box)`
   grid-area: 'parameters';
@@ -59,9 +57,7 @@ export interface INewEditMetaEditor {
 interface IMetaEditorProps {
     language: string;
     resolvedDimensions: IDimension[];
-    cubeQuery: ICubeQuery;
-    defaultHeaderResponse: IHeaderResult;
-    onChange: (newEdit: ICubeQuery) => void;
+    editorContentsResponse: IEditorContentsResult;
     isMetaAccordionOpen: boolean;
     onMetaAccordionOpenChange: () => void;
     titleMaxLength?: number;
@@ -71,9 +67,7 @@ interface IMetaEditorProps {
 export const MetaEditor: React.FC<IMetaEditorProps> = ({
     language,
     resolvedDimensions,
-    cubeQuery,
-    defaultHeaderResponse,
-    onChange,
+    editorContentsResponse,
     isMetaAccordionOpen,
     onMetaAccordionOpenChange,
     titleMaxLength,
@@ -86,10 +80,8 @@ export const MetaEditor: React.FC<IMetaEditorProps> = ({
         <MetaEditorWrapper>
             <HeaderEditor
                 style={{ width: '100%' }}
-                defaultHeaderResponse={defaultHeaderResponse}
-                editValue={cubeQuery?.chartHeaderEdit}
+                editorContentResponse={editorContentsResponse}
                 language={language}
-                onChange={(title: MultiLanguageString) => onChange({ ...cubeQuery, chartHeaderEdit: title })}
                 maxLength={titleMaxLength}
             />
             <GridFixer>
@@ -119,22 +111,6 @@ export const MetaEditor: React.FC<IMetaEditorProps> = ({
                                             <DimensionEditor
                                                 dimension={dimension}
                                                 language={language}
-                                                dimensionEdits={cubeQuery?.variableQueries[dimension.code]}
-                                                onChange={newEdit => {
-                                                    onChange({
-                                                        ...cubeQuery,
-                                                        variableQueries: {
-                                                            ...cubeQuery?.variableQueries,
-                                                            [dimension.code]: {
-                                                                ...cubeQuery?.variableQueries[dimension.code],
-                                                                valueEdits: {
-                                                                    ...cubeQuery?.variableQueries[dimension.code]?.valueEdits,
-                                                                    ...newEdit.valueEdits
-                                                                }
-                                                            }
-                                                        }
-                                                    })
-                                                }}
                                             />
                                         </TabPanel>
                                     );

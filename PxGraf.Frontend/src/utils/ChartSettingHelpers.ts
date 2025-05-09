@@ -1,8 +1,8 @@
 import { IDimension } from "types/cubeMeta";
 import { Query } from "types/query";
-import { ISortingOption } from "types/visualizationRules";
 import { IVisualizationSettings } from "types/visualizationSettings";
 import { VisualizationType } from "types/visualizationType";
+import { ISortingOption } from "../types/editorContentsResponse";
 
 export function getValidatedSettings(currentSettings: IVisualizationSettings, selectedVisualization: VisualizationType, sortingOptions: ISortingOption[], dimensions: IDimension[], query: Query): IVisualizationSettings {
     switch (selectedVisualization) {

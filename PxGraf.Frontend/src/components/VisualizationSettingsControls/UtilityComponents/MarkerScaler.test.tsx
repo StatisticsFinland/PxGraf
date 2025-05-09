@@ -2,8 +2,10 @@ import React from 'react';
 import '@testing-library/jest-dom';
 import { render, screen, fireEvent } from '@testing-library/react';
 import MarkerScaler from "./MarkerScaler";
-import { IVisualizationRules } from '../../../types/visualizationRules';
 import { IVisualizationSettings } from '../../../types/visualizationSettings';
+import { EditorContext } from '../../../contexts/editorContext';
+import { VisualizationType } from '../../../types/visualizationType';
+import { IVisualizationOptions } from '../../../types/editorContentsResponse';
 
 jest.mock('react-i18next', () => ({
     ...jest.requireActual('react-i18next'),
@@ -17,11 +19,11 @@ jest.mock('react-i18next', () => ({
     },
 }));
 
-const mockVisualizationRules: IVisualizationRules = {
+const mockVisualizationRules: IVisualizationOptions = {
     allowManualPivot: null,
     sortingOptions: null,
-    multiselectDimensionAllowed: null
-};
+    allowMultiselect: null
+} as unknown as IVisualizationOptions;
 
 const mockVisualizationSettings: IVisualizationSettings = {
     defaultSelectableVariableCodes: null,
@@ -37,12 +39,10 @@ const mockVisualizationSettings: IVisualizationSettings = {
 
 describe('Rendering test', () => {
     it('renders correctly', () => {
-        const mockSettingsChangedHandler = jest.fn();
         const { asFragment } = render(
             <MarkerScaler
-                visualizationRules={mockVisualizationRules}
+                visualizationOptions={mockVisualizationRules}
                 visualizationSettings={mockVisualizationSettings}
-                settingsChangedHandler={mockSettingsChangedHandler}
             />);
         expect(asFragment()).toMatchSnapshot();
     });
@@ -50,13 +50,11 @@ describe('Rendering test', () => {
 
 describe('Assertion tests', () => {
     it('Marker size value should be 123 when the corresponding parameter value is 123', () => {
-        const mockSettingsChangedHandler = jest.fn();
         const toggledMockSettings = { ...mockVisualizationSettings, markerSize: 123 }
         render(
             <MarkerScaler
-                visualizationRules={mockVisualizationRules}
+                visualizationOptions={mockVisualizationRules}
                 visualizationSettings={toggledMockSettings}
-                settingsChangedHandler={mockSettingsChangedHandler}
             />);
         expect(screen.getByDisplayValue('123')).toHaveValue('123');
     });
@@ -64,11 +62,25 @@ describe('Assertion tests', () => {
     it('MarkerScaler onChange and onChangeCommitted should work properly', () => {
         const mockSettingsChangedHandler = jest.fn();
         render(
-            <MarkerScaler
-                visualizationRules={mockVisualizationRules}
-                visualizationSettings={mockVisualizationSettings}
-                settingsChangedHandler={mockSettingsChangedHandler}
-            />
+            <EditorContext.Provider value={{
+                defaultSelectables: {},
+                setDefaultSelectables: jest.fn(),
+                cubeQuery: null,
+                setCubeQuery: jest.fn(),
+                query: {},
+                setQuery: jest.fn(),
+                saveDialogOpen: false,
+                setSaveDialogOpen: jest.fn(),
+                selectedVisualizationUserInput: VisualizationType.VerticalBarChart,
+                setSelectedVisualizationUserInput: jest.fn(),
+                visualizationSettingsUserInput: {},
+                setVisualizationSettingsUserInput: mockSettingsChangedHandler
+            }}>
+                <MarkerScaler
+                    visualizationOptions={mockVisualizationRules}
+                    visualizationSettings={mockVisualizationSettings}
+                />
+            </EditorContext.Provider>
         );
 
         const slider = screen.getByRole('slider');
