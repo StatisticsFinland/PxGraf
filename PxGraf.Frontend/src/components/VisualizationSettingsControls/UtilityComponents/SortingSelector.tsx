@@ -27,7 +27,7 @@ export const SortingSelector: React.FC<ISortingSelectorProps> = ({ sortingOption
                 id="sorting-selector"
                 label={t("chartSettings.sort")}
                 value={visualizationSettings.sorting}
-                onChange={(event) => setVisualizationSettingsUserInput({ ...visualizationSettings, sorting: event.target.value })}
+                onBlur={(event) => setVisualizationSettingsUserInput({ ...visualizationSettings, sorting: event.target.value })}
             >
                 {sortingOptions.map(v => { return <MenuItem key={"key" + v.code} value={v.code}>{v.description[uiContentLanguage]}</MenuItem> })}
             </Select>

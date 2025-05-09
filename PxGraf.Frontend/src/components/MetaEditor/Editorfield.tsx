@@ -27,10 +27,15 @@ export const EditorField: React.FC<IEditorFieldProps> = ({ label, defaultValue, 
     const { t } = useTranslation();
     const inputId = useId();
     const ALERT_TRESHOLD = 0.556;
+    const [localValue, setLocalValue] = React.useState(defaultValue);
 
     const value: string = editValue ?? defaultValue;
     const isEdited: boolean = editValue != null;
     const showAlert = maxLength && (value.length / maxLength) > ALERT_TRESHOLD;
+
+    React.useEffect(() => {
+        setLocalValue(defaultValue);
+    }, [defaultValue]);
 
     return (
         <FormControl variant="outlined" style={style}>
@@ -38,15 +43,19 @@ export const EditorField: React.FC<IEditorFieldProps> = ({ label, defaultValue, 
             <StyledOutlinedInput
                 id={inputId}
                 type='text'
-                value={value.substring(0, maxLength || value.length)}
+                value={localValue}
                 onChange={evt => {
                     const parsedValue = evt.target.value.substring(0, maxLength || evt.target.value.length);
-                    onChange(parsedValue);
+                    setLocalValue(parsedValue);
                 }}
+                onBlur={() => onChange(localValue)}
                 endAdornment={
                     isEdited && (
                         <InputAdornment position="end">
-                            <RevertButton onClick={onChange} />
+                            <RevertButton onClick={() => {
+                                setLocalValue(defaultValue);
+                                onChange(defaultValue);
+                            }}/>
                         </InputAdornment>
                     )
                 }

@@ -26,7 +26,6 @@ const fetchEditorContents = async (idStack: string[], query: Query, metaEdits: I
 }
 
 export const useEditorContentsQuery = (idStack: string[], query: Query, cubeQuery: ICubeQuery): IEditorContentsResult => {
-    [idStack, query, cubeQuery] = useDebounceState(1000, idStack, query, cubeQuery);
     const queryKey = ['editor-contents', ...idStack, query, cubeQuery];
     return useQuery(
         queryKey,

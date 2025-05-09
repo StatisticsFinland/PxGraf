@@ -25,7 +25,7 @@ export const MultiselectableSelector: React.FC<IMultiselectableSelectorProps> = 
                 label={"Monivalitaselausmuuttuja"}
                 value={visualizationSettings.multiselectableVariableCode ?? "noMultiselectable"}
                 defaultValue={"noMultiselectable"}
-                onChange={(event) => setVisualizationSettingsUserInput({
+                onBlur={(event) => setVisualizationSettingsUserInput({
                     ...visualizationSettings,
                     multiselectableVariableCode: event.target.value !== "noMultiselectable" ? event.target.value : null
                 })}
