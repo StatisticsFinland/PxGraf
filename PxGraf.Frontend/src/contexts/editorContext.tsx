@@ -1,5 +1,6 @@
 /* istanbul ignore file */
 
+import { debounce } from 'lodash';
 import * as React from 'react';
 import { ICubeQuery, Query } from 'types/query';
 import { IVisualizationSettings } from 'types/visualizationSettings';
@@ -58,12 +59,28 @@ export const EditorContext = React.createContext<IEditorContext>({
  * @param children - The child components
  */
 export const EditorProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [cubeQuery, setCubeQuery] = React.useState({ variableQueries: {} });
+    const [cubeQuery, setCubeQueryState] = React.useState({ variableQueries: {} });
     const [query, setQuery] = React.useState(null);
     const [saveDialogOpen, setSaveDialogOpen] = React.useState(false);
     const [selectedVisualizationUserInput, setSelectedVisualizationUserInput] = React.useState(null);
     const [visualizationSettingsUserInput, setVisualizationSettingsUserInput] = React.useState(null);
     const [defaultSelectables, setDefaultSelectables] = React.useState(null);
+
+    const debouncedSetCubeQuery = React.useMemo(() => {
+        return debounce((newQuery: ICubeQuery) => {
+            setCubeQueryState(newQuery);
+        }, 1000);
+    }, []);
+
+    const setCubeQuery = React.useCallback((newQuery: ICubeQuery) => {
+        debouncedSetCubeQuery(newQuery);
+    }, [debouncedSetCubeQuery]);
+
+    React.useEffect(() => {
+        return () => {
+            debouncedSetCubeQuery.cancel();
+        };
+    }, [debouncedSetCubeQuery]);
 
     const contextValue = React.useMemo(() => {
         return {

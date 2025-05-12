@@ -46,8 +46,8 @@ export const EditorField: React.FC<IEditorFieldProps> = ({ label, defaultValue, 
                 onChange={evt => {
                     const parsedValue = evt.target.value.substring(0, maxLength || evt.target.value.length);
                     setLocalValue(parsedValue);
+                    onChange(parsedValue);
                 }}
-                onBlur={() => onChange(localValue)}
                 endAdornment={
                     isEdited && (
                         <InputAdornment position="end">
