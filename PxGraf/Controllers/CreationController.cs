@@ -253,7 +253,7 @@ namespace PxGraf.Controllers
                 Size = includedValuesCount,
                 MaximumSupportedSize = maxQuerySize,
                 SizeWarningLimit = Convert.ToInt32(maxQuerySize * 0.75),
-                HeaderText = HeaderBuildingUtilities.GetHeader(filteredMeta, query),
+                HeaderText = HeaderBuildingUtilities.GetHeader(filteredMeta, query, true),
                 MaximumHeaderLength = Configuration.Current.QueryOptions.MaxHeaderLength,
                 VisualizationOptions = visualizationOptions,
                 VisualizationRejectionReasons = rejectionReasons
