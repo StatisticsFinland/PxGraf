@@ -12,13 +12,14 @@ import SortingSelector from './UtilityComponents/SortingSelector';
 import React from 'react';
 import { MultiselectableSelector } from "./TypeSpecificControls/MultiselectableSelector";
 import { IVisualizationOptions } from "../../types/editorContentsResponse";
+import { EditorContext } from "../../contexts/editorContext";
+import { getValidatedSettings } from "../../utils/ChartSettingHelpers";
 
 export interface IVisualizationSettingControlProps {
-    selectedVisualization: string,
-    visualizationOptions: IVisualizationOptions,
+    selectedVisualization: VisualizationType,
     dimensions: IDimension[],
     dimensionQuery: Query,
-    visualizationSettings: IVisualizationSettings
+    visualizationOptions: IVisualizationOptions
 }
 
 export interface IVisualizationSettingsProps {
@@ -34,11 +35,33 @@ const SettingsWrapper = styled.div`
 
 export const VisualizationSettingControl: React.FC<IVisualizationSettingControlProps> = ({
     selectedVisualization,
-    visualizationOptions,
     dimensions,
     dimensionQuery,
-    visualizationSettings
+    visualizationOptions,
 }) => {
+    const { visualizationSettingsUserInput, setVisualizationSettingsUserInput, defaultSelectables } = React.useContext(EditorContext);
+    const visualizationSettings = React.useMemo(() => {
+        if (selectedVisualization != null && visualizationOptions?.sortingOptions != null && dimensions != null) {
+            const sortingOptions = visualizationOptions?.allowManualPivot && visualizationSettingsUserInput?.pivotRequested ? visualizationOptions?.sortingOptions.pivoted : visualizationOptions?.sortingOptions.default;
+            const result = getValidatedSettings(visualizationSettingsUserInput, selectedVisualization, sortingOptions, dimensions, dimensionQuery);
+            if (defaultSelectables && Object.keys(defaultSelectables).length > 0) {
+                result.defaultSelectableVariableCodes = defaultSelectables;
+            } else {
+                result.defaultSelectableVariableCodes = null;
+            }
+            return result;
+        }
+        else {
+            return null;
+        }
+    }, [visualizationSettingsUserInput, selectedVisualization, visualizationOptions, dimensions, dimensionQuery, defaultSelectables]);
+
+    React.useEffect(() => {
+        if (!visualizationSettingsUserInput && visualizationSettings) {
+            setVisualizationSettingsUserInput(visualizationSettings);
+        }
+    }, [visualizationSettingsUserInput, visualizationSettings]);
+
     const sortingOptions = visualizationOptions?.allowManualPivot && visualizationSettings.pivotRequested ? visualizationOptions?.sortingOptions.pivoted : visualizationOptions?.sortingOptions.default;
     const showTableSettings: boolean = selectedVisualization === VisualizationType.Table;
     const showSortingOptions: boolean = (sortingOptions?.length > 0);

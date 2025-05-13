@@ -87,7 +87,6 @@ const FlexContentWrapper = styled.div`
 interface IEditorMetaSectionProps {
     editorContentsResponse: IEditorContentsResult;
     selectedVisualization: VisualizationType;
-    settings: IVisualizationSettings;
     resolvedDimensions: IDimension[];
     dimensionQuery: Query;
     contentLanguages: string[];
@@ -103,12 +102,11 @@ const TitleWrapper = styled.div`
  * In this view the user can change the visualization type and settings and edit the meta data information such as the chart header for the visualization.
  * @param {IEditorMetaSectionProps} editorContentsResponse Editor contents response from the API.
  * @param {VisualizationType} selectedVisualization Currently selected visualization type.
- * @param {IVisualizationSettings} settings Visualization settings.
  * @param {IDimension[]} resolvedDimensions: Resolved dimension codes.
  * @param {Query} dimensionQuery: Query object containing the selected values for each dimension.
  * @param {string[]} contentLanguages: List of available content languages.
  */
-export const EditorMetaSection: React.FC<IEditorMetaSectionProps> = ({ editorContentsResponse, selectedVisualization, settings, resolvedDimensions, dimensionQuery, contentLanguages }) => {
+export const EditorMetaSection: React.FC<IEditorMetaSectionProps> = ({ editorContentsResponse, selectedVisualization, resolvedDimensions, dimensionQuery, contentLanguages }) => {
     const { language, languageTab, setLanguageTab } = React.useContext(UiLanguageContext);
     const [isMetaAccordionOpen, setIsMetaAccordionOpen] = React.useState(false);
 
@@ -194,13 +192,12 @@ export const EditorMetaSection: React.FC<IEditorMetaSectionProps> = ({ editorCon
                     </FlexContentWrapper>
                 </ChartTypeSelectorWrapper>
             </GridFixer>
-                {selectedVisualization != null && settings != null && <VisualizationSettingControl
+                {selectedVisualization != null && <VisualizationSettingControl
                     selectedVisualization={selectedVisualization}
-                    visualizationSettings={settings}
-                    visualizationOptions={getVisualizationOptionsForType(editorContentsResponse.data.visualizationOptions, selectedVisualization)}
                     dimensions={resolvedDimensions}
                     dimensionQuery={dimensionQuery}
-                />}
+                    visualizationOptions={getVisualizationOptionsForType(editorContentsResponse.data?.visualizationOptions, selectedVisualization)}
+            />}
         </MetaWrapper>
     );
 }

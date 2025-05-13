@@ -3,8 +3,7 @@ import { useParams, useLocation } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
 import { Box, Stack, Divider, Container, CircularProgress, Alert } from '@mui/material';
 import { EditorContext } from 'contexts/editorContext';
-import { getDefaultQueries, getVisualizationOptionsForType, resolveDimensions } from 'utils/editorHelpers';
-import { getValidatedSettings } from 'utils/ChartSettingHelpers';
+import { getDefaultQueries, resolveDimensions } from 'utils/editorHelpers';
 import EditorFilterSection from './EditorFilterSection';
 import EditorFooterSection from './EditorFooterSection';
 import EditorPreviewSection from './EditorPreviewSection';
@@ -20,7 +19,6 @@ import { useValidateTableMetadataQuery } from 'api/services/validate-table-metad
 import { UiLanguageContext } from 'contexts/uiLanguageContext';
 import { IDimension } from '../../types/cubeMeta';
 import { useEditorContentsQuery } from '../../api/services/editor-contents';
-import { IVisualizationOptions } from '../../types/editorContentsResponse';
 
 //Used to set the width of the dimension selection and preview margin in pixels
 const dimensionSelectionWidth = 450;
@@ -73,7 +71,6 @@ export const Editor = () => {
         query,
         selectedVisualizationUserInput,
         visualizationSettingsUserInput,
-        defaultSelectables,
         setQuery,
         setCubeQuery,
         setVisualizationSettingsUserInput,
@@ -180,24 +177,7 @@ export const Editor = () => {
         return null;
     }, [editorContentsResponse.data?.visualizationOptions, selectedVisualizationUserInput]);
 
-    const visualizationOptions: IVisualizationOptions = getVisualizationOptionsForType(editorContentsResponse.data?.visualizationOptions, selectedVisualization);
-
-    const visualizationSettings = React.useMemo(() => {
-        if (selectedVisualization != null && visualizationOptions?.sortingOptions != null && resolvedDimensions != null) {
-            const sortingOptions = visualizationOptions?.allowManualPivot && visualizationSettingsUserInput?.pivotRequested ? visualizationOptions?.sortingOptions.pivoted : visualizationOptions?.sortingOptions.default;
-            const result = getValidatedSettings(visualizationSettingsUserInput, selectedVisualization, sortingOptions, resolvedDimensions, modifiedQuery);
-            if (defaultSelectables && Object.keys(defaultSelectables).length > 0) {
-                result.defaultSelectableVariableCodes = defaultSelectables;
-            } else {
-                result.defaultSelectableVariableCodes = null;
-            }
-            return result;
-        }
-        else {
-            return null;
-        }
-    }, [visualizationSettingsUserInput, selectedVisualization, visualizationOptions?.sortingOptions, resolvedDimensions, modifiedQuery, defaultSelectables]);
-    const saveQueryMutation = useSaveMutation(path, modifiedQuery, cubeQuery, selectedVisualization, visualizationSettings);
+    const saveQueryMutation = useSaveMutation(path, modifiedQuery, cubeQuery, selectedVisualization, visualizationSettingsUserInput);
 
     const errorContainer = (errorMessage: string) => {
         return (
@@ -247,7 +227,6 @@ export const Editor = () => {
                     editorContentsResponse={editorContentsResponse}
                     resolvedDimensions={resolvedDimensions}
                     selectedVisualization={selectedVisualization}
-                    settings={visualizationSettings}
                     dimensionQuery={modifiedQuery}
                     contentLanguages={contentLanguages}
                 />
@@ -257,7 +236,7 @@ export const Editor = () => {
                     query={modifiedQuery}
                     editorContents={editorContentsResponse}
                     selectedVisualization={selectedVisualization}
-                    visualizationSettings={visualizationSettings}
+                    visualizationSettings={visualizationSettingsUserInput}
                 />
                 <FooterDivider />
                 <EditorFooterSection />
