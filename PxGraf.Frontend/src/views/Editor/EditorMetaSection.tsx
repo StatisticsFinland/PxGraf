@@ -11,7 +11,6 @@ import VisualizationSettingControl from 'components/VisualizationSettingsControl
 import styled from 'styled-components';
 import { IDimension } from 'types/cubeMeta';
 import { VisualizationType } from 'types/visualizationType';
-import { IVisualizationSettings } from 'types/visualizationSettings';
 import { Query } from 'types/query';
 import ChartTypeRejectionReasons from 'components/ChartTypeRejectionReasons/ChartTypeRejectionReasons';
 import CellCount from 'components/CellCount/CellCount';
@@ -196,7 +195,7 @@ export const EditorMetaSection: React.FC<IEditorMetaSectionProps> = ({ editorCon
                     selectedVisualization={selectedVisualization}
                     dimensions={resolvedDimensions}
                     dimensionQuery={dimensionQuery}
-                    visualizationOptions={getVisualizationOptionsForType(editorContentsResponse.data?.visualizationOptions, selectedVisualization)}
+                    visualizationOptions={getVisualizationOptionsForType(editorContentsResponse.data.visualizationOptions, selectedVisualization)}
             />}
         </MetaWrapper>
     );

@@ -28,4 +28,7 @@
   <ItemGroup>
     <None Remove="build\**" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="src\components\VisualizationSettingsControls\__snapshots__\" />
+  </ItemGroup>
 </Project>
