@@ -5,7 +5,7 @@ import { IDimension, EDimensionType } from "types/cubeMeta";
 import VisualizationSettingControl from "./VisualizationSettingsControl";
 import { FilterType, Query } from "types/query";
 import { IVisualizationSettings } from '../../types/visualizationSettings';
-import { EditorContext, EditorProvider } from '../../contexts/editorContext';
+import { EditorContext } from '../../contexts/editorContext';
 import { VisualizationType } from '../../types/visualizationType';
 import { IVisualizationOptions } from '../../types/editorContentsResponse';
 

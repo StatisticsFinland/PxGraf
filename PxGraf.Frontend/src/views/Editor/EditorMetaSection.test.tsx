@@ -248,7 +248,6 @@ describe('Rendering test', () => {
                     editorContentsResponse={editorContentsResult}
                     resolvedDimensions={mockDimensions}
                     selectedVisualization={selectedVisualizationMock}
-                    settings={mockVisualizationSettings}
                     dimensionQuery={mockQuery}
                     contentLanguages={["fi", "sv", "en"]}
                 />
@@ -269,7 +268,6 @@ describe('Rendering test', () => {
                     editorContentsResponse={errorEditorContentsResult}
                     resolvedDimensions={mockDimensions}
                     selectedVisualization={selectedVisualizationMock}
-                    settings={mockVisualizationSettings}
                     dimensionQuery={mockQuery}
                     contentLanguages={["fi", "sv", "en"]}
                 />
