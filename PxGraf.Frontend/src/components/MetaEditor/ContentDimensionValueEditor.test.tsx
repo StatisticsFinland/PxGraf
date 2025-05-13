@@ -83,7 +83,6 @@ describe('Assertion tests', () => {
             </UiLanguageContext.Provider >
         );
         fireEvent.change(screen.getByDisplayValue('asd'), { target: { value: 'editValue2' } });
-        fireEvent.blur(screen.getByDisplayValue('editValue2'));
         expect(mockFunction).toHaveBeenCalledTimes(1);
     });
 });

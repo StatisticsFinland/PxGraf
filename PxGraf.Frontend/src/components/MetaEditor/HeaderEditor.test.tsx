@@ -141,7 +141,6 @@ describe('Assertion tests', () => {
             </EditorContext.Provider>
         );
         fireEvent.change(screen.getByDisplayValue(mockCubeQuery.chartHeaderEdit['fi']), { target: { value: 'editValue2' } });
-        fireEvent.blur(screen.getByDisplayValue('editValue2'));
         expect(mockFunction).toHaveBeenCalledTimes(1);
     });
 });
