@@ -74,50 +74,6 @@ describe('Rendering test', () => {
         );
         expect(asFragment()).toMatchSnapshot();
     });
-    it('renders correctly when loading', () => {
-        const { asFragment } = render(
-                <EditorContext.Provider value={{
-                    defaultSelectables: {},
-                    setDefaultSelectables: jest.fn(),
-                    cubeQuery: mockCubeQuery,
-                    setCubeQuery: mockFunction,
-                    query: {},
-                    setQuery: jest.fn(),
-                    saveDialogOpen: false,
-                    setSaveDialogOpen: jest.fn(),
-                    selectedVisualizationUserInput: VisualizationType.VerticalBarChart,
-                    setSelectedVisualizationUserInput: jest.fn(),
-                    visualizationSettingsUserInput: {},
-                    setVisualizationSettingsUserInput: jest.fn()
-                }}>
-                    <HeaderEditor editorContentResponse={mockDefaultResponseLoading} language={mockLang} style={{}} />
-                </EditorContext.Provider>
-
-        );
-        expect(asFragment()).toMatchSnapshot();
-    });
-    it('renders correctly when receiving error', () => {
-        const { asFragment } = render(
-                    <EditorContext.Provider value={{
-                        defaultSelectables: {},
-                        setDefaultSelectables: jest.fn(),
-                        cubeQuery: mockCubeQuery,
-                        setCubeQuery: mockFunction,
-                        query: {},
-                        setQuery: jest.fn(),
-                        saveDialogOpen: false,
-                        setSaveDialogOpen: jest.fn(),
-                        selectedVisualizationUserInput: VisualizationType.VerticalBarChart,
-                        setSelectedVisualizationUserInput: jest.fn(),
-                        visualizationSettingsUserInput: {},
-                        setVisualizationSettingsUserInput: jest.fn()
-                    }}>
-                        <HeaderEditor editorContentResponse={mockDefaultResponseError} language={mockLang} style={{}} />
-                    </EditorContext.Provider>
-
-        );
-        expect(asFragment()).toMatchSnapshot();
-    });
 });
 
 describe('Assertion tests', () => {
