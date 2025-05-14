@@ -12,7 +12,6 @@ import SortingSelector from './UtilityComponents/SortingSelector';
 import React from 'react';
 import { MultiselectableSelector } from "./TypeSpecificControls/MultiselectableSelector";
 import { IVisualizationOptions } from "../../types/editorContentsResponse";
-import { EditorContext } from "../../contexts/editorContext";
 
 export interface IVisualizationSettingControlProps {
     selectedVisualization: VisualizationType,
