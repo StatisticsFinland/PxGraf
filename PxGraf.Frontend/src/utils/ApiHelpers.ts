@@ -57,21 +57,3 @@ export const defaultQueryOptions = {
 export const parseLanguageString = (languages: string[]): string => {
     return `(${languages.join(", ").toUpperCase()})`;
 }
-
-/* istanbul ignore next */
-export const useDebounceState = (delay: number, ...params) => {
-
-  const cachedParams = useMemo(() => params, params);
-  const [debouncedParams, setDebouncedParams] = useState(cachedParams);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedParams(cachedParams);
-    }, delay ?? 500);
-    return () => {
-      clearTimeout(timer);
-    }
-  }, [cachedParams, delay]);
-
-  return debouncedParams;
-}

@@ -6,7 +6,7 @@ import { useQuery } from "react-query";
 import { ICubeQuery, Query } from "types/query";
 import { IVisualizationSettings } from "types/visualizationSettings";
 
-import { buildCubeQuery, defaultQueryOptions, useDebounceState } from "utils/ApiHelpers";
+import { buildCubeQuery, defaultQueryOptions } from "utils/ApiHelpers";
 
 /**
  * Interface for a visualization result.
@@ -52,7 +52,6 @@ export const useVisualizationQuery = (
     selectedVisualization: string,
     visualizationSettings: IVisualizationSettings
 ): IVisualizationResult => {
-    [idStack, query, cubeQuery, language, selectedVisualization, visualizationSettings] = useDebounceState(1000, idStack, query, cubeQuery, language, selectedVisualization, visualizationSettings);
     const queryKey = ['chart', ...idStack, query, cubeQuery, language, selectedVisualization, visualizationSettings];
 
     const checkSettingsValidity = (selectedVisualization: string, settings: IVisualizationSettings) => {
