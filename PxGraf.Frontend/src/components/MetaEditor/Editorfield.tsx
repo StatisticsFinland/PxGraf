@@ -26,10 +26,10 @@ const StyledOutlinedInput = styled(OutlinedInput)<{ $isEdited: boolean }>(({ $is
 export const EditorField: React.FC<IEditorFieldProps> = ({ label, defaultValue, editValue, onChange, maxLength, style = {} }) => {
     const { t } = useTranslation();
     const inputId = useId();
-    const ALERT_TRESHOLD = 0.556;
+    const ALERT_THRESHOLD = 0.556;
     const [localValue, setLocalValue] = React.useState(editValue ?? defaultValue);
     const isEdited: boolean = editValue != null;
-    const showAlert = maxLength && (localValue.length / maxLength) > ALERT_TRESHOLD;
+    const showAlert = maxLength && (localValue.length / maxLength) > ALERT_THRESHOLD;
 
     React.useEffect(() => {
         const value = editValue ?? defaultValue;

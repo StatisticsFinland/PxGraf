@@ -126,14 +126,6 @@ export const EditorMetaSection: React.FC<IEditorMetaSectionProps> = ({ editorCon
         setIsMetaAccordionOpen(!isMetaAccordionOpen);
     }
 
-    if (editorContentsResponse.isError) {
-        return (
-            <ResponseWrapper>
-                <Alert severity="error">{t("error.contentLoad")}</Alert>
-            </ResponseWrapper>
-        );
-    }
-
     const buttonInfo =(
         <>
             {t('infoText.visualizationSelection')}

@@ -5,6 +5,7 @@ import '@testing-library/jest-dom';
 import UiLanguageContext from 'contexts/uiLanguageContext';
 import { ISelectabilityInfo } from '../Preview/Preview';
 import { EDimensionType } from 'types/cubeMeta'; 
+import userEvent from '@testing-library/user-event';
 
 const mockSetSelections = jest.fn((selections: ISelectableSelections | ((prevState: ISelectableSelections) => ISelectableSelections)) => {
     return;
@@ -82,5 +83,30 @@ describe('Rendering test', () => {
             </UiLanguageContext.Provider>
         );
         expect(asFragment()).toMatchSnapshot();
+    });
+});
+
+describe('Functionality tests', () => {
+    it('calls setSelections when a value is changed', async () => {
+        const user = userEvent.setup();
+        const expectedSelections: ISelectableSelections = {
+            foobar1: ['barfoo2'],
+            foobar2: ['barfoo1']
+        }
+        const { findByRole, getByLabelText } = render(
+            <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
+                <SelectableDimensionMenus
+                    setSelections={mockSetSelections}
+                    selectables={mockSelectables}
+                    selections={mockSelections}
+                />
+            </UiLanguageContext.Provider>
+        );
+        const selectableMenu = getByLabelText('foo1');
+        await user.click(selectableMenu);
+        const valueSelect = await findByRole('option', { name: 'fyy2' });
+        await user.click(valueSelect);
+
+        expect(mockSetSelections).toHaveBeenCalledWith(expectedSelections);
     });
 });

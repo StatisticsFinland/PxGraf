@@ -42,7 +42,7 @@ interface IEditorPreviewSectionProps {
 export const EditorPreviewSection: React.FC<IEditorPreviewSectionProps> = ({ path, query, selectedVisualization, visualizationSettings, editorContents }) => {
     const { t } = useTranslation();
 
-    if (!editorContents.data?.visualizationOptions || editorContents.data?.visualizationOptions?.length === 0) {
+    if (!editorContents.data?.visualizationOptions?.length) {
         if (editorContents.data && Object.keys(editorContents.data.visualizationRejectionReasons).length > 0) {
             // Selected filters cannot produce a visualization
             return (

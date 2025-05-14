@@ -66,21 +66,21 @@ export const EditorProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const [visualizationSettingsUserInput, setVisualizationSettingsUserInput] = React.useState(null);
     const [defaultSelectables, setDefaultSelectables] = React.useState(null);
 
-    const debouncedSetCubeQuery = React.useMemo(() => {
+    const debouncedCubeQuery = React.useMemo(() => {
         return debounce((newQuery: ICubeQuery) => {
             setCubeQueryState(newQuery);
         }, 1000);
     }, []);
 
     const setCubeQuery = React.useCallback((newQuery: ICubeQuery) => {
-        debouncedSetCubeQuery(newQuery);
-    }, [debouncedSetCubeQuery]);
+        debouncedCubeQuery(newQuery);
+    }, [debouncedCubeQuery]);
 
     React.useEffect(() => {
         return () => {
-            debouncedSetCubeQuery.cancel();
+            debouncedCubeQuery.cancel();
         };
-    }, [debouncedSetCubeQuery]);
+    }, [debouncedCubeQuery]);
 
     const contextValue = React.useMemo(() => {
         return {

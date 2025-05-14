@@ -256,25 +256,4 @@ describe('Rendering test', () => {
             );
         expect(asFragment()).toMatchSnapshot();
     });
-
-    it('renders correctly in case of an error', () => {
-        const errorEditorContentsResult: IEditorContentsResult = {
-            isError: true,
-            isLoading: false,
-            data: null,
-        };
-        const { asFragment } = render(
-            <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
-                <EditorMetaSection
-                    editorContentsResponse={errorEditorContentsResult}
-                    resolvedDimensions={mockDimensions}
-                    selectedVisualization={selectedVisualizationMock}
-                    dimensionQuery={mockQuery}
-                    visualizationSettings={mockVisualizationSettings}
-                    contentLanguages={["fi", "sv", "en"]}
-                />
-            </UiLanguageContext.Provider>
-        );
-        expect(asFragment()).toMatchSnapshot();
-    });
 });
