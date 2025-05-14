@@ -40,7 +40,6 @@ export const VisualizationSettingControl: React.FC<IVisualizationSettingControlP
     visualizationOptions,
     visualizationSettings,
 }) => {
-    const { setVisualizationSettingsUserInput } = React.useContext(EditorContext);
     const sortingOptions = visualizationOptions?.allowManualPivot && visualizationSettings.pivotRequested ? visualizationOptions?.sortingOptions.pivoted : visualizationOptions?.sortingOptions.default;
     const showTableSettings: boolean = selectedVisualization === VisualizationType.Table;
     const showSortingOptions: boolean = (sortingOptions?.length > 0);

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Box, Tabs, Tab, Alert } from '@mui/material';
+import { Box, Tabs, Tab } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import MetaEditor from 'components/MetaEditor/MetaEditor';
