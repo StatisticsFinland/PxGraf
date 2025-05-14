@@ -44,8 +44,8 @@ const mockVisualizationSettings: IVisualizationSettings = {
     columnVariableCodes: ["foobar2", "foobar4"],
     sorting: null,
     matchXLabelsToEnd: false,
-    markerSize: 1,
-    showDataPoints: false,
+    markerSize: null,
+    showDataPoints: false
 }
 
 const mockDimensions: IDimension[]  = [
@@ -168,244 +168,125 @@ const mockDimensionQuery: Query = {
     }
 }
 
-const mockEditorContext =
-{
-    defaultSelectables: {},
-    setDefaultSelectables: jest.fn(),
-    cubeQuery: null,
-    setCubeQuery: jest.fn(),
-    query: {},
-    setQuery: jest.fn(),
-    saveDialogOpen: false,
-    setSaveDialogOpen: jest.fn(),
-    selectedVisualizationUserInput: VisualizationType.Table,
-    setSelectedVisualizationUserInput: jest.fn(),
-    visualizationSettingsUserInput: mockVisualizationSettings,
-    setVisualizationSettingsUserInput: mockSettingsChangedHandler
-};
-
 describe('Rendering test', () => {
     it('renders table correctly', () => {
-        const { asFragment } = render(
-            <EditorContext.Provider value={mockEditorContext}>
-                <VisualizationSettingControl
-                selectedVisualization={VisualizationType.Table}
-                dimensionQuery={mockDimensionQuery}
-                dimensions={mockDimensions}
-                visualizationOptions={mockVisualizationRules}
-                />
-            </EditorContext.Provider>
-        );
+        const { asFragment } = render(<VisualizationSettingControl
+            selectedVisualization={VisualizationType.Table}
+            dimensionQuery={mockDimensionQuery}
+            dimensions={mockDimensions}
+            visualizationOptions={mockVisualizationRules}
+            visualizationSettings={mockVisualizationSettings}
+        />);
         expect(asFragment()).toMatchSnapshot();
     });
     it('renders linechart correctly', () => {
-        const { asFragment } = render(
-            <EditorContext.Provider value={{
-                ...mockEditorContext,
-                selectedVisualizationUserInput: VisualizationType.LineChart,
-            }}>
-                <VisualizationSettingControl
-                selectedVisualization={VisualizationType.LineChart}
-                dimensionQuery={mockDimensionQuery}
-                dimensions={mockDimensions}
-                visualizationOptions={mockVisualizationRules}
-                />
-            </EditorContext.Provider>
-        );
+        const { asFragment } = render(<VisualizationSettingControl
+            selectedVisualization={VisualizationType.LineChart}
+            dimensionQuery={mockDimensionQuery}
+            dimensions={mockDimensions}
+            visualizationOptions={mockVisualizationRules}
+            visualizationSettings={mockVisualizationSettings}
+        />);
         expect(asFragment()).toMatchSnapshot();
     });
     it('renders piechart correctly', () => {
-        const { asFragment } = render(
-            <EditorContext.Provider value={{
-                ...mockEditorContext,
-                selectedVisualizationUserInput: VisualizationType.PieChart,
-            }}>
-                <VisualizationSettingControl
-                    selectedVisualization={VisualizationType.PieChart}
-                    dimensionQuery={mockDimensionQuery}
-                    dimensions={mockDimensions}
-                    visualizationOptions={{
-                        ...mockVisualizationRules,
-                        sortingOptions:
-                        {
-                            default: [{ code: "foo", description: { fi: "Foo" } }],
-                            pivoted: [{ code: "bar", description: { fi: "Bar" } }]
-                        }
-                    }}
-                />
-            </EditorContext.Provider>
-        );
+        const { asFragment } = render(<VisualizationSettingControl
+            selectedVisualization={VisualizationType.PieChart}
+            dimensionQuery={mockDimensionQuery}
+            dimensions={mockDimensions}
+            visualizationOptions={mockVisualizationRules}
+            visualizationSettings={mockVisualizationSettings}
+        />);
         expect(asFragment()).toMatchSnapshot();
     });
     it('renders verticalbarchart correctly', () => {
-        const { asFragment } = render(
-            <EditorContext.Provider value={{
-                ...mockEditorContext,
-                selectedVisualizationUserInput: VisualizationType.VerticalBarChart,
-            }}>
-                <VisualizationSettingControl
-                    selectedVisualization={VisualizationType.VerticalBarChart}
-                    dimensionQuery={mockDimensionQuery}
-                    dimensions={mockDimensions}
-                    visualizationOptions={mockVisualizationRules}
-                />
-            </EditorContext.Provider>
-        );
+        const { asFragment } = render(<VisualizationSettingControl
+            selectedVisualization={VisualizationType.VerticalBarChart}
+            dimensionQuery={mockDimensionQuery}
+            dimensions={mockDimensions}
+            visualizationOptions={mockVisualizationRules}
+            visualizationSettings={mockVisualizationSettings}
+        />);
         expect(asFragment()).toMatchSnapshot();
     });
     it('renders groupverticalbarchart correctly', () => {
-        const { asFragment } = render(
-            <EditorContext.Provider value={{
-                ...mockEditorContext,
-                selectedVisualizationUserInput: VisualizationType.GroupVerticalBarChart,
-            }}>
-                <VisualizationSettingControl
-                selectedVisualization={VisualizationType.GroupVerticalBarChart}
-                dimensionQuery={mockDimensionQuery}
-                dimensions={mockDimensions}
-                visualizationOptions={mockVisualizationRules}
-                />
-            </EditorContext.Provider>
-        );
+        const { asFragment } = render(<VisualizationSettingControl
+            selectedVisualization={VisualizationType.GroupVerticalBarChart}
+            dimensionQuery={mockDimensionQuery}
+            dimensions={mockDimensions}
+            visualizationOptions={mockVisualizationRules}
+            visualizationSettings={mockVisualizationSettings}
+        />);
         expect(asFragment()).toMatchSnapshot();
     });
     it('renders stackedverticalbarchart correctly', () => {
-        const { asFragment } = render(
-            <EditorContext.Provider value={{
-                ...mockEditorContext,
-                selectedVisualizationUserInput: VisualizationType.StackedVerticalBarChart,
-            }}>
-                <VisualizationSettingControl
-                    selectedVisualization={VisualizationType.StackedVerticalBarChart}
-                    dimensionQuery={mockDimensionQuery}
-                    dimensions={mockDimensions}
-                    visualizationOptions={mockVisualizationRules}
-                />
-                </EditorContext.Provider>
-        );
+        const { asFragment } = render(<VisualizationSettingControl
+            selectedVisualization={VisualizationType.StackedVerticalBarChart}
+            dimensionQuery={mockDimensionQuery}
+            dimensions={mockDimensions}
+            visualizationOptions={mockVisualizationRules}
+            visualizationSettings={mockVisualizationSettings}
+        />);
         expect(asFragment()).toMatchSnapshot();
     });
     it('renders percentverticalbarchart correctly', () => {
-        const { asFragment } = render(
-            <EditorContext.Provider value={{
-                ...mockEditorContext,
-                selectedVisualizationUserInput: VisualizationType.PercentVerticalBarChart,
-            }}>
-                <VisualizationSettingControl
-                    selectedVisualization={VisualizationType.PercentVerticalBarChart}
-                    dimensionQuery={mockDimensionQuery}
-                    dimensions={mockDimensions}
-                    visualizationOptions={mockVisualizationRules}
-                />
-                </EditorContext.Provider>
-        );
+        const { asFragment } = render(<VisualizationSettingControl
+            selectedVisualization={VisualizationType.PercentVerticalBarChart}
+            dimensionQuery={mockDimensionQuery}
+            dimensions={mockDimensions}
+            visualizationOptions={mockVisualizationRules}
+            visualizationSettings={mockVisualizationSettings}
+        />);
         expect(asFragment()).toMatchSnapshot();
     });
     it('renders horizontalbarchart correctly', () => {
-        const { asFragment } = render(
-            <EditorContext.Provider value={{
-                ...mockEditorContext,
-                selectedVisualizationUserInput: VisualizationType.HorizontalBarChart,
-            }}>
-                <VisualizationSettingControl
-                    selectedVisualization={VisualizationType.HorizontalBarChart}
-                    dimensionQuery={mockDimensionQuery}
-                    dimensions={mockDimensions}
-                    visualizationOptions={{
-                        ...mockVisualizationRules,
-                        sortingOptions:
-                        {
-                            default: [{ code: "foo", description: { fi: "Foo" } }],
-                            pivoted: [{ code: "bar", description: { fi: "Bar" } }]
-                        }
-                    }}
-                />
-            </EditorContext.Provider>
-        );
+        const { asFragment } = render(<VisualizationSettingControl
+            selectedVisualization={VisualizationType.HorizontalBarChart}
+            dimensionQuery={mockDimensionQuery}
+            dimensions={mockDimensions}
+            visualizationOptions={mockVisualizationRules}
+            visualizationSettings={mockVisualizationSettings}
+        />);
         expect(asFragment()).toMatchSnapshot();
     });
     it('renders grouphorizontalbarchart correctly', () => {
-        const { asFragment } = render(
-            <EditorContext.Provider value={{
-                ...mockEditorContext,
-                selectedVisualizationUserInput: VisualizationType.GroupHorizontalBarChart,
-            }}>
-                <VisualizationSettingControl
-                    selectedVisualization={VisualizationType.GroupHorizontalBarChart}
-                    dimensionQuery={mockDimensionQuery}
-                    dimensions={mockDimensions}
-                    visualizationOptions={{
-                        ...mockVisualizationRules,
-                        sortingOptions:
-                        {
-                            default: [{ code: "foo", description: { fi: "Foo" } }],
-                            pivoted: [{ code: "bar", description: { fi: "Bar" } }]
-                        }
-                    }}
-                />
-            </EditorContext.Provider>
-        );
+        const { asFragment } = render(<VisualizationSettingControl
+            selectedVisualization={VisualizationType.HorizontalBarChart}
+            dimensionQuery={mockDimensionQuery}
+            dimensions={mockDimensions}
+            visualizationOptions={mockVisualizationRules}
+            visualizationSettings={mockVisualizationSettings}
+        />);
         expect(asFragment()).toMatchSnapshot();
     });
     it('renders stackedhorizontalbarchart correctly', () => {
-        const { asFragment } = render(
-            <EditorContext.Provider value={{
-                ...mockEditorContext,
-                selectedVisualizationUserInput: VisualizationType.StackedHorizontalBarChart,
-            }}>
-                <VisualizationSettingControl
-                    selectedVisualization={VisualizationType.StackedHorizontalBarChart}
-                    dimensionQuery={mockDimensionQuery}
-                    dimensions={mockDimensions}
-                    visualizationOptions={{
-                        ...mockVisualizationRules,
-                        sortingOptions:
-                        {
-                            default: [{ code: "foo", description: { fi: "Foo" } }],
-                            pivoted: [{ code: "bar", description: { fi: "Bar" } }]
-                        }
-                    }}
-                />
-            </EditorContext.Provider>
-        );
+        const { asFragment } = render(<VisualizationSettingControl
+            selectedVisualization={VisualizationType.StackedHorizontalBarChart}
+            dimensionQuery={mockDimensionQuery}
+            dimensions={mockDimensions}
+            visualizationOptions={mockVisualizationRules}
+            visualizationSettings={mockVisualizationSettings}
+        />);
         expect(asFragment()).toMatchSnapshot();
     });
     it('renders percenthorizontalbarchart correctly', () => {
-        const { asFragment } = render(
-            <EditorContext.Provider value={{
-                ...mockEditorContext,
-                selectedVisualizationUserInput: VisualizationType.PercentHorizontalBarChart,
-            }}>
-                <VisualizationSettingControl
-                    selectedVisualization={VisualizationType.PercentHorizontalBarChart}
-                    dimensionQuery={mockDimensionQuery}
-                    dimensions={mockDimensions}
-                    visualizationOptions={{
-                        ...mockVisualizationRules,
-                        sortingOptions: 
-                        {
-                            default: [{ code: "foo", description: { fi: "Foo" } }],
-                            pivoted: [{ code: "bar", description: { fi: "Bar" } }]
-                        }
-                    }}
-                />
-            </EditorContext.Provider>
-        );
+        const { asFragment } = render(<VisualizationSettingControl
+            selectedVisualization={VisualizationType.PercentHorizontalBarChart}
+            dimensionQuery={mockDimensionQuery}
+            dimensions={mockDimensions}
+            visualizationOptions={mockVisualizationRules}
+            visualizationSettings={mockVisualizationSettings}
+        />);
         expect(asFragment()).toMatchSnapshot();
     });
     it('renders scatterplot correctly', () => {
-        const { asFragment } = render(
-            <EditorContext.Provider value={{
-                ...mockEditorContext,
-                selectedVisualizationUserInput: VisualizationType.ScatterPlot,
-            }}>
-                <VisualizationSettingControl
-                selectedVisualization={VisualizationType.ScatterPlot}
-                dimensionQuery={mockDimensionQuery}
-                dimensions={mockDimensions}
-                visualizationOptions={mockVisualizationRules} />
-            </EditorContext.Provider>
-        );
+        const { asFragment } = render(<VisualizationSettingControl
+            selectedVisualization={VisualizationType.ScatterPlot}
+            dimensionQuery={mockDimensionQuery}
+            dimensions={mockDimensions}
+            visualizationOptions={mockVisualizationRules}
+            visualizationSettings={mockVisualizationSettings}
+        />);
         expect(asFragment()).toMatchSnapshot();
     });
 });
@@ -419,14 +300,13 @@ describe('Assertion tests', () => {
         };
 
         const { getByLabelText } = render(
-            <EditorContext.Provider value={mockEditorContext}>
-                <VisualizationSettingControl
-                    selectedVisualization={VisualizationType.Table}
-                    dimensionQuery={mockDimensionQuery}
-                    dimensions={mockDimensions}
-                    visualizationOptions={modifiedVisualizationRules}
-                />
-            </EditorContext.Provider>
+            <VisualizationSettingControl
+                selectedVisualization={VisualizationType.Table}
+                dimensionQuery={mockDimensionQuery}
+                dimensions={mockDimensions}
+                visualizationOptions={modifiedVisualizationRules}
+                visualizationSettings={mockVisualizationSettings}
+            />
         );
         expect(getByLabelText('chartSettings.cutYAxis')).toBeInTheDocument();
         expect(getByLabelText('chartSettings.matchXLabelsToEnd')).toBeInTheDocument();
@@ -438,24 +318,33 @@ describe('Assertion tests', () => {
     it('updates values properly when user changes switches', () => {
         const { getByLabelText } = render(
             <EditorContext.Provider value={{
-                ...mockEditorContext,
+                defaultSelectables: {},
+                setDefaultSelectables: jest.fn(),
+                cubeQuery: null,
+                setCubeQuery: jest.fn(),
+                query: {},
+                setQuery: jest.fn(),
+                saveDialogOpen: false,
+                setSaveDialogOpen: jest.fn(),
                 selectedVisualizationUserInput: VisualizationType.VerticalBarChart,
+                setSelectedVisualizationUserInput: jest.fn(),
+                visualizationSettingsUserInput: {},
+                setVisualizationSettingsUserInput: mockSettingsChangedHandler
             }}>
                 <VisualizationSettingControl
                     selectedVisualization={VisualizationType.Table}
                     dimensionQuery={mockDimensionQuery}
                     dimensions={mockDimensions}
                     visualizationOptions={mockVisualizationRules}
+                    visualizationSettings={mockVisualizationSettings}
                 />
             </EditorContext.Provider>
         );
 
         fireEvent.click(getByLabelText('visualizationSettings.showDataPoints'));
         expect(mockSettingsChangedHandler).toHaveBeenCalledWith({
-            showDataPoints: !mockVisualizationSettings.showDataPoints,
-            columnVariableCodes: mockVisualizationSettings.columnVariableCodes,
-            defaultSelectableVariableCodes: mockVisualizationSettings.defaultSelectableVariableCodes,
-            rowVariableCodes: mockVisualizationSettings.rowVariableCodes,
+            ...mockVisualizationSettings,
+            showDataPoints: !mockVisualizationSettings.showDataPoints
         });
     });
 });

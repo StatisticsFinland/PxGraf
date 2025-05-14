@@ -34,6 +34,6 @@ export const getErrorText = (error: EDatabaseTableError) => {
     }
 }
 
-export const getVisualizationOptionsForType = (options: IVisualizationOptions[], type: VisualizationType): IVisualizationOptions | undefined => {
-    return options.find(option => option.type === type);
+export const getVisualizationOptionsForVisualizationType = (options: IVisualizationOptions[], type: VisualizationType): IVisualizationOptions | undefined => {
+    return options?.find(option => option.type === type);
 }

@@ -3,7 +3,7 @@ import { useParams, useLocation } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
 import { Box, Stack, Divider, Container, CircularProgress, Alert } from '@mui/material';
 import { EditorContext } from 'contexts/editorContext';
-import { getDefaultQueries, resolveDimensions } from 'utils/editorHelpers';
+import { getDefaultQueries, getVisualizationOptionsForVisualizationType, resolveDimensions } from 'utils/editorHelpers';
 import EditorFilterSection from './EditorFilterSection';
 import EditorFooterSection from './EditorFooterSection';
 import EditorPreviewSection from './EditorPreviewSection';
@@ -19,6 +19,7 @@ import { useValidateTableMetadataQuery } from 'api/services/validate-table-metad
 import { UiLanguageContext } from 'contexts/uiLanguageContext';
 import { IDimension } from '../../types/cubeMeta';
 import { useEditorContentsQuery } from '../../api/services/editor-contents';
+import { getValidatedSettings } from '../../utils/ChartSettingHelpers';
 
 //Used to set the width of the dimension selection and preview margin in pixels
 const dimensionSelectionWidth = 450;
@@ -75,6 +76,7 @@ export const Editor = () => {
         setCubeQuery,
         setVisualizationSettingsUserInput,
         setSelectedVisualizationUserInput,
+        defaultSelectables,
         setDefaultSelectables
     } = React.useContext(EditorContext);
 
@@ -165,6 +167,7 @@ export const Editor = () => {
             return null;
         }
     }, [cubeMetaResponse.data, resolvedDimensionCodes]);
+
     const selectedVisualization = React.useMemo(() => {
         if (editorContentsResponse.data?.visualizationOptions?.length > 0) {
             if (editorContentsResponse.data?.visualizationOptions?.some(options => options.type === selectedVisualizationUserInput)) {
@@ -176,6 +179,23 @@ export const Editor = () => {
         }
         return null;
     }, [editorContentsResponse.data?.visualizationOptions, selectedVisualizationUserInput]);
+
+    const visualizationSettings = React.useMemo(() => {
+        const visualizationOptions = getVisualizationOptionsForVisualizationType(editorContentsResponse.data?.visualizationOptions, selectedVisualization);
+        if (selectedVisualization != null && visualizationOptions?.sortingOptions != null && dimensions != null) {
+            const sortingOptions = visualizationOptions?.allowManualPivot && visualizationSettingsUserInput?.pivotRequested ? visualizationOptions?.sortingOptions.pivoted : visualizationOptions?.sortingOptions.default;
+            const result = getValidatedSettings(visualizationSettingsUserInput, selectedVisualization, sortingOptions, dimensions, modifiedQuery);
+            if (defaultSelectables && Object.keys(defaultSelectables).length > 0) {
+                result.defaultSelectableVariableCodes = defaultSelectables;
+            } else {
+                result.defaultSelectableVariableCodes = null;
+            }
+            return result;
+        }
+        else {
+            return null;
+        }
+    }, [selectedVisualization, dimensions, visualizationSettingsUserInput, modifiedQuery, defaultSelectables, editorContentsResponse]);
 
     const saveQueryMutation = useSaveMutation(path, modifiedQuery, cubeQuery, selectedVisualization, visualizationSettingsUserInput);
 
@@ -229,14 +249,15 @@ export const Editor = () => {
                     selectedVisualization={selectedVisualization}
                     dimensionQuery={modifiedQuery}
                     contentLanguages={contentLanguages}
+                    visualizationSettings={visualizationSettings}
                 />
                 <PreviewDivider />
                 <EditorPreviewSection
                     path={path}
                     query={modifiedQuery}
                     editorContents={editorContentsResponse}
+                    visualizationSettings={visualizationSettings}
                     selectedVisualization={selectedVisualization}
-                    visualizationSettings={visualizationSettingsUserInput}
                 />
                 <FooterDivider />
                 <EditorFooterSection />

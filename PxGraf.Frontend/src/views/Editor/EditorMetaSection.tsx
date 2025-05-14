@@ -17,7 +17,8 @@ import CellCount from 'components/CellCount/CellCount';
 import InfoBubble from 'components/InfoBubble/InfoBubble';
 import UiLanguageContext from 'contexts/uiLanguageContext';
 import { IEditorContentsResult } from '../../api/services/editor-contents';
-import { getVisualizationOptionsForType } from '../../utils/editorHelpers';
+import { getVisualizationOptionsForVisualizationType } from '../../utils/editorHelpers';
+import { IVisualizationSettings } from '../../types/visualizationSettings';
 
 const MetaWrapper = styled(Box)`
   grid-area: 'parameters';
@@ -89,6 +90,7 @@ interface IEditorMetaSectionProps {
     resolvedDimensions: IDimension[];
     dimensionQuery: Query;
     contentLanguages: string[];
+    visualizationSettings: IVisualizationSettings;
 }
 
 const TitleWrapper = styled.div`
@@ -104,8 +106,9 @@ const TitleWrapper = styled.div`
  * @param {IDimension[]} resolvedDimensions: Resolved dimension codes.
  * @param {Query} dimensionQuery: Query object containing the selected values for each dimension.
  * @param {string[]} contentLanguages: List of available content languages.
+ * @param {IVisualizationSettings} visualizationSettings: Visualization settings for the selected visualization type.
  */
-export const EditorMetaSection: React.FC<IEditorMetaSectionProps> = ({ editorContentsResponse, selectedVisualization, resolvedDimensions, dimensionQuery, contentLanguages }) => {
+export const EditorMetaSection: React.FC<IEditorMetaSectionProps> = ({ editorContentsResponse, selectedVisualization, resolvedDimensions, dimensionQuery, contentLanguages, visualizationSettings }) => {
     const { language, languageTab, setLanguageTab } = React.useContext(UiLanguageContext);
     const [isMetaAccordionOpen, setIsMetaAccordionOpen] = React.useState(false);
 
@@ -195,7 +198,8 @@ export const EditorMetaSection: React.FC<IEditorMetaSectionProps> = ({ editorCon
                     selectedVisualization={selectedVisualization}
                     dimensions={resolvedDimensions}
                     dimensionQuery={dimensionQuery}
-                    visualizationOptions={getVisualizationOptionsForType(editorContentsResponse.data.visualizationOptions, selectedVisualization)}
+                    visualizationOptions={getVisualizationOptionsForVisualizationType(editorContentsResponse.data.visualizationOptions, selectedVisualization)}
+                    visualizationSettings={visualizationSettings}
             />}
         </MetaWrapper>
     );

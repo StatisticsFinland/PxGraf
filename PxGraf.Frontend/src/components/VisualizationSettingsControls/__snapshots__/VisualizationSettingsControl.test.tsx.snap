@@ -23,67 +23,6 @@ exports[`Rendering test renders grouphorizontalbarchart correctly 1`] = `
       class="sc-cXawGu ehfJVs"
     >
       <div
-        class="MuiFormControl-root css-1iw3t7y-MuiFormControl-root"
-      >
-        <label
-          class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined css-113d811-MuiFormLabel-root-MuiInputLabel-root"
-          data-shrink="true"
-          id="sorting-selector-label"
-        >
-          chartSettings.sort
-        </label>
-        <div
-          class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiSelect-root css-j5ihgt-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root"
-        >
-          <div
-            aria-expanded="false"
-            aria-haspopup="listbox"
-            aria-labelledby="sorting-selector-label sorting-selector"
-            class="MuiSelect-select MuiSelect-outlined MuiInputBase-input MuiOutlinedInput-input css-w76bbz-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input"
-            id="sorting-selector"
-            role="combobox"
-            tabindex="0"
-          >
-            <span
-              aria-hidden="true"
-              class="notranslate"
-            >
-              ​
-            </span>
-          </div>
-          <input
-            aria-hidden="true"
-            aria-invalid="false"
-            class="MuiSelect-nativeInput css-j0riat-MuiSelect-nativeInput"
-            tabindex="-1"
-            value="foo"
-          />
-          <svg
-            aria-hidden="true"
-            class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconOutlined css-lohd6h-MuiSvgIcon-root-MuiSelect-icon"
-            data-testid="ArrowDropDownIcon"
-            focusable="false"
-            viewBox="0 0 24 24"
-          >
-            <path
-              d="M7 10l5 5 5-5z"
-            />
-          </svg>
-          <fieldset
-            aria-hidden="true"
-            class="MuiOutlinedInput-notchedOutline css-1ll44ll-MuiOutlinedInput-notchedOutline"
-          >
-            <legend
-              class="css-w1u3ce"
-            >
-              <span>
-                chartSettings.sort
-              </span>
-            </legend>
-          </fieldset>
-        </div>
-      </div>
-      <div
         class="MuiStack-root sc-fWnslK vwiSF css-m69qwo-MuiStack-root"
       >
         <div
@@ -551,67 +490,6 @@ exports[`Rendering test renders horizontalbarchart correctly 1`] = `
     <div
       class="sc-cXawGu ehfJVs"
     >
-      <div
-        class="MuiFormControl-root css-1iw3t7y-MuiFormControl-root"
-      >
-        <label
-          class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined css-113d811-MuiFormLabel-root-MuiInputLabel-root"
-          data-shrink="true"
-          id="sorting-selector-label"
-        >
-          chartSettings.sort
-        </label>
-        <div
-          class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiSelect-root css-j5ihgt-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root"
-        >
-          <div
-            aria-expanded="false"
-            aria-haspopup="listbox"
-            aria-labelledby="sorting-selector-label sorting-selector"
-            class="MuiSelect-select MuiSelect-outlined MuiInputBase-input MuiOutlinedInput-input css-w76bbz-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input"
-            id="sorting-selector"
-            role="combobox"
-            tabindex="0"
-          >
-            <span
-              aria-hidden="true"
-              class="notranslate"
-            >
-              ​
-            </span>
-          </div>
-          <input
-            aria-hidden="true"
-            aria-invalid="false"
-            class="MuiSelect-nativeInput css-j0riat-MuiSelect-nativeInput"
-            tabindex="-1"
-            value="foo"
-          />
-          <svg
-            aria-hidden="true"
-            class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconOutlined css-lohd6h-MuiSvgIcon-root-MuiSelect-icon"
-            data-testid="ArrowDropDownIcon"
-            focusable="false"
-            viewBox="0 0 24 24"
-          >
-            <path
-              d="M7 10l5 5 5-5z"
-            />
-          </svg>
-          <fieldset
-            aria-hidden="true"
-            class="MuiOutlinedInput-notchedOutline css-1ll44ll-MuiOutlinedInput-notchedOutline"
-          >
-            <legend
-              class="css-w1u3ce"
-            >
-              <span>
-                chartSettings.sort
-              </span>
-            </legend>
-          </fieldset>
-        </div>
-      </div>
       <div
         class="MuiStack-root sc-fWnslK vwiSF css-m69qwo-MuiStack-root"
       >
@@ -1081,67 +959,6 @@ exports[`Rendering test renders percenthorizontalbarchart correctly 1`] = `
       class="sc-cXawGu ehfJVs"
     >
       <div
-        class="MuiFormControl-root css-1iw3t7y-MuiFormControl-root"
-      >
-        <label
-          class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined css-113d811-MuiFormLabel-root-MuiInputLabel-root"
-          data-shrink="true"
-          id="sorting-selector-label"
-        >
-          chartSettings.sort
-        </label>
-        <div
-          class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiSelect-root css-j5ihgt-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root"
-        >
-          <div
-            aria-expanded="false"
-            aria-haspopup="listbox"
-            aria-labelledby="sorting-selector-label sorting-selector"
-            class="MuiSelect-select MuiSelect-outlined MuiInputBase-input MuiOutlinedInput-input css-w76bbz-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input"
-            id="sorting-selector"
-            role="combobox"
-            tabindex="0"
-          >
-            <span
-              aria-hidden="true"
-              class="notranslate"
-            >
-              ​
-            </span>
-          </div>
-          <input
-            aria-hidden="true"
-            aria-invalid="false"
-            class="MuiSelect-nativeInput css-j0riat-MuiSelect-nativeInput"
-            tabindex="-1"
-            value="foo"
-          />
-          <svg
-            aria-hidden="true"
-            class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconOutlined css-lohd6h-MuiSvgIcon-root-MuiSelect-icon"
-            data-testid="ArrowDropDownIcon"
-            focusable="false"
-            viewBox="0 0 24 24"
-          >
-            <path
-              d="M7 10l5 5 5-5z"
-            />
-          </svg>
-          <fieldset
-            aria-hidden="true"
-            class="MuiOutlinedInput-notchedOutline css-1ll44ll-MuiOutlinedInput-notchedOutline"
-          >
-            <legend
-              class="css-w1u3ce"
-            >
-              <span>
-                chartSettings.sort
-              </span>
-            </legend>
-          </fieldset>
-        </div>
-      </div>
-      <div
         class="MuiStack-root sc-fWnslK vwiSF css-m69qwo-MuiStack-root"
       >
         <div
@@ -1610,67 +1427,6 @@ exports[`Rendering test renders piechart correctly 1`] = `
       class="sc-cXawGu ehfJVs"
     >
       <div
-        class="MuiFormControl-root css-1iw3t7y-MuiFormControl-root"
-      >
-        <label
-          class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined css-113d811-MuiFormLabel-root-MuiInputLabel-root"
-          data-shrink="true"
-          id="sorting-selector-label"
-        >
-          chartSettings.sort
-        </label>
-        <div
-          class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiSelect-root css-j5ihgt-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root"
-        >
-          <div
-            aria-expanded="false"
-            aria-haspopup="listbox"
-            aria-labelledby="sorting-selector-label sorting-selector"
-            class="MuiSelect-select MuiSelect-outlined MuiInputBase-input MuiOutlinedInput-input css-w76bbz-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input"
-            id="sorting-selector"
-            role="combobox"
-            tabindex="0"
-          >
-            <span
-              aria-hidden="true"
-              class="notranslate"
-            >
-              ​
-            </span>
-          </div>
-          <input
-            aria-hidden="true"
-            aria-invalid="false"
-            class="MuiSelect-nativeInput css-j0riat-MuiSelect-nativeInput"
-            tabindex="-1"
-            value="foo"
-          />
-          <svg
-            aria-hidden="true"
-            class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconOutlined css-lohd6h-MuiSvgIcon-root-MuiSelect-icon"
-            data-testid="ArrowDropDownIcon"
-            focusable="false"
-            viewBox="0 0 24 24"
-          >
-            <path
-              d="M7 10l5 5 5-5z"
-            />
-          </svg>
-          <fieldset
-            aria-hidden="true"
-            class="MuiOutlinedInput-notchedOutline css-1ll44ll-MuiOutlinedInput-notchedOutline"
-          >
-            <legend
-              class="css-w1u3ce"
-            >
-              <span>
-                chartSettings.sort
-              </span>
-            </legend>
-          </fieldset>
-        </div>
-      </div>
-      <div
         class="MuiStack-root sc-fWnslK vwiSF css-m69qwo-MuiStack-root"
       >
         <div
@@ -2138,67 +1894,6 @@ exports[`Rendering test renders stackedhorizontalbarchart correctly 1`] = `
     <div
       class="sc-cXawGu ehfJVs"
     >
-      <div
-        class="MuiFormControl-root css-1iw3t7y-MuiFormControl-root"
-      >
-        <label
-          class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined css-113d811-MuiFormLabel-root-MuiInputLabel-root"
-          data-shrink="true"
-          id="sorting-selector-label"
-        >
-          chartSettings.sort
-        </label>
-        <div
-          class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiSelect-root css-j5ihgt-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root"
-        >
-          <div
-            aria-expanded="false"
-            aria-haspopup="listbox"
-            aria-labelledby="sorting-selector-label sorting-selector"
-            class="MuiSelect-select MuiSelect-outlined MuiInputBase-input MuiOutlinedInput-input css-w76bbz-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input"
-            id="sorting-selector"
-            role="combobox"
-            tabindex="0"
-          >
-            <span
-              aria-hidden="true"
-              class="notranslate"
-            >
-              ​
-            </span>
-          </div>
-          <input
-            aria-hidden="true"
-            aria-invalid="false"
-            class="MuiSelect-nativeInput css-j0riat-MuiSelect-nativeInput"
-            tabindex="-1"
-            value="foo"
-          />
-          <svg
-            aria-hidden="true"
-            class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconOutlined css-lohd6h-MuiSvgIcon-root-MuiSelect-icon"
-            data-testid="ArrowDropDownIcon"
-            focusable="false"
-            viewBox="0 0 24 24"
-          >
-            <path
-              d="M7 10l5 5 5-5z"
-            />
-          </svg>
-          <fieldset
-            aria-hidden="true"
-            class="MuiOutlinedInput-notchedOutline css-1ll44ll-MuiOutlinedInput-notchedOutline"
-          >
-            <legend
-              class="css-w1u3ce"
-            >
-              <span>
-                chartSettings.sort
-              </span>
-            </legend>
-          </fieldset>
-        </div>
-      </div>
       <div
         class="MuiStack-root sc-fWnslK vwiSF css-m69qwo-MuiStack-root"
       >

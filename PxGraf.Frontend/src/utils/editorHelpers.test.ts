@@ -1,5 +1,5 @@
 import { IDimension, EDimensionType } from "types/cubeMeta";
-import { getDefaultQueries, getVisualizationOptionsForType, resolveDimensions } from "./editorHelpers";
+import { getDefaultQueries, getVisualizationOptionsForVisualizationType, resolveDimensions } from "./editorHelpers";
 import { IVisualizationOptions } from "../types/editorContentsResponse";
 import { VisualizationType } from "../types/visualizationType";
 
@@ -74,14 +74,14 @@ describe('getVisualizationOptionsForType tests', () => {
                 }
             }
         ];
-        const result = getVisualizationOptionsForType(mockVisualizationOptions, VisualizationType.LineChart);
+        const result = getVisualizationOptionsForVisualizationType(mockVisualizationOptions, VisualizationType.LineChart);
         expect(result).toBeTruthy();
         expect(result).toEqual(mockVisualizationOptions[0]);
     });
 
     it('Should return undefined if type not found', () => {
         const mockVisualizationOptions: IVisualizationOptions[] = [];
-        const result = getVisualizationOptionsForType(mockVisualizationOptions, VisualizationType.LineChart);
+        const result = getVisualizationOptionsForVisualizationType(mockVisualizationOptions, VisualizationType.LineChart);
         expect(result).toEqual(undefined);
     });
 });

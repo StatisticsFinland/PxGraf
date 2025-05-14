@@ -250,6 +250,7 @@ describe('Rendering test', () => {
                     selectedVisualization={selectedVisualizationMock}
                     dimensionQuery={mockQuery}
                     contentLanguages={["fi", "sv", "en"]}
+                    visualizationSettings={mockVisualizationSettings}
                 />
                 </UiLanguageContext.Provider>
             );
@@ -269,6 +270,7 @@ describe('Rendering test', () => {
                     resolvedDimensions={mockDimensions}
                     selectedVisualization={selectedVisualizationMock}
                     dimensionQuery={mockQuery}
+                    visualizationSettings={mockVisualizationSettings}
                     contentLanguages={["fi", "sv", "en"]}
                 />
             </UiLanguageContext.Provider>
