@@ -1,7 +1,7 @@
 import React from 'react';
 import '@testing-library/jest-dom';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { EMetaPropertyType, IContentDimensionValue, IDimensionValue } from 'types/cubeMeta';
+import { EMetaPropertyType, IContentDimensionValue } from 'types/cubeMeta';
 import { IDimensionValueEditions } from 'types/query';
 import ContentDimensionValueEditor from './ContentDimensionValueEditor';
 import UiLanguageContext from 'contexts/uiLanguageContext';

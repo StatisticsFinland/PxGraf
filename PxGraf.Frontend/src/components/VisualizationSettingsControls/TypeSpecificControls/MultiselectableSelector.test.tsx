@@ -4,7 +4,7 @@ import { render, screen } from '@testing-library/react';
 import { MultiselectableSelector } from './MultiselectableSelector';
 import { IDimension, EDimensionType } from "types/cubeMeta";
 import { IVisualizationSettings } from '../../../types/visualizationSettings';
-import { IVisualizationRules } from '../../../types/visualizationRules';
+import { IVisualizationOptions } from '../../../types/editorContentsResponse';
 
 const mockDimensions: IDimension[] = [
 	{
@@ -50,13 +50,12 @@ const mockDimensions: IDimension[] = [
 	}
 ];
 
-const mockSettingsChangedHandler = jest.fn();
 const mockVisualizationSettings: IVisualizationSettings = {
 	multiselectableVariableCode: 'msVar'
 };
-const mockVisualizationRules: IVisualizationRules = {
-	allowManualPivot: false, sortingOptions: null, multiselectDimensionAllowed: true
-};
+const mockvisualizationOptions: IVisualizationOptions = {
+	allowManualPivot: false, sortingOptions: null, allowMultiselect: true
+} as unknown as IVisualizationOptions;
 
 jest.mock('react-i18next', () => ({
 	...jest.requireActual('react-i18next'),
@@ -74,8 +73,7 @@ describe('Rendering test', () => {
 	it('renders correctly', () => {
 		const { asFragment } = render(
 			<MultiselectableSelector
-				visualizationRules={mockVisualizationRules}
-				settingsChangedHandler={mockSettingsChangedHandler}
+				visualizationOptions={mockvisualizationOptions}
 				visualizationSettings={mockVisualizationSettings}
 				dimensions={mockDimensions}
 			/>);
@@ -87,24 +85,20 @@ describe('Rendering test', () => {
 
 describe('Assertion tests', () => {
 	it('When no multiselect variable code is provided, the selector should default to "noMultiselectable"', () => {
-		const mockSettingsChangedHandler = jest.fn();
 		render(<MultiselectableSelector
 			dimensions={mockDimensions}
-			visualizationRules={mockVisualizationRules}
+			visualizationOptions={mockvisualizationOptions}
 			visualizationSettings={{ ...mockVisualizationSettings, multiselectableVariableCode: null }}
-			settingsChangedHandler={mockSettingsChangedHandler}
 		></MultiselectableSelector>);
 		expect(screen.getByDisplayValue("noMultiselectable")).toBeInTheDocument();
 	});
 
 	it('When multiselect variable code is provided, the selector should be rendered with a corresponding value', () => {
-		const mockSettingsChangedHandler = jest.fn();
 		const changedMockSettings = { ...mockVisualizationSettings, multiselectableDimensionCode: "msVar" }
 		render(<MultiselectableSelector
 			dimensions={mockDimensions}
-			visualizationRules={mockVisualizationRules}
+			visualizationOptions={mockvisualizationOptions}
 			visualizationSettings={changedMockSettings}
-			settingsChangedHandler={mockSettingsChangedHandler}
 		></MultiselectableSelector>);
 		expect(screen.queryByDisplayValue("msVar")).toBeInTheDocument();
 	});

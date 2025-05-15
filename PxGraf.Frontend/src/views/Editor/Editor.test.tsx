@@ -1,23 +1,22 @@
 import React from 'react';
 import { render, screen } from "@testing-library/react";
 import { ICubeMetaResult } from "api/services/cube-meta";
-import { IHeaderResult } from "api/services/default-header";
 import { IFilterDimensionResult } from "api/services/filter-dimension";
-import { IVisualizationSettingsResult } from "api/services/visualization-rules";
 import { ISaveQueryResult } from "api/services/queries";
 import { EDimensionType } from "types/cubeMeta";
 import Editor from "./Editor";
-import { IQueryInfoResult } from "api/services/query-info";
 import { HashRouter } from "react-router-dom";
 import { IVisualizationResult } from "api/services/visualization";
 import { EVariableType, ETimeVariableInterval, EVisualizationType } from "@statisticsfinland/pxvisualizer";
-import { ITypeSpecificVisualizationRules } from "types/visualizationRules";
 import serializer from "../../testUtils/stripHighchartsHashes";
 import { NavigationProvider } from "contexts/navigationContext";
 import { IValidateTableMetaDataResult } from "api/services/validate-table-metadata";
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { UiLanguageContext } from "contexts/uiLanguageContext";
 import '@testing-library/jest-dom';
+import { IVisualizationOptions } from '../../types/editorContentsResponse';
+import { VisualizationType } from '../../types/visualizationType';
+import { IEditorContentsResult } from '../../api/services/editor-contents';
 
 const queryClient = new QueryClient();
 const language = "fi";
@@ -62,31 +61,10 @@ jest.mock('api/services/cube-meta', () => ({
     }
 }));
 
-jest.mock('api/services/default-header', () => ({
-    ...jest.requireActual('api/services/default-header'),
-    useDefaultHeaderQuery: () => {
-        return mockHeaderResult;
-    }
-}));
-
-jest.mock('api/services/query-info', () => ({
-    ...jest.requireActual('api/services/query-info'),
-    useQueryInfoQuery: () => {
-        return mockQueryInfoResult;
-    }
-}));
-
 jest.mock('api/services/filter-dimension', () => ({
     ...jest.requireActual('api/services/filter-dimension'),
     useResolveDimensionFiltersQuery: () => {
         return mockFilterDimensionResult;
-    }
-}));
-
-jest.mock('api/services/visualization-rules', () => ({
-    ...jest.requireActual('api/services/visualization-rules'),
-    useVisualizationOptionsQuery: () => {
-        return mockVisualizationSettingsResult;
     }
 }));
 
@@ -117,6 +95,13 @@ jest.mock('@statisticsfinland/pxvisualizer', () => {
         }
     }
 });
+
+jest.mock('api/services/editor-contents', () => ({
+    ...jest.requireActual('api/services/editor-contents'),
+    useEditorContentsQuery: () => {
+        return mockEditorContentsResult;
+    }
+}));
 
 const mockVisualizationResult: IVisualizationResult = {
     isLoading: false,
@@ -196,29 +181,25 @@ const mockSaveQueryResult: ISaveQueryResult = {
     mutate: jest.fn()
 }
 
-const mockTypeSpecificVisualizationRules: ITypeSpecificVisualizationRules = {
-    allowShowingDataPoints: true,
-    allowCuttingYAxis: true,
-    allowMatchXLabelsToEnd: true,
-    allowSetMarkerScale: true
-}
-
-const mockVisualizationSettingsResult: IVisualizationSettingsResult = {
-    isLoading: false,
-    isError: false,
-    data: {
+const mockVisualizationSettingsResult: IVisualizationOptions = {
+        type: VisualizationType.HorizontalBarChart,
         allowManualPivot: false,
-        multiselectDimensionAllowed: false,
-        sortingOptions: [
-            {
-                code: 'DESCENDING',
-                description: {
-                    'fi': 'Laskeva'
+        allowMultiselect: false,
+        sortingOptions: {
+            default: [
+                {
+                    code: 'DESCENDING',
+                    description: {
+                        'fi': 'Laskeva'
+                    }
                 }
-            }
-        ],
-        visualizationTypeSpecificRules: mockTypeSpecificVisualizationRules
-    }
+            ],
+            pivoted: []
+        },
+        allowShowingDataPoints: true,
+        allowCuttingYAxis: true,
+        allowMatchXLabelsToEnd: true,
+        allowSetMarkerScale: true
 }
 
 const mockFilterDimensionResult: IFilterDimensionResult = {
@@ -229,7 +210,7 @@ const mockFilterDimensionResult: IFilterDimensionResult = {
     }
 }
 
-const mockQueryInfoResult: IQueryInfoResult = {
+const mockEditorContentsResult: IEditorContentsResult = {
     isLoading: false,
     isError: false,
     data: {
@@ -237,20 +218,15 @@ const mockQueryInfoResult: IQueryInfoResult = {
         maximumSupportedSize: 100,
         size: 5,
         sizeWarningLimit: 75,
-        validVisualizations: ['HorizontalBarChart', 'VerticalBarChart'],
         visualizationRejectionReasons: {
             'pieChart': {
                 'fi': 'huono kaavio'
             }
-        }
-    }
-}
-
-const mockHeaderResult: IHeaderResult = {
-    isLoading: false,
-    isError: false,
-    data: {
-        'fi': 'header'
+        },
+        visualizationOptions: [mockVisualizationSettingsResult],
+        headerText: {
+            'fi': 'header'
+        },
     }
 }
 

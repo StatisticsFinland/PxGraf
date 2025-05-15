@@ -22,7 +22,6 @@ interface IContentDimensionValueEditorProps {
 
 export const ContentDimensionValueEditor: React.FC<IContentDimensionValueEditorProps> = ({ dimensionValue, language, valueEdits, onChange }) => {
     const { uiContentLanguage } = React.useContext(UiLanguageContext);
-
     const { t } = useTranslation();
 
     return (

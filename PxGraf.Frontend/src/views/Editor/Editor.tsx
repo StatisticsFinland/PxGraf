@@ -1,12 +1,9 @@
 import React, { useEffect } from 'react';
 import { useParams, useLocation } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
-
 import { Box, Stack, Divider, Container, CircularProgress, Alert } from '@mui/material';
-
 import { EditorContext } from 'contexts/editorContext';
-import { getDefaultQueries, resolveDimensions } from 'utils/editorHelpers';
-import { getValidatedSettings } from 'utils/ChartSettingHelpers';
+import { getDefaultQueries, getVisualizationOptionsForVisualizationType, resolveDimensions } from 'utils/editorHelpers';
 import EditorFilterSection from './EditorFilterSection';
 import EditorFooterSection from './EditorFooterSection';
 import EditorPreviewSection from './EditorPreviewSection';
@@ -14,17 +11,15 @@ import EditorMetaSection from './EditorMetaSection';
 import EditorDialogs from './EditorDialogs';
 import styled from 'styled-components';
 import { useCubeMetaQuery } from 'api/services/cube-meta';
-import { useDefaultHeaderQuery } from 'api/services/default-header';
 import { useResolveDimensionFiltersQuery } from 'api/services/filter-dimension';
-import { useVisualizationOptionsQuery } from 'api/services/visualization-rules';
 import { IFetchSavedQueryResponse, useSaveMutation } from 'api/services/queries';
-import { VisualizationType } from 'types/visualizationType';
-import { useQueryInfoQuery } from 'api/services/query-info';
 import { extractCubeQuery, extractQuery } from 'utils/ApiHelpers';
 import { useNavigationContext } from 'contexts/navigationContext';
 import { useValidateTableMetadataQuery } from 'api/services/validate-table-metadata';
 import { UiLanguageContext } from 'contexts/uiLanguageContext';
 import { IDimension } from '../../types/cubeMeta';
+import { useEditorContentsQuery } from '../../api/services/editor-contents';
+import { getValidatedSettings } from '../../utils/ChartSettingHelpers';
 
 //Used to set the width of the dimension selection and preview margin in pixels
 const dimensionSelectionWidth = 450;
@@ -77,11 +72,11 @@ export const Editor = () => {
         query,
         selectedVisualizationUserInput,
         visualizationSettingsUserInput,
-        defaultSelectables,
         setQuery,
         setCubeQuery,
         setVisualizationSettingsUserInput,
         setSelectedVisualizationUserInput,
+        defaultSelectables,
         setDefaultSelectables
     } = React.useContext(EditorContext);
 
@@ -116,9 +111,7 @@ export const Editor = () => {
     const tableValidityResponse = useValidateTableMetadataQuery(path);
     const isTableInvalid = tableValidityResponse.data && (!tableValidityResponse.data.allDimensionsContainValues || !tableValidityResponse.data.tableHasContentDimension || !tableValidityResponse.data.tableHasTimeDimension);
     const cubeMetaResponse = useCubeMetaQuery(path);
-
     const { language, languageTab, setLanguageTab, uiContentLanguage, setUiContentLanguage } = React.useContext(UiLanguageContext);
-
     const contentLanguages: string[] = cubeMetaResponse.data ? cubeMetaResponse.data.availableLanguages : [];
 
     useEffect(() => {
@@ -149,9 +142,7 @@ export const Editor = () => {
         }
     }, [query, cubeMetaResponse.data]);
 
-    const defaultHeaderResponse = useDefaultHeaderQuery(path, modifiedQuery);
-    const queryInfoResponse = useQueryInfoQuery(path, modifiedQuery, cubeQuery);
-
+    const editorContentsResponse = useEditorContentsQuery(path, modifiedQuery, cubeQuery);
     const resolvedDimensionCodesResponse = useResolveDimensionFiltersQuery(path, modifiedQuery);
     const resolvedDimensionCodes = React.useMemo(() => {
         if (resolvedDimensionCodesResponse.data != null) {
@@ -176,27 +167,24 @@ export const Editor = () => {
             return null;
         }
     }, [cubeMetaResponse.data, resolvedDimensionCodes]);
+
     const selectedVisualization = React.useMemo(() => {
-        if (queryInfoResponse.data?.validVisualizations.length > 0) {
-            if (queryInfoResponse.data?.validVisualizations.includes(selectedVisualizationUserInput)) {
+        if (editorContentsResponse.data?.visualizationOptions?.length > 0) {
+            if (editorContentsResponse.data?.visualizationOptions?.some(options => options.type === selectedVisualizationUserInput)) {
                 return selectedVisualizationUserInput;
             }
             else {
-                return queryInfoResponse.data?.validVisualizations[0] as VisualizationType;
+                return editorContentsResponse.data?.visualizationOptions[0].type;
             }
         }
         return null;
-    }, [queryInfoResponse.data?.validVisualizations, selectedVisualizationUserInput]);
-    const visualizationRulesResponse = useVisualizationOptionsQuery(
-        path,
-        modifiedQuery,
-        selectedVisualization,
-        // We should NOT use visualizationSettingsUserInput but since getDefaultSettings always return pivotRequested as false (or null) we can getaway with this cheat.
-        visualizationSettingsUserInput?.pivotRequested ?? false,
-    );
+    }, [editorContentsResponse.data?.visualizationOptions, selectedVisualizationUserInput]);
+
     const visualizationSettings = React.useMemo(() => {
-        if (selectedVisualization != null && visualizationRulesResponse.data?.sortingOptions != null && resolvedDimensions != null) {
-            const result = getValidatedSettings(visualizationSettingsUserInput, selectedVisualization, visualizationRulesResponse.data.sortingOptions, resolvedDimensions, modifiedQuery);
+        const visualizationOptions = getVisualizationOptionsForVisualizationType(editorContentsResponse.data?.visualizationOptions, selectedVisualization);
+        if (selectedVisualization != null && visualizationOptions?.sortingOptions != null && dimensions != null) {
+            const sortingOptions = visualizationOptions?.allowManualPivot && visualizationSettingsUserInput?.pivotRequested ? visualizationOptions?.sortingOptions.pivoted : visualizationOptions?.sortingOptions.default;
+            const result = getValidatedSettings(visualizationSettingsUserInput, selectedVisualization, sortingOptions, dimensions, modifiedQuery);
             if (defaultSelectables && Object.keys(defaultSelectables).length > 0) {
                 result.defaultSelectableVariableCodes = defaultSelectables;
             } else {
@@ -207,8 +195,9 @@ export const Editor = () => {
         else {
             return null;
         }
-    }, [visualizationSettingsUserInput, selectedVisualization, visualizationRulesResponse.data?.sortingOptions, resolvedDimensions, modifiedQuery, defaultSelectables]);
-    const saveQueryMutation = useSaveMutation(path, modifiedQuery, cubeQuery, selectedVisualization, visualizationSettings);
+    }, [selectedVisualization, dimensions, visualizationSettingsUserInput, modifiedQuery, defaultSelectables, editorContentsResponse]);
+
+    const saveQueryMutation = useSaveMutation(path, modifiedQuery, cubeQuery, selectedVisualization, visualizationSettingsUserInput);
 
     const errorContainer = (errorMessage: string) => {
         return (
@@ -226,13 +215,13 @@ export const Editor = () => {
             </Container>
         );
     }
-    else if (isTableInvalid || tableValidityResponse.isError || cubeMetaResponse.isError || !cubeMetaResponse?.data?.dimensions) {
+    else if (isTableInvalid || tableValidityResponse.isError || cubeMetaResponse.isError || !cubeMetaResponse?.data?.dimensions || editorContentsResponse.isError) {
         const errorWithCubeMeta = cubeMetaResponse.isError || !cubeMetaResponse?.data?.dimensions;
         const errorConditionsAndMessages = [
-            { condition: tableValidityResponse.isError || (errorWithCubeMeta && tableValidityResponse.data?.allDimensionsContainValues), message: t("error.contentLoad") },
+            { condition: tableValidityResponse.isError || (errorWithCubeMeta && tableValidityResponse.data?.allDimensionsContainValues) || editorContentsResponse.isError, message: t("error.contentLoad") },
             { condition: tableValidityResponse.data && !tableValidityResponse.data.tableHasContentDimension, message: t("error.contentVariableMissing") },
             { condition: tableValidityResponse.data && !tableValidityResponse.data.tableHasTimeDimension, message: t("error.timeVariableMissing") },
-            { condition: tableValidityResponse.data && !tableValidityResponse.data.allDimensionsContainValues, message: t("error.variablesMissingValues") }
+            { condition: tableValidityResponse.data && !tableValidityResponse.data.allDimensionsContainValues, message: t("error.variablesMissingValues") },
         ];
         const errorMessages = errorConditionsAndMessages
             .filter(item => item.condition)
@@ -255,22 +244,20 @@ export const Editor = () => {
             <Divider orientation="vertical" />
             <MetaPreviewSectionWrapper>
                 <EditorMetaSection
-                    defaultHeaderResponse={defaultHeaderResponse}
-                    visualizationRulesResponse={visualizationRulesResponse}
-                    queryInfo={queryInfoResponse.data}
+                    editorContentsResponse={editorContentsResponse}
                     resolvedDimensions={resolvedDimensions}
                     selectedVisualization={selectedVisualization}
-                    settings={visualizationSettings}
                     dimensionQuery={modifiedQuery}
                     contentLanguages={contentLanguages}
+                    visualizationSettings={visualizationSettings}
                 />
                 <PreviewDivider />
                 <EditorPreviewSection
                     path={path}
                     query={modifiedQuery}
-                    queryInfo={queryInfoResponse.data}
-                    selectedVisualization={selectedVisualization}
+                    editorContents={editorContentsResponse}
                     visualizationSettings={visualizationSettings}
+                    selectedVisualization={selectedVisualization}
                 />
                 <FooterDivider />
                 <EditorFooterSection />

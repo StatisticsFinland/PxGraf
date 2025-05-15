@@ -5,7 +5,7 @@ import { UiLanguageContext } from 'contexts/uiLanguageContext';
 import { EditorField } from './Editorfield';
 import styled from 'styled-components';
 import { IDimension } from 'types/cubeMeta';
-import { IDimensionEditions } from 'types/query';
+import { EditorContext } from '../../contexts/editorContext';
 
 const EditorFieldWrapper = styled(Stack)`
   padding: 0px;
@@ -14,13 +14,37 @@ const EditorFieldWrapper = styled(Stack)`
 interface IBasicDimensionEditor {
     dimension: IDimension;
     language: string;
-    dimensionEdits: IDimensionEditions;
-    onChange: (newEdit: IDimensionEditions) => void;
 }
 
-export const BasicDimensionEditor: React.FC<IBasicDimensionEditor> = ({ dimension, language, dimensionEdits, onChange }) => {
+export const BasicDimensionEditor: React.FC<IBasicDimensionEditor> = ({ dimension, language }) => {
     const { t } = useTranslation();
     const { uiContentLanguage } = React.useContext(UiLanguageContext);
+    const { cubeQuery, setCubeQuery } = React.useContext(EditorContext);
+    const dimensionEdits = cubeQuery?.variableQueries[dimension.code];
+
+    const handleChange = (newValue: string, valueCode: string) => {
+        const newDimensionEdit = {
+            ...dimensionEdits,
+            valueEdits: {
+                ...dimensionEdits?.valueEdits,
+                [valueCode]: {
+                    ...dimensionEdits?.valueEdits?.[valueCode],
+                    nameEdit: {
+                        ...dimensionEdits?.valueEdits?.[valueCode]?.nameEdit,
+                        [language]: newValue
+                    }
+                }
+            }
+        };
+
+        setCubeQuery({
+            ...cubeQuery,
+            variableQueries: {
+                ...cubeQuery?.variableQueries,
+                [dimension.code]: newDimensionEdit
+            }
+        });
+    };
 
     return (
         <EditorFieldWrapper spacing={2}>
@@ -31,22 +55,7 @@ export const BasicDimensionEditor: React.FC<IBasicDimensionEditor> = ({ dimensio
                         key={value.code}
                         defaultValue={value.name[language]}
                         editValue={dimensionEdits?.valueEdits[value.code]?.nameEdit?.[language]}
-                        onChange={newValue => {
-                            const newDimensionEdit = {
-                                ...dimensionEdits,
-                                valueEdits: {
-                                    ...dimensionEdits?.valueEdits,
-                                    [value.code]: {
-                                        ...dimensionEdits?.valueEdits[value.code],
-                                        nameEdit: {
-                                            ...dimensionEdits?.valueEdits[value.code]?.nameEdit,
-                                            [language]: newValue
-                                        }
-                                    }
-                                }
-                            };
-                            onChange(newDimensionEdit);
-                        }}
+                        onChange={newValue => handleChange(newValue, value.code)}
                     />
                 );
             })}

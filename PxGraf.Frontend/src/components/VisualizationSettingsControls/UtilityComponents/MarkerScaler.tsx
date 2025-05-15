@@ -3,6 +3,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { IVisualizationSettingsProps } from '../VisualizationSettingsControl';
 import styled from 'styled-components';
+import { EditorContext } from '../../../contexts/editorContext';
 
 const FormControlWrapper = styled(Stack)`
     gap: 40px;
@@ -14,10 +15,11 @@ const StyledSlider = styled(Slider)`
     margin-right: 16px;
 `;
 
-export const MarkerScaler: React.FC<IVisualizationSettingsProps> = ({ visualizationSettings, settingsChangedHandler }) => {
+export const MarkerScaler: React.FC<IVisualizationSettingsProps> = ({ visualizationSettings }) => {
     const { t } = useTranslation();
     // We dont want to trigger the api call every time the slider moves, only when the change is committed.
     const [sliderValue, setSliderValue] = React.useState(visualizationSettings.markerSize);
+    const { setVisualizationSettingsUserInput } = React.useContext(EditorContext);
 
     const marks = [
         {
@@ -46,7 +48,7 @@ export const MarkerScaler: React.FC<IVisualizationSettingsProps> = ({ visualizat
                     marks={marks}
                     value={sliderValue}
                     onChange={(_event, value) => setSliderValue(typeof (value) == "number" ? value : 100)}
-                    onChangeCommitted={(_event, value) => settingsChangedHandler({ ...visualizationSettings, markerSize: typeof (value) == "number" ? value : 100 })}
+                    onChangeCommitted={(_event, value) => setVisualizationSettingsUserInput({ ...visualizationSettings, markerSize: typeof (value) == "number" ? value : 100 })}
                     aria-label={t("chartSettings.markerScaleDefaultLabel")}
                     valueLabelDisplay="auto" />
             </Box>

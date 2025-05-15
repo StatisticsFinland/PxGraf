@@ -1,22 +1,13 @@
 import React from 'react';
 import EditorMetaSection from "./EditorMetaSection";
 import { render } from "@testing-library/react";
-import { IHeaderResult } from "api/services/default-header";
-import { IVisualizationSettingsResult } from "api/services/visualization-rules";
 import { EMetaPropertyType, IDimension, EDimensionType } from "types/cubeMeta";
-import { FilterType, IQueryInfo, Query } from "types/query";
+import { FilterType, Query } from "types/query";
 import { IVisualizationSettings } from "types/visualizationSettings";
 import { VisualizationType } from "types/visualizationType";
-import { ITypeSpecificVisualizationRules } from "types/visualizationRules";
 import { UiLanguageContext } from "contexts/uiLanguageContext";
-
-const headerResultMock: IHeaderResult = {
-    isError: false,
-    isLoading: false,
-    data: {
-        'fi': 'foo'
-    }
-}
+import { IEditorContentsResult } from '../../api/services/editor-contents';
+import { IEditorContentsResponse, IVisualizationOptions } from '../../types/editorContentsResponse';
 
 const mockDimensions: IDimension[] = [
     {
@@ -182,20 +173,11 @@ const mockQuery: Query = {
     }
 };
 
-const mockTypeSpecificVisualizationRules: ITypeSpecificVisualizationRules = {
-    allowShowingDataPoints: true,
-    allowCuttingYAxis: true,
-    allowMatchXLabelsToEnd: true,
-    allowSetMarkerScale: true
-}
-
-const visualizationRulesResponseMock: IVisualizationSettingsResult = {
-    isLoading: false,
-    isError: false,
-    data: {
-        allowManualPivot: false,
-        multiselectDimensionAllowed: false,
-        sortingOptions: [
+const visualizationOptions: IVisualizationOptions = {
+    allowManualPivot: false,
+    allowMultiselect: false,
+    sortingOptions: {
+        default: [
             {
                 code: 'DESCENDING',
                 description: {
@@ -205,20 +187,36 @@ const visualizationRulesResponseMock: IVisualizationSettingsResult = {
                 }
             }
         ],
-        visualizationTypeSpecificRules: mockTypeSpecificVisualizationRules
-    }
-}
+        pivoted: []
+    },
+    allowShowingDataPoints: true,
+    allowCuttingYAxis: true,
+    allowMatchXLabelsToEnd: true,
+    allowSetMarkerScale: true,
+    type: VisualizationType.HorizontalBarChart,
+};
 
-const mockQueryInfo: IQueryInfo = {
+const editorContents: IEditorContentsResponse = {
+    headerText: {
+        'fi': 'foo'
+    },
     maximumHeaderLength: 120,
     maximumSupportedSize: 200,
     size: 5,
     sizeWarningLimit: 175,
-    validVisualizations: ['HorizontalBarChart'],
-    visualizationRejectionReasons: {'pieChart': {
-        'fi': 'huono kaavio'
-    }
-}}
+    visualizationRejectionReasons: {
+        'pieChart': {
+            'fi': 'huono kaavio'
+        }
+    },
+    visualizationOptions: [visualizationOptions]
+};
+
+const editorContentsResult: IEditorContentsResult = {
+    isError: false,
+    isLoading: false,
+    data: editorContents,
+}
 
 const selectedVisualizationMock: VisualizationType = VisualizationType.HorizontalBarChart
 
@@ -247,14 +245,12 @@ describe('Rendering test', () => {
         const { asFragment } = render(
             <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
                 <EditorMetaSection
-                    defaultHeaderResponse={headerResultMock}
+                    editorContentsResponse={editorContentsResult}
                     resolvedDimensions={mockDimensions}
                     selectedVisualization={selectedVisualizationMock}
-                    settings={mockVisualizationSettings}
                     dimensionQuery={mockQuery}
-                    visualizationRulesResponse={visualizationRulesResponseMock}
-                    queryInfo={mockQueryInfo}
                     contentLanguages={["fi", "sv", "en"]}
+                    visualizationSettings={mockVisualizationSettings}
                 />
                 </UiLanguageContext.Provider>
             );
