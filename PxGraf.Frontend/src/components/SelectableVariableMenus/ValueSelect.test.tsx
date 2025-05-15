@@ -5,6 +5,7 @@ import '@testing-library/jest-dom';
 import { EDimensionType } from 'types/cubeMeta';
 import UiLanguageContext from 'contexts/uiLanguageContext';
 import { IVariable } from '../../types/visualizationResponse';
+import userEvent from '@testing-library/user-event';
 
 const mockFunction = jest.fn((value: string) => {
     return;
@@ -56,4 +57,19 @@ describe('Rendering test', () => {
         );
         expect(asFragment()).toMatchSnapshot();
     });
+});
+
+describe('Functionality test', () => { });
+it('calls the onValueChanged function when a value is selected', async () => {
+    const user = userEvent.setup();
+    const { getByLabelText, findByRole } = render(
+        <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
+            <ValueSelect dimension={mockData.dimension} activeSelections={mockData.activeSelections} onValueChanged={mockData.onValueChanged} multiselect={mockData.multiselect} />
+        </UiLanguageContext.Provider>
+    );
+    const select = getByLabelText(mockData.dimension.name[uiContentLanguage]);
+    await user.click(select);
+    const menuItem = await findByRole('option', { name: mockData.dimension.values[0].name[uiContentLanguage] });
+    await user.click(menuItem);
+    expect(mockFunction).toHaveBeenCalledWith(["asd1", "asd2", "barfoo1"]);
 });

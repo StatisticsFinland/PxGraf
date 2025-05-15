@@ -1,17 +1,15 @@
 import { Stack, IconButton, FormControl } from '@mui/material';
-
 import React, { useState } from 'react';
-
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
-
 import { useTranslation } from 'react-i18next';
 import DimensionList from '../UtilityComponents/DimensionList';
 import { IVisualizationSettingsProps } from '../VisualizationSettingsControl';
 import { IDimension } from 'types/cubeMeta';
 import styled from 'styled-components';
 import { Query } from "types/query";
+import { EditorContext } from '../../../contexts/editorContext';
 
 const DimensionListWrapper = styled(Stack)`
     padding: 8px;
@@ -29,9 +27,10 @@ interface ITableSettingsProps extends IVisualizationSettingsProps {
     query?: Query
 }
 
-export const TablePivotSettings: React.FC<ITableSettingsProps> = ({ visualizationSettings, settingsChangedHandler, dimensions, selectableDimensions, query }) => {
+export const TablePivotSettings: React.FC<ITableSettingsProps> = ({ visualizationSettings, dimensions, selectableDimensions, query }) => {
     const { t } = useTranslation();
     const [selected, setSelected] = useState("");
+    const { setVisualizationSettingsUserInput } = React.useContext(EditorContext);
 
     const upHandler = () => {
         if (selected == null) return;
@@ -40,14 +39,14 @@ export const TablePivotSettings: React.FC<ITableSettingsProps> = ({ visualizatio
             const i = dimsCopy.indexOf(selected);
             dimsCopy[i] = dimsCopy[i - 1];
             dimsCopy[i - 1] = selected;
-            settingsChangedHandler({ ...visualizationSettings, columnVariableCodes: dimsCopy });
+            setVisualizationSettingsUserInput({ ...visualizationSettings, columnVariableCodes: dimsCopy });
         }
         else if (visualizationSettings.rowVariableCodes.includes(selected) && visualizationSettings.rowVariableCodes[0] !== selected) {
             const dimsCopy = [...visualizationSettings.rowVariableCodes];
             const i = dimsCopy.indexOf(selected);
             dimsCopy[i] = dimsCopy[i - 1];
             dimsCopy[i - 1] = selected;
-            settingsChangedHandler({ ...visualizationSettings, rowVariableCodes: dimsCopy });
+            setVisualizationSettingsUserInput({ ...visualizationSettings, rowVariableCodes: dimsCopy });
         }
     }
 
@@ -58,14 +57,14 @@ export const TablePivotSettings: React.FC<ITableSettingsProps> = ({ visualizatio
             const i = dimsCopy.indexOf(selected);
             dimsCopy[i] = dimsCopy[i + 1];
             dimsCopy[i + 1] = selected;
-            settingsChangedHandler({ ...visualizationSettings, columnVariableCodes: dimsCopy });
+            setVisualizationSettingsUserInput({ ...visualizationSettings, columnVariableCodes: dimsCopy });
         }
         else if (visualizationSettings.rowVariableCodes.includes(selected) && visualizationSettings.rowVariableCodes[visualizationSettings.rowVariableCodes.length - 1] !== selected) {
             const dimsCopy = [...visualizationSettings.rowVariableCodes];
             const i = dimsCopy.indexOf(selected);
             dimsCopy[i] = dimsCopy[i + 1];
             dimsCopy[i + 1] = selected;
-            settingsChangedHandler({ ...visualizationSettings, rowVariableCodes: dimsCopy });
+            setVisualizationSettingsUserInput({ ...visualizationSettings, rowVariableCodes: dimsCopy });
         }
     }
 
@@ -76,10 +75,10 @@ export const TablePivotSettings: React.FC<ITableSettingsProps> = ({ visualizatio
         const columnIndex = columnCopy.indexOf(selected);
         if (rowIndex > -1) {
             rowCopy.splice(rowIndex, 1);
-            settingsChangedHandler({ ...visualizationSettings, rowVariableCodes: rowCopy, columnVariableCodes: [...columnCopy, selected] });
+            setVisualizationSettingsUserInput({ ...visualizationSettings, rowVariableCodes: rowCopy, columnVariableCodes: [...columnCopy, selected] });
         } else if (columnIndex > -1) {
             columnCopy.splice(columnIndex, 1);
-            settingsChangedHandler({ ...visualizationSettings, rowVariableCodes: [...rowCopy, selected], columnVariableCodes: columnCopy });
+            setVisualizationSettingsUserInput({ ...visualizationSettings, rowVariableCodes: [...rowCopy, selected], columnVariableCodes: columnCopy });
         }
     }
 

@@ -1,7 +1,6 @@
 import TablePivotSettings from "./TypeSpecificControls/TablePivotSettings";
 import { MarkerScaler } from "./UtilityComponents/MarkerScaler";
 import { IVisualizationSettings } from "types/visualizationSettings";
-import { IVisualizationRules } from "types/visualizationRules";
 import { VisualizationType } from "types/visualizationType";
 import { IDimension, EDimensionType } from "types/cubeMeta";
 import { Query } from "types/query";
@@ -12,22 +11,19 @@ import { VisualizationSettingsSwitch } from "./UtilityComponents/VisualizationSe
 import SortingSelector from './UtilityComponents/SortingSelector';
 import React from 'react';
 import { MultiselectableSelector } from "./TypeSpecificControls/MultiselectableSelector";
+import { IVisualizationOptions } from "../../types/editorContentsResponse";
 
 export interface IVisualizationSettingControlProps {
-    selectedVisualization: string,
-    visualizationSettings: IVisualizationSettings,
-    visualizationRules: IVisualizationRules,
-    settingsChangedHandler: SettingsChangedHandler,
+    selectedVisualization: VisualizationType,
     dimensions: IDimension[],
     dimensionQuery: Query,
+    visualizationOptions: IVisualizationOptions,
+    visualizationSettings: IVisualizationSettings,
 }
 
-export type SettingsChangedHandler = (newSettings: IVisualizationSettings) => void;
-
 export interface IVisualizationSettingsProps {
-    visualizationRules: IVisualizationRules,
-    visualizationSettings: IVisualizationSettings
-    settingsChangedHandler: SettingsChangedHandler
+    visualizationOptions: IVisualizationOptions,
+    visualizationSettings: IVisualizationSettings,
 }
 
 const SettingsWrapper = styled.div`
@@ -38,25 +34,24 @@ const SettingsWrapper = styled.div`
 
 export const VisualizationSettingControl: React.FC<IVisualizationSettingControlProps> = ({
     selectedVisualization,
-    visualizationSettings,
-    visualizationRules,
-    settingsChangedHandler,
     dimensions,
     dimensionQuery,
+    visualizationOptions,
+    visualizationSettings,
 }) => {
-
+    const sortingOptions = visualizationOptions?.allowManualPivot && visualizationSettings.pivotRequested ? visualizationOptions?.sortingOptions.pivoted : visualizationOptions?.sortingOptions.default;
     const showTableSettings: boolean = selectedVisualization === VisualizationType.Table;
-    const showSortingOptions: boolean = (visualizationRules.sortingOptions?.length > 0);
-    const showMarkerScaler: boolean = visualizationRules.visualizationTypeSpecificRules.allowSetMarkerScale;
-    const showYAxisCutting: boolean = visualizationRules.visualizationTypeSpecificRules.allowCuttingYAxis;
-    const showMatchXLabelsToEnd: boolean = visualizationRules.visualizationTypeSpecificRules.allowMatchXLabelsToEnd;
-    const showPivot: boolean = visualizationRules.allowManualPivot;
-    const showDataPoints: boolean = visualizationRules.visualizationTypeSpecificRules.allowShowingDataPoints;
+    const showSortingOptions: boolean = (sortingOptions?.length > 0);
+    const showMarkerScaler: boolean = visualizationOptions?.allowSetMarkerScale;
+    const showYAxisCutting: boolean = visualizationOptions?.allowCuttingYAxis;
+    const showMatchXLabelsToEnd: boolean = visualizationOptions?.allowMatchXLabelsToEnd;
+    const showPivot: boolean = visualizationOptions?.allowManualPivot;
+    const showDataPoints: boolean = visualizationOptions?.allowShowingDataPoints;
 
     const { t } = useTranslation();
     const selectableDimensions: IDimension[] = dimensions.filter(v => dimensionQuery[v.code].selectable);
     const selectableDimensionsExcludingContent: IDimension[] = selectableDimensions?.filter(fv => fv.type !== EDimensionType.Content);
-    const showMultiselectableSelector: boolean = visualizationRules.multiselectDimensionAllowed && selectableDimensionsExcludingContent.length > 0;
+    const showMultiselectableSelector: boolean = visualizationOptions?.allowMultiselect && selectableDimensionsExcludingContent.length > 0;
 
     return (
         <div>
@@ -65,34 +60,30 @@ export const VisualizationSettingControl: React.FC<IVisualizationSettingControlP
                 <SettingsWrapper>
                     {showTableSettings && (
                         <TablePivotSettings
-                            visualizationRules={visualizationRules}
-                            visualizationSettings={visualizationSettings}
-                            settingsChangedHandler={settingsChangedHandler}
+                            visualizationOptions={visualizationOptions}
                             dimensions={dimensions}
                             selectableDimensions={selectableDimensions}
                             query={dimensionQuery}
+                            visualizationSettings={visualizationSettings}
                         />
                     )}
                     {showSortingOptions && (
                         <SortingSelector
-                            sortingOptions={visualizationRules.sortingOptions}
-                            activeSortingCode={visualizationSettings.sorting}
-                            sortingChangedHandler={(sorting) => settingsChangedHandler({ ...visualizationSettings, sorting: sorting })}
+                            visualizationSettings={visualizationSettings}
+                            sortingOptions={sortingOptions}
                         />
                     )}
                     {showMarkerScaler && (
                         <MarkerScaler
-                            visualizationRules={visualizationRules}
+                            visualizationOptions={visualizationOptions}
                             visualizationSettings={visualizationSettings}
-                            settingsChangedHandler={settingsChangedHandler}
                         />
                     )}
                     {showMultiselectableSelector && (
                         <MultiselectableSelector
-                            visualizationRules={visualizationRules}
-                            settingsChangedHandler={settingsChangedHandler}
-                            visualizationSettings={visualizationSettings}
+                            visualizationOptions={visualizationOptions}
                             dimensions={selectableDimensionsExcludingContent}
+                            visualizationSettings={visualizationSettings}
                         />
                     )}
                 </SettingsWrapper>
@@ -102,38 +93,34 @@ export const VisualizationSettingControl: React.FC<IVisualizationSettingControlP
                     {showYAxisCutting && (
                         <VisualizationSettingsSwitch
                             selected={visualizationSettings.cutYAxis}
-                            visualizationSettings={visualizationSettings}
-                            settingsChangedHandler={settingsChangedHandler}
                             label="chartSettings.cutYAxis"
                             changeProperty="cutYAxis"
+                            visualizationSettings={visualizationSettings}
                         />
                     )}
                     {showMatchXLabelsToEnd && (
                         <VisualizationSettingsSwitch
                             selected={visualizationSettings.matchXLabelsToEnd}
-                            visualizationSettings={visualizationSettings}
-                            settingsChangedHandler={settingsChangedHandler}
                             label="chartSettings.matchXLabelsToEnd"
                             changeProperty="matchXLabelsToEnd"
                             hidden={true}
+                            visualizationSettings={visualizationSettings}
                         />
                     )}
                     {(showPivot) && (
                         <VisualizationSettingsSwitch
                             selected={visualizationSettings.pivotRequested}
-                            visualizationSettings={visualizationSettings}
-                            settingsChangedHandler={settingsChangedHandler}
                             label="chartSettings.pivot"
                             changeProperty="pivotRequested"
+                            visualizationSettings={visualizationSettings}
                         />
                     )}
                     {showDataPoints && (
                         <VisualizationSettingsSwitch
                             selected={visualizationSettings.showDataPoints}
-                            visualizationSettings={visualizationSettings}
-                            settingsChangedHandler={settingsChangedHandler}
                             label="visualizationSettings.showDataPoints"
                             changeProperty="showDataPoints"
+                            visualizationSettings={visualizationSettings}
                         />
                     )}
                 </SettingsWrapper>

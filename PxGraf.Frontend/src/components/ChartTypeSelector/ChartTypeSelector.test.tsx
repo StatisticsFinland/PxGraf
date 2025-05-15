@@ -2,6 +2,8 @@ import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { ChartTypeSelector } from './ChartTypeSelector';
 import '@testing-library/jest-dom';
+import { EditorContext } from '../../contexts/editorContext';
+import { VisualizationType } from '../../types/visualizationType';
 
 jest.mock('react-i18next', () => ({
     ...jest.requireActual('react-i18next'),
@@ -21,15 +23,31 @@ const mockTypes = ['foo', 'bar', 'baz'];
 
 describe('Rendering test', () => {
     it('renders correctly', () => {
-        const { asFragment } = render(<ChartTypeSelector onTypeSelected={onTypeSelectedMock} possibleTypes={mockTypes} selectedType={'foo'} />);
+        const { asFragment } = render(<ChartTypeSelector possibleTypes={mockTypes} selectedType={'foo'} />);
         expect(asFragment()).toMatchSnapshot();
     });
 });
 
 describe('Assertion tests', () => {
     it('should invoke handler if clicked', () => {
-        render(<ChartTypeSelector onTypeSelected={onTypeSelectedMock} possibleTypes={mockTypes} selectedType={'foo'} />);
+        render(
+            <EditorContext.Provider value={{
+                defaultSelectables: {},
+                setDefaultSelectables: jest.fn(),
+                cubeQuery: null,
+                setCubeQuery: jest.fn(),
+                query: {},
+                setQuery: jest.fn(),
+                saveDialogOpen: false,
+                setSaveDialogOpen: jest.fn(),
+                selectedVisualizationUserInput: VisualizationType.VerticalBarChart,
+                setSelectedVisualizationUserInput: onTypeSelectedMock,
+                visualizationSettingsUserInput: {},
+                setVisualizationSettingsUserInput: jest.fn()
+            }}>
+                <ChartTypeSelector possibleTypes={mockTypes} selectedType={'foo'} />
+            </EditorContext.Provider>);
         fireEvent.click(screen.getByText('chartTypes.bar'));
-        expect(onTypeSelectedMock).toBeCalledTimes(1);
+        expect(onTypeSelectedMock).toHaveBeenCalledTimes(1);
     });
 });

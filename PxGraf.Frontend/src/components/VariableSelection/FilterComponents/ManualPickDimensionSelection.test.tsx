@@ -3,6 +3,7 @@ import { render } from "@testing-library/react";
 import ManualPickDimensionSelection from "./ManualPickDimensionSelection";
 import UiLanguageContext from "contexts/uiLanguageContext";
 import { IDimensionValue } from "../../../types/cubeMeta";
+import userEvent from '@testing-library/user-event';
 
 const mockDimensionValues: IDimensionValue[] = [
     {
@@ -77,4 +78,26 @@ describe('Rendering test', () => {
         );
         expect(asFragment()).toMatchSnapshot();
     });
+});
+
+describe('Functionality test', () => {
+    it('calls the onQueryChanged function when a value is selected', async () => {
+        const user = userEvent.setup();
+        const mockOnQueryChanged = jest.fn();
+
+        const { getByLabelText, findByRole } = render(
+            <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
+                <ManualPickDimensionSelection
+                    options={mockDimensionValues}
+                    selectedValues={[mockDimensionValues[0]]}
+                    onQueryChanged={mockOnQueryChanged} />
+            </UiLanguageContext.Provider>
+        );
+        const selectableMenu = getByLabelText('variableSelect.itemFilter');
+        await user.click(selectableMenu);
+        const valueSelect = await findByRole('option', { name: '2020' });
+        await user.click(valueSelect);
+
+        expect(mockOnQueryChanged).toHaveBeenCalledWith(["2018", "2020"]);
+    })
 });

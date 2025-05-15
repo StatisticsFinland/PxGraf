@@ -3,6 +3,8 @@ import { FilterType, IDimensionQuery } from 'types/query';
 import { getDefaultFilter } from './dimensionSelectionHelpers';
 import { useTranslation } from 'react-i18next';
 import { EDatabaseTableError } from '../types/tableListItems';
+import { IVisualizationOptions } from '../types/editorContentsResponse';
+import { VisualizationType } from '../types/visualizationType';
 
 export const getDefaultQueries = (variables: IDimension[]) => {
     const queries: { [key: string]: IDimensionQuery } = {};
@@ -30,4 +32,8 @@ export const getErrorText = (error: EDatabaseTableError) => {
         default:
             return t("error.contentLoad");
     }
+}
+
+export const getVisualizationOptionsForVisualizationType = (options: IVisualizationOptions[], type: VisualizationType): IVisualizationOptions | undefined => {
+    return options?.find(option => option.type === type);
 }

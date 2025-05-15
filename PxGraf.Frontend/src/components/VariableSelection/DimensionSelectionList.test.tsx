@@ -384,7 +384,6 @@ describe('Rendering test', () => {
                         FoobarMissingValueName: ["missingName"]
                     }}
                     query={mockQuery}
-                    onQueryChanged={(newValues) => undefined}
                 ></DimensionSelectionList>
             </UiLanguageContext.Provider>
         );
