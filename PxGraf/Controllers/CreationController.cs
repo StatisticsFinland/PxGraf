@@ -209,11 +209,11 @@ namespace PxGraf.Controllers
             IReadOnlyMatrixMetadata filteredMeta = tableMeta.FilterDimensionValues(query);
             int includedValuesCount = filteredMeta.Dimensions.Select(x => x.Values.Count).Aggregate((a, x) => a * x);
 
-            if (includedValuesCount == 0)
+            if (includedValuesCount == 0 || includedValuesCount > maxQuerySize)
             {
                 return new EditorContentsResponse()
                 {
-                    Size = 0,
+                    Size = includedValuesCount,
                     MaximumSupportedSize = maxQuerySize,
                     SizeWarningLimit = Convert.ToInt32(maxQuerySize * 0.75),
                     HeaderText = new MultilanguageString(Configuration.Current.LanguageOptions.Available.Select(lang => new KeyValuePair<string, string>(lang, string.Empty))),
