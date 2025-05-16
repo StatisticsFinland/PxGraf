@@ -24,7 +24,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System;
 using PxGraf.Datasource.FileDatasource;
-using System.Drawing;
 
 namespace PxGraf.Controllers
 {
