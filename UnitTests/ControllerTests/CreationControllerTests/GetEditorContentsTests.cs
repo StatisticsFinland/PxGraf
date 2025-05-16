@@ -107,5 +107,38 @@ namespace UnitTests.ControllerTests.CreationControllerTests
             Assert.That(editorContent.Value, Is.Not.Null);
             Assert.That(editorContent.Value.Size.Equals(0), Is.True);
         }
+
+        [Test]
+        public async Task GetEditorContents_ExceedinglyLargeQuery_ReturnsWithNoValidVisualizations()
+        {
+            List<DimensionParameters> cubeParams =
+            [
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 96),
+                new DimensionParameters(DimensionType.Other, 100),
+                new DimensionParameters(DimensionType.Other, 100),
+                new DimensionParameters(DimensionType.Other, 10) { Selectable = true},
+            ];
+
+            List<DimensionParameters> metaParams =
+            [
+                new DimensionParameters(DimensionType.Content, 5),
+                new DimensionParameters(DimensionType.Time, 192),
+                new DimensionParameters(DimensionType.Other, 128),
+                new DimensionParameters(DimensionType.Other, 128),
+                new DimensionParameters(DimensionType.Other, 16),
+            ];
+
+
+            CreationController testController = TestCreationControllerBuilder.BuildController(cubeParams, metaParams);
+            MatrixQuery cubeQuery = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams);
+
+            ActionResult<EditorContentsResponse> editorContent = await testController.GetEditorContents(cubeQuery);
+
+            Assert.That(editorContent, Is.Not.Null);
+            Assert.That(editorContent.Value, Is.Not.Null);
+            Assert.That(editorContent.Value.Size.Equals(9600000), Is.True);
+            Assert.That(editorContent.Value.VisualizationOptions.Count, Is.EqualTo(0));
+        }
     }
 }
