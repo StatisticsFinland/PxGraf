@@ -14,7 +14,7 @@ using System;
 namespace PxGraf.ChartTypeSelection
 {
     /// <summary>
-    /// Contains all nessesary information to determine which chart types are valid for the cube and/or query this object was constructed from.
+    /// Contains all necessary information to determine which chart types are valid for the cube and/or query this object was constructed from.
     /// Serves as an adapter between queries/cubes and the chart type selector so changes to one do not force changes to the other and the related unit tests.
     /// </summary>
     public class VisualizationTypeSelectionObject
@@ -75,7 +75,7 @@ namespace PxGraf.ChartTypeSelection
             public string Code { get; }
 
             /// <summary>
-            /// Visualization type, bar chart, table, etc.
+            /// Dimension type, content, time, ordinal, nominal etc.
             /// </summary>
             public DimensionType Type { get; }
 
@@ -102,7 +102,7 @@ namespace PxGraf.ChartTypeSelection
 
             /// <summary>
             /// Only time dimensions can be consecutive or irregular. IE: cons: 2020, 2021, 2022 and irregular: 2020, 2022, 2023
-            /// True if the dimension is a time dimension and has irregular values, false if the time dimension has cosecutive values.
+            /// True if the dimension is a time dimension and has irregular values, false if the time dimension has consecutive values.
             /// null when the dimension is not a time dimension.
             /// </summary>
             public bool? IsIrregular { get; private set; }

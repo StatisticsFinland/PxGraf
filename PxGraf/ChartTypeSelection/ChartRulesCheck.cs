@@ -8,7 +8,7 @@ using System.Linq;
 namespace PxGraf.ChartTypeSelection
 {
     /// <summary>
-    /// Defines the limits for data dimensions for a spesific chart type.
+    /// Defines the limits for data dimensions for a specific chart type.
     /// </summary>
     /// <remarks>
     /// Default constructor
@@ -280,7 +280,7 @@ namespace PxGraf.ChartTypeSelection
         }
 
         /// <summary>
-        /// Returns the time dimennsion if the query contains one, if not, returns a dimension which is ordinal and has the most values.
+        /// Returns the time dimension if the query contains one, if not, returns a dimension which is ordinal and has the most values.
         /// If the query contains neither time or progressive dimensions, returns null.
         /// </summary>
         /// <returns></returns>
