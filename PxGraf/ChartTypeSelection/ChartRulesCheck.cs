@@ -153,9 +153,9 @@ namespace PxGraf.ChartTypeSelection
                 if (contentRange.DimensionNotAllowed) yield return BuildRejectionInfo(RejectionReason.ContentNotAllowed, contentDimension);
                 else
                 {
-                    int conttentSize = contentDimension.Size;
-                    if (conttentSize < contentRange.Min) yield return BuildRejectionInfo(RejectionReason.ContentBelowMin, conttentSize, contentRange.Min, contentDimension);
-                    if (conttentSize > contentRange.Max) yield return BuildRejectionInfo(RejectionReason.ContentOverMax, conttentSize, contentRange.Max, contentDimension);
+                    int contentSize = contentDimension.Size;
+                    if (contentSize < contentRange.Min) yield return BuildRejectionInfo(RejectionReason.ContentBelowMin, contentSize, contentRange.Min, contentDimension);
+                    if (contentSize > contentRange.Max) yield return BuildRejectionInfo(RejectionReason.ContentOverMax, contentSize, contentRange.Max, contentDimension);
                 }
             }
         }

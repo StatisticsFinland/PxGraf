@@ -140,7 +140,7 @@ namespace PxGraf.ChartTypeSelection
                 }
                 else if (dimension.Type == DimensionType.Time && dimension is TimeDimension timeDim)
                 {
-                    result.IsIrregular = size > 1 &&
+                    result.IsIrregular = !query.Selectable && 
                         (timeDim.Interval == TimeDimensionInterval.Irregular ||
                         TimeDimensionInterval.Irregular == Data.TimeDimensionIntervalParser.DetermineIntervalFromCodes(timeDim.Values.Codes));
                 }
