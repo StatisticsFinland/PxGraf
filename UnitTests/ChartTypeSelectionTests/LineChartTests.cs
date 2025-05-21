@@ -275,5 +275,47 @@ namespace UnitTests.ChartTypeSelectionTests
 
             Assert.That(check.CheckValidity(input)[0].Reason, Is.EqualTo(RejectionReason.IrregularTimeNotAllowed));
         }
+
+        /// <summary>
+        /// Case: Selectable time variable with multiple irregular values, ordinal dimension with multiple values and a content dimension with 1 value
+        /// Result: Pass
+        /// </summary>
+        [Test]
+        public void SelectableIrregularTimeAndMultivalueOrdinal_Pass()
+        {
+            List<DimensionParameters> dimension =
+            [
+                new DimensionParameters(DimensionType.Time, 10) { Irregular = true, Selectable = true },
+                new DimensionParameters(DimensionType.Ordinal, 5),
+                new DimensionParameters(DimensionType.Content, 1),
+            ];
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
+            LineChartCheck check = new(Limits.LineChartLimits);
+            List<ChartRejectionInfo> reasons = check.CheckValidity(input);
+            string msg = "Ok";
+            if (reasons.Count > 0) msg = reasons[0].ToString();
+            Assert.That(reasons.Count, Is.EqualTo(0), msg);
+        }
+
+        /// <summary>
+        /// Case: Time variable with 1 value, ordinal dimension with multiple values and a content dimension with 1 value
+        /// Result: Pass
+        /// </summary>
+        [Test]
+        public void SizeOneTimeVariableAndMultivalueOrdinal_Pass()
+        {
+            List<DimensionParameters> dimension =
+            [
+                new DimensionParameters(DimensionType.Time, 1),
+                new DimensionParameters(DimensionType.Ordinal, 5),
+                new DimensionParameters(DimensionType.Content, 1),
+            ];
+            VisualizationTypeSelectionObject input = TestDataCubeBuilder.BuildTestVisualizationTypeSelectionObject(dimension);
+            LineChartCheck check = new(Limits.LineChartLimits);
+            List<ChartRejectionInfo> reasons = check.CheckValidity(input);
+            string msg = "Ok";
+            if (reasons.Count > 0) msg = reasons[0].ToString();
+            Assert.That(reasons.Count, Is.EqualTo(0), msg);
+        }
     }
 }

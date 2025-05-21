@@ -86,7 +86,6 @@ namespace PxGraf.Data
                 return TimeDimensionInterval.Quarter;
             }
 
-
             if (BiAnnualValuesRegex().IsMatch(valueCodes.First()) && Validate(valueCodes, code => new BiAnnualTimeStamp(code)))
             {
                 return TimeDimensionInterval.HalfYear;
