@@ -97,8 +97,8 @@ namespace PxGraf.Data
             List<IReadOnlyDimension> multiselects = [.. meta.GetMultivalueDimensions().Where(mvv => !query.DimensionQueries[mvv.Code].Selectable)];
             return new VisualizationOption.SortingOptionsCollection
             {
-                Default = GetOptions(multiselects[1]),
-                Pivoted = allowPivot ? GetOptions(multiselects[0]) : null
+                Default = GetOptions(multiselects[0]), // OBS: Highcharts flips columns and rows in horizontal bar charts
+                Pivoted = allowPivot ? GetOptions(multiselects[1]) : null
             };
 
             List<SortingOption> GetOptions(IReadOnlyDimension sortingDimension)
