@@ -138,7 +138,7 @@ namespace PxGraf.ChartTypeSelection
                     if (query.Selectable) result.NumberOfUnits = 1;
                     else result.NumberOfUnits = cDim.Values.Map(v => v.Unit).Distinct().Count();
                 }
-                else if (dimension.Type == DimensionType.Time && dimension is TimeDimension timeDim && !query.Selectable) // Selectable time dimensions are not considered irregular
+                else if (dimension.Type == DimensionType.Time && dimension is TimeDimension timeDim)
                 {
                     result.IsIrregular = !query.Selectable &&
                         (timeDim.Interval == TimeDimensionInterval.Irregular || TimeDimensionInterval.Irregular == Data.TimeDimensionIntervalParser.DetermineIntervalFromCodes(timeDim.Values.Codes));
