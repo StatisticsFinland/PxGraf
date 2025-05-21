@@ -1,4 +1,5 @@
-﻿using Px.Utils.Models.Metadata.Enums;
+﻿using Px.Utils.Models.Metadata.Dimensions;
+using Px.Utils.Models.Metadata.Enums;
 using PxGraf.ChartTypeSelection.JsonObjects;
 using PxGraf.Enums;
 using System;
@@ -22,7 +23,7 @@ namespace PxGraf.ChartTypeSelection
         public abstract VisualizationType Type { get; }
 
         /// <summary>
-        /// Chart type spesific limits
+        /// Chart type specific limits
         /// </summary>
         IChartTypeLimits Limits { get; } = limits;
 
@@ -44,7 +45,9 @@ namespace PxGraf.ChartTypeSelection
             reasons.AddRange(CheckMultiselectLimits(input, Limits.NumberOfMultiselectsRange));
 
             // Time
-            reasons.AddRange(CheckTimeLimits(input.Dimensions.FirstOrDefault(v => v.Type == DimensionType.Time), Limits.TimeRange, Limits.IrregularTimeRange));
+            VisualizationTypeSelectionObject.DimensionInfo timeDimension = input.Dimensions.FirstOrDefault(v => v.Type == DimensionType.Time);
+            bool checkIrregularity = GetTimeOrLargestOrdinal(input.Dimensions) == timeDimension; // Checking for time dimension irregularity is only relevant if the time dimension is the column dimension.
+            reasons.AddRange(CheckTimeLimits(timeDimension, Limits.TimeRange, Limits.IrregularTimeRange, checkIrregularity));
 
             // Content
             reasons.AddRange(CheckContentLimits(input.Dimensions.FirstOrDefault(v => v.Type == DimensionType.Content), Limits.ContentRange));
@@ -84,7 +87,7 @@ namespace PxGraf.ChartTypeSelection
         }
 
         /// <summary>
-        /// Checks that data contais atleas one actual value.
+        /// Checks that data contains at least one actual value.
         /// </summary>
         /// <returns></returns>
         private IEnumerable<ChartRejectionInfo> CheckData(VisualizationTypeSelectionObject input)
@@ -111,7 +114,7 @@ namespace PxGraf.ChartTypeSelection
         /// <summary>
         /// Yields rejection enums if the provided dimension does not fit in the time dimension limits.
         /// </summary>
-        private IEnumerable<ChartRejectionInfo> CheckTimeLimits(VisualizationTypeSelectionObject.DimensionInfo timeDimension, DimensionRange timeRange, DimensionRange irregularRange)
+        private IEnumerable<ChartRejectionInfo> CheckTimeLimits(VisualizationTypeSelectionObject.DimensionInfo timeDimension, DimensionRange timeRange, DimensionRange irregularRange, bool checkIrregularity)
         {
             if (timeDimension is null)
             {
@@ -125,12 +128,13 @@ namespace PxGraf.ChartTypeSelection
                 yield break;
             }
 
-            if (timeDimension.IsIrregular ?? throw new InvalidOperationException("Regularity was not defined for the time dimension"))
+            if (checkIrregularity && (timeDimension.IsIrregular ?? throw new InvalidOperationException("Regularity was not defined for the time dimension")))
             {
                 if (irregularRange.DimensionNotAllowed) yield return BuildRejectionInfo(RejectionReason.IrregularTimeNotAllowed, timeDimension);
                 else if (timeDimension.Size < irregularRange.Min) yield return BuildRejectionInfo(RejectionReason.IrregularTimeBelowMin, timeDimension.Size, irregularRange.Min, timeDimension);
                 else if (timeDimension.Size > irregularRange.Max) yield return BuildRejectionInfo(RejectionReason.IrregularTimeOverMax, timeDimension.Size, irregularRange.Max, timeDimension);
             }
+
             if (timeDimension.Size < timeRange.Min) yield return BuildRejectionInfo(RejectionReason.TimeBelowMin, timeDimension.Size, timeRange.Min, timeDimension);
             else if (timeDimension.Size > timeRange.Max) yield return BuildRejectionInfo(RejectionReason.TimeOverMax, timeDimension.Size, timeRange.Max, timeDimension);
         }

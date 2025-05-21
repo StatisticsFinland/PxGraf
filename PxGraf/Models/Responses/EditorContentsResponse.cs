@@ -14,12 +14,12 @@ namespace PxGraf.Models.Responses
         public required int Size { get; set; }
 
         /// <summary>
-        /// The limit when the end user should be warned that the size of the query is getting larger than is parctical.
+        /// The limit when the end user should be warned that the size of the query is getting larger than is practical.
         /// </summary>
         public required int SizeWarningLimit { get; set; }
 
         /// <summary>
-        /// The limit when the end user should be told that the size of the query can cause technical issues and further actios will be prevented unless the size is reduced
+        /// The limit when the end user should be told that the size of the query can cause technical issues and further actions will be prevented unless the size is reduced
         /// </summary>
         public required int MaximumSupportedSize { get; set; }
 

@@ -1,7 +1,7 @@
 ﻿namespace PxGraf.Enums
 {
     /// <summary>
-    /// Defines different reasons why spesific chart type is not valid for a given data set
+    /// Defines different reasons why specific chart type is not valid for a given data set
     /// </summary>
     public enum RejectionReason
     {

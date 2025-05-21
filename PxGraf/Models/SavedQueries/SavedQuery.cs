@@ -26,7 +26,7 @@ namespace PxGraf.Models.SavedQueries
         public bool Archived { get; set; }
 
         /// <summary>
-        /// Contains visualization type and the type spesific settings.
+        /// Contains visualization type and the type specific settings.
         /// </summary>
         public VisualizationSettings Settings { get; set; }
 
@@ -42,7 +42,7 @@ namespace PxGraf.Models.SavedQueries
         public string Version { get; set; } = "1.1";
 
         /// <summary>
-        /// Use this for builing the object outside of the serialization.
+        /// Use this for building the object outside of the serialization.
         /// </summary>
         public SavedQuery(MatrixQuery query, bool archived, VisualizationSettings settings, DateTime creationTime)
         {

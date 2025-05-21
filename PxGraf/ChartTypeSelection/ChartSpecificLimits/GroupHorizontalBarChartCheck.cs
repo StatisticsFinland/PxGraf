@@ -65,7 +65,7 @@ namespace PxGraf.ChartTypeSelection.ChartSpecificLimits
         }
 
         /// <summary>
-        /// Returns the grouped horizontal bar chart spesific priorities for rejection reasons
+        /// Returns the grouped horizontal bar chart specific priorities for rejection reasons
         /// </summary>
         /// <param name="reason"></param>
         /// <returns></returns>

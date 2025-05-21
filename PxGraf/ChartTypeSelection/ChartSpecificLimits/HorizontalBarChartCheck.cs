@@ -6,7 +6,7 @@ using System.Collections.Generic;
 namespace PxGraf.ChartTypeSelection.ChartSpecificLimits
 {
     /// <summary>
-    /// Functionality to check the query compatibility with the basic horizontal bar chart spesific rules.
+    /// Functionality to check the query compatibility with the basic horizontal bar chart specific rules.
     /// </summary>
     /// <remarks>
     /// Default constructor
@@ -40,7 +40,7 @@ namespace PxGraf.ChartTypeSelection.ChartSpecificLimits
         }
 
         /// <summary>
-        /// Sets the chart type spesific priorities for differenet rejection reasons.
+        /// Sets the chart type specific priorities for differenet rejection reasons.
         /// </summary>
         /// <param name="reason"></param>
         /// <returns></returns>
