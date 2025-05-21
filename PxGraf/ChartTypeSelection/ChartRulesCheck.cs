@@ -45,9 +45,7 @@ namespace PxGraf.ChartTypeSelection
             reasons.AddRange(CheckMultiselectLimits(input, Limits.NumberOfMultiselectsRange));
 
             // Time
-            VisualizationTypeSelectionObject.DimensionInfo timeDimension = input.Dimensions.FirstOrDefault(v => v.Type == DimensionType.Time);
-            bool checkIrregularity = GetTimeOrLargestOrdinal(input.Dimensions) == timeDimension; // Checking for time dimension irregularity is only relevant if the time dimension is the column dimension.
-            reasons.AddRange(CheckTimeLimits(timeDimension, Limits.TimeRange, Limits.IrregularTimeRange, checkIrregularity));
+            reasons.AddRange(CheckTimeLimits(input.Dimensions.FirstOrDefault(v => v.Type == DimensionType.Time), Limits.TimeRange, Limits.IrregularTimeRange));
 
             // Content
             reasons.AddRange(CheckContentLimits(input.Dimensions.FirstOrDefault(v => v.Type == DimensionType.Content), Limits.ContentRange));
@@ -114,7 +112,7 @@ namespace PxGraf.ChartTypeSelection
         /// <summary>
         /// Yields rejection enums if the provided dimension does not fit in the time dimension limits.
         /// </summary>
-        private IEnumerable<ChartRejectionInfo> CheckTimeLimits(VisualizationTypeSelectionObject.DimensionInfo timeDimension, DimensionRange timeRange, DimensionRange irregularRange, bool checkIrregularity)
+        private IEnumerable<ChartRejectionInfo> CheckTimeLimits(VisualizationTypeSelectionObject.DimensionInfo timeDimension, DimensionRange timeRange, DimensionRange irregularRange)
         {
             if (timeDimension is null)
             {
@@ -128,7 +126,7 @@ namespace PxGraf.ChartTypeSelection
                 yield break;
             }
 
-            if (checkIrregularity && (timeDimension.IsIrregular ?? throw new InvalidOperationException("Regularity was not defined for the time dimension")))
+            if (timeDimension.IsIrregular ?? throw new InvalidOperationException("Regularity was not defined for the time dimension"))
             {
                 if (irregularRange.DimensionNotAllowed) yield return BuildRejectionInfo(RejectionReason.IrregularTimeNotAllowed, timeDimension);
                 else if (timeDimension.Size < irregularRange.Min) yield return BuildRejectionInfo(RejectionReason.IrregularTimeBelowMin, timeDimension.Size, irregularRange.Min, timeDimension);
