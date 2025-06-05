@@ -18,6 +18,7 @@ namespace PxGraf.Settings
         public CacheOptions CacheOptions { get; private set; }
         public CorsOptions CorsOptions { get; private set; }
         public LocalFilesystemDatabaseConfig LocalFilesystemDatabaseConfig { get; private set; }
+        public string[] DatabaseWhitelist { get; private set; }
 
         public static void Load(IConfiguration configuration)
         {
@@ -53,11 +54,13 @@ namespace PxGraf.Settings
                     AllowedOrigins = configuration.GetSection("Cors:AllowedOrigins").Get<string[]>(),
                 },
                 LocalFilesystemDatabaseConfig = new LocalFilesystemDatabaseConfig(
-                    configuration.GetSection("LocalFileSystemDatabaseConfig:Enabled").Get<bool>(),
-                    configuration["LocalFilesystemDatabaseConfig:DatabaseRootPath"],
-                    Encoding.GetEncoding(configuration["LocalFilesystemDatabaseConfig:Encoding"]),
-                    configuration.GetSection("LocalFilesystemDatabaseConfig:DatabaseWhitelist").Get<string[]>()
-                )
+                    configuration.GetSection("LocalFileSystemDatabaseConfig:Enabled").Get<bool?>() ?? false,
+                    configuration["LocalFilesystemDatabaseConfig:DatabaseRootPath"] ?? string.Empty,
+                    !string.IsNullOrEmpty(configuration["LocalFilesystemDatabaseConfig:Encoding"])
+                        ? Encoding.GetEncoding(configuration["LocalFilesystemDatabaseConfig:Encoding"])
+                        : Encoding.Default
+                ),
+                DatabaseWhitelist = configuration.GetSection("DatabaseWhitelist").Get<string[]>() ?? []
             };
 
             Current = newConfig;
