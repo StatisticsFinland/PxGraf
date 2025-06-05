@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using PxGraf.Datasource.FileDatasource;
+using PxGraf.Exceptions;
 using System.Collections.Generic;
 using System.Text;
 
@@ -25,7 +26,7 @@ namespace PxGraf.Settings
             //Set config defaults
             Configuration newConfig = new()
             {
-                PxWebUrl = configuration["pxwebUrl"],
+                PxWebUrl = configuration["pxwebUrl"] ?? null,
                 CreationAPI = configuration.GetSection("FeatureManagement:CreationAPI").Get<bool>(),
                 SavedQueryDirectory = configuration["savedQueryDirectory"],
                 ArchiveFileDirectory = configuration["archiveFileDirectory"],
@@ -55,13 +56,21 @@ namespace PxGraf.Settings
                 },
                 LocalFilesystemDatabaseConfig = new LocalFilesystemDatabaseConfig(
                     configuration.GetSection("LocalFileSystemDatabaseConfig:Enabled").Get<bool?>() ?? false,
-                    configuration["LocalFilesystemDatabaseConfig:DatabaseRootPath"] ?? string.Empty,
+                    configuration["LocalFilesystemDatabaseConfig:DatabaseRootPath"] ?? null,
                     !string.IsNullOrEmpty(configuration["LocalFilesystemDatabaseConfig:Encoding"])
                         ? Encoding.GetEncoding(configuration["LocalFilesystemDatabaseConfig:Encoding"])
-                        : Encoding.Default
+                        : null
                 ),
                 DatabaseWhitelist = configuration.GetSection("DatabaseWhitelist").Get<string[]>() ?? []
             };
+
+            if (string.IsNullOrEmpty(newConfig.PxWebUrl) && !newConfig.LocalFilesystemDatabaseConfig.Enabled)
+            {
+                throw new InvalidConfigurationException(
+                    "PxWeb URL is not set and Local Filesystem Database is not enabled. " +
+                    "Please configure at least one of these options in the appsettings.json file."
+                );
+            }
 
             Current = newConfig;
         }
