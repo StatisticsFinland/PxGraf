@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace PxGraf.ChartTypeSelection.ChartSpecificLimits
 {
     /// <summary>
-    /// Functionality to check the query compatibility with the group vertical bar chart spesific rules.
+    /// Functionality to check the query compatibility with the group vertical bar chart specific rules.
     /// </summary>
     /// <remarks>
     /// Default constructor
@@ -14,7 +14,7 @@ namespace PxGraf.ChartTypeSelection.ChartSpecificLimits
     public class GroupVerticalBarChartCheck(IChartTypeLimits limits) : ChartRulesCheck(limits)
     {
         // Elimination conditions and priorities:
-        // 1. Minumum number of multiselect dimensions
+        // 1. Minimum number of multiselect dimensions
         // 2. Maximum number of multiselect dimensions
         // 3. Number of values in the content dimension
         // 4. One of the multiselect dimensions must be either time or progressive

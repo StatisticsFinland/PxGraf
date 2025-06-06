@@ -48,16 +48,18 @@ The directory where saved query files are stored.
 The directory where archived query files are stored.
 #### FeatureManagement
 Grants or denies access to the Creation API.
+#### DatabaseWhitelist
+List of directory or PxWeb database names that are allowed to be accessed and shown as database root directories. If empty, everything is allowed.
 #### LocalFileSystemDatabaseConfig
-Configuration for the local database if in use.
+Optional configuration for the local database if in use.
 #### LocalFileSystemDatabaseConfig.Enabled
 Determines whether the local database with Px.Utils or PxWeb api is used.
 #### LocalFileSystemDatabaseConfig.DatabaseRootPath
 The path to the database root directory.
 #### LocalFileSystemDatabaseConfig.Encoding
 Name of the encoding used in the database.
-#### LocalFileSystemDatabaseConfig.DatabaseWhitelist
-List of directory names that are allowed to be accessed as database root directories. If empty, no directories are allowed.
+
+Note: If the LocalFileSystemDatabaseConfig block is not present, the PxWeb API is used to fetch data automatically. Providing neither working PxWeb API address nor LocalFileSystemDatabaseConfig will result in an error at application startup.
 
 ## Translation files
 

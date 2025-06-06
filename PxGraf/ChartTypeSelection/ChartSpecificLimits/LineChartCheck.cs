@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace PxGraf.ChartTypeSelection.ChartSpecificLimits
 {
     /// <summary>
-    /// Functionality to check the query compatibility with the line chart spesific rules.
+    /// Functionality to check the query compatibility with the line chart specific rules.
     /// </summary>
     /// <remarks>
     /// Default constructor
@@ -50,7 +50,7 @@ namespace PxGraf.ChartTypeSelection.ChartSpecificLimits
         }
 
         /// <summary>
-        /// Sets the priority for differenet rejection reasons.
+        /// Sets the priority for different rejection reasons.
         /// </summary>
         /// <param name="reason"></param>
         /// <returns></returns>

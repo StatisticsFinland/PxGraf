@@ -6,7 +6,7 @@ using System.Linq;
 namespace PxGraf.ChartTypeSelection.ChartSpecificLimits
 {
     /// <summary>
-    /// Functionality to check the query compatibility with the scatter plot spesific rules.
+    /// Functionality to check the query compatibility with the scatter plot specific rules.
     /// </summary>
     /// <remarks>
     /// Default constructor

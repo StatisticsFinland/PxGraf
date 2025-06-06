@@ -128,7 +128,7 @@ namespace PxGraf
             services.AddSingleton<IMultiStateMemoryTaskCache>(provider => new MultiStateMemoryTaskCache(
                 Configuration.Current.CacheOptions.Database.ItemAmountLimit,
                 TimeSpan.FromSeconds(Configuration.Current.CacheOptions.CacheFreshnessCheckIntervalSeconds)));
-            if (Configuration.Current.LocalFilesystemDatabaseConfig.Enabled)
+            if (Configuration.Current.LocalFilesystemDatabaseConfig?.Enabled ?? false)
             {
                 services.AddSingleton<IFileDatasource>(provider => new LocalFilesystemDatabase(
                     Configuration.Current.LocalFilesystemDatabaseConfig ));
