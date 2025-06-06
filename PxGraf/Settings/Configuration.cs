@@ -71,20 +71,23 @@ namespace PxGraf.Settings
 
         private static LocalFilesystemDatabaseConfig GetLocalDatabaseConfig(IConfiguration configuration)
         {
-            if (!configuration.GetSection("LocalFileSystemDatabaseConfig:Enabled").Exists())
+            IConfigurationSection section = configuration.GetSection("LocalFileSystemDatabaseConfig");
+            if (!section.Exists())
             {
                 return null;
             }
-            else
+
+            bool enabled = section.GetValue<bool?>("Enabled") ?? false;
+            string databaseRootPath = section["DatabaseRootPath"];
+            string encodingName = section["Encoding"];
+            Encoding encoding = !string.IsNullOrEmpty(encodingName) ? Encoding.GetEncoding(encodingName) : null;
+
+            if (!enabled || string.IsNullOrEmpty(databaseRootPath) || encoding == null)
             {
-                return new(
-                    configuration.GetSection("LocalFileSystemDatabaseConfig:Enabled").Get<bool?>() ?? false,
-                    configuration["LocalFilesystemDatabaseConfig:DatabaseRootPath"] ?? null,
-                    !string.IsNullOrEmpty(configuration["LocalFilesystemDatabaseConfig:Encoding"])
-                        ? Encoding.GetEncoding(configuration["LocalFilesystemDatabaseConfig:Encoding"])
-                        : null
-                );
+                return null;
             }
+
+            return new LocalFilesystemDatabaseConfig(enabled, databaseRootPath, encoding);
         }
     }
 }

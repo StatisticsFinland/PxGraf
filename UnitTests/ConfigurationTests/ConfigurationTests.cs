@@ -66,7 +66,7 @@ namespace UnitTests.ConfigurationTests
                     {
                         {"LocalFilesystemDatabaseConfig:Enabled", "true"},
                         {"LocalFilesystemDatabaseConfig:Encoding", "latin1"},
-                        {"LocalFilesystemDatabaseConfig:DatabasePath", "path/to/database"}
+                        {"LocalFilesystemDatabaseConfig:DatabaseRootPath", "path/to/database"}
                     })
                 .Build();
             Configuration.Load(configuration);
@@ -89,6 +89,23 @@ namespace UnitTests.ConfigurationTests
                     })
                 .Build();
             Assert.Throws<InvalidConfigurationException>(() => Configuration.Load(configuration));
+        }
+
+        [Test]
+        public void ConfigurationLoadTest_WithMissingLocalDatabaseFields_SuccessWitNullLocalDatabaseConfig()
+        {
+            IConfiguration configuration = new ConfigurationBuilder()
+                .AddInMemoryCollection(
+                    new Dictionary<string, string>
+                    {
+                        {"pxwebUrl", "http://pxwebtesturl:12345/"},
+                        {"LocalFilesystemDatabaseConfig:Enabled", "true"}
+                    })
+                .Build();
+            Configuration.Load(configuration);
+            Assert.That(Configuration.Current, Is.Not.Null);
+            Assert.That(Configuration.Current.PxWebUrl, Is.EqualTo("http://pxwebtesturl:12345/"));
+            Assert.That(Configuration.Current.LocalFilesystemDatabaseConfig, Is.Null);
         }
     }
 }
