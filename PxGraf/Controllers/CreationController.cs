@@ -34,7 +34,7 @@ namespace PxGraf.Controllers
     {
         private readonly ICachedDatasource _datasource = datasource;
         private readonly ILogger<CreationController> _logger = logger;
-        private readonly string[] databaseWhitelist = Configuration.Current.LocalFilesystemDatabaseConfig.DatabaseWhitelist;
+        private readonly string[] databaseWhitelist = Configuration.Current.DatabaseWhitelist;
 
         /// <summary>
         /// Returns a list of database items from the given level of the data base based on the dbPath.

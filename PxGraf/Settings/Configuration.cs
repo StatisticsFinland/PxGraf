@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using PxGraf.Datasource.FileDatasource;
+using PxGraf.Exceptions;
 using System.Collections.Generic;
 using System.Text;
 
@@ -18,13 +19,14 @@ namespace PxGraf.Settings
         public CacheOptions CacheOptions { get; private set; }
         public CorsOptions CorsOptions { get; private set; }
         public LocalFilesystemDatabaseConfig LocalFilesystemDatabaseConfig { get; private set; }
+        public string[] DatabaseWhitelist { get; private set; }
 
         public static void Load(IConfiguration configuration)
         {
             //Set config defaults
             Configuration newConfig = new()
             {
-                PxWebUrl = configuration["pxwebUrl"],
+                PxWebUrl = configuration["pxwebUrl"] ?? null,
                 CreationAPI = configuration.GetSection("FeatureManagement:CreationAPI").Get<bool>(),
                 SavedQueryDirectory = configuration["savedQueryDirectory"],
                 ArchiveFileDirectory = configuration["archiveFileDirectory"],
@@ -52,15 +54,40 @@ namespace PxGraf.Settings
                     AllowAnyOrigin = configuration.GetSection("Cors:AllowAnyOrigin").Get<bool>(),
                     AllowedOrigins = configuration.GetSection("Cors:AllowedOrigins").Get<string[]>(),
                 },
-                LocalFilesystemDatabaseConfig = new LocalFilesystemDatabaseConfig(
-                    configuration.GetSection("LocalFileSystemDatabaseConfig:Enabled").Get<bool>(),
-                    configuration["LocalFilesystemDatabaseConfig:DatabaseRootPath"],
-                    Encoding.GetEncoding(configuration["LocalFilesystemDatabaseConfig:Encoding"]),
-                    configuration.GetSection("LocalFilesystemDatabaseConfig:DatabaseWhitelist").Get<string[]>()
-                )
+                LocalFilesystemDatabaseConfig = GetLocalDatabaseConfig(configuration),
+                DatabaseWhitelist = configuration.GetSection("DatabaseWhitelist").Get<string[]>() ?? []
             };
 
+            if (string.IsNullOrEmpty(newConfig.PxWebUrl) && (newConfig.LocalFilesystemDatabaseConfig == null || !newConfig.LocalFilesystemDatabaseConfig.Enabled))
+            {
+                throw new InvalidConfigurationException(
+                    "PxWeb URL is not set and Local Filesystem Database is not enabled. " +
+                    "Please configure at least one of these options in the appsettings.json file."
+                );
+            }
+
             Current = newConfig;
+        }
+
+        private static LocalFilesystemDatabaseConfig GetLocalDatabaseConfig(IConfiguration configuration)
+        {
+            IConfigurationSection section = configuration.GetSection("LocalFileSystemDatabaseConfig");
+            if (!section.Exists())
+            {
+                return null;
+            }
+
+            bool enabled = section.GetValue<bool?>("Enabled") ?? false;
+            string databaseRootPath = section["DatabaseRootPath"];
+            string encodingName = section["Encoding"];
+            Encoding encoding = !string.IsNullOrEmpty(encodingName) ? Encoding.GetEncoding(encodingName) : null;
+
+            if (!enabled || string.IsNullOrEmpty(databaseRootPath) || encoding == null)
+            {
+                return null;
+            }
+
+            return new LocalFilesystemDatabaseConfig(enabled, databaseRootPath, encoding);
         }
     }
 }
