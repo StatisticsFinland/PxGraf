@@ -54,17 +54,11 @@ namespace PxGraf.Settings
                     AllowAnyOrigin = configuration.GetSection("Cors:AllowAnyOrigin").Get<bool>(),
                     AllowedOrigins = configuration.GetSection("Cors:AllowedOrigins").Get<string[]>(),
                 },
-                LocalFilesystemDatabaseConfig = new LocalFilesystemDatabaseConfig(
-                    configuration.GetSection("LocalFileSystemDatabaseConfig:Enabled").Get<bool?>() ?? false,
-                    configuration["LocalFilesystemDatabaseConfig:DatabaseRootPath"] ?? null,
-                    !string.IsNullOrEmpty(configuration["LocalFilesystemDatabaseConfig:Encoding"])
-                        ? Encoding.GetEncoding(configuration["LocalFilesystemDatabaseConfig:Encoding"])
-                        : null
-                ),
+                LocalFilesystemDatabaseConfig = GetLocalDatabaseConfig(configuration),
                 DatabaseWhitelist = configuration.GetSection("DatabaseWhitelist").Get<string[]>() ?? []
             };
 
-            if (string.IsNullOrEmpty(newConfig.PxWebUrl) && !newConfig.LocalFilesystemDatabaseConfig.Enabled)
+            if (string.IsNullOrEmpty(newConfig.PxWebUrl) && (newConfig.LocalFilesystemDatabaseConfig == null || !newConfig.LocalFilesystemDatabaseConfig.Enabled))
             {
                 throw new InvalidConfigurationException(
                     "PxWeb URL is not set and Local Filesystem Database is not enabled. " +
@@ -73,6 +67,24 @@ namespace PxGraf.Settings
             }
 
             Current = newConfig;
+        }
+
+        private static LocalFilesystemDatabaseConfig GetLocalDatabaseConfig(IConfiguration configuration)
+        {
+            if (!configuration.GetSection("LocalFileSystemDatabaseConfig:Enabled").Exists())
+            {
+                return null;
+            }
+            else
+            {
+                return new(
+                    configuration.GetSection("LocalFileSystemDatabaseConfig:Enabled").Get<bool?>() ?? false,
+                    configuration["LocalFilesystemDatabaseConfig:DatabaseRootPath"] ?? null,
+                    !string.IsNullOrEmpty(configuration["LocalFilesystemDatabaseConfig:Encoding"])
+                        ? Encoding.GetEncoding(configuration["LocalFilesystemDatabaseConfig:Encoding"])
+                        : null
+                );
+            }
         }
     }
 }

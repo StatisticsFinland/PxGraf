@@ -39,7 +39,7 @@ namespace UnitTests.ConfigurationTests
         }
 
         [Test]
-        public void ConfigurationLoadTest_WithoutLocalDatabase_SuccessWithDefaultValues()
+        public void ConfigurationLoadTest_WithoutLocalDatabase_SuccessWithNullLocalDatabaseCOnfig()
         {
 
             IConfiguration configuration = new ConfigurationBuilder()
@@ -54,8 +54,7 @@ namespace UnitTests.ConfigurationTests
 
             Assert.That(Configuration.Current, Is.Not.Null);
             Assert.That(Configuration.Current.PxWebUrl, Is.EqualTo("http://pxwebtesturl:12345/"));
-            Assert.That(Configuration.Current.LocalFilesystemDatabaseConfig, Is.Not.Null);
-            Assert.That(Configuration.Current.LocalFilesystemDatabaseConfig.Enabled, Is.False);
+            Assert.That(Configuration.Current.LocalFilesystemDatabaseConfig, Is.Null);
         }
 
         [Test]
@@ -86,6 +85,7 @@ namespace UnitTests.ConfigurationTests
                     new Dictionary<string, string>
                     {
                         {"pxwebUrl", null},
+                        {"LocalFilesystemDatabaseConfig", null}
                     })
                 .Build();
             Assert.Throws<InvalidConfigurationException>(() => Configuration.Load(configuration));
