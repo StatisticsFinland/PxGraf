@@ -18,7 +18,6 @@ using PxGraf.Models.Requests;
 using PxGraf.Models.Responses.DatabaseItems;
 using PxGraf.Models.Responses;
 using PxGraf.Settings;
-using PxGraf.Utility;
 using PxGraf.Visualization;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,7 +34,7 @@ namespace PxGraf.Controllers
     {
         private readonly ICachedDatasource _datasource = datasource;
         private readonly ILogger<CreationController> _logger = logger;
-        private readonly string[] databaseWhitelist = Configuration.Current.LocalFilesystemDatabaseConfig.DatabaseWhitelist;
+        private readonly string[] databaseWhitelist = Configuration.Current.DatabaseWhitelist;
 
         /// <summary>
         /// Returns a list of database items from the given level of the data base based on the dbPath.
@@ -180,150 +179,86 @@ namespace PxGraf.Controllers
         }
 
         /// <summary>
-        /// Returns a default header for the given table query.
+        /// Provides information required for the editor to set up the visualization.
         /// </summary>
-        /// <param name="input"><see cref="MatrixQuery"/> object containing the table reference and the query.</param>
-        /// <returns><see cref="MultilanguageString"/> object containing the default header for different languages.</returns>
-        [HttpPost("default-header")]
-        public async Task<ActionResult<MultilanguageString>> GetDefaultHeaderAsync([FromBody] MatrixQuery input)
+        /// <remarks>If the query doesn't contain any dimension queries or the resulting matrix is empty, an empty response is returned.</remarks>
+        /// <param name="query">Query object containing the table reference and dimension queries.</param>
+        /// <returns><see cref="EditorContentsResponse"/> object that contains the size of the resulting matrix, maximum supported size, header text, maximum header length, visualization options for accepted visualization types and rejection reasons.</returns>
+#nullable enable
+        [HttpPost("editor-contents")]
+        public async Task<ActionResult<EditorContentsResponse>> GetEditorContents([FromBody] MatrixQuery query)
         {
-            _logger.LogDebug("Requesting default header for {Input} POST: api/creation/default-header", input);
-            IReadOnlyMatrixMetadata tableMeta = await _datasource.GetMatrixMetadataCachedAsync(input.TableReference);
-            IReadOnlyMatrixMetadata filteredMeta = tableMeta.FilterDimensionValues(input);
-            MultilanguageString header = HeaderBuildingUtilities.CreateDefaultHeader(filteredMeta.Dimensions, input, tableMeta.AvailableLanguages);
-
-            _logger.LogDebug("default-header result: {Header}", header);
-            return header;
-        }
-
-        /// <summary>
-        /// Returns a list of valid visualization type names.
-        /// </summary>
-        /// <param name="cubeQuery"><see cref="MatrixQuery"/> object containing the table reference and the query.</param>
-        /// <returns>List of strings of valid visualization type names.</returns>
-        [HttpPost("valid-visualizations")]
-        public async Task<ActionResult<List<string>>> GetValidVisualizationTypesAsync([FromBody] MatrixQuery cubeQuery)
-        {
-            _logger.LogDebug("Requesting valid visualizations for {CubeQuery} POST: api/creation/valid-visualization", cubeQuery);
-            IReadOnlyMatrixMetadata tableMeta = await _datasource.GetMatrixMetadataCachedAsync(cubeQuery.TableReference);
-            IReadOnlyMatrixMetadata filteredMeta = tableMeta.FilterDimensionValues(cubeQuery);
-
-            Matrix<DecimalDataValue> matrix = await _datasource.GetMatrixCachedAsync(cubeQuery.TableReference, filteredMeta);
-
-            IReadOnlyList<VisualizationType> validTypes = ChartTypeSelector.Selector.GetValidChartTypes(cubeQuery, matrix);
-            List<string> validTypesList = [.. validTypes.Select(ChartTypeEnumConverter.ToJsonString)];
-            _logger.LogDebug("valid-visualizations result: {ValidTypesList}", validTypesList);
-            return validTypesList;
-        }
-
-        /// <summary>
-        /// Returns information about valid and rejected visualization types and query size and size limits.
-        /// </summary>
-        /// <param name="cubeQuery"><see cref="MatrixQuery"/> object containing the table reference and the query.</param>
-        /// <returns><see cref="QueryInfoResponse"/> object that contains information about valid visualization type, reasons for rejected visualization types, query size and limits for header length and query size.</returns>
-        [HttpPost("query-info")]
-        public async Task<ActionResult<QueryInfoResponse>> GetQueryInfoAsync([FromBody] MatrixQuery cubeQuery)
-        {
-            _logger.LogDebug("Requesting query info for {CubeQuery} POST: api/creation/query-info", cubeQuery);
+            _logger.LogDebug("GetEditorContents called with {Query} POST: api/creation/query-info", query);
             int maxQuerySize = Configuration.Current.QueryOptions.MaxQuerySize;
-            int maxHeaderLength = Configuration.Current.QueryOptions.MaxHeaderLength;
 
-            IReadOnlyMatrixMetadata tableMeta = await _datasource.GetMatrixMetadataCachedAsync(cubeQuery.TableReference);
-            IReadOnlyMatrixMetadata filteredMeta = tableMeta.FilterDimensionValues(cubeQuery);
-
+            if (query.DimensionQueries.Count == 0)
+            {
+                return new EditorContentsResponse()
+                {
+                    Size = 0,
+                    MaximumSupportedSize = maxQuerySize,
+                    SizeWarningLimit = Convert.ToInt32(maxQuerySize * 0.75),
+                    HeaderText = new MultilanguageString(Configuration.Current.LanguageOptions.Available.Select(lang => new KeyValuePair<string, string>(lang, string.Empty))),
+                    MaximumHeaderLength = Configuration.Current.QueryOptions.MaxHeaderLength,
+                    VisualizationOptions = [],
+                    VisualizationRejectionReasons = []
+                };
+            }
+            
+            IReadOnlyMatrixMetadata tableMeta = await _datasource.GetMatrixMetadataCachedAsync(query.TableReference);
+            IReadOnlyMatrixMetadata filteredMeta = tableMeta.FilterDimensionValues(query);
             int includedValuesCount = filteredMeta.Dimensions.Select(x => x.Values.Count).Aggregate((a, x) => a * x);
+
             if (includedValuesCount == 0 || includedValuesCount > maxQuerySize)
             {
-                QueryInfoResponse queryInfoResponse = new ()
+                return new EditorContentsResponse()
                 {
                     Size = includedValuesCount,
-                    SizeWarningLimit = Convert.ToInt32(maxQuerySize * 0.75),
                     MaximumSupportedSize = maxQuerySize,
-                    MaximumHeaderLength = maxHeaderLength
+                    SizeWarningLimit = Convert.ToInt32(maxQuerySize * 0.75),
+                    HeaderText = new MultilanguageString(Configuration.Current.LanguageOptions.Available.Select(lang => new KeyValuePair<string, string>(lang, string.Empty))),
+                    MaximumHeaderLength = Configuration.Current.QueryOptions.MaxHeaderLength,
+                    VisualizationOptions = [],
+                    VisualizationRejectionReasons = []
                 };
-
-                _logger.LogDebug("query-info result: {QueryInfoResponse}", queryInfoResponse);
-                return queryInfoResponse;
             }
 
-            Matrix<DecimalDataValue> matrix = await _datasource.GetMatrixCachedAsync(cubeQuery.TableReference, filteredMeta);
+            Matrix<DecimalDataValue> matrix = await _datasource.GetMatrixCachedAsync(query.TableReference, filteredMeta);
 
-            QueryInfoResponse response = new()
-            {
-                Size = matrix.Data.Length,
-                SizeWarningLimit = Convert.ToInt32(maxQuerySize * 0.75),
-                MaximumSupportedSize = maxQuerySize,
-                MaximumHeaderLength = maxHeaderLength
-            };
+            Dictionary<VisualizationType, MultilanguageString> rejectionReasons = [];
+            List<VisualizationOption> visualizationOptions = [];
 
             foreach (KeyValuePair<VisualizationType, IReadOnlyList<ChartRejectionInfo>> reasonKvp in
-                ChartTypeSelector.Selector.GetRejectionReasons(cubeQuery, matrix))
+                ChartTypeSelector.Selector.GetRejectionReasons(query, matrix))
             {
                 if (reasonKvp.Value.Any())
                 {
                     Dictionary<string, string> translations = [];
                     foreach (string language in Localization.GetAllAvailableLanguages())
                     {
-                        string textInLang = Localization.FromLanguage(language).Translation.RejectionReasons.GetTranslation(reasonKvp.Value[0]);
-                        translations[language] = textInLang;
+                        translations[language] = Localization.FromLanguage(language)
+                            .Translation.RejectionReasons.GetTranslation(reasonKvp.Value[0]);
                     }
-                    response.VisualizationRejectionReasons[reasonKvp.Key] = new (translations);
+                    rejectionReasons[reasonKvp.Key] = new (translations);
                 }
                 else  // no rejection reasons == valid visualization type
                 {
-                    response.ValidVisualizations.Add(reasonKvp.Key);
+                    visualizationOptions.Add(GetVisualizationOption(reasonKvp.Key, filteredMeta, query));
                 }
             }
-            _logger.LogDebug("query-info result: {Response}", response);
-            return response;
+
+            return new EditorContentsResponse()
+            {
+                Size = includedValuesCount,
+                MaximumSupportedSize = maxQuerySize,
+                SizeWarningLimit = Convert.ToInt32(maxQuerySize * 0.75),
+                HeaderText = HeaderBuildingUtilities.GetHeader(filteredMeta, query, true),
+                MaximumHeaderLength = Configuration.Current.QueryOptions.MaxHeaderLength,
+                VisualizationOptions = visualizationOptions,
+                VisualizationRejectionReasons = rejectionReasons
+            };
         }
-
-        /// <summary>
-        /// Returns visualization rules for the given query and selected visualization type.
-        /// </summary>
-        /// <param name="rulesQuery"><see cref="VisualizationSettingsRequest"/> object that contains the selected visualization type and settings for the query.</param>
-        /// <returns><see cref="VisualizationRules"/> object that contains rules for which settings are available for the given visualization query.</returns>
-        [HttpPost("visualization-rules")]
-        public async Task<ActionResult<VisualizationRules>> GetVisualizationRulesAsync([FromBody] VisualizationSettingsRequest rulesQuery)
-        {
-            _logger.LogDebug("Requesting visualization rules for {RulesQuery} POST: api/creation/visualization-rules", rulesQuery);
-            IReadOnlyMatrixMetadata tableMeta = await _datasource.GetMatrixMetadataCachedAsync(rulesQuery.Query.TableReference);
-            IReadOnlyMatrixMetadata filteredMeta = tableMeta.FilterDimensionValues(rulesQuery.Query);
-            
-            // All dimensions must have atleast one value selected
-            if (!filteredMeta.Dimensions.All(v => v.Values.Count != 0))
-            {
-                _logger.LogDebug("visualization-rules result: All dimensions must have atleast one value selected.");
-                return new VisualizationRules(false, false);
-            }
-
-            Matrix<DecimalDataValue> dataCube = await _datasource.GetMatrixCachedAsync(rulesQuery.Query.TableReference, filteredMeta);
-
-            IChartTypeSelector selector = ChartTypeSelector.Selector;
-            IReadOnlyList<VisualizationType> validTypes = selector.GetValidChartTypes(rulesQuery.Query, dataCube);
-
-            if (!validTypes.Contains(rulesQuery.SelectedVisualization))
-            {
-                // Not possible to determine valid settings if the selected visualization is not valid for this query.
-                _logger.LogDebug("visualization-rules result: Selected visualization is not valid for this query.");
-                return new VisualizationRules(false, false);
-            }
-
-            bool manualPivotability = ManualPivotRules.GetManualPivotability(rulesQuery.SelectedVisualization, filteredMeta, rulesQuery.Query);
-            bool multiSelDim = IsMultivalueSelectableAllowed(rulesQuery.SelectedVisualization, rulesQuery.Query.DimensionQueries.Values);
-            IReadOnlyList<SortingOption> sortingOptions = CubeSorting.Get(filteredMeta, rulesQuery);
-            VisualizationRules.TypeSpecificVisualizationRules typeSpecificRules = new (rulesQuery.SelectedVisualization);
-            VisualizationRules visualizationRules = new (manualPivotability, multiSelDim, typeSpecificRules, sortingOptions);
-            _logger.LogDebug("visualization-rules result: {VisualizationRules}", visualizationRules);
-            return visualizationRules;
-
-            static bool IsMultivalueSelectableAllowed(VisualizationType type, IEnumerable<DimensionQuery> dimQueries)
-            {
-                // Multiselect dimension only allowed for LineChart for now. Will be extended to Table in the future.
-                return (type == VisualizationType.LineChart)
-                    && dimQueries.Any(vq => vq.Selectable);
-            }
-        }
+#nullable disable
 
         /// <summary>
         /// Returns visualization object matching the request.
@@ -366,5 +301,34 @@ namespace PxGraf.Controllers
                 return BadRequest();
             }
         }
+
+#nullable enable
+        private static VisualizationOption GetVisualizationOption(VisualizationType type, IReadOnlyMatrixMetadata meta, MatrixQuery query)
+        {
+            bool manualPivotability = ManualPivotRules.GetManualPivotability(type, meta, query);
+
+            bool AllowCuttingYAxis =
+                type == VisualizationType.LineChart ||
+                type == VisualizationType.ScatterPlot;
+
+            bool AllowMatchXLabelsToEnd =
+                type == VisualizationType.VerticalBarChart ||
+                type == VisualizationType.GroupVerticalBarChart ||
+                type == VisualizationType.PercentVerticalBarChart ||
+                type == VisualizationType.StackedVerticalBarChart;
+
+            return new VisualizationOption()
+            {
+                Type = type,
+                AllowManualPivot = manualPivotability,
+                allowMultiselect = (type == VisualizationType.LineChart) && query.DimensionQueries.Any(vq => vq.Value.Selectable),
+                AllowShowingDataPoints = type == VisualizationType.VerticalBarChart,
+                AllowCuttingYAxis = AllowCuttingYAxis,
+                AllowMatchXLabelsToEnd = AllowMatchXLabelsToEnd,
+                AllowSetMarkerScale = type == VisualizationType.ScatterPlot,
+                SortingOptions = CubeSorting.Get(type, meta, manualPivotability, query)
+            };
+        }
+#nullable disable
     }
 }

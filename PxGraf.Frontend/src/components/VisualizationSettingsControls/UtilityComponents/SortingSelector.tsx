@@ -4,17 +4,19 @@ import {
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { UiLanguageContext } from 'contexts/uiLanguageContext';
-import { ISortingOption } from 'types/visualizationRules';
+import { IVisualizationSettings } from '../../../types/visualizationSettings';
+import { EditorContext } from '../../../contexts/editorContext';
+import { ISortingOption } from '../../../types/editorContentsResponse';
 
 interface ISortingSelectorProps {
     sortingOptions: ISortingOption[],
-    activeSortingCode: string,
-    sortingChangedHandler: (newSortingCode: string) => void
+    visualizationSettings: IVisualizationSettings
 }
 
-export const SortingSelector: React.FC<ISortingSelectorProps> = ({ sortingOptions, activeSortingCode, sortingChangedHandler }) => {
+export const SortingSelector: React.FC<ISortingSelectorProps> = ({ sortingOptions, visualizationSettings }) => {
     const { t } = useTranslation();
     const { uiContentLanguage } = React.useContext(UiLanguageContext);
+    const { setVisualizationSettingsUserInput } = React.useContext(EditorContext);
 
     return (
         <FormControl>
@@ -24,8 +26,11 @@ export const SortingSelector: React.FC<ISortingSelectorProps> = ({ sortingOption
                 labelId="sorting-selector-label"
                 id="sorting-selector"
                 label={t("chartSettings.sort")}
-                value={activeSortingCode}
-                onChange={(event) => sortingChangedHandler(event.target.value)}
+                value={visualizationSettings.sorting}
+                onChange={(event) => setVisualizationSettingsUserInput({
+                    ...visualizationSettings,
+                    sorting: event.target.value
+                })}
             >
                 {sortingOptions.map(v => { return <MenuItem key={"key" + v.code} value={v.code}>{v.description[uiContentLanguage]}</MenuItem> })}
             </Select>

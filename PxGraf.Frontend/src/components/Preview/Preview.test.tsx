@@ -1,12 +1,15 @@
 import { render } from "@testing-library/react";
 import React from 'react';
-import { FilterType, ICubeQuery, IDimensionEditions, IDimensionQuery, Query } from "types/query";
+import { FilterType, ICubeQuery, Query } from "types/query";
 import { IVisualizationSettings } from "types/visualizationSettings";
-import Preview from "./Preview";
-import { EVariableType, EVisualizationType, ETimeVariableInterval } from "@statisticsfinland/pxvisualizer";
+import Preview, { ISelectabilityInfo, getSelectables, getResolvedSelections } from "./Preview";
+import { EVariableType, EVisualizationType, ETimeVariableInterval, IQueryVisualizationResponse } from "@statisticsfinland/pxvisualizer";
 import { IVisualizationResult } from "api/services/visualization";
-
 import serializer from "../../testUtils/stripHighchartsHashes";
+import UiLanguageContext from "../../contexts/uiLanguageContext";
+import { EditorContext } from "../../contexts/editorContext";
+import { ISelectableSelections } from "../SelectableVariableMenus/SelectableDimensionMenus";
+import { EDimensionType } from "../../types/cubeMeta";
 
 function mockComponentMocker(name) {
     return function MockComponent(...args) {
@@ -208,6 +211,18 @@ jest.mock('api/services/visualization', () => ({
     },
 }));
 
+const defaultSelectables = { foo: ['2018'] };
+const setDefaultSelectables = jest.fn();
+const setCubeQuery = jest.fn();
+const query = null;
+const setQuery = jest.fn();
+const saveDialogOpen = false;
+const setSaveDialogOpen = jest.fn();
+const selectedVisualizationUserInput = null;
+const setSelectedVisualizationUserInput = jest.fn();
+const visualizationSettingsUserInput = null;
+const setVisualizationSettingsUserInput = jest.fn();
+
 describe('Rendering test', () => {
     beforeAll(() => {
         expect.addSnapshotSerializer(serializer);
@@ -215,15 +230,120 @@ describe('Rendering test', () => {
 
     it('renders correctly', () => {
         const { asFragment } = render(
-            <Preview
-                path={mockPath}
-                query={mockQuery}
-                language={mockLanguage}
-                cubeQueryTextEdits={mockCubeQueryTextEdits}
-                selectedVisualization={mockSelectedVisualization}
-                visualizationSettings={mockVisualizationSettings}
-            />);
+            <UiLanguageContext.Provider value={{
+                language: mockLanguage,
+                setLanguage: jest.fn(),
+                languageTab: mockLanguage,
+                setLanguageTab: jest.fn(),
+                uiContentLanguage: mockLanguage,
+                setUiContentLanguage: jest.fn(),
+                availableUiLanguages: ['fi', 'en', 'sv'],
+            }}>
+                <EditorContext.Provider value={{ cubeQuery: mockCubeQueryTextEdits, setCubeQuery, query, setQuery, saveDialogOpen, setSaveDialogOpen, selectedVisualizationUserInput, setSelectedVisualizationUserInput, visualizationSettingsUserInput, setVisualizationSettingsUserInput, defaultSelectables, setDefaultSelectables }}>
+                    <Preview
+                        path={mockPath}
+                        query={mockQuery}
+                        selectedVisualization={mockSelectedVisualization}
+                        visualizationSettings={mockVisualizationSettings}
+                    />
+                </EditorContext.Provider>
+            </UiLanguageContext.Provider>);
 
         expect(asFragment()).toMatchSnapshot();
+    });
+});
+
+const mockSelectables: ISelectabilityInfo[] = [
+    {
+        dimension: {
+            code: 'foobar1',
+            name: { fi: 'foobar1.fi', sv: 'foobar1.sv', en: 'foobar1.en' },
+            note: null,
+            type: EDimensionType.Content,
+            values: [
+                {
+                    code: 'barfoo1',
+                    name: { fi: 'barfoo1.fi', sv: 'barfoo1.sv', en: 'barfoo1.en' },
+                    note: null,
+                    isSum: false,
+                    contentComponent: null
+                },
+                {
+                    code: 'barfoo2',
+                    name: { fi: 'barfoo2.fi', sv: 'barfoo2.sv', en: 'barfoo2.en' },
+                    note: null,
+                    isSum: false,
+                    contentComponent: null
+                }
+            ]
+        },
+        multiselectable: false
+    }
+]
+
+describe('Assertion tests', () => {
+    it('getResolvedSelections applies default selectable variable value if selections have not been manually changed', () => {
+        const mockSelections: ISelectableSelections = {
+        };
+        const defaultSelectables: ISelectableSelections = {};
+        const result = getResolvedSelections(mockSelectables, mockSelections, defaultSelectables);
+        expect(result).toEqual({
+            foobar1: ['barfoo1']
+        });
+    });
+
+    it('getResolvedSelections applies first available variable value if default value has not been set', () => {
+        const mockSelections: ISelectableSelections = {};
+        const defaultSelectables: ISelectableSelections = {
+            foobar1: ['barfoo2']
+        };
+        const result = getResolvedSelections(mockSelectables, mockSelections, defaultSelectables);
+        expect(result).toEqual({
+            foobar1: ['barfoo2']
+        });
+    });
+
+    it('getResolvedSelections retains manually changed selections over default selectable variable values', () => {
+        const mockSelections: ISelectableSelections = {
+            foobar1: ['barfoo1', 'barfoo2']
+        };
+        const defaultSelectables: ISelectableSelections = {
+            foobar1: ['barfoo2']
+        };
+        const result = getResolvedSelections(mockSelectables, mockSelections, defaultSelectables, 'foobar1');
+        expect(result).toEqual({
+            foobar1: ['barfoo1', 'barfoo2']
+        });
+    });
+
+    it('getResolvedSelections returns only first selected value if multiple values are selected from non-multiselectable dimension', () => {
+        const mockSelections: ISelectableSelections = {
+            foobar1: ['barfoo1', 'barfoo2']
+        };
+        const defaultSelectables: ISelectableSelections = {
+            foobar1: ['barfoo2']
+        };
+        const result = getResolvedSelections(mockSelectables, mockSelections, defaultSelectables);
+        expect(result).toEqual({
+            foobar1: ['barfoo1']
+        });
+    });
+
+    it('getSelectables returns correct information about selectable dimensions', () => {
+        const mockVisualizationResponseWithSelectables: IQueryVisualizationResponse = {
+            ...mockVisualizationQueryResult.data,
+            selectableVariableCodes: ['Tiedot', 'Vuosi']
+        }
+        const mockVisualizationSettingsWithMultiselect: IVisualizationSettings = {
+            ...mockVisualizationSettings,
+            multiselectableVariableCode: 'Vuosi'
+        };
+        
+        const result = getSelectables(mockVisualizationResponseWithSelectables, mockVisualizationSettingsWithMultiselect);
+        expect(result.length).toBe(2);
+        expect(result[0].dimension.code).toBe('Tiedot');
+        expect(result[1].dimension.code).toBe('Vuosi');
+        expect(result[0].multiselectable).toBe(false);
+        expect(result[1].multiselectable).toBe(true);
     });
 });

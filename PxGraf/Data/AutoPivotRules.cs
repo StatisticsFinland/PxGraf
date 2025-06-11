@@ -13,7 +13,7 @@ namespace PxGraf.Data
 {
     /// <summary>
     /// Contains the business logic determining when the order of the dimensions should be reversed
-    /// and the data transposed for draving some spesific chart.
+    /// and the data transposed for drawing some specific chart.
     /// </summary>
     public static class AutoPivotRules
     {
@@ -40,7 +40,7 @@ namespace PxGraf.Data
         }
 
         /// <summary>
-        /// Returns true if the data must be pivoted before a group vertical bar chart can be drwn.
+        /// Returns true if the data must be pivoted before a group vertical bar chart can be drawn.
         /// If both multiselect dimensions have maximum of 4 values, time or progressive dimensions is the outer dimension.
         /// The dimension with fewer values is the inner dimension by default
         /// </summary>

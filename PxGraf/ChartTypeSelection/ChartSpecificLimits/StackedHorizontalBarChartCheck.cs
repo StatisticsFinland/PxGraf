@@ -6,7 +6,7 @@ using System.Collections.Generic;
 namespace PxGraf.ChartTypeSelection.ChartSpecificLimits
 {
     /// <summary>
-    /// Functionality to check the query compatibility with the stacked horizontal bar chart spesific rules.
+    /// Functionality to check the query compatibility with the stacked horizontal bar chart specific rules.
     /// </summary>
     /// <remarks>
     /// Default constructor

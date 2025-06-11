@@ -1,4 +1,5 @@
-﻿using Px.Utils.Models.Metadata.Enums;
+﻿using Px.Utils.Models.Metadata.Dimensions;
+using Px.Utils.Models.Metadata.Enums;
 using PxGraf.ChartTypeSelection.JsonObjects;
 using PxGraf.Enums;
 using System;
@@ -8,7 +9,7 @@ using System.Linq;
 namespace PxGraf.ChartTypeSelection
 {
     /// <summary>
-    /// Defines the limits for data dimensions for a spesific chart type.
+    /// Defines the limits for data dimensions for a specific chart type.
     /// </summary>
     /// <remarks>
     /// Default constructor
@@ -22,7 +23,7 @@ namespace PxGraf.ChartTypeSelection
         public abstract VisualizationType Type { get; }
 
         /// <summary>
-        /// Chart type spesific limits
+        /// Chart type specific limits
         /// </summary>
         IChartTypeLimits Limits { get; } = limits;
 
@@ -84,7 +85,7 @@ namespace PxGraf.ChartTypeSelection
         }
 
         /// <summary>
-        /// Checks that data contais atleas one actual value.
+        /// Checks that data contains at least one actual value.
         /// </summary>
         /// <returns></returns>
         private IEnumerable<ChartRejectionInfo> CheckData(VisualizationTypeSelectionObject input)
@@ -131,6 +132,7 @@ namespace PxGraf.ChartTypeSelection
                 else if (timeDimension.Size < irregularRange.Min) yield return BuildRejectionInfo(RejectionReason.IrregularTimeBelowMin, timeDimension.Size, irregularRange.Min, timeDimension);
                 else if (timeDimension.Size > irregularRange.Max) yield return BuildRejectionInfo(RejectionReason.IrregularTimeOverMax, timeDimension.Size, irregularRange.Max, timeDimension);
             }
+
             if (timeDimension.Size < timeRange.Min) yield return BuildRejectionInfo(RejectionReason.TimeBelowMin, timeDimension.Size, timeRange.Min, timeDimension);
             else if (timeDimension.Size > timeRange.Max) yield return BuildRejectionInfo(RejectionReason.TimeOverMax, timeDimension.Size, timeRange.Max, timeDimension);
         }
@@ -153,9 +155,9 @@ namespace PxGraf.ChartTypeSelection
                 if (contentRange.DimensionNotAllowed) yield return BuildRejectionInfo(RejectionReason.ContentNotAllowed, contentDimension);
                 else
                 {
-                    int conttentSize = contentDimension.Size;
-                    if (conttentSize < contentRange.Min) yield return BuildRejectionInfo(RejectionReason.ContentBelowMin, conttentSize, contentRange.Min, contentDimension);
-                    if (conttentSize > contentRange.Max) yield return BuildRejectionInfo(RejectionReason.ContentOverMax, conttentSize, contentRange.Max, contentDimension);
+                    int contentSize = contentDimension.Size;
+                    if (contentSize < contentRange.Min) yield return BuildRejectionInfo(RejectionReason.ContentBelowMin, contentSize, contentRange.Min, contentDimension);
+                    if (contentSize > contentRange.Max) yield return BuildRejectionInfo(RejectionReason.ContentOverMax, contentSize, contentRange.Max, contentDimension);
                 }
             }
         }
@@ -280,7 +282,7 @@ namespace PxGraf.ChartTypeSelection
         }
 
         /// <summary>
-        /// Returns the time dimennsion if the query contains one, if not, returns a dimension which is ordinal and has the most values.
+        /// Returns the time dimension if the query contains one, if not, returns a dimension which is ordinal and has the most values.
         /// If the query contains neither time or progressive dimensions, returns null.
         /// </summary>
         /// <returns></returns>

@@ -1,13 +1,12 @@
 import React from 'react';
 import { Box } from '@mui/material';
-import { EditorContext } from 'contexts/editorContext';
 import styled from 'styled-components';
 import Preview from 'components/Preview/Preview';
-import { IQueryInfo, Query } from 'types/query';
+import { Query } from 'types/query';
 import { VisualizationType } from 'types/visualizationType';
 import { IVisualizationSettings } from 'types/visualizationSettings';
 import { useTranslation } from 'react-i18next';
-import UiLanguageContext from 'contexts/uiLanguageContext';
+import { IEditorContentsResult } from '../../api/services/editor-contents';
 
 const PreviewWrapper = styled(Box)`
     grid-area: 'preview';
@@ -29,8 +28,7 @@ interface IEditorPreviewSectionProps {
     query: Query;
     selectedVisualization: VisualizationType;
     visualizationSettings: IVisualizationSettings;
-    queryInfo: IQueryInfo;
-
+    editorContents: IEditorContentsResult;
 }
 
 /**
@@ -39,14 +37,13 @@ interface IEditorPreviewSectionProps {
  * @param {Query} query Current query settings.
  * @param {VisualizationType} visualizationType Selected visualization type.
  * @param {IVisualizationSettings} visualizationSettings Selected visualization settings.
- * @param {IQueryInfo} queryInfo Information about the query.
+ * @param {IEditorContentsResponse} editorContents Contents of the editor. This includes the visualization options and rejection reasons.
  */
-export const EditorPreviewSection: React.FC<IEditorPreviewSectionProps> = ({path, query, selectedVisualization, visualizationSettings, queryInfo}) => {
+export const EditorPreviewSection: React.FC<IEditorPreviewSectionProps> = ({ path, query, selectedVisualization, visualizationSettings, editorContents }) => {
     const { t } = useTranslation();
-    const {cubeQuery} = React.useContext(EditorContext);
-    const {languageTab} = React.useContext(UiLanguageContext);
-    if (queryInfo?.validVisualizations?.length === 0) {
-        if (Object.keys(queryInfo?.visualizationRejectionReasons).length > 0) {
+
+    if (!editorContents.data?.visualizationOptions?.length) {
+        if (editorContents.data && Object.keys(editorContents.data.visualizationRejectionReasons).length > 0) {
             // Selected filters cannot produce a visualization
             return (
                 <GuideTextWrapper>
@@ -64,12 +61,10 @@ export const EditorPreviewSection: React.FC<IEditorPreviewSectionProps> = ({path
     return (
         <PreviewWrapper>
             <Preview
-              path={path}
-              query={query}
-              language={languageTab}
-              cubeQueryTextEdits={cubeQuery}
-              selectedVisualization={selectedVisualization}
-              visualizationSettings={visualizationSettings}
+                path={path}
+                query={query}
+                selectedVisualization={selectedVisualization}
+                visualizationSettings={visualizationSettings}
             />
         </PreviewWrapper>
     );

@@ -1,9 +1,9 @@
 import { IDimension, EDimensionType } from "types/cubeMeta";
 import { FilterType, Query } from "types/query";
-import { ISortingOption } from "types/visualizationRules";
 import { IVisualizationSettings } from "types/visualizationSettings";
 import { VisualizationType } from "types/visualizationType";
 import { getValidatedSettings } from "./ChartSettingHelpers";
+import { ISortingOption } from "../types/editorContentsResponse";
 
 const mockVisualizationSettings: IVisualizationSettings = {
     columnVariableCodes: ['foo', 'bar', 'baz'],

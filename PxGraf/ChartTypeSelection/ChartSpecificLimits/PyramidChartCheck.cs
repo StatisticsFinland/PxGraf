@@ -6,7 +6,7 @@ using System.Collections.Generic;
 namespace PxGraf.ChartTypeSelection.ChartSpecificLimits
 {
     /// <summary>
-    /// Functionality to check the query compatibility with the pyramid chart spesific rules.
+    /// Functionality to check the query compatibility with the pyramid chart specific rules.
     /// </summary>
     /// <remarks>
     /// Default constructor
