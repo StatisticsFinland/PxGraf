@@ -197,7 +197,7 @@ export const Editor = () => {
         }
     }, [selectedVisualization, dimensions, visualizationSettingsUserInput, modifiedQuery, defaultSelectables, editorContentsResponse]);
 
-    const saveQueryMutation = useSaveMutation(path, modifiedQuery, cubeQuery, selectedVisualization, visualizationSettingsUserInput);
+    const saveQueryMutation = useSaveMutation(path, modifiedQuery, cubeQuery, selectedVisualization, visualizationSettings);
 
     const errorContainer = (errorMessage: string) => {
         return (
