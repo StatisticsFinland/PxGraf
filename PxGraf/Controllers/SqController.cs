@@ -84,7 +84,9 @@ namespace PxGraf.Controllers
                 SaveQueryParams saveQueryParams = new ()
                 {
                     Query = savedQuery.Query,
-                    Settings = VisualizationCreationSettings.FromVisualizationSettings(savedQuery, filteredMeta)
+                    Settings = VisualizationCreationSettings.FromVisualizationSettings(savedQuery, filteredMeta),
+                    Draft = savedQuery.Draft,
+                    Id = savedQueryId
                 };
 
                 _logger.LogInformation("{SavedQueryId} result: Query: {Query}, Settings: {Settings}", savedQueryId, saveQueryParams.Query, saveQueryParams.Settings);
@@ -107,8 +109,8 @@ namespace PxGraf.Controllers
         public async Task<ActionResult<SaveQueryResponse>> SaveQueryAsync([FromBody] SaveQueryParams parameters)
         {
             _logger.LogDebug("Save request received {Parameters} POST: api/sq/save", parameters);
-            string newGuid = Guid.NewGuid().ToString();
-            string fileName = $"{newGuid}.sq";
+            string guid = !string.IsNullOrEmpty(parameters.Id) ? parameters.Id : Guid.NewGuid().ToString();
+            string fileName = $"{guid}.sq";
 
             IReadOnlyMatrixMetadata tableMeta = await _cachedDatasource.GetMatrixMetadataCachedAsync(parameters.Query.TableReference);
             IReadOnlyMatrixMetadata filteredMeta = tableMeta.FilterDimensionValues(parameters.Query);
@@ -118,7 +120,7 @@ namespace PxGraf.Controllers
             // All dimensions must have atleast one value selected
             if (!filteredMeta.Dimensions.Any(v => v.Values.Count != 0) || !ValidateVisualizationSettings(filteredMeta, visualizationSettings))
             {
-                _logger.LogWarning("Query {NewGuid} is missing a value for a dimension. {Parameters}", newGuid, parameters);
+                _logger.LogWarning("Query {NewGuid} is missing a value for a dimension. {Parameters}", guid, parameters);
                 return BadRequest();
             }
 
@@ -127,17 +129,17 @@ namespace PxGraf.Controllers
             IReadOnlyList<VisualizationType> validTypes = ChartTypeSelector.Selector.GetValidChartTypes(parameters.Query, dataCube);
             if (validTypes.Contains(visualizationSettings.VisualizationType))
             {
-                SavedQuery savedQuery = new (parameters.Query, archived: false, visualizationSettings, DateTime.Now);
+                SavedQuery savedQuery = new (parameters.Query, archived: false, visualizationSettings, DateTime.Now, parameters.Draft);
                 await _sqFileInterface.SerializeToFile(fileName, Configuration.Current.SavedQueryDirectory, savedQuery);
                 
-                SaveQueryResponse saveQueryResponse = new () { Id = newGuid };
+                SaveQueryResponse saveQueryResponse = new () { Id = guid };
                 _logger.LogDebug("Async query saved successfully {SaveQueryResponse}", saveQueryResponse);
 
                 return saveQueryResponse;
             }
 
             // If visualization type is not given or it is not valid return 400.
-            _logger.LogWarning("Query {NewGuid} has an invalid visualization type", newGuid);
+            _logger.LogWarning("Query {NewGuid} has an invalid visualization type", guid);
             return BadRequest();
         }
 
@@ -150,8 +152,8 @@ namespace PxGraf.Controllers
         public async Task<ActionResult<SaveQueryResponse>> ArchiveQueryAsync([FromBody] SaveQueryParams parameters)
         {
             _logger.LogDebug("Archiving query {Parameters} POST: api/sq/archive", parameters);
-            string newGuid = Guid.NewGuid().ToString();
-            string queryFileName = $"{newGuid}.sq";
+            string guid = !string.IsNullOrEmpty(parameters.Id) ? parameters.Id : Guid.NewGuid().ToString();
+            string queryFileName = $"{guid}.sq";
             IReadOnlyMatrixMetadata meta = await _cachedDatasource.GetMatrixMetadataCachedAsync(parameters.Query.TableReference);
             IReadOnlyMatrixMetadata filteredMeta = meta.FilterDimensionValues(parameters.Query);
 
@@ -160,7 +162,7 @@ namespace PxGraf.Controllers
             // All dimensions must have atleast one value selected
             if (filteredMeta.Dimensions.Any(v => v.Values.Count == 0) || !ValidateVisualizationSettings(filteredMeta, visualizationSettings))
             {
-                _logger.LogWarning("Archived query {NewGuid} is missing a value for a dimension. {Parameters}", newGuid, parameters);
+                _logger.LogWarning("Archived query {NewGuid} is missing a value for a dimension. {Parameters}", guid, parameters);
                 return BadRequest();
             }
 
@@ -168,17 +170,17 @@ namespace PxGraf.Controllers
             IReadOnlyList<VisualizationType> validTypes = ChartTypeSelector.Selector.GetValidChartTypes(parameters.Query, matrix);
             if (validTypes.Contains(visualizationSettings.VisualizationType))
             {
-                SavedQuery savedQuery = new(parameters.Query, archived: true, visualizationSettings, DateTime.Now);
+                SavedQuery savedQuery = new(parameters.Query, archived: true, visualizationSettings, DateTime.Now, parameters.Draft);
                 await _sqFileInterface.SerializeToFile(queryFileName, Configuration.Current.SavedQueryDirectory, savedQuery);
 
-                string archiveName = $"{newGuid}.sqa";
+                string archiveName = $"{guid}.sqa";
                 await _sqFileInterface.SerializeToFile(archiveName, Configuration.Current.ArchiveFileDirectory, new ArchiveCube(matrix));
                 _logger.LogInformation("Archiving query {ArchiveName}", archiveName);
-                return new SaveQueryResponse() { Id = newGuid };
+                return new SaveQueryResponse() { Id = guid };
             }
 
             // If visualization type is not given or it is not valid return 400.
-            _logger.LogWarning("Archived query {NewGuid} has an invalid visualization type", newGuid);
+            _logger.LogWarning("Archived query {NewGuid} has an invalid visualization type", guid);
             return BadRequest();
         }
 
@@ -197,8 +199,8 @@ namespace PxGraf.Controllers
                 SavedQuery baseQuery = await _sqFileInterface.ReadSavedQueryFromFile(request.SqId, Configuration.Current.SavedQueryDirectory);
                 try
                 {
-                    string newGuid = Guid.NewGuid().ToString();
-                    string queryFileName = $"{newGuid}.sq";
+                    string guid = !string.IsNullOrEmpty(request.SqId) ? request.SqId : Guid.NewGuid().ToString();
+                    string queryFileName = $"{guid}.sq";
                     IReadOnlyMatrixMetadata meta = await _cachedDatasource.GetMatrixMetadataCachedAsync(baseQuery.Query.TableReference);
                     IReadOnlyMatrixMetadata filteredMeta = meta.FilterDimensionValues(baseQuery.Query);
                     Matrix<DecimalDataValue> matrix = await _cachedDatasource.GetMatrixCachedAsync(baseQuery.Query.TableReference, filteredMeta);
@@ -206,13 +208,13 @@ namespace PxGraf.Controllers
                     IReadOnlyList<VisualizationType> validTypes = ChartTypeSelector.Selector.GetValidChartTypes(baseQuery.Query, matrix);
                     if (validTypes.Contains(baseQuery.Settings.VisualizationType))
                     {
-                        SavedQuery savedQuery = new (baseQuery.Query, archived: true, baseQuery.Settings, DateTime.Now);
+                        SavedQuery savedQuery = new (baseQuery.Query, archived: true, baseQuery.Settings, DateTime.Now, request.Draft);
                         await _sqFileInterface.SerializeToFile(queryFileName, Configuration.Current.SavedQueryDirectory, savedQuery);
 
-                        string archiveName = $"{newGuid}.sqa";
+                        string archiveName = $"{guid}.sqa";
                         await _sqFileInterface.SerializeToFile(archiveName, Configuration.Current.ArchiveFileDirectory, new ArchiveCube(matrix));
                         _logger.LogInformation("Rearchived query {ArchiveName}", archiveName);
-                        return new ReArchiveResponse() { NewSqId = newGuid };
+                        return new ReArchiveResponse() { NewSqId = guid };
                     }
 
                     // If visualization type is not valid for the new data return 400.

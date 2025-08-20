@@ -19,6 +19,7 @@ jest.mock('react-i18next', () => ({
 
 const onCloseMock = jest.fn();
 const onSaveMock = jest.fn(() => { });
+const setIsDraftMock = jest.fn();
 
 describe('Rendering test', () => {
     it('renders correctly when closed', () => {
@@ -40,7 +41,11 @@ describe('Rendering test', () => {
                 visualizationSettingsUserInput: {},
                 setVisualizationSettingsUserInput: jest.fn(),
                 defaultSelectables: {},
-                setDefaultSelectables: jest.fn()
+                setDefaultSelectables: jest.fn(),
+                loadedQueryId: '',
+                setLoadedQueryId: jest.fn(),
+                loadedQueryIsDraft: false,
+                setLoadedQueryIsDraft: setIsDraftMock
             }}>
                 <SaveDialog onSave={onSaveMock} />
             </EditorContext.Provider>
@@ -53,6 +58,7 @@ describe('Assertion test', () => {
     beforeEach(() => {
         onCloseMock.mockClear();
         onSaveMock.mockClear();
+        setIsDraftMock.mockClear();
     });
 
     it('invokes close function when cancel button is clicked', () => {
@@ -69,7 +75,11 @@ describe('Assertion test', () => {
                 visualizationSettingsUserInput: {},
                 setVisualizationSettingsUserInput: jest.fn(),
                 defaultSelectables: {},
-                setDefaultSelectables: jest.fn()
+                setDefaultSelectables: jest.fn(),
+                loadedQueryId: '',
+                setLoadedQueryId: jest.fn(),
+                loadedQueryIsDraft: false,
+                setLoadedQueryIsDraft: setIsDraftMock
             }}>
                 <SaveDialog onSave={onSaveMock} />
             </EditorContext.Provider>
@@ -92,7 +102,11 @@ describe('Assertion test', () => {
                 visualizationSettingsUserInput: {},
                 setVisualizationSettingsUserInput: jest.fn(),
                 defaultSelectables: {},
-                setDefaultSelectables: jest.fn()
+                setDefaultSelectables: jest.fn(),
+                loadedQueryId: '',
+                setLoadedQueryId: jest.fn(),
+                loadedQueryIsDraft: false,
+                setLoadedQueryIsDraft: setIsDraftMock
             }}>
                 <SaveDialog onSave={onSaveMock} />
             </EditorContext.Provider>

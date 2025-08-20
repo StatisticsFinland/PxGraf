@@ -222,6 +222,10 @@ const selectedVisualizationUserInput = null;
 const setSelectedVisualizationUserInput = jest.fn();
 const visualizationSettingsUserInput = null;
 const setVisualizationSettingsUserInput = jest.fn();
+const loadedQueryId = '';
+const setLoadedQueryId = jest.fn();
+const loadedQueryIsDraft = false;
+const setLoadedQueryIsDraft = jest.fn();
 
 describe('Rendering test', () => {
     beforeAll(() => {
@@ -239,7 +243,24 @@ describe('Rendering test', () => {
                 setUiContentLanguage: jest.fn(),
                 availableUiLanguages: ['fi', 'en', 'sv'],
             }}>
-                <EditorContext.Provider value={{ cubeQuery: mockCubeQueryTextEdits, setCubeQuery, query, setQuery, saveDialogOpen, setSaveDialogOpen, selectedVisualizationUserInput, setSelectedVisualizationUserInput, visualizationSettingsUserInput, setVisualizationSettingsUserInput, defaultSelectables, setDefaultSelectables }}>
+                <EditorContext.Provider value={{
+                    cubeQuery: mockCubeQueryTextEdits,
+                    setCubeQuery,
+                    query,
+                    setQuery,
+                    saveDialogOpen,
+                    setSaveDialogOpen,
+                    selectedVisualizationUserInput,
+                    setSelectedVisualizationUserInput,
+                    visualizationSettingsUserInput,
+                    setVisualizationSettingsUserInput,
+                    defaultSelectables,
+                    setDefaultSelectables,
+                    loadedQueryId,
+                    setLoadedQueryId,
+                    loadedQueryIsDraft,
+                    setLoadedQueryIsDraft
+                }}>
                     <Preview
                         path={mockPath}
                         query={mockQuery}

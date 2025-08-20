@@ -5,7 +5,6 @@ using PxGraf.Models.SavedQueries;
 using PxGraf.Settings;
 using PxGraf.Utility;
 using System;
-using System.Text.Encodings.Web;
 using System.Text.Json;
 using UnitTests.Fixtures;
 using UnitTests.Utilities;
@@ -70,7 +69,7 @@ namespace UnitTests.SerializerTests
         {
             SavedQuery query = JsonSerializer.Deserialize<SavedQuery>(testSavedQuery, GlobalJsonConverterOptions.Default);
             string serializedString = JsonSerializer.Serialize(query, GlobalJsonConverterOptions.Default);
-            Assert.That(serializedString.Contains("1.1"));
+            Assert.That(serializedString.Contains("1.2"));
             Assert.That(serializedString.Contains(ChartTypeEnumConverter.ToJsonString(query.Settings.VisualizationType)));
         }
 
@@ -346,6 +345,40 @@ namespace UnitTests.SerializerTests
             Assert.That(savedQuery.Archived, Is.True);
             Assert.That(savedQuery.Settings.Layout.ColumnDimensionCodes.Count, Is.EqualTo(3));
             Assert.That(savedQuery.Version, Is.EqualTo("1.0"));
+        }
+
+        [Test]
+        public void DeserializeSavedQuery_V1_2Draft_ReturnsV1_2DeserializedSavedQuery()
+        {
+            string testJson = @"{
+                    ""Version"":""1.2"",
+                    ""Draft"": true,
+		            ""Query"":{},
+		            ""CreationTime"": ""2023-04-24T14:36:18.7550813+03:00"",
+		            ""Archived"":true,
+                    ""Settings"":{
+                      ""MatchXLabelsToEnd"":false,
+                      ""XLabelInterval"":1,
+                      ""Layout"":{
+                         ""RowVariableCodes"":[
+                            ""Ilmoittava lentoasema""                            
+                         ],
+                         ""ColumnVariableCodes"":[
+                            ""Kuukausi""                            
+                         ]
+                      },
+                      ""VisualizationType"":""GroupVerticalBarChart"",
+                      ""DefaultSelectableVariableCodes"":null
+                   },
+                }";
+
+            SavedQuery savedQuery = JsonSerializer.Deserialize<SavedQuery>(testJson, GlobalJsonConverterOptions.Default);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(savedQuery.Version, Is.EqualTo("1.2"));
+                Assert.That(savedQuery.Draft, Is.True);
+            });
         }
 
         [Test]

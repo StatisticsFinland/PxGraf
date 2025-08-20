@@ -16,5 +16,15 @@ namespace PxGraf.Models.Requests
         /// <see cref="VisualizationCreationSettings"/> object containing settings for the visualization.
         /// </summary>
         public VisualizationCreationSettings Settings { get; set; }
+
+        /// <summary>
+        /// Id of the query to be updated. If not provided, a new query will be created.
+        /// </summary>
+        public string Id { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Whether the saved query is a draft. Defaults to false.
+        /// </summary>
+        public bool Draft { get; set; } = false;
     }
 }

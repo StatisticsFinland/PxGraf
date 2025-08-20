@@ -18,6 +18,8 @@ export interface ISaveQueryResponse {
  * Response object for fetching a saved query.
  * @property query - The query object consisting of the table reference and dimension queries @see {@link Query}.
  * @property {IVisualizationSettings} settings - The visualization settings for the query.
+ * @property {string} id - The id of the retreived query.
+ * @property {boolean} draft - Indicates if the query is a draft and can be overwritten.
  */
 export interface IFetchSavedQueryResponse {
     query: {
@@ -28,6 +30,16 @@ export interface IFetchSavedQueryResponse {
         variableQueries: Query;
     } & ICubeQuery;
     settings: IVisualizationSettings;
+    id: string;
+    draft: boolean;
+}
+
+/**
+ * Interface for save query mutation payload
+ */
+export interface ISaveQueryMutationParams {
+    archive: boolean;
+    isDraft: boolean;
 }
 
 /**
@@ -43,7 +55,7 @@ export interface ISaveQueryResult {
     isError: boolean;
     isSuccess: boolean;
     data: ISaveQueryResponse;
-    mutate: (property: boolean) => void;
+    mutate: (params: ISaveQueryMutationParams) => void;
 }
 
 /**
@@ -66,7 +78,8 @@ const sendSaveRequest = async (
     metaEdits: ICubeQuery,
     selectedVisualization: string,
     visualizationSettings: IVisualizationSettings,
-    archive: boolean | void
+    params: ISaveQueryMutationParams,
+    id: string
 ): Promise<ISaveQueryResponse> => {
 
     const client = new ApiClient();
@@ -76,9 +89,11 @@ const sendSaveRequest = async (
         settings: {
             ...visualizationSettings,
             selectedVisualization: selectedVisualization,
-        }
+        },
+        id: id,
+        draft: params.isDraft
     });
-    const url = archive ? 'sq/archive' : 'sq/save';
+    const url = params.archive ? 'sq/archive' : 'sq/save';
     return await client.postAsync(url, requestBody);
 }
 
@@ -98,9 +113,24 @@ export const useFetchSavedQuery = (queryId: string): IFetchSavedQueryResult => {
     );
 };
 
-export const useSaveMutation = (idStack: string[], query: Query, metaEdits: ICubeQuery, selectedVisualization: string, visualizationSettings: IVisualizationSettings): ISaveQueryResult => {
+export const useSaveMutation = (
+    idStack: string[], 
+    query: Query, 
+    metaEdits: ICubeQuery, 
+    selectedVisualization: string, 
+    visualizationSettings: IVisualizationSettings, 
+    id: string
+): ISaveQueryResult => {
     return useMutation(
-        (archive) => sendSaveRequest(idStack, query, metaEdits, selectedVisualization, visualizationSettings, archive),
+        (params: ISaveQueryMutationParams) => sendSaveRequest(
+            idStack, 
+            query, 
+            metaEdits, 
+            selectedVisualization, 
+            visualizationSettings, 
+            params, 
+            id
+        ),
         { retry: false }
     );
 }

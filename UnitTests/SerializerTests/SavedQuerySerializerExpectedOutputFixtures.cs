@@ -14,7 +14,8 @@
                     },
                     ""showDataPoints"": false
                 },
-                ""version"": ""1.1"",
+                ""draft"": false,
+                ""version"": ""1.2"",
                 ""query"": {
                     ""tableReference"": {
                         ""name"": ""table.px"",
@@ -97,7 +98,8 @@
                     ""layout"": null,
                     ""showDataPoints"": false
                 },
-                ""version"": ""1.1"",
+                ""draft"": false,
+                ""version"": ""1.2"",
                 ""query"": {
                     ""tableReference"": {
                         ""name"": ""table.px"",
@@ -190,7 +192,8 @@
                     },
                     ""showDataPoints"": false
                 },
-                ""version"": ""1.1"",
+                ""draft"": false,
+                ""version"": ""1.2"",
                 ""query"": {
                     ""tableReference"": {
                         ""name"": ""table.px"",
@@ -318,7 +321,8 @@
                     },
                     ""showDataPoints"": false
                 },
-                ""version"": ""1.1"",
+                ""draft"": false,
+                ""version"": ""1.2"",
                 ""query"": {
                     ""tableReference"": {
                         ""name"": ""table.px"",
