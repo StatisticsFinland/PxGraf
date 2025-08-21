@@ -11,6 +11,12 @@ interface ISaveDialogProps {
     onSave: (archive: boolean, draft: boolean) => void;
 }
 
+/**
+ * SaveDialog component for saving queries. Contains options to save the current query as either dynamic (with updating data) or static (with fixed data), and whether to save it as a draft or published.
+ * @param {ISaveDialogProps} props - The properties for the SaveDialog component.
+ * @param {function} props.onSave - Callback function to handle the save action.
+ * @returns {JSX.Element} The rendered SaveDialog component.
+ */
 export const SaveDialog: React.FC<ISaveDialogProps> = ({ onSave }) => {
     const { t } = useTranslation();
     const [selected, setSelected] = useState("dynamic");

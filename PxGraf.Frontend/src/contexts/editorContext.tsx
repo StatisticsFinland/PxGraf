@@ -20,10 +20,8 @@ import { VisualizationType } from 'types/visualizationType';
  * @property {React.Dispatch<IVisualizationSettings>} setVisualizationSettingsUserInput - Function to set the visualization settings
  * @property {{ [key: string]: string[] }} defaultSelectables - The default selectables for each dimension
  * @property {React.Dispatch<{ [key: string]: string[] }>} setDefaultSelectables - Function to set the default selectables
- * @property {string} loadedQueryId - The id of the loaded query
- * @property {React.Dispatch<string>} setLoadedQueryId - Function to set the query id
- * @property {boolean} saveAsDraft - Flag to indicate if the query is a draft
- * @property {React.Dispatch<boolean>} setSaveAsDraft - Function to set the draft flag
+ * @property {string} loadedQueryId - The id of the loaded query if any
+ * @property {React.Dispatch<string>} setLoadedQueryId - Function to set the query id when loading a query
  */
 interface IEditorContext {
     cubeQuery: ICubeQuery;

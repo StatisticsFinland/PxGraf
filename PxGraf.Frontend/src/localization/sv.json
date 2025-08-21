@@ -100,7 +100,8 @@
     "saveQuery": "Välj lagringsformat",
     "saveOptions": "Välj i vilket format du vill spara",
     "saveDynamic": "Dynamisk enkät och data som uppdateras",
-    "saveStatic": "Statisk enkät och statiska data"
+    "saveStatic": "Statisk enkät och statiska data",
+    "publish": "Publiceringsklar"
   },
   "saveResultDialog": {
     "ok": "ok",

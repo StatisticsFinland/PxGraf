@@ -23,7 +23,7 @@ namespace PxGraf.Models.Requests
         public string Id { get; set; } = string.Empty;
 
         /// <summary>
-        /// Whether the saved query is a draft. Defaults to false.
+        /// Whether the saved query is a draft. If true, the query will be overwritten when it's saved. Defaults to false.
         /// </summary>
         public bool Draft { get; set; } = false;
     }

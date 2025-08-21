@@ -115,4 +115,67 @@ describe('Assertion test', () => {
         expect(onSaveMock).toHaveBeenCalledTimes(1);
         expect(onCloseMock).toHaveBeenCalledTimes(1);
     });
+
+    it('invokes save and close function with draft as true when publish checkbox is unchecked', () => {
+        render(
+            <EditorContext.Provider value={{
+                cubeQuery: null,
+                setCubeQuery: jest.fn(),
+                query: {},
+                setQuery: jest.fn(),
+                saveDialogOpen: true,
+                setSaveDialogOpen: onCloseMock,
+                selectedVisualizationUserInput: VisualizationType.VerticalBarChart,
+                setSelectedVisualizationUserInput: jest.fn(),
+                visualizationSettingsUserInput: {},
+                setVisualizationSettingsUserInput: jest.fn(),
+                defaultSelectables: {},
+                setDefaultSelectables: jest.fn(),
+                loadedQueryId: '',
+                setLoadedQueryId: jest.fn(),
+                loadedQueryIsDraft: false,
+                setLoadedQueryIsDraft: setIsDraftMock
+            }}>
+                <SaveDialog onSave={onSaveMock} />
+            </EditorContext.Provider>
+        );
+
+        // Checkbox is unchecked by default (saveAsPublished = false)
+        fireEvent.click(screen.getByText('saveDialog.save'));
+        expect(onSaveMock).toHaveBeenCalledWith(false, true); // static: false, draft: true
+        expect(onSaveMock).toHaveBeenCalledTimes(1);
+        expect(onCloseMock).toHaveBeenCalledTimes(1);
+    });
+
+    it('invokes save and close function with draft as false when publish checkbox is checked', () => {
+        render(
+            <EditorContext.Provider value={{
+                cubeQuery: null,
+                setCubeQuery: jest.fn(),
+                query: {},
+                setQuery: jest.fn(),
+                saveDialogOpen: true,
+                setSaveDialogOpen: onCloseMock,
+                selectedVisualizationUserInput: VisualizationType.VerticalBarChart,
+                setSelectedVisualizationUserInput: jest.fn(),
+                visualizationSettingsUserInput: {},
+                setVisualizationSettingsUserInput: jest.fn(),
+                defaultSelectables: {},
+                setDefaultSelectables: jest.fn(),
+                loadedQueryId: '',
+                setLoadedQueryId: jest.fn(),
+                loadedQueryIsDraft: false,
+                setLoadedQueryIsDraft: setIsDraftMock
+            }}>
+                <SaveDialog onSave={onSaveMock} />
+            </EditorContext.Provider>
+        );
+
+        // Check the publish checkbox
+        fireEvent.click(screen.getByText('saveDialog.publish'));
+        fireEvent.click(screen.getByText('saveDialog.save'));
+        expect(onSaveMock).toHaveBeenCalledWith(false, false); // static: false, draft: false
+        expect(onSaveMock).toHaveBeenCalledTimes(1);
+        expect(onCloseMock).toHaveBeenCalledTimes(1);
+    });
 });

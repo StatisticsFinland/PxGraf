@@ -10,8 +10,8 @@ in the [HighCharts shop](https://shop.highsoft.com/?utm_source=npmjs&utm_medium=
 
 ## Core functions
 - **Data visualization:** PxGraf helps users create visualization from px data. It automatically decides which visualization types are available based on the user's selections and what kind of customizations can be made. The user can then choose from available options. The data and visualizations can also be exported in different formats.
-- **Saved queries:** The user can create, save, archive and load queries. Saved queries can be shared with other users or published externally. Saved queries are stored in the running environment's file system and the user is provided with an ID representing the saved query.
-- **APIs:** PxGraf's APIs provide functionality for processing the data for visualization and saving and loading queries.
+- **Saved queries:** The user can create, save, overwrite, archive and load queries. Saved queries can be shared with other users or published externally. Saved queries are stored in the running environment's file system and the user is provided with an ID representing the saved query.
+- **APIs:** PxGraf's APIs provide functionality for processing the data for visualization, and saving and loading queries.
 
 ## APIs
 - **Creation API:** Provides endpoints for fetching database listings and Px table metadata. It also provides functionality for metadata validation and providing required contents for the visualization editor. Can be disabled in the appsettings.json file.

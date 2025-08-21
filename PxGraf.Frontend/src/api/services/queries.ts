@@ -36,6 +36,8 @@ export interface IFetchSavedQueryResponse {
 
 /**
  * Interface for save query mutation payload
+ * @property {boolean} archive - Flag to indicate if the query should be archived.
+ * @property {boolean} isDraft - Flag to indicate if the query is a draft and can be overwritten.
  */
 export interface ISaveQueryMutationParams {
     archive: boolean;

@@ -7,7 +7,7 @@ export const buildCubeQuery = (query: Query, metaEdits: ICubeQuery, idStack: str
     return merge(
       { tableReference: buildTableReference(idStack) },
       { variableQueries: query },
-      metaEdits,
+      metaEdits
     )
 }
 
