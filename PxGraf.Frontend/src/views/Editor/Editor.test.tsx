@@ -17,6 +17,7 @@ import '@testing-library/jest-dom';
 import { IVisualizationOptions } from '../../types/editorContentsResponse';
 import { VisualizationType } from '../../types/visualizationType';
 import { IEditorContentsResult } from '../../api/services/editor-contents';
+import { EditorContext } from '../../contexts/editorContext';
 
 const queryClient = new QueryClient();
 const language = "fi";
@@ -286,6 +287,50 @@ const errorTableValidationResult: IValidateTableMetaDataResult = {
     data: null
 }
 
+const mockLocation = {
+    state: {
+        result: {
+            id: 'test-query-id',
+            draft: true,
+            settings: {
+                selectedVisualization: EVisualizationType.HorizontalBarChart,
+                defaultSelectableVariableCodes: { foobar1: ['barfoo1', 'barfoo2'] }
+            },
+            query: {
+                variableQueries: {
+                    foobar1: {
+                        valueFilter: ['barfoo1', 'barfoo2'],
+                        selectable: true,
+                        virtualValueDefinitions: [],
+                        valueEdits: {}
+                    },
+                    foobar2: {
+                        valueFilter: ['barfoo1', 'barfoo2'],
+                        selectable: true,
+                        virtualValueDefinitions: [],
+                        valueEdits: {}
+                    }
+                },
+                chartHeaderEdit: {
+                    fi: 'test header',
+                    sv: 'test header sv',
+                    en: 'test header en'
+                }
+            }
+        }
+    }
+};
+
+jest.mock('react-router-dom', () => ({
+    ...jest.requireActual('react-router-dom'),
+    useParams: () => {
+        return {
+            '*': 'foo/bar'
+        };
+    },
+    useLocation: () => mockLocation
+}));
+
 let mockResult: IValidateTableMetaDataResult;
 
 jest.mock('api/services/validate-table-metadata', () => ({
@@ -367,5 +412,85 @@ describe('Assertion tests', () => {
         );
 
         expect(screen.getByText('error.contentLoad')).toBeInTheDocument();
+    });
+
+    it('loads query data from location state', () => {
+        mockResult = mockTableValidationResult;
+        mockCubeMetaResult.isLoading = false;
+        mockCubeMetaResult.isError = false;
+        mockCubeMetaResult.data = {
+            defaultLanguage: 'fi',
+            availableLanguages: ['fi'],
+            additionalProperties: {},
+            dimensions: [
+                {
+                    code: 'code',
+                    name: {
+                        'fi': 'variableName'
+                    },
+                    type: EDimensionType.Content,
+                    values: [
+                        {
+                            code: 'variableValueCode',
+                            name: {
+                                'fi': 'variableValueName'
+                            },
+                            isVirtual: false,
+                            additionalProperties: {},
+                        }
+                    ],
+                    additionalProperties: {}
+                }
+            ]
+        };
+
+        const setSelectedVisualizationUserInput = jest.fn();
+        const setLoadedQueryId = jest.fn();
+        const setLoadedQueryIsDraft = jest.fn();
+        const originalUseContext = React.useContext;
+
+        const mockEditorContext = {
+            cubeQuery: { variableQueries: {} },
+            setCubeQuery: jest.fn(),
+            query: null,
+            setQuery: jest.fn(),
+            saveDialogOpen: false,
+            setSaveDialogOpen: jest.fn(),
+            selectedVisualizationUserInput: null,
+            setSelectedVisualizationUserInput,
+            visualizationSettingsUserInput: null,
+            setVisualizationSettingsUserInput: jest.fn(),
+            defaultSelectables: null,
+            setDefaultSelectables: jest.fn(),
+            loadedQueryId: '',
+            setLoadedQueryId,
+            loadedQueryIsDraft: false,
+            setLoadedQueryIsDraft
+        };
+
+        // Mock useContext to return the mockEditorContext for EditorContext
+        jest.spyOn(React, 'useContext').mockImplementation(context => {
+            if (context === EditorContext) {
+                return mockEditorContext;
+            }
+            // Return the original context for other contexts
+            return originalUseContext(context);
+        });
+
+        render(
+            <QueryClientProvider client={queryClient}>
+                <NavigationProvider>
+                    <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
+                        <Editor />
+                    </UiLanguageContext.Provider>
+                </NavigationProvider>
+            </QueryClientProvider>
+        );
+
+        expect(setLoadedQueryId).toHaveBeenCalledWith('test-query-id');
+        expect(setLoadedQueryIsDraft).toHaveBeenCalledWith(true);
+        expect(setSelectedVisualizationUserInput).toHaveBeenCalledWith(EVisualizationType.HorizontalBarChart);
+
+        jest.restoreAllMocks();
     });
 });
