@@ -1,5 +1,4 @@
 /* istanbul ignore file */
-
 import ApiClient from "api/client";
 import { useMutation, useQuery, UseMutationResult } from "react-query";
 import { ICubeQuery, Query } from "types/query";
@@ -42,6 +41,22 @@ export interface IFetchSavedQueryResponse {
 export interface ISaveQueryMutationParams {
     archive: boolean;
     isDraft: boolean;
+}
+
+/**
+ * Interface for save query result
+ * @property {boolean} isLoading - Flag to indicate if the data is still loading.
+ * @property {boolean} isError - Flag to indicate if an error occurred during loading.
+ * @property {boolean} isSuccess - Flag to indicate if the request was successful.
+ * @property {ISaveQueryResponse} data - The save query response data.
+ * @property {function} mutate - Function to mutate the state of the query.
+ */
+export interface ISaveQueryResult {
+    isLoading: boolean;
+    isError: boolean;
+    isSuccess: boolean;
+    data: ISaveQueryResponse;
+    mutate: (params: ISaveQueryMutationParams) => void;
 }
 
 /**
