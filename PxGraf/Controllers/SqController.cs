@@ -109,7 +109,7 @@ namespace PxGraf.Controllers
         public async Task<ActionResult<SaveQueryResponse>> SaveQueryAsync([FromBody] SaveQueryParams parameters)
         {
             _logger.LogDebug("Save request received {Parameters} POST: api/sq/save", parameters);
-            string guid = !string.IsNullOrEmpty(parameters.Id) ? parameters.Id : Guid.NewGuid().ToString();
+            string guid = await GetIsDraftAsync(parameters.Id) ? parameters.Id : Guid.NewGuid().ToString();
             string fileName = $"{guid}.sq";
 
             IReadOnlyMatrixMetadata tableMeta = await _cachedDatasource.GetMatrixMetadataCachedAsync(parameters.Query.TableReference);
@@ -152,7 +152,7 @@ namespace PxGraf.Controllers
         public async Task<ActionResult<SaveQueryResponse>> ArchiveQueryAsync([FromBody] SaveQueryParams parameters)
         {
             _logger.LogDebug("Archiving query {Parameters} POST: api/sq/archive", parameters);
-            string guid = !string.IsNullOrEmpty(parameters.Id) ? parameters.Id : Guid.NewGuid().ToString();
+            string guid = await GetIsDraftAsync(parameters.Id) ? parameters.Id : Guid.NewGuid().ToString();
             string queryFileName = $"{guid}.sq";
             IReadOnlyMatrixMetadata meta = await _cachedDatasource.GetMatrixMetadataCachedAsync(parameters.Query.TableReference);
             IReadOnlyMatrixMetadata filteredMeta = meta.FilterDimensionValues(parameters.Query);
@@ -199,7 +199,7 @@ namespace PxGraf.Controllers
                 SavedQuery baseQuery = await _sqFileInterface.ReadSavedQueryFromFile(request.SqId, Configuration.Current.SavedQueryDirectory);
                 try
                 {
-                    string guid = !string.IsNullOrEmpty(request.SqId) ? request.SqId : Guid.NewGuid().ToString();
+                    string guid = await GetIsDraftAsync(request.SqId) ? request.SqId : Guid.NewGuid().ToString();
                     string queryFileName = $"{guid}.sq";
                     IReadOnlyMatrixMetadata meta = await _cachedDatasource.GetMatrixMetadataCachedAsync(baseQuery.Query.TableReference);
                     IReadOnlyMatrixMetadata filteredMeta = meta.FilterDimensionValues(baseQuery.Query);
@@ -247,6 +247,27 @@ namespace PxGraf.Controllers
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// Checks for draft state of a query based on given id
+        /// </summary>
+        /// <param name="id">Id to check draft state for</param>
+        /// <returns>True if the query exists and is in draft state. Otherwise false</returns>
+        private async Task<bool> GetIsDraftAsync(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return false;
+            }
+
+            if (_sqFileInterface.SavedQueryExists(id, Configuration.Current.SavedQueryDirectory))
+            {
+                SavedQuery savedQuery = await _sqFileInterface.ReadSavedQueryFromFile(id, Configuration.Current.SavedQueryDirectory);
+                return savedQuery.Draft;
+            }
+
+            return false;
         }
     }
 }

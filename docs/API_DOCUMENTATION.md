@@ -26,7 +26,7 @@ Query meta API provides an endpoint for retrieving metadata of a saved query.
 | GetQueryMeta | GET: {*savedQueryId*} | savedQueryId: The id of the saved query provided in the url. | QueryMetaResponse object that contains the metadata of the saved query including the header, archival status, selected visualization type, etc. |
 
 # Saved query API (/api/sq/)
-SQ api provides endpoints for retrieving, saving, archiving and re-archiving queries. When saving, archiving or re-archiving queries, if an id is provided with the SaveQueryParams object, the file with that id is overwritten. If no id is provided, a new id is generated for the query.
+SQ api provides endpoints for retrieving, saving, archiving and re-archiving queries. When saving, archiving or re-archiving queries, if an id is provided with the SaveQueryParams object and a draft state saved query file is found, it is overwritten. If no id is provided, or the previously saved query is not in draft state, a new id is generated for the query.
 
 ## Endpoints
 
