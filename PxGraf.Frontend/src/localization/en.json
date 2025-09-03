@@ -100,7 +100,8 @@
     "saveQuery": "Select saving format",
     "saveOptions": "Select in which format you want to save",
     "saveDynamic": "Dynamic query and updated data",
-    "saveStatic": "Static query and static data"
+    "saveStatic": "Static query and static data",
+    "publish": "Publish-ready"
   },
   "saveResultDialog": {
     "ok": "OK",

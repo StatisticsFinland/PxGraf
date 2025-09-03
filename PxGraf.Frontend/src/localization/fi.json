@@ -100,7 +100,8 @@
     "saveQuery": "Valitse tallennuksen muoto",
     "saveOptions": "Valitse missä muodossa haluat tallentaa",
     "saveDynamic": "Dynaaminen kysely ja päivittyvä data",
-    "saveStatic": "Staattinen kysely ja staattinen data"
+    "saveStatic": "Staattinen kysely ja staattinen data",
+    "publish": "Julkaisuvalmis"
   },
   "saveResultDialog": {
     "ok": "OK",

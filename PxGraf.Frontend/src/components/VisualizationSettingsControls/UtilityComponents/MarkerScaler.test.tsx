@@ -74,7 +74,11 @@ describe('Assertion tests', () => {
                 selectedVisualizationUserInput: VisualizationType.VerticalBarChart,
                 setSelectedVisualizationUserInput: jest.fn(),
                 visualizationSettingsUserInput: {},
-                setVisualizationSettingsUserInput: mockSettingsChangedHandler
+                setVisualizationSettingsUserInput: mockSettingsChangedHandler,
+                loadedQueryId: '',
+                setLoadedQueryId: jest.fn(),
+                loadedQueryIsDraft: false,
+                setLoadedQueryIsDraft: jest.fn()
             }}>
                 <MarkerScaler
                     visualizationOptions={mockVisualizationRules}

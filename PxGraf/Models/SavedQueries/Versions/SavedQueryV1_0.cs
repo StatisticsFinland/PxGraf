@@ -57,7 +57,8 @@ namespace PxGraf.Models.SavedQueries.Versions
                 Settings = BuildSettingsFromV10(Settings),
                 CreationTime = CreationTime,
                 Query = Query,
-                Version = "1.0"
+                Version = "1.0",
+                Draft = false // Draft is not supported in this version
             };
 
             if (Settings.PivotRequested is bool b)

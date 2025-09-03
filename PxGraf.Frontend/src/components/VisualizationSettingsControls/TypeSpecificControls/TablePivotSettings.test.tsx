@@ -231,7 +231,11 @@ describe('Assertion tests', () => {
                     selectedVisualizationUserInput,
                     setSelectedVisualizationUserInput,
                     visualizationSettingsUserInput,
-                    setVisualizationSettingsUserInput: mockSettingsChangedHandler
+                    setVisualizationSettingsUserInput: mockSettingsChangedHandler,
+                    loadedQueryId: '',
+                    setLoadedQueryId: jest.fn(),
+                    loadedQueryIsDraft: false,
+                    setLoadedQueryIsDraft: jest.fn()
                 }}>
                     <TablePivotSettings
                         dimensions={mockDimensions}
@@ -264,7 +268,11 @@ describe('Assertion tests', () => {
                     selectedVisualizationUserInput,
                     setSelectedVisualizationUserInput,
                     visualizationSettingsUserInput,
-                    setVisualizationSettingsUserInput: mockSettingsChangedHandler
+                    setVisualizationSettingsUserInput: mockSettingsChangedHandler,
+                    loadedQueryId: '',
+                    setLoadedQueryId: jest.fn(),
+                    loadedQueryIsDraft: false,
+                    setLoadedQueryIsDraft: jest.fn()
                 }}>
                     <TablePivotSettings
                         dimensions={mockDimensions}
@@ -297,7 +305,11 @@ describe('Assertion tests', () => {
                     selectedVisualizationUserInput,
                     setSelectedVisualizationUserInput,
                     visualizationSettingsUserInput,
-                    setVisualizationSettingsUserInput: mockSettingsChangedHandler
+                    setVisualizationSettingsUserInput: mockSettingsChangedHandler,
+                    loadedQueryId: '',
+                    setLoadedQueryId: jest.fn(),
+                    loadedQueryIsDraft: false,
+                    setLoadedQueryIsDraft: jest.fn()
                 }}>
                     <TablePivotSettings
                         dimensions={mockDimensions}
@@ -330,7 +342,11 @@ describe('Assertion tests', () => {
                     selectedVisualizationUserInput,
                     setSelectedVisualizationUserInput,
                     visualizationSettingsUserInput,
-                    setVisualizationSettingsUserInput: mockSettingsChangedHandler
+                    setVisualizationSettingsUserInput: mockSettingsChangedHandler,
+                    loadedQueryId: '',
+                    setLoadedQueryId: jest.fn(),
+                    loadedQueryIsDraft: false,
+                    setLoadedQueryIsDraft: jest.fn()
                 }}>
                     <TablePivotSettings
                         dimensions={mockDimensions}
@@ -363,7 +379,11 @@ describe('Assertion tests', () => {
                     selectedVisualizationUserInput,
                     setSelectedVisualizationUserInput,
                     visualizationSettingsUserInput,
-                    setVisualizationSettingsUserInput: mockSettingsChangedHandler
+                    setVisualizationSettingsUserInput: mockSettingsChangedHandler,
+                    loadedQueryId: '',
+                    setLoadedQueryId: jest.fn(),
+                    loadedQueryIsDraft: false,
+                    setLoadedQueryIsDraft: jest.fn()
                 }}>
                     <TablePivotSettings
                         dimensions={mockDimensions}
@@ -396,7 +416,11 @@ describe('Assertion tests', () => {
                     selectedVisualizationUserInput,
                     setSelectedVisualizationUserInput,
                     visualizationSettingsUserInput,
-                    setVisualizationSettingsUserInput: mockSettingsChangedHandler
+                    setVisualizationSettingsUserInput: mockSettingsChangedHandler,
+                    loadedQueryId: '',
+                    setLoadedQueryId: jest.fn(),
+                    loadedQueryIsDraft: false,
+                    setLoadedQueryIsDraft: jest.fn()
                 }}>
                     <TablePivotSettings
                         dimensions={mockDimensions}
@@ -429,7 +453,11 @@ describe('Assertion tests', () => {
                     selectedVisualizationUserInput,
                     setSelectedVisualizationUserInput,
                     visualizationSettingsUserInput,
-                    setVisualizationSettingsUserInput: mockSettingsChangedHandler
+                    setVisualizationSettingsUserInput: mockSettingsChangedHandler,
+                    loadedQueryId: '',
+                    setLoadedQueryId: jest.fn(),
+                    loadedQueryIsDraft: false,
+                    setLoadedQueryIsDraft: jest.fn()
                 }}>
                     <TablePivotSettings
                         dimensions={mockDimensions}
@@ -462,7 +490,11 @@ describe('Assertion tests', () => {
                     selectedVisualizationUserInput,
                     setSelectedVisualizationUserInput,
                     visualizationSettingsUserInput,
-                    setVisualizationSettingsUserInput: mockSettingsChangedHandler
+                    setVisualizationSettingsUserInput: mockSettingsChangedHandler,
+                    loadedQueryId: '',
+                    setLoadedQueryId: jest.fn(),
+                    loadedQueryIsDraft: false,
+                    setLoadedQueryIsDraft: jest.fn()
                 }}>
                     <TablePivotSettings
                         dimensions={mockDimensions}
@@ -492,7 +524,11 @@ describe('Assertion tests', () => {
                     selectedVisualizationUserInput,
                     setSelectedVisualizationUserInput,
                     visualizationSettingsUserInput,
-                    setVisualizationSettingsUserInput: mockSettingsChangedHandler
+                    setVisualizationSettingsUserInput: mockSettingsChangedHandler,
+                    loadedQueryId: '',
+                    setLoadedQueryId: jest.fn(),
+                    loadedQueryIsDraft: false,
+                    setLoadedQueryIsDraft: jest.fn()
                 }}>
                     <TablePivotSettings
                         dimensions={mockDimensions}
@@ -522,7 +558,11 @@ describe('Assertion tests', () => {
                     selectedVisualizationUserInput,
                     setSelectedVisualizationUserInput,
                     visualizationSettingsUserInput,
-                    setVisualizationSettingsUserInput: mockSettingsChangedHandler
+                    setVisualizationSettingsUserInput: mockSettingsChangedHandler,
+                    loadedQueryId: '',
+                    setLoadedQueryId: jest.fn(),
+                    loadedQueryIsDraft: false,
+                    setLoadedQueryIsDraft: jest.fn()
                 }}>
                     <TablePivotSettings
                         dimensions={mockDimensions}
@@ -552,7 +592,11 @@ describe('Assertion tests', () => {
                     selectedVisualizationUserInput,
                     setSelectedVisualizationUserInput,
                     visualizationSettingsUserInput,
-                    setVisualizationSettingsUserInput: mockSettingsChangedHandler
+                    setVisualizationSettingsUserInput: mockSettingsChangedHandler,
+                    loadedQueryId: '',
+                    setLoadedQueryId: jest.fn(),
+                    loadedQueryIsDraft: false,
+                    setLoadedQueryIsDraft: jest.fn()
                 }}>
                     <TablePivotSettings
                         dimensions={mockDimensions}
@@ -584,7 +628,11 @@ describe('Assertion tests', () => {
                     selectedVisualizationUserInput,
                     setSelectedVisualizationUserInput,
                     visualizationSettingsUserInput,
-                    setVisualizationSettingsUserInput: mockSettingsChangedHandler
+                    setVisualizationSettingsUserInput: mockSettingsChangedHandler,
+                    loadedQueryId: '',
+                    setLoadedQueryId: jest.fn(),
+                    loadedQueryIsDraft: false,
+                    setLoadedQueryIsDraft: jest.fn()
                 }}>
                     <TablePivotSettings
                         dimensions={mockDimensions}
@@ -616,7 +664,11 @@ describe('Assertion tests', () => {
                     selectedVisualizationUserInput,
                     setSelectedVisualizationUserInput,
                     visualizationSettingsUserInput,
-                    setVisualizationSettingsUserInput: mockSettingsChangedHandler
+                    setVisualizationSettingsUserInput: mockSettingsChangedHandler,
+                    loadedQueryId: '',
+                    setLoadedQueryId: jest.fn(),
+                    loadedQueryIsDraft: false,
+                    setLoadedQueryIsDraft: jest.fn()
                 }}>
                     <TablePivotSettings
                         dimensions={mockDimensions}

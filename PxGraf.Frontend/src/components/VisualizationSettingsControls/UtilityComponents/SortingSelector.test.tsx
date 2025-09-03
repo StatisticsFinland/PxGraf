@@ -53,7 +53,11 @@ const editorContext = {
     visualizationSettingsUserInput: null,
     setVisualizationSettingsUserInput: jest.fn(),
     defaultSelectables: null,
-    setDefaultSelectables: jest.fn()
+    setDefaultSelectables: jest.fn(),
+    loadedQueryId: '',
+    setLoadedQueryId: jest.fn(),
+    loadedQueryIsDraft: false,
+    setLoadedQueryIsDraft: jest.fn()
 };
 
 describe('rendering test', () => {

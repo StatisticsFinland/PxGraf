@@ -87,11 +87,12 @@ namespace PxGraf.Models.SavedQueries.Versions
                 Settings = BuildSettingsFromV11(Settings),
                 CreationTime = CreationTime,
                 Query = Query,
-                Version = "1.1"
+                Version = "1.1",
+                Draft = false, // Draft is not supported in this version
             };
         }
 
-        private static VisualizationSettings BuildSettingsFromV11(VisualizationSettingsV11 settings)
+        internal static VisualizationSettings BuildSettingsFromV11(VisualizationSettingsV11 settings)
         {
             switch (settings.VisualizationType)
             {

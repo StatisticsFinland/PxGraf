@@ -1,9 +1,9 @@
 ﻿#nullable enable
-using PxGraf.Models.SavedQueries.Versions;
 using PxGraf.Models.SavedQueries;
-using System.Text.Json.Serialization;
-using System.Text.Json;
+using PxGraf.Models.SavedQueries.Versions;
 using System;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace PxGraf.Utility.CustomJsonConverters
 {
@@ -25,14 +25,16 @@ namespace PxGraf.Utility.CustomJsonConverters
                     ?? throw new JsonException("Failed to deserialize SavedQueryV10."),
                 "1.1" => JsonSerializer.Deserialize<SavedQueryV11>(jdoc.RootElement.GetRawText(), options)?.ToSavedQuery()
                     ?? throw new JsonException("Failed to deserialize SavedQueryV11."),
-                _ => throw new NotSupportedException($"Unknown version in saved query ({version})."),
+                "1.2" => JsonSerializer.Deserialize<SavedQueryV12>(jdoc.RootElement.GetRawText(), options)?.ToSavedQuery()
+                    ?? throw new JsonException("Failed to deserialize SavedQueryV12."),
+                _ => throw new NotSupportedException($"Unknown version in saved query ({version}).")
             };
         }
 
         public override void Write(Utf8JsonWriter writer, SavedQuery value, JsonSerializerOptions options)
         {
-            SavedQueryV11 v11 = new(value);
-            JsonSerializer.Serialize(writer, v11, options);
+            SavedQueryV12 v12 = new(value);
+            JsonSerializer.Serialize(writer, v12, options);
         }
     }
 }
