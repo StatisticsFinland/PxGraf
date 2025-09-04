@@ -526,6 +526,33 @@ namespace UnitTests.Visualization
         }
 
         [Test]
+        public static void BuildVisualizationResponseTest_SizeOne_KeyFigure()
+        {
+            List<DimensionParameters> varParams =
+            [
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Other, 1),
+                new DimensionParameters(DimensionType.Time, 1),
+            ];
+            VisualizationCreationSettings creationSettings = new()
+            {
+                SelectedVisualization = VisualizationType.KeyFigure,
+                ShowUnit = true
+            };
+            Matrix<DecimalDataValue> inputCube = TestDataCubeBuilder.BuildTestMatrix(varParams);
+            SavedQuery inputQuery = TestDataCubeBuilder.BuildTestSavedQuery(varParams, false, creationSettings, inputCube);
+            VisualizationSettings settings = creationSettings.ToVisualizationSettings(inputCube.Metadata, inputQuery.Query);
+            VisualizationResponse result = PxVisualizerCubeAdapter.BuildVisualizationResponse(inputCube, inputQuery.Query, settings);
+            IReadOnlyList<double?> expectedData = [0.123];
+            Assert.Multiple(() =>
+            { 
+                Assert.That(result.Data, Is.EqualTo(expectedData).Within(0.001));
+                Assert.That(result.VisualizationSettings.VisualizationType, Is.EqualTo(VisualizationType.KeyFigure));
+                Assert.That(result.VisualizationSettings.ShowUnit, Is.True);
+            });
+        }
+
+        [Test]
         public void ResponseSerializationTest_WithMissing_Returned()
         {
             List<DimensionParameters> cubeParams =

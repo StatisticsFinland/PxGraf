@@ -173,8 +173,7 @@ namespace PxGraf.Models.SavedQueries.Versions
                 case VisualizationType.KeyFigure:
                     {
                         return new KeyFigureVisualizationSettings(
-                            new Layout(settings.RowDimensionCodes,
-                            settings.ColumnDimensionCodes),
+                            null,
                             settings.DefaultSelectableDimensionCodes);
                     }
                 default:

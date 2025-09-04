@@ -237,9 +237,7 @@ namespace PxGraf.Models.Requests
                 case VisualizationType.KeyFigure:
                     {
                         return new KeyFigureVisualizationSettings(
-                            LayoutRules.GetTableLayout(
-                                RowDimensionCodes,
-                                ColumnDimensionCodes),
+                            new Layout(), // Single data cell, no layout
                             DefaultSelectableDimensionCodes,
                             ShowUnit ?? false);
                     }
