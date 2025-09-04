@@ -100,7 +100,8 @@ namespace PxGraf.Visualization
                     ShowLastLabel = settings.MatchXLabelsToEnd,
                     MarkerSize = settings.MarkerSize,
                     Sorting = settings.Sorting,
-                    ShowDataPoints = settings.ShowDataPoints
+                    ShowDataPoints = settings.ShowDataPoints,
+                    ShowUnit = settings.ShowUnit
                 }
             };
         }

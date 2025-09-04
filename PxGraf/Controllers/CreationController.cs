@@ -326,7 +326,8 @@ namespace PxGraf.Controllers
                 AllowCuttingYAxis = AllowCuttingYAxis,
                 AllowMatchXLabelsToEnd = AllowMatchXLabelsToEnd,
                 AllowSetMarkerScale = type == VisualizationType.ScatterPlot,
-                SortingOptions = CubeSorting.Get(type, meta, manualPivotability, query)
+                SortingOptions = CubeSorting.Get(type, meta, manualPivotability, query),
+                AllowHidingUnit = type == VisualizationType.KeyFigure
             };
         }
 #nullable disable

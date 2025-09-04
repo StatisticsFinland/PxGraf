@@ -43,6 +43,7 @@
     "StackedHorizontalBarChart": "Stacked horizontal bar",
     "PercentHorizontalBarChart": "Relative horizontal bar",
     "Table": "Table",
+    "KeyFigure": "Key figure",
     "Note": "Note"
   },
   "tableSelect": {

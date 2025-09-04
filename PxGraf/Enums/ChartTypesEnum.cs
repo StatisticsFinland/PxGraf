@@ -71,6 +71,11 @@ namespace PxGraf.Enums
         /// <summary>
         /// Tables can have any number of dimensions that are separated to row and column dimensions
         /// </summary>
-        Table
+        Table,
+
+        /// <summary>
+        /// Key figure visualization highlights a single data point with additional context information
+        /// </summary>
+        KeyFigure
     }
 }

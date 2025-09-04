@@ -1,8 +1,9 @@
-﻿using PxGraf.Enums;
+﻿using PxGraf.Data;
+using PxGraf.Enums;
 using PxGraf.Models.Queries;
+using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
-using System;
 
 namespace PxGraf.Models.SavedQueries.Versions
 {
@@ -165,6 +166,13 @@ namespace PxGraf.Models.SavedQueries.Versions
                 case VisualizationType.Table:
                     {
                         return new TableVisualizationSettings(
+                            new Layout(settings.RowDimensionCodes,
+                            settings.ColumnDimensionCodes),
+                            settings.DefaultSelectableDimensionCodes);
+                    }
+                case VisualizationType.KeyFigure:
+                    {
+                        return new KeyFigureVisualizationSettings(
                             new Layout(settings.RowDimensionCodes,
                             settings.ColumnDimensionCodes),
                             settings.DefaultSelectableDimensionCodes);

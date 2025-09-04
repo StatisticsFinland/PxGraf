@@ -234,6 +234,7 @@ namespace PxGraf.Data
                 VisualizationType.LineChart => LineChart(meta),
                 VisualizationType.ScatterPlot => ScatterPlot(meta),
                 VisualizationType.Table => false,
+                VisualizationType.KeyFigure => false,
                 _ => false,
             };
         }

@@ -202,6 +202,12 @@ namespace PxGraf.Models.SavedQueries.Versions
                             settings.Layout,
                             settings.DefaultSelectableDimensionCodes);
                     }
+                case VisualizationType.KeyFigure:
+                    {
+                        return new KeyFigureVisualizationSettings(
+                            settings.Layout,
+                            settings.DefaultSelectableDimensionCodes);
+                    }
                 default:
                     return null;
             }

@@ -32,6 +32,8 @@ export function getValidatedSettings(currentSettings: IVisualizationSettings, se
             return getScatterPlotValidatedSettings(currentSettings);
         case VisualizationType.PyramidChart:
             return getPyramidChartValidatedSettings(currentSettings);
+        case VisualizationType.KeyFigure:
+            return getKeyFigureValidatedSettings(currentSettings);
         default:
             return {};
     }
@@ -93,6 +95,12 @@ function getScatterPlotValidatedSettings(currentSettings: IVisualizationSettings
     return {
         cutYAxis: currentSettings?.cutYAxis ?? false,
         markerSize: currentSettings?.markerSize ?? 100,
+    };
+}
+
+function getKeyFigureValidatedSettings(currentSettings: IVisualizationSettings) {
+    return {
+        showUnit: currentSettings?.showUnit ?? true
     };
 }
 

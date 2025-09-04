@@ -16,5 +16,6 @@ export enum VisualizationType {
     PieChart = 'PieChart',
     LineChart = 'LineChart',
     ScatterPlot = 'ScatterPlot',
-    Table = 'Table'
+    Table = 'Table',
+    KeyFigure = 'KeyFigure'
 }

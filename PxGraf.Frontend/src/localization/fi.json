@@ -43,6 +43,7 @@
     "StackedHorizontalBarChart": "Pinottu vaakapylväs",
     "PercentHorizontalBarChart": "Suhteellinen vaakapylväs",
     "Table": "Taulukko",
+    "KeyFigure":  "Avainluku",
     "Note": "Selite"
   },
   "tableSelect": {

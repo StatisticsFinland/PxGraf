@@ -30,6 +30,7 @@ namespace PxGraf.Models.Queries
         [JsonPropertyName("defaultSelectableVariableCodes")] // legacy name, do not change or all the old queries break.
         public Dictionary<string, List<string>> DefaultSelectableDimensionCodes { get; } = defaultSelectableDimensionCodes;
         public bool? ShowDataPoints { get; protected set; } = false;
+        public bool ShowUnit { get; protected set; } = true;
     }
 
     /// <summary>
@@ -38,6 +39,22 @@ namespace PxGraf.Models.Queries
     public class TableVisualizationSettings(Layout layout, Dictionary<string, List<string>> defaultSelectableDimensionCodes = null) : VisualizationSettings(layout, defaultSelectableDimensionCodes)
     {
         public override VisualizationType VisualizationType => VisualizationType.Table;
+    }
+
+    public class KeyFigureVisualizationSettings : VisualizationSettings
+    {
+        public override VisualizationType VisualizationType => VisualizationType.KeyFigure;
+        
+        public KeyFigureVisualizationSettings(Layout layout, Dictionary<string, List<string>> defaultSelectableDimensionCodes = null, bool showUnit = true)
+            : base(layout, defaultSelectableDimensionCodes)
+        {
+            Layout = new Layout()
+            {
+                RowDimensionCodes = [],
+                ColumnDimensionCodes = []
+            };
+            ShowUnit = showUnit;
+        }
     }
 
     public class LineChartVisualizationSettings : VisualizationSettings

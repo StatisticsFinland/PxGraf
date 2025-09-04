@@ -41,6 +41,7 @@ export interface IVisualizationOptions {
     allowManualPivot: boolean;
     allowMultiselect: boolean;
     sortingOptions: ISortingOptionCollection;
+    allowHidingUnit?: boolean;
 }
 
 /**

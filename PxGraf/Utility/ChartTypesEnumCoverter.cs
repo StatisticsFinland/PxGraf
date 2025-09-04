@@ -31,6 +31,7 @@ namespace PxGraf.Utility
                 VisualizationType.VerticalBarChart => "vbar",
                 VisualizationType.GroupVerticalBarChart => "vbargrp",
                 VisualizationType.Table => "table",
+                VisualizationType.KeyFigure => "keyfig",
                 _ => throw new UnknownChartTypeException("Given chart type does not have a string representation", type)
             };
         }
@@ -67,6 +68,7 @@ namespace PxGraf.Utility
                 "vbar" => VisualizationType.VerticalBarChart,
                 "vbargrp" => VisualizationType.GroupVerticalBarChart,
                 "table" => VisualizationType.Table,
+                "keyfig" => VisualizationType.KeyFigure,
                 _ => null
             };
         }
@@ -90,6 +92,7 @@ namespace PxGraf.Utility
                 VisualizationType.LineChart => "LineChart",
                 VisualizationType.ScatterPlot => "ScatterPlot",
                 VisualizationType.Table => "Table",
+                VisualizationType.KeyFigure => "KeyFigure",
 
                 _ => throw new UnknownChartTypeException("Given chart type does not have a string representation", type),
             };
@@ -114,6 +117,7 @@ namespace PxGraf.Utility
                 "linechart" => VisualizationType.LineChart,
                 "scatterplot" => VisualizationType.ScatterPlot,
                 "table" => VisualizationType.Table,
+                "keyfigure" => VisualizationType.KeyFigure,
 
                 _ => throw new UnknownChartTypeException("Given string does not have a chart type representation"),
             };
