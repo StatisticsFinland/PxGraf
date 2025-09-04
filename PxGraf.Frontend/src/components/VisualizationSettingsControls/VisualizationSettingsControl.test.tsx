@@ -32,7 +32,7 @@ const mockVisualizationRules: IVisualizationOptions = {
     allowCuttingYAxis: true,
     allowMatchXLabelsToEnd: true,
     allowSetMarkerScale: true,
-    type: VisualizationType.VerticalBarChart
+    type: VisualizationType.VerticalBarChart,
 };
 
 const mockVisualizationSettings: IVisualizationSettings = {
@@ -45,7 +45,8 @@ const mockVisualizationSettings: IVisualizationSettings = {
     sorting: null,
     matchXLabelsToEnd: false,
     markerSize: null,
-    showDataPoints: false
+    showDataPoints: false,
+    showUnit: false
 }
 
 const mockDimensions: IDimension[]  = [
@@ -282,6 +283,21 @@ describe('Rendering test', () => {
     it('renders scatterplot correctly', () => {
         const { asFragment } = render(<VisualizationSettingControl
             selectedVisualization={VisualizationType.ScatterPlot}
+            dimensionQuery={mockDimensionQuery}
+            dimensions={mockDimensions}
+            visualizationOptions={
+                {
+                    ...mockVisualizationRules,
+                    allowHidingUnit: true
+                }
+            }
+            visualizationSettings={mockVisualizationSettings}
+        />);
+        expect(asFragment()).toMatchSnapshot();
+    });
+    it('renders key figure correctly', () => {
+        const { asFragment } = render(<VisualizationSettingControl
+            selectedVisualization={VisualizationType.KeyFigure}
             dimensionQuery={mockDimensionQuery}
             dimensions={mockDimensions}
             visualizationOptions={mockVisualizationRules}
