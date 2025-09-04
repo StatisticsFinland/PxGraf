@@ -247,5 +247,16 @@
             };
 
         public IChartTypeLimits TableLimits => Table;
+
+        /// <summary>
+        /// Numerical limits for key figure
+        /// </summary>
+        public ChartTypeLimits KeyFigure { get; set; } =
+            new ChartTypeLimits()
+            {
+                NumberOfMultiselects = "0"
+            };
+
+        public IChartTypeLimits KeyFigureLimits => KeyFigure;
     }
 }

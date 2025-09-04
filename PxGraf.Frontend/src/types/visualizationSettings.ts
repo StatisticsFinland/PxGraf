@@ -15,6 +15,7 @@ import {VisualizationType} from './visualizationType';
  * @property {number} markerSize - The size of scatter plot markers.
  * @property {VisualizationType} selectedVisualization - The selected visualization type.
  * @property {boolean} showDataPoints - Flag to indicate if data points should be shown in the visualization.
+ * @property {boolean} showUnit - Flag to indicate if the unit should be shown in the visualization.
  */
 export interface IVisualizationSettings {
     defaultSelectableVariableCodes?: { [key: string]: string[] };
@@ -28,4 +29,5 @@ export interface IVisualizationSettings {
     markerSize?: number;
     selectedVisualization?: VisualizationType;
     showDataPoints?: boolean;
+    showUnit?: boolean;
 }

@@ -171,7 +171,8 @@
             ""timeSeriesStartingPoint"": ""2000-01-01T00:00:00Z"",
             ""cutValueAxis"": false,
             ""sorting"": ""ascending"",
-            ""showDataPoints"": false
+            ""showDataPoints"": false,
+            ""showUnit"": true
             }
         }";
 
@@ -529,7 +530,8 @@
             ""timeVariableIntervals"": ""Year"",
             ""timeSeriesStartingPoint"": ""2000-01-01T00:00:00Z"",
             ""cutValueAxis"": false,
-            ""showDataPoints"": false
+            ""showDataPoints"": false,
+            ""showUnit"": true
           }
         }";
 
@@ -903,7 +905,8 @@
             ""timeVariableIntervals"": ""Year"",
             ""timeSeriesStartingPoint"": ""2000-01-01T00:00:00Z"",
             ""cutValueAxis"": false,
-            ""showDataPoints"": false
+            ""showDataPoints"": false,
+            ""showUnit"": true
           }
         }";
     }

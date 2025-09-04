@@ -188,3 +188,4 @@ The visualization type is defined by ```visualizationType``` possible values are
 - LineChart
 - ScatterPlot
 - Table
+- KeyFigure

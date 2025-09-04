@@ -15,7 +15,8 @@
         "Pie": "Piirakka",
         "Line": "Viiva",
         "ScatterPlot": "Hajonta",
-        "Table": "Taulukko"
+        "Table": "Taulukko",
+        "KeyFigure":  "Avainluku"
       },
       "RejectionReasons": {
         "TimeRequired": "Poimintasi ei sisällä aikaulottuvuutta",
@@ -83,7 +84,8 @@
         "Pie": "Pie chart",
         "Line": "Line chart",
         "ScatterPlot": "Scatter chart",
-        "Table": "Table"
+        "Table": "Table",
+        "KeyFigure": "Key figure"
       },
       "RejectionReasons": {
         "TimeRequired": "Your selection does not include time dimension",
@@ -151,7 +153,8 @@
         "Pie": "Pajdiagram",
         "Line": "Linjediagram",
         "ScatterPlot": "Spridningsdiagram",
-        "Table": "Tabell"
+        "Table": "Tabell",
+        "KeyFigure": "Nyckeltal"
       },
       "RejectionReasons": {
         "TimeRequired": "Ditt uttag har ingen tidsdimension",

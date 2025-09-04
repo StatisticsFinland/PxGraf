@@ -60,5 +60,10 @@ namespace PxGraf.ChartTypeSelection.JsonObjects
         /// Numeric limits for table
         /// </summary>
         public IChartTypeLimits TableLimits { get; }
+
+        /// <summary>
+        /// Numeric limits for key figure
+        /// </summary>
+        public IChartTypeLimits KeyFigureLimits { get; }
     }
 }

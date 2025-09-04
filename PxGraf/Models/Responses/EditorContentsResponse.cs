@@ -58,6 +58,7 @@ namespace PxGraf.Models.Responses
         public required bool AllowCuttingYAxis { get; set; } 
         public required bool AllowMatchXLabelsToEnd { get; set; }
         public required bool AllowSetMarkerScale { get; set; }
+        public required bool AllowHidingUnit { get; set; }
 
         /// <summary>
         /// Whether manual ordering of dimensions is allowed.

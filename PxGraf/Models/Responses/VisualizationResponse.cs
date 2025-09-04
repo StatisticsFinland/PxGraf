@@ -49,6 +49,9 @@ namespace PxGraf.Models.Responses
 
             [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
             public bool? ShowDataPoints { get; set; }
+
+            [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+            public bool? ShowUnit { get; set; }
         }
 
         /// <summary>

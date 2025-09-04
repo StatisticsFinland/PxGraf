@@ -45,6 +45,7 @@ namespace PxGraf.Models.Requests
         public Dictionary<string, List<string>> DefaultSelectableDimensionCodes { get; set; }
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? ShowDataPoints { get; set; } = false;
+        public bool? ShowUnit { get; set; } = true;
 
         #region Visualization settings conversion
 
@@ -61,7 +62,7 @@ namespace PxGraf.Models.Requests
             Layout layout = LayoutRules.GetPivotBasedLayout(settings.VisualizationType, meta, query);
 
             bool? pivotRequested;
-            if (settings.VisualizationType == VisualizationType.Table)
+            if (settings.VisualizationType == VisualizationType.Table || settings.VisualizationType == VisualizationType.KeyFigure)
             {
                 pivotRequested = null;
             }
@@ -88,7 +89,8 @@ namespace PxGraf.Models.Requests
                 PivotRequested = pivotRequested,
                 Sorting = settings.Sorting,
                 DefaultSelectableDimensionCodes = settings.DefaultSelectableDimensionCodes,
-                ShowDataPoints = settings.ShowDataPoints
+                ShowDataPoints = settings.ShowDataPoints,
+                ShowUnit = settings.ShowUnit
             };
         }
 
@@ -231,6 +233,13 @@ namespace PxGraf.Models.Requests
                                 RowDimensionCodes,
                                 ColumnDimensionCodes),
                             DefaultSelectableDimensionCodes);
+                    }
+                case VisualizationType.KeyFigure:
+                    {
+                        return new KeyFigureVisualizationSettings(
+                            new Layout(), // Single data cell, no layout
+                            DefaultSelectableDimensionCodes,
+                            ShowUnit ?? false);
                     }
             }
 

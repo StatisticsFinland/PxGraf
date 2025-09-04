@@ -409,4 +409,10 @@ describe('getValidatedSettings tests', () => {
         expect(result).toBeTruthy();
         expect(result).toEqual({ cutYAxis: false, markerSize: 100 });
     });
+
+    it('Should return the correct object on KeyFigure', () => {
+        const result = getValidatedSettings(mockVisualizationSettings, VisualizationType.KeyFigure, [], mockDimensions, mockQuery);
+        expect(result).toBeTruthy();
+        expect(result).toEqual({ showUnit: true });
+    });
 });

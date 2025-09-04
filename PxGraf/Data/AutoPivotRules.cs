@@ -233,7 +233,6 @@ namespace PxGraf.Data
                 VisualizationType.PieChart => PieChart(meta),
                 VisualizationType.LineChart => LineChart(meta),
                 VisualizationType.ScatterPlot => ScatterPlot(meta),
-                VisualizationType.Table => false,
                 _ => false,
             };
         }

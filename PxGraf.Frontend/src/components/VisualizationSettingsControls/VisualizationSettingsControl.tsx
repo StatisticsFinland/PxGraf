@@ -47,6 +47,7 @@ export const VisualizationSettingControl: React.FC<IVisualizationSettingControlP
     const showMatchXLabelsToEnd: boolean = visualizationOptions?.allowMatchXLabelsToEnd;
     const showPivot: boolean = visualizationOptions?.allowManualPivot;
     const showDataPoints: boolean = visualizationOptions?.allowShowingDataPoints;
+    const showUnit: boolean = visualizationOptions?.allowHidingUnit;
 
     const { t } = useTranslation();
     const selectableDimensions: IDimension[] = dimensions.filter(v => dimensionQuery[v.code].selectable);
@@ -56,7 +57,7 @@ export const VisualizationSettingControl: React.FC<IVisualizationSettingControlP
     return (
         <div>
             <InfoBubble info={t('infoText.visualizationConfiguration')} ariaLabel={t('tooltip.visualizationConfig')} />
-            {(showTableSettings || showSortingOptions || showMarkerScaler || showMultiselectableSelector) && (
+            {(showTableSettings || showSortingOptions || showMarkerScaler || showMultiselectableSelector || showUnit) && (
                 <SettingsWrapper>
                     {showTableSettings && (
                         <TablePivotSettings
@@ -83,6 +84,14 @@ export const VisualizationSettingControl: React.FC<IVisualizationSettingControlP
                         <MultiselectableSelector
                             visualizationOptions={visualizationOptions}
                             dimensions={selectableDimensionsExcludingContent}
+                            visualizationSettings={visualizationSettings}
+                        />
+                    )}
+                    {showUnit && (
+                        <VisualizationSettingsSwitch
+                            selected={visualizationSettings.showUnit}
+                            label="chartSettings.showUnit"
+                            changeProperty="showUnit"
                             visualizationSettings={visualizationSettings}
                         />
                     )}

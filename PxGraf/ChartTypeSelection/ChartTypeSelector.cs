@@ -94,6 +94,11 @@ namespace PxGraf.ChartTypeSelection
         private TableCheck Table { get; }
 
         /// <summary>
+        /// Validity information about key figure tables with the given query
+        /// </summary>
+        private KeyFigureCheck KeyFigure { get; }
+
+        /// <summary>
         /// Validity information about all possible chart types
         /// </summary>
         private List<ChartRulesCheck> AllLimitChecks { get; }
@@ -120,6 +125,7 @@ namespace PxGraf.ChartTypeSelection
             PyramidChart = new PyramidChartCheck(limits.PyramidChartLimits);
 
             Table = new TableCheck(limits.TableLimits);
+            KeyFigure = new KeyFigureCheck(limits.KeyFigureLimits);
 
             AllLimitChecks =
             [
@@ -135,7 +141,8 @@ namespace PxGraf.ChartTypeSelection
                 PieChart,
                 PyramidChart,
                 ScatterPlot,
-                Table
+                Table,
+                KeyFigure
             ];
         }
 

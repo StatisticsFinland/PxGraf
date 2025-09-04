@@ -20,6 +20,7 @@ namespace PxGraf.Language
         public string Line { get; set; }
         public string ScatterPlot { get; set; }
         public string Table { get; set; }
+        public string KeyFigure { get; set; }
 
         public string GetTranslation(VisualizationType chartType)
         {
@@ -38,6 +39,7 @@ namespace PxGraf.Language
                 VisualizationType.LineChart => Line,
                 VisualizationType.ScatterPlot => ScatterPlot,
                 VisualizationType.Table => Table,
+                VisualizationType.KeyFigure => KeyFigure,
                 _ => throw new System.NotImplementedException()
             };
         }
