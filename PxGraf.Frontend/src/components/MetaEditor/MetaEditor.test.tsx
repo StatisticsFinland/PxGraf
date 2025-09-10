@@ -167,7 +167,7 @@ describe('Rendering test', () => {
     it('renders correctly', () => {
         const { asFragment } = render(
             <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
-                <EditorContext.Provider value={{ cubeQuery: mockCubeQuery, setCubeQuery, query, setQuery, saveDialogOpen, setSaveDialogOpen, selectedVisualizationUserInput, setSelectedVisualizationUserInput, visualizationSettingsUserInput, setVisualizationSettingsUserInput, defaultSelectables, setDefaultSelectables }}>
+                <EditorContext.Provider value={{ cubeQuery: mockCubeQuery, setCubeQuery, query, setQuery, saveDialogOpen, setSaveDialogOpen, selectedVisualizationUserInput, setSelectedVisualizationUserInput, visualizationSettingsUserInput, setVisualizationSettingsUserInput, defaultSelectables, setDefaultSelectables, loadedQueryId: '', setLoadedQueryId: jest.fn(), loadedQueryIsDraft: false, setLoadedQueryIsDraft: jest.fn() }}>
                     <MetaEditor
                         resolvedDimensions={mockDimensions}
                         editorContentsResponse={defaultHeaderResponseMock}

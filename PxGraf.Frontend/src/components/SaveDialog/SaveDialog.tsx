@@ -2,22 +2,34 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
     FormControlLabel, FormControl, Button, Dialog, DialogTitle,
-    DialogContent, DialogActions, FormLabel, RadioGroup, Radio,
+    DialogContent, DialogActions, FormLabel, RadioGroup, Radio, Checkbox
 } from '@mui/material';
 import SaveIcon from '@mui/icons-material/Save';
 import { EditorContext } from '../../contexts/editorContext';
 
 interface ISaveDialogProps {
-    onSave: (archive: boolean) => void;
+    onSave: (archive: boolean, draft: boolean) => void;
 }
 
+/**
+ * SaveDialog component for saving queries. Contains options to save the current query as either dynamic (with updating data) or static (with fixed data), and whether to save it as a draft or published.
+ * @param {ISaveDialogProps} props - The properties for the SaveDialog component.
+ * @param {function} props.onSave - Callback function to handle the save action.
+ * @returns {JSX.Element} The rendered SaveDialog component.
+ */
 export const SaveDialog: React.FC<ISaveDialogProps> = ({ onSave }) => {
     const { t } = useTranslation();
     const [selected, setSelected] = useState("dynamic");
     const { saveDialogOpen, setSaveDialogOpen } = React.useContext(EditorContext);
+    const [saveAsPublished, setSaveAsPublished] = useState(false);
+
+    const handleDraftChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSaveAsPublished(event.target.checked);
+    };
 
     const saveAndClose = () => {
-        onSave(selected === "static");
+        const isDraft = !saveAsPublished;
+        onSave(selected === "static", isDraft);
         setSaveDialogOpen(false);
     };
 
@@ -43,6 +55,15 @@ export const SaveDialog: React.FC<ISaveDialogProps> = ({ onSave }) => {
                         <FormControlLabel value="dynamic" control={<Radio />} label={t("saveDialog.saveDynamic")} />
                         <FormControlLabel value="static" control={<Radio />} label={t("saveDialog.saveStatic")} />
                     </RadioGroup>
+                    <FormControlLabel
+                        control={
+                            <Checkbox 
+                                checked={saveAsPublished} 
+                                onChange={handleDraftChange} 
+                            />
+                        }
+                        label={t("saveDialog.publish")}
+                    />
                 </FormControl>
             </DialogContent>
             <DialogActions>

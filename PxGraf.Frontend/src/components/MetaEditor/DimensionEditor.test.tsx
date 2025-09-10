@@ -99,7 +99,11 @@ describe('Rendering test', () => {
                     visualizationSettingsUserInput: {},
                     setVisualizationSettingsUserInput: jest.fn(),
                     defaultSelectables: {},
-                    setDefaultSelectables: jest.fn()
+                    setDefaultSelectables: jest.fn(),
+                    loadedQueryId: '',
+                    setLoadedQueryId: jest.fn(),
+                    loadedQueryIsDraft: false,
+                    setLoadedQueryIsDraft: jest.fn()
                 }}>
                     <DimensionEditor language={mockLang} dimension={mockDimension} />
                 </EditorContext.Provider>

@@ -85,7 +85,11 @@ describe('Rendering test', () => {
                     selectedVisualizationUserInput: VisualizationType.VerticalBarChart,
                     setSelectedVisualizationUserInput: jest.fn(),
                     visualizationSettingsUserInput: {},
-                    setVisualizationSettingsUserInput: jest.fn()
+                    setVisualizationSettingsUserInput: jest.fn(),
+                    loadedQueryId: '',
+                    setLoadedQueryId: jest.fn(),
+                    loadedQueryIsDraft: false,
+                    setLoadedQueryIsDraft: jest.fn()
                 }}>
                     <BasicDimensionEditor language={mockLang} dimension={mockDimension} />
                 </EditorContext.Provider>
@@ -111,7 +115,11 @@ describe('Assertion tests', () => {
                     selectedVisualizationUserInput: VisualizationType.VerticalBarChart,
                     setSelectedVisualizationUserInput: jest.fn(),
                     visualizationSettingsUserInput: {},
-                    setVisualizationSettingsUserInput: jest.fn()
+                    setVisualizationSettingsUserInput: jest.fn(),
+                    loadedQueryId: '',
+                    setLoadedQueryId: jest.fn(),
+                    loadedQueryIsDraft: false,
+                    setLoadedQueryIsDraft: jest.fn()
                 }}>
                     <BasicDimensionEditor language={mockLang} dimension={mockDimension} />
                 </EditorContext.Provider>
