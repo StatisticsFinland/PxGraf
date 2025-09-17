@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using Px.Utils.Models.Metadata.Dimensions;
@@ -11,6 +13,7 @@ using PxGraf.Datasource;
 using PxGraf.Language;
 using PxGraf.Models.Queries;
 using PxGraf.Models.Responses;
+using PxGraf.Services;
 using PxGraf.Settings;
 using PxGraf.Utility;
 using System.Collections.Generic;
@@ -21,6 +24,12 @@ namespace UnitTests.ControllerTests.VisualizationControllerTests
 {
     internal class GetVisualizationTests
     {
+        private Mock<ICachedDatasource> _mockCachedDatasource;
+        private Mock<ISqFileInterface> _mockSqFileInterface;
+        private Mock<IMultiStateMemoryTaskCache> _mockTaskCache;
+        private Mock<ILogger<VisualizationController>> _mockLogger;
+        private Mock<IAuditLogService> _mockAuditLogService;
+
         [OneTimeSetUp]
         public void DoSetup()
         {
@@ -44,11 +53,72 @@ namespace UnitTests.ControllerTests.VisualizationControllerTests
             Configuration.Load(configuration);
         }
 
+        [SetUp]
+        public void Setup()
+        {
+            _mockCachedDatasource = new Mock<ICachedDatasource>();
+            _mockSqFileInterface = new Mock<ISqFileInterface>();
+            _mockTaskCache = new Mock<IMultiStateMemoryTaskCache>();
+            _mockLogger = new Mock<ILogger<VisualizationController>>();
+            _mockAuditLogService = new Mock<IAuditLogService>();
+        }
+
+        private VisualizationController BuildController(
+            List<DimensionParameters> cubeParams,
+            List<DimensionParameters> metaParams,
+            string testQueryId,
+            MultiStateMemoryTaskCache.CacheEntryState entryState,
+            bool savedQueryFound = true,
+            bool archived = false)
+        {
+            _mockCachedDatasource.Setup(x => x.GetMatrixMetadataCachedAsync(It.IsAny<PxTableReference>()))
+                .ReturnsAsync(() => TestDataCubeBuilder.BuildTestMeta(metaParams));
+            
+            _mockCachedDatasource.Setup(x => x.GetMatrixCachedAsync(It.IsAny<PxTableReference>(), It.IsAny<IReadOnlyMatrixMetadata>()))
+                .ReturnsAsync(() => TestDataCubeBuilder.BuildTestMatrix(cubeParams));
+            
+            _mockCachedDatasource.Setup(x => x.GetMatrixAsync(It.IsAny<PxTableReference>(), It.IsAny<IReadOnlyMatrixMetadata>()))
+                .ReturnsAsync(() => TestDataCubeBuilder.BuildTestMatrix(cubeParams));
+
+            _mockTaskCache.Setup(x => x.TryGet(It.IsAny<string>(), out It.Ref<Task<VisualizationResponse>>.IsAny))
+                .Returns((string key, out Task<VisualizationResponse> value) =>
+                {
+                    value = Task.FromResult(new VisualizationResponse());
+                    return entryState;
+                });
+
+            _mockSqFileInterface.Setup(x => x.SavedQueryExists(It.IsAny<string>(), It.IsAny<string>()))
+                .Returns(savedQueryFound);
+            
+            _mockSqFileInterface.Setup(x => x.ReadSavedQueryFromFile(It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(() => TestDataCubeBuilder.BuildTestSavedQuery(cubeParams, archived, new LineChartVisualizationSettings(null, false, null)));
+            
+            _mockSqFileInterface.Setup(x => x.ArchiveCubeExists(It.IsAny<string>(), It.IsAny<string>()))
+                .Returns(true);
+            
+            _mockSqFileInterface.Setup(x => x.ReadArchiveCubeFromFile(It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(() => TestDataCubeBuilder.BuildTestArchiveCube(metaParams));
+
+            VisualizationController controller = new(
+                _mockSqFileInterface.Object, 
+                _mockTaskCache.Object, 
+                _mockCachedDatasource.Object, 
+                _mockLogger.Object,
+                _mockAuditLogService.Object)
+            {
+                ControllerContext = new ControllerContext()
+                {
+                    HttpContext = new DefaultHttpContext()
+                }
+            };
+
+            return controller;
+        }
+
         [Test]
         public async Task GetVisualizationTest_Fresh_Data_Is_Returned()
         {
-            Mock<ICachedDatasource> mockCachedDatasource = new();
-
+            // Arrange
             string testQueryId = "aaa-bbb-111-222-333";
 
             List<DimensionParameters> cubeParams =
@@ -87,24 +157,32 @@ namespace UnitTests.ControllerTests.VisualizationControllerTests
                     contentDimension.AdditionalProperties,
                     new ContentValueList([cdv]));
 
-            VisualizationController vController = TestVisualizationControllerBuilder.BuildController(
+            VisualizationController vController = BuildController(
                 cubeParams,
                 metaParams, 
                 testQueryId,
-                mockCachedDatasource,
                 MultiStateMemoryTaskCache.CacheEntryState.Fresh);
 
+            // Act
             ActionResult<VisualizationResponse> result = await vController.GetVisualization(testQueryId);
 
-            mockCachedDatasource.Verify(x => x.GetMatrixMetadataCachedAsync(It.IsAny<PxTableReference>()), Times.Never());
+            // Assert
+            _mockCachedDatasource.Verify(x => x.GetMatrixMetadataCachedAsync(It.IsAny<PxTableReference>()), Times.Never());
             Assert.That(result.Value, Is.InstanceOf<VisualizationResponse>());
+            
+            // Verify audit log was called with the correct parameters
+            _mockAuditLogService.Verify(
+                a => a.LogAuditEvent(
+                    It.Is<string>(action => action == "api/sq/visualization"),
+                    It.Is<string>(resource => resource == testQueryId),
+                    It.IsAny<Dictionary<string, string>>()),
+                Times.Once);
         }
 
         [Test]
         public async Task GetVisualizationTest_Stale_Data_Is_Returned_And_Update_Is_Triggered()
         {
-            Mock<ICachedDatasource> mockCachedDatasource = new();
-
+            // Arrange
             string testQueryId = "aaa-bbb-111-222-333";
 
             List<DimensionParameters> cubeParams =
@@ -143,24 +221,32 @@ namespace UnitTests.ControllerTests.VisualizationControllerTests
                     contentDimension.AdditionalProperties,
                     new ContentValueList([cdv]));
 
-            VisualizationController vController = TestVisualizationControllerBuilder.BuildController(
+            VisualizationController vController = BuildController(
                 cubeParams,
                 metaParams,
                 testQueryId,
-                mockCachedDatasource,
                 MultiStateMemoryTaskCache.CacheEntryState.Stale);
 
+            // Act
             ActionResult<VisualizationResponse> result = await vController.GetVisualization(testQueryId);
 
-            mockCachedDatasource.Verify(x => x.GetMatrixMetadataCachedAsync(It.IsAny<PxTableReference>()), Times.Once());
+            // Assert
+            _mockCachedDatasource.Verify(x => x.GetMatrixMetadataCachedAsync(It.IsAny<PxTableReference>()), Times.Once());
             Assert.That(result.Value, Is.InstanceOf<VisualizationResponse>());
+            
+            // Verify audit log was called with the correct parameters
+            _mockAuditLogService.Verify(
+                a => a.LogAuditEvent(
+                    It.Is<string>(action => action == "api/sq/visualization"),
+                    It.Is<string>(resource => resource == testQueryId),
+                    It.IsAny<Dictionary<string, string>>()),
+                Times.Once);
         }
 
         [Test]
         public async Task GetVisualizationTest_Null_Data_202_Is_Returned_And_Update_Is_Triggered()
         {
-            Mock<ICachedDatasource> mockCachedDatasource = new();
-
+            // Arrange
             string testQueryId = "aaa-bbb-111-222-333";
 
             List<DimensionParameters> cubeParams =
@@ -199,64 +285,88 @@ namespace UnitTests.ControllerTests.VisualizationControllerTests
                     contentDimension.AdditionalProperties,
                     new ContentValueList([cdv]));
 
-            VisualizationController vController = TestVisualizationControllerBuilder.BuildController(
+            VisualizationController vController = BuildController(
                 cubeParams,
                 metaParams,
                 testQueryId,
-                mockCachedDatasource,
                 MultiStateMemoryTaskCache.CacheEntryState.Null);
 
+            // Act
             ActionResult<VisualizationResponse> result = await vController.GetVisualization(testQueryId);
 
-            mockCachedDatasource.Verify(x => x.GetMatrixMetadataCachedAsync(It.IsAny<PxTableReference>()), Times.Once()); 
+            // Assert
+            _mockCachedDatasource.Verify(x => x.GetMatrixMetadataCachedAsync(It.IsAny<PxTableReference>()), Times.Once()); 
             Assert.That(result.Value, Is.InstanceOf<VisualizationResponse>());
+            
+            // Verify audit log was called with the correct parameters
+            _mockAuditLogService.Verify(
+                a => a.LogAuditEvent(
+                    It.Is<string>(action => action == "api/sq/visualization"),
+                    It.Is<string>(resource => resource == testQueryId),
+                    It.IsAny<Dictionary<string, string>>()),
+                Times.Once);
         }
 
         [Test]
         public async Task GetVisualizationTest_Faulty_Task_400_Is_Returned_No_Refetch_Is_Triggered()
         {
-            Mock<ICachedDatasource> mockCachedDatasource = new();
-
+            // Arrange
             string testQueryId = "aaa-bbb-111-222-333";
 
-            VisualizationController vController = TestVisualizationControllerBuilder.BuildController(
+            VisualizationController vController = BuildController(
                 [],
                 [],
                 testQueryId,
-                mockCachedDatasource,
                 MultiStateMemoryTaskCache.CacheEntryState.Error);
 
+            // Act
             ActionResult<VisualizationResponse> result = await vController.GetVisualization(testQueryId);
 
-            mockCachedDatasource.Verify(x => x.GetMatrixMetadataCachedAsync(It.IsAny<PxTableReference>()), Times.Never());
+            // Assert
+            _mockCachedDatasource.Verify(x => x.GetMatrixMetadataCachedAsync(It.IsAny<PxTableReference>()), Times.Never());
             Assert.That(result.Result, Is.InstanceOf<BadRequestResult>());
+            
+            // Verify audit log was called with the correct parameters
+            _mockAuditLogService.Verify(
+                a => a.LogAuditEvent(
+                    It.Is<string>(action => action == "api/sq/visualization"),
+                    It.Is<string>(resource => resource == testQueryId),
+                    It.IsAny<Dictionary<string, string>>()),
+                Times.Once);
         }
 
         [Test]
         public async Task GetVisualizationTest_WithFaultyQueryId_Returns_NotFound()
         {
-            Mock<ICachedDatasource> mockCachedDatasource = new();
-
+            // Arrange
             string testQueryId = "foo";
 
-            VisualizationController vController = TestVisualizationControllerBuilder.BuildController(
+            VisualizationController vController = BuildController(
                 [],
                 [],
                 testQueryId,
-                mockCachedDatasource,
                 MultiStateMemoryTaskCache.CacheEntryState.Null,
                 false);
 
+            // Act
             ActionResult<VisualizationResponse> result = await vController.GetVisualization(testQueryId);
 
+            // Assert
             Assert.That(result.Result, Is.InstanceOf<NotFoundResult>());
+            
+            // Verify audit log was called with INVALID_OR_MISSING_SQID for not found queries
+            _mockAuditLogService.Verify(
+                a => a.LogAuditEvent(
+                    It.Is<string>(action => action == "api/sq/visualization"),
+                    It.Is<string>(resource => resource == LoggerConstants.INVALID_OR_MISSING_SQID),
+                    It.IsAny<Dictionary<string, string>>()),
+                Times.Once);
         }
 
         [Test]
         public async Task GetVisualizationTest_WithArchivedQuery_ReturnsArchivedResponse()
         {
-            Mock<ICachedDatasource> mockCachedDatasource = new();
-
+            // Arrange
             string testQueryId = "aaa-bbb-111-222-333";
 
             List<DimensionParameters> metaParams =
@@ -267,17 +377,27 @@ namespace UnitTests.ControllerTests.VisualizationControllerTests
                 new DimensionParameters(DimensionType.Other, 1)
             ];
 
-            VisualizationController vController = TestVisualizationControllerBuilder.BuildController(
+            VisualizationController vController = BuildController(
                 metaParams,
                 metaParams,
                 testQueryId,
-                mockCachedDatasource,
                 MultiStateMemoryTaskCache.CacheEntryState.Null,
-                archived: true);
+                true,
+                true);
 
+            // Act
             ActionResult<VisualizationResponse> result = await vController.GetVisualization(testQueryId);
 
+            // Assert
             Assert.That(result.Value, Is.InstanceOf<VisualizationResponse>());
+            
+            // Verify audit log was called with the correct parameters
+            _mockAuditLogService.Verify(
+                a => a.LogAuditEvent(
+                    It.Is<string>(action => action == "api/sq/visualization"),
+                    It.Is<string>(resource => resource == testQueryId),
+                    It.IsAny<Dictionary<string, string>>()),
+                Times.Once);
         }
     }
 }

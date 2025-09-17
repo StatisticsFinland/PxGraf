@@ -20,6 +20,7 @@ using System.Threading.Tasks;
 using System;
 using UnitTests.Fixtures;
 using PxGraf.Datasource.ApiDatasource;
+using System.IO;
 
 namespace UnitTests.DatasourceTests
 {
@@ -174,7 +175,8 @@ namespace UnitTests.DatasourceTests
         public void GetMatrixMetadata_ReturnsNotSupported()
         {
             // Arrange
-            PxTableReference tableReference = new("mock/table/reference");
+            string path = Path.Join("mock", "table", "reference");
+            PxTableReference tableReference = new(path);
 
             // Act & Assert
             Assert.Throws<NotSupportedException>(() => PxWebV1ApiInterface.GetMatrixMetadata(tableReference));
@@ -282,7 +284,8 @@ namespace UnitTests.DatasourceTests
                 new(DimensionType.Other, 1),
                 new(DimensionType.Other, 1),
             ];
-            PxTableReference tableReference = new("mock/table/reference");
+            string path = Path.Join("mock", "table", "reference");
+            PxTableReference tableReference = new(path);
             MatrixMetadata meta = TestDataCubeBuilder.BuildTestMeta(varParams);
 
             // Act & Assert

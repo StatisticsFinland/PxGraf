@@ -10,9 +10,11 @@ using PxGraf.Datasource;
 using PxGraf.Models.Metadata;
 using PxGraf.Models.Responses;
 using PxGraf.Models.SavedQueries;
+using PxGraf.Services;
 using PxGraf.Settings;
 using PxGraf.Utility;
 using PxGraf.Visualization;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -32,12 +34,13 @@ namespace PxGraf.Controllers
     /// </remarks>
     [ApiController]
     [Route("api/sq/visualization")]
-    public class VisualizationController(ISqFileInterface sqFileInterface, IMultiStateMemoryTaskCache taskCache, ICachedDatasource cachedDatasource, ILogger<VisualizationController> logger) : ControllerBase
+    public class VisualizationController(ISqFileInterface sqFileInterface, IMultiStateMemoryTaskCache taskCache, ICachedDatasource cachedDatasource, ILogger<VisualizationController> logger, IAuditLogService auditLogService) : ControllerBase
     {
         private readonly ICachedDatasource _cachedDatasource = cachedDatasource;
         private readonly IMultiStateMemoryTaskCache _taskCache = taskCache;
         private readonly ISqFileInterface _sqFileInterface = sqFileInterface;
         private readonly ILogger<VisualizationController> _logger = logger;
+        private readonly IAuditLogService _auditLogService = auditLogService;
 
         private static CacheValues CacheValues => Configuration.Current.CacheOptions.Visualization;
         private static readonly TimeSpan AbsoluteExpiration = TimeSpan.FromMinutes(CacheValues.AbsoluteExpirationMinutes);
@@ -53,46 +56,76 @@ namespace PxGraf.Controllers
         [HttpGet("{sqId}")]
         public async Task<ActionResult<VisualizationResponse>> GetVisualization([FromRoute] string sqId)
         {
-            _logger.LogDebug("Requested visualization GET: api/sq/visualization/{SqId}", sqId);
-            MultiStateMemoryTaskCache.CacheEntryState itemCacheState = _taskCache.TryGet(sqId, out Task<VisualizationResponse> cachedRespTask);
-            string maxAge = $"max-age={Configuration.Current.CacheOptions.CacheFreshnessCheckIntervalSeconds}";
+            Dictionary<string, object> logScope = new()
+            {
+                [LoggerConstants.CONTROLLER] = nameof(VisualizationController),
+                [LoggerConstants.ACTION] = "api/sq/visualization"
+            };
+            using (_logger.BeginScope(logScope))
+            {
+                _logger.LogDebug("Requested visualization GET: api/sq/visualization");
+                MultiStateMemoryTaskCache.CacheEntryState itemCacheState = _taskCache.TryGet(sqId, out Task<VisualizationResponse> cachedRespTask);
+                string maxAge = $"max-age={Configuration.Current.CacheOptions.CacheFreshnessCheckIntervalSeconds}";
 
-            if (itemCacheState == MultiStateMemoryTaskCache.CacheEntryState.Fresh)
-            {
-                VisualizationResponse response = await cachedRespTask;
-                _logger.LogDebug("{SqId} result: {CachedResp}", sqId, response);
-                Response.Headers.CacheControl = $"{maxAge}";
-                return response;
-            }
+                if(itemCacheState != MultiStateMemoryTaskCache.CacheEntryState.Null)
+                {
+                    _auditLogService.LogAuditEvent(
+                        action: "api/sq/visualization",
+                        resource: sqId
+                        );
+                }
 
-            if (itemCacheState == MultiStateMemoryTaskCache.CacheEntryState.Stale)
-            {
-                VisualizationResponse response = await cachedRespTask;
-                _ = HandleStaleCacheResponseAsync(sqId, response); // OBS: No await
-                _logger.LogDebug("{SqId} result: {CachedResp}", sqId, response);
-                Response.Headers.CacheControl = $"max-age=0"; // Already stale, so no max-age
-                return response;
-            }
+                if (itemCacheState == MultiStateMemoryTaskCache.CacheEntryState.Fresh)
+                {
+                    _logger.LogDebug("Fresh cache hit for {SqId}", sqId);
+                    VisualizationResponse response = await cachedRespTask;
+                    Response.Headers.CacheControl = $"{maxAge}";
+                    _logger.LogDebug("Returning visualization.");
+                    return response;
+                }
 
-            if (itemCacheState == MultiStateMemoryTaskCache.CacheEntryState.Error)
-            {
-                return BadRequest();
-            }
+                if (itemCacheState == MultiStateMemoryTaskCache.CacheEntryState.Stale)
+                {
+                    _logger.LogDebug("Stale cache hit for {SqId}", sqId);
+                    VisualizationResponse response = await cachedRespTask;
+                    _ = HandleStaleCacheResponseAsync(sqId, response); // OBS: No await
+                    Response.Headers.CacheControl = $"max-age=0"; // Already stale, so no max-age
+                    _logger.LogDebug("Returning visualization.");
+                    return response;
+                }
 
-            if (_sqFileInterface.SavedQueryExists(sqId, Configuration.Current.SavedQueryDirectory))
-            {
-                SavedQuery sq = await _sqFileInterface.ReadSavedQueryFromFile(sqId, Configuration.Current.SavedQueryDirectory);
-                Task<VisualizationResponse> newResponseTask = BuildNewResponseAsync(sqId, sq);
-                _taskCache.Set(sqId, newResponseTask, SlidingExpiration, AbsoluteExpiration);
-                VisualizationResponse response = await newResponseTask;
-                _logger.LogDebug("{SqId} result: {Response}", sqId, response);
-                Response.Headers.CacheControl = $"{maxAge}";
-                return await newResponseTask; // Return directly if archived
-            }
-            else
-            {
-                _logger.LogWarning("Could not find saved query with id {SqId}", sqId);
-                return NotFound();
+                if (itemCacheState == MultiStateMemoryTaskCache.CacheEntryState.Error)
+                {
+                    _logger.LogWarning("Cache error for {SqId}", sqId);
+                    return BadRequest();
+                }
+
+                if (_sqFileInterface.SavedQueryExists(sqId, Configuration.Current.SavedQueryDirectory))
+                {
+                    _auditLogService.LogAuditEvent(
+                        action: "api/sq/visualization",
+                        resource: sqId
+                        );
+
+                    _logger.LogDebug("Cache miss for {SqId}", sqId);
+                    SavedQuery sq = await _sqFileInterface.ReadSavedQueryFromFile(sqId, Configuration.Current.SavedQueryDirectory);
+                    Task<VisualizationResponse> newResponseTask = BuildNewResponseAsync(sqId, sq);
+                    _taskCache.Set(sqId, newResponseTask, SlidingExpiration, AbsoluteExpiration);
+                    VisualizationResponse response = await newResponseTask;
+                    Response.Headers.CacheControl = $"{maxAge}";
+                    _logger.LogDebug("Returning visualization.");
+                    return await newResponseTask; // Return directly if archived
+                }
+                else
+                {
+                    _auditLogService.LogAuditEvent(
+                        action: "api/sq/visualization",
+                        resource: LoggerConstants.INVALID_OR_MISSING_SQID
+                        );
+
+                    _logger.LogWarning("Could not find a saved query file with the provided id.");
+                    return NotFound();
+                }
             }
         }
 

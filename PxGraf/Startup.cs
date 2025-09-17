@@ -19,6 +19,7 @@ using PxGraf.Datasource.Cache;
 using PxGraf.Models.Queries;
 using PxGraf.Datasource.FileDatasource;
 using PxGraf.Datasource.ApiDatasource;
+using PxGraf.Services;
 using System.Text;
 
 namespace PxGraf
@@ -125,6 +126,7 @@ namespace PxGraf
                 });
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<ISqFileInterface, SqFileInterface>();
+            services.AddScoped<IAuditLogService, AuditLogService>();
             services.AddSingleton<IMultiStateMemoryTaskCache>(provider => new MultiStateMemoryTaskCache(
                 Configuration.Current.CacheOptions.Database.ItemAmountLimit,
                 TimeSpan.FromSeconds(Configuration.Current.CacheOptions.CacheFreshnessCheckIntervalSeconds)));

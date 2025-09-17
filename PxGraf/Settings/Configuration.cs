@@ -21,6 +21,9 @@ namespace PxGraf.Settings
         public LocalFilesystemDatabaseConfig LocalFilesystemDatabaseConfig { get; private set; }
         public string[] DatabaseWhitelist { get; private set; }
 
+        public bool AuditLoggingEnabled { get; private set; }
+        public string[] AuditLogHeaders { get; private set; }
+
         public static void Load(IConfiguration configuration)
         {
             //Set config defaults
@@ -55,7 +58,9 @@ namespace PxGraf.Settings
                     AllowedOrigins = configuration.GetSection("Cors:AllowedOrigins").Get<string[]>(),
                 },
                 LocalFilesystemDatabaseConfig = GetLocalDatabaseConfig(configuration),
-                DatabaseWhitelist = configuration.GetSection("DatabaseWhitelist").Get<string[]>() ?? []
+                DatabaseWhitelist = configuration.GetSection("DatabaseWhitelist").Get<string[]>() ?? [],
+                AuditLoggingEnabled = configuration.GetValue<bool?>("LogOptions:AuditLog:Enabled") ?? false,
+                AuditLogHeaders = configuration.GetSection("LogOptions:AuditLog:IncludedHeaders").Get<string[]>() ?? []
             };
 
             if (string.IsNullOrEmpty(newConfig.PxWebUrl) && (newConfig.LocalFilesystemDatabaseConfig == null || !newConfig.LocalFilesystemDatabaseConfig.Enabled))

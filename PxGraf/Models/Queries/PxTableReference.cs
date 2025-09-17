@@ -1,14 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Text;
+using System.Linq;
+using System;
+using PxGraf.Utility;
 
 namespace PxGraf.Models.Queries
 {
     /// <summary>
     /// Reference to a file in the Px file system.
     /// </summary>
-    public class PxTableReference
+    public partial class PxTableReference
     {
         /// <summary>
         /// Name of the Px file.
@@ -43,6 +44,10 @@ namespace PxGraf.Models.Queries
         /// <param name="name">Name of the Px file.</param>
         public PxTableReference(IReadOnlyList<string> hierarchy, string name)
         {
+            if(hierarchy.Count > 10)
+                throw new ArgumentException("Input hierarchy too long.", nameof(hierarchy));
+            if(!hierarchy.All(InputValidation.ValidateFilePathPart) || !InputValidation.ValidateFileName(name))
+                throw new ArgumentException("Invalid input path.");
             Hierarchy = hierarchy;
             Name = name;
         }
@@ -56,8 +61,22 @@ namespace PxGraf.Models.Queries
         {
             char pathSeparator = separator ?? Path.DirectorySeparatorChar;
             List<string> parts = [.. path.Split(pathSeparator, StringSplitOptions.RemoveEmptyEntries)];
-            Hierarchy = parts[0..^1];
-            Name = parts[^1];
+            List<string> hierarchy = parts[0..^1];
+            if(hierarchy.Count > 10)
+            {
+                throw new ArgumentException("Input hierarchy too long.");
+            }
+            if(!hierarchy.All(InputValidation.ValidateFilePathPart))
+            {
+                throw new ArgumentException("Invalid input path.");
+            }
+            Hierarchy = hierarchy;
+            string name = parts[^1];
+            if(!InputValidation.ValidateFileName(name))
+            {
+                throw new ArgumentException("Invalid input path.");
+            }
+            Name = name;
         }
     }
 }
