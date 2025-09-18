@@ -43,6 +43,7 @@ namespace PxGraf.Controllers
         private readonly ISqFileInterface _sqFileInterface = sqFileInterface;
         private readonly ILogger<SqController> _logger = logger;
         private readonly IAuditLogService _auditLogService = auditLogService;
+        private const string CONTROLLER_PATH = "api/sq";
 
         /// <summary>
         /// Returns a saved query and its settings based on the given id.
@@ -59,17 +60,17 @@ namespace PxGraf.Controllers
             Dictionary<string, object> logScope = new()
             {
                 [LoggerConstants.CONTROLLER] = nameof(SqController),
-                [LoggerConstants.ACTION] = "api/sq"
+                [LoggerConstants.ACTION] = CONTROLLER_PATH
             };
             using (_logger.BeginScope(logScope))
             {
-                _logger.LogDebug("Saved query requested. GET: api/sq");
+                _logger.LogDebug("Saved query requested.");
                 if (_sqFileInterface.SavedQueryExists(savedQueryId, Configuration.Current.SavedQueryDirectory))
                 {
                     using (_logger.BeginScope(new Dictionary<string, object> { [LoggerConstants.SQ_ID] = savedQueryId }))
                     {
                         _auditLogService.LogAuditEvent(
-                            action: "api/sq",
+                            action: CONTROLLER_PATH,
                             resource: savedQueryId
                         );
 
@@ -113,7 +114,7 @@ namespace PxGraf.Controllers
                 else
                 {
                     _auditLogService.LogAuditEvent(
-                        action: "api/sq",
+                        action: CONTROLLER_PATH,
                         resource: LoggerConstants.INVALID_OR_MISSING_SQID
                     );
                     _logger.LogWarning("Saved query not found or the query id is invalid.");
@@ -130,21 +131,22 @@ namespace PxGraf.Controllers
         [HttpPost("save")]
         public async Task<ActionResult<SaveQueryResponse>> SaveQueryAsync([FromBody] SaveQueryParams parameters)
         {
+            string actionPath = $"{CONTROLLER_PATH}/save";
             Dictionary<string, object> logScope = new()
             {
                 [LoggerConstants.CONTROLLER] = nameof(SqController),
-                [LoggerConstants.ACTION] = "api/sq/save"
+                [LoggerConstants.ACTION] = actionPath
             };
             using (_logger.BeginScope(logScope))
             {
-                _logger.LogDebug("Save request received. POST: api/sq/save");
+                _logger.LogDebug("Save request received.");
                 string guid = await GetIsDraftAsync(parameters.Id) ? parameters.Id : Guid.NewGuid().ToString();
                 string fileName = $"{guid}.sq";
 
                 using (_logger.BeginScope(new Dictionary<string, object> { [LoggerConstants.SQ_ID] = guid }))
                 {
                     _auditLogService.LogAuditEvent(
-                        action: "api/sq/save",
+                        action: actionPath,
                         resource: guid
                     );
 
@@ -189,20 +191,21 @@ namespace PxGraf.Controllers
         [HttpPost("archive")]
         public async Task<ActionResult<SaveQueryResponse>> ArchiveQueryAsync([FromBody] SaveQueryParams parameters)
         {
+            string actionPath = $"{CONTROLLER_PATH}/archive";
             Dictionary<string, object> logScope = new()
             {
                 [LoggerConstants.CONTROLLER] = nameof(SqController),
-                [LoggerConstants.ACTION] = "api/sq/archive"
+                [LoggerConstants.ACTION] = actionPath
             };
             using (_logger.BeginScope(logScope))
             {
-                _logger.LogDebug("Archiving request received. POST: api/sq/archive");
+                _logger.LogDebug("Archiving request received.");
                 string guid = await GetIsDraftAsync(parameters.Id) ? parameters.Id : Guid.NewGuid().ToString();
                 string queryFileName = $"{guid}.sq";
                 using (_logger.BeginScope(new Dictionary<string, object> { [LoggerConstants.SQ_ID] = guid }))
                 {
                     _auditLogService.LogAuditEvent(
-                        action: "api/sq/archive",
+                        action: actionPath,
                         resource: guid
                     );
 
@@ -216,7 +219,7 @@ namespace PxGraf.Controllers
                     {
                         _logger.LogWarning("Query is missing values for a dimension.");
                         _auditLogService.LogAuditEvent(
-                            action: "api/sq/archive",
+                            action: actionPath,
                             resource: LoggerConstants.INVALID_VISUALIZATION
                         );
                         return BadRequest();
@@ -239,7 +242,7 @@ namespace PxGraf.Controllers
                     // If visualization type is not given or it is not valid return 400.
                     _logger.LogWarning("Query has an invalid visualization type.");
                     _auditLogService.LogAuditEvent(
-                        action: "api/sq/archive",
+                        action: actionPath,
                         resource: LoggerConstants.INVALID_VISUALIZATION
                     );
                     return BadRequest();
@@ -256,20 +259,21 @@ namespace PxGraf.Controllers
         [HttpPost("re-archive")]
         public async Task<ActionResult<ReArchiveResponse>> ReArchiveExistingQueryAsync([FromBody] ReArchiveRequest request)
         {
+            string actionPath = $"{CONTROLLER_PATH}/re-archive";
             Dictionary<string, object> logScope = new()
             {
                 [LoggerConstants.CONTROLLER] = nameof(SqController),
-                [LoggerConstants.ACTION] = "api/sq/re-archive"
+                [LoggerConstants.ACTION] = actionPath
             };
             using (_logger.BeginScope(logScope))
             {
-                _logger.LogDebug("Re-archiving query. POST: api/sq/re-archive");
+                _logger.LogDebug("Re-archiving query.");
                 if (_sqFileInterface.SavedQueryExists(request.SqId, Configuration.Current.SavedQueryDirectory))
                 {
                     using (_logger.BeginScope(new Dictionary<string, object> { [LoggerConstants.SQ_ID] = request.SqId }))
                     {
                         _auditLogService.LogAuditEvent(
-                            action: "api/sq/re-archive",
+                            action: actionPath,
                             resource: request.SqId
                         );
 
@@ -309,7 +313,7 @@ namespace PxGraf.Controllers
                 else
                 {
                     _auditLogService.LogAuditEvent(
-                        action: "api/sq/re-archive",
+                        action: actionPath,
                         resource: LoggerConstants.INVALID_OR_MISSING_SQID
                     );
 

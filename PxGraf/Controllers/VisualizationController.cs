@@ -47,6 +47,8 @@ namespace PxGraf.Controllers
         private static readonly TimeSpan AbsoluteExpiration = TimeSpan.FromMinutes(CacheValues.AbsoluteExpirationMinutes);
         private static readonly TimeSpan SlidingExpiration = TimeSpan.FromMinutes(CacheValues.SlidingExpirationMinutes);
 
+        private const string CONTROLLER_PATH = "api/sq/visualization";
+
         #region ACTIONS
 
         /// <summary>
@@ -60,18 +62,18 @@ namespace PxGraf.Controllers
             Dictionary<string, object> logScope = new()
             {
                 [LoggerConstants.CONTROLLER] = nameof(VisualizationController),
-                [LoggerConstants.ACTION] = "api/sq/visualization"
+                [LoggerConstants.ACTION] = CONTROLLER_PATH
             };
             using (_logger.BeginScope(logScope))
             {
-                _logger.LogDebug("Requested visualization GET: api/sq/visualization");
+                _logger.LogDebug("Requested visualization.");
                 MultiStateMemoryTaskCache.CacheEntryState itemCacheState = _taskCache.TryGet(sqId, out Task<VisualizationResponse> cachedRespTask);
                 string maxAge = $"max-age={Configuration.Current.CacheOptions.CacheFreshnessCheckIntervalSeconds}";
 
                 if(itemCacheState != MultiStateMemoryTaskCache.CacheEntryState.Null)
                 {
                     _auditLogService.LogAuditEvent(
-                        action: "api/sq/visualization",
+                        action: CONTROLLER_PATH,
                         resource: sqId
                         );
                 }
@@ -104,7 +106,7 @@ namespace PxGraf.Controllers
                 if (_sqFileInterface.SavedQueryExists(sqId, Configuration.Current.SavedQueryDirectory))
                 {
                     _auditLogService.LogAuditEvent(
-                        action: "api/sq/visualization",
+                        action: CONTROLLER_PATH,
                         resource: sqId
                         );
 
@@ -119,7 +121,7 @@ namespace PxGraf.Controllers
                 else
                 {
                     _auditLogService.LogAuditEvent(
-                        action: "api/sq/visualization",
+                        action: CONTROLLER_PATH,
                         resource: LoggerConstants.INVALID_OR_MISSING_SQID
                         );
 
