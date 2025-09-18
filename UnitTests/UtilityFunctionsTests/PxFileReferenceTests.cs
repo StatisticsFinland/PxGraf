@@ -56,7 +56,6 @@ namespace UnitTests.UtilityFunctionsTests
         [Test]
         public void FromPathWithInvalidHierarchyPartConstructorTest()
         {
-            var illegal = Path.GetInvalidPathChars();
             string path = Path.Combine("DB", "fol\0der1", "fold\aer2", "foobar.px");
             path = Path.DirectorySeparatorChar + path;
             Assert.Throws<ArgumentException>(() => new PxTableReference(path));
@@ -65,7 +64,7 @@ namespace UnitTests.UtilityFunctionsTests
         [Test]
         public void FromPathWithInvalidNameConstructorTest()
         {
-            string path = Path.Combine("DB", "folder1", "folder2", "foo:bar?.px/");
+            string path = Path.Combine("DB", "folder1", "folder2", "foo\0<bar>.px\a");
             path = Path.DirectorySeparatorChar + path;
             Assert.Throws<ArgumentException>(() => new PxTableReference(path));
         }
