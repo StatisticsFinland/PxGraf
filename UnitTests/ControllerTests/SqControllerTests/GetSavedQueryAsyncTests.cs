@@ -19,7 +19,6 @@ using UnitTests.Fixtures;
 
 namespace UnitTests.ControllerTests.SqControllerTests
 {
-    [Explicit("Refactored to verify audit log calls")]
     internal class GetSavedQueryAsyncTests
     {
         [OneTimeSetUp]

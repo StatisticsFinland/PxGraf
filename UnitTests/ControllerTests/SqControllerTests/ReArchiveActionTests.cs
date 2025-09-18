@@ -21,7 +21,6 @@ using UnitTests.Fixtures;
 
 namespace UnitTests.ControllerTests.SqControllerTests
 {
-    [Explicit("Refactored to verify audit log calls")]
     internal class ReArchiveActionTests
     {
         private const string TEST_SQ_ID = "abc-123";

@@ -22,7 +22,6 @@ using PxGraf.Services;
 
 namespace UnitTests.ControllerTests.SqControllerTests
 {
-    [Explicit("Refactored to verify audit log calls")]
     public class ArchiveQueryAsyncTests
     {
         [OneTimeSetUp]
