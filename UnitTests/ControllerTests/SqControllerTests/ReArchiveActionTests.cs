@@ -90,8 +90,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
             _mockAuditLogService.Verify(
                 a => a.LogAuditEvent(
                     It.Is<string>(action => action == "api/sq/re-archive"),
-                    It.Is<string>(resource => resource == LoggerConstants.INVALID_OR_MISSING_SQID),
-                    It.IsAny<Dictionary<string, string>>()),
+                    It.Is<string>(resource => resource == LoggerConstants.INVALID_OR_MISSING_SQID)),
                 Times.Once);
         }
 
@@ -129,8 +128,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
             _mockAuditLogService.Verify(
                 a => a.LogAuditEvent(
                     It.Is<string>(action => action == "api/sq/re-archive"),
-                    It.Is<string>(resource => resource == TEST_SQ_ID),
-                    It.IsAny<Dictionary<string, string>>()),
+                    It.Is<string>(resource => resource == TEST_SQ_ID)),
                 Times.Once);
         }
 
@@ -169,8 +167,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
             _mockAuditLogService.Verify(
                 a => a.LogAuditEvent(
                     It.Is<string>(action => action == "api/sq/re-archive"),
-                    It.Is<string>(resource => resource == TEST_SQ_ID),
-                    It.IsAny<Dictionary<string, string>>()),
+                    It.Is<string>(resource => resource == TEST_SQ_ID)),
                 Times.Once);
         }
     }

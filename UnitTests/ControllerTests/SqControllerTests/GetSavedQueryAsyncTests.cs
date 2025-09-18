@@ -91,8 +91,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
             mockAuditLogService.Verify(
                 a => a.LogAuditEvent(
                     It.Is<string>(action => action == "api/sq"),
-                    It.Is<string>(resource => resource == testQueryId),
-                    It.IsAny<Dictionary<string, string>>()),
+                    It.Is<string>(resource => resource == testQueryId)),
                 Times.Once);
         }
 
@@ -145,8 +144,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
             mockAuditLogService.Verify(
                 a => a.LogAuditEvent(
                     It.Is<string>(action => action == "api/sq"),
-                    It.Is<string>(resource => resource == testQueryId),
-                    It.IsAny<Dictionary<string, string>>()),
+                    It.Is<string>(resource => resource == testQueryId)),
                 Times.Once);
         }
 
@@ -176,8 +174,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
             mockAuditLogService.Verify(
                 a => a.LogAuditEvent(
                     It.Is<string>(action => action == "api/sq"),
-                    It.Is<string>(resource => resource == LoggerConstants.INVALID_OR_MISSING_SQID),
-                    It.IsAny<Dictionary<string, string>>()),
+                    It.Is<string>(resource => resource == LoggerConstants.INVALID_OR_MISSING_SQID)),
                 Times.Once);
         }
 

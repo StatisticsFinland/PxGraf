@@ -21,6 +21,7 @@ using PxGraf.Datasource.FileDatasource;
 using PxGraf.Datasource.ApiDatasource;
 using PxGraf.Services;
 using System.Text;
+using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 
 namespace PxGraf
 {
@@ -59,6 +60,14 @@ namespace PxGraf
         [SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "After evaluating the function and CORS permissions, we have deemed the warning to be unnecessary.")]
         public void ConfigureServices(IServiceCollection services)
         {
+#if !DEBUG
+            string aiConnectionString = Configuration.Current.ApplicationInsightsConnectionString;
+            ApplicationInsightsServiceOptions aiOptions = new()
+            {
+                ConnectionString = aiConnectionString
+            };
+            services.AddApplicationInsightsTelemetry(aiOptions);
+#endif
             services.AddFeatureManagement();
             services.AddResponseCaching();
             services.AddCors(options =>

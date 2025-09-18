@@ -133,8 +133,7 @@ namespace UnitTests.ControllerTests.QueryMetaControllerTests
             // Verify audit log was called with the correct parameters
             _auditLogService.Verify(a => a.LogAuditEvent(
                 It.Is<string>(action => action == "api/sq/meta"),
-                It.Is<string>(resource => resource == "test"),
-                It.IsAny<Dictionary<string, string>>()),
+                It.Is<string>(resource => resource == "test")),
                 Times.Once);
         }
 
@@ -170,8 +169,7 @@ namespace UnitTests.ControllerTests.QueryMetaControllerTests
             // Verify audit log was called with the correct parameters
             _auditLogService.Verify(a => a.LogAuditEvent(
                 It.Is<string>(action => action == "api/sq/meta"),
-                It.Is<string>(resource => resource == "test"),
-                It.IsAny<Dictionary<string, string>>()),
+                It.Is<string>(resource => resource == "test")),
                 Times.Once);
         }
 
@@ -193,8 +191,7 @@ namespace UnitTests.ControllerTests.QueryMetaControllerTests
             // Verify audit log was called with INVALID_OR_MISSING_SQID
             _auditLogService.Verify(a => a.LogAuditEvent(
                 It.Is<string>(action => action == "api/sq/meta"),
-                It.Is<string>(resource => resource == LoggerConstants.INVALID_OR_MISSING_SQID),
-                It.IsAny<Dictionary<string, string>>()),
+                It.Is<string>(resource => resource == LoggerConstants.INVALID_OR_MISSING_SQID)),
                 Times.Once);
         }
 
@@ -249,8 +246,7 @@ namespace UnitTests.ControllerTests.QueryMetaControllerTests
             // Verify audit log was called with the correct parameters
             _auditLogService.Verify(a => a.LogAuditEvent(
                 It.Is<string>(action => action == "api/sq/meta"),
-                It.Is<string>(resource => resource == "test"),
-                It.IsAny<Dictionary<string, string>>()),
+                It.Is<string>(resource => resource == "test")),
                 Times.Once);
         }
 
@@ -293,8 +289,7 @@ namespace UnitTests.ControllerTests.QueryMetaControllerTests
             // Verify audit log was called once with the correct parameters
             _auditLogService.Verify(a => a.LogAuditEvent(
                 It.Is<string>(action => action == "api/sq/meta"),
-                It.Is<string>(resource => resource == "test"),
-                It.IsAny<Dictionary<string, string>>()),
+                It.Is<string>(resource => resource == "test")),
                 Times.Once);
         }
 
@@ -330,8 +325,7 @@ namespace UnitTests.ControllerTests.QueryMetaControllerTests
             // Verify audit log was called once with the correct parameters
             _auditLogService.Verify(a => a.LogAuditEvent(
                 It.Is<string>(action => action == "api/sq/meta"),
-                It.Is<string>(resource => resource == "test"),
-                It.IsAny<Dictionary<string, string>>()),
+                It.Is<string>(resource => resource == "test")),
                 Times.Once);
         }
 
@@ -383,8 +377,7 @@ namespace UnitTests.ControllerTests.QueryMetaControllerTests
             // Verify audit log was called with the correct parameters
             _auditLogService.Verify(a => a.LogAuditEvent(
                 It.Is<string>(action => action == "api/sq/meta"),
-                It.Is<string>(resource => resource == "test"),
-                It.IsAny<Dictionary<string, string>>()),
+                It.Is<string>(resource => resource == "test")),
                 Times.Once);
         }
     }

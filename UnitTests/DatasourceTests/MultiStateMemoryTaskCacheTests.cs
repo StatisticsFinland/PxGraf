@@ -85,6 +85,7 @@ namespace UnitTests.DatasourceTests
             Assert.ThrowsAsync<Exception>(() => value1);
             Assert.That(value1.Exception.Message.Contains("Test exception"));
             Assert.That(nullState, Is.EqualTo(MultiStateMemoryTaskCache.CacheEntryState.Null));
+            Assert.That(value2, Is.Null);
         }
     }
 }

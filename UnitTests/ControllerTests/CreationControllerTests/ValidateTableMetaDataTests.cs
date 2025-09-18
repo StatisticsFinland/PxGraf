@@ -69,12 +69,6 @@ namespace UnitTests.ControllerTests.CreationControllerTests
                     return TestDataCubeBuilder.BuildTestMatrix([]);
                 });
 
-            dataSource.Setup(ds => ds.GetGroupContentsCachedAsync(It.IsAny<string[]>())) // TODO: Is this needed?
-                .ReturnsAsync((string[] hierarchy) =>
-                {
-                    return null;
-                });
-
             CreationController controller = new(dataSource.Object, logger.Object, auditLogService.Object);
 
             // Act

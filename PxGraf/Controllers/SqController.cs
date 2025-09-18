@@ -33,6 +33,7 @@ namespace PxGraf.Controllers
     /// <param name="datasource">Instance of a <see cref="ICachedDatasource"/> object. Used to interact with data source and cached data.</param>
     /// <param name="sqFileInterface">Instance of a <see cref="ISqFileInterface"/> object. Used for interacting with saved queries.</param>
     /// <param name="logger"><see cref="ILogger"/> instance used for logging.</param>
+    /// <param name="auditLogService">Service for logging audit events.</param>
     [FeatureGate("CreationAPI")]
     [ApiController]
     [Route("api/sq")]
@@ -214,6 +215,10 @@ namespace PxGraf.Controllers
                     if (filteredMeta.Dimensions.Any(v => v.Values.Count == 0) || !ValidateVisualizationSettings(filteredMeta, visualizationSettings))
                     {
                         _logger.LogWarning("Query is missing values for a dimension.");
+                        _auditLogService.LogAuditEvent(
+                            action: "api/sq/archive",
+                            resource: LoggerConstants.INVALID_VISUALIZATION
+                        );
                         return BadRequest();
                     }
 
@@ -233,6 +238,10 @@ namespace PxGraf.Controllers
 
                     // If visualization type is not given or it is not valid return 400.
                     _logger.LogWarning("Query has an invalid visualization type.");
+                    _auditLogService.LogAuditEvent(
+                        action: "api/sq/archive",
+                        resource: LoggerConstants.INVALID_VISUALIZATION
+                    );
                     return BadRequest();
                 }
             }

@@ -100,8 +100,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
             mockAuditLogService.Verify(
                 a => a.LogAuditEvent(
                     It.Is<string>(action => action == "api/sq/archive"),
-                    It.Is<string>(resource => resource == result.Value.Id),
-                    It.IsAny<Dictionary<string, string>>()),
+                    It.Is<string>(resource => resource == result.Value.Id)),
                 Times.Once);
         }
 
@@ -167,8 +166,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
             mockAuditLogService.Verify(
                 a => a.LogAuditEvent(
                     It.Is<string>(action => action == "api/sq/archive"),
-                    It.Is<string>(resource => resource == LoggerConstants.INVALID_OR_MISSING_SQID),
-                    It.IsAny<Dictionary<string, string>>()),
+                    It.Is<string>(resource => resource == LoggerConstants.INVALID_VISUALIZATION)),
                 Times.Once);
         }
 
@@ -225,8 +223,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
             mockAuditLogService.Verify(
                 a => a.LogAuditEvent(
                     It.Is<string>(action => action == "api/sq/archive"),
-                    It.Is<string>(resource => resource == LoggerConstants.INVALID_OR_MISSING_SQID),
-                    It.IsAny<Dictionary<string, string>>()),
+                    It.Is<string>(resource => resource == LoggerConstants.INVALID_VISUALIZATION)),
                 Times.Once);
         }
 
@@ -282,8 +279,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
             mockAuditLogService.Verify(
                 a => a.LogAuditEvent(
                     It.Is<string>(action => action == "api/sq/archive"),
-                    It.Is<string>(resource => resource == LoggerConstants.INVALID_OR_MISSING_SQID),
-                    It.IsAny<Dictionary<string, string>>()),
+                    It.Is<string>(resource => resource == LoggerConstants.INVALID_VISUALIZATION)),
                 Times.Once);
         }
     }

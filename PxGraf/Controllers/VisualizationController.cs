@@ -29,6 +29,7 @@ namespace PxGraf.Controllers
     /// <param name="taskCache">The cache for storing tasks</param>
     /// <param name="cachedDatasource">The cached datasource</param>
     /// <param name="logger">The logger interface</param>
+    /// <param name="auditLogService">Service for logging audit events.</param>
     /// <remarks>
     /// Default constructor.
     /// </remarks>
@@ -111,7 +112,6 @@ namespace PxGraf.Controllers
                     SavedQuery sq = await _sqFileInterface.ReadSavedQueryFromFile(sqId, Configuration.Current.SavedQueryDirectory);
                     Task<VisualizationResponse> newResponseTask = BuildNewResponseAsync(sqId, sq);
                     _taskCache.Set(sqId, newResponseTask, SlidingExpiration, AbsoluteExpiration);
-                    VisualizationResponse response = await newResponseTask;
                     Response.Headers.CacheControl = $"{maxAge}";
                     _logger.LogDebug("Returning visualization.");
                     return await newResponseTask; // Return directly if archived

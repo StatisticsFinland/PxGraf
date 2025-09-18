@@ -87,16 +87,16 @@ namespace UnitTests.ControllerTests.VisualizationControllerTests
                     return entryState;
                 });
 
-            _mockSqFileInterface.Setup(x => x.SavedQueryExists(It.IsAny<string>(), It.IsAny<string>()))
+            _mockSqFileInterface.Setup(x => x.SavedQueryExists(It.Is<string>(id => id == testQueryId), It.IsAny<string>()))
                 .Returns(savedQueryFound);
             
-            _mockSqFileInterface.Setup(x => x.ReadSavedQueryFromFile(It.IsAny<string>(), It.IsAny<string>()))
+            _mockSqFileInterface.Setup(x => x.ReadSavedQueryFromFile(It.Is<string>(id => id == testQueryId), It.IsAny<string>()))
                 .ReturnsAsync(() => TestDataCubeBuilder.BuildTestSavedQuery(cubeParams, archived, new LineChartVisualizationSettings(null, false, null)));
             
-            _mockSqFileInterface.Setup(x => x.ArchiveCubeExists(It.IsAny<string>(), It.IsAny<string>()))
+            _mockSqFileInterface.Setup(x => x.ArchiveCubeExists(It.Is<string>(id => id == testQueryId), It.IsAny<string>()))
                 .Returns(true);
             
-            _mockSqFileInterface.Setup(x => x.ReadArchiveCubeFromFile(It.IsAny<string>(), It.IsAny<string>()))
+            _mockSqFileInterface.Setup(x => x.ReadArchiveCubeFromFile(It.Is<string>(id => id == testQueryId), It.IsAny<string>()))
                 .ReturnsAsync(() => TestDataCubeBuilder.BuildTestArchiveCube(metaParams));
 
             VisualizationController controller = new(
@@ -174,8 +174,7 @@ namespace UnitTests.ControllerTests.VisualizationControllerTests
             _mockAuditLogService.Verify(
                 a => a.LogAuditEvent(
                     It.Is<string>(action => action == "api/sq/visualization"),
-                    It.Is<string>(resource => resource == testQueryId),
-                    It.IsAny<Dictionary<string, string>>()),
+                    It.Is<string>(resource => resource == testQueryId)),
                 Times.Once);
         }
 
@@ -238,8 +237,7 @@ namespace UnitTests.ControllerTests.VisualizationControllerTests
             _mockAuditLogService.Verify(
                 a => a.LogAuditEvent(
                     It.Is<string>(action => action == "api/sq/visualization"),
-                    It.Is<string>(resource => resource == testQueryId),
-                    It.IsAny<Dictionary<string, string>>()),
+                    It.Is<string>(resource => resource == testQueryId)),
                 Times.Once);
         }
 
@@ -302,8 +300,7 @@ namespace UnitTests.ControllerTests.VisualizationControllerTests
             _mockAuditLogService.Verify(
                 a => a.LogAuditEvent(
                     It.Is<string>(action => action == "api/sq/visualization"),
-                    It.Is<string>(resource => resource == testQueryId),
-                    It.IsAny<Dictionary<string, string>>()),
+                    It.Is<string>(resource => resource == testQueryId)),
                 Times.Once);
         }
 
@@ -330,8 +327,7 @@ namespace UnitTests.ControllerTests.VisualizationControllerTests
             _mockAuditLogService.Verify(
                 a => a.LogAuditEvent(
                     It.Is<string>(action => action == "api/sq/visualization"),
-                    It.Is<string>(resource => resource == testQueryId),
-                    It.IsAny<Dictionary<string, string>>()),
+                    It.Is<string>(resource => resource == testQueryId)),
                 Times.Once);
         }
 
@@ -358,8 +354,7 @@ namespace UnitTests.ControllerTests.VisualizationControllerTests
             _mockAuditLogService.Verify(
                 a => a.LogAuditEvent(
                     It.Is<string>(action => action == "api/sq/visualization"),
-                    It.Is<string>(resource => resource == LoggerConstants.INVALID_OR_MISSING_SQID),
-                    It.IsAny<Dictionary<string, string>>()),
+                    It.Is<string>(resource => resource == LoggerConstants.INVALID_OR_MISSING_SQID)),
                 Times.Once);
         }
 
@@ -395,8 +390,7 @@ namespace UnitTests.ControllerTests.VisualizationControllerTests
             _mockAuditLogService.Verify(
                 a => a.LogAuditEvent(
                     It.Is<string>(action => action == "api/sq/visualization"),
-                    It.Is<string>(resource => resource == testQueryId),
-                    It.IsAny<Dictionary<string, string>>()),
+                    It.Is<string>(resource => resource == testQueryId)),
                 Times.Once);
         }
     }

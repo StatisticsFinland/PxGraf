@@ -60,9 +60,8 @@ namespace UnitTests.DatasourceTests
         [Test]
         public void TraversalAttemptWithReferenceThrowsArgumentException()
         {
-            string rootPath = Path.Combine("C:", "Foo");
             Assert.Throws<ArgumentException>(() => { 
-                PxTableReference reference = new ([ "..", "Users", "Public" ], "file.px");
+                PxTableReference _ = new ([ "..", "Users", "Public" ], "file.px");
             });
         }
 

@@ -32,6 +32,26 @@ in the [HighCharts shop](https://shop.highsoft.com/?utm_source=npmjs&utm_medium=
 appsettings.json contains the configuration for the backend. It contains following sections:
 #### LogOptions
 Configuration for logging such as file save location and logging level. Logging uses NLog. Further configuration can be done in the nlog.config file.
+
+The following logging features are available:
+- **Standard Logging**: Configurable text-based logs with customizable log level.
+- **Application Insights**: Azure Application Insights integration for comprehensive telemetry. Can be enabled by providing a connection string in the appsettings.json file or through the PXGRAF_APPLICATIONINSIGHTS_CONNECTION_STRING environment variable.
+- **Audit Logging**: Optional feature for tracking user actions. When enabled, logs HTTP requests with configurable headers to include in the audit trail.
+
+LogOptions structure:
+```json
+"LogOptions": {
+  "Folder": "<path to logs>",
+  "SysId": "PxGraf",
+  "Level": "Information",
+  "AuditLog": {
+    "Enabled": false,
+    "IncludedHeaders": []
+  },
+  "ApplicationInsightsConnectionString": "<connection string>"
+}
+```
+
 #### CacheOptions
 Configuration for caching PxWeb data, visualization responses and more.
 #### CORS
