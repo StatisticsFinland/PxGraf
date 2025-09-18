@@ -11,22 +11,13 @@ namespace PxGraf.Services
         void LogAuditEvent(string action, string resource);
     }
 
-    public class AuditLogService : IAuditLogService
+    public class AuditLogService(IHttpContextAccessor httpContextAccessor, ILogger<AuditLogService> logger) : IAuditLogService
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly ILogger<AuditLogService> _logger;
-
-        public AuditLogService(IHttpContextAccessor httpContextAccessor, ILogger<AuditLogService> logger)
-        {
-            _httpContextAccessor = httpContextAccessor;
-            _logger = logger;
-        }
-
         public void LogAuditEvent(string action, string resource)
         {
             if (!Configuration.Current.AuditLoggingEnabled) return;
 
-            HttpContext httpContext = _httpContextAccessor.HttpContext;
+            HttpContext httpContext = httpContextAccessor.HttpContext;
             if (httpContext == null) return;
 
             // Extract only the configured headers
@@ -39,9 +30,9 @@ namespace PxGraf.Services
 
             context.Add("Category", "Audit");
 
-            using (_logger.BeginScope(context))
+            using (logger.BeginScope(context))
             {
-                _logger.LogInformation("Audit Event: action={Action}, resource={Resource}, user={User}, clientIP={ClientIP}",
+                logger.LogInformation("Audit Event: action={Action}, resource={Resource}, user={User}, clientIP={ClientIP}",
                     action,
                     resource,
                     httpContext.User.Identity?.Name ?? "Anonymous",

@@ -29,7 +29,8 @@ namespace PxGraf.Settings
         public static void Load(IConfiguration configuration)
         {
             string aiConnectionString = Environment.GetEnvironmentVariable("PXGRAF_APPLICATIONINSIGHTS_CONNECTION_STRING")
-                ?? configuration["LogOptions:ApplicationInsightsConnectionString"];
+                ?? configuration["LogOptions:ApplicationInsightsConnectionString"]
+                ?? null;
 
             //Set config defaults
             Configuration newConfig = new()
