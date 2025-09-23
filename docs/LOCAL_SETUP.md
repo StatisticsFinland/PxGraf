@@ -24,6 +24,38 @@ PxGraf can be configured to run using the local px database using Px.Utils inste
 In order to use Px.Utils, a Px file database must be created on the local system.
 To enable PxGraf to use Px.Utils, the appsettings.json file must be updated with the path to the Px file database (LocalFileSystemDatabaseConfig.DatabaseRootPath) and LocalFileSystemDatabaseConfig.Enabled must be set to true. LocalFileSystemDatabaseConfig.Encoding should match the encoding of the Px and alias files in the database.
 
+## Logging Configuration
+
+### Standard Logging
+1. In your appsettings.json, set the `LogOptions.Folder` to a valid directory path where logs will be stored
+2. Set `LogOptions.Level` to the desired logging level (e.g., "Information", "Debug", "Warning", etc.)
+
+### Application Insights
+To enable Application Insights telemetry:
+1. Obtain an Application Insights connection string from your Azure portal
+2. Configure it using one of these methods:
+   - Add it to appsettings.json in the `LogOptions.ApplicationInsightsConnectionString` field
+   - Set the environment variable `PXGRAF_APPLICATIONINSIGHTS_CONNECTION_STRING`
+
+### Audit Logging
+For security and compliance tracking, enable audit logging:
+1. Set `LogOptions.AuditLog.Enabled` to `true` in appsettings.json
+2. Configure which HTTP headers to include in the audit logs by adding their names to the `LogOptions.AuditLog.IncludedHeaders` array
+
+Example configuration:
+```json
+"LogOptions": {
+  "Folder": "C:\\PxGraf\\Logs",
+  "SysId": "PxGraf",
+  "Level": "Information",
+  "AuditLog": {
+    "Enabled": true,
+    "IncludedHeaders": ["testHeader", "foobar"]
+  },
+  "ApplicationInsightsConnectionString": "InstrumentationKey=00000000-0000-0000-0000-000000000000;IngestionEndpoint=https://region.in.applicationinsights.azure.com/"
+}
+```
+
 ## Backend
 
 1. Make a copy of the appsettings.template.json and rename it to appsettings.json

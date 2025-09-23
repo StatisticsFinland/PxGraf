@@ -9,6 +9,7 @@ using Px.Utils.Models.Metadata;
 using Px.Utils.Models;
 using PxGraf.ChartTypeSelection;
 using PxGraf.Data;
+using PxGraf.Datasource.FileDatasource;
 using PxGraf.Datasource;
 using PxGraf.Enums;
 using PxGraf.Language;
@@ -17,23 +18,25 @@ using PxGraf.Models.Queries;
 using PxGraf.Models.Requests;
 using PxGraf.Models.Responses.DatabaseItems;
 using PxGraf.Models.Responses;
+using PxGraf.Services;
 using PxGraf.Settings;
+using PxGraf.Utility;
 using PxGraf.Visualization;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
-using PxGraf.Datasource.FileDatasource;
 
 namespace PxGraf.Controllers
 {
     [FeatureGate("CreationAPI")]
     [ApiController]
     [Route("api/creation")]
-    public class CreationController(ICachedDatasource datasource, ILogger<CreationController> logger) : ControllerBase
+    public class CreationController(ICachedDatasource datasource, ILogger<CreationController> logger, IAuditLogService auditLogService) : ControllerBase
     {
         private readonly ICachedDatasource _datasource = datasource;
         private readonly ILogger<CreationController> _logger = logger;
+        private readonly IAuditLogService _auditLogService = auditLogService;
         private readonly string[] databaseWhitelist = Configuration.Current.DatabaseWhitelist;
 
         /// <summary>
@@ -47,28 +50,50 @@ namespace PxGraf.Controllers
         [HttpGet("data-bases/{*dbPath}")]
         public async Task<ActionResult<DatabaseGroupContents>> GetDataBaseListingAsync([FromRoute] string dbPath)
         {
-            const string LOGMSG = "Getting the database listing. GET: api/creation/data-bases/{DbPath}";
-            _logger.LogDebug(LOGMSG, dbPath);
-
-            string[] hierarchy = dbPath is not null ? dbPath.Split("/") : [];
-            if (hierarchy.Length > 0 && !PathUtils.IsDatabaseWhitelisted(hierarchy, databaseWhitelist))
+            Dictionary<string, object> logScope = new() { 
+                [LoggerConstants.CONTROLLER] = nameof(CreationController),
+                [LoggerConstants.ACTION] = "api/creation/data-bases"
+            };
+            using(_logger.BeginScope(logScope))
             {
-                _logger.LogInformation("Database {DbPath} is not whitelisted.", dbPath);
-                return NotFound();
-            }
-            // Find databases and tables with all available languages and add them to the response
-            DatabaseGroupContents result = await _datasource.GetGroupContentsCachedAsync(hierarchy);
+                _logger.LogDebug("Database listing requested. GET api/creation/data-bases/");
+                string[] hierarchy = dbPath is not null ? dbPath.Split("/") : [];
+                if (!hierarchy.All(InputValidation.ValidateFilePathPart))
+                {
+                    _logger.LogWarning("Invalid path input.");
+                    return BadRequest();
+                }
 
-            // If listing databases, filter out databases that are not whitelisted
-            if (hierarchy.Length == 0 && databaseWhitelist.Length > 0)
-            {
-                List<DatabaseGroupHeader> filteredHeaders = [.. result.Headers.Where(header => PathUtils.IsDatabaseWhitelisted(header.Code, databaseWhitelist))];
-                _logger.LogDebug("data-bases/{DbPath} result: {Result}", dbPath, result);
-                return new DatabaseGroupContents(filteredHeaders, result.Files);
-            }
+                // Add validated dbPath to the logging scope
+                using (_logger.BeginScope(new Dictionary<string, object> { [LoggerConstants.DB_PATH] = dbPath }))
+                {
+                    if (hierarchy.Length > 0 && !PathUtils.IsDatabaseWhitelisted(hierarchy, databaseWhitelist))
+                    {
+                        _logger.LogDebug("Requested database is not whitelisted.");
+                        return NotFound();
+                    }
 
-            _logger.LogDebug("data-bases/{DbPath} result: {Result}", dbPath, result);
-            return result;
+                    // Find databases and tables with all available languages and add them to the response
+                    DatabaseGroupContents result = await _datasource.GetGroupContentsCachedAsync(hierarchy);
+
+                    _auditLogService.LogAuditEvent(
+                        action: "api/creation/data-bases",
+                        resource: hierarchy.Length > 0 ? string.Join("/", hierarchy) : "/"
+                    );
+
+                    // If listing databases, filter out databases that are not whitelisted
+                    if (hierarchy.Length == 0 && databaseWhitelist.Length > 0)
+                    {
+                        List<DatabaseGroupHeader> filteredHeaders = [.. result.Headers.Where(header => PathUtils.IsDatabaseWhitelisted(header.Code, databaseWhitelist))];
+                        DatabaseGroupContents resp = new(filteredHeaders, result.Files);
+                        _logger.LogDebug("Returning table listing result: {Result}", resp);
+                        return resp;
+                    }
+
+                    _logger.LogDebug("Returning table listing result: {Result}", result);
+                    return result;
+                }
+            }
         }
 
         /// <summary>
@@ -82,24 +107,38 @@ namespace PxGraf.Controllers
         [HttpGet("cube-meta/{*tablePath}")]
         public async Task<ActionResult<IReadOnlyMatrixMetadata>> GetCubeMetaAsync([FromRoute] string tablePath)
         {
-            _logger.LogDebug("Requested cube meta for {TablePath} GET: api/creation/cube-meta", tablePath);
-
-            PxTableReference tableReference = new(tablePath, '/');
-            if (!PathUtils.IsDatabaseWhitelisted(tableReference.Hierarchy, databaseWhitelist))
+            using(_logger.BeginScope(new Dictionary<string, object> {
+                [LoggerConstants.CONTROLLER] = nameof(CreationController),
+                [LoggerConstants.ACTION] = "api/creation/cube-meta",
+            }))
             {
-                _logger.LogInformation("Database {TablePath} is not whitelisted.", tablePath);
-                return NotFound();
-            }
+                _logger.LogDebug("Cube meta requested. GET: api/creation/cube-meta");
 
-            IReadOnlyMatrixMetadata readOnlyMeta = await _datasource.GetMatrixMetadataCachedAsync(tableReference);
-            if (readOnlyMeta == null)
-            {
-                _logger.LogWarning("cube-meta result or {TablePath}: null. May result from a dimension without values.", tablePath);
-                return BadRequest();
+                PxTableReference tableReference = new(tablePath, '/');
+                using (_logger.BeginScope(new Dictionary<string, object> { [LoggerConstants.DB_PATH] = tableReference.ToPath()}))
+                {
+                    if (!PathUtils.IsDatabaseWhitelisted(tableReference.Hierarchy, databaseWhitelist))
+                    {
+                        _logger.LogDebug("Requested database is not whitelisted.");
+                        return NotFound();
+                    }
+
+                    _auditLogService.LogAuditEvent(
+                        action: "api/creation/cube-meta",
+                        resource: tableReference.ToPath()
+                    );
+
+                    IReadOnlyMatrixMetadata readOnlyMeta = await _datasource.GetMatrixMetadataCachedAsync(tableReference);
+                    if (readOnlyMeta == null)
+                    {
+                        _logger.LogWarning("Cube-meta result was null. May result from a dimension without values.");
+                        return BadRequest();
+                    }
+                    MatrixMetadata metadataClone = readOnlyMeta.GetTransform(readOnlyMeta);
+                    _logger.LogDebug("Returning metadata result.");
+                    return metadataClone;
+                }
             }
-            MatrixMetadata metadataClone = readOnlyMeta.GetTransform(readOnlyMeta);
-            _logger.LogDebug("cube-meta result {Meta}", metadataClone);
-            return metadataClone;
         }
 
         /// <summary>
@@ -113,35 +152,41 @@ namespace PxGraf.Controllers
         [HttpGet("validate-table-metadata/{*tablePath}")]
         public async Task<ActionResult<TableMetaValidationResult>> ValidateTableMetaData([FromRoute] string tablePath)
         {
-            _logger.LogDebug("Validating table metadata for {TablePath} GET: api/creation/validate-table-metadata", tablePath);
+            using (_logger.BeginScope(new Dictionary<string, object>
+            {
+                [LoggerConstants.CONTROLLER] = nameof(CreationController),
+                [LoggerConstants.ACTION] = "api/creation/validate-table-metadata",
+            }))
+            {
+                _logger.LogDebug("Table metadata validation requested. GET: api/creation/validate-table-metadata");
 
-            PxTableReference tableReference = new(tablePath, '/');
-            if (!PathUtils.IsDatabaseWhitelisted(tableReference.Hierarchy, databaseWhitelist))
-            {
-                _logger.LogInformation("Database {TablePath} is not whitelisted.", tablePath);
-                return NotFound();
-            }
+                PxTableReference tableReference = new(tablePath, '/');
+                using (_logger.BeginScope(new Dictionary<string, object> { [LoggerConstants.DB_PATH] = tableReference.ToPath() }))
+                {
+                    _auditLogService.LogAuditEvent(
+                        action: "api/creation/validate-table-metadata",
+                        resource: tableReference.ToPath()
+                    );
 
-            IReadOnlyMatrixMetadata tableMeta = await _datasource.GetMatrixMetadataCachedAsync(tableReference);
-            if (tableMeta is null)
-            {
-                return new TableMetaValidationResult(
-                    tableHasContentDimension: false,
-                    tableHasTimeDimension: false,
-                    allDimensionsContainValues: false
-                );
-            }
-            else
-            {
+                    if (!PathUtils.IsDatabaseWhitelisted(tableReference.Hierarchy, databaseWhitelist))
+                    {
+                        _logger.LogDebug("Requested database is not whitelisted.");
+                        return NotFound();
+                    }
+
+                    IReadOnlyMatrixMetadata tableMeta = await _datasource.GetMatrixMetadataCachedAsync(tableReference);
 #nullable enable
-                IReadOnlyDimension? contDim = tableMeta.Dimensions.FirstOrDefault(v => v.Type == DimensionType.Content); 
-                IReadOnlyDimension? timeDim = tableMeta.Dimensions.FirstOrDefault(v => v.Type == DimensionType.Time);
-                return new TableMetaValidationResult(
-                    contDim is not null && contDim.Values.Count > 0,
-                    timeDim is not null && timeDim.Values.Count > 0,
-                    tableMeta.Dimensions.All(v => v.Values.Count > 0)
-                );
+                    IReadOnlyDimension? contDim = tableMeta.Dimensions.FirstOrDefault(v => v.Type == DimensionType.Content);
+                    IReadOnlyDimension? timeDim = tableMeta.Dimensions.FirstOrDefault(v => v.Type == DimensionType.Time);
+                    TableMetaValidationResult resp = new(
+                        contDim is not null && contDim.Values.Count > 0,
+                        timeDim is not null && timeDim.Values.Count > 0,
+                        tableMeta.Dimensions.All(v => v.Values.Count > 0)
+                    );
+                    _logger.LogDebug("Returning table metadata validation result: {Result}", resp);
+                    return resp;
 #nullable disable
+                }
             }
         }
 
@@ -153,29 +198,42 @@ namespace PxGraf.Controllers
         [HttpPost("filter-dimension")]
         public async Task<ActionResult<Dictionary<string, List<string>>>> GetDimensionFilterResultAsync([FromBody] FilterRequest filterRequest)
         {
-            _logger.LogDebug("Requesting filter result for {FilterRequest} POST: api/creation/filter-dimension", filterRequest);
-            IReadOnlyMatrixMetadata tableMeta = await _datasource.GetMatrixMetadataCachedAsync(filterRequest.TableReference);
+            using (_logger.BeginScope(new Dictionary<string, object>
+            {
+                [LoggerConstants.CONTROLLER] = nameof(CreationController),
+                [LoggerConstants.ACTION] = "api/creation/filter-dimension",
+                [LoggerConstants.DB_PATH] = filterRequest.TableReference.ToPath()
+            }))
+            {
+                _logger.LogDebug("Dimension filtering requested. POST: api/creation/filter-dimension");
 
-            Dictionary<string, List<string>> result = filterRequest.Filters.ToDictionary(
-                filter => filter.Key,
-                filter =>
-                {
-                    if (tableMeta.Dimensions.FirstOrDefault(dimension => dimension.Code == filter.Key) is IReadOnlyDimension dimension)
-                    {
-                        IEnumerable<IReadOnlyDimensionValue> filteredValues = filter.Value.Filter(dimension.Values);
-                        List<string> filteredValueCodes = [.. filteredValues.Select(value => value.Code)];
-                        _logger.LogDebug("filter-dimension result: {FilteredValueCodes}", filteredValueCodes);
-                        return filteredValueCodes;
-                    }
-                    else
-                    {
-                        _logger.LogDebug("filter-dimension result: []");
-                        return [];
-                    }
-                }
-            );
+                _auditLogService.LogAuditEvent(
+                    action: "api/creation/filter-dimension",
+                    resource: filterRequest.TableReference.ToPath()
+                );
 
-            return result;
+                IReadOnlyMatrixMetadata tableMeta = await _datasource.GetMatrixMetadataCachedAsync(filterRequest.TableReference);
+
+                Dictionary<string, List<string>> result = filterRequest.Filters.ToDictionary(
+                    filter => filter.Key,
+                    filter =>
+                    {
+                        if (tableMeta.Dimensions.FirstOrDefault(dimension => dimension.Code == filter.Key) is IReadOnlyDimension dimension)
+                        {
+                            IEnumerable<IReadOnlyDimensionValue> filteredValues = filter.Value.Filter(dimension.Values);
+                            List<string> filteredValueCodes = [.. filteredValues.Select(value => value.Code)];
+                            return filteredValueCodes;
+                        }
+                        else
+                        {
+                            return [];
+                        }
+                    }
+                );
+
+                _logger.LogDebug("Returning dimension filtering result: {Result}", result);
+                return result;
+            }
         }
 
         /// <summary>
@@ -188,75 +246,94 @@ namespace PxGraf.Controllers
         [HttpPost("editor-contents")]
         public async Task<ActionResult<EditorContentsResponse>> GetEditorContents([FromBody] MatrixQuery query)
         {
-            _logger.LogDebug("GetEditorContents called with {Query} POST: api/creation/query-info", query);
-            int maxQuerySize = Configuration.Current.QueryOptions.MaxQuerySize;
-
-            if (query.DimensionQueries.Count == 0)
+            using (_logger.BeginScope(new Dictionary<string, object>
             {
-                return new EditorContentsResponse()
+                [LoggerConstants.CONTROLLER] = nameof(CreationController),
+                [LoggerConstants.ACTION] = "api/creation/editor-contents",
+                [LoggerConstants.DB_PATH] = query.TableReference.ToPath()
+            }))
+            {
+                _logger.LogDebug("Editor contents requested. POST: api/creation/editor-contents");
+
+                _auditLogService.LogAuditEvent(
+                    action: "api/creation/editor-contents",
+                    resource: query.TableReference.ToPath()
+                );
+
+                int maxQuerySize = Configuration.Current.QueryOptions.MaxQuerySize;
+
+                if (query.DimensionQueries.Count == 0)
                 {
-                    Size = 0,
-                    MaximumSupportedSize = maxQuerySize,
-                    SizeWarningLimit = Convert.ToInt32(maxQuerySize * 0.75),
-                    HeaderText = new MultilanguageString(Configuration.Current.LanguageOptions.Available.Select(lang => new KeyValuePair<string, string>(lang, string.Empty))),
-                    MaximumHeaderLength = Configuration.Current.QueryOptions.MaxHeaderLength,
-                    VisualizationOptions = [],
-                    VisualizationRejectionReasons = []
-                };
-            }
-            
-            IReadOnlyMatrixMetadata tableMeta = await _datasource.GetMatrixMetadataCachedAsync(query.TableReference);
-            IReadOnlyMatrixMetadata filteredMeta = tableMeta.FilterDimensionValues(query);
-            int includedValuesCount = filteredMeta.Dimensions.Select(x => x.Values.Count).Aggregate((a, x) => a * x);
+                    _logger.LogDebug("Query did not contain any dimension queries.");
+                    _logger.LogDebug("Returning empty editor contents result.");
+                    return new EditorContentsResponse()
+                    {
+                        Size = 0,
+                        MaximumSupportedSize = maxQuerySize,
+                        SizeWarningLimit = Convert.ToInt32(maxQuerySize * 0.75),
+                        HeaderText = new MultilanguageString(Configuration.Current.LanguageOptions.Available.Select(lang => new KeyValuePair<string, string>(lang, string.Empty))),
+                        MaximumHeaderLength = Configuration.Current.QueryOptions.MaxHeaderLength,
+                        VisualizationOptions = [],
+                        VisualizationRejectionReasons = []
+                    };
+                }
 
-            if (includedValuesCount == 0 || includedValuesCount > maxQuerySize)
-            {
+                IReadOnlyMatrixMetadata tableMeta = await _datasource.GetMatrixMetadataCachedAsync(query.TableReference);
+                IReadOnlyMatrixMetadata filteredMeta = tableMeta.FilterDimensionValues(query);
+                int includedValuesCount = filteredMeta.Dimensions.Select(x => x.Values.Count).Aggregate((a, x) => a * x);
+
+                if (includedValuesCount == 0 || includedValuesCount > maxQuerySize)
+                {
+                    _logger.LogDebug("Resulting matrix would have size {IncludedValuesCount}, which is either 0 or exceeds the maximum supported size of {MaxQuerySize}.", includedValuesCount, maxQuerySize);
+                    _logger.LogDebug("Returning editor contents result with no valid visualization types.");
+                    return new EditorContentsResponse()
+                    {
+                        Size = includedValuesCount,
+                        MaximumSupportedSize = maxQuerySize,
+                        SizeWarningLimit = Convert.ToInt32(maxQuerySize * 0.75),
+                        HeaderText = new MultilanguageString(Configuration.Current.LanguageOptions.Available.Select(lang => new KeyValuePair<string, string>(lang, string.Empty))),
+                        MaximumHeaderLength = Configuration.Current.QueryOptions.MaxHeaderLength,
+                        VisualizationOptions = [],
+                        VisualizationRejectionReasons = []
+                    };
+                }
+
+                Matrix<DecimalDataValue> matrix = await _datasource.GetMatrixCachedAsync(query.TableReference, filteredMeta);
+
+                Dictionary<VisualizationType, MultilanguageString> rejectionReasons = [];
+                List<VisualizationOption> visualizationOptions = [];
+
+                foreach (KeyValuePair<VisualizationType, IReadOnlyList<ChartRejectionInfo>> reasonKvp in
+                    ChartTypeSelector.Selector.GetRejectionReasons(query, matrix))
+                {
+                    if (reasonKvp.Value.Any())
+                    {
+                        Dictionary<string, string> translations = [];
+                        foreach (string language in Localization.GetAllAvailableLanguages())
+                        {
+                            translations[language] = Localization.FromLanguage(language)
+                                .Translation.RejectionReasons.GetTranslation(reasonKvp.Value[0]);
+                        }
+                        rejectionReasons[reasonKvp.Key] = new(translations);
+                    }
+                    else  // no rejection reasons == valid visualization type
+                    {
+                        visualizationOptions.Add(GetVisualizationOption(reasonKvp.Key, filteredMeta, query));
+                    }
+                }
+
+                _logger.LogDebug("Returning editor contents result with size {IncludedValuesCount} and {VisualizationOptionsCount} visualization options.", includedValuesCount, visualizationOptions.Count);
                 return new EditorContentsResponse()
                 {
                     Size = includedValuesCount,
                     MaximumSupportedSize = maxQuerySize,
                     SizeWarningLimit = Convert.ToInt32(maxQuerySize * 0.75),
-                    HeaderText = new MultilanguageString(Configuration.Current.LanguageOptions.Available.Select(lang => new KeyValuePair<string, string>(lang, string.Empty))),
+                    HeaderText = HeaderBuildingUtilities.GetHeader(filteredMeta, query, true),
                     MaximumHeaderLength = Configuration.Current.QueryOptions.MaxHeaderLength,
-                    VisualizationOptions = [],
-                    VisualizationRejectionReasons = []
+                    VisualizationOptions = visualizationOptions,
+                    VisualizationRejectionReasons = rejectionReasons
                 };
             }
-
-            Matrix<DecimalDataValue> matrix = await _datasource.GetMatrixCachedAsync(query.TableReference, filteredMeta);
-
-            Dictionary<VisualizationType, MultilanguageString> rejectionReasons = [];
-            List<VisualizationOption> visualizationOptions = [];
-
-            foreach (KeyValuePair<VisualizationType, IReadOnlyList<ChartRejectionInfo>> reasonKvp in
-                ChartTypeSelector.Selector.GetRejectionReasons(query, matrix))
-            {
-                if (reasonKvp.Value.Any())
-                {
-                    Dictionary<string, string> translations = [];
-                    foreach (string language in Localization.GetAllAvailableLanguages())
-                    {
-                        translations[language] = Localization.FromLanguage(language)
-                            .Translation.RejectionReasons.GetTranslation(reasonKvp.Value[0]);
-                    }
-                    rejectionReasons[reasonKvp.Key] = new (translations);
-                }
-                else  // no rejection reasons == valid visualization type
-                {
-                    visualizationOptions.Add(GetVisualizationOption(reasonKvp.Key, filteredMeta, query));
-                }
-            }
-
-            return new EditorContentsResponse()
-            {
-                Size = includedValuesCount,
-                MaximumSupportedSize = maxQuerySize,
-                SizeWarningLimit = Convert.ToInt32(maxQuerySize * 0.75),
-                HeaderText = HeaderBuildingUtilities.GetHeader(filteredMeta, query, true),
-                MaximumHeaderLength = Configuration.Current.QueryOptions.MaxHeaderLength,
-                VisualizationOptions = visualizationOptions,
-                VisualizationRejectionReasons = rejectionReasons
-            };
         }
 #nullable disable
 
@@ -271,34 +348,47 @@ namespace PxGraf.Controllers
         [HttpPost("visualization")]
         public async Task<ActionResult<VisualizationResponse>> GetVisualizationAsync([FromBody] ChartRequest request)
         {
-            _logger.LogDebug("Requesting visualization for {Request} POST: api/creation/visualization", request);
-            IReadOnlyMatrixMetadata completeMeta = await _datasource.GetMatrixMetadataCachedAsync(request.Query.TableReference);
-            IReadOnlyMatrixMetadata filteredMeta = completeMeta.FilterDimensionValues(request.Query);
-            
-            // The resulting cube would have volume 0
-            if (filteredMeta.Dimensions.Any(d => d.Values.Count == 0))
+            using (_logger.BeginScope(new Dictionary<string, object>
             {
-                _logger.LogDebug("visualization result: One or more dimensions have no included values. {FilteredMeta}", filteredMeta);
-                return BadRequest();
-            }
-
-            Matrix<DecimalDataValue> matrix = await _datasource.GetMatrixCachedAsync(request.Query.TableReference, filteredMeta);
-            IChartTypeSelector selector = ChartTypeSelector.Selector;
-
-            if (selector.GetValidChartTypes(request.Query, matrix).Contains(request.VisualizationSettings.SelectedVisualization))
+                [LoggerConstants.CONTROLLER] = nameof(CreationController),
+                [LoggerConstants.ACTION] = "api/creation/visualization",
+                [LoggerConstants.DB_PATH] = request.Query.TableReference.ToPath()
+            }))
             {
-                VisualizationSettings vSettings =
-                    request.VisualizationSettings.ToVisualizationSettings(filteredMeta, request.Query);
+                _auditLogService.LogAuditEvent(
+                    action: "api/creation/visualization",
+                    resource: request.Query.TableReference.ToPath()
+                );
 
-                VisualizationResponse visualizationResponse = PxVisualizerCubeAdapter.BuildVisualizationResponse(matrix, request.Query, vSettings);
-                _logger.LogDebug("visualization result: {VisualizationResponse}", visualizationResponse);
+                _logger.LogDebug("Requesting visualization. POST: api/creation/visualization");
+                IReadOnlyMatrixMetadata completeMeta = await _datasource.GetMatrixMetadataCachedAsync(request.Query.TableReference);
+                IReadOnlyMatrixMetadata filteredMeta = completeMeta.FilterDimensionValues(request.Query);
 
-                return visualizationResponse;
-            }
-            else
-            {
-                _logger.LogWarning("visualization result: Selected visualization is not valid for this query.");
-                return BadRequest();
+                // The resulting cube would have volume 0
+                if (filteredMeta.Dimensions.Any(d => d.Values.Count == 0))
+                {
+                    _logger.LogDebug("One or more dimensions have no included values.");
+                    return BadRequest();
+                }
+
+                Matrix<DecimalDataValue> matrix = await _datasource.GetMatrixCachedAsync(request.Query.TableReference, filteredMeta);
+                IChartTypeSelector selector = ChartTypeSelector.Selector;
+
+                if (selector.GetValidChartTypes(request.Query, matrix).Contains(request.VisualizationSettings.SelectedVisualization))
+                {
+                    VisualizationSettings vSettings =
+                        request.VisualizationSettings.ToVisualizationSettings(filteredMeta, request.Query);
+
+                    VisualizationResponse visualizationResponse = PxVisualizerCubeAdapter.BuildVisualizationResponse(matrix, request.Query, vSettings);
+                    _logger.LogDebug("Returning visualization result.");
+
+                    return visualizationResponse;
+                }
+                else
+                {
+                    _logger.LogWarning("Selected visualization type is not valid for this query.");
+                    return BadRequest();
+                }
             }
         }
 

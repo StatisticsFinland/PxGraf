@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using PxGraf.Datasource.FileDatasource;
 using PxGraf.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -21,8 +22,16 @@ namespace PxGraf.Settings
         public LocalFilesystemDatabaseConfig LocalFilesystemDatabaseConfig { get; private set; }
         public string[] DatabaseWhitelist { get; private set; }
 
+        public bool AuditLoggingEnabled { get; private set; }
+        public string[] AuditLogHeaders { get; private set; }
+        public string ApplicationInsightsConnectionString { get; private set; }
+
         public static void Load(IConfiguration configuration)
         {
+            string aiConnectionString = Environment.GetEnvironmentVariable("PXGRAF_APPLICATIONINSIGHTS_CONNECTION_STRING")
+                ?? configuration["LogOptions:ApplicationInsightsConnectionString"]
+                ?? null;
+
             //Set config defaults
             Configuration newConfig = new()
             {
@@ -55,7 +64,10 @@ namespace PxGraf.Settings
                     AllowedOrigins = configuration.GetSection("Cors:AllowedOrigins").Get<string[]>(),
                 },
                 LocalFilesystemDatabaseConfig = GetLocalDatabaseConfig(configuration),
-                DatabaseWhitelist = configuration.GetSection("DatabaseWhitelist").Get<string[]>() ?? []
+                DatabaseWhitelist = configuration.GetSection("DatabaseWhitelist").Get<string[]>() ?? [],
+                AuditLoggingEnabled = configuration.GetValue<bool?>("LogOptions:AuditLog:Enabled") ?? false,
+                AuditLogHeaders = configuration.GetSection("LogOptions:AuditLog:IncludedHeaders").Get<string[]>() ?? [],
+                ApplicationInsightsConnectionString = aiConnectionString
             };
 
             if (string.IsNullOrEmpty(newConfig.PxWebUrl) && (newConfig.LocalFilesystemDatabaseConfig == null || !newConfig.LocalFilesystemDatabaseConfig.Enabled))

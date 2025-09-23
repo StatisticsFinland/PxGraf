@@ -4,6 +4,7 @@ using Px.Utils.Models.Metadata.Enums;
 using PxGraf.Controllers;
 using PxGraf.Models.Queries;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace UnitTests.ControllerTests.CreationControllerTests
@@ -21,9 +22,10 @@ namespace UnitTests.ControllerTests.CreationControllerTests
                 new (DimensionType.Nominal, 5),
                 new (DimensionType.Other, 3)
             ];
+            string path = Path.Combine("foo", "bar", "baz");
             FilterRequest filter = new()
             {
-                TableReference = new("foo/bar/baz"),
+                TableReference = new(path),
                 Filters = new Dictionary<string, IValueFilter>
                 {
                     { "variable-0", new ItemFilter(["value-0"]) },

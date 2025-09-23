@@ -19,7 +19,9 @@ using PxGraf.Datasource.Cache;
 using PxGraf.Models.Queries;
 using PxGraf.Datasource.FileDatasource;
 using PxGraf.Datasource.ApiDatasource;
+using PxGraf.Services;
 using System.Text;
+using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 
 namespace PxGraf
 {
@@ -58,6 +60,14 @@ namespace PxGraf
         [SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "After evaluating the function and CORS permissions, we have deemed the warning to be unnecessary.")]
         public void ConfigureServices(IServiceCollection services)
         {
+#if !DEBUG
+            string aiConnectionString = Configuration.Current.ApplicationInsightsConnectionString;
+            ApplicationInsightsServiceOptions aiOptions = new()
+            {
+                ConnectionString = aiConnectionString
+            };
+            services.AddApplicationInsightsTelemetry(aiOptions);
+#endif
             services.AddFeatureManagement();
             services.AddResponseCaching();
             services.AddCors(options =>
@@ -125,6 +135,7 @@ namespace PxGraf
                 });
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<ISqFileInterface, SqFileInterface>();
+            services.AddScoped<IAuditLogService, AuditLogService>();
             services.AddSingleton<IMultiStateMemoryTaskCache>(provider => new MultiStateMemoryTaskCache(
                 Configuration.Current.CacheOptions.Database.ItemAmountLimit,
                 TimeSpan.FromSeconds(Configuration.Current.CacheOptions.CacheFreshnessCheckIntervalSeconds)));

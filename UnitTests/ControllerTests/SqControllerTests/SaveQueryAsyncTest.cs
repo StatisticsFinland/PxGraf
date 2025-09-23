@@ -13,6 +13,7 @@ using PxGraf.Models.Queries;
 using PxGraf.Models.Requests;
 using PxGraf.Models.Responses;
 using PxGraf.Models.SavedQueries;
+using PxGraf.Services;
 using PxGraf.Settings;
 using PxGraf.Utility;
 using System.Collections.Generic;
@@ -40,6 +41,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
             Mock<ICachedDatasource> mockCachedDatasource = new();
             Mock<ISqFileInterface> mockSqFileInterface = new();
             Mock<ILogger<SqController>> mockLogger = new();
+            Mock<IAuditLogService> mockAuditLogService = new();
 
             List<DimensionParameters> metaParams =
             [
@@ -78,7 +80,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
                 }
             };
 
-            SqController testController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, mockLogger.Object);
+            SqController testController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, mockLogger.Object, mockAuditLogService.Object);
             ActionResult<SaveQueryResponse> actionResult = await testController.SaveQueryAsync(testInput);
             Assert.That(actionResult.Value, Is.InstanceOf<SaveQueryResponse>());
             mockSqFileInterface.Verify(

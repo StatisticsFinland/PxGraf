@@ -10,6 +10,20 @@ Some good things to know:
 	- The query files are read-only once they are created. PxGraf never edits or deletes them.
 	- The frontend SPA is a static website, it can be served by any web server that can serve static files. (The backend serves it by default.)
 
+## Production Logging Considerations
+
+### Application Insights
+In production environments, Application Insights provides comprehensive telemetry for monitoring:
+- **Connection String**: For production, set the Application Insights connection string using environment variables rather than configuration files:
+  ```
+  PXGRAF_APPLICATIONINSIGHTS_CONNECTION_STRING=InstrumentationKey=...;IngestionEndpoint=...
+  ```
+- **Disabled in Development**: Application Insights is automatically disabled in development environments (when running in DEBUG configuration)
+
+### Audit Logging
+For compliance and security tracking:
+- **Included Headers**: In production, configure `LogOptions.AuditLog.IncludedHeaders` to include security-relevant headers like information about the user or request origin.
+
 ## Only one PxGraf instance
 
 This is the simplest setup. A single instance if PxGraf that serves the frontend SPA and runs the visualization API.
