@@ -2,10 +2,9 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Moq;
-using Newtonsoft.Json.Linq;
 using NUnit.Framework;
-using Px.Utils.Models.Metadata;
 using Px.Utils.Models.Metadata.Enums;
+using Px.Utils.Models.Metadata;
 using PxGraf.Controllers;
 using PxGraf.Datasource;
 using PxGraf.Enums;
@@ -19,6 +18,7 @@ using PxGraf.Utility;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnitTests.Fixtures;
+using PxGraf.Services;
 
 namespace UnitTests.ControllerTests.SqControllerTests
 {
@@ -41,6 +41,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
             Mock<ICachedDatasource> mockCachedDatasource = new();
             Mock<ISqFileInterface> mockSqFileInterface = new();
             Mock<ILogger<SqController>> mockLogger = new();
+            Mock<IAuditLogService> mockAuditLogService = new();
 
             // Arrange
             List<DimensionParameters> cubeParams =
@@ -84,7 +85,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
             mockSqFileInterface.Setup(s => s.SerializeToFile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<SavedQuery>()))
                 .Returns(Task.CompletedTask);
 
-            SqController testController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, mockLogger.Object);
+            SqController testController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, mockLogger.Object, mockAuditLogService.Object);
 
             // Act
             ActionResult<SaveQueryResponse> result = await testController.ArchiveQueryAsync(testInput);
@@ -93,6 +94,13 @@ namespace UnitTests.ControllerTests.SqControllerTests
             Assert.That(result.Value, Is.InstanceOf<SaveQueryResponse>());
             mockSqFileInterface.Verify(
                 s => s.SerializeToFile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<SavedQuery>()), Times.Once);
+                
+            // Verify audit log was called with the correct parameters
+            mockAuditLogService.Verify(
+                a => a.LogAuditEvent(
+                    It.Is<string>(action => action == "api/sq/archive"),
+                    It.Is<string>(resource => resource == result.Value.Id)),
+                Times.Once);
         }
 
         [Test]
@@ -101,6 +109,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
             Mock<ICachedDatasource> mockCachedDatasource = new();
             Mock<ISqFileInterface> mockSqFileInterface = new();
             Mock<ILogger<SqController>> mockLogger = new();
+            Mock<IAuditLogService> mockAuditLogService = new();
 
             // Arrange
             List<DimensionParameters> cubeParams =
@@ -144,13 +153,20 @@ namespace UnitTests.ControllerTests.SqControllerTests
             mockSqFileInterface.Setup(s => s.SerializeToFile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<SavedQuery>()))
                 .Returns(Task.CompletedTask);
 
-            SqController testController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, mockLogger.Object);
+            SqController testController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, mockLogger.Object, mockAuditLogService.Object);
 
             // Act
             ActionResult<SaveQueryResponse> result = await testController.ArchiveQueryAsync(testInput);
 
             // Assert
             Assert.That(result.Result, Is.InstanceOf<BadRequestResult>());
+            
+            // Verify audit log was called with invalid request
+            mockAuditLogService.Verify(
+                a => a.LogAuditEvent(
+                    It.Is<string>(action => action == "api/sq/archive"),
+                    It.Is<string>(resource => resource == LoggerConstants.INVALID_VISUALIZATION)),
+                Times.Once);
         }
 
         [Test]
@@ -159,6 +175,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
             Mock<ICachedDatasource> mockCachedDatasource = new();
             Mock<ISqFileInterface> mockSqFileInterface = new();
             Mock<ILogger<SqController>> mockLogger = new();
+            Mock<IAuditLogService> mockAuditLogService = new();
 
             // Arrange
             List<DimensionParameters> cubeParams =
@@ -191,7 +208,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
             mockSqFileInterface.Setup(s => s.SerializeToFile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<SavedQuery>()))
                 .Returns(Task.CompletedTask);
 
-            SqController testController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, mockLogger.Object);
+            SqController testController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, mockLogger.Object, mockAuditLogService.Object);
 
             // Act
             ActionResult<SaveQueryResponse> result = await testController.ArchiveQueryAsync(testInput);
@@ -199,7 +216,14 @@ namespace UnitTests.ControllerTests.SqControllerTests
             // Assert
             Assert.That(result.Result, Is.InstanceOf<BadRequestResult>());
             mockSqFileInterface.Verify(
-                               s => s.SerializeToFile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<SavedQuery>()), Times.Never);
+                s => s.SerializeToFile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<SavedQuery>()), Times.Never);
+                
+            // Verify audit log was called with invalid request
+            mockAuditLogService.Verify(
+                a => a.LogAuditEvent(
+                    It.Is<string>(action => action == "api/sq/archive"),
+                    It.Is<string>(resource => resource == LoggerConstants.INVALID_VISUALIZATION)),
+                Times.Once);
         }
 
         [Test]
@@ -208,6 +232,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
             Mock<ICachedDatasource> mockCachedDatasource = new();
             Mock<ISqFileInterface> mockSqFileInterface = new();
             Mock<ILogger<SqController>> mockLogger = new();
+            Mock<IAuditLogService> mockAuditLogService = new();
 
             // Arrange
             List<DimensionParameters> cubeParams =
@@ -239,7 +264,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
             mockSqFileInterface.Setup(s => s.SerializeToFile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<SavedQuery>()))
                 .Returns(Task.CompletedTask);
 
-            SqController testController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, mockLogger.Object);
+            SqController testController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, mockLogger.Object, mockAuditLogService.Object);
 
             // Act
             ActionResult<SaveQueryResponse> result = await testController.ArchiveQueryAsync(testInput);
@@ -247,7 +272,14 @@ namespace UnitTests.ControllerTests.SqControllerTests
             // Assert
             Assert.That(result.Result, Is.InstanceOf<BadRequestResult>());
             mockSqFileInterface.Verify(
-                               s => s.SerializeToFile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<SavedQuery>()), Times.Never);
+                s => s.SerializeToFile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<SavedQuery>()), Times.Never);
+                
+            // Verify audit log was called with invalid request
+            mockAuditLogService.Verify(
+                a => a.LogAuditEvent(
+                    It.Is<string>(action => action == "api/sq/archive"),
+                    It.Is<string>(resource => resource == LoggerConstants.INVALID_VISUALIZATION)),
+                Times.Once);
         }
     }
 }

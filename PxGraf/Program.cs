@@ -1,12 +1,12 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using NLog;
+using NLog.Web;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using NLog;
-using NLog.Web;
-using Microsoft.Extensions.Logging;
 
 namespace PxGraf
 {
@@ -15,21 +15,25 @@ namespace PxGraf
     {
         public static void Main(string[] args)
         {
-            Logger logger = LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
-            logger.Info("Starting application");
+            // Setup NLog configuration
+            Logger nlogConfig = LogManager.Setup()
+                .LoadConfigurationFromAppSettings()
+                .GetCurrentClassLogger();
+            
+            nlogConfig.Info("Starting application");
 
             try
             {
-                logger.Info("Starting host");
+                nlogConfig.Info("Starting host");
                 CreateHostBuilder(args).Build().Run();
             }
             catch (Exception ex)
             {
-                logger.Fatal(ex, "Service terminated unexpectedly");
+                nlogConfig.Fatal(ex, "Service terminated unexpectedly");
             }
             finally
             {
-                logger.Info("Shutting down");
+                nlogConfig.Info("Shutting down");
                 LogManager.Shutdown();
             }
         }
@@ -39,6 +43,13 @@ namespace PxGraf
                  .ConfigureLogging(logging =>
                  {
                      logging.ClearProviders();
+                     
+                     // Configure logging for standard app logs and audit logs
+                     logging.AddFilter("Microsoft", Microsoft.Extensions.Logging.LogLevel.Warning);
+                     logging.AddFilter("System", Microsoft.Extensions.Logging.LogLevel.Warning);
+                     
+                     // Add filter to separate audit logs
+                     logging.AddFilter("PxGraf.Services.AuditLogService", Microsoft.Extensions.Logging.LogLevel.Information);
                  })
                  .UseNLog()
                  .ConfigureAppConfiguration((hostingContext, config) =>
