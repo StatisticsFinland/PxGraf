@@ -1,0 +1,15 @@
+apiVersion: nais.io/v1alpha1
+kind: Application
+metadata:
+  name: ssbno-pxgraf-frontend
+  namespace: ssbno
+spec:
+  accessPolicy:
+    outbound:
+      rules:
+        - application: ssbno-pxgraf-backend
+  image: {{ image }}
+  ingresses:
+    - https://ssbno-pxgraf-frontend.intern.test.ssb.no
+  port: 3000
+  ttl: 48h
