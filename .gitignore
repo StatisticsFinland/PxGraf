@@ -351,3 +351,4 @@ PxGraf.Frontend/dist/
 
 # misc
 .DS_Store
+/PxGraf/.DS_Store

@@ -1,0 +1,34 @@
+version: "3.9"
+
+services:
+  backend:
+    build:
+      context: ./PxGraf
+      dockerfile: Dockerfile
+    container_name: pxgraf-backend
+    environment:
+      - ASPNETCORE_URLS=http://+:5000
+      - ASPNETCORE_ENVIRONMENT=Production
+    ports:
+      - "5000:5000"
+    networks:
+      - pxgraf-net
+
+  frontend:
+    build:
+      context: ./PxGraf.Frontend
+      dockerfile: Dockerfile
+    container_name: pxgraf-frontend
+    environment: []
+    depends_on:
+      - backend
+    ports:
+      - "3000:80"
+    networks:
+      - pxgraf-net
+
+networks:
+  pxgraf-net:
+    driver: bridge
+
+
