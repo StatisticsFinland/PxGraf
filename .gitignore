@@ -348,3 +348,6 @@ healthchecksdb
 /PxGraf/web.config
 /PxGraf/wwwroot/*
 PxGraf.Frontend/dist/
+
+# misc
+.DS_Store
