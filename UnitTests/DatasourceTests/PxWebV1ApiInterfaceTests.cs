@@ -50,19 +50,19 @@ namespace UnitTests.DatasourceTests
             {
                 Content = new StringContent("[{ \"dbid\":\"FooBar\", \"text\":\"FooBarEn\" }]")
             };
-            mockConnection.Setup(mc => mc.GetAsync("api/v1/en/", "")).ReturnsAsync(mockEnResponse);
+            mockConnection.Setup(mc => mc.GetAsync("api/v0/en/", "")).ReturnsAsync(mockEnResponse);
 
             HttpResponseMessage mockFiResponse = new(HttpStatusCode.OK)
             {
                 Content = new StringContent("[{ \"dbid\":\"FooBar\", \"text\":\"FooBarFi\" }]")
             };
-            mockConnection.Setup(mc => mc.GetAsync("api/v1/fi/", "")).ReturnsAsync(mockFiResponse);
+            mockConnection.Setup(mc => mc.GetAsync("api/v0/fi/", "")).ReturnsAsync(mockFiResponse);
 
             HttpResponseMessage mockSvResponse = new(HttpStatusCode.OK)
             {
                 Content = new StringContent("[{ \"dbid\":\"FooBar\", \"text\":\"FooBarSv\" }]")
             };
-            mockConnection.Setup(mc => mc.GetAsync("api/v1/sv/", "")).ReturnsAsync(mockSvResponse);
+            mockConnection.Setup(mc => mc.GetAsync("api/v0/sv/", "")).ReturnsAsync(mockSvResponse);
 
             DatabaseGroupContents dbContent = await objectUnderTest.GetDatabaseItemGroup([]);
 
@@ -83,19 +83,19 @@ namespace UnitTests.DatasourceTests
             {
                 Content = new StringContent("[{ \"id\":\"FooBar\", \"text\":\"FooBarEn\", \"type\":\"t\", \"updated\":\"2024-08-24T13:15:00.000\" }]")
             };
-            mockConnection.Setup(mc => mc.GetAsync("api/v1/en/database/subgroup/folder/", "")).ReturnsAsync(mockEnResponse);
+            mockConnection.Setup(mc => mc.GetAsync("api/v0/en/database/subgroup/folder/", "")).ReturnsAsync(mockEnResponse);
 
             HttpResponseMessage mockFiResponse = new(HttpStatusCode.OK)
             {
                 Content = new StringContent("[{ \"id\":\"FooBar\", \"text\":\"FooBarFi\", \"type\":\"t\", \"updated\":\"2024-08-24T13:15:00.000\" }]")
             };
-            mockConnection.Setup(mc => mc.GetAsync("api/v1/fi/database/subgroup/folder/", "")).ReturnsAsync(mockFiResponse);
+            mockConnection.Setup(mc => mc.GetAsync("api/v0/fi/database/subgroup/folder/", "")).ReturnsAsync(mockFiResponse);
 
             HttpResponseMessage mockSvResponse = new(HttpStatusCode.OK)
             {
                 Content = new StringContent("[{ \"id\":\"FooBar\", \"text\":\"FooBarSv\", \"type\":\"t\", \"updated\":\"2024-08-24T13:15:00.000\" }]")
             };
-            mockConnection.Setup(mc => mc.GetAsync("api/v1/sv/database/subgroup/folder/", "")).ReturnsAsync(mockSvResponse);
+            mockConnection.Setup(mc => mc.GetAsync("api/v0/sv/database/subgroup/folder/", "")).ReturnsAsync(mockSvResponse);
 
             DatabaseGroupContents dbContent = await objectUnderTest.GetDatabaseItemGroup(["database", "subgroup", "folder"]);
 
@@ -117,19 +117,19 @@ namespace UnitTests.DatasourceTests
             {
                 Content = new StringContent("[{ \"dbid\":\"FooBar\", \"text\":\"FooBarEn\", \"type\":\"l\" }]")
             };
-            mockConnection.Setup(mc => mc.GetAsync("api/v1/en/database/", "")).ReturnsAsync(mockEnResponse);
+            mockConnection.Setup(mc => mc.GetAsync("api/v0/en/database/", "")).ReturnsAsync(mockEnResponse);
 
             HttpResponseMessage mockFiResponse = new(HttpStatusCode.OK)
             {
                 Content = new StringContent("[{ \"dbid\":\"FooBar\", \"text\":\"FooBarFi\", \"type\":\"l\" }]")
             };
-            mockConnection.Setup(mc => mc.GetAsync("api/v1/fi/database/", "")).ReturnsAsync(mockFiResponse);
+            mockConnection.Setup(mc => mc.GetAsync("api/v0/fi/database/", "")).ReturnsAsync(mockFiResponse);
 
             HttpResponseMessage mockSvResponse = new(HttpStatusCode.OK)
             {
                 Content = new StringContent("[{ \"dbid\":\"FooBar\", \"text\":\"FooBarSv\", \"type\":\"l\" }]")
             };
-            mockConnection.Setup(mc => mc.GetAsync("api/v1/sv/database/", "")).ReturnsAsync(mockSvResponse);
+            mockConnection.Setup(mc => mc.GetAsync("api/v0/sv/database/", "")).ReturnsAsync(mockSvResponse);
 
             DatabaseGroupContents dbContent = await objectUnderTest.GetDatabaseItemGroup(["database"]);
 
@@ -161,7 +161,7 @@ namespace UnitTests.DatasourceTests
             {
                 Content = new StringContent("[{ \"id\":\"FooBar\", \"text\":\"FooBarFi\", \"type\":\"t\", \"updated\":\"2024-08-24T13:15:00.000\" }]")
             };
-            mockConnection.Setup(mc => mc.GetAsync("api/v1/fi/mock/table/reference/", "")).ReturnsAsync(mockFiResponse);
+            mockConnection.Setup(mc => mc.GetAsync("api/v0/fi/mock/table/reference/", "")).ReturnsAsync(mockFiResponse);
             DateTime expectedLastWriteTime = new(2024, 8, 24, 13, 15, 0, DateTimeKind.Local);
 
             // Act
@@ -203,27 +203,27 @@ namespace UnitTests.DatasourceTests
                 Content = new StringContent(PxWebV1ApiInterfaceFixtures.MockSvContent)
             };
 
-            mockConnection.Setup(mc => mc.GetAsync("api/v1/en/mock/table/reference/FooBar", "")).ReturnsAsync(mockEnResponse);
-            mockConnection.Setup(mc => mc.GetAsync("api/v1/fi/mock/table/reference/FooBar", "")).ReturnsAsync(mockFiResponse);
-            mockConnection.Setup(mc => mc.GetAsync("api/v1/sv/mock/table/reference/FooBar", "")).ReturnsAsync(mockSvResponse);
+            mockConnection.Setup(mc => mc.GetAsync("api/v0/en/mock/table/reference/FooBar", "")).ReturnsAsync(mockEnResponse);
+            mockConnection.Setup(mc => mc.GetAsync("api/v0/fi/mock/table/reference/FooBar", "")).ReturnsAsync(mockFiResponse);
+            mockConnection.Setup(mc => mc.GetAsync("api/v0/sv/mock/table/reference/FooBar", "")).ReturnsAsync(mockSvResponse);
 
             HttpResponseMessage mockJsonStatResponseEn = new(HttpStatusCode.OK)
             {
                 Content = new StringContent(PxWebV1ApiInterfaceFixtures.MockEnJsonStat2)
             };
-            mockConnection.Setup(mc => mc.PostAsync("api/v1/en/mock/table/reference/FooBar", It.IsAny<string>())).ReturnsAsync(mockJsonStatResponseEn);
+            mockConnection.Setup(mc => mc.PostAsync("api/v0/en/mock/table/reference/FooBar", It.IsAny<string>())).ReturnsAsync(mockJsonStatResponseEn);
 
             HttpResponseMessage mockJsonStatResponseFi = new(HttpStatusCode.OK)
             {
                 Content = new StringContent(PxWebV1ApiInterfaceFixtures.MockFiJsonStat2)
             };
-            mockConnection.Setup(mc => mc.PostAsync("api/v1/fi/mock/table/reference/FooBar", It.IsAny<string>())).ReturnsAsync(mockJsonStatResponseFi);
+            mockConnection.Setup(mc => mc.PostAsync("api/v0/fi/mock/table/reference/FooBar", It.IsAny<string>())).ReturnsAsync(mockJsonStatResponseFi);
 
             HttpResponseMessage mockJsonStatResponseSv = new(HttpStatusCode.OK)
             {
                 Content = new StringContent(PxWebV1ApiInterfaceFixtures.MockSvJsonStat2)
             };
-            mockConnection.Setup(mc => mc.PostAsync("api/v1/sv/mock/table/reference/FooBar", It.IsAny<string>())).ReturnsAsync(mockJsonStatResponseSv);
+            mockConnection.Setup(mc => mc.PostAsync("api/v0/sv/mock/table/reference/FooBar", It.IsAny<string>())).ReturnsAsync(mockJsonStatResponseSv);
 
             IEnumerable<string> expectedLangs = ["en", "fi", "sv"];
             Dictionary<string, string> expectedUnitValues = new()
@@ -319,27 +319,27 @@ namespace UnitTests.DatasourceTests
                 Content = new StringContent(PxWebV1ApiInterfaceFixtures.MockSvContent)
             };
 
-            mockConnection.Setup(mc => mc.GetAsync("api/v1/en/mock/table/reference/FooBar", "")).ReturnsAsync(mockEnResponse);
-            mockConnection.Setup(mc => mc.GetAsync("api/v1/fi/mock/table/reference/FooBar", "")).ReturnsAsync(mockFiResponse);
-            mockConnection.Setup(mc => mc.GetAsync("api/v1/sv/mock/table/reference/FooBar", "")).ReturnsAsync(mockSvResponse);
+            mockConnection.Setup(mc => mc.GetAsync("api/v0/en/mock/table/reference/FooBar", "")).ReturnsAsync(mockEnResponse);
+            mockConnection.Setup(mc => mc.GetAsync("api/v0/fi/mock/table/reference/FooBar", "")).ReturnsAsync(mockFiResponse);
+            mockConnection.Setup(mc => mc.GetAsync("api/v0/sv/mock/table/reference/FooBar", "")).ReturnsAsync(mockSvResponse);
 
             HttpResponseMessage mockJsonStatResponseEn = new(HttpStatusCode.OK)
             {
                 Content = new StringContent(PxWebV1ApiInterfaceFixtures.MockEnJsonStat2)
             };
-            mockConnection.Setup(mc => mc.PostAsync("api/v1/en/mock/table/reference/FooBar", It.IsAny<string>())).ReturnsAsync(mockJsonStatResponseEn);
+            mockConnection.Setup(mc => mc.PostAsync("api/v0/en/mock/table/reference/FooBar", It.IsAny<string>())).ReturnsAsync(mockJsonStatResponseEn);
 
             HttpResponseMessage mockJsonStatResponseFi = new(HttpStatusCode.OK)
             {
                 Content = new StringContent(PxWebV1ApiInterfaceFixtures.MockFiJsonStat2)
             };
-            mockConnection.Setup(mc => mc.PostAsync("api/v1/fi/mock/table/reference/FooBar", It.IsAny<string>())).ReturnsAsync(mockJsonStatResponseFi);
+            mockConnection.Setup(mc => mc.PostAsync("api/v0/fi/mock/table/reference/FooBar", It.IsAny<string>())).ReturnsAsync(mockJsonStatResponseFi);
 
             HttpResponseMessage mockJsonStatResponseSv = new(HttpStatusCode.OK)
             {
                 Content = new StringContent(PxWebV1ApiInterfaceFixtures.MockSvJsonStat2)
             };
-            mockConnection.Setup(mc => mc.PostAsync("api/v1/sv/mock/table/reference/FooBar", It.IsAny<string>())).ReturnsAsync(mockJsonStatResponseSv);
+            mockConnection.Setup(mc => mc.PostAsync("api/v0/sv/mock/table/reference/FooBar", It.IsAny<string>())).ReturnsAsync(mockJsonStatResponseSv);
             decimal[] expectedData = [1.0m, 2.0m, 3.0m, 4.0m];
 
             // Act

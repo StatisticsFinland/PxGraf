@@ -345,7 +345,6 @@ healthchecksdb
 /Frontend/dist
 /PxGraf/SavedQueries
 /PxGraf/ArchivedQueries
-/PxGraf/appsettings.json
 /PxGraf/web.config
 /PxGraf/wwwroot/*
 PxGraf.Frontend/dist/

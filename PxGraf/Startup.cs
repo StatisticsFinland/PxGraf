@@ -44,7 +44,7 @@ namespace PxGraf
             Configuration.Load(configuration);
             try
             {
-                Language.Localization.Load(Path.Combine(AppContext.BaseDirectory, "Pars\\translations.json"));
+                Language.Localization.Load(Path.Combine(AppContext.BaseDirectory, "Pars/translations.json"));
             }
             catch(IOException ex)
             {

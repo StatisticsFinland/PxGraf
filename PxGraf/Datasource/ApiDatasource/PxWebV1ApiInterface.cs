@@ -234,17 +234,17 @@ namespace PxGraf.Datasource.ApiDatasource
         /// </summary>
         private async Task<List<DataBaseListResponseItem>> GetDataBaseListingInLangAsync(string lang)
         {
-            _logger.LogDebug("PxWeb GET: api/v1/{Lang}/", lang);
-            HttpResponseMessage resp = await _pxwebConnection.GetAsync($"api/v1/{lang}/");
+            _logger.LogDebug("PxWeb GET: api/v0/{Lang}/", lang);
+            HttpResponseMessage resp = await _pxwebConnection.GetAsync($"api/v0/{lang}/");
             if (resp.IsSuccessStatusCode)
             {
                 string json = await resp.Content.ReadAsStringAsync();
-                _logger.LogDebug("PxWeb: api/v1/{Lang}/ result: {Json}", lang, json);
+                _logger.LogDebug("PxWeb: api/v0/{Lang}/ result: {Json}", lang, json);
                 return JsonSerializer.Deserialize<List<DataBaseListResponseItem>>(json, GlobalJsonConverterOptions.Default);
             }
             else
             {
-                _logger.LogWarning("PxWeb: api/v1/{Lang}/ failed with status code {StatusCode}", lang, resp.StatusCode);
+                _logger.LogWarning("PxWeb: api/v0/{Lang}/ failed with status code {StatusCode}", lang, resp.StatusCode);
             }
             return [];
         }
@@ -255,17 +255,17 @@ namespace PxGraf.Datasource.ApiDatasource
         private async Task<List<TableListResponseItem>> GetTableItemListingInLangAsync(string lang, IReadOnlyList<string> path)
         {
             string joinedPath = string.Join("/", path);
-            _logger.LogDebug("PxWeb GET: api/v1/{Lang}/{JoinedPath}/", lang, joinedPath);
-            HttpResponseMessage resp = await _pxwebConnection.GetAsync($"api/v1/{lang}/{joinedPath}/");
+            _logger.LogDebug("PxWeb GET: api/v0/{Lang}/{JoinedPath}/", lang, joinedPath);
+            HttpResponseMessage resp = await _pxwebConnection.GetAsync($"api/v0/{lang}/{joinedPath}/");
             if (resp.IsSuccessStatusCode)
             {
                 string json = await resp.Content.ReadAsStringAsync();
-                _logger.LogDebug("PxWeb: api/v1/{Lang}/{JoinedPath}/ result: {Json}", lang, joinedPath, json);
+                _logger.LogDebug("PxWeb: api/v0/{Lang}/{JoinedPath}/ result: {Json}", lang, joinedPath, json);
                 return JsonSerializer.Deserialize<List<TableListResponseItem>>(json, GlobalJsonConverterOptions.Default);
             }
             else
             {
-                _logger.LogWarning("PxWeb: api/v1/{Lang}/ failed with status code {StatusCode}", lang, resp.StatusCode);
+                _logger.LogWarning("PxWeb: api/v0/{Lang}/ failed with status code {StatusCode}", lang, resp.StatusCode);
             }
             return [];
         }
@@ -430,45 +430,45 @@ namespace PxGraf.Datasource.ApiDatasource
         private async Task<PxMetaResponse> GetPxWebMetaRespInLanguageAsync(string lang, PxTableReference pxTableRef)
         {
             string tableRefPath = pxTableRef.ToPath();
-            _logger.LogDebug("PxWeb GET: api/v1/{Lang}/{TableRefPath}", lang, tableRefPath);
-            HttpResponseMessage resp = await _pxwebConnection.GetAsync($"api/v1/{lang}/{tableRefPath}");
+            _logger.LogDebug("PxWeb GET: api/v0/{Lang}/{TableRefPath}", lang, tableRefPath);
+            HttpResponseMessage resp = await _pxwebConnection.GetAsync($"api/v0/{lang}/{tableRefPath}");
             string contentString = await resp.Content.ReadAsStringAsync();
 
             if (resp.IsSuccessStatusCode)
             {
-                _logger.LogDebug("PxWeb: api/v1/{Lang}/{TableRefPath} result: {ContentString}", lang, tableRefPath, contentString);
+                _logger.LogDebug("PxWeb: api/v0/{Lang}/{TableRefPath} result: {ContentString}", lang, tableRefPath, contentString);
                 return JsonSerializer.Deserialize<PxMetaResponse>(contentString, GlobalJsonConverterOptions.Default);
             }
             else if (resp.StatusCode == System.Net.HttpStatusCode.BadRequest)
             {
                 if (contentString == "Parameter error") // Can be due table is not found (for given language)
                 {
-                    _logger.LogWarning("PxWeb: api/v1/{Lang}/{TableRefPath} could not find table for given language", lang, tableRefPath);
+                    _logger.LogWarning("PxWeb: api/v0/{Lang}/{TableRefPath} could not find table for given language", lang, tableRefPath);
                     return null;
                 }
 
-                _logger.LogWarning("PxWeb: api/v1/{Lang}/{TableRefPath} failed with status code {StatusCode}: {Error}", lang, tableRefPath, resp.StatusCode, contentString);
+                _logger.LogWarning("PxWeb: api/v0/{Lang}/{TableRefPath} failed with status code {StatusCode}: {Error}", lang, tableRefPath, resp.StatusCode, contentString);
                 return null;
             }
 
-            _logger.LogWarning("PxWeb: api/v1/{Lang}/{TableRefPath} failed with status code {StatusCode}: {ContentString}", lang, tableRefPath, resp.StatusCode, contentString);
+            _logger.LogWarning("PxWeb: api/v0/{Lang}/{TableRefPath} failed with status code {StatusCode}: {ContentString}", lang, tableRefPath, resp.StatusCode, contentString);
             throw new BadPxWebResponseException(resp.StatusCode, $"PxWeb responded {resp.StatusCode}: {contentString}");
         }
 
         private async Task<ResponseType> GetPxWebDataResponseAsync<ResponseType>(string lang, PxTableReference pxTableRef, PxWebDataQueryPostParams query)
         {
             string tableRefPath = pxTableRef.ToPath();
-            _logger.LogDebug("PxWeb POST: api/v1/{Lang}/{TableRefPath} with query: {Query}", lang, tableRefPath, query);
-            HttpResponseMessage resp = await _pxwebConnection.PostAsync($"api/v1/{lang}/{tableRefPath}", JsonSerializer.Serialize(query));
+            _logger.LogDebug("PxWeb POST: api/v0/{Lang}/{TableRefPath} with query: {Query}", lang, tableRefPath, query);
+            HttpResponseMessage resp = await _pxwebConnection.PostAsync($"api/v0/{lang}/{tableRefPath}", JsonSerializer.Serialize(query));
             if (resp.IsSuccessStatusCode)
             {
                 string json = await resp.Content.ReadAsStringAsync();
-                _logger.LogDebug("PxWeb: api/v1/{Lang}/{TableRefPath} result: {Json}", lang, tableRefPath, json);
+                _logger.LogDebug("PxWeb: api/v0/{Lang}/{TableRefPath} result: {Json}", lang, tableRefPath, json);
                 return JsonSerializer.Deserialize<ResponseType>(json, GlobalJsonConverterOptions.Default);
             }
             else
             {
-                _logger.LogWarning("PxWeb: api/v1/{Lang}/{TableRefPath} failed with query {Query}", lang, tableRefPath, query);
+                _logger.LogWarning("PxWeb: api/v0/{Lang}/{TableRefPath} failed with query {Query}", lang, tableRefPath, query);
                 throw new BadPxWebResponseException(resp.StatusCode, $"PxWeb responded with a status code {resp.StatusCode}.");
             }
         }
