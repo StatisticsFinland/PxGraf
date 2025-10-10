@@ -34,7 +34,7 @@ describe('Assertion test', () => {
             onNumberChanged={mockChangeFunction}
         ></TopNDimensionSelection>);
         fireEvent.change(screen.getByLabelText('variableSelect.topFilter'), { target: { value: '5' } });
-        expect(mockChangeFunction).toBeCalledWith(5);
+        expect(mockChangeFunction).toHaveBeenCalledWith(5);
     });
 
     it('should call onchange with 0 when value is not convertable to number', () => {
@@ -43,6 +43,6 @@ describe('Assertion test', () => {
             onNumberChanged={mockChangeFunction}
         ></TopNDimensionSelection>);
         fireEvent.change(screen.getByLabelText('variableSelect.topFilter'), { target: { value: 'eivoikaantaa' } });
-        expect(mockChangeFunction).toBeCalledWith(0);
+        expect(mockChangeFunction).toHaveBeenCalledWith(0);
     });
 });

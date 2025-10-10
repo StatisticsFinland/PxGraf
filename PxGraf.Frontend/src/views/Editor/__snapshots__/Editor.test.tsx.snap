@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`Rendering test renders correctly 1`] = `
 <DocumentFragment>
@@ -6,10 +6,10 @@ exports[`Rendering test renders correctly 1`] = `
   class="MuiStack-root css-m69qwo-MuiStack-root"
 >
   <div
-    class="sc-etfXYe dgnSNr MuiBox-root css-ve9ogo"
+    class="sc-dNdcvo hUUHJO MuiBox-root css-ve9ogo"
   >
     <div
-      class="sc-jPkiSJ gDbOmk"
+      class="sc-kvnevz kaVEh"
     >
       <p
         class="MuiTypography-root MuiTypography-body2 css-1wle3ir-MuiTypography-root"
@@ -18,7 +18,7 @@ exports[`Rendering test renders correctly 1`] = `
       </p>
       <button
         aria-label="tooltip.open: variableSelect.title"
-        class="sc-cUiCeM cxsgJn"
+        class="sc-eqYatC jzGZYW"
         id="mainContent"
       >
         <svg
@@ -35,7 +35,7 @@ exports[`Rendering test renders correctly 1`] = `
       </button>
     </div>
     <div
-      class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiAccordion-root MuiAccordion-rounded Mui-expanded MuiAccordion-gutters sc-lixPIL hhKrnM css-1808mag-MuiPaper-root-MuiAccordion-root"
+      class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiAccordion-root MuiAccordion-rounded Mui-expanded MuiAccordion-gutters sc-kCuUfV hFmPGu css-1808mag-MuiPaper-root-MuiAccordion-root"
       style="--Paper-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12);"
     >
       <h3
@@ -87,18 +87,18 @@ exports[`Rendering test renders correctly 1`] = `
             class="MuiCollapse-wrapperInner MuiCollapse-vertical css-1i4ywhz-MuiCollapse-wrapperInner"
           >
             <div
-              class="MuiAccordion-region"
+              class="MuiAccordion-region css-at4ued-MuiAccordion-region"
               id="panel1a-content"
               role="region"
             >
               <div
-                class="MuiAccordionDetails-root sc-cZSric doygIH css-1lj39kh-MuiAccordionDetails-root"
+                class="MuiAccordionDetails-root sc-dFVmKS cSZYue css-1lj39kh-MuiAccordionDetails-root"
               >
                 <div
-                  class="MuiStack-root sc-jJAtPt bTLmYV css-1sazv7p-MuiStack-root"
+                  class="MuiStack-root sc-lgpSej blKtZ css-1sazv7p-MuiStack-root"
                 >
                   <div
-                    class="MuiStack-root sc-cXawGu iAjbKI css-m69qwo-MuiStack-root"
+                    class="MuiStack-root sc-dYwGCk fSnjLc css-m69qwo-MuiStack-root"
                   >
                     <span
                       aria-label="variableSelect.openMenu"
@@ -120,7 +120,7 @@ exports[`Rendering test renders correctly 1`] = `
                       </svg>
                     </span>
                     <div
-                      class="MuiAutocomplete-root MuiAutocomplete-hasPopupIcon sc-iQQCXo lkWepn css-o5oj2-MuiAutocomplete-root"
+                      class="MuiAutocomplete-root MuiAutocomplete-hasPopupIcon sc-jwTyAe dXDubk css-o5oj2-MuiAutocomplete-root"
                     >
                       <div
                         class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-cmpglg-MuiFormControl-root-MuiTextField-root"
@@ -156,8 +156,7 @@ exports[`Rendering test renders correctly 1`] = `
                               aria-label="selectable.open"
                               class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium MuiAutocomplete-popupIndicator css-2y136s-MuiButtonBase-root-MuiIconButton-root-MuiAutocomplete-popupIndicator"
                               tabindex="-1"
-                              title="selectable.open"
-                            ...
+                              title="selectable.open"...
 </DocumentFragment>
 `;
 
