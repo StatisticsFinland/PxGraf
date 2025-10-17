@@ -1,9 +1,9 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`Rendering test renders correctly 1`] = `
 <DocumentFragment>
   <div
-    class="MuiStack-root sc-dIMoHT gaCGej css-nen11g-MuiStack-root"
+    class="MuiStack-root sc-dTvVRJ dPzWIe css-nen11g-MuiStack-root"
   >
     <p
       class="MuiTypography-root MuiTypography-body1 css-rizt0-MuiTypography-root"
@@ -11,10 +11,10 @@ exports[`Rendering test renders correctly 1`] = `
       general.results:
     </p>
     <ul
-      class="MuiList-root MuiList-padding MuiList-dense sc-Qotzb kfVHXg css-st2ob2-MuiList-root"
+      class="MuiList-root MuiList-padding MuiList-dense sc-bRKDuR lknNCo css-st2ob2-MuiList-root"
     >
       <li
-        class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding sc-fYsHOw clBvbN css-qyw6ft-MuiListItem-root"
+        class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding sc-hvigdm gMUrlu css-qyw6ft-MuiListItem-root"
       >
         <div
           class="MuiListItemText-root MuiListItemText-dense css-cfq8qh-MuiListItemText-root"
@@ -27,7 +27,7 @@ exports[`Rendering test renders correctly 1`] = `
         </div>
       </li>
       <li
-        class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding sc-fYsHOw clBvbN css-qyw6ft-MuiListItem-root"
+        class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding sc-hvigdm gMUrlu css-qyw6ft-MuiListItem-root"
       >
         <div
           class="MuiListItemText-root MuiListItemText-dense css-cfq8qh-MuiListItemText-root"

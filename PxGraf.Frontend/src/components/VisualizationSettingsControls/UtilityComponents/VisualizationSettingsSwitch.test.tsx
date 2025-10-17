@@ -60,7 +60,7 @@ describe('Assertion tests', () => {
                 changeProperty={"showDataPoints"}
                 />
             </EditorContext.Provider>);
-        const switchElement = getByRole('checkbox');
+        const switchElement = getByRole('switch');
         fireEvent.click(switchElement);
 
         expect(mockSettingsChangedHandler).toHaveBeenCalledWith({ ...mockVisualizationSettings, showDataPoints: true });

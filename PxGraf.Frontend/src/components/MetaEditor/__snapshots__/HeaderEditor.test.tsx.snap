@@ -1,16 +1,16 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`Rendering test renders correctly 1`] = `
 <DocumentFragment>
   <div
-    class="sc-iQQCXo eqtGLL"
+    class="sc-jwTyAe CMzLA"
   >
     <div
-      class="sc-dIMoHT cJfGCw"
+      class="sc-dTvVRJ bxafV"
     >
       <button
         aria-label="tooltip.open: editMetadata.header"
-        class="sc-fYsHOw lgeTOX"
+        class="sc-hvigdm dWELBE"
       >
         <svg
           aria-hidden="true"
@@ -37,7 +37,7 @@ exports[`Rendering test renders correctly 1`] = `
           </b>
         </label>
         <div
-          class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd sc-Qotzb eOEgqK css-jupps9-MuiInputBase-root-MuiOutlinedInput-root"
+          class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd sc-bRKDuR gHDiGG css-jupps9-MuiInputBase-root-MuiOutlinedInput-root"
         >
           <input
             aria-invalid="false"
@@ -76,10 +76,10 @@ exports[`Rendering test renders correctly 1`] = `
           </div>
           <fieldset
             aria-hidden="true"
-            class="MuiOutlinedInput-notchedOutline css-1ll44ll-MuiOutlinedInput-notchedOutline"
+            class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
           >
             <legend
-              class="css-w1u3ce"
+              class="css-ex8a5f-MuiNotchedOutlined-root"
             >
               <span>
                 editMetadata.header
