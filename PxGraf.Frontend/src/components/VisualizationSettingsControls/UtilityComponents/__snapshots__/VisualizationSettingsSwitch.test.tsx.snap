@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`Rendering test renders correctly 1`] = `
 <DocumentFragment>
@@ -12,11 +12,12 @@ exports[`Rendering test renders correctly 1`] = `
         class="MuiSwitch-root MuiSwitch-sizeMedium css-rehya9-MuiSwitch-root"
       >
         <span
-          class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked Mui-checked css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
+          class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary Mui-checked Mui-checked css-aqlqb4-MuiButtonBase-root-MuiSwitchBase-root-MuiSwitch-switchBase"
         >
           <input
             checked=""
-            class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
+            class="PrivateSwitchBase-input MuiSwitch-input css-12xagqm-MuiSwitchBase-root"
+            role="switch"
             type="checkbox"
           />
           <span
@@ -31,7 +32,7 @@ exports[`Rendering test renders correctly 1`] = `
         class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-rizt0-MuiTypography-root"
       >
         <p
-          class="MuiTypography-root MuiTypography-body1 sc-fYsHOw ditWhj css-rizt0-MuiTypography-root"
+          class="MuiTypography-root MuiTypography-body1 sc-hvigdm bKGIDA css-rizt0-MuiTypography-root"
         >
           label
         </p>

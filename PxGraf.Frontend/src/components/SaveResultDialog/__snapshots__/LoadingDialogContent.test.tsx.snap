@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`Rendering test renders correctly 1`] = `
 <DocumentFragment>
@@ -6,7 +6,7 @@ exports[`Rendering test renders correctly 1`] = `
     class="MuiDialogContent-root MuiDialogContent-dividers css-10bxh4q-MuiDialogContent-root"
   >
     <div
-      class="MuiContainer-root MuiContainer-maxWidthLg sc-Qotzb bfUJAt css-5c1adp-MuiContainer-root"
+      class="MuiContainer-root MuiContainer-maxWidthLg sc-bRKDuR hKMXCV css-5c1adp-MuiContainer-root"
     >
       <span
         class="MuiCircularProgress-root MuiCircularProgress-indeterminate MuiCircularProgress-colorPrimary css-1wxecgq-MuiCircularProgress-root"

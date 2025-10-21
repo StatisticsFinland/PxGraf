@@ -1,13 +1,13 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`Rendering test renders correctly 1`] = `
 <DocumentFragment>
   <div
-  class="sc-dIMoHT bkdTWD"
+  class="sc-dTvVRJ hXHpey"
 >
   <button
     aria-label="tooltip.open: tooltip.visualizationSize"
-    class="sc-Qotzb goKfvB"
+    class="sc-bRKDuR csytVp"
   >
     <svg
       aria-hidden="true"
@@ -106,7 +106,7 @@ exports[`Rendering test renders correctly 1`] = `
   class="MuiStack-root css-pl8gqh-MuiStack-root"
 />
   <div
-  class="sc-iQQCXo fXkKuS tk-table"
+  class="sc-jwTyAe tYaQZ tk-table"
 >
   <pre
     data-testid="Chart"

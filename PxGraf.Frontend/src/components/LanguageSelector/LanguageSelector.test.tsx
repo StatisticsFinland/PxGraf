@@ -43,8 +43,8 @@ describe('Assertion tests', () => {
             </UiLanguageContext.Provider>
         );
         fireEvent.click(screen.getByText('FI'));
-        expect(setLanguage).toBeCalledTimes(1);
+        expect(setLanguage).toHaveBeenCalledTimes(1);
         fireEvent.click(screen.getByText('SV'));
-        expect(setLanguage).toBeCalledTimes(2);
+        expect(setLanguage).toHaveBeenCalledTimes(2);
     });
 });

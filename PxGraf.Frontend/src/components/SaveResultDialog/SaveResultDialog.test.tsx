@@ -61,6 +61,6 @@ describe('Assertion test', () => {
     it('invokes close function when cancel button is clicked', () => {
         render(<SaveResultDialog mutation={mockSuccessMutation} onClose={onCloseMock} open={true} />);
         fireEvent.click(screen.getByText('saveResultDialog.ok'));
-        expect(onCloseMock).toBeCalledTimes(1);
+        expect(onCloseMock).toHaveBeenCalledTimes(1);
     });
 });
