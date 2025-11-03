@@ -1,6 +1,6 @@
 {
   "name": "pxgraf",
-  "version": "2.4.6",
+  "version": "2.4.7",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.14.0",
