@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -42,6 +42,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
             Mock<ISqFileInterface> mockSqFileInterface = new();
             Mock<ILogger<SqController>> mockLogger = new();
             Mock<IAuditLogService> mockAuditLogService = new();
+            Mock<IPublicationWebhookService> mockWebhookService = new();
 
             List<DimensionParameters> metaParams =
             [
@@ -80,7 +81,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
                 }
             };
 
-            SqController testController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, mockLogger.Object, mockAuditLogService.Object);
+            SqController testController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, mockLogger.Object, mockAuditLogService.Object, mockWebhookService.Object);
             ActionResult<SaveQueryResponse> actionResult = await testController.SaveQueryAsync(testInput);
             Assert.That(actionResult.Value, Is.InstanceOf<SaveQueryResponse>());
             mockSqFileInterface.Verify(

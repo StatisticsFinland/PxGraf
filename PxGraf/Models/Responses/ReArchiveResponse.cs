@@ -1,4 +1,6 @@
-﻿namespace PxGraf.Models.Responses
+using PxGraf.Models.SavedQueries;
+
+namespace PxGraf.Models.Responses
 {
     /// <summary>
     /// Response object for re-archiving a saved query.
@@ -9,5 +11,10 @@
         /// Id of the new saved query.
         /// </summary>
         public string NewSqId { get; set; }
+
+        /// <summary>
+        /// The publication status of the new saved query.
+        /// </summary>
+        public QueryPublicationStatus PublicationStatus { get; set; }
     }
 }

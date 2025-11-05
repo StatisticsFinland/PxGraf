@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -28,6 +28,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
         private Mock<ISqFileInterface> _mockSqFileInterface;
         private Mock<ILogger<SqController>> _mockLogger;
         private Mock<IAuditLogService> _mockAuditLogService;
+        private Mock<IPublicationWebhookService> _mockWebhookService;
 
         [OneTimeSetUp]
         public void DoSetup()
@@ -47,6 +48,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
             _mockSqFileInterface = new Mock<ISqFileInterface>();
             _mockLogger = new Mock<ILogger<SqController>>();
             _mockAuditLogService = new Mock<IAuditLogService>();
+            _mockWebhookService = new Mock<IPublicationWebhookService>();
         }
 
         private SqController BuildController(List<DimensionParameters> cubeParams, List<DimensionParameters> metaParams)
@@ -66,7 +68,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
             _mockSqFileInterface.Setup(s => s.ReadSavedQueryFromFile(It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(Task.Run(() => TestDataCubeBuilder.BuildTestSavedQuery(cubeParams, false, new LineChartVisualizationSettings(null, false, null))));
 
-            return new SqController(_mockCachedDatasource.Object, _mockSqFileInterface.Object, _mockLogger.Object, _mockAuditLogService.Object);
+            return new SqController(_mockCachedDatasource.Object, _mockSqFileInterface.Object, _mockLogger.Object, _mockAuditLogService.Object, _mockWebhookService.Object);
         }
 
         [Test]

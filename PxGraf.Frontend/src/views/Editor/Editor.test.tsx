@@ -177,7 +177,8 @@ const mockSaveQueryResult: ISaveQueryResult = {
     isError: false,
     isSuccess: true,
     data: {
-        id: 'id'
+        id: 'id',
+        publicationStatus: 0
     },
     mutate: jest.fn()
 }

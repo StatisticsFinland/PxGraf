@@ -8,9 +8,11 @@ import { buildCubeQuery, defaultQueryOptions } from "utils/ApiHelpers";
 /**
  * Response object for saving a query.
  * @property {string} id - The id of the saved query.
+ * @property {EQueryPublicationStatus} publicationStatus - The publication status of the saved query.
  */
 export interface ISaveQueryResponse {
     id: string;
+    publicationStatus: EQueryPublicationStatus;
 }
 
 /**
@@ -71,6 +73,18 @@ export interface IFetchSavedQueryResult {
     isError: boolean;
     isSuccess: boolean;
     data: IFetchSavedQueryResponse;
+}
+
+/**
+ * Enum for query publication status
+ * @property {string} Unpublished - The query is unpublished.
+ * @property {string} Success - The query was published successfully.
+ * @property {string} Failed - The query publication failed.
+ */
+export enum EQueryPublicationStatus {
+    Unpublished,
+    Success,
+    Failed
 }
 
 const sendSaveRequest = async (

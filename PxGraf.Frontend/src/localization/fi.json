@@ -109,7 +109,11 @@
     "fail": "Tallennus epäonnistui.",
     "errorMessage": "Tarkista muuttujavalinnat ja yritä uudelleen.",
     "id": "Poiminnan tunniste",
-    "copyToClipBoard": "Kopioi leikepöydälle"
+    "copyToClipBoard": "Kopioi leikepöydälle",
+    "publicationStatus": "Julkaisun tila",
+    "publicationSuccess": "Julkaisu onnistui",
+    "publicationFailed": "Julkaisu epäonnistui",
+    "publicationUnpublished": "Ei julkaistu"
   },
   "error": {
     "contentLoad": "Sisällön lataaminen ei onnistunut",

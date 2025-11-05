@@ -109,7 +109,11 @@
     "fail": "Saving unsuccessful.",
     "errorMessage": "Check the variable selections and try again.",
     "id": "Selection identifier",
-    "copyToClipBoard": "Copy to clipboardd"
+    "copyToClipBoard": "Copy to clipboardd",
+    "publicationStatus": "Publication status",
+    "publicationSuccess": "Publication successful",
+    "publicationFailed": "Publication failed",
+    "publicationUnpublished": "Not published"
   },
   "error": {
     "contentLoad": "Content could not be loaded",

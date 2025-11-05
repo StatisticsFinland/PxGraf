@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+using PxGraf.Models.SavedQueries;
+using System.ComponentModel.DataAnnotations;
 
 namespace PxGraf.Models.Responses
 {
@@ -12,5 +13,11 @@ namespace PxGraf.Models.Responses
         /// </summary>
         [Required]
         public string Id { get; set; }
+
+        /// <summary>
+        /// The publication status of the saved query
+        /// </summary>
+        [Required]
+        public QueryPublicationStatus PublicationStatus { get; set; }
     }
 }

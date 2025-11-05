@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.FeatureManagement.Mvc;
 using Px.Utils.Models.Data.DataValue;
@@ -34,15 +34,17 @@ namespace PxGraf.Controllers
     /// <param name="sqFileInterface">Instance of a <see cref="ISqFileInterface"/> object. Used for interacting with saved queries.</param>
     /// <param name="logger"><see cref="ILogger"/> instance used for logging.</param>
     /// <param name="auditLogService">Service for logging audit events.</param>
+    /// <param name="webhookService">Service for sending publication webhooks.</param>
     [FeatureGate("CreationAPI")]
     [ApiController]
     [Route("api/sq")]
-    public class SqController(ICachedDatasource datasource, ISqFileInterface sqFileInterface, ILogger<SqController> logger, IAuditLogService auditLogService) : ControllerBase
+    public class SqController(ICachedDatasource datasource, ISqFileInterface sqFileInterface, ILogger<SqController> logger, IAuditLogService auditLogService, IPublicationWebhookService webhookService) : ControllerBase
     {
         private readonly ICachedDatasource _cachedDatasource = datasource;
         private readonly ISqFileInterface _sqFileInterface = sqFileInterface;
         private readonly ILogger<SqController> _logger = logger;
         private readonly IAuditLogService _auditLogService = auditLogService;
+        private readonly IPublicationWebhookService _webhookService = webhookService;
         private const string CONTROLLER_PATH = "api/sq";
 
         /// <summary>
@@ -169,8 +171,14 @@ namespace PxGraf.Controllers
                     {
                         SavedQuery savedQuery = new(parameters.Query, archived: false, visualizationSettings, DateTime.Now, parameters.Draft);
                         await _sqFileInterface.SerializeToFile(fileName, Configuration.Current.SavedQueryDirectory, savedQuery);
+                        QueryPublicationStatus publicationStatus = QueryPublicationStatus.Unpublished;
+                        // Trigger webhook for non-draft queries
+                        if (!parameters.Draft)
+                        {
+                            publicationStatus = await _webhookService.TriggerWebhookAsync(guid, savedQuery, filteredMeta.AdditionalProperties);
+                        }
 
-                        SaveQueryResponse saveQueryResponse = new() { Id = guid };
+                        SaveQueryResponse saveQueryResponse = new() { Id = guid , PublicationStatus = publicationStatus };
                         _logger.LogInformation("Query saved successfully.");
                         _logger.LogDebug("Returning save query result.");
                         return saveQueryResponse;
@@ -234,9 +242,17 @@ namespace PxGraf.Controllers
 
                         string archiveName = $"{guid}.sqa";
                         await _sqFileInterface.SerializeToFile(archiveName, Configuration.Current.ArchiveFileDirectory, new ArchiveCube(matrix));
+                        
+                        QueryPublicationStatus publicationStatus = QueryPublicationStatus.Unpublished;
+                        // Trigger webhook for non-draft queries
+                        if (!parameters.Draft)
+                        {
+                            publicationStatus = await _webhookService.TriggerWebhookAsync(guid, savedQuery, filteredMeta.AdditionalProperties);
+                        }
+
                         _logger.LogInformation("Query archived successfully.");
                         _logger.LogDebug("Returning archive query result.");
-                        return new SaveQueryResponse() { Id = guid };
+                        return new SaveQueryResponse() { Id = guid, PublicationStatus = publicationStatus };
                     }
 
                     // If visualization type is not given or it is not valid return 400.
@@ -294,9 +310,17 @@ namespace PxGraf.Controllers
 
                                 string archiveName = $"{guid}.sqa";
                                 await _sqFileInterface.SerializeToFile(archiveName, Configuration.Current.ArchiveFileDirectory, new ArchiveCube(matrix));
+                                
+                                QueryPublicationStatus publicationStatus = QueryPublicationStatus.Unpublished;
+                                // Trigger webhook for non-draft queries
+                                if (!request.Draft)
+                                {
+                                    publicationStatus = await _webhookService.TriggerWebhookAsync(guid, savedQuery, filteredMeta.AdditionalProperties);
+                                }
+
                                 _logger.LogInformation("Query re-archived successfully.");
                                 _logger.LogDebug("Returning re-archive query result.");
-                                return new ReArchiveResponse() { NewSqId = guid };
+                                return new ReArchiveResponse() { NewSqId = guid, PublicationStatus = publicationStatus };
                             }
 
                             // If visualization type is not valid for the new data return 400.

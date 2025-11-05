@@ -20,7 +20,7 @@ const mockSuccessMutation: ISaveQueryResult = {
     isLoading: false,
     isError: false,
     isSuccess: true,
-    data: {id:'foobar'},
+    data: { id: 'foobar', publicationStatus: 0 },
     mutate: function (_property: any): void {
         throw new Error('Function not implemented.');
     }
@@ -30,7 +30,7 @@ const mockErrorMutation: ISaveQueryResult = {
     isLoading: false,
     isError: false,
     isSuccess: true,
-    data: {id:'foobar'},
+    data: { id: 'foobar', publicationStatus: 2 },
     mutate: function (_property: any): void {
         throw new Error('Function not implemented.');
     }
