@@ -49,6 +49,7 @@ namespace PxGraf.Services
 
         /// <summary>
         /// Triggers a webhook notification for a published query.
+        /// </summary>
         /// <param name="queryId">The ID of the saved query.</param>
         /// <param name="savedQuery">The saved query object.</param>
         /// <param name="additionalProperties">The metadata additional properties dictionary.</param>
