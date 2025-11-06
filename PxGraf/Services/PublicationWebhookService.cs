@@ -55,51 +55,58 @@ namespace PxGraf.Services
         /// <returns>A task representing the asynchronous operation.</returns>
         public async Task<QueryPublicationStatus> TriggerWebhookAsync(string queryId, SavedQuery savedQuery, IReadOnlyDictionary<string, MetaProperty> additionalProperties)
         {
-            if (!_config.IsEnabled)
+            using (logger.BeginScope(new Dictionary<string, object>()
             {
-                logger.LogDebug("Publication webhook is not configured or disabled. Skipping webhook trigger.");
-                return QueryPublicationStatus.Unpublished;
-            }
-
-            if (savedQuery.Draft)
+                [LoggerConstants.FUNC_NAME] = nameof(TriggerWebhookAsync),
+                [LoggerConstants.SQ_ID] = queryId
+            }))
             {
-                logger.LogDebug("Query {QueryId} is in draft mode. Webhook will not be triggered.", queryId);
-                return QueryPublicationStatus.Unpublished;
-            }
-
-            try
-            {
-                Dictionary<string, object> webhookBody = BuildWebhookBody(queryId, savedQuery, additionalProperties);
-                string jsonContent = JsonSerializer.Serialize(webhookBody, GlobalJsonConverterOptions.Default);
-
-                using HttpRequestMessage request = new(HttpMethod.Post, _config.EndpointUrl);
-                request.Content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
-
-                if (_config.HasAccessToken)
+                if (!_config.IsEnabled)
                 {
-                    request.Headers.Add(_config.AccessTokenHeaderName, _config.AccessTokenHeaderValue);
+                    logger.LogDebug("Publication webhook is not configured or disabled. Skipping webhook trigger.");
+                    return QueryPublicationStatus.Unpublished;
                 }
 
-                logger.LogInformation("Sending publication webhook for query {QueryId} to {EndpointUrl}", queryId, _config.EndpointUrl);
-
-                HttpResponseMessage response = await httpClient.SendAsync(request);
-
-                if (response.IsSuccessStatusCode)
+                if (savedQuery.Draft)
                 {
-                    logger.LogInformation("Publication webhook for query {QueryId} sent successfully. Status: {StatusCode}", queryId, response.StatusCode);
-                }
-                else
-                {
-                    logger.LogWarning("Publication webhook for query {QueryId} failed. Status: {StatusCode}, Reason: {ReasonPhrase}",
-                             queryId, response.StatusCode, response.ReasonPhrase);
+                    logger.LogDebug("Query is in draft mode. Webhook will not be triggered.");
+                    return QueryPublicationStatus.Unpublished;
                 }
 
-                return QueryPublicationStatus.Success;
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Failed to send publication webhook for query {QueryId}", queryId);
-                return QueryPublicationStatus.Failed;
+                try
+                {
+                    Dictionary<string, object> webhookBody = BuildWebhookBody(queryId, savedQuery, additionalProperties);
+                    string jsonContent = JsonSerializer.Serialize(webhookBody, GlobalJsonConverterOptions.Default);
+
+                    using HttpRequestMessage request = new(HttpMethod.Post, _config.EndpointUrl);
+                    request.Content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+                    if (_config.HasAccessToken)
+                    {
+                        request.Headers.Add(_config.AccessTokenHeaderName, _config.AccessTokenHeaderValue);
+                    }
+
+                    logger.LogInformation("Sending publication webhook for query to {EndpointUrl}", _config.EndpointUrl);
+
+                    HttpResponseMessage response = await httpClient.SendAsync(request);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        logger.LogInformation("Publication webhook for query sent successfully. Status: {StatusCode}", response.StatusCode);
+                    }
+                    else
+                    {
+                        logger.LogWarning("Publication webhook for query failed. Status: {StatusCode}, Reason: {ReasonPhrase}",
+                                 response.StatusCode, response.ReasonPhrase);
+                    }
+
+                    return QueryPublicationStatus.Success;
+                }
+                catch (Exception ex)
+                {
+                    logger.LogError(ex, "Failed to send publication webhook for query");
+                    return QueryPublicationStatus.Failed;
+                }
             }
         }
 
@@ -164,7 +171,7 @@ namespace PxGraf.Services
             return propertyName.ToLowerInvariant() switch
             {
                 "id" => queryId,
-                "chartheaderedit" => GetHeader(savedQuery.Query.ChartHeaderEdit, savedQuery),
+                "header" => GetHeader(savedQuery.Query.ChartHeaderEdit, savedQuery),
                 "archived" => savedQuery.Archived,
                 "containsselectabledimensions" => savedQuery.Query.DimensionQueries.Any(q => q.Value.Selectable),
                 "visualizationtype" => GetVisualizationType(savedQuery.Settings.VisualizationType),
