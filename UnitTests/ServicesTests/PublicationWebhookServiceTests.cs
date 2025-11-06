@@ -42,22 +42,19 @@ namespace UnitTests.ServicesTests
             _mockDatasource = new Mock<ICachedDatasource>();
         }
 
-        // TODO: One line function, no need for this to be a separate method
-        private HttpClient CreateHttpClient()
-        {
-            return new HttpClient(_mockHttpMessageHandler.Object);
-        }
-
         // TODO: Combine this with ConfigureWebhookDisabled below with parameterization
-        private static void ConfigureWebhookEnabled()
+        private static void ConfigureWebhookEnabled(bool enableWebhook = true)
         {
             // Set up configuration with webhook enabled using TestInMemoryConfiguration as base
             Dictionary<string, string> configDict = TestInMemoryConfiguration.Get().ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
-            configDict.Add("PublicationWebhookConfiguration:EndpointUrl", "https://example.com/webhook");
-            configDict.Add("PublicationWebhookConfiguration:AccessTokenHeaderName", "Authorization");
-            configDict.Add("PublicationWebhookConfiguration:AccessTokenHeaderValue", "Bearer test-token");
-            configDict.Add("PublicationWebhookConfiguration:BodyContentPropertyNames:0", "id");
-            configDict.Add("PublicationWebhookConfiguration:BodyContentPropertyNames:1", "archived");
+            if (enableWebhook)
+            {
+                configDict.Add("PublicationWebhookConfiguration:EndpointUrl", "https://example.com/webhook");
+                configDict.Add("PublicationWebhookConfiguration:AccessTokenHeaderName", "Authorization");
+                configDict.Add("PublicationWebhookConfiguration:AccessTokenHeaderValue", "Bearer test-token");
+                configDict.Add("PublicationWebhookConfiguration:BodyContentPropertyNames:0", "id");
+                configDict.Add("PublicationWebhookConfiguration:BodyContentPropertyNames:1", "archived");
+            }
 
             IConfiguration configuration = new ConfigurationBuilder()
             .AddInMemoryCollection(configDict)
@@ -65,24 +62,13 @@ namespace UnitTests.ServicesTests
             Configuration.Load(configuration);
         }
 
-        private static void ConfigureWebhookDisabled()
-        {
-            // Set up configuration with webhook disabled
-            Dictionary<string, string> configDict = TestInMemoryConfiguration.Get().ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
-
-            IConfiguration configuration = new ConfigurationBuilder()
-                      .AddInMemoryCollection(configDict)
-                         .Build();
-            Configuration.Load(configuration);
-        }
-
         [Test]
         public async Task TriggerWebhookAsync_ConfigurationDisabled_ReturnsUnpublished()
         {
             // Arrange
-            ConfigureWebhookDisabled();
+            ConfigureWebhookEnabled(false);
 
-            using HttpClient httpClient = CreateHttpClient();
+            using HttpClient httpClient = new (_mockHttpMessageHandler.Object);
             PublicationWebhookService webhookService = new (httpClient, _mockLogger.Object, _mockDatasource.Object);
             SavedQuery savedQuery = TestDataCubeBuilder.BuildTestSavedQuery([], false, null);
             Dictionary<string, MetaProperty> additionalProperties = [];
@@ -104,7 +90,7 @@ namespace UnitTests.ServicesTests
             // Arrange
             ConfigureWebhookEnabled();
 
-            using HttpClient httpClient = CreateHttpClient();
+            using HttpClient httpClient = new (_mockHttpMessageHandler.Object);
             PublicationWebhookService webhookService = new (httpClient, _mockLogger.Object, _mockDatasource.Object);
             SavedQuery savedQuery = TestDataCubeBuilder.BuildTestSavedQuery([], false, null);
             savedQuery.Draft = true; // Set query as draft
@@ -127,7 +113,7 @@ namespace UnitTests.ServicesTests
             // Arrange
             ConfigureWebhookEnabled();
 
-            using HttpClient httpClient = CreateHttpClient();
+            using HttpClient httpClient = new (_mockHttpMessageHandler.Object);
             PublicationWebhookService webhookService = new (httpClient, _mockLogger.Object, _mockDatasource.Object);
             SavedQuery savedQuery = TestDataCubeBuilder.BuildTestSavedQuery([], false, null);
             savedQuery.Draft = false; // Ensure query is not a draft
@@ -154,7 +140,7 @@ namespace UnitTests.ServicesTests
             // Arrange
             ConfigureWebhookEnabled();
 
-            using HttpClient httpClient = CreateHttpClient();
+            using HttpClient httpClient = new (_mockHttpMessageHandler.Object);
             PublicationWebhookService webhookService = new (httpClient, _mockLogger.Object, _mockDatasource.Object);
             SavedQuery savedQuery = TestDataCubeBuilder.BuildTestSavedQuery([], false, null);
             savedQuery.Draft = false; // Ensure query is not a draft
@@ -181,7 +167,7 @@ namespace UnitTests.ServicesTests
             // Arrange
             ConfigureWebhookEnabled();
 
-            using HttpClient httpClient = CreateHttpClient();
+            using HttpClient httpClient = new (_mockHttpMessageHandler.Object);
             PublicationWebhookService webhookService = new (httpClient, _mockLogger.Object, _mockDatasource.Object);
             SavedQuery savedQuery = TestDataCubeBuilder.BuildTestSavedQuery([], false, null);
             savedQuery.Draft = false; // Ensure query is not a draft
@@ -208,7 +194,7 @@ namespace UnitTests.ServicesTests
             // Arrange
             ConfigureWebhookEnabled();
 
-            using HttpClient httpClient = CreateHttpClient();
+            using HttpClient httpClient = new (_mockHttpMessageHandler.Object);
             PublicationWebhookService webhookService = new (httpClient, _mockLogger.Object, _mockDatasource.Object);
             SavedQuery savedQuery = TestDataCubeBuilder.BuildTestSavedQuery([], false, null);
             savedQuery.Draft = false; // Ensure query is not a draft

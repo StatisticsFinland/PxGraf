@@ -109,7 +109,7 @@
     "fail": "Saving unsuccessful.",
     "errorMessage": "Check the variable selections and try again.",
     "id": "Selection identifier",
-    "copyToClipBoard": "Copy to clipboardd",
+    "copyToClipBoard": "Copy to clipboard",
     "publicationStatus": "Publication status",
     "publicationSuccess": "Publication successful",
     "publicationFailed": "Publication failed",
