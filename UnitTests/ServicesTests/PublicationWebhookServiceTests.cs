@@ -271,7 +271,6 @@ namespace UnitTests.ServicesTests
                 Assert.That(capturedRequest.Content.Headers.ContentType.MediaType, Is.EqualTo("application/json"));
                 Assert.That(capturedRequest.Headers.Contains("Authorization"), Is.True);
 
-                // Body assertions (use cached string, not disposed content)
                 Assert.That(string.IsNullOrWhiteSpace(capturedBody), Is.False, "Webhook body should not be empty");
                 using JsonDocument doc = JsonDocument.Parse(capturedBody);
                 JsonElement root = doc.RootElement;
@@ -292,7 +291,6 @@ namespace UnitTests.ServicesTests
                 Assert.That(root.TryGetProperty("version", out JsonElement versionEl), Is.True, "Expected version field missing");
                 Assert.That(versionEl.GetString(), Is.EqualTo("1.2"));
 
-                // HEADER assertions (current implementation returns a serialized Task object; make test resilient to future fix)
                 Assert.That(root.TryGetProperty("header", out JsonElement headerEl), Is.True, "Expected header field missing");
                 if (headerEl.ValueKind == JsonValueKind.Object && headerEl.TryGetProperty("result", out JsonElement headerResultEl) && headerResultEl.ValueKind == JsonValueKind.Object)
                 {
