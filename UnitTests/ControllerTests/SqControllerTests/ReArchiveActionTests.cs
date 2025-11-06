@@ -80,13 +80,13 @@ namespace UnitTests.ControllerTests.SqControllerTests
             {
                 SqId = TEST_SQ_ID
             };
-            
+
             // Act
             ActionResult<ReArchiveResponse> result = await controller.ReArchiveExistingQueryAsync(request);
 
             // Assert
             Assert.That(result.Result, Is.InstanceOf<NotFoundResult>());
-            
+
             // Verify audit log was called with INVALID_OR_MISSING_SQID for not found queries
             _mockAuditLogService.Verify(
                 a => a.LogAuditEvent(
@@ -118,13 +118,13 @@ namespace UnitTests.ControllerTests.SqControllerTests
             {
                 SqId = TEST_SQ_ID
             };
-            
+
             // Act
             ActionResult<ReArchiveResponse> result = await controller.ReArchiveExistingQueryAsync(request);
 
             // Assert
             Assert.That(result.Result, Is.InstanceOf<BadRequestResult>());
-            
+
             // Verify audit log was called with the correct parameters
             _mockAuditLogService.Verify(
                 a => a.LogAuditEvent(
@@ -156,20 +156,102 @@ namespace UnitTests.ControllerTests.SqControllerTests
             {
                 SqId = TEST_SQ_ID
             };
-            
+
             // Act
             ActionResult<ReArchiveResponse> result = await controller.ReArchiveExistingQueryAsync(request);
 
             // Assert
             Assert.That(result.Value, Is.Not.Null);
             Assert.That(result.Value, Is.InstanceOf<ReArchiveResponse>());
-            
+
             // Verify audit log was called with the correct parameters
             _mockAuditLogService.Verify(
                 a => a.LogAuditEvent(
                     It.Is<string>(action => action == "api/sq/re-archive"),
                     It.Is<string>(resource => resource == TEST_SQ_ID)),
                 Times.Once);
+        }
+
+        [Test]
+        public async Task ReArchiveExistingQueryAsync_NonDraftQuery_CallsWebhookService()
+        {
+            // Arrange
+            List<DimensionParameters> cubeParameters =
+                [
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 10),
+                new DimensionParameters(DimensionType.Other, 1),
+                new DimensionParameters(DimensionType.Other, 1),
+            ];
+            List<DimensionParameters> metaParameters =
+                [
+                new DimensionParameters(DimensionType.Content, 10),
+                new DimensionParameters(DimensionType.Time, 10),
+                new DimensionParameters(DimensionType.Other, 15),
+                new DimensionParameters(DimensionType.Other, 7)
+                ];
+
+            _mockWebhookService.Setup(w => w.TriggerWebhookAsync(It.IsAny<string>(), It.IsAny<SavedQuery>(), It.IsAny<IReadOnlyDictionary<string, Px.Utils.Models.Metadata.MetaProperties.MetaProperty>>()))
+                .ReturnsAsync(QueryPublicationStatus.Success);
+
+            SqController controller = BuildController(cubeParameters, metaParameters);
+            ReArchiveRequest request = new()
+            {
+                SqId = TEST_SQ_ID,
+                Draft = false // Non-draft query
+            };
+
+            // Act
+            ActionResult<ReArchiveResponse> result = await controller.ReArchiveExistingQueryAsync(request);
+
+            // Assert
+            Assert.That(result.Value, Is.Not.Null);
+            Assert.That(result.Value, Is.InstanceOf<ReArchiveResponse>());
+            Assert.That(result.Value.PublicationStatus, Is.EqualTo(QueryPublicationStatus.Success));
+
+            // Verify webhook service was called
+            _mockWebhookService.Verify(
+                w => w.TriggerWebhookAsync(It.IsAny<string>(), It.IsAny<SavedQuery>(), It.IsAny<IReadOnlyDictionary<string, Px.Utils.Models.Metadata.MetaProperties.MetaProperty>>()),
+                Times.Once);
+        }
+
+        [Test]
+        public async Task ReArchiveExistingQueryAsync_DraftQuery_DoesNotCallWebhookService()
+        {
+            // Arrange
+            List<DimensionParameters> cubeParameters =
+                [
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 10),
+                new DimensionParameters(DimensionType.Other, 1),
+                new DimensionParameters(DimensionType.Other, 1),
+            ];
+            List<DimensionParameters> metaParameters =
+                [
+                new DimensionParameters(DimensionType.Content, 10),
+                new DimensionParameters(DimensionType.Time, 10),
+                new DimensionParameters(DimensionType.Other, 15),
+                new DimensionParameters(DimensionType.Other, 7)
+                ];
+            SqController controller = BuildController(cubeParameters, metaParameters);
+            ReArchiveRequest request = new()
+            {
+                SqId = TEST_SQ_ID,
+                Draft = true // Draft query
+            };
+
+            // Act
+            ActionResult<ReArchiveResponse> result = await controller.ReArchiveExistingQueryAsync(request);
+
+            // Assert
+            Assert.That(result.Value, Is.Not.Null);
+            Assert.That(result.Value, Is.InstanceOf<ReArchiveResponse>());
+            Assert.That(result.Value.PublicationStatus, Is.EqualTo(QueryPublicationStatus.Unpublished));
+
+            // Verify webhook service was NOT called
+            _mockWebhookService.Verify(
+                w => w.TriggerWebhookAsync(It.IsAny<string>(), It.IsAny<SavedQuery>(), It.IsAny<IReadOnlyDictionary<string, Px.Utils.Models.Metadata.MetaProperties.MetaProperty>>()),
+                Times.Never);
         }
     }
 }

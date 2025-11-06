@@ -2,7 +2,7 @@ import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import SaveResultDialog from './SaveResultDialog';
-import { ISaveQueryResult } from 'api/services/queries';
+import { EQueryPublicationStatus, ISaveQueryResult } from 'api/services/queries';
 
 jest.mock('react-i18next', () => ({
     ...jest.requireActual('react-i18next'),
@@ -20,7 +20,17 @@ const mockSuccessMutation: ISaveQueryResult = {
     isLoading: false,
     isError: false,
     isSuccess: true,
-    data: { id: 'foobar', publicationStatus: 0 },
+    data: { id: 'foobar', publicationStatus: EQueryPublicationStatus.Success },
+    mutate: function (_property: any): void {
+        throw new Error('Function not implemented.');
+    }
+};
+
+const mockSuccessDraftMutation: ISaveQueryResult = {
+    isLoading: false,
+    isError: false,
+    isSuccess: true,
+    data: { id: 'foobar', publicationStatus: EQueryPublicationStatus.Unpublished },
     mutate: function (_property: any): void {
         throw new Error('Function not implemented.');
     }
@@ -30,7 +40,7 @@ const mockErrorMutation: ISaveQueryResult = {
     isLoading: false,
     isError: false,
     isSuccess: true,
-    data: { id: 'foobar', publicationStatus: 2 },
+    data: { id: 'foobar', publicationStatus: EQueryPublicationStatus.Failed },
     mutate: function (_property: any): void {
         throw new Error('Function not implemented.');
     }
@@ -48,10 +58,15 @@ describe('Rendering test', () => {
         const dom = render(<SaveResultDialog mutation={mockSuccessMutation} onClose={onCloseMock} open={true} />);
         expect(dom.baseElement).toMatchSnapshot();
     });
+
+    it('renders correctly when open (draft)', () => {
+        const dom = render(<SaveResultDialog mutation={mockSuccessDraftMutation} onClose={onCloseMock} open={true} />);
+        expect(dom.baseElement).toMatchSnapshot();
+    });
 });
 
 describe('Error rendering test', () => {
-    it('renders error correctly when open', () => {
+    it('renders error correctly when open with error', () => {
         const dom = render(<SaveResultDialog mutation={mockErrorMutation} onClose={onCloseMock} open={true} />);
         expect(dom.baseElement).toMatchSnapshot();
     });

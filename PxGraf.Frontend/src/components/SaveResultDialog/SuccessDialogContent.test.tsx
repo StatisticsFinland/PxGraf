@@ -2,6 +2,7 @@ import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import SuccessDialogContent from './SuccessDialogContent';
+import { EQueryPublicationStatus } from '../../api/services/queries';
 
 jest.mock('react-i18next', () => ({
     ...jest.requireActual('react-i18next'),
@@ -27,8 +28,18 @@ describe('Rendering test', () => {
         expect(asFragment()).toMatchSnapshot();
     });
 
-    it('renders correctly when open', () => {
-        const dom = render(<SuccessDialogContent />);
+    it('renders correctly when open (draft)', () => {
+        const dom = render(<SuccessDialogContent isDraft={true} publicationStatus={EQueryPublicationStatus.Unpublished} />);
+        expect(dom.baseElement).toMatchSnapshot();
+    });
+
+    it('renders correctly when open (published)', () => {
+        const dom = render(<SuccessDialogContent isDraft={false} publicationStatus={EQueryPublicationStatus.Success} />);
+        expect(dom.baseElement).toMatchSnapshot();
+    });
+
+    it('renders correctly when open (publication error)', () => {
+        const dom = render(<SuccessDialogContent isDraft={false} publicationStatus={EQueryPublicationStatus.Failed} />);
         expect(dom.baseElement).toMatchSnapshot();
     });
 });
