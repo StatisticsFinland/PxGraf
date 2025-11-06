@@ -3,10 +3,13 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using Moq.Protected;
 using NUnit.Framework;
+using Px.Utils.Language;
 using Px.Utils.Models.Metadata;
+using Px.Utils.Models.Metadata.Enums;
 using Px.Utils.Models.Metadata.MetaProperties;
 using PxGraf.Datasource;
 using PxGraf.Language;
+using PxGraf.Models.Queries;
 using PxGraf.Models.SavedQueries;
 using PxGraf.Services;
 using PxGraf.Settings;
@@ -27,6 +30,8 @@ namespace UnitTests.ServicesTests
         private Mock<HttpMessageHandler> _mockHttpMessageHandler;
         private Mock<ILogger<PublicationWebhookService>> _mockLogger;
         private Mock<ICachedDatasource> _mockDatasource;
+        private List<DimensionParameters> _queryParams = [];
+        private VisualizationSettings _visualizationSettings = null;
 
         [OneTimeSetUp]
         public void DoSetup()
@@ -40,9 +45,34 @@ namespace UnitTests.ServicesTests
             _mockHttpMessageHandler = new Mock<HttpMessageHandler>();
             _mockLogger = new Mock<ILogger<PublicationWebhookService>>();
             _mockDatasource = new Mock<ICachedDatasource>();
+            List<DimensionParameters> dimParams =
+            [
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 4),
+                new DimensionParameters(DimensionType.Nominal, 2)
+            ];
+            MatrixMetadata testMeta = TestDataCubeBuilder.BuildTestMeta(dimParams, ["fi", "en", "sv"]);
+            testMeta.AdditionalProperties.Add("DESCRIPTION", new MultilanguageStringProperty(new MultilanguageString(new Dictionary<string, string>
+            {
+                { "fi", "Test description (fi)" },
+                { "en", "Test description (en)" },
+                { "sv", "Test description (sv)" }
+            })));
+            _mockDatasource.Setup(ds => ds.GetMatrixMetadataCachedAsync(It.IsAny<PxTableReference>()))
+                .ReturnsAsync(testMeta);
+            _queryParams =
+            [
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 2),
+                new DimensionParameters(DimensionType.Nominal, 1)
+            ];
+            _visualizationSettings = new TableVisualizationSettings(new Layout()
+            {
+                ColumnDimensionCodes = [],
+                RowDimensionCodes = []
+            });
         }
 
-        // TODO: Combine this with ConfigureWebhookDisabled below with parameterization
         private static void ConfigureWebhookEnabled(bool enableWebhook = true)
         {
             // Set up configuration with webhook enabled using TestInMemoryConfiguration as base
@@ -54,6 +84,15 @@ namespace UnitTests.ServicesTests
                 configDict.Add("PublicationWebhookConfiguration:AccessTokenHeaderValue", "Bearer test-token");
                 configDict.Add("PublicationWebhookConfiguration:BodyContentPropertyNames:0", "id");
                 configDict.Add("PublicationWebhookConfiguration:BodyContentPropertyNames:1", "archived");
+                configDict.Add("PublicationWebhookConfiguration:BodyContentPropertyNames:2", "header");
+                configDict.Add("PublicationWebhookConfiguration:BodyContentPropertyNames:3", "containsselectabledimensions");
+                configDict.Add("PublicationWebhookConfiguration:BodyContentPropertyNames:4", "visualizationtype");
+                configDict.Add("PublicationWebhookConfiguration:BodyContentPropertyNames:5", "version");
+                configDict.Add("PublicationWebhookConfiguration:BodyContentPropertyNames:6", "draft");
+                configDict.Add("PublicationWebhookConfiguration:BodyContentPropertyNames:7", "creationtime");
+                configDict.Add("PublicationWebhookConfiguration:BodyContentPropertyNameEdits:id", "id_test");
+                configDict.Add("PublicationWebhookConfiguration:VisualizationTypeTranslations:Table", "CustomTable");
+                configDict.Add("PublicationWebhookConfiguration:MetadataProperties:0", "DESCRIPTION");
             }
 
             IConfiguration configuration = new ConfigurationBuilder()
@@ -70,7 +109,7 @@ namespace UnitTests.ServicesTests
 
             using HttpClient httpClient = new (_mockHttpMessageHandler.Object);
             PublicationWebhookService webhookService = new (httpClient, _mockLogger.Object, _mockDatasource.Object);
-            SavedQuery savedQuery = TestDataCubeBuilder.BuildTestSavedQuery([], false, null);
+            SavedQuery savedQuery = TestDataCubeBuilder.BuildTestSavedQuery(_queryParams, false, _visualizationSettings);
             Dictionary<string, MetaProperty> additionalProperties = [];
 
             // Act
@@ -92,7 +131,7 @@ namespace UnitTests.ServicesTests
 
             using HttpClient httpClient = new (_mockHttpMessageHandler.Object);
             PublicationWebhookService webhookService = new (httpClient, _mockLogger.Object, _mockDatasource.Object);
-            SavedQuery savedQuery = TestDataCubeBuilder.BuildTestSavedQuery([], false, null);
+            SavedQuery savedQuery = TestDataCubeBuilder.BuildTestSavedQuery(_queryParams, false, _visualizationSettings);
             savedQuery.Draft = true; // Set query as draft
             Dictionary<string, MetaProperty> additionalProperties = [];
 
@@ -115,7 +154,7 @@ namespace UnitTests.ServicesTests
 
             using HttpClient httpClient = new (_mockHttpMessageHandler.Object);
             PublicationWebhookService webhookService = new (httpClient, _mockLogger.Object, _mockDatasource.Object);
-            SavedQuery savedQuery = TestDataCubeBuilder.BuildTestSavedQuery([], false, null);
+            SavedQuery savedQuery = TestDataCubeBuilder.BuildTestSavedQuery(_queryParams, false, _visualizationSettings);
             savedQuery.Draft = false; // Ensure query is not a draft
             Dictionary<string, MetaProperty> additionalProperties = [];
 
@@ -142,7 +181,7 @@ namespace UnitTests.ServicesTests
 
             using HttpClient httpClient = new (_mockHttpMessageHandler.Object);
             PublicationWebhookService webhookService = new (httpClient, _mockLogger.Object, _mockDatasource.Object);
-            SavedQuery savedQuery = TestDataCubeBuilder.BuildTestSavedQuery([], false, null);
+            SavedQuery savedQuery = TestDataCubeBuilder.BuildTestSavedQuery(_queryParams, false, _visualizationSettings);
             savedQuery.Draft = false; // Ensure query is not a draft
             Dictionary<string, MetaProperty> additionalProperties = [];
 
@@ -169,7 +208,7 @@ namespace UnitTests.ServicesTests
 
             using HttpClient httpClient = new (_mockHttpMessageHandler.Object);
             PublicationWebhookService webhookService = new (httpClient, _mockLogger.Object, _mockDatasource.Object);
-            SavedQuery savedQuery = TestDataCubeBuilder.BuildTestSavedQuery([], false, null);
+            SavedQuery savedQuery = TestDataCubeBuilder.BuildTestSavedQuery(_queryParams, false, _visualizationSettings);
             savedQuery.Draft = false; // Ensure query is not a draft
             Dictionary<string, MetaProperty> additionalProperties = [];
 
@@ -196,7 +235,7 @@ namespace UnitTests.ServicesTests
 
             using HttpClient httpClient = new (_mockHttpMessageHandler.Object);
             PublicationWebhookService webhookService = new (httpClient, _mockLogger.Object, _mockDatasource.Object);
-            SavedQuery savedQuery = TestDataCubeBuilder.BuildTestSavedQuery([], false, null);
+            SavedQuery savedQuery = TestDataCubeBuilder.BuildTestSavedQuery(_queryParams, false, _visualizationSettings);
             savedQuery.Draft = false; // Ensure query is not a draft
             Dictionary<string, MetaProperty> additionalProperties = [];
 

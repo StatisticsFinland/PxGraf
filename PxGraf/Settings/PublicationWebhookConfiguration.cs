@@ -34,7 +34,7 @@ namespace PxGraf.Settings
         /// Key: Standard property name (Id, ChartHeaderEdit, Archived, ContainsSelectableDimensions, VisualizationType, TableReference, Note)
         /// Value: Custom field name to use in the webhook body
         /// </summary>
-        public Dictionary<string, string> BodyContentPropertyNameEdits { get; set; } = new();
+        public Dictionary<string, string> BodyContentPropertyNameEdits { get; set; } = [];
 
         /// <summary>
         /// Optional dictionary to translate VisualizationType enum values to custom strings.
@@ -42,7 +42,7 @@ namespace PxGraf.Settings
         /// Value: Custom string representation
         /// If not specified, defaults to "Table" for Table type and "Graph" for all others.
         /// </summary>
-        public Dictionary<string, string> VisualizationTypeTranslations { get; set; } = new();
+        public Dictionary<string, string> VisualizationTypeTranslations { get; set; } = [];
 
         /// <summary>
         /// Optional dictionary to map px file metadata properties to webhook body field names.
