@@ -176,7 +176,7 @@ namespace UnitTests.ServicesTests
         }
 
         [Test]
-        public async Task TriggerWebhookAsync_FailedResponse_ReturnsSuccess()
+        public async Task TriggerWebhookAsync_FailedResponse_ReturnsFailed()
         {
             // Arrange
             ConfigureWebhookEnabled();
@@ -194,7 +194,7 @@ namespace UnitTests.ServicesTests
             QueryPublicationStatus result = await webhookService.TriggerWebhookAsync("test-id", savedQuery, _testMeta.AdditionalProperties);
 
             // Assert - Note: Even failed HTTP responses return Success as per the implementation
-            Assert.That(result, Is.EqualTo(QueryPublicationStatus.Success));
+            Assert.That(result, Is.EqualTo(QueryPublicationStatus.Failed));
 
             // Verify HTTP call was made once
             _mockHttpMessageHandler.Protected()

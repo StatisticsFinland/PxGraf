@@ -94,14 +94,14 @@ namespace PxGraf.Services
                     if (response.IsSuccessStatusCode)
                     {
                         logger.LogInformation("Publication webhook for query sent successfully. Status: {StatusCode}", response.StatusCode);
+                        return QueryPublicationStatus.Success;
                     }
                     else
                     {
                         logger.LogWarning("Publication webhook for query failed. Status: {StatusCode}, Reason: {ReasonPhrase}",
                                  response.StatusCode, response.ReasonPhrase);
+                        return QueryPublicationStatus.Failed;
                     }
-
-                    return QueryPublicationStatus.Success;
                 }
                 catch (Exception ex)
                 {

@@ -178,7 +178,7 @@ namespace PxGraf.Controllers
                             publicationStatus = await _webhookService.TriggerWebhookAsync(guid, savedQuery, filteredMeta.AdditionalProperties);
                         }
 
-                        SaveQueryResponse saveQueryResponse = new() { Id = guid , PublicationStatus = publicationStatus };
+                        SaveQueryResponse saveQueryResponse = new() { Id = guid, PublicationStatus = publicationStatus };
                         _logger.LogInformation("Query saved successfully.");
                         _logger.LogDebug("Returning save query result.");
                         return saveQueryResponse;
@@ -242,7 +242,7 @@ namespace PxGraf.Controllers
 
                         string archiveName = $"{guid}.sqa";
                         await _sqFileInterface.SerializeToFile(archiveName, Configuration.Current.ArchiveFileDirectory, new ArchiveCube(matrix));
-                        
+
                         QueryPublicationStatus publicationStatus = QueryPublicationStatus.Unpublished;
                         // Trigger webhook for non-draft queries
                         if (!parameters.Draft)
@@ -310,7 +310,7 @@ namespace PxGraf.Controllers
 
                                 string archiveName = $"{guid}.sqa";
                                 await _sqFileInterface.SerializeToFile(archiveName, Configuration.Current.ArchiveFileDirectory, new ArchiveCube(matrix));
-                                
+
                                 QueryPublicationStatus publicationStatus = QueryPublicationStatus.Unpublished;
                                 // Trigger webhook for non-draft queries
                                 if (!request.Draft)
