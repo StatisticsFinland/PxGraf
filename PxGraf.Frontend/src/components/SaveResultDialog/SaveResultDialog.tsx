@@ -33,10 +33,21 @@ export const SaveResultDialog: React.FC<ISaveResultDialogProps> = ({
         if (mutation.isSuccess) { return t('saveResultDialog.success') }
     }
 
+    const handleClose = () => {
+        // Prevent closing while loading
+        if (mutation.isLoading) {
+            return;
+        }
+        onClose();
+    };
+
+    const canClose = !mutation.isLoading;
+
     return (
         <Dialog
             open={open}
-            onClose={onClose}
+            onClose={handleClose}
+            disableEscapeKeyDown={mutation.isLoading}
             scroll='paper'
             aria-labelledby="scroll-dialog-title"
             aria-describedby="scroll-dialog-description"
@@ -44,7 +55,13 @@ export const SaveResultDialog: React.FC<ISaveResultDialogProps> = ({
             <DialogTitle id="result-dialog-title">{HeaderText()}</DialogTitle>
             <SaveDialogContent result={mutation} isDraft={isDraft} />
             <DialogActions>
-                <Button onClick={onClose} variant="contained">{t("saveResultDialog.ok")}</Button>
+                <Button
+                    onClick={handleClose}
+                    variant="contained"
+                    disabled={!canClose}
+                >
+                    {t("saveResultDialog.ok")}
+                </Button>
             </DialogActions>
         </Dialog>
     );
@@ -55,10 +72,10 @@ const SaveDialogContent: React.FC<ISaveDialogContentProps> = ({ result, isDraft 
     else if (result.isSuccess) {
         return (
             <SuccessDialogContent
-                queryId={result.data?.id}
-                publicationStatus={result.data?.publicationStatus}
-                isDraft={isDraft}
-            />
+  queryId={result.data?.id}
+           publicationStatus={result.data?.publicationStatus}
+      isDraft={isDraft}
+     />
         );
     }
     else { return <ErrorDialogContent /> }

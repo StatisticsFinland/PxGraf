@@ -113,7 +113,9 @@
     "publicationStatus": "Julkaisun tila",
     "publicationSuccess": "Julkaisu onnistui",
     "publicationFailed": "Julkaisu epäonnistui",
-    "publicationUnpublished": "Ei julkaistu"
+    "publicationUnpublished": "Ei julkaistu",
+    "saving": "Tallennetaan kyselyä...",
+    "pleaseWait": "Odota hetki, julkaistavien kyselyjen käsittely voi kestää pidempään."
   },
   "error": {
     "contentLoad": "Sisällön lataaminen ei onnistunut",

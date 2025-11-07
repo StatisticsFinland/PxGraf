@@ -113,7 +113,9 @@
     "publicationStatus": "Publiceringsstatus",
     "publicationSuccess": "Publicering lyckades",
     "publicationFailed": "Publicering misslyckades",
-    "publicationUnpublished": "Inte publicerad"
+    "publicationUnpublished": "Inte publicerad",
+    "saving": "Sparar fråga...",
+    "pleaseWait": "Vänta lite, behandlingen av publicerbara frågor kan ta längre tid."
   },
   "error": {
     "contentLoad": "Innehållet kunde inte hämtas",

@@ -17,14 +17,14 @@ export const EditorDialogs: React.FC<IEditorDialogsProps> = ({ saveQueryMutation
     /* istanbul ignore next */
     const saveQueryAndShowResult = (archive: boolean, isDraft: boolean) => {
         setLastSavedAsDraft(isDraft);
+        setSaveDialogOpen(false);
+        setSaveResultDialogOpen(true);
         saveQueryMutation.mutate(
             { archive, isDraft },
             {
                 onSuccess: (data) => {
                     setLoadedQueryId(data.id);
                     setLoadedQueryIsDraft(isDraft);
-                    setSaveDialogOpen(false);
-                    setSaveResultDialogOpen(true);
                 }
             }
         );

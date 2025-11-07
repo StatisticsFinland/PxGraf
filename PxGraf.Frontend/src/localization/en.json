@@ -113,7 +113,9 @@
     "publicationStatus": "Publication status",
     "publicationSuccess": "Publication successful",
     "publicationFailed": "Publication failed",
-    "publicationUnpublished": "Not published"
+    "publicationUnpublished": "Not published",
+    "saving": "Saving query...",
+    "pleaseWait": "Please wait, this may take a moment for published queries."
   },
   "error": {
     "contentLoad": "Content could not be loaded",
