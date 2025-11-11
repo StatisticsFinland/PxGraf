@@ -5,41 +5,48 @@ import {
 import ContentPasteIcon from '@mui/icons-material/ContentPaste';
 import styled from 'styled-components';
 import React from 'react';
-import { EQueryPublicationStatus } from 'api/services/queries';
+import { EQueryPublicationStatus, TMultiLanguageString } from 'api/services/queries';
 
 const StyledOutlinedInput = styled(OutlinedInput)`
-    width: 380px;
+width: 380px;
 `;
 
 const StyledFormControl = styled(FormControl)`
-    margin-bottom: 16px;
+margin-bottom: 16px;
 `;
 
 interface ISuccessDialogContentProps {
     queryId?: string;
     publicationStatus?: EQueryPublicationStatus;
+    publicationMessage?: TMultiLanguageString;
     isDraft?: boolean;
 }
 
 export const SuccessDialogContent: React.FC<ISuccessDialogContentProps> = ({
     queryId,
     publicationStatus,
+    publicationMessage,
     isDraft = false
 }) => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const text = queryId || "Unknown";
 
     const getPublicationStatusMessage = () => {
-        switch (publicationStatus) {
-            case EQueryPublicationStatus.Success:
-                return t("saveResultDialog.publicationSuccess");
-            case EQueryPublicationStatus.Failed:
-                return t("saveResultDialog.publicationFailed");
-            case EQueryPublicationStatus.Unpublished:
-                return t("saveResultDialog.publicationUnpublished");
-            default:
-                return t("saveResultDialog.publicationUnpublished");
+        // If we have localized messages from webhook, use them
+        if (publicationMessage && Object.keys(publicationMessage).length > 0) {
+            const currentLanguage = i18n.language;
+
+            // Check if we have an error message and try to localize it
+            if (publicationMessage['error']) {
+                return publicationMessage['error'];
+            }
+
+            // Try to get message for current language, fallback to any available language
+            return publicationMessage[currentLanguage] ||
+                t("error.webhookResponseError");
         }
+
+        return t("error.webhookResponseError");
     };
 
     const getPublicationAlertSeverity = () => {
@@ -75,7 +82,7 @@ export const SuccessDialogContent: React.FC<ISuccessDialogContentProps> = ({
             </StyledFormControl>
             {!isDraft && publicationStatus && (
                 <Alert severity={getPublicationAlertSeverity()}>
-                    <strong>{t("saveResultDialog.publicationStatus")}:</strong> {getPublicationStatusMessage()}
+                    {getPublicationStatusMessage()}
                 </Alert>
             )}
         </DialogContent>

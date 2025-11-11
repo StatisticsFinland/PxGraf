@@ -18,7 +18,7 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Text.Json; // Added for body inspection
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using UnitTests.Fixtures;
@@ -48,20 +48,20 @@ namespace UnitTests.ServicesTests
             _mockLogger = new Mock<ILogger<PublicationWebhookService>>();
             _mockDatasource = new Mock<ICachedDatasource>();
             List<DimensionParameters> dimParams =
-            [
+                [
                 new DimensionParameters(DimensionType.Content, 1),
                 new DimensionParameters(DimensionType.Time, 4),
                 new DimensionParameters(DimensionType.Nominal, 2)
-            ];
+                ];
             _testMeta = TestDataCubeBuilder.BuildTestMeta(dimParams, ["fi", "en", "sv"]);
             _mockDatasource.Setup(ds => ds.GetMatrixMetadataCachedAsync(It.IsAny<PxTableReference>()))
                 .ReturnsAsync(_testMeta);
             _queryParams =
-            [
+                [
                 new DimensionParameters(DimensionType.Content, 1),
                 new DimensionParameters(DimensionType.Time, 2),
                 new DimensionParameters(DimensionType.Nominal, 1)
-            ];
+                ];
             _visualizationSettings = new TableVisualizationSettings(new Layout()
             {
                 ColumnDimensionCodes = [],
@@ -94,8 +94,8 @@ namespace UnitTests.ServicesTests
             }
 
             IConfiguration configuration = new ConfigurationBuilder()
-            .AddInMemoryCollection(configDict)
-            .Build();
+                .AddInMemoryCollection(configDict)
+                .Build();
             Configuration.Load(configuration);
         }
 
@@ -105,15 +105,15 @@ namespace UnitTests.ServicesTests
             // Arrange
             ConfigureWebhookEnabled(false);
 
-            using HttpClient httpClient = new (_mockHttpMessageHandler.Object);
-            PublicationWebhookService webhookService = new (httpClient, _mockLogger.Object, _mockDatasource.Object);
+            using HttpClient httpClient = new(_mockHttpMessageHandler.Object);
+            PublicationWebhookService webhookService = new(httpClient, _mockLogger.Object, _mockDatasource.Object);
             SavedQuery savedQuery = TestDataCubeBuilder.BuildTestSavedQuery(_queryParams, false, _visualizationSettings);
 
             // Act
-            QueryPublicationStatus result = await webhookService.TriggerWebhookAsync("test-id", savedQuery, _testMeta.AdditionalProperties);
+            WebhookPublicationResult result = await webhookService.TriggerWebhookAsync("test-id", savedQuery, _testMeta.AdditionalProperties);
 
             // Assert
-            Assert.That(result, Is.EqualTo(QueryPublicationStatus.Unpublished));
+            Assert.That(result.Status, Is.EqualTo(QueryPublicationStatus.Unpublished));
 
             // Verify no HTTP call was made
             _mockHttpMessageHandler.Protected()
@@ -126,16 +126,16 @@ namespace UnitTests.ServicesTests
             // Arrange
             ConfigureWebhookEnabled();
 
-            using HttpClient httpClient = new (_mockHttpMessageHandler.Object);
-            PublicationWebhookService webhookService = new (httpClient, _mockLogger.Object, _mockDatasource.Object);
+            using HttpClient httpClient = new(_mockHttpMessageHandler.Object);
+            PublicationWebhookService webhookService = new(httpClient, _mockLogger.Object, _mockDatasource.Object);
             SavedQuery savedQuery = TestDataCubeBuilder.BuildTestSavedQuery(_queryParams, false, _visualizationSettings);
             savedQuery.Draft = true; // Set query as draft
 
             // Act
-            QueryPublicationStatus result = await webhookService.TriggerWebhookAsync("test-id", savedQuery, _testMeta.AdditionalProperties);
+            WebhookPublicationResult result = await webhookService.TriggerWebhookAsync("test-id", savedQuery, _testMeta.AdditionalProperties);
 
             // Assert
-            Assert.That(result, Is.EqualTo(QueryPublicationStatus.Unpublished));
+            Assert.That(result.Status, Is.EqualTo(QueryPublicationStatus.Unpublished));
 
             // Verify no HTTP call was made
             _mockHttpMessageHandler.Protected()
@@ -148,8 +148,8 @@ namespace UnitTests.ServicesTests
             // Arrange
             ConfigureWebhookEnabled();
 
-            using HttpClient httpClient = new (_mockHttpMessageHandler.Object);
-            PublicationWebhookService webhookService = new (httpClient, _mockLogger.Object, _mockDatasource.Object);
+            using HttpClient httpClient = new(_mockHttpMessageHandler.Object);
+            PublicationWebhookService webhookService = new(httpClient, _mockLogger.Object, _mockDatasource.Object);
             VisualizationSettings lineVisualizationSettings = new LineChartVisualizationSettings(new Layout()
             {
                 ColumnDimensionCodes = [],
@@ -165,10 +165,10 @@ namespace UnitTests.ServicesTests
                 .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK));
 
             // Act
-            QueryPublicationStatus result = await webhookService.TriggerWebhookAsync("test-id", savedQuery, _testMeta.AdditionalProperties);
+            WebhookPublicationResult result = await webhookService.TriggerWebhookAsync("test-id", savedQuery, _testMeta.AdditionalProperties);
 
             // Assert
-            Assert.That(result, Is.EqualTo(QueryPublicationStatus.Success));
+            Assert.That(result.Status, Is.EqualTo(QueryPublicationStatus.Success));
 
             // Verify HTTP call was made once
             _mockHttpMessageHandler.Protected()
@@ -181,8 +181,8 @@ namespace UnitTests.ServicesTests
             // Arrange
             ConfigureWebhookEnabled();
 
-            using HttpClient httpClient = new (_mockHttpMessageHandler.Object);
-            PublicationWebhookService webhookService = new (httpClient, _mockLogger.Object, _mockDatasource.Object);
+            using HttpClient httpClient = new(_mockHttpMessageHandler.Object);
+            PublicationWebhookService webhookService = new(httpClient, _mockLogger.Object, _mockDatasource.Object);
             SavedQuery savedQuery = TestDataCubeBuilder.BuildTestSavedQuery(_queryParams, false, _visualizationSettings);
             savedQuery.Draft = false; // Ensure query is not a draft
 
@@ -191,10 +191,10 @@ namespace UnitTests.ServicesTests
                 .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.BadRequest));
 
             // Act
-            QueryPublicationStatus result = await webhookService.TriggerWebhookAsync("test-id", savedQuery, _testMeta.AdditionalProperties);
+            WebhookPublicationResult result = await webhookService.TriggerWebhookAsync("test-id", savedQuery, _testMeta.AdditionalProperties);
 
-            // Assert - Note: Even failed HTTP responses return Success as per the implementation
-            Assert.That(result, Is.EqualTo(QueryPublicationStatus.Failed));
+            // Assert - Note: Even failed HTTP responses return Failed as per the implementation
+            Assert.That(result.Status, Is.EqualTo(QueryPublicationStatus.Failed));
 
             // Verify HTTP call was made once
             _mockHttpMessageHandler.Protected()
@@ -207,8 +207,8 @@ namespace UnitTests.ServicesTests
             // Arrange
             ConfigureWebhookEnabled();
 
-            using HttpClient httpClient = new (_mockHttpMessageHandler.Object);
-            PublicationWebhookService webhookService = new (httpClient, _mockLogger.Object, _mockDatasource.Object);
+            using HttpClient httpClient = new(_mockHttpMessageHandler.Object);
+            PublicationWebhookService webhookService = new(httpClient, _mockLogger.Object, _mockDatasource.Object);
             SavedQuery savedQuery = TestDataCubeBuilder.BuildTestSavedQuery(_queryParams, false, _visualizationSettings);
             savedQuery.Draft = false; // Ensure query is not a draft
 
@@ -217,10 +217,10 @@ namespace UnitTests.ServicesTests
                 .ThrowsAsync(new HttpRequestException("Network error"));
 
             // Act
-            QueryPublicationStatus result = await webhookService.TriggerWebhookAsync("test-id", savedQuery, _testMeta.AdditionalProperties);
+            WebhookPublicationResult result = await webhookService.TriggerWebhookAsync("test-id", savedQuery, _testMeta.AdditionalProperties);
 
             // Assert
-            Assert.That(result, Is.EqualTo(QueryPublicationStatus.Failed));
+            Assert.That(result.Status, Is.EqualTo(QueryPublicationStatus.Failed));
 
             // Verify HTTP call was attempted once
             _mockHttpMessageHandler.Protected()
@@ -233,10 +233,10 @@ namespace UnitTests.ServicesTests
             // Arrange
             ConfigureWebhookEnabled();
 
-            using HttpClient httpClient = new (_mockHttpMessageHandler.Object);
-            PublicationWebhookService webhookService = new (httpClient, _mockLogger.Object, _mockDatasource.Object);
+            using HttpClient httpClient = new(_mockHttpMessageHandler.Object);
+            PublicationWebhookService webhookService = new(httpClient, _mockLogger.Object, _mockDatasource.Object);
             SavedQuery savedQuery = TestDataCubeBuilder.BuildTestSavedQuery(_queryParams, false, _visualizationSettings);
-            MultilanguageString chartHeaderEdit =  new(new Dictionary<string, string>()
+            MultilanguageString chartHeaderEdit = new(new Dictionary<string, string>()
             {
                 ["sv"] = "Edited header sv"
             });
@@ -247,9 +247,9 @@ namespace UnitTests.ServicesTests
             string capturedBody = null;
             _mockHttpMessageHandler.Protected()
                 .Setup<Task<HttpResponseMessage>>(
-                    "SendAsync",
-                    ItExpr.IsAny<HttpRequestMessage>(),
-                    ItExpr.IsAny<CancellationToken>())
+                "SendAsync",
+                ItExpr.IsAny<HttpRequestMessage>(),
+                ItExpr.IsAny<CancellationToken>())
                 .Callback<HttpRequestMessage, CancellationToken>((request, _) =>
                 {
                     capturedRequest = request;
@@ -259,12 +259,12 @@ namespace UnitTests.ServicesTests
                 .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK));
 
             // Act
-            QueryPublicationStatus result = await webhookService.TriggerWebhookAsync("test-id", savedQuery, _testMeta.AdditionalProperties);
+            WebhookPublicationResult result = await webhookService.TriggerWebhookAsync("test-id", savedQuery, _testMeta.AdditionalProperties);
 
             // Assert basic request properties
             Assert.Multiple(() =>
             {
-                Assert.That(result, Is.EqualTo(QueryPublicationStatus.Success));
+                Assert.That(result.Status, Is.EqualTo(QueryPublicationStatus.Success));
                 Assert.That(capturedRequest, Is.Not.Null);
                 Assert.That(capturedRequest.Method, Is.EqualTo(HttpMethod.Post));
                 Assert.That(capturedRequest.RequestUri.ToString(), Is.EqualTo("https://example.com/webhook"));
@@ -312,6 +312,52 @@ namespace UnitTests.ServicesTests
                     Assert.DoesNotThrow(() => _ = DateTime.Parse(creationStr, CultureInfo.InvariantCulture), "creationtime should be a valid DateTime string");
                 }
             });
+        }
+
+        [Test]
+        public async Task TriggerWebhookAsync_NullResponse_ReturnsNullMessages()
+        {
+            // Arrange
+            ConfigureWebhookEnabled();
+
+            using HttpClient httpClient = new(_mockHttpMessageHandler.Object);
+            PublicationWebhookService webhookService = new(httpClient, _mockLogger.Object, _mockDatasource.Object);
+            SavedQuery savedQuery = TestDataCubeBuilder.BuildTestSavedQuery(_queryParams, false, _visualizationSettings);
+            savedQuery.Draft = false; // Ensure query is not a draft
+
+            _mockHttpMessageHandler.Protected()
+                .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+                .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK) { Content = null });
+
+            // Act
+            WebhookPublicationResult result = await webhookService.TriggerWebhookAsync("test-id", savedQuery, _testMeta.AdditionalProperties);
+
+            // Assert
+            Assert.That(result.Status, Is.EqualTo(QueryPublicationStatus.Success));
+            Assert.That(result.Messages, Is.Null);
+        }
+
+        [Test]
+        public async Task TriggerWebhookAsync_EmptyResponse_ReturnsErrorMessage()
+        {
+            // Arrange
+            ConfigureWebhookEnabled();
+
+            using HttpClient httpClient = new(_mockHttpMessageHandler.Object);
+            PublicationWebhookService webhookService = new(httpClient, _mockLogger.Object, _mockDatasource.Object);
+            SavedQuery savedQuery = TestDataCubeBuilder.BuildTestSavedQuery(_queryParams, false, _visualizationSettings);
+            savedQuery.Draft = false; // Ensure query is not a draft
+
+            _mockHttpMessageHandler.Protected()
+                .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+                .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent("") });
+
+            // Act
+            WebhookPublicationResult result = await webhookService.TriggerWebhookAsync("test-id", savedQuery, _testMeta.AdditionalProperties);
+
+            // Assert
+            Assert.That(result.Status, Is.EqualTo(QueryPublicationStatus.Success));
+            Assert.That(result.Messages, Is.Null);
         }
     }
 }

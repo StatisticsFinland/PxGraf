@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
+using Px.Utils.Language;
 using Px.Utils.Models.Metadata.Enums;
 using Px.Utils.Models.Metadata;
 using PxGraf.Controllers;
@@ -86,6 +87,9 @@ namespace UnitTests.ControllerTests.SqControllerTests
             mockSqFileInterface.Setup(s => s.SerializeToFile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<SavedQuery>()))
                 .Returns(Task.CompletedTask);
 
+            mockWebhookService.Setup(w => w.TriggerWebhookAsync(It.IsAny<string>(), It.IsAny<SavedQuery>(), It.IsAny<IReadOnlyDictionary<string, Px.Utils.Models.Metadata.MetaProperties.MetaProperty>>()))
+                .ReturnsAsync(new WebhookPublicationResult { Status = QueryPublicationStatus.Success, Messages = new MultilanguageString([])});
+
             SqController testController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, mockLogger.Object, mockAuditLogService.Object, mockWebhookService.Object);
 
             // Act
@@ -101,6 +105,10 @@ namespace UnitTests.ControllerTests.SqControllerTests
                 a => a.LogAuditEvent(
                     It.Is<string>(action => action == "api/sq/archive"),
                     It.Is<string>(resource => resource == result.Value.Id)),
+                Times.Once);
+
+            mockWebhookService.Verify(
+                w => w.TriggerWebhookAsync(It.IsAny<string>(), It.IsAny<SavedQuery>(), It.IsAny<IReadOnlyDictionary<string, Px.Utils.Models.Metadata.MetaProperties.MetaProperty>>()),
                 Times.Once);
         }
 
@@ -157,7 +165,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
                 .Returns(Task.CompletedTask);
 
             mockWebhookService.Setup(w => w.TriggerWebhookAsync(It.IsAny<string>(), It.IsAny<SavedQuery>(), It.IsAny<IReadOnlyDictionary<string, Px.Utils.Models.Metadata.MetaProperties.MetaProperty>>()))
-                .ReturnsAsync(QueryPublicationStatus.Success);
+                .ReturnsAsync(new WebhookPublicationResult { Status = QueryPublicationStatus.Success, Messages = new MultilanguageString([])});
 
             SqController testController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, mockLogger.Object, mockAuditLogService.Object, mockWebhookService.Object);
 

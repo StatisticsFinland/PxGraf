@@ -110,19 +110,15 @@
     "errorMessage": "Check the variable selections and try again.",
     "id": "Selection identifier",
     "copyToClipBoard": "Copy to clipboard",
-    "publicationStatus": "Publication status",
-    "publicationSuccess": "Publication successful",
-    "publicationFailed": "Publication failed",
-    "publicationUnpublished": "Not published",
-    "saving": "Saving query...",
-    "pleaseWait": "Please wait, this may take a moment for published queries."
+    "saving": "Saving query..."
   },
   "error": {
     "contentLoad": "Content could not be loaded",
     "queryLoad": "Failed to load visualisation",
     "contentVariableMissing": "Content variable missing from the table. Please contact the producer of this table or maintenance. ",
     "timeVariableMissing": "Time variable missing from the table. Please contact the producer of this table or maintenance. ",
-    "variablesMissingValues": "Variable values missing from the table. Please contact the producer of this table or maintenance. "
+    "variablesMissingValues": "Variable values missing from the table. Please contact the producer of this table or maintenance. ",
+    "webhookResponseError": "Empty response from server. Please try again later."
   },
   "rejectionDialog": {
     "buttonText": "Other chart types",

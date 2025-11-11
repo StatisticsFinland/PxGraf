@@ -110,19 +110,15 @@
     "errorMessage": "Kontrollera variabelvalen och försök igen.",
     "id": "Uttagets identifierare",
     "copyToClipBoard": "Kopiera till urklipp",
-    "publicationStatus": "Publiceringsstatus",
-    "publicationSuccess": "Publicering lyckades",
-    "publicationFailed": "Publicering misslyckades",
-    "publicationUnpublished": "Inte publicerad",
-    "saving": "Sparar fråga...",
-    "pleaseWait": "Vänta lite, behandlingen av publicerbara frågor kan ta längre tid."
+    "saving": "Sparar fråga..."
   },
   "error": {
     "contentLoad": "Innehållet kunde inte hämtas",
     "queryLoad": "Det gick inte att ladda ner visualiseringen",
     "contentVariableMissing": "Tabellen saknar innehållsvariabel. Kontakta tabellens producent eller administratör. ",
     "timeVariableMissing": "Tabellen saknar tidsvariabel. Kontakta tabellens producent eller administratör. ",
-    "variablesMissingValues": "Tabellen saknar variabelvärden. Kontakta tabellens producent eller administratör. "
+    "variablesMissingValues": "Tabellen saknar variabelvärden. Kontakta tabellens producent eller administratör. ",
+    "webhookResponseError": "Tomt svar från servern. Försök igen senare."
   },
   "rejectionDialog": {
     "buttonText": "Övriga diagramtyper",

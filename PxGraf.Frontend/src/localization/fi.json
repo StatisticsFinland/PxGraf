@@ -110,19 +110,15 @@
     "errorMessage": "Tarkista muuttujavalinnat ja yritä uudelleen.",
     "id": "Poiminnan tunniste",
     "copyToClipBoard": "Kopioi leikepöydälle",
-    "publicationStatus": "Julkaisun tila",
-    "publicationSuccess": "Julkaisu onnistui",
-    "publicationFailed": "Julkaisu epäonnistui",
-    "publicationUnpublished": "Ei julkaistu",
-    "saving": "Tallennetaan kyselyä...",
-    "pleaseWait": "Odota hetki, julkaistavien kyselyjen käsittely voi kestää pidempään."
+    "saving": "Tallennetaan kyselyä..."
   },
   "error": {
     "contentLoad": "Sisällön lataaminen ei onnistunut",
     "queryLoad": "Visualisoinnin lataaminen epäonnistui",
     "contentVariableMissing": "Taulukosta puuttuu sisältömuuttuja. Ota yhteyttä tämän taulukon tuottajaan tai ylläpitoon. ",
     "timeVariableMissing": "Taulukosta puuttuu aikamuuttuja. Ota yhteyttä tämän taulukon tuottajaan tai ylläpitoon. ",
-    "variablesMissingValues": "Taulukosta puuttuu muuttujan arvoja. Ota yhteyttä tämän taulukon tuottajaan tai ylläpitoon. "
+    "variablesMissingValues": "Taulukosta puuttuu muuttujan arvoja. Ota yhteyttä tämän taulukon tuottajaan tai ylläpitoon. ",
+    "webhookResponseError": "Tyhjä vastaus palvelimelta. Yritä uudelleen myöhemmin."
   },
   "rejectionDialog":{
     "buttonText": "Muut kuviotyypit",

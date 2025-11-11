@@ -44,7 +44,7 @@ exports[`Error rendering test renders error correctly when open with error 1`] =
           class="MuiDialogContent-root MuiDialogContent-dividers css-10bxh4q-MuiDialogContent-root"
         >
           <div
-            class="MuiFormControl-root sc-hvigdm cZFveC css-1iw3t7y-MuiFormControl-root"
+            class="MuiFormControl-root sc-hvigdm hTSGKS css-1iw3t7y-MuiFormControl-root"
           >
             <label
               class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined css-113d811-MuiFormLabel-root-MuiInputLabel-root"
@@ -54,7 +54,7 @@ exports[`Error rendering test renders error correctly when open with error 1`] =
               saveResultDialog.id
             </label>
             <div
-              class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd sc-bRKDuR gJjKbh css-jupps9-MuiInputBase-root-MuiOutlinedInput-root"
+              class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd sc-bRKDuR bLDULx css-jupps9-MuiInputBase-root-MuiOutlinedInput-root"
             >
               <input
                 aria-invalid="false"
@@ -123,12 +123,7 @@ exports[`Error rendering test renders error correctly when open with error 1`] =
             <div
               class="MuiAlert-message css-zioonp-MuiAlert-message"
             >
-              <strong>
-                saveResultDialog.publicationStatus
-                :
-              </strong>
-               
-              saveResultDialog.publicationFailed
+              error.webhookResponseError
             </div>
           </div>
         </div>
@@ -203,7 +198,7 @@ exports[`Rendering test renders correctly when open (draft) 1`] = `
           class="MuiDialogContent-root MuiDialogContent-dividers css-10bxh4q-MuiDialogContent-root"
         >
           <div
-            class="MuiFormControl-root sc-hvigdm cZFveC css-1iw3t7y-MuiFormControl-root"
+            class="MuiFormControl-root sc-hvigdm hTSGKS css-1iw3t7y-MuiFormControl-root"
           >
             <label
               class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined css-113d811-MuiFormLabel-root-MuiInputLabel-root"
@@ -213,7 +208,7 @@ exports[`Rendering test renders correctly when open (draft) 1`] = `
               saveResultDialog.id
             </label>
             <div
-              class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd sc-bRKDuR gJjKbh css-jupps9-MuiInputBase-root-MuiOutlinedInput-root"
+              class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd sc-bRKDuR bLDULx css-jupps9-MuiInputBase-root-MuiOutlinedInput-root"
             >
               <input
                 aria-invalid="false"
@@ -326,7 +321,7 @@ exports[`Rendering test renders correctly when open 1`] = `
           class="MuiDialogContent-root MuiDialogContent-dividers css-10bxh4q-MuiDialogContent-root"
         >
           <div
-            class="MuiFormControl-root sc-hvigdm cZFveC css-1iw3t7y-MuiFormControl-root"
+            class="MuiFormControl-root sc-hvigdm hTSGKS css-1iw3t7y-MuiFormControl-root"
           >
             <label
               class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined css-113d811-MuiFormLabel-root-MuiInputLabel-root"
@@ -336,7 +331,7 @@ exports[`Rendering test renders correctly when open 1`] = `
               saveResultDialog.id
             </label>
             <div
-              class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd sc-bRKDuR gJjKbh css-jupps9-MuiInputBase-root-MuiOutlinedInput-root"
+              class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd sc-bRKDuR bLDULx css-jupps9-MuiInputBase-root-MuiOutlinedInput-root"
             >
               <input
                 aria-invalid="false"
@@ -405,12 +400,7 @@ exports[`Rendering test renders correctly when open 1`] = `
             <div
               class="MuiAlert-message css-zioonp-MuiAlert-message"
             >
-              <strong>
-                saveResultDialog.publicationStatus
-                :
-              </strong>
-               
-              saveResultDialog.publicationSuccess
+              error.webhookResponseError
             </div>
           </div>
         </div>

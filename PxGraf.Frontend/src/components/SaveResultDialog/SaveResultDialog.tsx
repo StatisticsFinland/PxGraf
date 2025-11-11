@@ -72,10 +72,11 @@ const SaveDialogContent: React.FC<ISaveDialogContentProps> = ({ result, isDraft 
     else if (result.isSuccess) {
         return (
             <SuccessDialogContent
-  queryId={result.data?.id}
-           publicationStatus={result.data?.publicationStatus}
-      isDraft={isDraft}
-     />
+                queryId={result.data?.id}
+                publicationStatus={result.data?.publicationStatus}
+                publicationMessage={result.data?.publicationMessage}
+                isDraft={isDraft}
+            />
         );
     }
     else { return <ErrorDialogContent /> }

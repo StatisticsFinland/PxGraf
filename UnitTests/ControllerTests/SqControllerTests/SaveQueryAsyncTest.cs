@@ -3,8 +3,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
+using Px.Utils.Language;
 using Px.Utils.Models.Metadata;
 using Px.Utils.Models.Metadata.Enums;
+using Px.Utils.Models.Metadata.MetaProperties;
 using PxGraf.Controllers;
 using PxGraf.Datasource;
 using PxGraf.Enums;
@@ -69,6 +71,9 @@ namespace UnitTests.ControllerTests.SqControllerTests
             mockSqFileInterface.Setup(s => s.SerializeToFile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<SavedQuery>()))
                 .Returns(Task.CompletedTask);
 
+            mockWebhookService.Setup(s => s.TriggerWebhookAsync(It.IsAny<string>(), It.IsAny<SavedQuery>(), It.IsAny<IReadOnlyDictionary<string, MetaProperty>>()))
+                .ReturnsAsync(new WebhookPublicationResult { Status = QueryPublicationStatus.Success, Messages = new MultilanguageString([])});
+
             SaveQueryParams testInput = new()
             {
                 Query = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams),
@@ -86,6 +91,9 @@ namespace UnitTests.ControllerTests.SqControllerTests
             Assert.That(actionResult.Value, Is.InstanceOf<SaveQueryResponse>());
             mockSqFileInterface.Verify(
                 s => s.SerializeToFile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<SavedQuery>()), Times.Once);
+            mockWebhookService.Verify(
+                w => w.TriggerWebhookAsync(It.IsAny<string>(), It.IsAny<SavedQuery>(), It.IsAny<IReadOnlyDictionary<string, MetaProperty>>()),
+                Times.Once);
         }
 
         [Test]
@@ -124,7 +132,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
                 .Returns(Task.CompletedTask);
 
             mockWebhookService.Setup(w => w.TriggerWebhookAsync(It.IsAny<string>(), It.IsAny<SavedQuery>(), It.IsAny<IReadOnlyDictionary<string, Px.Utils.Models.Metadata.MetaProperties.MetaProperty>>()))
-                .ReturnsAsync(QueryPublicationStatus.Success);
+                .ReturnsAsync(new WebhookPublicationResult { Status = QueryPublicationStatus.Success, Messages = new MultilanguageString([])});
 
             SaveQueryParams testInput = new()
             {

@@ -3,8 +3,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
+using Px.Utils.Language;
 using Px.Utils.Models.Metadata;
 using Px.Utils.Models.Metadata.Enums;
+using Px.Utils.Models.Metadata.MetaProperties;
 using PxGraf.Controllers;
 using PxGraf.Datasource;
 using PxGraf.Language;
@@ -156,6 +158,9 @@ namespace UnitTests.ControllerTests.SqControllerTests
             {
                 SqId = TEST_SQ_ID
             };
+            
+            _mockWebhookService.Setup(s => s.TriggerWebhookAsync(It.IsAny<string>(), It.IsAny<SavedQuery>(), It.IsAny<IReadOnlyDictionary<string, MetaProperty>>()))
+                .ReturnsAsync(new WebhookPublicationResult { Status = QueryPublicationStatus.Success, Messages = new MultilanguageString([])});
 
             // Act
             ActionResult<ReArchiveResponse> result = await controller.ReArchiveExistingQueryAsync(request);
@@ -169,6 +174,10 @@ namespace UnitTests.ControllerTests.SqControllerTests
                 a => a.LogAuditEvent(
                     It.Is<string>(action => action == "api/sq/re-archive"),
                     It.Is<string>(resource => resource == TEST_SQ_ID)),
+                Times.Once);
+
+            _mockWebhookService.Verify(
+                w => w.TriggerWebhookAsync(It.IsAny<string>(), It.IsAny<SavedQuery>(), It.IsAny<IReadOnlyDictionary<string, MetaProperty>>()),
                 Times.Once);
         }
 
@@ -192,7 +201,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
                 ];
 
             _mockWebhookService.Setup(w => w.TriggerWebhookAsync(It.IsAny<string>(), It.IsAny<SavedQuery>(), It.IsAny<IReadOnlyDictionary<string, Px.Utils.Models.Metadata.MetaProperties.MetaProperty>>()))
-                .ReturnsAsync(QueryPublicationStatus.Success);
+                .ReturnsAsync(new WebhookPublicationResult { Status = QueryPublicationStatus.Success, Messages = new MultilanguageString([]) });
 
             SqController controller = BuildController(cubeParameters, metaParameters);
             ReArchiveRequest request = new()

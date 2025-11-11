@@ -5,6 +5,7 @@ using Px.Utils.Models.Metadata.MetaProperties;
 using PxGraf.Datasource;
 using PxGraf.Enums;
 using PxGraf.Models.Metadata;
+using PxGraf.Models.Responses;
 using PxGraf.Models.SavedQueries;
 using PxGraf.Settings;
 using PxGraf.Utility;
@@ -20,6 +21,15 @@ using System.Threading.Tasks;
 namespace PxGraf.Services
 {
     /// <summary>
+    /// Result object containing publication status and localized messages
+    /// </summary>
+    public class WebhookPublicationResult
+    {
+        public QueryPublicationStatus Status { get; set; }
+        public MultilanguageString Messages { get; set; } = new MultilanguageString([]);
+    }
+
+    /// <summary>
     /// Service interface for publication webhooks.
     /// </summary>
     public interface IPublicationWebhookService
@@ -30,8 +40,8 @@ namespace PxGraf.Services
         /// <param name="queryId">The ID of the saved query.</param>
         /// <param name="savedQuery">The saved query object.</param>
         /// <param name="additionalProperties">The metadata additional properties dictionary.</param>
-        /// <returns>A task representing the asynchronous operation.</returns>
-        Task<QueryPublicationStatus> TriggerWebhookAsync(string queryId, SavedQuery savedQuery, IReadOnlyDictionary<string, MetaProperty> additionalProperties);
+        /// <returns>A task representing the asynchronous operation with publication result.</returns>
+        Task<WebhookPublicationResult> TriggerWebhookAsync(string queryId, SavedQuery savedQuery, IReadOnlyDictionary<string, MetaProperty> additionalProperties);
     }
 
     /// <summary>
@@ -54,7 +64,7 @@ namespace PxGraf.Services
         /// <param name="savedQuery">The saved query object.</param>
         /// <param name="additionalProperties">The metadata additional properties dictionary.</param>
         /// <returns>A task representing the asynchronous operation.</returns>
-        public async Task<QueryPublicationStatus> TriggerWebhookAsync(string queryId, SavedQuery savedQuery, IReadOnlyDictionary<string, MetaProperty> additionalProperties)
+        public async Task<WebhookPublicationResult> TriggerWebhookAsync(string queryId, SavedQuery savedQuery, IReadOnlyDictionary<string, MetaProperty> additionalProperties)
         {
             using (logger.BeginScope(new Dictionary<string, object>()
             {
@@ -65,13 +75,13 @@ namespace PxGraf.Services
                 if (!_config.IsEnabled)
                 {
                     logger.LogDebug("Publication webhook is not configured or disabled. Skipping webhook trigger.");
-                    return QueryPublicationStatus.Unpublished;
+                    return new WebhookPublicationResult { Status = QueryPublicationStatus.Unpublished };
                 }
 
                 if (savedQuery.Draft)
                 {
                     logger.LogDebug("Query is in draft mode. Webhook will not be triggered.");
-                    return QueryPublicationStatus.Unpublished;
+                    return new WebhookPublicationResult { Status = QueryPublicationStatus.Unpublished };
                 }
 
                 try
@@ -91,22 +101,36 @@ namespace PxGraf.Services
 
                     HttpResponseMessage response = await httpClient.SendAsync(request);
 
+                    MultilanguageString messages = await ExtractMessagesFromResponse(response);
+
                     if (response.IsSuccessStatusCode)
                     {
                         logger.LogInformation("Publication webhook for query sent successfully. Status: {StatusCode}", response.StatusCode);
-                        return QueryPublicationStatus.Success;
+                        return new WebhookPublicationResult
+                        {
+                            Status = QueryPublicationStatus.Success,
+                            Messages = messages
+                        };
                     }
                     else
                     {
                         logger.LogWarning("Publication webhook for query failed. Status: {StatusCode}, Reason: {ReasonPhrase}",
-                                 response.StatusCode, response.ReasonPhrase);
-                        return QueryPublicationStatus.Failed;
+                        response.StatusCode, response.ReasonPhrase);
+                        return new WebhookPublicationResult
+                        {
+                            Status = QueryPublicationStatus.Failed,
+                            Messages = messages
+                        };
                     }
                 }
                 catch (Exception ex)
                 {
                     logger.LogError(ex, "Failed to send publication webhook for query");
-                    return QueryPublicationStatus.Failed;
+                    return new WebhookPublicationResult
+                    {
+                        Status = QueryPublicationStatus.Failed,
+                        Messages = new MultilanguageString(new Dictionary<string, string> { ["error"] = ex.Message })
+                    };
                 }
             }
         }
@@ -126,7 +150,7 @@ namespace PxGraf.Services
             {
                 // Get the custom field name if configured, otherwise use the original property name
                 string fieldName = _config.BodyContentPropertyNameEdits.TryGetValue(propertyName, out string customName)
-                    ? customName
+                       ? customName
                     : propertyName;
 
                 object value = GetPropertyValue(propertyName, queryId, savedQuery);
@@ -238,6 +262,51 @@ namespace PxGraf.Services
 
             // Fallback to default enum name
             return enumName;
+        }
+
+        /// <summary>
+        /// Extracts localized messages from the webhook response.
+        /// </summary>
+        /// <param name="response">The HTTP response from the webhook.</param>
+        /// <returns>MultilanguageString of localized messages or error message if parsing fails.</returns>
+        private async Task<MultilanguageString> ExtractMessagesFromResponse(HttpResponseMessage response)
+        {
+            try
+            {
+                if (response?.Content == null)
+                {
+                    logger.LogWarning("Webhook response or response content is null");
+                    return null;
+                }
+
+                string responseContent = await response.Content.ReadAsStringAsync();
+
+                if (string.IsNullOrWhiteSpace(responseContent))
+                {
+                    logger.LogWarning("Webhook response content is empty or whitespace");
+                    return null;
+                }
+
+                WebhookResponse webhookResponse = JsonSerializer.Deserialize<WebhookResponse>(responseContent, GlobalJsonConverterOptions.Default);
+
+                if (webhookResponse?.Messages != null && webhookResponse.Messages.Languages.Any())
+                {
+                    return webhookResponse.Messages;
+                }
+
+                logger.LogWarning("Webhook response content could not be parsed as valid message format. Content: {ResponseContent}", responseContent);
+                return new MultilanguageString(new Dictionary<string, string> { ["error"] = "Webhook response does not contain valid message format" });
+            }
+            catch (JsonException ex)
+            {
+                logger.LogWarning(ex, "Failed to parse webhook response as JSON. Response content: {ResponseContent}", response?.Content);
+                return new MultilanguageString(new Dictionary<string, string> { ["error"] = $"Invalid response format: {ex.Message}" });
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Unexpected error while extracting messages from webhook response");
+                return new MultilanguageString(new Dictionary<string, string> { ["error"] = ex.Message });
+            }
         }
     }
 }

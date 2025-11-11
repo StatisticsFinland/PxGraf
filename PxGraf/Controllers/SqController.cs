@@ -171,14 +171,20 @@ namespace PxGraf.Controllers
                     {
                         SavedQuery savedQuery = new(parameters.Query, archived: false, visualizationSettings, DateTime.Now, parameters.Draft);
                         await _sqFileInterface.SerializeToFile(fileName, Configuration.Current.SavedQueryDirectory, savedQuery);
-                        QueryPublicationStatus publicationStatus = QueryPublicationStatus.Unpublished;
+                        WebhookPublicationResult webhookResult = new () { Status = QueryPublicationStatus.Unpublished };
+
                         // Trigger webhook for non-draft queries
                         if (!parameters.Draft)
                         {
-                            publicationStatus = await _webhookService.TriggerWebhookAsync(guid, savedQuery, filteredMeta.AdditionalProperties);
+                            webhookResult = await _webhookService.TriggerWebhookAsync(guid, savedQuery, filteredMeta.AdditionalProperties);
                         }
 
-                        SaveQueryResponse saveQueryResponse = new() { Id = guid, PublicationStatus = publicationStatus };
+                        SaveQueryResponse saveQueryResponse = new()
+                        {
+                            Id = guid,
+                            PublicationStatus = webhookResult.Status,
+                            PublicationMessage = webhookResult.Messages
+                        };
                         _logger.LogInformation("Query saved successfully.");
                         _logger.LogDebug("Returning save query result.");
                         return saveQueryResponse;
@@ -243,16 +249,22 @@ namespace PxGraf.Controllers
                         string archiveName = $"{guid}.sqa";
                         await _sqFileInterface.SerializeToFile(archiveName, Configuration.Current.ArchiveFileDirectory, new ArchiveCube(matrix));
 
-                        QueryPublicationStatus publicationStatus = QueryPublicationStatus.Unpublished;
+                        WebhookPublicationResult webhookResult = new() { Status = QueryPublicationStatus.Unpublished };
+
                         // Trigger webhook for non-draft queries
                         if (!parameters.Draft)
                         {
-                            publicationStatus = await _webhookService.TriggerWebhookAsync(guid, savedQuery, filteredMeta.AdditionalProperties);
+                            webhookResult = await _webhookService.TriggerWebhookAsync(guid, savedQuery, filteredMeta.AdditionalProperties);
                         }
 
                         _logger.LogInformation("Query archived successfully.");
                         _logger.LogDebug("Returning archive query result.");
-                        return new SaveQueryResponse() { Id = guid, PublicationStatus = publicationStatus };
+                        return new SaveQueryResponse()
+                        {
+                            Id = guid,
+                            PublicationStatus = webhookResult.Status,
+                            PublicationMessage = webhookResult.Messages
+                        };
                     }
 
                     // If visualization type is not given or it is not valid return 400.
@@ -311,16 +323,22 @@ namespace PxGraf.Controllers
                                 string archiveName = $"{guid}.sqa";
                                 await _sqFileInterface.SerializeToFile(archiveName, Configuration.Current.ArchiveFileDirectory, new ArchiveCube(matrix));
 
-                                QueryPublicationStatus publicationStatus = QueryPublicationStatus.Unpublished;
+                                WebhookPublicationResult webhookResult = new() { Status = QueryPublicationStatus.Unpublished };
+
                                 // Trigger webhook for non-draft queries
                                 if (!request.Draft)
                                 {
-                                    publicationStatus = await _webhookService.TriggerWebhookAsync(guid, savedQuery, filteredMeta.AdditionalProperties);
+                                    webhookResult = await _webhookService.TriggerWebhookAsync(guid, savedQuery, filteredMeta.AdditionalProperties);
                                 }
 
                                 _logger.LogInformation("Query re-archived successfully.");
                                 _logger.LogDebug("Returning re-archive query result.");
-                                return new ReArchiveResponse() { NewSqId = guid, PublicationStatus = publicationStatus };
+                                return new ReArchiveResponse()
+                                {
+                                    NewSqId = guid,
+                                    PublicationStatus = webhookResult.Status,
+                                    PublicationMessage = webhookResult.Messages
+                                };
                             }
 
                             // If visualization type is not valid for the new data return 400.
