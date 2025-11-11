@@ -9,6 +9,7 @@ using Px.Utils.Models.Metadata.Enums;
 using PxGraf.Datasource;
 using PxGraf.Language;
 using PxGraf.Models.Queries;
+using PxGraf.Models.Responses;
 using PxGraf.Models.SavedQueries;
 using PxGraf.Services;
 using PxGraf.Settings;
@@ -160,6 +161,7 @@ namespace UnitTests.ServicesTests
             SavedQuery savedQuery = TestDataCubeBuilder.BuildTestSavedQuery(_queryParams, false, lineVisualizationSettings);
             savedQuery.Draft = false; // Ensure query is not a draft
 
+            // Mock successful response with empty content to test null message handling
             _mockHttpMessageHandler.Protected()
                 .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
                 .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK));
@@ -169,6 +171,7 @@ namespace UnitTests.ServicesTests
 
             // Assert
             Assert.That(result.Status, Is.EqualTo(QueryPublicationStatus.Success));
+            Assert.That(result.Messages, Is.Null); // Empty response should return null
 
             // Verify HTTP call was made once
             _mockHttpMessageHandler.Protected()
@@ -213,18 +216,21 @@ namespace UnitTests.ServicesTests
             savedQuery.Draft = false; // Ensure query is not a draft
 
             _mockHttpMessageHandler.Protected()
-                .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
-                .ThrowsAsync(new HttpRequestException("Network error"));
+              .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+             .ThrowsAsync(new HttpRequestException("Network error"));
 
             // Act
             WebhookPublicationResult result = await webhookService.TriggerWebhookAsync("test-id", savedQuery, _testMeta.AdditionalProperties);
 
             // Assert
             Assert.That(result.Status, Is.EqualTo(QueryPublicationStatus.Failed));
+            Assert.That(result.Messages, Is.Not.Null);
+            Assert.That(result.Messages.Languages.Contains("error"), Is.True);
+            Assert.That(result.Messages["error"], Is.EqualTo("Network error"));
 
             // Verify HTTP call was attempted once
             _mockHttpMessageHandler.Protected()
-                .Verify("SendAsync", Times.Once(), ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>());
+             .Verify("SendAsync", Times.Once(), ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>());
         }
 
         [Test]
@@ -338,7 +344,7 @@ namespace UnitTests.ServicesTests
         }
 
         [Test]
-        public async Task TriggerWebhookAsync_EmptyResponse_ReturnsErrorMessage()
+        public async Task TriggerWebhookAsync_EmptyResponse_ReturnsNullMessages()
         {
             // Arrange
             ConfigureWebhookEnabled();
@@ -358,6 +364,77 @@ namespace UnitTests.ServicesTests
             // Assert
             Assert.That(result.Status, Is.EqualTo(QueryPublicationStatus.Success));
             Assert.That(result.Messages, Is.Null);
+        }
+
+        [Test]
+        public async Task TriggerWebhookAsync_ValidWebhookResponse_ReturnsMessages()
+        {
+            // Arrange
+            ConfigureWebhookEnabled();
+
+            using HttpClient httpClient = new(_mockHttpMessageHandler.Object);
+            PublicationWebhookService webhookService = new(httpClient, _mockLogger.Object, _mockDatasource.Object);
+            SavedQuery savedQuery = TestDataCubeBuilder.BuildTestSavedQuery(_queryParams, false, _visualizationSettings);
+            savedQuery.Draft = false; // Ensure query is not a draft
+
+            // Create a proper WebhookResponse with localized messages
+            WebhookResponse webhookResponse = new ()
+            {
+                Messages = new MultilanguageString(new Dictionary<string, string>
+                {
+                    ["fi"] = "Julkaisu onnistui",
+                    ["en"] = "Publication successful",
+                    ["sv"] = "Publicering lyckades"
+                })
+            };
+
+            string responseContent = JsonSerializer.Serialize(webhookResponse);
+
+            _mockHttpMessageHandler.Protected()
+                        .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+             .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK)
+             {
+                 Content = new StringContent(responseContent, System.Text.Encoding.UTF8, "application/json")
+             });
+
+            // Act
+            WebhookPublicationResult result = await webhookService.TriggerWebhookAsync("test-id", savedQuery, _testMeta.AdditionalProperties);
+
+            // Assert
+            Assert.That(result.Status, Is.EqualTo(QueryPublicationStatus.Success));
+            Assert.That(result.Messages, Is.Not.Null);
+            Assert.That(result.Messages.Languages.Count, Is.EqualTo(3));
+            Assert.That(result.Messages["fi"], Is.EqualTo("Julkaisu onnistui"));
+            Assert.That(result.Messages["en"], Is.EqualTo("Publication successful"));
+            Assert.That(result.Messages["sv"], Is.EqualTo("Publicering lyckades"));
+        }
+
+        [Test]
+        public async Task TriggerWebhookAsync_InvalidJsonResponse_ReturnsErrorMessage()
+        {
+            // Arrange
+            ConfigureWebhookEnabled();
+
+            using HttpClient httpClient = new(_mockHttpMessageHandler.Object);
+            PublicationWebhookService webhookService = new(httpClient, _mockLogger.Object, _mockDatasource.Object);
+            SavedQuery savedQuery = TestDataCubeBuilder.BuildTestSavedQuery(_queryParams, false, _visualizationSettings);
+            savedQuery.Draft = false; // Ensure query is not a draft
+
+            _mockHttpMessageHandler.Protected()
+              .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+              .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK)
+              {
+                  Content = new StringContent("invalid json content", System.Text.Encoding.UTF8, "application/json")
+              });
+
+            // Act
+            WebhookPublicationResult result = await webhookService.TriggerWebhookAsync("test-id", savedQuery, _testMeta.AdditionalProperties);
+
+            // Assert
+            Assert.That(result.Status, Is.EqualTo(QueryPublicationStatus.Success));
+            Assert.That(result.Messages, Is.Not.Null);
+            Assert.That(result.Messages.Languages.Contains("error"), Is.True);
+            Assert.That(result.Messages["error"], Does.StartWith("Invalid response format:"));
         }
     }
 }

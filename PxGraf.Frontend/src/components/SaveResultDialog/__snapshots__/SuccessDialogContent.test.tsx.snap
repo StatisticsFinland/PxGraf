@@ -13,7 +13,7 @@ exports[`Rendering test renders correctly when closed 1`] = `
         data-shrink="true"
         for="display-saved-query-id-input-label"
       >
-        saveResultDialog.id
+        Selection identifier
       </label>
       <div
         class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd sc-bRKDuR bLDULx css-jupps9-MuiInputBase-root-MuiOutlinedInput-root"
@@ -30,7 +30,7 @@ exports[`Rendering test renders correctly when closed 1`] = `
           class="MuiInputAdornment-root MuiInputAdornment-positionEnd MuiInputAdornment-outlined MuiInputAdornment-sizeMedium css-elo8k2-MuiInputAdornment-root"
         >
           <button
-            aria-label="saveResultDialog.copyToClipBoard"
+            aria-label="Copy to clipboard"
             class="MuiButtonBase-root MuiIconButton-root MuiIconButton-edgeEnd MuiIconButton-sizeMedium css-1ysp02-MuiButtonBase-root-MuiIconButton-root"
             tabindex="0"
             type="button"
@@ -56,7 +56,7 @@ exports[`Rendering test renders correctly when closed 1`] = `
             class="css-ex8a5f-MuiNotchedOutlined-root"
           >
             <span>
-              saveResultDialog.id
+              Selection identifier
             </span>
           </legend>
         </fieldset>
@@ -80,7 +80,7 @@ exports[`Rendering test renders correctly when open (draft) 1`] = `
           data-shrink="true"
           for="display-saved-query-id-input-label"
         >
-          saveResultDialog.id
+          Selection identifier
         </label>
         <div
           class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd sc-bRKDuR bLDULx css-jupps9-MuiInputBase-root-MuiOutlinedInput-root"
@@ -97,7 +97,7 @@ exports[`Rendering test renders correctly when open (draft) 1`] = `
             class="MuiInputAdornment-root MuiInputAdornment-positionEnd MuiInputAdornment-outlined MuiInputAdornment-sizeMedium css-elo8k2-MuiInputAdornment-root"
           >
             <button
-              aria-label="saveResultDialog.copyToClipBoard"
+              aria-label="Copy to clipboard"
               class="MuiButtonBase-root MuiIconButton-root MuiIconButton-edgeEnd MuiIconButton-sizeMedium css-1ysp02-MuiButtonBase-root-MuiIconButton-root"
               tabindex="0"
               type="button"
@@ -123,7 +123,7 @@ exports[`Rendering test renders correctly when open (draft) 1`] = `
               class="css-ex8a5f-MuiNotchedOutlined-root"
             >
               <span>
-                saveResultDialog.id
+                Selection identifier
               </span>
             </legend>
           </fieldset>
@@ -134,7 +134,7 @@ exports[`Rendering test renders correctly when open (draft) 1`] = `
 </body>
 `;
 
-exports[`Rendering test renders correctly when open (publication error) 1`] = `
+exports[`Rendering test renders correctly with webhook error message 1`] = `
 <body>
   <div>
     <div
@@ -148,7 +148,7 @@ exports[`Rendering test renders correctly when open (publication error) 1`] = `
           data-shrink="true"
           for="display-saved-query-id-input-label"
         >
-          saveResultDialog.id
+          Selection identifier
         </label>
         <div
           class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd sc-bRKDuR bLDULx css-jupps9-MuiInputBase-root-MuiOutlinedInput-root"
@@ -165,7 +165,7 @@ exports[`Rendering test renders correctly when open (publication error) 1`] = `
             class="MuiInputAdornment-root MuiInputAdornment-positionEnd MuiInputAdornment-outlined MuiInputAdornment-sizeMedium css-elo8k2-MuiInputAdornment-root"
           >
             <button
-              aria-label="saveResultDialog.copyToClipBoard"
+              aria-label="Copy to clipboard"
               class="MuiButtonBase-root MuiIconButton-root MuiIconButton-edgeEnd MuiIconButton-sizeMedium css-1ysp02-MuiButtonBase-root-MuiIconButton-root"
               tabindex="0"
               type="button"
@@ -191,7 +191,7 @@ exports[`Rendering test renders correctly when open (publication error) 1`] = `
               class="css-ex8a5f-MuiNotchedOutlined-root"
             >
               <span>
-                saveResultDialog.id
+                Selection identifier
               </span>
             </legend>
           </fieldset>
@@ -220,7 +220,7 @@ exports[`Rendering test renders correctly when open (publication error) 1`] = `
         <div
           class="MuiAlert-message css-zioonp-MuiAlert-message"
         >
-          error.webhookResponseError
+          Invalid response format: JSON parsing failed
         </div>
       </div>
     </div>
@@ -228,7 +228,7 @@ exports[`Rendering test renders correctly when open (publication error) 1`] = `
 </body>
 `;
 
-exports[`Rendering test renders correctly when open (published) 1`] = `
+exports[`Rendering test renders correctly with webhook success message 1`] = `
 <body>
   <div>
     <div
@@ -242,7 +242,7 @@ exports[`Rendering test renders correctly when open (published) 1`] = `
           data-shrink="true"
           for="display-saved-query-id-input-label"
         >
-          saveResultDialog.id
+          Selection identifier
         </label>
         <div
           class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd sc-bRKDuR bLDULx css-jupps9-MuiInputBase-root-MuiOutlinedInput-root"
@@ -259,7 +259,7 @@ exports[`Rendering test renders correctly when open (published) 1`] = `
             class="MuiInputAdornment-root MuiInputAdornment-positionEnd MuiInputAdornment-outlined MuiInputAdornment-sizeMedium css-elo8k2-MuiInputAdornment-root"
           >
             <button
-              aria-label="saveResultDialog.copyToClipBoard"
+              aria-label="Copy to clipboard"
               class="MuiButtonBase-root MuiIconButton-root MuiIconButton-edgeEnd MuiIconButton-sizeMedium css-1ysp02-MuiButtonBase-root-MuiIconButton-root"
               tabindex="0"
               type="button"
@@ -285,7 +285,7 @@ exports[`Rendering test renders correctly when open (published) 1`] = `
               class="css-ex8a5f-MuiNotchedOutlined-root"
             >
               <span>
-                saveResultDialog.id
+                Selection identifier
               </span>
             </legend>
           </fieldset>
@@ -314,7 +314,7 @@ exports[`Rendering test renders correctly when open (published) 1`] = `
         <div
           class="MuiAlert-message css-zioonp-MuiAlert-message"
         >
-          error.webhookResponseError
+          Publication was successful
         </div>
       </div>
     </div>

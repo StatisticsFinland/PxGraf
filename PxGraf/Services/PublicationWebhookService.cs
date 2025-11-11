@@ -11,7 +11,6 @@ using PxGraf.Settings;
 using PxGraf.Utility;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -56,6 +55,7 @@ namespace PxGraf.Services
     public class PublicationWebhookService(HttpClient httpClient, ILogger<PublicationWebhookService> logger, ICachedDatasource datasource) : IPublicationWebhookService
     {
         private readonly PublicationWebhookConfiguration _config = Configuration.Current.PublicationWebhookConfig;
+        private const string ERROR_KEY = "error";
 
         /// <summary>
         /// Triggers a webhook notification for a published query.
@@ -129,7 +129,7 @@ namespace PxGraf.Services
                     return new WebhookPublicationResult
                     {
                         Status = QueryPublicationStatus.Failed,
-                        Messages = new MultilanguageString(new Dictionary<string, string> { ["error"] = ex.Message })
+                        Messages = new MultilanguageString(new Dictionary<string, string> { [ERROR_KEY] = ex.Message })
                     };
                 }
             }
@@ -295,17 +295,17 @@ namespace PxGraf.Services
                 }
 
                 logger.LogWarning("Webhook response content could not be parsed as valid message format. Content: {ResponseContent}", responseContent);
-                return new MultilanguageString(new Dictionary<string, string> { ["error"] = "Webhook response does not contain valid message format" });
+                return new MultilanguageString(new Dictionary<string, string> { [ERROR_KEY] = "Webhook response does not contain valid message format" });
             }
             catch (JsonException ex)
             {
                 logger.LogWarning(ex, "Failed to parse webhook response as JSON. Response content: {ResponseContent}", response?.Content);
-                return new MultilanguageString(new Dictionary<string, string> { ["error"] = $"Invalid response format: {ex.Message}" });
+                return new MultilanguageString(new Dictionary<string, string> { [ERROR_KEY] = $"Invalid response format: {ex.Message}" });
             }
             catch (Exception ex)
             {
                 logger.LogError(ex, "Unexpected error while extracting messages from webhook response");
-                return new MultilanguageString(new Dictionary<string, string> { ["error"] = ex.Message });
+                return new MultilanguageString(new Dictionary<string, string> { [ERROR_KEY] = ex.Message });
             }
         }
     }

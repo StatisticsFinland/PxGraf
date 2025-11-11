@@ -40,10 +40,11 @@ export const SuccessDialogContent: React.FC<ISuccessDialogContentProps> = ({
             if (publicationMessage['error']) {
                 return publicationMessage['error'];
             }
-
+            
             // Try to get message for current language, fallback to any available language
-            return publicationMessage[currentLanguage] ||
-                t("error.webhookResponseError");
+            return publicationMessage[currentLanguage] || 
+                publicationMessage[Object.keys(publicationMessage)[0]] ||
+                t("saveResultDialog.publicationUnpublished");
         }
 
         return t("error.webhookResponseError");
