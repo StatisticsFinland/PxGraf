@@ -39,6 +39,18 @@ namespace UnitTests.ControllerTests.SqControllerTests
         [Test]
         public async Task ArhiveQueryAsyncReturnsSavedQueryResponse()
         {
+            // Set up configuration with webhook enabled
+            Dictionary<string, string> configDict = new(TestInMemoryConfiguration.Get())
+            {
+                { "PublicationWebhookConfiguration:EndpointUrl", "https://example.com/webhook" },
+                { "PublicationWebhookConfiguration:BodyContentPropertyNames:0", "id" }
+            };
+
+            IConfiguration configuration = new ConfigurationBuilder()
+                .AddInMemoryCollection(configDict)
+                .Build();
+            Configuration.Load(configuration);
+
             Mock<ICachedDatasource> mockCachedDatasource = new();
             Mock<ISqFileInterface> mockSqFileInterface = new();
             Mock<ILogger<SqController>> mockLogger = new();
@@ -115,6 +127,16 @@ namespace UnitTests.ControllerTests.SqControllerTests
         [Test]
         public async Task ArchiveQueryAsync_NonDraftQuery_CallsWebhookService()
         {
+            // Set up configuration with webhook enabled
+            Dictionary<string, string> configDict = new(TestInMemoryConfiguration.Get());
+            configDict.Add("PublicationWebhookConfiguration:EndpointUrl", "https://example.com/webhook");
+            configDict.Add("PublicationWebhookConfiguration:BodyContentPropertyNames:0", "id");
+            
+            IConfiguration configuration = new ConfigurationBuilder()
+                .AddInMemoryCollection(configDict)
+                .Build();
+            Configuration.Load(configuration);
+
             // Arrange
             Mock<ICachedDatasource> mockCachedDatasource = new();
             Mock<ISqFileInterface> mockSqFileInterface = new();

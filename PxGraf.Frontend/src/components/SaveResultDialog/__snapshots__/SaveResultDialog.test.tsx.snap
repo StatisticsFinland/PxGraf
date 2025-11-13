@@ -254,7 +254,6 @@ exports[`Rendering test renders correctly when open (draft) 1`] = `
               </fieldset>
             </div>
           </div>
-          0
         </div>
         <div
           class="MuiDialogActions-root MuiDialogActions-spacing css-15fu35s-MuiDialogActions-root"

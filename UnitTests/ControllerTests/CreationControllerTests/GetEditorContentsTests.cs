@@ -1,4 +1,4 @@
-﻿using NUnit.Framework;
+using NUnit.Framework;
 using Px.Utils.Models.Metadata.Enums;
 using PxGraf.Controllers;
 using PxGraf.Models.Queries;
@@ -52,6 +52,8 @@ namespace UnitTests.ControllerTests.CreationControllerTests
 
             ActionResult<EditorContentsResponse> editorContent = await testController.GetEditorContents(cubeQuery);
             Assert.That(editorContent, Is.Not.Null);
+            Assert.That(editorContent.Value, Is.Not.Null);
+            Assert.That(editorContent.Value.PublicationEnabled, Is.Not.Null);
         }
 
         [Test]
@@ -74,6 +76,7 @@ namespace UnitTests.ControllerTests.CreationControllerTests
             Assert.That(editorContent, Is.Not.Null);
             Assert.That(editorContent.Value, Is.Not.Null);
             Assert.That(editorContent.Value.Size.Equals(0), Is.True);
+            Assert.That(editorContent.Value.PublicationEnabled, Is.Not.Null);
         }
 
         [Test]
@@ -106,6 +109,7 @@ namespace UnitTests.ControllerTests.CreationControllerTests
             Assert.That(editorContent, Is.Not.Null);
             Assert.That(editorContent.Value, Is.Not.Null);
             Assert.That(editorContent.Value.Size.Equals(0), Is.True);
+            Assert.That(editorContent.Value.PublicationEnabled, Is.Not.Null);
         }
 
         [Test]

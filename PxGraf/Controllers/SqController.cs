@@ -173,8 +173,8 @@ namespace PxGraf.Controllers
                         await _sqFileInterface.SerializeToFile(fileName, Configuration.Current.SavedQueryDirectory, savedQuery);
                         WebhookPublicationResult webhookResult = new () { Status = QueryPublicationStatus.Unpublished };
 
-                        // Trigger webhook for non-draft queries
-                        if (!parameters.Draft)
+                        // Trigger webhook for non-draft queries only if webhook is enabled
+                        if (!parameters.Draft && Configuration.Current.PublicationWebhookConfig.IsEnabled)
                         {
                             webhookResult = await _webhookService.TriggerWebhookAsync(guid, savedQuery, filteredMeta.AdditionalProperties);
                         }
@@ -251,8 +251,8 @@ namespace PxGraf.Controllers
 
                         WebhookPublicationResult webhookResult = new() { Status = QueryPublicationStatus.Unpublished };
 
-                        // Trigger webhook for non-draft queries
-                        if (!parameters.Draft)
+                        // Trigger webhook for non-draft queries only if webhook is enabled
+                        if (!parameters.Draft && Configuration.Current.PublicationWebhookConfig.IsEnabled)
                         {
                             webhookResult = await _webhookService.TriggerWebhookAsync(guid, savedQuery, filteredMeta.AdditionalProperties);
                         }
@@ -325,8 +325,8 @@ namespace PxGraf.Controllers
 
                                 WebhookPublicationResult webhookResult = new() { Status = QueryPublicationStatus.Unpublished };
 
-                                // Trigger webhook for non-draft queries
-                                if (!request.Draft)
+                                // Trigger webhook for non-draft queries only if webhook is enabled
+                                if (!request.Draft && Configuration.Current.PublicationWebhookConfig.IsEnabled)
                                 {
                                     webhookResult = await _webhookService.TriggerWebhookAsync(guid, savedQuery, filteredMeta.AdditionalProperties);
                                 }

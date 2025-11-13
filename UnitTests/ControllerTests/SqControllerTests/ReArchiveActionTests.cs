@@ -138,14 +138,26 @@ namespace UnitTests.ControllerTests.SqControllerTests
         [Test]
         public async Task ReArchiveExistingQueryAsync_Success()
         {
+            // Set up configuration with webhook enabled
+            Dictionary<string, string> configDict = new(TestInMemoryConfiguration.Get())
+            {
+                { "PublicationWebhookConfiguration:EndpointUrl", "https://example.com/webhook" },
+                { "PublicationWebhookConfiguration:BodyContentPropertyNames:0", "id" }
+            };
+
+            IConfiguration configuration = new ConfigurationBuilder()
+              .AddInMemoryCollection(configDict)
+          .Build();
+            Configuration.Load(configuration);
+
             // Arrange
             List<DimensionParameters> cubeParameters =
-            [
-                new DimensionParameters(DimensionType.Content, 1),
-                new DimensionParameters(DimensionType.Time, 10),
-                new DimensionParameters(DimensionType.Other, 1),
-                new DimensionParameters(DimensionType.Other, 1),
-            ];
+           [
+              new DimensionParameters(DimensionType.Content, 1),
+             new DimensionParameters(DimensionType.Time, 10),
+               new DimensionParameters(DimensionType.Other, 1),
+                 new DimensionParameters(DimensionType.Other, 1),
+         ];
             List<DimensionParameters> metaParameters =
             [
                 new DimensionParameters(DimensionType.Content, 10),
@@ -156,11 +168,12 @@ namespace UnitTests.ControllerTests.SqControllerTests
             SqController controller = BuildController(cubeParameters, metaParameters);
             ReArchiveRequest request = new()
             {
-                SqId = TEST_SQ_ID
+                SqId = TEST_SQ_ID,
+                Draft = false // Non-draft query to trigger webhook
             };
-            
+
             _mockWebhookService.Setup(s => s.TriggerWebhookAsync(It.IsAny<string>(), It.IsAny<SavedQuery>(), It.IsAny<IReadOnlyDictionary<string, MetaProperty>>()))
-                .ReturnsAsync(new WebhookPublicationResult { Status = QueryPublicationStatus.Success, Messages = new MultilanguageString([])});
+                .ReturnsAsync(new WebhookPublicationResult { Status = QueryPublicationStatus.Success, Messages = new MultilanguageString([]) });
 
             // Act
             ActionResult<ReArchiveResponse> result = await controller.ReArchiveExistingQueryAsync(request);
@@ -184,21 +197,33 @@ namespace UnitTests.ControllerTests.SqControllerTests
         [Test]
         public async Task ReArchiveExistingQueryAsync_NonDraftQuery_CallsWebhookService()
         {
+            // Set up configuration with webhook enabled
+            Dictionary<string, string> configDict = new(TestInMemoryConfiguration.Get())
+            {
+                { "PublicationWebhookConfiguration:EndpointUrl", "https://example.com/webhook" },
+                { "PublicationWebhookConfiguration:BodyContentPropertyNames:0", "id" }
+            };
+
+            IConfiguration configuration = new ConfigurationBuilder()
+            .AddInMemoryCollection(configDict)
+            .Build();
+            Configuration.Load(configuration);
+
             // Arrange
             List<DimensionParameters> cubeParameters =
-                [
+            [
                 new DimensionParameters(DimensionType.Content, 1),
                 new DimensionParameters(DimensionType.Time, 10),
                 new DimensionParameters(DimensionType.Other, 1),
                 new DimensionParameters(DimensionType.Other, 1),
             ];
             List<DimensionParameters> metaParameters =
-                [
+            [
                 new DimensionParameters(DimensionType.Content, 10),
                 new DimensionParameters(DimensionType.Time, 10),
                 new DimensionParameters(DimensionType.Other, 15),
                 new DimensionParameters(DimensionType.Other, 7)
-                ];
+            ];
 
             _mockWebhookService.Setup(w => w.TriggerWebhookAsync(It.IsAny<string>(), It.IsAny<SavedQuery>(), It.IsAny<IReadOnlyDictionary<string, Px.Utils.Models.Metadata.MetaProperties.MetaProperty>>()))
                 .ReturnsAsync(new WebhookPublicationResult { Status = QueryPublicationStatus.Success, Messages = new MultilanguageString([]) });

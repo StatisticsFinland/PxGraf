@@ -81,7 +81,7 @@ export const SuccessDialogContent: React.FC<ISuccessDialogContentProps> = ({
                         </InputAdornment>}
                 />
             </StyledFormControl>
-            {!isDraft && publicationStatus && (
+            {!isDraft && publicationStatus !== undefined && publicationStatus !== EQueryPublicationStatus.Unpublished && (
                 <Alert severity={getPublicationAlertSeverity()}>
                     {getPublicationStatusMessage()}
                 </Alert>

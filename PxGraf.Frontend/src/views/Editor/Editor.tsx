@@ -81,7 +81,8 @@ export const Editor = () => {
         loadedQueryId,
         setLoadedQueryId,
         loadedQueryIsDraft,
-        setLoadedQueryIsDraft
+        setLoadedQueryIsDraft,
+        setPublicationEnabled
     } = React.useContext(EditorContext);
 
     const { setTablePath } = useNavigationContext();
@@ -149,6 +150,14 @@ export const Editor = () => {
     }, [query, cubeMetaResponse.data]);
 
     const editorContentsResponse = useEditorContentsQuery(path, modifiedQuery, cubeQuery);
+    
+    // Update publication enabled state when editor contents are loaded
+    useEffect(() => {
+        if (editorContentsResponse.data?.publicationEnabled !== undefined) {
+            setPublicationEnabled(editorContentsResponse.data.publicationEnabled);
+        }
+    }, [editorContentsResponse.data?.publicationEnabled, setPublicationEnabled]);
+    
     const resolvedDimensionCodesResponse = useResolveDimensionFiltersQuery(path, modifiedQuery);
     const resolvedDimensionCodes = React.useMemo(() => {
         if (resolvedDimensionCodesResponse.data != null) {
