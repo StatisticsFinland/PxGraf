@@ -146,7 +146,16 @@ export const Preview: React.FC<IPreviewProps> = ({ path, query, selectedVisualiz
                 selectables={selectables}
                 multiselectableDimensionCode={visualizationSettings?.multiselectableVariableCode}
             />
-            {showVisualization && <ChartWrapper className='tk-table' $previewSize={size}><Chart locale={languageTab} pxGraphData={data} selectedVariableCodes={resolvedSelections} /></ChartWrapper>}
+            {showVisualization &&
+                <ChartWrapper className='tk-table' $previewSize={size}>
+                    <Chart
+                        locale={languageTab}
+                        pxGraphData={data}
+                        selectedVariableCodes={resolvedSelections}
+                        showTableSources={true}
+                        showLastUpdated={true}
+                    />
+                </ChartWrapper>}
         </>
     );
 }
