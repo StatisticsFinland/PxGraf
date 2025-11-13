@@ -78,7 +78,9 @@ describe('Assertion tests', () => {
                 loadedQueryId: '',
                 setLoadedQueryId: jest.fn(),
                 loadedQueryIsDraft: false,
-                setLoadedQueryIsDraft: jest.fn()
+                setLoadedQueryIsDraft: jest.fn(),
+                publicationEnabled: true,
+                setPublicationEnabled: jest.fn()
             }}>
                 <MarkerScaler
                     visualizationOptions={mockVisualizationRules}

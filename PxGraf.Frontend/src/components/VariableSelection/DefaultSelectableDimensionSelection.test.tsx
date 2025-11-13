@@ -83,7 +83,7 @@ describe('Rendering test', () => {
     it('renders correctly with default selectable', () => {
         const { asFragment } = render(
             <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
-                <EditorContext.Provider value={{ cubeQuery, setCubeQuery, query, setQuery, saveDialogOpen, setSaveDialogOpen, selectedVisualizationUserInput, setSelectedVisualizationUserInput, visualizationSettingsUserInput, setVisualizationSettingsUserInput, defaultSelectables, setDefaultSelectables, loadedQueryId: '', setLoadedQueryId: jest.fn(), loadedQueryIsDraft: false, setLoadedQueryIsDraft: jest.fn() }}>
+                <EditorContext.Provider value={{ cubeQuery, setCubeQuery, query, setQuery, saveDialogOpen, setSaveDialogOpen, selectedVisualizationUserInput, setSelectedVisualizationUserInput, visualizationSettingsUserInput, setVisualizationSettingsUserInput, defaultSelectables, setDefaultSelectables, loadedQueryId: '', setLoadedQueryId: jest.fn(), loadedQueryIsDraft: false, setLoadedQueryIsDraft: jest.fn(), publicationEnabled: true, setPublicationEnabled: jest.fn() }}>
                     <DefaultSelectableDimensionSelection
                         options={mockDimensionValues}
                         resolvedDimensionValueCodes={mockResolvedCodes}
@@ -97,7 +97,7 @@ describe('Rendering test', () => {
     it('renders correctly without default selectable', () => {
         const { asFragment } = render(
             <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
-                <EditorContext.Provider value={{ cubeQuery, setCubeQuery, query, setQuery, saveDialogOpen, setSaveDialogOpen, selectedVisualizationUserInput, setSelectedVisualizationUserInput, visualizationSettingsUserInput, setVisualizationSettingsUserInput, defaultSelectables: {}, setDefaultSelectables, loadedQueryId: '', setLoadedQueryId: jest.fn(), loadedQueryIsDraft: false, setLoadedQueryIsDraft: jest.fn() }}>
+                <EditorContext.Provider value={{ cubeQuery, setCubeQuery, query, setQuery, saveDialogOpen, setSaveDialogOpen, selectedVisualizationUserInput, setSelectedVisualizationUserInput, visualizationSettingsUserInput, setVisualizationSettingsUserInput, defaultSelectables: {}, setDefaultSelectables, loadedQueryId: '', setLoadedQueryId: jest.fn(), loadedQueryIsDraft: false, setLoadedQueryIsDraft: jest.fn(), publicationEnabled: true, setPublicationEnabled: jest.fn() }}>
                     <DefaultSelectableDimensionSelection
                         options={mockDimensionValues}
                         resolvedDimensionValueCodes={mockResolvedCodes}
@@ -111,7 +111,7 @@ describe('Rendering test', () => {
     it('renders correctly without resolved dimension value codes', () => {
         const { asFragment } = render(
             <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
-                <EditorContext.Provider value={{ cubeQuery, setCubeQuery, query, setQuery, saveDialogOpen, setSaveDialogOpen, selectedVisualizationUserInput, setSelectedVisualizationUserInput, visualizationSettingsUserInput, setVisualizationSettingsUserInput, defaultSelectables, setDefaultSelectables, loadedQueryId: '', setLoadedQueryId: jest.fn(), loadedQueryIsDraft: false, setLoadedQueryIsDraft: jest.fn() }}>
+                <EditorContext.Provider value={{ cubeQuery, setCubeQuery, query, setQuery, saveDialogOpen, setSaveDialogOpen, selectedVisualizationUserInput, setSelectedVisualizationUserInput, visualizationSettingsUserInput, setVisualizationSettingsUserInput, defaultSelectables, setDefaultSelectables, loadedQueryId: '', setLoadedQueryId: jest.fn(), loadedQueryIsDraft: false, setLoadedQueryIsDraft: jest.fn(), publicationEnabled: true, setPublicationEnabled: jest.fn() }}>
                     <DefaultSelectableDimensionSelection
                         options={mockDimensionValues}
                         resolvedDimensionValueCodes={[]}

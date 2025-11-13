@@ -259,7 +259,9 @@ describe('Rendering test', () => {
                     loadedQueryId,
                     setLoadedQueryId,
                     loadedQueryIsDraft,
-                    setLoadedQueryIsDraft
+                    setLoadedQueryIsDraft,
+                    publicationEnabled: true,
+                    setPublicationEnabled: jest.fn()
                 }}>
                     <Preview
                         path={mockPath}

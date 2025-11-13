@@ -11,7 +11,7 @@ jest.mock('react-i18next', () => ({
         return {
             t: (str: string) => str,
             i18n: {
-                changeLanguage: () => new Promise(() => null),
+        changeLanguage: () => new Promise(() => null),
             },
         };
     },
@@ -29,7 +29,7 @@ const editorContextMock = {
     query: {},
     setQuery: jest.fn(),
     saveDialogOpen: false,
-    setSaveDialogOpen: jest.fn(),
+  setSaveDialogOpen: jest.fn(),
     selectedVisualizationUserInput: VisualizationType.VerticalBarChart,
     setSelectedVisualizationUserInput: onTypeSelectedMock,
     visualizationSettingsUserInput: {},
@@ -37,12 +37,14 @@ const editorContextMock = {
     loadedQueryId: '',
     setLoadedQueryId: jest.fn(),
     loadedQueryIsDraft: false,
-    setLoadedQueryIsDraft: jest.fn()
+    setLoadedQueryIsDraft: jest.fn(),
+    publicationEnabled: true,
+    setPublicationEnabled: jest.fn()
 };
 
 describe('Rendering test', () => {
     it('renders correctly', () => {
-        const { asFragment } = render(<ChartTypeSelector possibleTypes={mockTypes} selectedType={'foo'} />);
+     const { asFragment } = render(<ChartTypeSelector possibleTypes={mockTypes} selectedType={'foo'} />);
         expect(asFragment()).toMatchSnapshot();
     });
 });

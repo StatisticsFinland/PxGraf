@@ -30,79 +30,79 @@ const uiContentLanguage = 'fi';
 const setUiContentLanguage = jest.fn();
 
 const mockDimensions: IDimension[] = [{
-        code:'foo',
-        name: {
-            'fi': 'asd',
-            'sv': 'asd',
-            'en': 'asd'
-        },
-        type: EDimensionType.Content,
-        values: [
-            {
-                code:'bar',
-                name: {
-                    'fi': 'fgfgfg',
-                    'sv': 'fgfgfg',
-                    'en': 'fgfgfg'
-                },
-                isVirtual: false,
-                unit: {
-                    'fi': 'yksikko',
-                    'sv': 'enhet',
-                    'en': 'unit'
-                },
-                precision: 0,
-                lastUpdated: '2021-01-01',
-                additionalProperties: {
-                    SOURCE: {
-                        type: EMetaPropertyType.MultilanguageText,
-                        value: {
-                            'fi': 'lahde',
-                            'sv': 'kalla',
-                            'en': 'source'
-                        }
-                    }
-                }
-            }
-        ]
+    code: 'foo',
+    name: {
+        'fi': 'asd',
+        'sv': 'asd',
+        'en': 'asd'
     },
-    {
-        code:'foo2',
-        name: {
-            'fi': null,
-            'sv': null,
-            'en': null
-        },
-        type: EDimensionType.Content,
-        values: [
-            {
-                code:'bar2',
-                name: {
-                    'fi': null,
-                    'sv': null,
-                    'en': null,
-                },
-                isVirtual: false,
-                unit: {
-                    'fi': 'yksikko',
-                    'sv': 'enhet',
-                    'en': 'unit'
-                },
-                precision: 0,
-                lastUpdated: '2021-01-01',
-                additionalProperties: {
-                    SOURCE: {
-                        type: EMetaPropertyType.MultilanguageText,
-                        value: {
-                            'fi': 'lahde',
-                            'sv': 'kalla',
-                            'en': 'source'
-                        }
+    type: EDimensionType.Content,
+    values: [
+        {
+            code: 'bar',
+            name: {
+                'fi': 'fgfgfg',
+                'sv': 'fgfgfg',
+                'en': 'fgfgfg'
+            },
+            isVirtual: false,
+            unit: {
+                'fi': 'yksikko',
+                'sv': 'enhet',
+                'en': 'unit'
+            },
+            precision: 0,
+            lastUpdated: '2021-01-01',
+            additionalProperties: {
+                SOURCE: {
+                    type: EMetaPropertyType.MultilanguageText,
+                    value: {
+                        'fi': 'lahde',
+                        'sv': 'kalla',
+                        'en': 'source'
                     }
                 }
             }
-        ]
-    }
+        }
+    ]
+},
+{
+    code: 'foo2',
+    name: {
+        'fi': null,
+        'sv': null,
+        'en': null
+    },
+    type: EDimensionType.Content,
+    values: [
+        {
+            code: 'bar2',
+            name: {
+                'fi': null,
+                'sv': null,
+                'en': null,
+            },
+            isVirtual: false,
+            unit: {
+                'fi': 'yksikko',
+                'sv': 'enhet',
+                'en': 'unit'
+            },
+            precision: 0,
+            lastUpdated: '2021-01-01',
+            additionalProperties: {
+                SOURCE: {
+                    type: EMetaPropertyType.MultilanguageText,
+                    value: {
+                        'fi': 'lahde',
+                        'sv': 'kalla',
+                        'en': 'source'
+                    }
+                }
+            }
+        }
+    ]
+}
 ]
 const mockLang = 'fi';
 const mockFunction = jest.fn();
@@ -167,7 +167,7 @@ describe('Rendering test', () => {
     it('renders correctly', () => {
         const { asFragment } = render(
             <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
-                <EditorContext.Provider value={{ cubeQuery: mockCubeQuery, setCubeQuery, query, setQuery, saveDialogOpen, setSaveDialogOpen, selectedVisualizationUserInput, setSelectedVisualizationUserInput, visualizationSettingsUserInput, setVisualizationSettingsUserInput, defaultSelectables, setDefaultSelectables, loadedQueryId: '', setLoadedQueryId: jest.fn(), loadedQueryIsDraft: false, setLoadedQueryIsDraft: jest.fn() }}>
+                <EditorContext.Provider value={{ cubeQuery: mockCubeQuery, setCubeQuery, query, setQuery, saveDialogOpen, setSaveDialogOpen, selectedVisualizationUserInput, setSelectedVisualizationUserInput, visualizationSettingsUserInput, setVisualizationSettingsUserInput, defaultSelectables, setDefaultSelectables, loadedQueryId: '', setLoadedQueryId: jest.fn(), loadedQueryIsDraft: false, setLoadedQueryIsDraft: jest.fn(), publicationEnabled: true, setPublicationEnabled: jest.fn() }}>
                     <MetaEditor
                         resolvedDimensions={mockDimensions}
                         editorContentsResponse={defaultHeaderResponseMock}
