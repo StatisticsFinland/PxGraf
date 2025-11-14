@@ -52,8 +52,8 @@ describe('Assertion tests', () => {
                 setLoadedQueryId: jest.fn(),
                 loadedQueryIsDraft: false,
                 setLoadedQueryIsDraft: jest.fn(),
-                publicationEnabled: true,
-                setPublicationEnabled: jest.fn()
+                publicationWebhookEnabled: true,
+                setPublicationWebhookEnabled: jest.fn()
             }}>
                 <VisualizationSettingsSwitch
                     selected={false}

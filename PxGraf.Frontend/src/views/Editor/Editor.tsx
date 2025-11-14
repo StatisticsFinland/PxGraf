@@ -82,7 +82,7 @@ export const Editor = () => {
         setLoadedQueryId,
         loadedQueryIsDraft,
         setLoadedQueryIsDraft,
-        setPublicationEnabled
+        setPublicationWebhookEnabled
     } = React.useContext(EditorContext);
 
     const { setTablePath } = useNavigationContext();
@@ -153,10 +153,10 @@ export const Editor = () => {
 
     // Update publication enabled state when editor contents are loaded
     useEffect(() => {
-        if (editorContentsResponse.data?.publicationEnabled !== undefined) {
-            setPublicationEnabled(editorContentsResponse.data.publicationEnabled);
+        if (editorContentsResponse.data?.publicationWebhookEnabled !== undefined) {
+            setPublicationWebhookEnabled(editorContentsResponse.data.publicationWebhookEnabled);
         }
-    }, [editorContentsResponse.data?.publicationEnabled, setPublicationEnabled]);
+    }, [editorContentsResponse.data?.publicationWebhookEnabled, setPublicationWebhookEnabled]);
 
     const resolvedDimensionCodesResponse = useResolveDimensionFiltersQuery(path, modifiedQuery);
     const resolvedDimensionCodes = React.useMemo(() => {

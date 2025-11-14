@@ -46,7 +46,7 @@ namespace PxGraf.Models.Responses
         /// Indicates whether publication webhooks are enabled in the configuration.
         /// When false, queries should be saved as published (non-draft) by default since there's no webhook to trigger.
         /// </summary>
-        public required bool PublicationEnabled { get; set; }
+        public required bool PublicationWebhookEnabled { get; set; }
     }
 
     public class VisualizationOption

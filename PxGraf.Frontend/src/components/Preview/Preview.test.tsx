@@ -260,8 +260,8 @@ describe('Rendering test', () => {
                     setLoadedQueryId,
                     loadedQueryIsDraft,
                     setLoadedQueryIsDraft,
-                    publicationEnabled: true,
-                    setPublicationEnabled: jest.fn()
+                    publicationWebhookEnabled: true,
+                    setPublicationWebhookEnabled: jest.fn()
                 }}>
                     <Preview
                         path={mockPath}

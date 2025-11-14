@@ -52,7 +52,7 @@ export interface IVisualizationOptions {
  * @property {number} maximumHeaderLength - The maximum length of the header text.
  * @property {IVisualizationOptions[]} visualizationOptions - Visualization options for the valid visualization types as an array of @ {@link IVisualizationOptions} objects.
  * @property {object} visualizationRejectionReasons - Object containing rejection reasons for each visualization type as a @ {@link MultiLanguageString} object.
- * @property {boolean} [publicationEnabled] - Indicates whether publication webhooks are enabled. When false, the publish checkbox should be hidden and queries saved as published by default.
+ * @property {boolean} [publicationWebhookEnabled] - Indicates whether publication webhooks are enabled. When false, the publish checkbox should be hidden and queries saved as published by default.
  */
 export interface IEditorContentsResponse {
     size: number;
@@ -64,5 +64,5 @@ export interface IEditorContentsResponse {
     visualizationRejectionReasons: {
         [visualizationType: string]: MultiLanguageString;
     };
-    publicationEnabled?: boolean;
+    publicationWebhookEnabled?: boolean;
 }

@@ -72,8 +72,8 @@ describe('Rendering test', () => {
                 setLoadedQueryId: jest.fn(),
                 loadedQueryIsDraft: false,
                 setLoadedQueryIsDraft: jest.fn(),
-                publicationEnabled: true,
-                setPublicationEnabled: jest.fn()
+                publicationWebhookEnabled: true,
+                setPublicationWebhookEnabled: jest.fn()
             }}>
                 <HeaderEditor editorContentResponse={mockDefaultResponse} language={mockLang} style={{}} />
             </EditorContext.Provider>
@@ -102,8 +102,8 @@ describe('Assertion tests', () => {
                 setLoadedQueryId: jest.fn(),
                 loadedQueryIsDraft: false,
                 setLoadedQueryIsDraft: jest.fn(),
-                publicationEnabled: true,
-                setPublicationEnabled: jest.fn()
+                publicationWebhookEnabled: true,
+                setPublicationWebhookEnabled: jest.fn()
             }}>
                 <HeaderEditor editorContentResponse={mockDefaultResponse} language={mockLang} style={{}} />
             </EditorContext.Provider>

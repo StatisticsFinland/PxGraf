@@ -68,8 +68,8 @@ const mockEditorContextPublicationTrue = {
     setLoadedQueryId: jest.fn(),
     loadedQueryIsDraft: false,
     setLoadedQueryIsDraft: jest.fn(),
-    publicationEnabled: true,
-    setPublicationEnabled: jest.fn()
+    publicationWebhookEnabled: true,
+    setPublicationWebhookEnabled: jest.fn()
 };
 
 
@@ -96,8 +96,8 @@ describe('Rendering test', () => {
     it('renders correctly when open with publication disabled', () => {
         const mockEditorContextPublicationFalse = {
             ...mockEditorContextPublicationTrue,
-            publicationEnabled: false,
-            setPublicationEnabled: jest.fn()
+            publicationWebhookEnabled: false,
+            setPublicationWebhookEnabled: jest.fn()
         };
 
         const dom = render(

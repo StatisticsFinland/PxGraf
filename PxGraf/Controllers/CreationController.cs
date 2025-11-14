@@ -261,7 +261,7 @@ namespace PxGraf.Controllers
                 );
 
                 int maxQuerySize = Configuration.Current.QueryOptions.MaxQuerySize;
-                bool publicationEnabled = Configuration.Current.PublicationWebhookConfig.IsEnabled;
+                bool publicationWebhookEnabled = Configuration.Current.PublicationWebhookConfig.IsEnabled;
 
                 if (query.DimensionQueries.Count == 0)
                 {
@@ -276,7 +276,7 @@ namespace PxGraf.Controllers
                         MaximumHeaderLength = Configuration.Current.QueryOptions.MaxHeaderLength,
                         VisualizationOptions = [],
                         VisualizationRejectionReasons = [],
-                        PublicationEnabled = publicationEnabled
+                        PublicationWebhookEnabled = publicationWebhookEnabled
                     };
                 }
 
@@ -297,7 +297,7 @@ namespace PxGraf.Controllers
                         MaximumHeaderLength = Configuration.Current.QueryOptions.MaxHeaderLength,
                         VisualizationOptions = [],
                         VisualizationRejectionReasons = [],
-                        PublicationEnabled = publicationEnabled
+                        PublicationWebhookEnabled = publicationWebhookEnabled
                     };
                 }
 
@@ -335,7 +335,7 @@ namespace PxGraf.Controllers
                     MaximumHeaderLength = Configuration.Current.QueryOptions.MaxHeaderLength,
                     VisualizationOptions = visualizationOptions,
                     VisualizationRejectionReasons = rejectionReasons,
-                    PublicationEnabled = publicationEnabled
+                    PublicationWebhookEnabled = publicationWebhookEnabled
                 };
             }
         }

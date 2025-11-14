@@ -236,8 +236,8 @@ describe('Assertion tests', () => {
                     setLoadedQueryId: jest.fn(),
                     loadedQueryIsDraft: false,
                     setLoadedQueryIsDraft: jest.fn(),
-                    publicationEnabled: true,
-                    setPublicationEnabled: jest.fn()
+                    publicationWebhookEnabled: true,
+                    setPublicationWebhookEnabled: jest.fn()
 
                 }}>
                     <TablePivotSettings
@@ -276,8 +276,8 @@ describe('Assertion tests', () => {
                     setLoadedQueryId: jest.fn(),
                     loadedQueryIsDraft: false,
                     setLoadedQueryIsDraft: jest.fn(),
-                    publicationEnabled: true,
-                    setPublicationEnabled: jest.fn()
+                    publicationWebhookEnabled: true,
+                    setPublicationWebhookEnabled: jest.fn()
                 }}>
                     <TablePivotSettings
                         dimensions={mockDimensions}
@@ -315,8 +315,8 @@ describe('Assertion tests', () => {
                     setLoadedQueryId: jest.fn(),
                     loadedQueryIsDraft: false,
                     setLoadedQueryIsDraft: jest.fn(),
-                    publicationEnabled: true,
-                    setPublicationEnabled: jest.fn()
+                    publicationWebhookEnabled: true,
+                    setPublicationWebhookEnabled: jest.fn()
                 }}>
                     <TablePivotSettings
                         dimensions={mockDimensions}
@@ -354,8 +354,8 @@ describe('Assertion tests', () => {
                     setLoadedQueryId: jest.fn(),
                     loadedQueryIsDraft: false,
                     setLoadedQueryIsDraft: jest.fn(),
-                    publicationEnabled: true,
-                    setPublicationEnabled: jest.fn()
+                    publicationWebhookEnabled: true,
+                    setPublicationWebhookEnabled: jest.fn()
                 }}>
                     <TablePivotSettings
                         dimensions={mockDimensions}
@@ -393,8 +393,8 @@ describe('Assertion tests', () => {
                     setLoadedQueryId: jest.fn(),
                     loadedQueryIsDraft: false,
                     setLoadedQueryIsDraft: jest.fn(),
-                    publicationEnabled: true,
-                    setPublicationEnabled: jest.fn()
+                    publicationWebhookEnabled: true,
+                    setPublicationWebhookEnabled: jest.fn()
                 }}>
                     <TablePivotSettings
                         dimensions={mockDimensions}
@@ -432,8 +432,8 @@ describe('Assertion tests', () => {
                     setLoadedQueryId: jest.fn(),
                     loadedQueryIsDraft: false,
                     setLoadedQueryIsDraft: jest.fn(),
-                    publicationEnabled: true,
-                    setPublicationEnabled: jest.fn()
+                    publicationWebhookEnabled: true,
+                    setPublicationWebhookEnabled: jest.fn()
                 }}>
                     <TablePivotSettings
                         dimensions={mockDimensions}
@@ -471,8 +471,8 @@ describe('Assertion tests', () => {
                     setLoadedQueryId: jest.fn(),
                     loadedQueryIsDraft: false,
                     setLoadedQueryIsDraft: jest.fn(),
-                    publicationEnabled: true,
-                    setPublicationEnabled: jest.fn()
+                    publicationWebhookEnabled: true,
+                    setPublicationWebhookEnabled: jest.fn()
                 }}>
                     <TablePivotSettings
                         dimensions={mockDimensions}
@@ -510,8 +510,8 @@ describe('Assertion tests', () => {
                     setLoadedQueryId: jest.fn(),
                     loadedQueryIsDraft: false,
                     setLoadedQueryIsDraft: jest.fn(),
-                    publicationEnabled: true,
-                    setPublicationEnabled: jest.fn()
+                    publicationWebhookEnabled: true,
+                    setPublicationWebhookEnabled: jest.fn()
                 }}>
                     <TablePivotSettings
                         dimensions={mockDimensions}
@@ -546,8 +546,8 @@ describe('Assertion tests', () => {
                     setLoadedQueryId: jest.fn(),
                     loadedQueryIsDraft: false,
                     setLoadedQueryIsDraft: jest.fn(),
-                    publicationEnabled: true,
-                    setPublicationEnabled: jest.fn()
+                    publicationWebhookEnabled: true,
+                    setPublicationWebhookEnabled: jest.fn()
                 }}>
                     <TablePivotSettings
                         dimensions={mockDimensions}
@@ -582,8 +582,8 @@ describe('Assertion tests', () => {
                     setLoadedQueryId: jest.fn(),
                     loadedQueryIsDraft: false,
                     setLoadedQueryIsDraft: jest.fn(),
-                    publicationEnabled: true,
-                    setPublicationEnabled: jest.fn()
+                    publicationWebhookEnabled: true,
+                    setPublicationWebhookEnabled: jest.fn()
                 }}>
                     <TablePivotSettings
                         dimensions={mockDimensions}
@@ -618,8 +618,8 @@ describe('Assertion tests', () => {
                     setLoadedQueryId: jest.fn(),
                     loadedQueryIsDraft: false,
                     setLoadedQueryIsDraft: jest.fn(),
-                    publicationEnabled: true,
-                    setPublicationEnabled: jest.fn()
+                    publicationWebhookEnabled: true,
+                    setPublicationWebhookEnabled: jest.fn()
                 }}>
                     <TablePivotSettings
                         dimensions={mockDimensions}
@@ -656,8 +656,8 @@ describe('Assertion tests', () => {
                     setLoadedQueryId: jest.fn(),
                     loadedQueryIsDraft: false,
                     setLoadedQueryIsDraft: jest.fn(),
-                    publicationEnabled: true,
-                    setPublicationEnabled: jest.fn()
+                    publicationWebhookEnabled: true,
+                    setPublicationWebhookEnabled: jest.fn()
                 }}>
                     <TablePivotSettings
                         dimensions={mockDimensions}
@@ -694,8 +694,8 @@ describe('Assertion tests', () => {
                     setLoadedQueryId: jest.fn(),
                     loadedQueryIsDraft: false,
                     setLoadedQueryIsDraft: jest.fn(),
-                    publicationEnabled: true,
-                    setPublicationEnabled: jest.fn()
+                    publicationWebhookEnabled: true,
+                    setPublicationWebhookEnabled: jest.fn()
                 }}>
                     <TablePivotSettings
                         dimensions={mockDimensions}

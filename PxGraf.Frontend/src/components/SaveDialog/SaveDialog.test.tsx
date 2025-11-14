@@ -46,8 +46,8 @@ describe('Rendering test', () => {
                 setLoadedQueryId: jest.fn(),
                 loadedQueryIsDraft: false,
                 setLoadedQueryIsDraft: setIsDraftMock,
-                publicationEnabled: true,
-                setPublicationEnabled: jest.fn()
+                publicationWebhookEnabled: true,
+                setPublicationWebhookEnabled: jest.fn()
             }}>
                 <SaveDialog onSave={onSaveMock} />
             </EditorContext.Provider>
@@ -74,8 +74,8 @@ describe('Rendering test', () => {
                 setLoadedQueryId: jest.fn(),
                 loadedQueryIsDraft: false,
                 setLoadedQueryIsDraft: setIsDraftMock,
-                publicationEnabled: false,
-                setPublicationEnabled: jest.fn()
+                publicationWebhookEnabled: false,
+                setPublicationWebhookEnabled: jest.fn()
             }}>
                 <SaveDialog onSave={onSaveMock} />
             </EditorContext.Provider>
@@ -110,8 +110,8 @@ describe('Assertion test', () => {
                 setLoadedQueryId: jest.fn(),
                 loadedQueryIsDraft: false,
                 setLoadedQueryIsDraft: setIsDraftMock,
-                publicationEnabled: true,
-                setPublicationEnabled: jest.fn()
+                publicationWebhookEnabled: true,
+                setPublicationWebhookEnabled: jest.fn()
             }}>
                 <SaveDialog onSave={onSaveMock} />
             </EditorContext.Provider>
@@ -139,8 +139,8 @@ describe('Assertion test', () => {
                 setLoadedQueryId: jest.fn(),
                 loadedQueryIsDraft: false,
                 setLoadedQueryIsDraft: setIsDraftMock,
-                publicationEnabled: true,
-                setPublicationEnabled: jest.fn()
+                publicationWebhookEnabled: true,
+                setPublicationWebhookEnabled: jest.fn()
             }}>
                 <SaveDialog onSave={onSaveMock} />
             </EditorContext.Provider>
@@ -169,8 +169,8 @@ describe('Assertion test', () => {
                 setLoadedQueryId: jest.fn(),
                 loadedQueryIsDraft: false,
                 setLoadedQueryIsDraft: setIsDraftMock,
-                publicationEnabled: true,
-                setPublicationEnabled: jest.fn()
+                publicationWebhookEnabled: true,
+                setPublicationWebhookEnabled: jest.fn()
             }}>
                 <SaveDialog onSave={onSaveMock} />
             </EditorContext.Provider>
@@ -202,8 +202,8 @@ describe('Assertion test', () => {
                 setLoadedQueryId: jest.fn(),
                 loadedQueryIsDraft: false,
                 setLoadedQueryIsDraft: setIsDraftMock,
-                publicationEnabled: true,
-                setPublicationEnabled: jest.fn()
+                publicationWebhookEnabled: true,
+                setPublicationWebhookEnabled: jest.fn()
             }}>
                 <SaveDialog onSave={onSaveMock} />
             </EditorContext.Provider>

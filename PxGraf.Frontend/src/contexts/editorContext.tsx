@@ -24,8 +24,8 @@ import { VisualizationType } from 'types/visualizationType';
  * @property {React.Dispatch<string>} setLoadedQueryId - Function to set the query id when loading a query
  * @property {boolean} loadedQueryIsDraft - Flag to indicate if the loaded query is a draft
  * @property {React.Dispatch<boolean>} setLoadedQueryIsDraft - Function to set the loaded query draft state
- * @property {boolean} publicationEnabled - Flag to indicate if publication webhooks are enabled
- * @property {React.Dispatch<boolean>} setPublicationEnabled - Function to set the publication enabled state
+ * @property {boolean} publicationWebhookEnabled - Flag to indicate if publication webhooks are enabled
+ * @property {React.Dispatch<boolean>} setPublicationWebhookEnabled - Function to set the publication enabled state
  */
 interface IEditorContext {
     cubeQuery: ICubeQuery;
@@ -44,8 +44,8 @@ interface IEditorContext {
     setLoadedQueryId: React.Dispatch<string>;
     loadedQueryIsDraft: boolean;
     setLoadedQueryIsDraft: React.Dispatch<boolean>;
-    publicationEnabled: boolean;
-    setPublicationEnabled: React.Dispatch<boolean>;
+    publicationWebhookEnabled: boolean;
+    setPublicationWebhookEnabled: React.Dispatch<boolean>;
 }
 
 /**
@@ -68,8 +68,8 @@ export const EditorContext = React.createContext<IEditorContext>({
     setLoadedQueryId: () => { /* no base implementation */ },
     loadedQueryIsDraft: false,
     setLoadedQueryIsDraft: () => { /* no base implementation */ },
-    publicationEnabled: true,
-    setPublicationEnabled: () => { /* no base implementation */ },
+    publicationWebhookEnabled: true,
+    setPublicationWebhookEnabled: () => { /* no base implementation */ },
 });
 
 /**
@@ -85,7 +85,7 @@ export const EditorProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const [defaultSelectables, setDefaultSelectables] = React.useState(null);
     const [loadedQueryId, setLoadedQueryId] = React.useState('');
     const [loadedQueryIsDraft, setLoadedQueryIsDraft] = React.useState(false);
-    const [publicationEnabled, setPublicationEnabled] = React.useState(true);
+    const [publicationWebhookEnabled, setPublicationWebhookEnabled] = React.useState(true);
 
     const debouncedCubeQuery = React.useMemo(() => {
         return debounce((newQuery: ICubeQuery) => {
@@ -113,12 +113,12 @@ export const EditorProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             defaultSelectables, setDefaultSelectables,
             loadedQueryId, setLoadedQueryId,
             loadedQueryIsDraft, setLoadedQueryIsDraft,
-            publicationEnabled, setPublicationEnabled,
+            publicationWebhookEnabled, setPublicationWebhookEnabled,
         }
     }, [
         cubeQuery, query, saveDialogOpen, selectedVisualizationUserInput,
         visualizationSettingsUserInput, defaultSelectables, loadedQueryId,
-        loadedQueryIsDraft, publicationEnabled
+        loadedQueryIsDraft, publicationWebhookEnabled
     ]);
 
     return (

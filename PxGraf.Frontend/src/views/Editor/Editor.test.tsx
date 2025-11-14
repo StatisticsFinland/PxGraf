@@ -229,7 +229,7 @@ const mockEditorContentsResult: IEditorContentsResult = {
         headerText: {
             'fi': 'header'
         },
-        publicationEnabled: true
+        publicationWebhookEnabled: true
     }
 }
 
@@ -468,8 +468,8 @@ describe('Assertion tests', () => {
             setLoadedQueryId,
             loadedQueryIsDraft: false,
             setLoadedQueryIsDraft,
-            publicationEnabled: true,
-            setPublicationEnabled: jest.fn()
+            publicationWebhookEnabled: true,
+            setPublicationWebhookEnabled: jest.fn()
         };
 
         // Mock useContext to return the mockEditorContext for EditorContext
@@ -498,7 +498,7 @@ describe('Assertion tests', () => {
         jest.restoreAllMocks();
     });
 
-    it('calls setPublicationEnabled when editorContentsResponse has publicationEnabled property', () => {
+    it('calls setPublicationWebhookEnabled when editorContentsResponse has publicationWebhookEnabled property', () => {
         mockResult = mockTableValidationResult;
         mockCubeMetaResult.isLoading = false;
         mockCubeMetaResult.isError = false;
@@ -520,7 +520,7 @@ describe('Assertion tests', () => {
             }]
         };
 
-        const setPublicationEnabled = jest.fn();
+        const setPublicationWebhookEnabled = jest.fn();
         const originalUseContext = React.useContext;
 
         const mockEditorContextWithPublication = {
@@ -540,8 +540,8 @@ describe('Assertion tests', () => {
             setLoadedQueryId: jest.fn(),
             loadedQueryIsDraft: false,
             setLoadedQueryIsDraft: jest.fn(),
-            publicationEnabled: true,
-            setPublicationEnabled
+            publicationWebhookEnabled: true,
+            setPublicationWebhookEnabled
         };
 
         // Mock useContext to return our mock for EditorContext
@@ -562,8 +562,8 @@ describe('Assertion tests', () => {
             </QueryClientProvider>
         );
 
-        // Verify that setPublicationEnabled was called with true (from the mocked API response)
-        expect(setPublicationEnabled).toHaveBeenCalledWith(true);
+        // Verify that setPublicationWebhookEnabled was called with true (from the mocked API response)
+        expect(setPublicationWebhookEnabled).toHaveBeenCalledWith(true);
 
         jest.restoreAllMocks();
     });
