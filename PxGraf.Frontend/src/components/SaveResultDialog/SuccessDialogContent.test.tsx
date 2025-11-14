@@ -64,15 +64,23 @@ describe('Rendering test', () => {
         expect(dom.baseElement).toMatchSnapshot();
     });
 
-    it('renders correctly with webhook error message', () => {
-        const publicationMessage = {
-            'error': 'Invalid response format: JSON parsing failed'
-        };
+    it('renders correctly without webhook message (failed)', () => {
         const dom = render(
             <SuccessDialogContent
                 isDraft={false}
                 publicationStatus={EQueryPublicationStatus.Failed}
-                publicationMessage={publicationMessage}
+                publicationMessage={null}
+            />
+        );
+        expect(dom.baseElement).toMatchSnapshot();
+    });
+
+    it('renders correctly without webhook message (success)', () => {
+        const dom = render(
+            <SuccessDialogContent
+                isDraft={false}
+                publicationStatus={EQueryPublicationStatus.Success}
+                publicationMessage={null}
             />
         );
         expect(dom.baseElement).toMatchSnapshot();

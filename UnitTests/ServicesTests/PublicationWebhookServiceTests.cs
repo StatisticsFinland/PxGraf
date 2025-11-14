@@ -223,9 +223,7 @@ namespace UnitTests.ServicesTests
 
             // Assert
             Assert.That(result.Status, Is.EqualTo(QueryPublicationStatus.Failed));
-            Assert.That(result.Messages, Is.Not.Null);
-            Assert.That(result.Messages.Languages.Contains("error"), Is.True);
-            Assert.That(result.Messages["error"], Is.EqualTo("Network error"));
+            Assert.That(result.Messages, Is.Null);
 
             // Verify HTTP call was attempted once
             _mockHttpMessageHandler.Protected()
@@ -409,7 +407,7 @@ namespace UnitTests.ServicesTests
         }
 
         [Test]
-        public async Task TriggerWebhookAsync_InvalidJsonResponse_ReturnsErrorMessage()
+        public async Task TriggerWebhookAsync_InvalidJsonResponse_ReturnsNullMessage()
         {
             // Arrange
             ConfigureWebhookEnabled();
@@ -431,9 +429,7 @@ namespace UnitTests.ServicesTests
 
             // Assert
             Assert.That(result.Status, Is.EqualTo(QueryPublicationStatus.Success));
-            Assert.That(result.Messages, Is.Not.Null);
-            Assert.That(result.Messages.Languages.Contains("error"), Is.True);
-            Assert.That(result.Messages["error"], Does.StartWith("Invalid response format:"));
+            Assert.That(result.Messages, Is.Null);
         }
     }
 }

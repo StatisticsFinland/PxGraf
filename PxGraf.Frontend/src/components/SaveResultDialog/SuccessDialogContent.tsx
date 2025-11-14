@@ -37,18 +37,13 @@ export const SuccessDialogContent: React.FC<ISuccessDialogContentProps> = ({
         if (publicationMessage && Object.keys(publicationMessage).length > 0) {
             const currentLanguage = i18n.language;
 
-            // Check if we have an error message and try to localize it
-            if (publicationMessage['error']) {
-                return publicationMessage['error'];
-            }
-
             // Try to get message for current language, fallback to any available language
             return publicationMessage[currentLanguage] ||
                 publicationMessage[Object.keys(publicationMessage)[0]] ||
                 t("saveResultDialog.publicationUnpublished");
         }
 
-        return t("error.webhookResponseError");
+        return publicationStatus === EQueryPublicationStatus.Failed ? ("error.webhookResponseError") : t("saveResultDialog.webhookResponseSuccess");
     };
 
     const getPublicationAlertSeverity = () => {

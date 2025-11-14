@@ -101,7 +101,8 @@
     "saveOptions": "Valitse missä muodossa haluat tallentaa",
     "saveDynamic": "Dynaaminen kysely ja päivittyvä data",
     "saveStatic": "Staattinen kysely ja staattinen data",
-    "publish": "Julkaisuvalmis"
+    "publish": "Julkaisuvalmis",
+    "webhookResponseSuccess": "Siirto onnistui."
   },
   "saveResultDialog": {
     "ok": "OK",
@@ -118,7 +119,7 @@
     "contentVariableMissing": "Taulukosta puuttuu sisältömuuttuja. Ota yhteyttä tämän taulukon tuottajaan tai ylläpitoon. ",
     "timeVariableMissing": "Taulukosta puuttuu aikamuuttuja. Ota yhteyttä tämän taulukon tuottajaan tai ylläpitoon. ",
     "variablesMissingValues": "Taulukosta puuttuu muuttujan arvoja. Ota yhteyttä tämän taulukon tuottajaan tai ylläpitoon. ",
-    "webhookResponseError": "Tyhjä vastaus palvelimelta. Yritä uudelleen myöhemmin."
+    "webhookResponseError": "Siirto epäonnistui."
   },
   "rejectionDialog":{
     "buttonText": "Muut kuviotyypit",

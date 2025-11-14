@@ -401,7 +401,7 @@ exports[`Rendering test renders correctly when open 1`] = `
             <div
               class="MuiAlert-message css-zioonp-MuiAlert-message"
             >
-              error.webhookResponseError
+              saveResultDialog.webhookResponseSuccess
             </div>
           </div>
         </div>
@@ -549,7 +549,7 @@ exports[`Rendering test renders correctly when open with publication disabled 1`
             <div
               class="MuiAlert-message css-zioonp-MuiAlert-message"
             >
-              error.webhookResponseError
+              saveResultDialog.webhookResponseSuccess
             </div>
           </div>
         </div>

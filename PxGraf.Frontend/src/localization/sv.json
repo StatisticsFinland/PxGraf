@@ -110,7 +110,8 @@
     "errorMessage": "Kontrollera variabelvalen och försök igen.",
     "id": "Uttagets identifierare",
     "copyToClipBoard": "Kopiera till urklipp",
-    "saving": "Sparar fråga..."
+    "saving": "Sparar fråga...",
+    "webhookResponseSuccess": "Exporterat."
   },
   "error": {
     "contentLoad": "Innehållet kunde inte hämtas",
@@ -118,7 +119,7 @@
     "contentVariableMissing": "Tabellen saknar innehållsvariabel. Kontakta tabellens producent eller administratör. ",
     "timeVariableMissing": "Tabellen saknar tidsvariabel. Kontakta tabellens producent eller administratör. ",
     "variablesMissingValues": "Tabellen saknar variabelvärden. Kontakta tabellens producent eller administratör. ",
-    "webhookResponseError": "Tomt svar från servern. Försök igen senare."
+    "webhookResponseError": "Misslyckades att exportera."
   },
   "rejectionDialog": {
     "buttonText": "Övriga diagramtyper",
