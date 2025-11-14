@@ -2,26 +2,21 @@
 import ApiClient from "api/client";
 import { useMutation, useQuery, UseMutationResult } from "react-query";
 import { ICubeQuery, Query } from "types/query";
+import { EQueryPublicationStatus } from "types/saveQuery";
 import { IVisualizationSettings } from "types/visualizationSettings";
 import { buildCubeQuery, defaultQueryOptions } from "utils/ApiHelpers";
-
-/**
- * Multi-language string type matching backend MultilanguageString
- */
-export type TMultiLanguageString = {
-    [key: string]: string;
-};
+import { MultiLanguageString } from "types/multiLanguageString";
 
 /**
  * Response object for saving a query.
  * @property {string} id - The id of the saved query.
  * @property {EQueryPublicationStatus} publicationStatus - The publication status of the saved query.
- * @property {TMultiLanguageString} publicationMessage - Localized publication messages from webhook response.
+ * @property {MultiLanguageString} publicationMessage - Localized publication messages from webhook response.
  */
 export interface ISaveQueryResponse {
     id: string;
     publicationStatus: EQueryPublicationStatus;
-    publicationMessage?: TMultiLanguageString;
+    publicationMessage?: MultiLanguageString;
 }
 
 /**
@@ -82,18 +77,6 @@ export interface IFetchSavedQueryResult {
     isError: boolean;
     isSuccess: boolean;
     data: IFetchSavedQueryResponse;
-}
-
-/**
- * Enum for query publication status
- * @property {string} Unpublished - The query is unpublished.
- * @property {string} Success - The query was published successfully.
- * @property {string} Failed - The query publication failed.
- */
-export enum EQueryPublicationStatus {
-    Unpublished,
-    Success,
-    Failed
 }
 
 const sendSaveRequest = async (

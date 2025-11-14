@@ -2,7 +2,8 @@ import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import SaveResultDialog from './SaveResultDialog';
-import { EQueryPublicationStatus, ISaveQueryResult } from 'api/services/queries';
+import { EQueryPublicationStatus } from "types/saveQuery";
+import { ISaveQueryResult } from 'api/services/queries';
 import { EditorContext } from '../../contexts/editorContext';
 import { VisualizationType } from '../../types/visualizationType';
 

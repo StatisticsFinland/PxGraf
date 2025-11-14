@@ -2,7 +2,7 @@ import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import SuccessDialogContent from './SuccessDialogContent';
-import { EQueryPublicationStatus } from '../../api/services/queries';
+import { EQueryPublicationStatus } from "types/saveQuery";
 
 const mockT = jest.fn((key: string) => {
     const translations: { [key: string]: string } = {

@@ -5,7 +5,8 @@ import {
 import ContentPasteIcon from '@mui/icons-material/ContentPaste';
 import styled from 'styled-components';
 import React from 'react';
-import { EQueryPublicationStatus, TMultiLanguageString } from 'api/services/queries';
+import { EQueryPublicationStatus } from "types/saveQuery";
+import { MultiLanguageString } from "types/multiLanguageString";
 
 const StyledOutlinedInput = styled(OutlinedInput)`
 width: 380px;
@@ -18,7 +19,7 @@ margin-bottom: 16px;
 interface ISuccessDialogContentProps {
     queryId?: string;
     publicationStatus?: EQueryPublicationStatus;
-    publicationMessage?: TMultiLanguageString;
+    publicationMessage?: MultiLanguageString;
     isDraft?: boolean;
 }
 
