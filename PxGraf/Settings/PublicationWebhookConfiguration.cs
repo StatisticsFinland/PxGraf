@@ -1,3 +1,4 @@
+using PxGraf.Services;
 using System.Collections.Generic;
 
 namespace PxGraf.Settings
@@ -23,18 +24,17 @@ namespace PxGraf.Settings
         public string AccessTokenHeaderValue { get; set; }
 
         /// <summary>
-        /// List of property names to include in the webhook POST body.
-        /// These can be either standard names or custom names defined in BodyContentPropertyNameEdits.
+        /// List of property names to include in the webhook POST body as described by <see cref="PublicationPropertyType"/> enum.
         /// Standard supported properties: Id, ChartHeaderEdit, Archived, ContainsSelectableDimensions, VisualizationType, TableReference, Note
         /// </summary>
-        public string[] BodyContentPropertyNames { get; set; }
+        public PublicationPropertyType[] BodyContentPropertyNames { get; set; }
 
         /// <summary>
         /// Optional dictionary to map standard property names to custom field names in the webhook body.
-        /// Key: Standard property name (Id, ChartHeaderEdit, Archived, ContainsSelectableDimensions, VisualizationType, TableReference, Note)
+        /// Key: Standard property name (Id, ChartHeaderEdit, Archived, ContainsSelectableDimensions, VisualizationType, TableReference, Note) as described by <see cref="PublicationPropertyType"/> enum.
         /// Value: Custom field name to use in the webhook body
         /// </summary>
-        public Dictionary<string, string> BodyContentPropertyNameEdits { get; set; } = [];
+        public Dictionary<PublicationPropertyType, string> BodyContentPropertyNameEdits { get; set; } = [];
 
         /// <summary>
         /// Optional dictionary to translate VisualizationType enum values to custom strings.

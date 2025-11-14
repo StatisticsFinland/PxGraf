@@ -15,6 +15,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace PxGraf.Services
@@ -26,6 +27,20 @@ namespace PxGraf.Services
     {
         public QueryPublicationStatus Status { get; set; }
         public MultilanguageString Messages { get; set; } = new MultilanguageString([]);
+    }
+
+    [JsonConverter(typeof(JsonStringEnumConverter))]
+    public enum PublicationPropertyType
+    {
+        Id,
+        Header,
+        Archived,
+        ContainsSelectableDimensions,
+        VisualizationType,
+        TableReference,
+        CreationTime,
+        Draft,
+        Version
     }
 
     /// <summary>
@@ -131,12 +146,12 @@ namespace PxGraf.Services
         {
             Dictionary<string, object> body = [];
 
-            foreach (string propertyName in _config.BodyContentPropertyNames)
+            foreach (PublicationPropertyType propertyName in _config.BodyContentPropertyNames)
             {
                 // Get the custom field name if configured, otherwise use the original property name
                 string fieldName = _config.BodyContentPropertyNameEdits.TryGetValue(propertyName, out string customName)
-                       ? customName
-                    : propertyName;
+                    ? customName
+                    : propertyName.ToString();
 
                 object value = GetPropertyValue(propertyName, queryId, savedQuery);
                 if (value != null)
@@ -172,24 +187,24 @@ namespace PxGraf.Services
         /// <summary>
         /// Gets the value for a specified property name from the saved query data.
         /// </summary>
-        /// <param name="propertyName">The standard property name to retrieve.</param>
+        /// <param name="propertyName"><see cref="PublicationPropertyType"/> type of the property to retrieve.</param>
         /// <param name="queryId">The query ID.</param>
         /// <param name="savedQuery">The saved query object.</param>
         /// <returns>The property value, or null if the property is not recognized.</returns>
-        private object GetPropertyValue(string propertyName, string queryId, SavedQuery savedQuery)
+        private object GetPropertyValue(PublicationPropertyType propertyName, string queryId, SavedQuery savedQuery)
         {
-            return propertyName.ToLowerInvariant() switch
+            return propertyName switch
             {
-                "id" => queryId,
-                "header" => GetHeader(savedQuery.Query.ChartHeaderEdit, savedQuery),
-                "archived" => savedQuery.Archived,
-                "containsselectabledimensions" => savedQuery.Query.DimensionQueries.Any(q => q.Value.Selectable),
-                "visualizationtype" => GetVisualizationType(savedQuery.Settings.VisualizationType),
-                "tablereference" => savedQuery.Query.TableReference.ToPath(),
-                "creationtime" => savedQuery.CreationTime,
-                "draft" => savedQuery.Draft,
-                "version" => savedQuery.Version,
-                _ => LogUnknownPropertyAndReturnNull(propertyName)
+                PublicationPropertyType.Id => queryId,
+                PublicationPropertyType.Header => GetHeader(savedQuery.Query.ChartHeaderEdit, savedQuery),
+                PublicationPropertyType.Archived => savedQuery.Archived,
+                PublicationPropertyType.ContainsSelectableDimensions => savedQuery.Query.DimensionQueries.Any(q => q.Value.Selectable),
+                PublicationPropertyType.VisualizationType => GetVisualizationType(savedQuery.Settings.VisualizationType),
+                PublicationPropertyType.TableReference => savedQuery.Query.TableReference.ToPath(),
+                PublicationPropertyType.CreationTime => savedQuery.CreationTime,
+                PublicationPropertyType.Draft => savedQuery.Draft,
+                PublicationPropertyType.Version => savedQuery.Version,
+                _ => LogUnknownPropertyAndReturnNull(propertyName.ToString())
             };
         }
 

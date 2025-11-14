@@ -88,7 +88,6 @@ namespace UnitTests.ServicesTests
                 configDict.Add("PublicationWebhookConfiguration:BodyContentPropertyNames:6", "draft");
                 configDict.Add("PublicationWebhookConfiguration:BodyContentPropertyNames:7", "creationtime");
                 configDict.Add("PublicationWebhookConfiguration:BodyContentPropertyNames:8", "tablereference");
-                configDict.Add("PublicationWebhookConfiguration:BodyContentPropertyNames:9", "unknown");
                 configDict.Add("PublicationWebhookConfiguration:BodyContentPropertyNameEdits:id", "id_test");
                 configDict.Add("PublicationWebhookConfiguration:VisualizationTypeTranslations:Table", "CustomTable");
                 configDict.Add("PublicationWebhookConfiguration:MetadataProperties:NOTE", "INFO");
@@ -282,22 +281,22 @@ namespace UnitTests.ServicesTests
                 JsonElement root = doc.RootElement;
                 Assert.That(root.TryGetProperty("id_test", out JsonElement idEl), Is.True);
                 Assert.That(idEl.GetString(), Is.EqualTo("test-id"));
-                Assert.That(root.TryGetProperty("archived", out JsonElement archivedEl), Is.True, "Expected archived field missing");
+                Assert.That(root.TryGetProperty("Archived", out JsonElement archivedEl), Is.True, "Expected archived field missing");
                 Assert.That(archivedEl.GetBoolean(), Is.False);
-                Assert.That(root.TryGetProperty("visualizationtype", out JsonElement vizEl), Is.True, "Expected visualizationtype field missing");
+                Assert.That(root.TryGetProperty("VisualizationType", out JsonElement vizEl), Is.True, "Expected visualizationtype field missing");
                 Assert.That(vizEl.GetString(), Is.EqualTo("CustomTable"));
-                Assert.That(root.TryGetProperty("containsselectabledimensions", out JsonElement selectableEl), Is.True, "Expected containsselectabledimensions field missing");
+                Assert.That(root.TryGetProperty("ContainsSelectableDimensions", out JsonElement selectableEl), Is.True, "Expected containsselectabledimensions field missing");
                 Assert.That(selectableEl.GetBoolean(), Is.False);
-                Assert.That(root.TryGetProperty("tablereference", out JsonElement tableRefEl), Is.True, "Expected tablereference field missing");
+                Assert.That(root.TryGetProperty("TableReference", out JsonElement tableRefEl), Is.True, "Expected tablereference field missing");
                 Assert.That(tableRefEl.GetString().EndsWith("TestPxFile.px"), Is.True);
-                Assert.That(root.TryGetProperty("draft", out JsonElement draftEl), Is.True, "Expected draft field missing");
+                Assert.That(root.TryGetProperty("Draft", out JsonElement draftEl), Is.True, "Expected draft field missing");
                 Assert.That(draftEl.GetBoolean(), Is.False);
                 Assert.That(root.TryGetProperty("INFO", out _), Is.True, "Expected INFO (mapped NOTE) metadata field missing");
-                Assert.That(root.TryGetProperty("creationtime", out _), Is.True, "Expected creationtime field missing");
-                Assert.That(root.TryGetProperty("version", out JsonElement versionEl), Is.True, "Expected version field missing");
+                Assert.That(root.TryGetProperty("CreationTime", out _), Is.True, "Expected creationtime field missing");
+                Assert.That(root.TryGetProperty("Version", out JsonElement versionEl), Is.True, "Expected version field missing");
                 Assert.That(versionEl.GetString(), Is.EqualTo("1.2"));
 
-                Assert.That(root.TryGetProperty("header", out JsonElement headerEl), Is.True, "Expected header field missing");
+                Assert.That(root.TryGetProperty("Header", out JsonElement headerEl), Is.True, "Expected header field missing");
                 if (headerEl.ValueKind == JsonValueKind.Object && headerEl.TryGetProperty("result", out JsonElement headerResultEl) && headerResultEl.ValueKind == JsonValueKind.Object)
                 {
                     Assert.That(headerResultEl.TryGetProperty("fi", out JsonElement fiHeader), Is.True, "Missing fi header inside header.result");

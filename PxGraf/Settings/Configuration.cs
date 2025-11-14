@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using PxGraf.Datasource.FileDatasource;
 using PxGraf.Exceptions;
+using PxGraf.Services;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -117,8 +118,8 @@ namespace PxGraf.Settings
                 EndpointUrl = section["EndpointUrl"],
                 AccessTokenHeaderName = section["AccessTokenHeaderName"],
                 AccessTokenHeaderValue = section["AccessTokenHeaderValue"],
-                BodyContentPropertyNames = section.GetSection("BodyContentPropertyNames").Get<string[]>() ?? [],
-                BodyContentPropertyNameEdits = section.GetSection("BodyContentPropertyNameEdits").Get<Dictionary<string, string>>() ?? [],
+                BodyContentPropertyNames = section.GetSection("BodyContentPropertyNames").Get<PublicationPropertyType[]>() ?? [],
+                BodyContentPropertyNameEdits = section.GetSection("BodyContentPropertyNameEdits").Get<Dictionary<PublicationPropertyType, string>>() ?? [],
                 VisualizationTypeTranslations = section.GetSection("VisualizationTypeTranslations").Get<Dictionary<string, string>>() ?? [],
                 MetadataProperties = section.GetSection("MetadataProperties").Get<Dictionary<string, string>>() ?? []
             };
