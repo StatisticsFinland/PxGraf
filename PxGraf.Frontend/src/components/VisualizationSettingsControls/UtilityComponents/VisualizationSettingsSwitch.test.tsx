@@ -55,11 +55,11 @@ describe('Assertion tests', () => {
                 publicationEnabled: true,
                 setPublicationEnabled: jest.fn()
             }}>
-            <VisualizationSettingsSwitch
-                selected={false}
-                visualizationSettings={mockVisualizationSettings}
-                label={"label"}
-                changeProperty={"showDataPoints"}
+                <VisualizationSettingsSwitch
+                    selected={false}
+                    visualizationSettings={mockVisualizationSettings}
+                    label={"label"}
+                    changeProperty={"showDataPoints"}
                 />
             </EditorContext.Provider>);
         const switchElement = getByRole('switch');

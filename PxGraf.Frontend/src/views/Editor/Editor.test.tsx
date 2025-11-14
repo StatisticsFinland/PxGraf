@@ -147,8 +147,8 @@ const mockVisualizationResult: IVisualizationResult = {
                     source: { fi: "sourcefi2", sv: "sourcesv2", en: "sourceen2" },
                     numberOfDecimals: 0,
                     lastUpdated: "2021-01-01T00:00:00Z"
-                }
-            }],
+                    }
+                }],
         }, {
             code: "foobar2",
             name: { fi: "foo2", sv: "bar2", en: "foobar2" },
@@ -165,9 +165,9 @@ const mockVisualizationResult: IVisualizationResult = {
                 name: { fi: "fyy2", sv: "bör2", en: "fyybör2" },
                 note: { fi: "fuu2", sv: "baar2", en: "fuubaar2" },
                 isSum: false,
-                contentComponent: null,
+                    contentComponent: null,
+                    }],
             }],
-        }],
         tableReference: { hierarchy: ["foo", "bar"], name: "foobar_table" },
     },
 }

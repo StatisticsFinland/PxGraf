@@ -66,43 +66,43 @@ const mockDimensions: IDimension[] = [{
         }
     ]
 },
-{
-    code: 'foo2',
-    name: {
-        'fi': null,
-        'sv': null,
-        'en': null
-    },
-    type: EDimensionType.Content,
-    values: [
-        {
-            code: 'bar2',
-            name: {
-                'fi': null,
-                'sv': null,
-                'en': null,
-            },
-            isVirtual: false,
-            unit: {
-                'fi': 'yksikko',
-                'sv': 'enhet',
-                'en': 'unit'
-            },
-            precision: 0,
-            lastUpdated: '2021-01-01',
-            additionalProperties: {
-                SOURCE: {
-                    type: EMetaPropertyType.MultilanguageText,
-                    value: {
-                        'fi': 'lahde',
-                        'sv': 'kalla',
-                        'en': 'source'
+    {
+        code: 'foo2',
+        name: {
+            'fi': null,
+            'sv': null,
+            'en': null
+        },
+        type: EDimensionType.Content,
+        values: [
+            {
+                code: 'bar2',
+                name: {
+                    'fi': null,
+                    'sv': null,
+                    'en': null,
+                },
+                isVirtual: false,
+                unit: {
+                    'fi': 'yksikko',
+                    'sv': 'enhet',
+                    'en': 'unit'
+                },
+                precision: 0,
+                lastUpdated: '2021-01-01',
+                additionalProperties: {
+                    SOURCE: {
+                        type: EMetaPropertyType.MultilanguageText,
+                        value: {
+                            'fi': 'lahde',
+                            'sv': 'kalla',
+                            'en': 'source'
+                        }
                     }
                 }
             }
-        }
-    ]
-}
+        ]
+    }
 ]
 const mockLang = 'fi';
 const mockFunction = jest.fn();

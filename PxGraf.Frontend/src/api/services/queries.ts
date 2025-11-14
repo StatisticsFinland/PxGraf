@@ -32,10 +32,10 @@ export interface ISaveQueryResponse {
  * @property {boolean} draft - Indicates if the query is a draft and can be overwritten.
  */
 export interface IFetchSavedQueryResponse {
- query: {
+    query: {
         tableReference: {
-      name: string;
-      hierarchy: string[];
+            name: string;
+            hierarchy: string[];
         };
         variableQueries: Query;
     } & ICubeQuery;
@@ -109,10 +109,10 @@ const sendSaveRequest = async (
     const client = new ApiClient();
 
     const requestBody = JSON.stringify({
-     query: buildCubeQuery(query, metaEdits, idStack),
+        query: buildCubeQuery(query, metaEdits, idStack),
         settings: {
-          ...visualizationSettings,
-      selectedVisualization: selectedVisualization,
+            ...visualizationSettings,
+            selectedVisualization: selectedVisualization,
         },
         id: id,
         draft: params.isDraft
@@ -122,7 +122,7 @@ const sendSaveRequest = async (
 }
 
 export const fetchSavedQuery = async (queryId: string): Promise<IFetchSavedQueryResponse> => {
- const client = new ApiClient();
+    const client = new ApiClient();
     const url = 'sq/' + queryId;
     const response = await client.getAsync(url);
 
@@ -132,8 +132,8 @@ export const fetchSavedQuery = async (queryId: string): Promise<IFetchSavedQuery
 export const useFetchSavedQuery = (queryId: string): IFetchSavedQueryResult => {
     return useQuery(
         [queryId],
-    () => fetchSavedQuery(queryId),
-  defaultQueryOptions
+        () => fetchSavedQuery(queryId),
+        defaultQueryOptions
     );
 };
 
@@ -141,20 +141,20 @@ export const useSaveMutation = (
     idStack: string[],
     query: Query,
     metaEdits: ICubeQuery,
-  selectedVisualization: string,
+    selectedVisualization: string,
     visualizationSettings: IVisualizationSettings,
     id: string
 ): UseMutationResult<ISaveQueryResponse, unknown, ISaveQueryMutationParams> => {
     return useMutation(
         (params: ISaveQueryMutationParams) => sendSaveRequest(
-     idStack,
+            idStack,
             query,
             metaEdits,
-        selectedVisualization,
- visualizationSettings,
-  params,
-        id
-  ),
+            selectedVisualization,
+            visualizationSettings,
+            params,
+            id
+        ),
         { retry: false }
     );
 }
