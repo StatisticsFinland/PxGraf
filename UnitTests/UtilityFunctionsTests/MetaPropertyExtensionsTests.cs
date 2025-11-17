@@ -1,4 +1,4 @@
-﻿using NUnit.Framework;
+using NUnit.Framework;
 using Px.Utils.Models.Metadata.MetaProperties;
 using PxGraf.Utility;
 using System;
@@ -46,7 +46,7 @@ namespace UnitTests.UtilityFunctionsTests
             // Act & Assert
             ArgumentException exception = Assert.Throws<ArgumentException>(() => originalProperty.AsMultiLanguageProperty(lang));
             Assert.That(exception.Message,
-                Is.EqualTo("Property of type Px.Utils.Models.Metadata.MetaProperties.StringListProperty can not be converted to multilanguage string property."));
+                Is.EqualTo("PublicationPropertyType of type Px.Utils.Models.Metadata.MetaProperties.StringListProperty can not be converted to multilanguage string property."));
         }
     }
 }

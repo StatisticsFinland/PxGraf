@@ -101,7 +101,8 @@
     "saveOptions": "Valitse missä muodossa haluat tallentaa",
     "saveDynamic": "Dynaaminen kysely ja päivittyvä data",
     "saveStatic": "Staattinen kysely ja staattinen data",
-    "publish": "Julkaisuvalmis"
+    "publish": "Julkaisuvalmis",
+    "webhookResponseSuccess": "Siirto onnistui."
   },
   "saveResultDialog": {
     "ok": "OK",
@@ -109,14 +110,16 @@
     "fail": "Tallennus epäonnistui.",
     "errorMessage": "Tarkista muuttujavalinnat ja yritä uudelleen.",
     "id": "Poiminnan tunniste",
-    "copyToClipBoard": "Kopioi leikepöydälle"
+    "copyToClipBoard": "Kopioi leikepöydälle",
+    "saving": "Tallennetaan kyselyä..."
   },
   "error": {
     "contentLoad": "Sisällön lataaminen ei onnistunut",
     "queryLoad": "Visualisoinnin lataaminen epäonnistui",
     "contentVariableMissing": "Taulukosta puuttuu sisältömuuttuja. Ota yhteyttä tämän taulukon tuottajaan tai ylläpitoon. ",
     "timeVariableMissing": "Taulukosta puuttuu aikamuuttuja. Ota yhteyttä tämän taulukon tuottajaan tai ylläpitoon. ",
-    "variablesMissingValues": "Taulukosta puuttuu muuttujan arvoja. Ota yhteyttä tämän taulukon tuottajaan tai ylläpitoon. "
+    "variablesMissingValues": "Taulukosta puuttuu muuttujan arvoja. Ota yhteyttä tämän taulukon tuottajaan tai ylläpitoon. ",
+    "webhookResponseError": "Siirto epäonnistui."
   },
   "rejectionDialog":{
     "buttonText": "Muut kuviotyypit",

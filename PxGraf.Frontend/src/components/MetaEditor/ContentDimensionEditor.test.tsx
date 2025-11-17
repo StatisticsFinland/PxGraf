@@ -105,7 +105,9 @@ describe('Rendering test', () => {
                     loadedQueryId: '',
                     setLoadedQueryId: jest.fn(),
                     loadedQueryIsDraft: false,
-                    setLoadedQueryIsDraft: jest.fn()
+                    setLoadedQueryIsDraft: jest.fn(),
+                    publicationWebhookEnabled: true,
+                    setPublicationWebhookEnabled: jest.fn()
                 }}>
                     <ContentDimensionEditor language={mockLang} dimension={mockDimension} />
                 </EditorContext.Provider>

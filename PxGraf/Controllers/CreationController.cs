@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.FeatureManagement.Mvc;
 using Px.Utils.Language;
@@ -261,6 +261,7 @@ namespace PxGraf.Controllers
                 );
 
                 int maxQuerySize = Configuration.Current.QueryOptions.MaxQuerySize;
+                bool publicationWebhookEnabled = Configuration.Current.PublicationWebhookConfig.IsEnabled;
 
                 if (query.DimensionQueries.Count == 0)
                 {
@@ -274,7 +275,8 @@ namespace PxGraf.Controllers
                         HeaderText = new MultilanguageString(Configuration.Current.LanguageOptions.Available.Select(lang => new KeyValuePair<string, string>(lang, string.Empty))),
                         MaximumHeaderLength = Configuration.Current.QueryOptions.MaxHeaderLength,
                         VisualizationOptions = [],
-                        VisualizationRejectionReasons = []
+                        VisualizationRejectionReasons = [],
+                        PublicationWebhookEnabled = publicationWebhookEnabled
                     };
                 }
 
@@ -294,7 +296,8 @@ namespace PxGraf.Controllers
                         HeaderText = new MultilanguageString(Configuration.Current.LanguageOptions.Available.Select(lang => new KeyValuePair<string, string>(lang, string.Empty))),
                         MaximumHeaderLength = Configuration.Current.QueryOptions.MaxHeaderLength,
                         VisualizationOptions = [],
-                        VisualizationRejectionReasons = []
+                        VisualizationRejectionReasons = [],
+                        PublicationWebhookEnabled = publicationWebhookEnabled
                     };
                 }
 
@@ -331,7 +334,8 @@ namespace PxGraf.Controllers
                     HeaderText = HeaderBuildingUtilities.GetHeader(filteredMeta, query, true),
                     MaximumHeaderLength = Configuration.Current.QueryOptions.MaxHeaderLength,
                     VisualizationOptions = visualizationOptions,
-                    VisualizationRejectionReasons = rejectionReasons
+                    VisualizationRejectionReasons = rejectionReasons,
+                    PublicationWebhookEnabled = publicationWebhookEnabled
                 };
             }
         }

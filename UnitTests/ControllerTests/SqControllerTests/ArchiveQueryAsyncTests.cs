@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
+using Px.Utils.Language;
 using Px.Utils.Models.Metadata.Enums;
 using Px.Utils.Models.Metadata;
 using PxGraf.Controllers;
@@ -38,10 +39,23 @@ namespace UnitTests.ControllerTests.SqControllerTests
         [Test]
         public async Task ArhiveQueryAsyncReturnsSavedQueryResponse()
         {
+            // Set up configuration with webhook enabled
+            Dictionary<string, string> configDict = new(TestInMemoryConfiguration.Get())
+            {
+                { "PublicationWebhookConfiguration:EndpointUrl", "https://example.com/webhook" },
+                { "PublicationWebhookConfiguration:BodyContentPropertyNames:0", "id" }
+            };
+
+            IConfiguration configuration = new ConfigurationBuilder()
+                .AddInMemoryCollection(configDict)
+                .Build();
+            Configuration.Load(configuration);
+
             Mock<ICachedDatasource> mockCachedDatasource = new();
             Mock<ISqFileInterface> mockSqFileInterface = new();
             Mock<ILogger<SqController>> mockLogger = new();
             Mock<IAuditLogService> mockAuditLogService = new();
+            Mock<IPublicationWebhookService> mockWebhookService = new();
 
             // Arrange
             List<DimensionParameters> cubeParams =
@@ -85,7 +99,10 @@ namespace UnitTests.ControllerTests.SqControllerTests
             mockSqFileInterface.Setup(s => s.SerializeToFile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<SavedQuery>()))
                 .Returns(Task.CompletedTask);
 
-            SqController testController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, mockLogger.Object, mockAuditLogService.Object);
+            mockWebhookService.Setup(w => w.TriggerWebhookAsync(It.IsAny<string>(), It.IsAny<SavedQuery>(), It.IsAny<IReadOnlyDictionary<string, Px.Utils.Models.Metadata.MetaProperties.MetaProperty>>()))
+                .ReturnsAsync(new WebhookPublicationResult { Status = QueryPublicationStatus.Success, Messages = new MultilanguageString([])});
+
+            SqController testController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, mockLogger.Object, mockAuditLogService.Object, mockWebhookService.Object);
 
             // Act
             ActionResult<SaveQueryResponse> result = await testController.ArchiveQueryAsync(testInput);
@@ -94,13 +111,164 @@ namespace UnitTests.ControllerTests.SqControllerTests
             Assert.That(result.Value, Is.InstanceOf<SaveQueryResponse>());
             mockSqFileInterface.Verify(
                 s => s.SerializeToFile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<SavedQuery>()), Times.Once);
-                
+
             // Verify audit log was called with the correct parameters
             mockAuditLogService.Verify(
                 a => a.LogAuditEvent(
                     It.Is<string>(action => action == "api/sq/archive"),
                     It.Is<string>(resource => resource == result.Value.Id)),
                 Times.Once);
+
+            mockWebhookService.Verify(
+                w => w.TriggerWebhookAsync(It.IsAny<string>(), It.IsAny<SavedQuery>(), It.IsAny<IReadOnlyDictionary<string, Px.Utils.Models.Metadata.MetaProperties.MetaProperty>>()),
+                Times.Once);
+        }
+
+        [Test]
+        public async Task ArchiveQueryAsync_NonDraftQuery_CallsWebhookService()
+        {
+            // Set up configuration with webhook enabled
+            Dictionary<string, string> configDict = new(TestInMemoryConfiguration.Get());
+            configDict.Add("PublicationWebhookConfiguration:EndpointUrl", "https://example.com/webhook");
+            configDict.Add("PublicationWebhookConfiguration:BodyContentPropertyNames:0", "id");
+            
+            IConfiguration configuration = new ConfigurationBuilder()
+                .AddInMemoryCollection(configDict)
+                .Build();
+            Configuration.Load(configuration);
+
+            // Arrange
+            Mock<ICachedDatasource> mockCachedDatasource = new();
+            Mock<ISqFileInterface> mockSqFileInterface = new();
+            Mock<ILogger<SqController>> mockLogger = new();
+            Mock<IAuditLogService> mockAuditLogService = new();
+            Mock<IPublicationWebhookService> mockWebhookService = new();
+
+            List<DimensionParameters> cubeParams =
+            [
+                new DimensionParameters(DimensionType.Content, 1)
+                {
+                    ValueFilter = new TopFilter(1)
+                },
+                new DimensionParameters(DimensionType.Time, 10)
+                {
+                    ValueFilter = new AllFilter()
+                },
+                new DimensionParameters(DimensionType.Other, 1)
+                {
+                    ValueFilter = new FromFilter("value-0")
+                },
+                new DimensionParameters(DimensionType.Other, 1)
+                {
+                    ValueFilter = new ItemFilter(["value-0", "value-1"])
+                }
+            ];
+
+            SaveQueryParams testInput = new()
+            {
+                Query = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams),
+                Settings = new VisualizationCreationSettings()
+                {
+                    SelectedVisualization = VisualizationType.LineChart,
+                    RowDimensionCodes = ["variable-2"],
+                    ColumnDimensionCodes = ["variable-1"],
+                    MultiselectableDimensionCode = null
+                },
+                Draft = false // Non-draft query
+            };
+
+            mockCachedDatasource.Setup(c => c.GetMatrixMetadataCachedAsync(It.IsAny<PxTableReference>()))
+                .Returns(Task.Run(() => (IReadOnlyMatrixMetadata)TestDataCubeBuilder.BuildTestMeta(cubeParams)));
+
+            mockCachedDatasource.Setup(c => c.GetMatrixCachedAsync(It.IsAny<PxTableReference>(), It.IsAny<IReadOnlyMatrixMetadata>()))
+                .Returns(Task.Run(() => TestDataCubeBuilder.BuildTestMatrix(cubeParams)));
+
+            mockSqFileInterface.Setup(s => s.SerializeToFile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<SavedQuery>()))
+                .Returns(Task.CompletedTask);
+
+            mockWebhookService.Setup(w => w.TriggerWebhookAsync(It.IsAny<string>(), It.IsAny<SavedQuery>(), It.IsAny<IReadOnlyDictionary<string, Px.Utils.Models.Metadata.MetaProperties.MetaProperty>>()))
+                .ReturnsAsync(new WebhookPublicationResult { Status = QueryPublicationStatus.Success, Messages = new MultilanguageString([])});
+
+            SqController testController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, mockLogger.Object, mockAuditLogService.Object, mockWebhookService.Object);
+
+            // Act
+            ActionResult<SaveQueryResponse> result = await testController.ArchiveQueryAsync(testInput);
+
+            // Assert
+            Assert.That(result.Value, Is.InstanceOf<SaveQueryResponse>());
+            Assert.That(result.Value.PublicationStatus, Is.EqualTo(QueryPublicationStatus.Success));
+
+            // Verify webhook service was called
+            mockWebhookService.Verify(
+                w => w.TriggerWebhookAsync(It.IsAny<string>(), It.IsAny<SavedQuery>(), It.IsAny<IReadOnlyDictionary<string, Px.Utils.Models.Metadata.MetaProperties.MetaProperty>>()),
+                Times.Once);
+        }
+
+        [Test]
+        public async Task ArchiveQueryAsync_DraftQuery_DoesNotCallWebhookService()
+        {
+            // Arrange
+            Mock<ICachedDatasource> mockCachedDatasource = new();
+            Mock<ISqFileInterface> mockSqFileInterface = new();
+            Mock<ILogger<SqController>> mockLogger = new();
+            Mock<IAuditLogService> mockAuditLogService = new();
+            Mock<IPublicationWebhookService> mockWebhookService = new();
+
+            List<DimensionParameters> cubeParams =
+            [
+                new DimensionParameters(DimensionType.Content, 1)
+                {
+                    ValueFilter = new TopFilter(1)
+                },
+                new DimensionParameters(DimensionType.Time, 10)
+                {
+                    ValueFilter = new AllFilter()
+                },
+                new DimensionParameters(DimensionType.Other, 1)
+                {
+                    ValueFilter = new FromFilter("value-0")
+                },
+                new DimensionParameters(DimensionType.Other, 1)
+                {
+                    ValueFilter = new ItemFilter(["value-0", "value-1"])
+                }
+            ];
+
+            SaveQueryParams testInput = new()
+            {
+                Query = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams),
+                Settings = new VisualizationCreationSettings()
+                {
+                    SelectedVisualization = VisualizationType.LineChart,
+                    RowDimensionCodes = ["variable-2"],
+                    ColumnDimensionCodes = ["variable-1"],
+                    MultiselectableDimensionCode = null
+                },
+                Draft = true // Draft query
+            };
+
+            mockCachedDatasource.Setup(c => c.GetMatrixMetadataCachedAsync(It.IsAny<PxTableReference>()))
+                .Returns(Task.Run(() => (IReadOnlyMatrixMetadata)TestDataCubeBuilder.BuildTestMeta(cubeParams)));
+
+            mockCachedDatasource.Setup(c => c.GetMatrixCachedAsync(It.IsAny<PxTableReference>(), It.IsAny<IReadOnlyMatrixMetadata>()))
+                .Returns(Task.Run(() => TestDataCubeBuilder.BuildTestMatrix(cubeParams)));
+
+            mockSqFileInterface.Setup(s => s.SerializeToFile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<SavedQuery>()))
+                .Returns(Task.CompletedTask);
+
+            SqController testController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, mockLogger.Object, mockAuditLogService.Object, mockWebhookService.Object);
+
+            // Act
+            ActionResult<SaveQueryResponse> result = await testController.ArchiveQueryAsync(testInput);
+
+            // Assert
+            Assert.That(result.Value, Is.InstanceOf<SaveQueryResponse>());
+            Assert.That(result.Value.PublicationStatus, Is.EqualTo(QueryPublicationStatus.Unpublished));
+
+            // Verify webhook service was NOT called
+            mockWebhookService.Verify(
+                w => w.TriggerWebhookAsync(It.IsAny<string>(), It.IsAny<SavedQuery>(), It.IsAny<IReadOnlyDictionary<string, Px.Utils.Models.Metadata.MetaProperties.MetaProperty>>()),
+                Times.Never);
         }
 
         [Test]
@@ -110,6 +278,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
             Mock<ISqFileInterface> mockSqFileInterface = new();
             Mock<ILogger<SqController>> mockLogger = new();
             Mock<IAuditLogService> mockAuditLogService = new();
+            Mock<IPublicationWebhookService> mockWebhookService = new();
 
             // Arrange
             List<DimensionParameters> cubeParams =
@@ -153,14 +322,14 @@ namespace UnitTests.ControllerTests.SqControllerTests
             mockSqFileInterface.Setup(s => s.SerializeToFile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<SavedQuery>()))
                 .Returns(Task.CompletedTask);
 
-            SqController testController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, mockLogger.Object, mockAuditLogService.Object);
+            SqController testController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, mockLogger.Object, mockAuditLogService.Object, mockWebhookService.Object);
 
             // Act
             ActionResult<SaveQueryResponse> result = await testController.ArchiveQueryAsync(testInput);
 
             // Assert
             Assert.That(result.Result, Is.InstanceOf<BadRequestResult>());
-            
+
             // Verify audit log was called with invalid request
             mockAuditLogService.Verify(
                 a => a.LogAuditEvent(
@@ -176,6 +345,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
             Mock<ISqFileInterface> mockSqFileInterface = new();
             Mock<ILogger<SqController>> mockLogger = new();
             Mock<IAuditLogService> mockAuditLogService = new();
+            Mock<IPublicationWebhookService> mockWebhookService = new();
 
             // Arrange
             List<DimensionParameters> cubeParams =
@@ -208,7 +378,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
             mockSqFileInterface.Setup(s => s.SerializeToFile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<SavedQuery>()))
                 .Returns(Task.CompletedTask);
 
-            SqController testController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, mockLogger.Object, mockAuditLogService.Object);
+            SqController testController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, mockLogger.Object, mockAuditLogService.Object, mockWebhookService.Object);
 
             // Act
             ActionResult<SaveQueryResponse> result = await testController.ArchiveQueryAsync(testInput);
@@ -217,7 +387,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
             Assert.That(result.Result, Is.InstanceOf<BadRequestResult>());
             mockSqFileInterface.Verify(
                 s => s.SerializeToFile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<SavedQuery>()), Times.Never);
-                
+
             // Verify audit log was called with invalid request
             mockAuditLogService.Verify(
                 a => a.LogAuditEvent(
@@ -233,6 +403,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
             Mock<ISqFileInterface> mockSqFileInterface = new();
             Mock<ILogger<SqController>> mockLogger = new();
             Mock<IAuditLogService> mockAuditLogService = new();
+            Mock<IPublicationWebhookService> mockWebhookService = new();
 
             // Arrange
             List<DimensionParameters> cubeParams =
@@ -264,7 +435,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
             mockSqFileInterface.Setup(s => s.SerializeToFile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<SavedQuery>()))
                 .Returns(Task.CompletedTask);
 
-            SqController testController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, mockLogger.Object, mockAuditLogService.Object);
+            SqController testController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, mockLogger.Object, mockAuditLogService.Object, mockWebhookService.Object);
 
             // Act
             ActionResult<SaveQueryResponse> result = await testController.ArchiveQueryAsync(testInput);
@@ -273,7 +444,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
             Assert.That(result.Result, Is.InstanceOf<BadRequestResult>());
             mockSqFileInterface.Verify(
                 s => s.SerializeToFile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<SavedQuery>()), Times.Never);
-                
+
             // Verify audit log was called with invalid request
             mockAuditLogService.Verify(
                 a => a.LogAuditEvent(

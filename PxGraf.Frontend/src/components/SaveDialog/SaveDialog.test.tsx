@@ -45,7 +45,37 @@ describe('Rendering test', () => {
                 loadedQueryId: '',
                 setLoadedQueryId: jest.fn(),
                 loadedQueryIsDraft: false,
-                setLoadedQueryIsDraft: setIsDraftMock
+                setLoadedQueryIsDraft: setIsDraftMock,
+                publicationWebhookEnabled: true,
+                setPublicationWebhookEnabled: jest.fn()
+            }}>
+                <SaveDialog onSave={onSaveMock} />
+            </EditorContext.Provider>
+        );
+        expect(dom.baseElement).toMatchSnapshot();
+    });
+
+    it('renders correctly when open and publication webhook is disabled', () => {
+        const dom = render(
+            <EditorContext.Provider value={{
+                cubeQuery: null,
+                setCubeQuery: jest.fn(),
+                query: {},
+                setQuery: jest.fn(),
+                saveDialogOpen: true,
+                setSaveDialogOpen: onCloseMock,
+                selectedVisualizationUserInput: VisualizationType.VerticalBarChart,
+                setSelectedVisualizationUserInput: jest.fn(),
+                visualizationSettingsUserInput: {},
+                setVisualizationSettingsUserInput: jest.fn(),
+                defaultSelectables: {},
+                setDefaultSelectables: jest.fn(),
+                loadedQueryId: '',
+                setLoadedQueryId: jest.fn(),
+                loadedQueryIsDraft: false,
+                setLoadedQueryIsDraft: setIsDraftMock,
+                publicationWebhookEnabled: false,
+                setPublicationWebhookEnabled: jest.fn()
             }}>
                 <SaveDialog onSave={onSaveMock} />
             </EditorContext.Provider>
@@ -79,7 +109,9 @@ describe('Assertion test', () => {
                 loadedQueryId: '',
                 setLoadedQueryId: jest.fn(),
                 loadedQueryIsDraft: false,
-                setLoadedQueryIsDraft: setIsDraftMock
+                setLoadedQueryIsDraft: setIsDraftMock,
+                publicationWebhookEnabled: true,
+                setPublicationWebhookEnabled: jest.fn()
             }}>
                 <SaveDialog onSave={onSaveMock} />
             </EditorContext.Provider>
@@ -106,7 +138,9 @@ describe('Assertion test', () => {
                 loadedQueryId: '',
                 setLoadedQueryId: jest.fn(),
                 loadedQueryIsDraft: false,
-                setLoadedQueryIsDraft: setIsDraftMock
+                setLoadedQueryIsDraft: setIsDraftMock,
+                publicationWebhookEnabled: true,
+                setPublicationWebhookEnabled: jest.fn()
             }}>
                 <SaveDialog onSave={onSaveMock} />
             </EditorContext.Provider>
@@ -134,7 +168,9 @@ describe('Assertion test', () => {
                 loadedQueryId: '',
                 setLoadedQueryId: jest.fn(),
                 loadedQueryIsDraft: false,
-                setLoadedQueryIsDraft: setIsDraftMock
+                setLoadedQueryIsDraft: setIsDraftMock,
+                publicationWebhookEnabled: true,
+                setPublicationWebhookEnabled: jest.fn()
             }}>
                 <SaveDialog onSave={onSaveMock} />
             </EditorContext.Provider>
@@ -165,7 +201,9 @@ describe('Assertion test', () => {
                 loadedQueryId: '',
                 setLoadedQueryId: jest.fn(),
                 loadedQueryIsDraft: false,
-                setLoadedQueryIsDraft: setIsDraftMock
+                setLoadedQueryIsDraft: setIsDraftMock,
+                publicationWebhookEnabled: true,
+                setPublicationWebhookEnabled: jest.fn()
             }}>
                 <SaveDialog onSave={onSaveMock} />
             </EditorContext.Provider>

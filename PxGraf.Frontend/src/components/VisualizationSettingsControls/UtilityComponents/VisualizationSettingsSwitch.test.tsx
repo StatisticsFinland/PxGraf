@@ -51,13 +51,15 @@ describe('Assertion tests', () => {
                 loadedQueryId: '',
                 setLoadedQueryId: jest.fn(),
                 loadedQueryIsDraft: false,
-                setLoadedQueryIsDraft: jest.fn()
+                setLoadedQueryIsDraft: jest.fn(),
+                publicationWebhookEnabled: true,
+                setPublicationWebhookEnabled: jest.fn()
             }}>
-            <VisualizationSettingsSwitch
-                selected={false}
-                visualizationSettings={mockVisualizationSettings}
-                label={"label"}
-                changeProperty={"showDataPoints"}
+                <VisualizationSettingsSwitch
+                    selected={false}
+                    visualizationSettings={mockVisualizationSettings}
+                    label={"label"}
+                    changeProperty={"showDataPoints"}
                 />
             </EditorContext.Provider>);
         const switchElement = getByRole('switch');

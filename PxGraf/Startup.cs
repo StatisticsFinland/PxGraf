@@ -136,6 +136,8 @@ namespace PxGraf
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<ISqFileInterface, SqFileInterface>();
             services.AddScoped<IAuditLogService, AuditLogService>();
+            services.AddScoped<IPublicationWebhookService, PublicationWebhookService>();
+            services.AddHttpClient<PublicationWebhookService>();
             services.AddSingleton<IMultiStateMemoryTaskCache>(provider => new MultiStateMemoryTaskCache(
                 Configuration.Current.CacheOptions.Database.ItemAmountLimit,
                 TimeSpan.FromSeconds(Configuration.Current.CacheOptions.CacheFreshnessCheckIntervalSeconds)));

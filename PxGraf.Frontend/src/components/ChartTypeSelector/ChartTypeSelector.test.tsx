@@ -37,7 +37,9 @@ const editorContextMock = {
     loadedQueryId: '',
     setLoadedQueryId: jest.fn(),
     loadedQueryIsDraft: false,
-    setLoadedQueryIsDraft: jest.fn()
+    setLoadedQueryIsDraft: jest.fn(),
+    publicationWebhookEnabled: true,
+    setPublicationWebhookEnabled: jest.fn()
 };
 
 describe('Rendering test', () => {
