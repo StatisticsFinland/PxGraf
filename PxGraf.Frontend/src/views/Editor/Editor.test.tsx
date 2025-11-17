@@ -90,7 +90,7 @@ jest.mock('@statisticsfinland/pxvisualizer', () => {
         Chart: (...args: any[]) => {
             return (
                 <pre data-testid={'Chart'}>
-                   args={JSON.stringify(args)}
+                    args={JSON.stringify(args)}
                 </pre>
             );
         }
@@ -108,7 +108,7 @@ const mockVisualizationResult: IVisualizationResult = {
     isLoading: false,
     isError: false,
     data: {
-        data: [ 1, 2, 3, 4 ],
+        data: [1, 2, 3, 4],
         missingDataInfo: {},
         dataNotes: [],
         rowVariableCodes: ["foobar2"],
@@ -147,8 +147,8 @@ const mockVisualizationResult: IVisualizationResult = {
                     source: { fi: "sourcefi2", sv: "sourcesv2", en: "sourceen2" },
                     numberOfDecimals: 0,
                     lastUpdated: "2021-01-01T00:00:00Z"
-                }
-            }],
+                    }
+                }],
         }, {
             code: "foobar2",
             name: { fi: "foo2", sv: "bar2", en: "foobar2" },
@@ -165,10 +165,10 @@ const mockVisualizationResult: IVisualizationResult = {
                 name: { fi: "fyy2", sv: "bör2", en: "fyybör2" },
                 note: { fi: "fuu2", sv: "baar2", en: "fuubaar2" },
                 isSum: false,
-                contentComponent: null,
+                    contentComponent: null,
+                    }],
             }],
-        }],
-        tableReference: { hierarchy: ["foo", "bar"], name:  "foobar_table" },
+        tableReference: { hierarchy: ["foo", "bar"], name: "foobar_table" },
     },
 }
 
@@ -177,30 +177,31 @@ const mockSaveQueryResult: ISaveQueryResult = {
     isError: false,
     isSuccess: true,
     data: {
-        id: 'id'
+        id: 'id',
+        publicationStatus: 0
     },
     mutate: jest.fn()
 }
 
 const mockVisualizationSettingsResult: IVisualizationOptions = {
-        type: VisualizationType.HorizontalBarChart,
-        allowManualPivot: false,
-        allowMultiselect: false,
-        sortingOptions: {
-            default: [
-                {
-                    code: 'DESCENDING',
-                    description: {
-                        'fi': 'Laskeva'
-                    }
+    type: VisualizationType.HorizontalBarChart,
+    allowManualPivot: false,
+    allowMultiselect: false,
+    sortingOptions: {
+        default: [
+            {
+                code: 'DESCENDING',
+                description: {
+                    'fi': 'Laskeva'
                 }
-            ],
-            pivoted: []
-        },
-        allowShowingDataPoints: true,
-        allowCuttingYAxis: true,
-        allowMatchXLabelsToEnd: true,
-        allowSetMarkerScale: true
+            }
+        ],
+        pivoted: []
+    },
+    allowShowingDataPoints: true,
+    allowCuttingYAxis: true,
+    allowMatchXLabelsToEnd: true,
+    allowSetMarkerScale: true
 }
 
 const mockFilterDimensionResult: IFilterDimensionResult = {
@@ -228,6 +229,7 @@ const mockEditorContentsResult: IEditorContentsResult = {
         headerText: {
             'fi': 'header'
         },
+        publicationWebhookEnabled: true
     }
 }
 
@@ -373,7 +375,7 @@ describe('Rendering test', () => {
             </QueryClientProvider>
         );
         expect(asFragment()).toMatchSnapshot();
-    
+
     });
 });
 
@@ -465,7 +467,9 @@ describe('Assertion tests', () => {
             loadedQueryId: '',
             setLoadedQueryId,
             loadedQueryIsDraft: false,
-            setLoadedQueryIsDraft
+            setLoadedQueryIsDraft,
+            publicationWebhookEnabled: true,
+            setPublicationWebhookEnabled: jest.fn()
         };
 
         // Mock useContext to return the mockEditorContext for EditorContext
@@ -490,6 +494,76 @@ describe('Assertion tests', () => {
         expect(setLoadedQueryId).toHaveBeenCalledWith('test-query-id');
         expect(setLoadedQueryIsDraft).toHaveBeenCalledWith(true);
         expect(setSelectedVisualizationUserInput).toHaveBeenCalledWith(EVisualizationType.HorizontalBarChart);
+
+        jest.restoreAllMocks();
+    });
+
+    it('calls setPublicationWebhookEnabled when editorContentsResponse has publicationWebhookEnabled property', () => {
+        mockResult = mockTableValidationResult;
+        mockCubeMetaResult.isLoading = false;
+        mockCubeMetaResult.isError = false;
+        mockCubeMetaResult.data = {
+            defaultLanguage: 'fi',
+            availableLanguages: ['fi'],
+            additionalProperties: {},
+            dimensions: [{
+                code: 'code',
+                name: { 'fi': 'variableName' },
+                type: EDimensionType.Content,
+                values: [{
+                    code: 'variableValueCode',
+                    name: { 'fi': 'variableValueName' },
+                    isVirtual: false,
+                    additionalProperties: {}
+                }],
+                additionalProperties: {}
+            }]
+        };
+
+        const setPublicationWebhookEnabled = jest.fn();
+        const originalUseContext = React.useContext;
+
+        const mockEditorContextWithPublication = {
+            cubeQuery: { variableQueries: {} },
+            setCubeQuery: jest.fn(),
+            query: null,
+            setQuery: jest.fn(),
+            saveDialogOpen: false,
+            setSaveDialogOpen: jest.fn(),
+            selectedVisualizationUserInput: null,
+            setSelectedVisualizationUserInput: jest.fn(),
+            visualizationSettingsUserInput: null,
+            setVisualizationSettingsUserInput: jest.fn(),
+            defaultSelectables: null,
+            setDefaultSelectables: jest.fn(),
+            loadedQueryId: '',
+            setLoadedQueryId: jest.fn(),
+            loadedQueryIsDraft: false,
+            setLoadedQueryIsDraft: jest.fn(),
+            publicationWebhookEnabled: true,
+            setPublicationWebhookEnabled
+        };
+
+        // Mock useContext to return our mock for EditorContext
+        jest.spyOn(React, 'useContext').mockImplementation(context => {
+            if (context === EditorContext) {
+                return mockEditorContextWithPublication;
+            }
+            return originalUseContext(context);
+        });
+
+        render(
+            <QueryClientProvider client={queryClient}>
+                <NavigationProvider>
+                    <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
+                        <Editor />
+                    </UiLanguageContext.Provider>
+                </NavigationProvider>
+            </QueryClientProvider>
+        );
+
+        // Verify that setPublicationWebhookEnabled was called with true (from the mocked API response)
+        expect(setPublicationWebhookEnabled).toHaveBeenCalledWith(true);
 
         jest.restoreAllMocks();
     });

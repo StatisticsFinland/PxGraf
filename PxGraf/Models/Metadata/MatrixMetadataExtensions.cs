@@ -1,4 +1,4 @@
-﻿#nullable enable
+#nullable enable
 using Px.Utils.Language;
 using Px.Utils.Models.Metadata.Dimensions;
 using Px.Utils.Models.Metadata.Enums;
@@ -122,7 +122,7 @@ namespace PxGraf.Models.Metadata
         /// </summary>
         /// <param name="meta">Metadata object to be searched.</param>
         /// <param name="propertyKey">Key of the property to be searched.</param>
-        /// <returns>Property value as a <see cref="MultilanguageString"/> object if it exists, otherwise null.</returns>
+        /// <returns>PublicationPropertyType value as a <see cref="MultilanguageString"/> object if it exists, otherwise null.</returns>
         public static MultilanguageString? GetMatrixMultilanguageProperty(this IReadOnlyMatrixMetadata meta, string propertyKey)
         {
             if (meta.AdditionalProperties.TryGetValue(propertyKey, out MetaProperty? prop) &&

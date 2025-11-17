@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -49,6 +49,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
             Mock<ISqFileInterface> mockSqFileInterface = new();
             Mock<ILogger<SqController>> mockLogger = new();
             Mock<IAuditLogService> mockAuditLogService = new();
+            Mock<IPublicationWebhookService> mockWebhookService = new();
 
             string testQueryId = "aaa-bbb-111-222-333";
 
@@ -78,7 +79,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
             mockSqFileInterface.Setup(x => x.ReadSavedQueryFromFile(It.Is<string>(s => s == testQueryId), It.IsAny<string>()))
                 .Returns(Task.Run(() => TestDataCubeBuilder.BuildTestSavedQuery(cubeParams, false, new LineChartVisualizationSettings(null, false, null))));
 
-            SqController metaController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, mockLogger.Object, mockAuditLogService.Object);
+            SqController metaController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, mockLogger.Object, mockAuditLogService.Object, mockWebhookService.Object);
             
             // Act
             ActionResult<SaveQueryParams> result = await metaController.GetSavedQueryAsync(testQueryId);
@@ -102,6 +103,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
             Mock<ISqFileInterface> mockSqFileInterface = new();
             Mock<ILogger<SqController>> mockLogger = new();
             Mock<IAuditLogService> mockAuditLogService = new();
+            Mock<IPublicationWebhookService> mockWebhookService = new();
 
             string testQueryId = "aaa-bbb-111-222-333";
 
@@ -131,7 +133,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
             mockSqFileInterface.Setup(x => x.ReadSavedQueryFromFile(It.Is<string>(s => s == testQueryId), It.IsAny<string>()))
                 .Returns(Task.Run(() => TestDataCubeBuilder.BuildTestSavedQuery(cubeParams, false, new HorizontalBarChartVisualizationSettings(null))));
 
-            SqController metaController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, mockLogger.Object, mockAuditLogService.Object);
+            SqController metaController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, mockLogger.Object, mockAuditLogService.Object, mockWebhookService.Object);
             
             // Act
             ActionResult<SaveQueryParams> actionResult = await metaController.GetSavedQueryAsync(testQueryId);
@@ -155,13 +157,14 @@ namespace UnitTests.ControllerTests.SqControllerTests
             Mock<ISqFileInterface> mockSqFileInterface = new();
             Mock<ILogger<SqController>> mockLogger = new();
             Mock<IAuditLogService> mockAuditLogService = new();
+            Mock<IPublicationWebhookService> mockWebhookService = new();
 
             string testQueryId = "aaa-bbb-111-222-333";
 
             mockSqFileInterface.Setup(x => x.SavedQueryExists(It.Is<string>(s => s == testQueryId), It.IsAny<string>()))
                 .Returns(false);
 
-            SqController metaController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, mockLogger.Object, mockAuditLogService.Object);
+            SqController metaController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, mockLogger.Object, mockAuditLogService.Object, mockWebhookService.Object);
             
             // Act
             ActionResult<SaveQueryParams> actionResult = await metaController.GetSavedQueryAsync(testQueryId);
@@ -185,6 +188,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
             Mock<ISqFileInterface> mockSqFileInterface = new();
             Mock<ILogger<SqController>> mockLogger = new();
             Mock<IAuditLogService> mockAuditLogService = new();
+            Mock<IPublicationWebhookService> mockWebhookService = new();
 
             string testQueryId = "aaa-bbb-111-222-333";
 
@@ -206,7 +210,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
             mockSqFileInterface.Setup(x => x.ReadSavedQueryFromFile(It.Is<string>(s => s == testQueryId), It.IsAny<string>()))
                 .Returns(Task.Run(() => TestDataCubeBuilder.BuildTestSavedQuery(metaParams, false, new HorizontalBarChartVisualizationSettings(null))));
 
-            SqController metaController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, mockLogger.Object, mockAuditLogService.Object);
+            SqController metaController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, mockLogger.Object, mockAuditLogService.Object, mockWebhookService.Object);
             
             // Act
             ActionResult<SaveQueryParams> actionResult = await metaController.GetSavedQueryAsync(testQueryId);

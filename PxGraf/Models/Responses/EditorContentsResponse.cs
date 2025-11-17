@@ -1,7 +1,6 @@
-﻿#nullable enable
+#nullable enable
 using Px.Utils.Language;
 using PxGraf.Enums;
-using System;
 using System.Collections.Generic;
 
 namespace PxGraf.Models.Responses
@@ -42,6 +41,12 @@ namespace PxGraf.Models.Responses
         /// Collection of reasons why the invalid visualization types are not possible for this query.
         /// </summary>
         public required Dictionary<VisualizationType, MultilanguageString> VisualizationRejectionReasons { get; set; }
+
+        /// <summary>
+        /// Indicates whether publication webhooks are enabled in the configuration.
+        /// When false, queries should be saved as published (non-draft) by default since there's no webhook to trigger.
+        /// </summary>
+        public required bool PublicationWebhookEnabled { get; set; }
     }
 
     public class VisualizationOption

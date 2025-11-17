@@ -12,22 +12,24 @@ interface IEditorDialogsProps {
 export const EditorDialogs: React.FC<IEditorDialogsProps> = ({ saveQueryMutation }) => {
     const { setSaveDialogOpen, setLoadedQueryId, setLoadedQueryIsDraft } = React.useContext(EditorContext);
     const [saveResultDialogOpen, setSaveResultDialogOpen] = React.useState(false);
+    const [lastSavedAsDraft, setLastSavedAsDraft] = React.useState(false);
 
     /* istanbul ignore next */
     const saveQueryAndShowResult = (archive: boolean, isDraft: boolean) => {
+        setLastSavedAsDraft(isDraft);
+        setSaveDialogOpen(false);
+        setSaveResultDialogOpen(true);
         saveQueryMutation.mutate(
             { archive, isDraft },
             {
                 onSuccess: (data) => {
                     setLoadedQueryId(data.id);
                     setLoadedQueryIsDraft(isDraft);
-                    setSaveDialogOpen(false);
-                    setSaveResultDialogOpen(true);
                 }
             }
         );
     }
-    
+
     return (
         <>
             <SaveDialog onSave={saveQueryAndShowResult} />
@@ -35,6 +37,7 @@ export const EditorDialogs: React.FC<IEditorDialogsProps> = ({ saveQueryMutation
                 open={saveResultDialogOpen}
                 onClose={() => setSaveResultDialogOpen(false)}
                 mutation={saveQueryMutation}
+                isDraft={lastSavedAsDraft}
             />
         </>
     );

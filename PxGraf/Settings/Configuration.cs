@@ -1,6 +1,7 @@
-﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration;
 using PxGraf.Datasource.FileDatasource;
 using PxGraf.Exceptions;
+using PxGraf.Services;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -25,6 +26,7 @@ namespace PxGraf.Settings
         public bool AuditLoggingEnabled { get; private set; }
         public string[] AuditLogHeaders { get; private set; }
         public string ApplicationInsightsConnectionString { get; private set; }
+        public PublicationWebhookConfiguration PublicationWebhookConfig { get; private set; }
 
         public static void Load(IConfiguration configuration)
         {
@@ -67,7 +69,8 @@ namespace PxGraf.Settings
                 DatabaseWhitelist = configuration.GetSection("DatabaseWhitelist").Get<string[]>() ?? [],
                 AuditLoggingEnabled = configuration.GetValue<bool?>("LogOptions:AuditLog:Enabled") ?? false,
                 AuditLogHeaders = configuration.GetSection("LogOptions:AuditLog:IncludedHeaders").Get<string[]>() ?? [],
-                ApplicationInsightsConnectionString = aiConnectionString
+                ApplicationInsightsConnectionString = aiConnectionString,
+                PublicationWebhookConfig = GetPublicationWebhookConfig(configuration)
             };
 
             if (string.IsNullOrEmpty(newConfig.PxWebUrl) && (newConfig.LocalFilesystemDatabaseConfig == null || !newConfig.LocalFilesystemDatabaseConfig.Enabled))
@@ -100,6 +103,26 @@ namespace PxGraf.Settings
             }
 
             return new LocalFilesystemDatabaseConfig(enabled, databaseRootPath, encoding);
+        }
+
+        private static PublicationWebhookConfiguration GetPublicationWebhookConfig(IConfiguration configuration)
+        {
+            IConfigurationSection section = configuration.GetSection("PublicationWebhookConfiguration");
+            if (!section.Exists())
+            {
+                return new PublicationWebhookConfiguration();
+            }
+
+            return new PublicationWebhookConfiguration
+            {
+                EndpointUrl = section["EndpointUrl"],
+                AccessTokenHeaderName = section["AccessTokenHeaderName"],
+                AccessTokenHeaderValue = section["AccessTokenHeaderValue"],
+                BodyContentPropertyNames = section.GetSection("BodyContentPropertyNames").Get<PublicationPropertyType[]>() ?? [],
+                BodyContentPropertyNameEdits = section.GetSection("BodyContentPropertyNameEdits").Get<Dictionary<PublicationPropertyType, string>>() ?? [],
+                VisualizationTypeTranslations = section.GetSection("VisualizationTypeTranslations").Get<Dictionary<string, string>>() ?? [],
+                MetadataProperties = section.GetSection("MetadataProperties").Get<Dictionary<string, string>>() ?? []
+            };
         }
     }
 }
