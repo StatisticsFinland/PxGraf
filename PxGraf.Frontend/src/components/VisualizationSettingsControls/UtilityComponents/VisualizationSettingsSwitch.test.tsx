@@ -47,16 +47,22 @@ describe('Assertion tests', () => {
                 selectedVisualizationUserInput: VisualizationType.VerticalBarChart,
                 setSelectedVisualizationUserInput: jest.fn(),
                 visualizationSettingsUserInput: {},
-                setVisualizationSettingsUserInput: mockSettingsChangedHandler
+                setVisualizationSettingsUserInput: mockSettingsChangedHandler,
+                loadedQueryId: '',
+                setLoadedQueryId: jest.fn(),
+                loadedQueryIsDraft: false,
+                setLoadedQueryIsDraft: jest.fn(),
+                publicationWebhookEnabled: true,
+                setPublicationWebhookEnabled: jest.fn()
             }}>
-            <VisualizationSettingsSwitch
-                selected={false}
-                visualizationSettings={mockVisualizationSettings}
-                label={"label"}
-                changeProperty={"showDataPoints"}
+                <VisualizationSettingsSwitch
+                    selected={false}
+                    visualizationSettings={mockVisualizationSettings}
+                    label={"label"}
+                    changeProperty={"showDataPoints"}
                 />
             </EditorContext.Provider>);
-        const switchElement = getByRole('checkbox');
+        const switchElement = getByRole('switch');
         fireEvent.click(switchElement);
 
         expect(mockSettingsChangedHandler).toHaveBeenCalledWith({ ...mockVisualizationSettings, showDataPoints: true });

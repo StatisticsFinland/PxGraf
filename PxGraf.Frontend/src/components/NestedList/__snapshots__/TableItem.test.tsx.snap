@@ -1,9 +1,9 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`Rendering test renders correctly 1`] = `
 <DocumentFragment>
   <li
-    class="MuiListItem-root MuiListItem-gutters MuiListItem-padding sc-gjZUHa iMmsjC css-cfd5wn-MuiListItem-root"
+    class="MuiListItem-root MuiListItem-gutters MuiListItem-padding sc-iQqcaB jImSCm css-cfd5wn-MuiListItem-root"
     id="foo-bar-baz"
   >
     <a

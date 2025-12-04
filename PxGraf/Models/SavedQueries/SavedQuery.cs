@@ -39,18 +39,24 @@ namespace PxGraf.Models.SavedQueries
         /// <summary>
         /// Query version
         /// </summary>
-        public string Version { get; set; } = "1.1";
+        public string Version { get; set; } = "1.2";
+
+        /// <summary>
+        /// If true, the query is in draft state and can be overwritten in the editor. False by default.
+        /// </summary>
+        public bool Draft { get; set; } = false;
 
         /// <summary>
         /// Use this for building the object outside of the serialization.
         /// </summary>
-        public SavedQuery(MatrixQuery query, bool archived, VisualizationSettings settings, DateTime creationTime)
+        public SavedQuery(MatrixQuery query, bool archived, VisualizationSettings settings, DateTime creationTime, bool draft)
         {
             Query = query;
             Archived = archived;
             Settings = settings;
             CreationTime = creationTime;
             LegacyProperties = [];
+            Draft = draft;
         }
 
         /// <summary>

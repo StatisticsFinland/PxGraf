@@ -58,11 +58,11 @@ namespace UnitTests.DatasourceTests
         }
 
         [Test]
-        public void TraversalAttemptWithReferenceThrowsUnauthorizedAccessException()
+        public void TraversalAttemptWithReferenceThrowsArgumentException()
         {
-            string rootPath = Path.Combine("C:", "Foo");
-            PxTableReference reference = new ([ "..", "Users", "Public" ], "file.px");
-            Assert.Throws<UnauthorizedAccessException>(() => PathUtils.BuildAndSanitizePath(rootPath, reference));
+            Assert.Throws<ArgumentException>(() => { 
+                PxTableReference _ = new ([ "..", "Users", "Public" ], "file.px");
+            });
         }
 
         [Test]

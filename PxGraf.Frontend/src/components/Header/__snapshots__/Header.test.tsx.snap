@@ -1,12 +1,12 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`Header component should render correctly 1`] = `
 <DocumentFragment>
   <div
-    class="sc-cXawGu hKsbev MuiBox-root css-0"
+    class="sc-dYwGCk ifryVv MuiBox-root css-0"
   >
     <div
-      class="MuiStack-root sc-cUiCeM hAlVej css-m69qwo-MuiStack-root"
+      class="MuiStack-root sc-eqYatC kYbApC css-m69qwo-MuiStack-root"
     >
       <a
         class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary Mui-focusVisible MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-65lmr2-MuiButtonBase-root-MuiButton-root"
@@ -23,12 +23,12 @@ exports[`Header component should render correctly 1`] = `
       >
         <img
           alt="navbar.logoAlt"
-          class="sc-jMsorb eMJfRY"
+          class="sc-kNOymR ffffih"
           src="test-file-stub"
         />
       </a>
       <div
-        class="sc-dcKlJK AXhBx"
+        class="sc-dntSTA dUDlyK"
       >
         <h1
           class="MuiTypography-root MuiTypography-h1 css-10l7o3s-MuiTypography-root"
@@ -37,7 +37,7 @@ exports[`Header component should render correctly 1`] = `
         </h1>
       </div>
       <div
-        class="sc-jScdur gQonCO"
+        class="sc-kcLKEh kiJuhX"
       >
         <a
           class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-1uent87-MuiButtonBase-root-MuiButton-root"
@@ -55,22 +55,22 @@ exports[`Header component should render correctly 1`] = `
         </button>
       </div>
       <div
-        class="MuiStack-root sc-jJAtPt zjSQa css-1os650h-MuiStack-root"
+        class="MuiStack-root sc-lgpSej eywjWa css-1os650h-MuiStack-root"
       >
         <div
-          class="MuiStack-root sc-dIMoHT bLAcLM css-nen11g-MuiStack-root"
+          class="MuiStack-root sc-dTvVRJ eQeXFd css-nen11g-MuiStack-root"
         >
           <div
-            class="sc-gDpztx gmWdfc"
+            class="sc-hjsuWn kNscgO"
           >
             <p
-              class="MuiTypography-root MuiTypography-body2 sc-iQQCXo dzRZkK css-1wle3ir-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body2 sc-jwTyAe hKVVjx css-1wle3ir-MuiTypography-root"
             >
               general.uiLanguage
             </p>
             <button
               aria-label="tooltip.open: general.uiLanguage"
-              class="sc-fYsHOw lgeTOX"
+              class="sc-hvigdm dWELBE"
             >
               <svg
                 aria-hidden="true"

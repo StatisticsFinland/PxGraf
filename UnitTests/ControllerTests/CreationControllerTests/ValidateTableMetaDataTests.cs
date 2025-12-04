@@ -1,15 +1,16 @@
-﻿using Castle.Core.Logging;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using Px.Utils.Models.Metadata.Enums;
+using Px.Utils.Models.Metadata;
 using PxGraf.Controllers;
 using PxGraf.Datasource;
 using PxGraf.Language;
 using PxGraf.Models.Queries;
 using PxGraf.Models.Responses;
+using PxGraf.Services;
 using PxGraf.Settings;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -51,7 +52,24 @@ namespace UnitTests.ControllerTests.CreationControllerTests
                 new DimensionParameters(secondDimensionType, 1)
             ];
 
-            CreationController controller = TestCreationControllerBuilder.BuildController([], dimParams);
+            Mock<ICachedDatasource> dataSource = new();
+            Mock<ILogger<CreationController>> logger = new();
+            Mock<IAuditLogService> auditLogService = new();
+
+
+            dataSource.Setup(ds => ds.GetMatrixMetadataCachedAsync(It.IsAny<PxTableReference>()))
+                .ReturnsAsync((PxTableReference tableReference) =>
+                {
+                    return TestDataCubeBuilder.BuildTestMeta(dimParams);
+                });
+
+            dataSource.Setup(ds => ds.GetMatrixCachedAsync(It.IsAny<PxTableReference>(), It.IsAny<MatrixMetadata>()))
+                .ReturnsAsync((PxTableReference tableReference, MatrixMetadata metadata) =>
+                {
+                    return TestDataCubeBuilder.BuildTestMatrix([]);
+                });
+
+            CreationController controller = new(dataSource.Object, logger.Object, auditLogService.Object);
 
             // Act
             ActionResult<TableMetaValidationResult> actionResult = await controller.ValidateTableMetaData("StatFin/path/table.px");
@@ -63,39 +81,25 @@ namespace UnitTests.ControllerTests.CreationControllerTests
         }
 
         [Test]
-        public async Task ValidateTableMetadata_CalledForNullTable_ReturnsExpectedResult()
-        {
-            // Arrange
-            Mock<ICachedDatasource> dataSource = new();
-            Mock<ILogger<CreationController>> logger = new();
-            dataSource.Setup(ds => ds.GetMatrixMetadataCachedAsync(It.IsAny<PxTableReference>()))
-                .ReturnsAsync((PxTableReference tableReference) => null);
-            CreationController controller = new(dataSource.Object, logger.Object);
-
-            // Act
-            ActionResult<TableMetaValidationResult> actionResult = await controller.ValidateTableMetaData("StatFin/bar/baz.px");
-
-            // Assert
-            Assert.That(actionResult.Value.TableHasContentDimension, Is.False);
-            Assert.That(actionResult.Value.TableHasTimeDimension, Is.False);
-            Assert.That(actionResult.Value.AllDimensionsContainValues, Is.False);
-        }
-
-        [Test]
         public async Task ValidateTableMetadata_CalledForTableInUnlistedDatabase_ReturnsNotFoundResult()
         {
             // Arrange
             Mock<ICachedDatasource> dataSource = new();
             Mock<ILogger<CreationController>> logger = new();
+            Mock<IAuditLogService> auditLogService = new();
             dataSource.Setup(ds => ds.GetMatrixMetadataCachedAsync(It.IsAny<PxTableReference>()))
                 .ReturnsAsync((PxTableReference tableReference) => null);
-            CreationController controller = new(dataSource.Object, logger.Object);
+            CreationController controller = new(dataSource.Object, logger.Object, auditLogService.Object);
 
             // Act
             ActionResult<TableMetaValidationResult> actionResult = await controller.ValidateTableMetaData("foo/bar/baz.px");
 
             // Assert
             Assert.That(actionResult.Result, Is.InstanceOf<NotFoundResult>());
+            auditLogService.Verify(a => a.LogAuditEvent(
+                It.Is<string>(s => s == "api/creation/validate-table-metadata"),
+                It.Is<string>(s => s == "foo/bar/baz.px")),
+                Times.Once);
         }
     }
 }

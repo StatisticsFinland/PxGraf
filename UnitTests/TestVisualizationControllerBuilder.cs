@@ -3,11 +3,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Px.Utils.Models.Metadata;
+using Px.Utils.Models.Metadata.Enums;
 using PxGraf.Controllers;
-using PxGraf.Datasource.Cache;
 using PxGraf.Datasource;
+using PxGraf.Datasource.Cache;
 using PxGraf.Models.Queries;
 using PxGraf.Models.Responses;
+using PxGraf.Models.SavedQueries;
+using PxGraf.Services;
+using PxGraf.Settings;
 using PxGraf.Utility;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -16,8 +20,8 @@ namespace UnitTests
 {
     public static class TestVisualizationControllerBuilder
     {
-        public static VisualizationController BuildController
-            (List<DimensionParameters> cubeParams,
+        public static VisualizationController BuildController(
+            List<DimensionParameters> cubeParams,
             List<DimensionParameters> metaParams,
             string testQueryId, 
             Mock<ICachedDatasource> mockCachedDatasource,
@@ -28,6 +32,7 @@ namespace UnitTests
             Mock<ISqFileInterface> sqFileInterface = new();
             Mock<IMultiStateMemoryTaskCache> taskCache = new();
             Mock<ILogger<VisualizationController>> logger = new();
+            Mock<IAuditLogService> auditLogService = new();
 
             mockCachedDatasource.Setup(x => x.GetMatrixMetadataCachedAsync(It.IsAny<PxTableReference>()))
                 .ReturnsAsync(() => TestDataCubeBuilder.BuildTestMeta(metaParams));
@@ -45,14 +50,22 @@ namespace UnitTests
 
             sqFileInterface.Setup(x => x.SavedQueryExists(It.Is<string>(s => s == testQueryId), It.IsAny<string>()))
                 .Returns(savedQueryFound);
+                
             sqFileInterface.Setup(x => x.ReadSavedQueryFromFile(It.Is<string>(s => s == testQueryId), It.IsAny<string>()))
                 .ReturnsAsync(() => TestDataCubeBuilder.BuildTestSavedQuery(cubeParams, archived, new LineChartVisualizationSettings(null, false, null)));
+                
             sqFileInterface.Setup(x => x.ArchiveCubeExists(It.IsAny<string>(), It.IsAny<string>()))
-                .Returns(() => true);
+                .Returns(true);
+                
             sqFileInterface.Setup(x => x.ReadArchiveCubeFromFile(It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(() => TestDataCubeBuilder.BuildTestArchiveCube(metaParams));
 
-            VisualizationController controller = new(sqFileInterface.Object, taskCache.Object, mockCachedDatasource.Object, logger.Object)
+            VisualizationController controller = new(
+                sqFileInterface.Object, 
+                taskCache.Object, 
+                mockCachedDatasource.Object, 
+                logger.Object,
+                auditLogService.Object)
             {
                 ControllerContext = new ControllerContext()
                 {

@@ -1,11 +1,11 @@
 ﻿#nullable enable
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.Extensions.Logging;
 using Moq;
 using PxGraf.Controllers;
 using PxGraf.Datasource;
 using PxGraf.Models.Queries;
 using PxGraf.Models.SavedQueries;
+using PxGraf.Services;
 using PxGraf.Utility;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -19,6 +19,7 @@ namespace UnitTests
             Mock<ISqFileInterface> sqFileInterface = new();
             Mock<ICachedDatasource> cachedDatasource = new();
             Mock<ILogger<QueryMetaController>> logger = new();
+            Mock<IAuditLogService> auditLogService = new();
 
             sqFileInterface.Setup(fi => fi.SavedQueryExists(It.IsAny<string>(), It.IsAny<string>()))
                 .Returns((string sq, string archivePath) =>
@@ -52,7 +53,7 @@ namespace UnitTests
                     return Task.FromResult(archiveCubes?[$"{archiveRoot}/{id}"]);
                 });
 
-            return new QueryMetaController(sqFileInterface.Object, cachedDatasource.Object, logger.Object);
+            return new QueryMetaController(sqFileInterface.Object, cachedDatasource.Object, logger.Object, auditLogService.Object);
         }
     }
 }

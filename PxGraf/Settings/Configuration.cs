@@ -1,6 +1,8 @@
-﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration;
 using PxGraf.Datasource.FileDatasource;
 using PxGraf.Exceptions;
+using PxGraf.Services;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -21,8 +23,17 @@ namespace PxGraf.Settings
         public LocalFilesystemDatabaseConfig LocalFilesystemDatabaseConfig { get; private set; }
         public string[] DatabaseWhitelist { get; private set; }
 
+        public bool AuditLoggingEnabled { get; private set; }
+        public string[] AuditLogHeaders { get; private set; }
+        public string ApplicationInsightsConnectionString { get; private set; }
+        public PublicationWebhookConfiguration PublicationWebhookConfig { get; private set; }
+
         public static void Load(IConfiguration configuration)
         {
+            string aiConnectionString = Environment.GetEnvironmentVariable("PXGRAF_APPLICATIONINSIGHTS_CONNECTION_STRING")
+                ?? configuration["LogOptions:ApplicationInsightsConnectionString"]
+                ?? null;
+
             //Set config defaults
             Configuration newConfig = new()
             {
@@ -55,7 +66,11 @@ namespace PxGraf.Settings
                     AllowedOrigins = configuration.GetSection("Cors:AllowedOrigins").Get<string[]>(),
                 },
                 LocalFilesystemDatabaseConfig = GetLocalDatabaseConfig(configuration),
-                DatabaseWhitelist = configuration.GetSection("DatabaseWhitelist").Get<string[]>() ?? []
+                DatabaseWhitelist = configuration.GetSection("DatabaseWhitelist").Get<string[]>() ?? [],
+                AuditLoggingEnabled = configuration.GetValue<bool?>("LogOptions:AuditLog:Enabled") ?? false,
+                AuditLogHeaders = configuration.GetSection("LogOptions:AuditLog:IncludedHeaders").Get<string[]>() ?? [],
+                ApplicationInsightsConnectionString = aiConnectionString,
+                PublicationWebhookConfig = GetPublicationWebhookConfig(configuration)
             };
 
             if (string.IsNullOrEmpty(newConfig.PxWebUrl) && (newConfig.LocalFilesystemDatabaseConfig == null || !newConfig.LocalFilesystemDatabaseConfig.Enabled))
@@ -88,6 +103,26 @@ namespace PxGraf.Settings
             }
 
             return new LocalFilesystemDatabaseConfig(enabled, databaseRootPath, encoding);
+        }
+
+        private static PublicationWebhookConfiguration GetPublicationWebhookConfig(IConfiguration configuration)
+        {
+            IConfigurationSection section = configuration.GetSection("PublicationWebhookConfiguration");
+            if (!section.Exists())
+            {
+                return new PublicationWebhookConfiguration();
+            }
+
+            return new PublicationWebhookConfiguration
+            {
+                EndpointUrl = section["EndpointUrl"],
+                AccessTokenHeaderName = section["AccessTokenHeaderName"],
+                AccessTokenHeaderValue = section["AccessTokenHeaderValue"],
+                BodyContentPropertyNames = section.GetSection("BodyContentPropertyNames").Get<PublicationPropertyType[]>() ?? [],
+                BodyContentPropertyNameEdits = section.GetSection("BodyContentPropertyNameEdits").Get<Dictionary<PublicationPropertyType, string>>() ?? [],
+                VisualizationTypeTranslations = section.GetSection("VisualizationTypeTranslations").Get<Dictionary<string, string>>() ?? [],
+                MetadataProperties = section.GetSection("MetadataProperties").Get<Dictionary<string, string>>() ?? []
+            };
         }
     }
 }

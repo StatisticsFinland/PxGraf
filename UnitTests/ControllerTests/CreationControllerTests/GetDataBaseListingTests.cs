@@ -134,5 +134,18 @@ namespace UnitTests.ControllerTests.CreationControllerTests
             // Assert
             Assert.That(actionResult.Result, Is.InstanceOf<NotFoundResult>());
         }
+
+        [Test]
+        public async Task GetDatabaseListingAsync_WithInvalidPath_ReturnsBadRequest()
+        {
+            // Arrange
+            CreationController controller = TestCreationControllerBuilder.BuildController([], []);
+
+            // Act
+            ActionResult<DatabaseGroupContents> actionResult = await controller.GetDataBaseListingAsync("data\0base/sub\agroup/fol\r\nder");
+
+            // Assert
+            Assert.That(actionResult.Result, Is.InstanceOf<BadRequestResult>());
+        }
     }
 }

@@ -77,17 +77,17 @@ namespace UnitTests
             return query;
         }
 
-        public static SavedQuery BuildTestSavedQuery(List<DimensionParameters> varParams, bool archived, VisualizationSettings settings)
+        public static SavedQuery BuildTestSavedQuery(List<DimensionParameters> varParams, bool archived, VisualizationSettings settings, bool draft = false)
         {
-            return new SavedQuery(BuildTestCubeQuery(varParams), archived, settings, DateTime.Now);
+            return new SavedQuery(BuildTestCubeQuery(varParams), archived, settings, DateTime.Now, draft);
         }
 
-        public static SavedQuery BuildTestSavedQuery(List<DimensionParameters> varParams, bool archived, VisualizationCreationSettings creationSettings, Matrix<DecimalDataValue> matrix)
+        public static SavedQuery BuildTestSavedQuery(List<DimensionParameters> varParams, bool archived, VisualizationCreationSettings creationSettings, Matrix<DecimalDataValue> matrix, bool draft = false)
         {
             MatrixQuery query = BuildTestCubeQuery(varParams);
             VisualizationSettings settings = creationSettings.ToVisualizationSettings(matrix.Metadata, query);
 
-            return new SavedQuery(BuildTestCubeQuery(varParams), archived, settings, DateTime.Now);
+            return new SavedQuery(BuildTestCubeQuery(varParams), archived, settings, DateTime.Now, draft);
         }
 
         public static DimensionQuery BuildTestVariableQuery(DimensionParameters varParams)

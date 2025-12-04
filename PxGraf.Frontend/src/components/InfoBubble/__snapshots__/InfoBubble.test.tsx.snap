@@ -1,10 +1,10 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`Rendering test renders correctly with popper hidden 1`] = `
 <DocumentFragment>
   <button
     aria-label="tooltip.open: foo"
-    class="sc-Qotzb goKfvB"
+    class="sc-bRKDuR csytVp"
   >
     <svg
       aria-hidden="true"

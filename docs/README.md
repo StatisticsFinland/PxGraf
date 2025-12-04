@@ -10,14 +10,14 @@ in the [HighCharts shop](https://shop.highsoft.com/?utm_source=npmjs&utm_medium=
 
 ## Core functions
 - **Data visualization:** PxGraf helps users create visualization from px data. It automatically decides which visualization types are available based on the user's selections and what kind of customizations can be made. The user can then choose from available options. The data and visualizations can also be exported in different formats.
-- **Saved queries:** The user can create, save, archive and load queries. Saved queries can be shared with other users or published externally. Saved queries are stored in the running environment's file system and the user is provided with an ID representing the saved query.
-- **APIs:** PxGraf's APIs provide functionality for processing the data for visualization and saving and loading queries.
+- **Saved queries:** The user can create, save, overwrite, archive and load queries. Saved queries can be shared with other users or published externally. Saved queries are stored in the running environment's file system and the user is provided with an ID representing the saved query. A saved query can be overwritten if it was previously saved in draft state. The frontend save dialogue prompts this as "Publish-ready", false by default. A query is saved as draft if it's not marked as publish-ready.
+- **APIs:** PxGraf's APIs provide functionality for processing the data for visualization, and saving and loading queries.
 
 ## APIs
 - **Creation API:** Provides endpoints for fetching database listings and Px table metadata. It also provides functionality for metadata validation and providing required contents for the visualization editor. Can be disabled in the appsettings.json file.
 - **Info API:** Provides information about the application. Its single endpoint returns the application's name, version and the environment it is running in.
 - **Query meta API:** Provides an endpoint that returns the metadata for a saved query given its ID.
-- **Saved query API:** Used for managing saved queries. Provides endpoints for fetching a saved query, saving a new query, archiving a query and re-archiving an existing query.
+- **Saved query API:** Used for managing saved queries. Provides endpoints for fetching a saved query, saving a new query, archiving a query and re-archiving an existing query. If publication webhook is configured, the queries can be saved as draft or publish-ready. When saved as draft, the query id will be overwritten in the next save operation. Publish-ready queries can not be overwritten and saving a publish-ready query will also trigger the publication webhook. Webhook's response is expected to contain a Messages field as a MultilanguageString that will be shown in the editor UI after the save process is completed.
 - **Visualization API:** Provides an endpoint for fetching visualization data for a saved query given its ID. More information about the response format can be found in VISUALIZATION_RESPONSE.md
 
 ### More information about the APIs can be found [here](API_DOCUMENTATION.md).
@@ -32,6 +32,26 @@ in the [HighCharts shop](https://shop.highsoft.com/?utm_source=npmjs&utm_medium=
 appsettings.json contains the configuration for the backend. It contains following sections:
 #### LogOptions
 Configuration for logging such as file save location and logging level. Logging uses NLog. Further configuration can be done in the nlog.config file.
+
+The following logging features are available:
+- **Standard Logging**: Configurable text-based logs with customizable log level.
+- **Application Insights**: Azure Application Insights integration for comprehensive telemetry. Can be enabled by providing a connection string in the appsettings.json file or through the PXGRAF_APPLICATIONINSIGHTS_CONNECTION_STRING environment variable.
+- **Audit Logging**: Optional feature for tracking user actions. When enabled, logs HTTP requests with configurable headers to include in the audit trail.
+
+LogOptions structure:
+```json
+"LogOptions": {
+  "Folder": "<path to logs>",
+  "SysId": "PxGraf",
+  "Level": "Information",
+  "AuditLog": {
+    "Enabled": false,
+    "IncludedHeaders": []
+  },
+  "ApplicationInsightsConnectionString": "<connection string>"
+}
+```
+
 #### CacheOptions
 Configuration for caching PxWeb data, visualization responses and more.
 #### CORS
@@ -58,6 +78,20 @@ Determines whether the local database with Px.Utils or PxWeb api is used.
 The path to the database root directory.
 #### LocalFileSystemDatabaseConfig.Encoding
 Name of the encoding used in the database.
+#### PublicationWebhookConfiguration.EndpointUrl
+URL for optional publication webhook that is called when a query is saved as publish-ready.
+####  PublicationWebhookConfiguration.AccessTokenHeaderName
+Optional HTTP header name for access token authentication.
+####  PublicationWebhookConfiguration.AccessTokenHeaderValue
+Optional access token value.
+####  PublicationWebhookConfiguration.BodyContentPropertyNames
+List of property names to include in the webhook body. Described by PublicationPropertyType enum.
+####  PublicationWebhookConfiguration.BodyContentPropertyNameEdits
+Optional mapping of standard property names to custom field names.
+####  PublicationWebhookConfiguration.VisualizationTypeTranslations
+Optional mapping of VisualizationType enum values to custom strings.
+####  PublicationWebhookConfiguration.MetadataProperties
+Optional mapping of px file metadata property keys to webhook body field names.
 
 Note: If the LocalFileSystemDatabaseConfig block is not present, the PxWeb API is used to fetch data automatically. Providing neither working PxWeb API address nor LocalFileSystemDatabaseConfig will result in an error at application startup.
 

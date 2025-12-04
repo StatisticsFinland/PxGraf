@@ -6,6 +6,7 @@ using PxGraf.Controllers;
 using PxGraf.Datasource;
 using PxGraf.Models.Queries;
 using PxGraf.Models.Responses.DatabaseItems;
+using PxGraf.Services;
 using System.Collections.Generic;
 
 namespace UnitTests
@@ -16,6 +17,7 @@ namespace UnitTests
         {
             Mock<ICachedDatasource> dataSource = new();
             Mock<ILogger<CreationController>> logger = new();
+            Mock<IAuditLogService> auditLogService = new();
 
             dataSource.Setup(ds => ds.GetMatrixMetadataCachedAsync(It.IsAny<PxTableReference>()))
                 .ReturnsAsync((PxTableReference tableReference) =>
@@ -35,7 +37,7 @@ namespace UnitTests
                     return mockContents;
                 });
 
-            return new CreationController(dataSource.Object, logger.Object);
+            return new CreationController(dataSource.Object, logger.Object, auditLogService.Object);
         }
     }
 }

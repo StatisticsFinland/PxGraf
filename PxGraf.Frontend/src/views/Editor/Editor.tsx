@@ -77,7 +77,12 @@ export const Editor = () => {
         setVisualizationSettingsUserInput,
         setSelectedVisualizationUserInput,
         defaultSelectables,
-        setDefaultSelectables
+        setDefaultSelectables,
+        loadedQueryId,
+        setLoadedQueryId,
+        loadedQueryIsDraft,
+        setLoadedQueryIsDraft,
+        setPublicationWebhookEnabled
     } = React.useContext(EditorContext);
 
     const { setTablePath } = useNavigationContext();
@@ -89,6 +94,8 @@ export const Editor = () => {
             setVisualizationSettingsUserInput(result.settings);
             setSelectedVisualizationUserInput(result.settings.selectedVisualization);
             setDefaultSelectables(result.settings.defaultSelectableVariableCodes);
+            setLoadedQueryId(result.id);
+            setLoadedQueryIsDraft(result.draft);
         }
     }, [result]);
 
@@ -143,6 +150,14 @@ export const Editor = () => {
     }, [query, cubeMetaResponse.data]);
 
     const editorContentsResponse = useEditorContentsQuery(path, modifiedQuery, cubeQuery);
+
+    // Update publication enabled state when editor contents are loaded
+    useEffect(() => {
+        if (editorContentsResponse.data?.publicationWebhookEnabled !== undefined) {
+            setPublicationWebhookEnabled(editorContentsResponse.data.publicationWebhookEnabled);
+        }
+    }, [editorContentsResponse.data?.publicationWebhookEnabled, setPublicationWebhookEnabled]);
+
     const resolvedDimensionCodesResponse = useResolveDimensionFiltersQuery(path, modifiedQuery);
     const resolvedDimensionCodes = React.useMemo(() => {
         if (resolvedDimensionCodesResponse.data != null) {
@@ -197,7 +212,9 @@ export const Editor = () => {
         }
     }, [selectedVisualization, dimensions, visualizationSettingsUserInput, modifiedQuery, defaultSelectables, editorContentsResponse]);
 
-    const saveQueryMutation = useSaveMutation(path, modifiedQuery, cubeQuery, selectedVisualization, visualizationSettings);
+    // If there is a loaded query (id) and it is a draft we use that id for saving, otherwise we save as a new query.
+    const saveId = loadedQueryId && loadedQueryIsDraft ? loadedQueryId : '';
+    const saveQueryMutation = useSaveMutation(path, modifiedQuery, cubeQuery, selectedVisualization, visualizationSettings, saveId);
 
     const errorContainer = (errorMessage: string) => {
         return (

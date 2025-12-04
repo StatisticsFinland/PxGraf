@@ -1,9 +1,9 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`Rendering test renders correctly 1`] = `
 <DocumentFragment>
   <div
-    class="sc-jPkiSJ gDbOmk"
+    class="sc-kvnevz kaVEh"
   >
     <p
       class="MuiTypography-root MuiTypography-body2 css-1wle3ir-MuiTypography-root"
@@ -12,7 +12,7 @@ exports[`Rendering test renders correctly 1`] = `
     </p>
     <button
       aria-label="tooltip.open: variableSelect.title"
-      class="sc-cUiCeM cxsgJn"
+      class="sc-eqYatC jzGZYW"
       id="mainContent"
     >
       <svg
@@ -29,7 +29,7 @@ exports[`Rendering test renders correctly 1`] = `
     </button>
   </div>
   <div
-    class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiAccordion-root MuiAccordion-rounded Mui-expanded MuiAccordion-gutters sc-lixPIL hhKrnM css-1808mag-MuiPaper-root-MuiAccordion-root"
+    class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiAccordion-root MuiAccordion-rounded Mui-expanded MuiAccordion-gutters sc-kCuUfV hFmPGu css-1808mag-MuiPaper-root-MuiAccordion-root"
     style="--Paper-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12);"
   >
     <h3
@@ -81,18 +81,18 @@ exports[`Rendering test renders correctly 1`] = `
           class="MuiCollapse-wrapperInner MuiCollapse-vertical css-1i4ywhz-MuiCollapse-wrapperInner"
         >
           <div
-            class="MuiAccordion-region"
+            class="MuiAccordion-region css-at4ued-MuiAccordion-region"
             id="panel1a-content"
             role="region"
           >
             <div
-              class="MuiAccordionDetails-root sc-cZSric doygIH css-1lj39kh-MuiAccordionDetails-root"
+              class="MuiAccordionDetails-root sc-dFVmKS cSZYue css-1lj39kh-MuiAccordionDetails-root"
             >
               <div
-                class="MuiStack-root sc-jJAtPt bTLmYV css-1sazv7p-MuiStack-root"
+                class="MuiStack-root sc-lgpSej blKtZ css-1sazv7p-MuiStack-root"
               >
                 <div
-                  class="MuiStack-root sc-cXawGu iAjbKI css-m69qwo-MuiStack-root"
+                  class="MuiStack-root sc-dYwGCk fSnjLc css-m69qwo-MuiStack-root"
                 >
                   <span
                     aria-label="variableSelect.openMenu"
@@ -114,7 +114,7 @@ exports[`Rendering test renders correctly 1`] = `
                     </svg>
                   </span>
                   <div
-                    class="MuiAutocomplete-root MuiAutocomplete-hasClearIcon MuiAutocomplete-hasPopupIcon sc-iQQCXo lkWepn css-o5oj2-MuiAutocomplete-root"
+                    class="MuiAutocomplete-root MuiAutocomplete-hasClearIcon MuiAutocomplete-hasPopupIcon sc-jwTyAe dXDubk css-o5oj2-MuiAutocomplete-root"
                   >
                     <div
                       class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-cmpglg-MuiFormControl-root-MuiTextField-root"
@@ -131,7 +131,7 @@ exports[`Rendering test renders correctly 1`] = `
                         class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-adornedStart MuiInputBase-adornedEnd MuiAutocomplete-inputRoot css-1e3qgpi-MuiInputBase-root-MuiOutlinedInput-root"
                       >
                         <div
-                          class="MuiButtonBase-root MuiChip-root MuiChip-filled MuiChip-sizeMedium MuiChip-colorDefault MuiChip-deletable MuiChip-deletableColorDefault MuiChip-filledDefault MuiAutocomplete-tag MuiAutocomplete-tagSizeMedium css-16yb58i-MuiButtonBase-root-MuiChip-root"
+                          class="MuiButtonBase-root MuiChip-root MuiChip-filled MuiChip-sizeMedium MuiChip-colorDefault MuiChip-deletable MuiChip-deletableColorDefault MuiChip-filledDefault MuiAutocomplete-tag MuiAutocomplete-tagSizeMedium css-194w1qn-MuiButtonBase-root-MuiChip-root"
                           data-tag-index="0"
                           role="button"
                           tabindex="-1"
@@ -210,10 +210,10 @@ exports[`Rendering test renders correctly 1`] = `
                         </div>
                         <fieldset
                           aria-hidden="true"
-                          class="MuiOutlinedInput-notchedOutline css-1ll44ll-MuiOutlinedInput-notchedOutline"
+                          class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
                         >
                           <legend
-                            class="css-w1u3ce"
+                            class="css-ex8a5f-MuiNotchedOutlined-root"
                           >
                             <span>
                               variableSelect.itemFilter
@@ -234,10 +234,11 @@ exports[`Rendering test renders correctly 1`] = `
                       class="MuiSwitch-root MuiSwitch-sizeMedium css-rehya9-MuiSwitch-root"
                     >
                       <span
-                        class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
+                        class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-aqlqb4-MuiButtonBase-root-MuiSwitchBase-root-MuiSwitch-switchBase"
                       >
                         <input
-                          class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
+                          class="PrivateSwitchBase-input MuiSwitch-input css-12xagqm-MuiSwitchBase-root"
+                          role="switch"
                           type="checkbox"
                         />
                         <span
@@ -263,7 +264,7 @@ exports[`Rendering test renders correctly 1`] = `
     </div>
   </div>
   <div
-    class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiAccordion-root MuiAccordion-rounded Mui-expanded MuiAccordion-gutters sc-lixPIL hhKrnM css-1808mag-MuiPaper-root-MuiAccordion-root"
+    class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiAccordion-root MuiAccordion-rounded Mui-expanded MuiAccordion-gutters sc-kCuUfV hFmPGu css-1808mag-MuiPaper-root-MuiAccordion-root"
     style="--Paper-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12);"
   >
     <h3
@@ -315,18 +316,18 @@ exports[`Rendering test renders correctly 1`] = `
           class="MuiCollapse-wrapperInner MuiCollapse-vertical css-1i4ywhz-MuiCollapse-wrapperInner"
         >
           <div
-            class="MuiAccordion-region"
+            class="MuiAccordion-region css-at4ued-MuiAccordion-region"
             id="panel1a-content"
             role="region"
           >
             <div
-              class="MuiAccordionDetails-root sc-cZSric doygIH css-1lj39kh-MuiAccordionDetails-root"
+              class="MuiAccordionDetails-root sc-dFVmKS cSZYue css-1lj39kh-MuiAccordionDetails-root"
             >
               <div
-                class="MuiStack-root sc-jJAtPt bTLmYV css-1sazv7p-MuiStack-root"
+                class="MuiStack-root sc-lgpSej blKtZ css-1sazv7p-MuiStack-root"
               >
                 <div
-                  class="MuiStack-root sc-cXawGu iAjbKI css-m69qwo-MuiStack-root"
+                  class="MuiStack-root sc-dYwGCk fSnjLc css-m69qwo-MuiStack-root"
                 >
                   <span
                     aria-label="variableSelect.openMenu"
@@ -348,7 +349,7 @@ exports[`Rendering test renders correctly 1`] = `
                     </svg>
                   </span>
                   <div
-                    class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root sc-icnseD bEmCvr css-cmpglg-MuiFormControl-root-MuiTextField-root"
+                    class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root sc-hwkwBN dXiwQ css-cmpglg-MuiFormControl-root-MuiTextField-root"
                   >
                     <label
                       class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined css-113d811-MuiFormLabel-root-MuiInputLabel-root"
@@ -372,10 +373,10 @@ exports[`Rendering test renders correctly 1`] = `
                       />
                       <fieldset
                         aria-hidden="true"
-                        class="MuiOutlinedInput-notchedOutline css-1ll44ll-MuiOutlinedInput-notchedOutline"
+                        class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
                       >
                         <legend
-                          class="css-w1u3ce"
+                          class="css-ex8a5f-MuiNotchedOutlined-root"
                         >
                           <span>
                             variableSelect.topFilter
@@ -386,7 +387,7 @@ exports[`Rendering test renders correctly 1`] = `
                   </div>
                 </div>
                 <div
-                  class="MuiStack-root sc-dIMoHT gaCGej css-nen11g-MuiStack-root"
+                  class="MuiStack-root sc-dTvVRJ dPzWIe css-nen11g-MuiStack-root"
                 >
                   <p
                     class="MuiTypography-root MuiTypography-body1 css-rizt0-MuiTypography-root"
@@ -394,10 +395,10 @@ exports[`Rendering test renders correctly 1`] = `
                     general.results:
                   </p>
                   <ul
-                    class="MuiList-root MuiList-padding MuiList-dense sc-Qotzb kfVHXg css-st2ob2-MuiList-root"
+                    class="MuiList-root MuiList-padding MuiList-dense sc-bRKDuR lknNCo css-st2ob2-MuiList-root"
                   >
                     <li
-                      class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding sc-fYsHOw clBvbN css-qyw6ft-MuiListItem-root"
+                      class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding sc-hvigdm gMUrlu css-qyw6ft-MuiListItem-root"
                     >
                       <div
                         class="MuiListItemText-root MuiListItemText-dense css-cfq8qh-MuiListItemText-root"
@@ -410,7 +411,7 @@ exports[`Rendering test renders correctly 1`] = `
                       </div>
                     </li>
                     <li
-                      class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding sc-fYsHOw clBvbN css-qyw6ft-MuiListItem-root"
+                      class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding sc-hvigdm gMUrlu css-qyw6ft-MuiListItem-root"
                     >
                       <div
                         class="MuiListItemText-root MuiListItemText-dense css-cfq8qh-MuiListItemText-root"
@@ -423,7 +424,7 @@ exports[`Rendering test renders correctly 1`] = `
                       </div>
                     </li>
                     <li
-                      class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding sc-fYsHOw clBvbN css-qyw6ft-MuiListItem-root"
+                      class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding sc-hvigdm gMUrlu css-qyw6ft-MuiListItem-root"
                     >
                       <div
                         class="MuiListItemText-root MuiListItemText-dense css-cfq8qh-MuiListItemText-root"
@@ -436,7 +437,7 @@ exports[`Rendering test renders correctly 1`] = `
                       </div>
                     </li>
                     <li
-                      class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding sc-fYsHOw clBvbN css-qyw6ft-MuiListItem-root"
+                      class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding sc-hvigdm gMUrlu css-qyw6ft-MuiListItem-root"
                     >
                       <div
                         class="MuiListItemText-root MuiListItemText-dense css-cfq8qh-MuiListItemText-root"
@@ -460,10 +461,11 @@ exports[`Rendering test renders correctly 1`] = `
                       class="MuiSwitch-root MuiSwitch-sizeMedium css-rehya9-MuiSwitch-root"
                     >
                       <span
-                        class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
+                        class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-aqlqb4-MuiButtonBase-root-MuiSwitchBase-root-MuiSwitch-switchBase"
                       >
                         <input
-                          class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
+                          class="PrivateSwitchBase-input MuiSwitch-input css-12xagqm-MuiSwitchBase-root"
+                          role="switch"
                           type="checkbox"
                         />
                         <span
@@ -489,7 +491,7 @@ exports[`Rendering test renders correctly 1`] = `
     </div>
   </div>
   <div
-    class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiAccordion-root MuiAccordion-rounded Mui-expanded MuiAccordion-gutters sc-lixPIL hhKrnM css-1808mag-MuiPaper-root-MuiAccordion-root"
+    class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiAccordion-root MuiAccordion-rounded Mui-expanded MuiAccordion-gutters sc-kCuUfV hFmPGu css-1808mag-MuiPaper-root-MuiAccordion-root"
     style="--Paper-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12);"
   >
     <h3
@@ -541,18 +543,18 @@ exports[`Rendering test renders correctly 1`] = `
           class="MuiCollapse-wrapperInner MuiCollapse-vertical css-1i4ywhz-MuiCollapse-wrapperInner"
         >
           <div
-            class="MuiAccordion-region"
+            class="MuiAccordion-region css-at4ued-MuiAccordion-region"
             id="panel1a-content"
             role="region"
           >
             <div
-              class="MuiAccordionDetails-root sc-cZSric doygIH css-1lj39kh-MuiAccordionDetails-root"
+              class="MuiAccordionDetails-root sc-dFVmKS cSZYue css-1lj39kh-MuiAccordionDetails-root"
             >
               <div
-                class="MuiStack-root sc-jJAtPt bTLmYV css-1sazv7p-MuiStack-root"
+                class="MuiStack-root sc-lgpSej blKtZ css-1sazv7p-MuiStack-root"
               >
                 <div
-                  class="MuiStack-root sc-cXawGu iAjbKI css-m69qwo-MuiStack-root"
+                  class="MuiStack-root sc-dYwGCk fSnjLc css-m69qwo-MuiStack-root"
                 >
                   <span
                     aria-label="variableSelect.openMenu"
@@ -574,7 +576,7 @@ exports[`Rendering test renders correctly 1`] = `
                     </svg>
                   </span>
                   <div
-                    class="MuiAutocomplete-root MuiAutocomplete-hasClearIcon MuiAutocomplete-hasPopupIcon sc-iQQCXo lkWepn css-o5oj2-MuiAutocomplete-root"
+                    class="MuiAutocomplete-root MuiAutocomplete-hasClearIcon MuiAutocomplete-hasPopupIcon sc-jwTyAe dXDubk css-o5oj2-MuiAutocomplete-root"
                   >
                     <div
                       class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-cmpglg-MuiFormControl-root-MuiTextField-root"
@@ -591,7 +593,7 @@ exports[`Rendering test renders correctly 1`] = `
                         class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-adornedStart MuiInputBase-adornedEnd MuiAutocomplete-inputRoot css-1e3qgpi-MuiInputBase-root-MuiOutlinedInput-root"
                       >
                         <div
-                          class="MuiButtonBase-root MuiChip-root MuiChip-filled MuiChip-sizeMedium MuiChip-colorDefault MuiChip-deletable MuiChip-deletableColorDefault MuiChip-filledDefault MuiAutocomplete-tag MuiAutocomplete-tagSizeMedium css-16yb58i-MuiButtonBase-root-MuiChip-root"
+                          class="MuiButtonBase-root MuiChip-root MuiChip-filled MuiChip-sizeMedium MuiChip-colorDefault MuiChip-deletable MuiChip-deletableColorDefault MuiChip-filledDefault MuiAutocomplete-tag MuiAutocomplete-tagSizeMedium css-194w1qn-MuiButtonBase-root-MuiChip-root"
                           data-tag-index="0"
                           role="button"
                           tabindex="-1"
@@ -614,7 +616,7 @@ exports[`Rendering test renders correctly 1`] = `
                           </svg>
                         </div>
                         <div
-                          class="MuiButtonBase-root MuiChip-root MuiChip-filled MuiChip-sizeMedium MuiChip-colorDefault MuiChip-deletable MuiChip-deletableColorDefault MuiChip-filledDefault MuiAutocomplete-tag MuiAutocomplete-tagSizeMedium css-16yb58i-MuiButtonBase-root-MuiChip-root"
+                          class="MuiButtonBase-root MuiChip-root MuiChip-filled MuiChip-sizeMedium MuiChip-colorDefault MuiChip-deletable MuiChip-deletableColorDefault MuiChip-filledDefault MuiAutocomplete-tag MuiAutocomplete-tagSizeMedium css-194w1qn-MuiButtonBase-root-MuiChip-root"
                           data-tag-index="1"
                           role="button"
                           tabindex="-1"
@@ -693,10 +695,10 @@ exports[`Rendering test renders correctly 1`] = `
                         </div>
                         <fieldset
                           aria-hidden="true"
-                          class="MuiOutlinedInput-notchedOutline css-1ll44ll-MuiOutlinedInput-notchedOutline"
+                          class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
                         >
                           <legend
-                            class="css-w1u3ce"
+                            class="css-ex8a5f-MuiNotchedOutlined-root"
                           >
                             <span>
                               variableSelect.itemFilter
@@ -717,10 +719,11 @@ exports[`Rendering test renders correctly 1`] = `
                       class="MuiSwitch-root MuiSwitch-sizeMedium css-rehya9-MuiSwitch-root"
                     >
                       <span
-                        class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
+                        class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-aqlqb4-MuiButtonBase-root-MuiSwitchBase-root-MuiSwitch-switchBase"
                       >
                         <input
-                          class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
+                          class="PrivateSwitchBase-input MuiSwitch-input css-12xagqm-MuiSwitchBase-root"
+                          role="switch"
                           type="checkbox"
                         />
                         <span
@@ -746,7 +749,7 @@ exports[`Rendering test renders correctly 1`] = `
     </div>
   </div>
   <div
-    class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiAccordion-root MuiAccordion-rounded Mui-expanded MuiAccordion-gutters sc-lixPIL hhKrnM css-1808mag-MuiPaper-root-MuiAccordion-root"
+    class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiAccordion-root MuiAccordion-rounded Mui-expanded MuiAccordion-gutters sc-kCuUfV hFmPGu css-1808mag-MuiPaper-root-MuiAccordion-root"
     style="--Paper-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12);"
   >
     <h3
@@ -798,18 +801,18 @@ exports[`Rendering test renders correctly 1`] = `
           class="MuiCollapse-wrapperInner MuiCollapse-vertical css-1i4ywhz-MuiCollapse-wrapperInner"
         >
           <div
-            class="MuiAccordion-region"
+            class="MuiAccordion-region css-at4ued-MuiAccordion-region"
             id="panel1a-content"
             role="region"
           >
             <div
-              class="MuiAccordionDetails-root sc-cZSric doygIH css-1lj39kh-MuiAccordionDetails-root"
+              class="MuiAccordionDetails-root sc-dFVmKS cSZYue css-1lj39kh-MuiAccordionDetails-root"
             >
               <div
-                class="MuiStack-root sc-jJAtPt bTLmYV css-1sazv7p-MuiStack-root"
+                class="MuiStack-root sc-lgpSej blKtZ css-1sazv7p-MuiStack-root"
               >
                 <div
-                  class="MuiStack-root sc-cXawGu iAjbKI css-m69qwo-MuiStack-root"
+                  class="MuiStack-root sc-dYwGCk fSnjLc css-m69qwo-MuiStack-root"
                 >
                   <span
                     aria-label="variableSelect.openMenu"
@@ -831,7 +834,7 @@ exports[`Rendering test renders correctly 1`] = `
                     </svg>
                   </span>
                   <div
-                    class="MuiAutocomplete-root MuiAutocomplete-hasClearIcon MuiAutocomplete-hasPopupIcon sc-kpOvIu dOazTh css-1tlcqt-MuiAutocomplete-root"
+                    class="MuiAutocomplete-root MuiAutocomplete-hasClearIcon MuiAutocomplete-hasPopupIcon sc-jJLAfE jwpHTr css-1tlcqt-MuiAutocomplete-root"
                   >
                     <div
                       class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-cmpglg-MuiFormControl-root-MuiTextField-root"
@@ -904,10 +907,10 @@ exports[`Rendering test renders correctly 1`] = `
                         </div>
                         <fieldset
                           aria-hidden="true"
-                          class="MuiOutlinedInput-notchedOutline css-1ll44ll-MuiOutlinedInput-notchedOutline"
+                          class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
                         >
                           <legend
-                            class="css-w1u3ce"
+                            class="css-ex8a5f-MuiNotchedOutlined-root"
                           >
                             <span>
                               variableSelect.fromFilter
@@ -919,7 +922,7 @@ exports[`Rendering test renders correctly 1`] = `
                   </div>
                 </div>
                 <div
-                  class="MuiStack-root sc-dIMoHT gaCGej css-nen11g-MuiStack-root"
+                  class="MuiStack-root sc-dTvVRJ dPzWIe css-nen11g-MuiStack-root"
                 >
                   <p
                     class="MuiTypography-root MuiTypography-body1 css-rizt0-MuiTypography-root"
@@ -927,10 +930,10 @@ exports[`Rendering test renders correctly 1`] = `
                     general.results:
                   </p>
                   <ul
-                    class="MuiList-root MuiList-padding MuiList-dense sc-Qotzb kfVHXg css-st2ob2-MuiList-root"
+                    class="MuiList-root MuiList-padding MuiList-dense sc-bRKDuR lknNCo css-st2ob2-MuiList-root"
                   >
                     <li
-                      class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding sc-fYsHOw clBvbN css-qyw6ft-MuiListItem-root"
+                      class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding sc-hvigdm gMUrlu css-qyw6ft-MuiListItem-root"
                     >
                       <div
                         class="MuiListItemText-root MuiListItemText-dense css-cfq8qh-MuiListItemText-root"
@@ -943,7 +946,7 @@ exports[`Rendering test renders correctly 1`] = `
                       </div>
                     </li>
                     <li
-                      class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding sc-fYsHOw clBvbN css-qyw6ft-MuiListItem-root"
+                      class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding sc-hvigdm gMUrlu css-qyw6ft-MuiListItem-root"
                     >
                       <div
                         class="MuiListItemText-root MuiListItemText-dense css-cfq8qh-MuiListItemText-root"
@@ -956,7 +959,7 @@ exports[`Rendering test renders correctly 1`] = `
                       </div>
                     </li>
                     <li
-                      class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding sc-fYsHOw clBvbN css-qyw6ft-MuiListItem-root"
+                      class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding sc-hvigdm gMUrlu css-qyw6ft-MuiListItem-root"
                     >
                       <div
                         class="MuiListItemText-root MuiListItemText-dense css-cfq8qh-MuiListItemText-root"
@@ -980,10 +983,11 @@ exports[`Rendering test renders correctly 1`] = `
                       class="MuiSwitch-root MuiSwitch-sizeMedium css-rehya9-MuiSwitch-root"
                     >
                       <span
-                        class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
+                        class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-aqlqb4-MuiButtonBase-root-MuiSwitchBase-root-MuiSwitch-switchBase"
                       >
                         <input
-                          class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
+                          class="PrivateSwitchBase-input MuiSwitch-input css-12xagqm-MuiSwitchBase-root"
+                          role="switch"
                           type="checkbox"
                         />
                         <span
@@ -1009,7 +1013,7 @@ exports[`Rendering test renders correctly 1`] = `
     </div>
   </div>
   <div
-    class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiAccordion-root MuiAccordion-rounded Mui-expanded MuiAccordion-gutters sc-lixPIL hhKrnM css-1808mag-MuiPaper-root-MuiAccordion-root"
+    class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiAccordion-root MuiAccordion-rounded Mui-expanded MuiAccordion-gutters sc-kCuUfV hFmPGu css-1808mag-MuiPaper-root-MuiAccordion-root"
     style="--Paper-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12);"
   >
     <h3
@@ -1061,18 +1065,18 @@ exports[`Rendering test renders correctly 1`] = `
           class="MuiCollapse-wrapperInner MuiCollapse-vertical css-1i4ywhz-MuiCollapse-wrapperInner"
         >
           <div
-            class="MuiAccordion-region"
+            class="MuiAccordion-region css-at4ued-MuiAccordion-region"
             id="panel1a-content"
             role="region"
           >
             <div
-              class="MuiAccordionDetails-root sc-cZSric doygIH css-1lj39kh-MuiAccordionDetails-root"
+              class="MuiAccordionDetails-root sc-dFVmKS cSZYue css-1lj39kh-MuiAccordionDetails-root"
             >
               <div
-                class="MuiStack-root sc-jJAtPt bTLmYV css-1sazv7p-MuiStack-root"
+                class="MuiStack-root sc-lgpSej blKtZ css-1sazv7p-MuiStack-root"
               >
                 <div
-                  class="MuiStack-root sc-cXawGu iAjbKI css-m69qwo-MuiStack-root"
+                  class="MuiStack-root sc-dYwGCk fSnjLc css-m69qwo-MuiStack-root"
                 >
                   <span
                     aria-label="variableSelect.openMenu"
@@ -1094,7 +1098,7 @@ exports[`Rendering test renders correctly 1`] = `
                     </svg>
                   </span>
                   <div
-                    class="sc-gDpztx cwHzLA MuiBox-root css-0"
+                    class="sc-hjsuWn kvOXru MuiBox-root css-0"
                   >
                     <p
                       class="MuiTypography-root MuiTypography-body1 css-rizt0-MuiTypography-root"
@@ -1104,7 +1108,7 @@ exports[`Rendering test renders correctly 1`] = `
                   </div>
                 </div>
                 <div
-                  class="MuiStack-root sc-dIMoHT gaCGej css-nen11g-MuiStack-root"
+                  class="MuiStack-root sc-dTvVRJ dPzWIe css-nen11g-MuiStack-root"
                 >
                   <p
                     class="MuiTypography-root MuiTypography-body1 css-rizt0-MuiTypography-root"
@@ -1112,10 +1116,10 @@ exports[`Rendering test renders correctly 1`] = `
                     general.results:
                   </p>
                   <ul
-                    class="MuiList-root MuiList-padding MuiList-dense sc-Qotzb kfVHXg css-st2ob2-MuiList-root"
+                    class="MuiList-root MuiList-padding MuiList-dense sc-bRKDuR lknNCo css-st2ob2-MuiList-root"
                   >
                     <li
-                      class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding sc-fYsHOw clBvbN css-qyw6ft-MuiListItem-root"
+                      class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding sc-hvigdm gMUrlu css-qyw6ft-MuiListItem-root"
                     >
                       <div
                         class="MuiListItemText-root MuiListItemText-dense css-cfq8qh-MuiListItemText-root"
@@ -1128,7 +1132,7 @@ exports[`Rendering test renders correctly 1`] = `
                       </div>
                     </li>
                     <li
-                      class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding sc-fYsHOw clBvbN css-qyw6ft-MuiListItem-root"
+                      class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding sc-hvigdm gMUrlu css-qyw6ft-MuiListItem-root"
                     >
                       <div
                         class="MuiListItemText-root MuiListItemText-dense css-cfq8qh-MuiListItemText-root"
@@ -1141,7 +1145,7 @@ exports[`Rendering test renders correctly 1`] = `
                       </div>
                     </li>
                     <li
-                      class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding sc-fYsHOw clBvbN css-qyw6ft-MuiListItem-root"
+                      class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding sc-hvigdm gMUrlu css-qyw6ft-MuiListItem-root"
                     >
                       <div
                         class="MuiListItemText-root MuiListItemText-dense css-cfq8qh-MuiListItemText-root"
@@ -1165,10 +1169,11 @@ exports[`Rendering test renders correctly 1`] = `
                       class="MuiSwitch-root MuiSwitch-sizeMedium css-rehya9-MuiSwitch-root"
                     >
                       <span
-                        class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
+                        class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-aqlqb4-MuiButtonBase-root-MuiSwitchBase-root-MuiSwitch-switchBase"
                       >
                         <input
-                          class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
+                          class="PrivateSwitchBase-input MuiSwitch-input css-12xagqm-MuiSwitchBase-root"
+                          role="switch"
                           type="checkbox"
                         />
                         <span
@@ -1194,7 +1199,7 @@ exports[`Rendering test renders correctly 1`] = `
     </div>
   </div>
   <div
-    class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiAccordion-root MuiAccordion-rounded Mui-expanded MuiAccordion-gutters sc-lixPIL hhKrnM css-1808mag-MuiPaper-root-MuiAccordion-root"
+    class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiAccordion-root MuiAccordion-rounded Mui-expanded MuiAccordion-gutters sc-kCuUfV hFmPGu css-1808mag-MuiPaper-root-MuiAccordion-root"
     style="--Paper-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12);"
   >
     <h3
@@ -1246,18 +1251,18 @@ exports[`Rendering test renders correctly 1`] = `
           class="MuiCollapse-wrapperInner MuiCollapse-vertical css-1i4ywhz-MuiCollapse-wrapperInner"
         >
           <div
-            class="MuiAccordion-region"
+            class="MuiAccordion-region css-at4ued-MuiAccordion-region"
             id="panel1a-content"
             role="region"
           >
             <div
-              class="MuiAccordionDetails-root sc-cZSric doygIH css-1lj39kh-MuiAccordionDetails-root"
+              class="MuiAccordionDetails-root sc-dFVmKS cSZYue css-1lj39kh-MuiAccordionDetails-root"
             >
               <div
-                class="MuiStack-root sc-jJAtPt bTLmYV css-1sazv7p-MuiStack-root"
+                class="MuiStack-root sc-lgpSej blKtZ css-1sazv7p-MuiStack-root"
               >
                 <div
-                  class="MuiStack-root sc-cXawGu iAjbKI css-m69qwo-MuiStack-root"
+                  class="MuiStack-root sc-dYwGCk fSnjLc css-m69qwo-MuiStack-root"
                 >
                   <span
                     aria-label="variableSelect.openMenu"
@@ -1279,7 +1284,7 @@ exports[`Rendering test renders correctly 1`] = `
                     </svg>
                   </span>
                   <div
-                    class="MuiAutocomplete-root MuiAutocomplete-hasClearIcon MuiAutocomplete-hasPopupIcon sc-iQQCXo lkWepn css-o5oj2-MuiAutocomplete-root"
+                    class="MuiAutocomplete-root MuiAutocomplete-hasClearIcon MuiAutocomplete-hasPopupIcon sc-jwTyAe dXDubk css-o5oj2-MuiAutocomplete-root"
                   >
                     <div
                       class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-cmpglg-MuiFormControl-root-MuiTextField-root"
@@ -1296,7 +1301,7 @@ exports[`Rendering test renders correctly 1`] = `
                         class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-adornedStart MuiInputBase-adornedEnd MuiAutocomplete-inputRoot css-1e3qgpi-MuiInputBase-root-MuiOutlinedInput-root"
                       >
                         <div
-                          class="MuiButtonBase-root MuiChip-root MuiChip-filled MuiChip-sizeMedium MuiChip-colorDefault MuiChip-deletable MuiChip-deletableColorDefault MuiChip-filledDefault MuiAutocomplete-tag MuiAutocomplete-tagSizeMedium css-16yb58i-MuiButtonBase-root-MuiChip-root"
+                          class="MuiButtonBase-root MuiChip-root MuiChip-filled MuiChip-sizeMedium MuiChip-colorDefault MuiChip-deletable MuiChip-deletableColorDefault MuiChip-filledDefault MuiAutocomplete-tag MuiAutocomplete-tagSizeMedium css-194w1qn-MuiButtonBase-root-MuiChip-root"
                           data-tag-index="0"
                           role="button"
                           tabindex="-1"
@@ -1375,10 +1380,10 @@ exports[`Rendering test renders correctly 1`] = `
                         </div>
                         <fieldset
                           aria-hidden="true"
-                          class="MuiOutlinedInput-notchedOutline css-1ll44ll-MuiOutlinedInput-notchedOutline"
+                          class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
                         >
                           <legend
-                            class="css-w1u3ce"
+                            class="css-ex8a5f-MuiNotchedOutlined-root"
                           >
                             <span>
                               variableSelect.itemFilter
@@ -1399,10 +1404,11 @@ exports[`Rendering test renders correctly 1`] = `
                       class="MuiSwitch-root MuiSwitch-sizeMedium css-rehya9-MuiSwitch-root"
                     >
                       <span
-                        class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
+                        class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-aqlqb4-MuiButtonBase-root-MuiSwitchBase-root-MuiSwitch-switchBase"
                       >
                         <input
-                          class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
+                          class="PrivateSwitchBase-input MuiSwitch-input css-12xagqm-MuiSwitchBase-root"
+                          role="switch"
                           type="checkbox"
                         />
                         <span
@@ -1428,7 +1434,7 @@ exports[`Rendering test renders correctly 1`] = `
     </div>
   </div>
   <div
-    class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiAccordion-root MuiAccordion-rounded Mui-expanded MuiAccordion-gutters sc-lixPIL hhKrnM css-1808mag-MuiPaper-root-MuiAccordion-root"
+    class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiAccordion-root MuiAccordion-rounded Mui-expanded MuiAccordion-gutters sc-kCuUfV hFmPGu css-1808mag-MuiPaper-root-MuiAccordion-root"
     style="--Paper-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12);"
   >
     <h3
@@ -1480,18 +1486,18 @@ exports[`Rendering test renders correctly 1`] = `
           class="MuiCollapse-wrapperInner MuiCollapse-vertical css-1i4ywhz-MuiCollapse-wrapperInner"
         >
           <div
-            class="MuiAccordion-region"
+            class="MuiAccordion-region css-at4ued-MuiAccordion-region"
             id="panel1a-content"
             role="region"
           >
             <div
-              class="MuiAccordionDetails-root sc-cZSric doygIH css-1lj39kh-MuiAccordionDetails-root"
+              class="MuiAccordionDetails-root sc-dFVmKS cSZYue css-1lj39kh-MuiAccordionDetails-root"
             >
               <div
-                class="MuiStack-root sc-jJAtPt bTLmYV css-1sazv7p-MuiStack-root"
+                class="MuiStack-root sc-lgpSej blKtZ css-1sazv7p-MuiStack-root"
               >
                 <div
-                  class="MuiStack-root sc-cXawGu iAjbKI css-m69qwo-MuiStack-root"
+                  class="MuiStack-root sc-dYwGCk fSnjLc css-m69qwo-MuiStack-root"
                 >
                   <span
                     aria-label="variableSelect.openMenu"
@@ -1513,7 +1519,7 @@ exports[`Rendering test renders correctly 1`] = `
                     </svg>
                   </span>
                   <div
-                    class="MuiAutocomplete-root MuiAutocomplete-hasClearIcon MuiAutocomplete-hasPopupIcon sc-iQQCXo lkWepn css-o5oj2-MuiAutocomplete-root"
+                    class="MuiAutocomplete-root MuiAutocomplete-hasClearIcon MuiAutocomplete-hasPopupIcon sc-jwTyAe dXDubk css-o5oj2-MuiAutocomplete-root"
                   >
                     <div
                       class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-cmpglg-MuiFormControl-root-MuiTextField-root"
@@ -1530,7 +1536,7 @@ exports[`Rendering test renders correctly 1`] = `
                         class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-adornedStart MuiInputBase-adornedEnd MuiAutocomplete-inputRoot css-1e3qgpi-MuiInputBase-root-MuiOutlinedInput-root"
                       >
                         <div
-                          class="MuiButtonBase-root MuiChip-root MuiChip-filled MuiChip-sizeMedium MuiChip-colorDefault MuiChip-deletable MuiChip-deletableColorDefault MuiChip-filledDefault MuiAutocomplete-tag MuiAutocomplete-tagSizeMedium css-16yb58i-MuiButtonBase-root-MuiChip-root"
+                          class="MuiButtonBase-root MuiChip-root MuiChip-filled MuiChip-sizeMedium MuiChip-colorDefault MuiChip-deletable MuiChip-deletableColorDefault MuiChip-filledDefault MuiAutocomplete-tag MuiAutocomplete-tagSizeMedium css-194w1qn-MuiButtonBase-root-MuiChip-root"
                           data-tag-index="0"
                           role="button"
                           tabindex="-1"
@@ -1609,10 +1615,10 @@ exports[`Rendering test renders correctly 1`] = `
                         </div>
                         <fieldset
                           aria-hidden="true"
-                          class="MuiOutlinedInput-notchedOutline css-1ll44ll-MuiOutlinedInput-notchedOutline"
+                          class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
                         >
                           <legend
-                            class="css-w1u3ce"
+                            class="css-ex8a5f-MuiNotchedOutlined-root"
                           >
                             <span>
                               variableSelect.itemFilter
@@ -1633,10 +1639,11 @@ exports[`Rendering test renders correctly 1`] = `
                       class="MuiSwitch-root MuiSwitch-sizeMedium css-rehya9-MuiSwitch-root"
                     >
                       <span
-                        class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
+                        class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-aqlqb4-MuiButtonBase-root-MuiSwitchBase-root-MuiSwitch-switchBase"
                       >
                         <input
-                          class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
+                          class="PrivateSwitchBase-input MuiSwitch-input css-12xagqm-MuiSwitchBase-root"
+                          role="switch"
                           type="checkbox"
                         />
                         <span
@@ -1662,7 +1669,7 @@ exports[`Rendering test renders correctly 1`] = `
     </div>
   </div>
   <div
-    class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiAccordion-root MuiAccordion-rounded Mui-expanded MuiAccordion-gutters sc-lixPIL hhKrnM css-1808mag-MuiPaper-root-MuiAccordion-root"
+    class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiAccordion-root MuiAccordion-rounded Mui-expanded MuiAccordion-gutters sc-kCuUfV hFmPGu css-1808mag-MuiPaper-root-MuiAccordion-root"
     style="--Paper-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12);"
   >
     <h3
@@ -1714,18 +1721,18 @@ exports[`Rendering test renders correctly 1`] = `
           class="MuiCollapse-wrapperInner MuiCollapse-vertical css-1i4ywhz-MuiCollapse-wrapperInner"
         >
           <div
-            class="MuiAccordion-region"
+            class="MuiAccordion-region css-at4ued-MuiAccordion-region"
             id="panel1a-content"
             role="region"
           >
             <div
-              class="MuiAccordionDetails-root sc-cZSric doygIH css-1lj39kh-MuiAccordionDetails-root"
+              class="MuiAccordionDetails-root sc-dFVmKS cSZYue css-1lj39kh-MuiAccordionDetails-root"
             >
               <div
-                class="MuiStack-root sc-jJAtPt bTLmYV css-1sazv7p-MuiStack-root"
+                class="MuiStack-root sc-lgpSej blKtZ css-1sazv7p-MuiStack-root"
               >
                 <div
-                  class="MuiStack-root sc-cXawGu iAjbKI css-m69qwo-MuiStack-root"
+                  class="MuiStack-root sc-dYwGCk fSnjLc css-m69qwo-MuiStack-root"
                 >
                   <span
                     aria-label="variableSelect.openMenu"
@@ -1747,7 +1754,7 @@ exports[`Rendering test renders correctly 1`] = `
                     </svg>
                   </span>
                   <div
-                    class="MuiAutocomplete-root MuiAutocomplete-hasClearIcon MuiAutocomplete-hasPopupIcon sc-iQQCXo lkWepn css-o5oj2-MuiAutocomplete-root"
+                    class="MuiAutocomplete-root MuiAutocomplete-hasClearIcon MuiAutocomplete-hasPopupIcon sc-jwTyAe dXDubk css-o5oj2-MuiAutocomplete-root"
                   >
                     <div
                       class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-cmpglg-MuiFormControl-root-MuiTextField-root"
@@ -1764,7 +1771,7 @@ exports[`Rendering test renders correctly 1`] = `
                         class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-adornedStart MuiInputBase-adornedEnd MuiAutocomplete-inputRoot css-1e3qgpi-MuiInputBase-root-MuiOutlinedInput-root"
                       >
                         <div
-                          class="MuiButtonBase-root MuiChip-root MuiChip-filled MuiChip-sizeMedium MuiChip-colorDefault MuiChip-deletable MuiChip-deletableColorDefault MuiChip-filledDefault MuiAutocomplete-tag MuiAutocomplete-tagSizeMedium css-16yb58i-MuiButtonBase-root-MuiChip-root"
+                          class="MuiButtonBase-root MuiChip-root MuiChip-filled MuiChip-sizeMedium MuiChip-colorDefault MuiChip-deletable MuiChip-deletableColorDefault MuiChip-filledDefault MuiAutocomplete-tag MuiAutocomplete-tagSizeMedium css-194w1qn-MuiButtonBase-root-MuiChip-root"
                           data-tag-index="0"
                           role="button"
                           tabindex="-1"
@@ -1843,10 +1850,10 @@ exports[`Rendering test renders correctly 1`] = `
                         </div>
                         <fieldset
                           aria-hidden="true"
-                          class="MuiOutlinedInput-notchedOutline css-1ll44ll-MuiOutlinedInput-notchedOutline"
+                          class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
                         >
                           <legend
-                            class="css-w1u3ce"
+                            class="css-ex8a5f-MuiNotchedOutlined-root"
                           >
                             <span>
                               variableSelect.itemFilter
@@ -1867,10 +1874,11 @@ exports[`Rendering test renders correctly 1`] = `
                       class="MuiSwitch-root MuiSwitch-sizeMedium css-rehya9-MuiSwitch-root"
                     >
                       <span
-                        class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-161ms7l-MuiButtonBase-root-MuiSwitch-switchBase"
+                        class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-aqlqb4-MuiButtonBase-root-MuiSwitchBase-root-MuiSwitch-switchBase"
                       >
                         <input
-                          class="PrivateSwitchBase-input MuiSwitch-input css-j8yymo"
+                          class="PrivateSwitchBase-input MuiSwitch-input css-12xagqm-MuiSwitchBase-root"
+                          role="switch"
                           type="checkbox"
                         />
                         <span

@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`Rendering test renders correctly 1`] = `
 <DocumentFragment>
@@ -6,10 +6,10 @@ exports[`Rendering test renders correctly 1`] = `
     class="MuiFormControl-root MuiFormControl-fullWidth css-ytlejw-MuiFormControl-root"
   >
     <div
-      class="MuiStack-root sc-fYsHOw kZzpde css-m69qwo-MuiStack-root"
+      class="MuiStack-root sc-hvigdm kRZasZ css-m69qwo-MuiStack-root"
     >
       <ul
-        class="MuiList-root MuiList-padding MuiList-dense MuiList-subheader sc-Qotzb cEUZKv css-h1es49-MuiList-root"
+        class="MuiList-root MuiList-padding MuiList-dense MuiList-subheader sc-bRKDuR tzCjD css-h1es49-MuiList-root"
       >
         <li
           class="MuiListSubheader-root MuiListSubheader-gutters MuiListSubheader-sticky css-l328gy-MuiListSubheader-root"
@@ -48,7 +48,7 @@ exports[`Rendering test renders correctly 1`] = `
         </div>
       </ul>
       <div
-        class="MuiStack-root sc-dKREkF cfxFSg css-nen11g-MuiStack-root"
+        class="MuiStack-root sc-fhHczv dxNExO css-nen11g-MuiStack-root"
       >
         <button
           aria-label="tableSettings.up"
@@ -106,7 +106,7 @@ exports[`Rendering test renders correctly 1`] = `
         </button>
       </div>
       <ul
-        class="MuiList-root MuiList-padding MuiList-dense MuiList-subheader sc-Qotzb cEUZKv css-h1es49-MuiList-root"
+        class="MuiList-root MuiList-padding MuiList-dense MuiList-subheader sc-bRKDuR tzCjD css-h1es49-MuiList-root"
       >
         <li
           class="MuiListSubheader-root MuiListSubheader-gutters MuiListSubheader-sticky css-l328gy-MuiListSubheader-root"
