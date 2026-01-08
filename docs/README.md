@@ -35,7 +35,6 @@ Configuration for logging such as file save location and logging level. Logging 
 
 The following logging features are available:
 - **Standard Logging**: Configurable text-based logs with customizable log level.
-- **Application Insights**: Azure Application Insights integration for comprehensive telemetry. Can be enabled by providing a connection string in the appsettings.json file or through the PXGRAF_APPLICATIONINSIGHTS_CONNECTION_STRING environment variable.
 - **Audit Logging**: Optional feature for tracking user actions. When enabled, logs HTTP requests with configurable headers to include in the audit trail.
 
 LogOptions structure:
@@ -47,10 +46,25 @@ LogOptions structure:
   "AuditLog": {
     "Enabled": false,
     "IncludedHeaders": []
-  },
-  "ApplicationInsightsConnectionString": "<connection string>"
+  }
 }
 ```
+
+#### ApplicationInsights
+Configuration for Azure Application Insights integration for comprehensive telemetry. Application Insights logging is handled through the ASP.NET Core logging pipeline rather than NLog.
+
+ApplicationInsights structure:
+```json
+"ApplicationInsights": {
+  "ConnectionString": "<connection string>",
+  "EnableAdaptiveSampling": false,
+  "MinLevel": "Information"
+}
+```
+
+- **ConnectionString**: Azure Application Insights connection string. Can also be provided via the `APPLICATIONINSIGHTS_CONNECTION_STRING` environment variable.
+- **EnableAdaptiveSampling**: Whether to enable adaptive sampling (defaults to false to ensure all configured logs are captured).
+- **MinLevel**: Minimum log level to send to Application Insights (defaults to Information).
 
 #### CacheOptions
 Configuration for caching PxWeb data, visualization responses and more.
