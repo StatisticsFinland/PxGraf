@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
 using PxGraf.Exceptions;
 using PxGraf.Language;
@@ -106,6 +106,85 @@ namespace UnitTests.ConfigurationTests
             Assert.That(Configuration.Current, Is.Not.Null);
             Assert.That(Configuration.Current.PxWebUrl, Is.EqualTo("http://pxwebtesturl:12345/"));
             Assert.That(Configuration.Current.LocalFilesystemDatabaseConfig, Is.Null);
+        }
+
+        [Test]
+        public void ConfigurationLoadTest_WithBlobContainerConfig_Success()
+        {
+            IConfiguration configuration = new ConfigurationBuilder()
+                .AddInMemoryCollection(
+                    new Dictionary<string, string>
+                    {
+                        {"BlobContainerDatabaseConfig:Enabled", "true"},
+                        {"BlobContainerDatabaseConfig:StorageAccountName", "teststorageaccount"},
+                        {"BlobContainerDatabaseConfig:ContainerName", "testcontainer"},
+                        {"BlobContainerDatabaseConfig:RootPath", "database/"}
+                    })
+                .Build();
+
+            Configuration.Load(configuration);
+
+            Assert.That(Configuration.Current, Is.Not.Null);
+            Assert.That(Configuration.Current.BlobContainerDatabaseConfig, Is.Not.Null);
+            Assert.That(Configuration.Current.BlobContainerDatabaseConfig.Enabled, Is.True);
+            Assert.That(Configuration.Current.BlobContainerDatabaseConfig.StorageAccountName, Is.EqualTo("teststorageaccount"));
+            Assert.That(Configuration.Current.BlobContainerDatabaseConfig.ContainerName, Is.EqualTo("testcontainer"));
+            Assert.That(Configuration.Current.BlobContainerDatabaseConfig.RootPath, Is.EqualTo("database/"));
+        }
+
+        [Test]
+        public void ConfigurationLoadTest_WithBlobContainerConfigWithoutRootPath_Success()
+        {
+            IConfiguration configuration = new ConfigurationBuilder()
+                .AddInMemoryCollection(
+                    new Dictionary<string, string>
+                    {
+                        {"BlobContainerDatabaseConfig:Enabled", "true"},
+                        {"BlobContainerDatabaseConfig:StorageAccountName", "teststorageaccount"},
+                        {"BlobContainerDatabaseConfig:ContainerName", "testcontainer"}
+                    })
+                .Build();
+
+            Configuration.Load(configuration);
+
+            Assert.That(Configuration.Current, Is.Not.Null);
+            Assert.That(Configuration.Current.BlobContainerDatabaseConfig, Is.Not.Null);
+            Assert.That(Configuration.Current.BlobContainerDatabaseConfig.RootPath, Is.EqualTo(""));
+        }
+
+        [Test]
+        public void ConfigurationLoadTest_WithMissingBlobContainerFields_SuccessWithNullBlobContainerConfig()
+        {
+            IConfiguration configuration = new ConfigurationBuilder()
+                .AddInMemoryCollection(
+                    new Dictionary<string, string>
+                    {
+                        {"pxwebUrl", "http://pxwebtesturl:12345/"},
+                        {"BlobContainerDatabaseConfig:Enabled", "true"}
+                    })
+                .Build();
+
+            Configuration.Load(configuration);
+
+            Assert.That(Configuration.Current, Is.Not.Null);
+            Assert.That(Configuration.Current.PxWebUrl, Is.EqualTo("http://pxwebtesturl:12345/"));
+            Assert.That(Configuration.Current.BlobContainerDatabaseConfig, Is.Null);
+        }
+
+        [Test]
+        public void ConfigurationLoadTest_WithoutAnyDataSource_ThrowsException()
+        {
+            IConfiguration configuration = new ConfigurationBuilder()
+                .AddInMemoryCollection(
+                    new Dictionary<string, string>
+                    {
+                        {"pxwebUrl", null},
+                        {"LocalFilesystemDatabaseConfig", null},
+                        {"BlobContainerDatabaseConfig", null}
+                    })
+                .Build();
+
+            Assert.Throws<InvalidConfigurationException>(() => Configuration.Load(configuration));
         }
     }
 }

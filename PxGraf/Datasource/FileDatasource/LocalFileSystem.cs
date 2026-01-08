@@ -11,14 +11,10 @@ namespace PxGraf.Datasource.FileDatasource
     /// <summary>
     /// Local file system implementation of IFileSystem.
     /// </summary>
-    /// <param name="rootPath">Root path for the file system operations.</param>
     /// <param name="encoding">Text encoding to use for text file operations.</param>
     [ExcludeFromCodeCoverage] // Methods consist mostly of filesystem IO
-    public class LocalFileSystem(string rootPath, Encoding encoding) : IFileSystem
+    public class LocalFileSystem(Encoding encoding) : IFileSystem
     {
-        private readonly string rootPath = rootPath;
-        private readonly Encoding encoding = encoding;
-
         /// <summary>
         /// Asynchronously enumerates files in a directory with the specified pattern.
         /// </summary>

@@ -144,7 +144,6 @@ namespace PxGraf
             if (Configuration.Current.LocalFilesystemDatabaseConfig?.Enabled ?? false)
             {
                 services.AddSingleton<IFileSystem>(provider => new LocalFileSystem(
-                    Configuration.Current.LocalFilesystemDatabaseConfig.DatabaseRootPath,
                     Configuration.Current.LocalFilesystemDatabaseConfig.Encoding));
                 services.AddSingleton<IFileDatasource>(provider => new FileDatasource(
                     provider.GetRequiredService<IFileSystem>(),
