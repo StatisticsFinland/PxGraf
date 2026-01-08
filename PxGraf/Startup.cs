@@ -22,6 +22,7 @@ using PxGraf.Datasource.ApiDatasource;
 using PxGraf.Services;
 using System.Text;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
+using Microsoft.Extensions.Logging.ApplicationInsights;
 
 namespace PxGraf
 {
@@ -60,14 +61,23 @@ namespace PxGraf
         [SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "After evaluating the function and CORS permissions, we have deemed the warning to be unnecessary.")]
         public void ConfigureServices(IServiceCollection services)
         {
-#if !DEBUG
-            string aiConnectionString = Configuration.Current.ApplicationInsightsConnectionString;
-            ApplicationInsightsServiceOptions aiOptions = new()
+            // Configure Application Insights if connection string is available
+            ApplicationInsightsConfig aiConfig = Configuration.Current.ApplicationInsights;
+            if (aiConfig.IsEnabled)
             {
-                ConnectionString = aiConnectionString
-            };
-            services.AddApplicationInsightsTelemetry(aiOptions);
-#endif
+                ApplicationInsightsServiceOptions aiOptions = new()
+                {
+                    ConnectionString = aiConfig.ConnectionString,
+                    EnableAdaptiveSampling = aiConfig.EnableAdaptiveSampling
+                };
+                services.AddApplicationInsightsTelemetry(aiOptions);
+
+                services.Configure<LoggerFilterOptions>(options =>
+                {
+                    options.AddFilter<ApplicationInsightsLoggerProvider>("", aiConfig.MinimumLevel);
+                });
+            }
+
             services.AddFeatureManagement();
             services.AddResponseCaching();
             services.AddCors(options =>
