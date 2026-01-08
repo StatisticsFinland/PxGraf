@@ -210,35 +210,34 @@ namespace PxGraf.Datasource.FileDatasource
         private static void AssignLanguageToSingleLangProperties(MatrixMetadata meta, List<string> keys)
         {
             // Table level
-            foreach (string key in keys)
-            {
-                if (meta.AdditionalProperties.TryGetValue(key, out MetaProperty? prop))
-                {
-                    meta.AdditionalProperties[key] = prop.AsMultiLanguageProperty(meta.DefaultLanguage);
-                }
-            }
+            AssignLanguagePropertiesAtLevel(meta.AdditionalProperties, keys, meta.DefaultLanguage);
 
             foreach (Dimension dim in meta.Dimensions)
             {
                 // Dimension level
-                foreach (string key in keys)
-                {
-                    if (dim.AdditionalProperties.TryGetValue(key, out MetaProperty? prop))
-                    {
-                        dim.AdditionalProperties[key] = prop.AsMultiLanguageProperty(meta.DefaultLanguage);
-                    }
-                }
+                AssignLanguagePropertiesAtLevel(dim.AdditionalProperties, keys, meta.DefaultLanguage);
 
                 // Dimension value level
                 foreach (DimensionValue val in dim.Values)
                 {
-                    foreach (string key in keys)
-                    {
-                        if (val.AdditionalProperties.TryGetValue(key, out MetaProperty? prop))
-                        {
-                            val.AdditionalProperties[key] = prop.AsMultiLanguageProperty(meta.DefaultLanguage);
-                        }
-                    }
+                    AssignLanguagePropertiesAtLevel(val.AdditionalProperties, keys, meta.DefaultLanguage);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Helper method to assign language properties at a specific metadata level.
+        /// </summary>
+        /// <param name="properties">The properties dictionary to process.</param>
+        /// <param name="keys">List of property keys to process.</param>
+        /// <param name="defaultLanguage">The default language to use.</param>
+        private static void AssignLanguagePropertiesAtLevel(Dictionary<string, MetaProperty> properties, List<string> keys, string defaultLanguage)
+        {
+            foreach (string key in keys)
+            {
+                if (properties.TryGetValue(key, out MetaProperty? prop))
+                {
+                    properties[key] = prop.AsMultiLanguageProperty(defaultLanguage);
                 }
             }
         }

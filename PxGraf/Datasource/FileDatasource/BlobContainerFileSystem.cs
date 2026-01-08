@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Ude;
 
@@ -33,7 +34,7 @@ namespace PxGraf.Datasource.FileDatasource
         public async Task<IEnumerable<string>> EnumerateFilesAsync(string directoryPath, string searchPattern)
         {
             List<string> files = [];
-            string prefix = ConvertToAzurePath(directoryPath);
+            string prefix = ConvertToAzurePath(directoryPath) ?? "";
             if (!string.IsNullOrEmpty(prefix))
             {
                 prefix += "/";
@@ -47,7 +48,7 @@ namespace PxGraf.Datasource.FileDatasource
                 if (blobItem.Name.EndsWith(fileExtension, StringComparison.OrdinalIgnoreCase))
                 {
                     // Check if the blob is directly in this level (not in a subdirectory)
-                    string relativePath = blobItem.Name.Substring(prefix.Length);
+                    string relativePath = blobItem.Name[prefix.Length..];
                     if (!relativePath.Contains('/'))
                     {
                         files.Add(blobItem.Name);
@@ -66,7 +67,7 @@ namespace PxGraf.Datasource.FileDatasource
         public async Task<IEnumerable<string>> EnumerateDirectoriesAsync(string directoryPath)
         {
             HashSet<string> directories = [];
-            string prefix = ConvertToAzurePath(directoryPath);
+            string prefix = ConvertToAzurePath(directoryPath) ?? "";
             if (!string.IsNullOrEmpty(prefix))
             {
                 prefix += "/";
@@ -74,11 +75,11 @@ namespace PxGraf.Datasource.FileDatasource
 
             await foreach (BlobItem blobItem in containerClient.GetBlobsAsync(prefix: prefix))
             {
-                string relativePath = blobItem.Name.Substring(prefix.Length);
+                string relativePath = blobItem.Name[prefix.Length..];
                 int slashIndex = relativePath.IndexOf('/');
                 if (slashIndex > 0)
                 {
-                    string directoryName = relativePath.Substring(0, slashIndex);
+                    string directoryName = relativePath[..slashIndex];
                     string fullDirectoryPath = prefix + directoryName;
                     directories.Add(fullDirectoryPath);
                 }
@@ -127,7 +128,7 @@ namespace PxGraf.Datasource.FileDatasource
             Encoding encoding = Encoding.UTF8; // Default fallback
             CharsetDetector cdet = new();
             byte[] buffer = new byte[1024];
-            int bytesRead = await blobStream.ReadAsync(buffer, 0, buffer.Length);
+            int bytesRead = await blobStream.ReadAsync(buffer.AsMemory(), CancellationToken.None);
             cdet.Feed(buffer, 0, bytesRead);
             cdet.DataEnd();
 
@@ -150,7 +151,7 @@ namespace PxGraf.Datasource.FileDatasource
         {
             string azurePath = ConvertToAzurePath(directoryPath);
             int lastSlashIndex = azurePath.LastIndexOf('/');
-            return lastSlashIndex >= 0 ? azurePath.Substring(lastSlashIndex + 1) : azurePath;
+            return lastSlashIndex >= 0 ? azurePath[(lastSlashIndex + 1)..] : azurePath;
         }
 
         /// <summary>
