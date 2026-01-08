@@ -62,7 +62,7 @@ namespace PxGraf
         public void ConfigureServices(IServiceCollection services)
         {
             // Configure Application Insights if connection string is available
-            ApplicationInsightsConfig aiConfig = Configuration.Current.ApplicationInsights; ;
+            ApplicationInsightsConfig aiConfig = Configuration.Current.ApplicationInsights;
             if (aiConfig.IsEnabled)
             {
                 ApplicationInsightsServiceOptions aiOptions = new()
