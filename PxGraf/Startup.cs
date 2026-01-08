@@ -47,7 +47,7 @@ namespace PxGraf
             {
                 Language.Localization.Load(Path.Combine(AppContext.BaseDirectory, "Pars", "translations.json"));
             }
-            catch(IOException ex)
+            catch (IOException ex)
             {
                 logger.LogCritical(ex, "A file system error occurred during startup");
             }
@@ -132,7 +132,7 @@ namespace PxGraf
                 {
                     c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "PxGraf.xml"));
                 }
-                catch(IOException ex)
+                catch (IOException ex)
                 {
                     logger.LogCritical(ex, "A file system error was encountered");
                 }
@@ -153,8 +153,22 @@ namespace PxGraf
                 TimeSpan.FromSeconds(Configuration.Current.CacheOptions.CacheFreshnessCheckIntervalSeconds)));
             if (Configuration.Current.LocalFilesystemDatabaseConfig?.Enabled ?? false)
             {
-                services.AddSingleton<IFileDatasource>(provider => new LocalFilesystemDatabase(
-                    Configuration.Current.LocalFilesystemDatabaseConfig ));
+                services.AddSingleton<IFileSystem>(provider => new LocalFileSystem(
+                    Configuration.Current.LocalFilesystemDatabaseConfig.DatabaseRootPath,
+                    Configuration.Current.LocalFilesystemDatabaseConfig.Encoding));
+                services.AddSingleton<IFileDatasource>(provider => new FileDatasource(
+                    provider.GetRequiredService<IFileSystem>(),
+                    Configuration.Current.LocalFilesystemDatabaseConfig.DatabaseRootPath));
+                services.AddSingleton<ICachedDatasource, CachedFileDatasource>();
+            }
+            else if (Configuration.Current.BlobContainerDatabaseConfig?.Enabled ?? false)
+            {
+                services.AddSingleton<IFileSystem>(provider => new BlobContainerFileSystem(
+                    Configuration.Current.BlobContainerDatabaseConfig.StorageAccountName,
+                    Configuration.Current.BlobContainerDatabaseConfig.ContainerName));
+                services.AddSingleton<IFileDatasource>(provider => new FileDatasource(
+                    provider.GetRequiredService<IFileSystem>(),
+                    Configuration.Current.BlobContainerDatabaseConfig.RootPath));
                 services.AddSingleton<ICachedDatasource, CachedFileDatasource>();
             }
             else
