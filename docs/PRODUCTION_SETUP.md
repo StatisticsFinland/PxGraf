@@ -24,6 +24,29 @@ In production environments, Application Insights provides comprehensive telemetr
 For compliance and security tracking:
 - **Included Headers**: In production, configure `LogOptions.AuditLog.IncludedHeaders` to include security-relevant headers like information about the user or request origin.
 
+## Data Source Considerations
+
+PxGraf supports three types of data sources:
+
+### Azure Blob Storage
+For cloud-native deployments:
+- **Authentication**: Uses Azure Managed Identity via DefaultAzureCredential in production environments
+- **Scalability**: Highly scalable and available through Azure's global infrastructure  
+- **Security**: Supports Azure RBAC and private endpoints for secure access
+- **Configuration**: Requires `BlobContainerDatabaseConfig.StorageAccountName` and `BlobContainerDatabaseConfig.ContainerName`
+- **Organization**: Optional `BlobContainerDatabaseConfig.RootPath` allows organizing Px files under a specific path within the container, enabling shared containers for multiple file types
+
+### Local File System
+For on-premises or VM-based deployments:
+- **Performance**: Direct file access provides good performance for local/on-prem scenarios
+- **Simplicity**: No external dependencies beyond the file system
+- **Configuration**: Requires `LocalFileSystemDatabaseConfig.DatabaseRootPath` and encoding settings
+
+### PxWeb API
+For integration with existing PxWeb installations:
+- **Compatibility**: Works with existing PxWeb infrastructure
+- **Configuration**: Requires `pxwebUrl` pointing to the PxWeb API endpoint
+
 ## Only one PxGraf instance
 
 This is the simplest setup. A single instance if PxGraf that serves the frontend SPA and runs the visualization API.
@@ -32,6 +55,16 @@ This is the simplest setup. A single instance if PxGraf that serves the frontend
 
 ## Two PxGraf instances
 
-In some cases it might be beneficial to have separate instances for the creation api and the visualization api. This enables authentication on instance basis and independent scaling for example. All of the instances must access the same query files and the data received from the PxWeb instances must be identical if there are more than one.
+In some cases it might be beneficial to have separate instances for the creation api and the visualization api. This enables authentication on instance basis and independent scaling for example. All of the instances must access the same query files and the data received from the data sources must be identical if there are more than one.
 
 ![PxGraf setup with two instances](/docs/pxgraf_setup_2.png)
+
+## Azure Cloud Deployment
+
+For Azure-based deployments using Blob Storage:
+
+### Azure App Service + Blob Storage
+- Deploy PxGraf as an Azure App Service
+- Store Px files in Azure Blob Storage
+- Use Managed Identity for authentication between App Service and Blob Storage
+- Configure Application Insights for monitoring
