@@ -1,7 +1,7 @@
 # PxGraf
 
 ## Overview
-PxGraf is a tool developed and maintained by Statistics Finland (Tilastokeskus) for visualizing statistical data from Px tables using the PxWeb API or local px database with Px.Utils library. The backend, written in C# with ASP.NET Core, fetches px file data from the PxWeb API or local px database using Px.Utils library, processes it for visualizations and serves it via REST apis. The frontend, written in TypeScript with React, provides a user interface for selecting and previewing data for visualizations and saving them as queries. The visualizations are drawn using PxVisualizer npm package, also developed and maintained by Statistics Finland.
+PxGraf is a tool developed and maintained by Statistics Finland (Tilastokeskus) for visualizing statistical data from Px tables using the PxWeb API, local px database with Px.Utils library, or Azure Blob Storage. The backend, written in C# with ASP.NET Core, fetches px file data from the PxWeb API, local px database using Px.Utils library, or Azure Blob Storage, processes it for visualizations and serves it via REST apis. The frontend, written in TypeScript with React, provides a user interface for selecting and previewing data for visualizations and saving them as queries. The visualizations are drawn using PxVisualizer npm package, also developed and maintained by Statistics Finland.
 
 The software is provided as is and Statistics Finland will **not** offer any support for setting up PxGraf or solving issues related to it.
 
@@ -78,6 +78,16 @@ Determines whether the local database with Px.Utils or PxWeb api is used.
 The path to the database root directory.
 #### LocalFileSystemDatabaseConfig.Encoding
 Name of the encoding used in the database.
+#### BlobContainerDatabaseConfig
+Optional configuration for the Azure Blob Storage database if in use.
+#### BlobContainerDatabaseConfig.Enabled
+Determines whether the Azure Blob Storage database is used.
+#### BlobContainerDatabaseConfig.StorageAccountName
+Name of the Azure Storage Account containing the Px files.
+#### BlobContainerDatabaseConfig.ContainerName
+Name of the blob container containing the Px files.
+#### BlobContainerDatabaseConfig.RootPath
+Optional root path within the blob container for Px files. This is useful when the same container stores multiple types of files, allowing you to organize Px files under a specific path (e.g., "database/") while keeping other files like saved queries in separate paths.
 #### PublicationWebhookConfiguration.EndpointUrl
 URL for optional publication webhook that is called when a query is saved as publish-ready.
 ####  PublicationWebhookConfiguration.AccessTokenHeaderName
@@ -93,7 +103,7 @@ Optional mapping of VisualizationType enum values to custom strings.
 ####  PublicationWebhookConfiguration.MetadataProperties
 Optional mapping of px file metadata property keys to webhook body field names.
 
-Note: If the LocalFileSystemDatabaseConfig block is not present, the PxWeb API is used to fetch data automatically. Providing neither working PxWeb API address nor LocalFileSystemDatabaseConfig will result in an error at application startup.
+Note: If none of the LocalFileSystemDatabaseConfig, BlobContainerDatabaseConfig, or pxwebUrl are configured, the application will result in an error at startup. At least one data source must be configured.
 
 ## Translation files
 

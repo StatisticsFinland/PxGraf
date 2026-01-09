@@ -21,6 +21,7 @@ namespace PxGraf.Settings
         public CacheOptions CacheOptions { get; private set; }
         public CorsOptions CorsOptions { get; private set; }
         public LocalFilesystemDatabaseConfig LocalFilesystemDatabaseConfig { get; private set; }
+        public BlobContainerDatabaseConfig BlobContainerDatabaseConfig { get; private set; }
         public string[] DatabaseWhitelist { get; private set; }
 
         public bool AuditLoggingEnabled { get; private set; }
@@ -66,6 +67,7 @@ namespace PxGraf.Settings
                     AllowedOrigins = configuration.GetSection("Cors:AllowedOrigins").Get<string[]>(),
                 },
                 LocalFilesystemDatabaseConfig = GetLocalDatabaseConfig(configuration),
+                BlobContainerDatabaseConfig = GetBlobContainerDatabaseConfig(configuration),
                 DatabaseWhitelist = configuration.GetSection("DatabaseWhitelist").Get<string[]>() ?? [],
                 AuditLoggingEnabled = configuration.GetValue<bool?>("LogOptions:AuditLog:Enabled") ?? false,
                 AuditLogHeaders = configuration.GetSection("LogOptions:AuditLog:IncludedHeaders").Get<string[]>() ?? [],
@@ -73,10 +75,12 @@ namespace PxGraf.Settings
                 PublicationWebhookConfig = GetPublicationWebhookConfig(configuration)
             };
 
-            if (string.IsNullOrEmpty(newConfig.PxWebUrl) && (newConfig.LocalFilesystemDatabaseConfig == null || !newConfig.LocalFilesystemDatabaseConfig.Enabled))
+            if (string.IsNullOrEmpty(newConfig.PxWebUrl) &&
+                (newConfig.LocalFilesystemDatabaseConfig == null || !newConfig.LocalFilesystemDatabaseConfig.Enabled) &&
+                (newConfig.BlobContainerDatabaseConfig == null || !newConfig.BlobContainerDatabaseConfig.Enabled))
             {
                 throw new InvalidConfigurationException(
-                    "PxWeb URL is not set and Local Filesystem Database is not enabled. " +
+                    "PxWeb URL is not set and neither Local Filesystem Database nor Blob Container Database is enabled. " +
                     "Please configure at least one of these options in the appsettings.json file."
                 );
             }
@@ -103,6 +107,27 @@ namespace PxGraf.Settings
             }
 
             return new LocalFilesystemDatabaseConfig(enabled, databaseRootPath, encoding);
+        }
+
+        private static BlobContainerDatabaseConfig GetBlobContainerDatabaseConfig(IConfiguration configuration)
+        {
+            IConfigurationSection section = configuration.GetSection("BlobContainerDatabaseConfig");
+            if (!section.Exists())
+            {
+                return null;
+            }
+
+            bool enabled = section.GetValue<bool?>("Enabled") ?? false;
+            string storageAccountName = section["StorageAccountName"];
+            string containerName = section["ContainerName"];
+            string rootPath = section["RootPath"] ?? "";
+
+            if (!enabled || string.IsNullOrEmpty(storageAccountName) || string.IsNullOrEmpty(containerName))
+            {
+                return null;
+            }
+
+            return new BlobContainerDatabaseConfig(enabled, storageAccountName, containerName, rootPath);
         }
 
         private static PublicationWebhookConfiguration GetPublicationWebhookConfig(IConfiguration configuration)
