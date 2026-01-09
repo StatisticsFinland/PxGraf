@@ -91,7 +91,7 @@ This will also build the frontend.
 3. You should now be able to navigate to localhost:3000 using your browser and see the application. (Requires PxGraf backend to also be running)
 
 ## Unit tests
-Both the backend and the frontend have unit tests. The backend tests can be run by running `dotnet test` in the solution folder or using Visual Studio test explorer. The frontend tests can be run by running `npm run test` in the PxGraf.Frontend folder
+Both the backend and the frontend have unit tests. The backend tests can be run by running `dotnet test` in the solution folder or using Visual Studio test explorer. The frontend tests can be run by running `npm run test` in the PxGraf.Frontend folder.
 
 Example configuration with root path:
 ```json
