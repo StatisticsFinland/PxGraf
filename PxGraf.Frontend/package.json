@@ -1,6 +1,6 @@
 {
   "name": "pxgraf",
-  "version": "2.5.3",
+  "version": "2.5.4",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -16,7 +16,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-i18next": "^16.0.0",
-    "react-router-dom": "^7.9.4",
+    "react-router-dom": "^7.12.0",
     "styled-components": "^6.1.14",
     "web-vitals": "^5.1.0"
   },
