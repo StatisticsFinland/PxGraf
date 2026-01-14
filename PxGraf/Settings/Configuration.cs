@@ -66,7 +66,7 @@ namespace PxGraf.Settings
                 BlobContainerDatabaseConfig = GetBlobContainerDatabaseConfig(configuration),
                 LocalQueryStorageConfig = GetLocalQueryStorageConfig(configuration),
                 BlobQueryStorageConfig = GetBlobQueryStorageConfig(configuration),
-                DatabaseWhitelist = configuration.GetSection("DatabaseWhitelist").Get<string[]>() ?? [],
+                DatabaseWhitelist = configuration.GetSection(nameof(DatabaseWhitelist)).Get<string[]>() ?? [],
                 AuditLoggingEnabled = configuration.GetValue<bool?>("LogOptions:AuditLog:Enabled") ?? false,
                 AuditLogHeaders = configuration.GetSection("LogOptions:AuditLog:IncludedHeaders").Get<string[]>() ?? [],
                 PublicationWebhookConfig = GetPublicationWebhookConfig(configuration),
@@ -96,9 +96,9 @@ namespace PxGraf.Settings
                 return null;
             }
 
-            bool enabled = section.GetValue<bool?>("Enabled") ?? false;
-            string databaseRootPath = section["DatabaseRootPath"];
-            string encodingName = section["Encoding"];
+            bool enabled = section.GetValue<bool?>(nameof(LocalFilesystemDatabaseConfig.Enabled)) ?? false;
+            string databaseRootPath = section[nameof(LocalFilesystemDatabaseConfig.DatabaseRootPath)];
+            string encodingName = section[nameof(LocalFilesystemDatabaseConfig.Encoding)];
             Encoding encoding = !string.IsNullOrEmpty(encodingName) ? Encoding.GetEncoding(encodingName) : null;
 
             if (!enabled || string.IsNullOrEmpty(databaseRootPath) || encoding == null)
@@ -111,16 +111,16 @@ namespace PxGraf.Settings
 
         private static BlobContainerDatabaseConfig GetBlobContainerDatabaseConfig(IConfiguration configuration)
         {
-            IConfigurationSection section = configuration.GetSection("BlobContainerDatabaseConfig");
+            IConfigurationSection section = configuration.GetSection(nameof(BlobContainerDatabaseConfig));
             if (!section.Exists())
             {
                 return null;
             }
 
-            bool enabled = section.GetValue<bool?>("Enabled") ?? false;
-            string storageAccountName = section["StorageAccountName"];
-            string containerName = section["ContainerName"];
-            string rootPath = section["RootPath"] ?? "";
+            bool enabled = section.GetValue<bool?>(nameof(BlobContainerDatabaseConfig.Enabled)) ?? false;
+            string storageAccountName = section[nameof(BlobContainerDatabaseConfig.StorageAccountName)];
+            string containerName = section[nameof(BlobContainerDatabaseConfig.ContainerName)];
+            string rootPath = section[nameof(BlobContainerDatabaseConfig.RootPath)] ?? "";
 
             if (!enabled || string.IsNullOrEmpty(storageAccountName) || string.IsNullOrEmpty(containerName))
             {
@@ -132,12 +132,12 @@ namespace PxGraf.Settings
 
         private static LocalQueryStorageConfig GetLocalQueryStorageConfig(IConfiguration configuration)
         {
-            IConfigurationSection newSection = configuration.GetSection("LocalQueryStorageConfig");
+            IConfigurationSection newSection = configuration.GetSection(nameof(LocalQueryStorageConfig));
             if (newSection.Exists())
             {
-                bool enabled = newSection.GetValue<bool?>("Enabled") ?? false;
-                string savedQueryDirectory = newSection["SavedQueryDirectory"];
-                string archiveFileDirectory = newSection["ArchiveFileDirectory"];
+                bool enabled = newSection.GetValue<bool?>(nameof(LocalQueryStorageConfig.Enabled)) ?? false;
+                string savedQueryDirectory = newSection[nameof(LocalQueryStorageConfig.SavedQueryDirectory)];
+                string archiveFileDirectory = newSection[nameof(LocalQueryStorageConfig.ArchiveFileDirectory)];
 
                 if (enabled && !string.IsNullOrEmpty(savedQueryDirectory) && !string.IsNullOrEmpty(archiveFileDirectory))
                 {
@@ -159,29 +159,29 @@ namespace PxGraf.Settings
 
         private static BlobQueryStorageConfig GetBlobQueryStorageConfig(IConfiguration configuration)
         {
-            IConfigurationSection section = configuration.GetSection("BlobQueryStorageConfig");
+            IConfigurationSection section = configuration.GetSection(nameof(BlobQueryStorageConfig));
             if (!section.Exists())
             {
                 return null;
             }
 
-            bool enabled = section.GetValue<bool?>("Enabled") ?? false;
-            string storageAccountName = section["StorageAccountName"];
-            string containerName = section["ContainerName"];
-            string savedQueryPath = section["SavedQueryPath"];
-            string archiveFilePath = section["ArchiveFilePath"];
+            bool enabled = section.GetValue<bool?>(nameof(BlobQueryStorageConfig.Enabled)) ?? false;
+            string storageAccountName = section[nameof(BlobQueryStorageConfig.StorageAccountName)];
+            string containerName = section[nameof(BlobQueryStorageConfig.ContainerName)];
+            string savedQueryPath = section[nameof(BlobQueryStorageConfig.SavedQueryPath)];
+            string archiveFilePath = section[nameof(BlobQueryStorageConfig.ArchiveFilePath)];
 
             if (!enabled || string.IsNullOrEmpty(storageAccountName) || string.IsNullOrEmpty(containerName))
             {
                 return null;
             }
 
-            return new BlobQueryStorageConfig(enabled, storageAccountName, containerName, savedQueryPath, archiveFilePath);
-        }
+                return new BlobQueryStorageConfig(enabled, storageAccountName, containerName, savedQueryPath, archiveFilePath);
+            }
 
         private static PublicationWebhookConfiguration GetPublicationWebhookConfig(IConfiguration configuration)
         {
-            IConfigurationSection section = configuration.GetSection("PublicationWebhookConfiguration");
+            IConfigurationSection section = configuration.GetSection(nameof(PublicationWebhookConfiguration));
             if (!section.Exists())
             {
                 return new PublicationWebhookConfiguration();
@@ -189,13 +189,13 @@ namespace PxGraf.Settings
 
             return new PublicationWebhookConfiguration
             {
-                EndpointUrl = section["EndpointUrl"],
-                AccessTokenHeaderName = section["AccessTokenHeaderName"],
-                AccessTokenHeaderValue = section["AccessTokenHeaderValue"],
-                BodyContentPropertyNames = section.GetSection("BodyContentPropertyNames").Get<PublicationPropertyType[]>() ?? [],
-                BodyContentPropertyNameEdits = section.GetSection("BodyContentPropertyNameEdits").Get<Dictionary<PublicationPropertyType, string>>() ?? [],
-                VisualizationTypeTranslations = section.GetSection("VisualizationTypeTranslations").Get<Dictionary<string, string>>() ?? [],
-                MetadataProperties = section.GetSection("MetadataProperties").Get<Dictionary<string, string>>() ?? []
+                EndpointUrl = section[nameof(PublicationWebhookConfiguration.EndpointUrl)],
+                AccessTokenHeaderName = section[nameof(PublicationWebhookConfiguration.AccessTokenHeaderName)],
+                AccessTokenHeaderValue = section[nameof(PublicationWebhookConfiguration.AccessTokenHeaderValue)],
+                BodyContentPropertyNames = section.GetSection(nameof(PublicationWebhookConfiguration.BodyContentPropertyNames)).Get<PublicationPropertyType[]>() ?? [],
+                BodyContentPropertyNameEdits = section.GetSection(nameof(PublicationWebhookConfiguration.BodyContentPropertyNameEdits)).Get<Dictionary<PublicationPropertyType, string>>() ?? [],
+                VisualizationTypeTranslations = section.GetSection(nameof(PublicationWebhookConfiguration.VisualizationTypeTranslations)).Get<Dictionary<string, string>>() ?? [],
+                MetadataProperties = section.GetSection(nameof(PublicationWebhookConfiguration.MetadataProperties)).Get<Dictionary<string, string>>() ?? []
             };
         }
 
