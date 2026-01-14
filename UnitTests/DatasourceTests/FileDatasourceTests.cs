@@ -2,6 +2,7 @@ using NUnit.Framework;
 using Moq;
 using PxGraf.Datasource.FileDatasource;
 using PxGraf.Models.Queries;
+using PxGraf.Storage;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Text;
@@ -16,26 +17,26 @@ namespace UnitTests.DatasourceTests
     [TestFixture]
     public class FileDatasourceTests
     {
-        private Mock<IFileSystem> mockFileSystem;
+        private Mock<IStorageProvider> mockStorageProvider;
         private FileDatasource datasource;
         private const string testRootPath = "/test/root";
 
         [SetUp]
         public void Setup()
         {
-            mockFileSystem = new Mock<IFileSystem>();
-            datasource = new FileDatasource(mockFileSystem.Object, testRootPath);
+            mockStorageProvider = new Mock<IStorageProvider>();
+            datasource = new FileDatasource(mockStorageProvider.Object, testRootPath);
         }
 
         [Test]
         public void Constructor_WithValidParameters_DoesNotThrow()
         {
             // Arrange & Act & Assert
-            Assert.That(() => new FileDatasource(mockFileSystem.Object, testRootPath), Throws.Nothing);
+            Assert.That(() => new FileDatasource(mockStorageProvider.Object, testRootPath), Throws.Nothing);
         }
 
         [Test]
-        public void Constructor_WithNullFileSystem_ThrowsArgumentNullException()
+        public void Constructor_WithNullStorageProvider_ThrowsArgumentNullException()
         {
             // Arrange, Act & Assert
             Assert.That(() => new FileDatasource(null, testRootPath), Throws.ArgumentNullException);
@@ -45,14 +46,14 @@ namespace UnitTests.DatasourceTests
         public void Constructor_WithNullRootPath_DoesNotThrow()
         {
             // Arrange, Act & Assert - null rootPath should be converted to empty string
-            Assert.That(() => new FileDatasource(mockFileSystem.Object, null), Throws.Nothing);
+            Assert.That(() => new FileDatasource(mockStorageProvider.Object, null), Throws.Nothing);
         }
 
         [Test]
         public void Constructor_WithEmptyRootPath_DoesNotThrow()
         {
             // Arrange, Act & Assert
-            Assert.That(() => new FileDatasource(mockFileSystem.Object, ""), Throws.Nothing);
+            Assert.That(() => new FileDatasource(mockStorageProvider.Object, ""), Throws.Nothing);
         }
 
         [Test]
@@ -62,9 +63,9 @@ namespace UnitTests.DatasourceTests
             List<string> groupHierarchy = ["level1", "level2"];
             List<string> mockFiles = ["/test/root/level1/level2/table1.px", "/test/root/level1/level2/table2.px"];
 
-            mockFileSystem.Setup(fs => fs.EnumerateFilesAsync(It.IsAny<string>(), It.IsAny<string>()))
+            mockStorageProvider.Setup(fs => fs.EnumerateFilesAsync(It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(mockFiles);
-            mockFileSystem.Setup(fs => fs.GetRelativePath(It.IsAny<string>(), It.IsAny<string>()))
+            mockStorageProvider.Setup(fs => fs.GetRelativePath(It.IsAny<string>(), It.IsAny<string>()))
                 .Returns<string, string>((basePath, targetPath) => Path.GetRelativePath(basePath, targetPath));
 
             // Act
@@ -83,15 +84,15 @@ namespace UnitTests.DatasourceTests
             List<string> mockDirectories = ["/test/root/level1/subgroup1", "/test/root/level1/subgroup2"];
             List<string> mockAliasFiles = ["Alias_en.txt", "Alias_fi.txt"];
 
-            mockFileSystem.Setup(fs => fs.EnumerateDirectoriesAsync(It.IsAny<string>()))
+            mockStorageProvider.Setup(fs => fs.EnumerateDirectoriesAsync(It.IsAny<string>()))
                 .ReturnsAsync(mockDirectories);
-            mockFileSystem.Setup(fs => fs.GetDirectoryName(It.IsAny<string>()))
+            mockStorageProvider.Setup(fs => fs.GetDirectoryName(It.IsAny<string>()))
                 .Returns<string>(path => Path.GetFileName(path));
-            mockFileSystem.Setup(fs => fs.EnumerateFilesAsync(It.IsAny<string>(), It.IsAny<string>()))
+            mockStorageProvider.Setup(fs => fs.EnumerateFilesAsync(It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(mockAliasFiles);
-            mockFileSystem.Setup(fs => fs.GetFileName(It.IsAny<string>()))
+            mockStorageProvider.Setup(fs => fs.GetFileName(It.IsAny<string>()))
                 .Returns<string>(path => Path.GetFileName(path));
-            mockFileSystem.Setup(fs => fs.ReadAllTextAsync(It.IsAny<string>()))
+            mockStorageProvider.Setup(fs => fs.ReadAllTextAsync(It.IsAny<string>()))
                 .ReturnsAsync("Test Group");
 
             // Act
@@ -105,7 +106,7 @@ namespace UnitTests.DatasourceTests
         public void Constructor_WithRootPath_SetsRootPathCorrectly()
         {
             // Act
-            FileDatasource datasourceWithRoot = new(mockFileSystem.Object, testRootPath);
+            FileDatasource datasourceWithRoot = new(mockStorageProvider.Object, testRootPath);
 
             // Assert - Verify the datasource works with the root path
             Assert.That(() => datasourceWithRoot.GetTablesAsync([]), Throws.Nothing);

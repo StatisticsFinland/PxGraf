@@ -13,6 +13,7 @@ using Px.Utils.PxFile.Metadata;
 using PxGraf.Models.Queries;
 using PxGraf.Models.Responses.DatabaseItems;
 using PxGraf.Utility;
+using PxGraf.Storage;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
@@ -30,12 +31,12 @@ namespace PxGraf.Datasource.FileDatasource
     /// <remarks>
     /// Initializes a new instance of FileDatasource.
     /// </remarks>
-    /// <param name="fileSystem">File system implementation to use for data access.</param>
+    /// <param name="storageProvider">Storage provider implementation to use for data access.</param>
     /// <param name="rootPath">Root path for database operations. Can be empty for storage systems that don't use root paths.</param>
     [ExcludeFromCodeCoverage] // Methods consist mostly of file system IO
-    public class FileDatasource(IFileSystem fileSystem, string rootPath = "") : IFileDatasource
+    public class FileDatasource(IStorageProvider storageProvider, string rootPath = "") : IFileDatasource
     {
-        private readonly IFileSystem fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
+        private readonly IStorageProvider storageProvider = storageProvider ?? throw new ArgumentNullException(nameof(storageProvider));
         private readonly string rootPath = rootPath;
 
         /// <summary>
@@ -52,11 +53,11 @@ namespace PxGraf.Datasource.FileDatasource
         {
             List<PxTableReference> tables = [];
             string path = PathUtils.BuildAndSanitizePath(rootPath, groupHierarchy);
-            IEnumerable<string> pxFiles = await fileSystem.EnumerateFilesAsync(path, PxSyntaxConstants.PX_FILE_FILTER);
+            IEnumerable<string> pxFiles = await storageProvider.EnumerateFilesAsync(path, PxSyntaxConstants.PX_FILE_FILTER);
 
             foreach (string pxFile in pxFiles)
             {
-                tables.Add(new PxTableReference(fileSystem.GetRelativePath(rootPath, pxFile)));
+                tables.Add(new PxTableReference(storageProvider.GetRelativePath(rootPath, pxFile)));
             }
             return tables;
         }
@@ -70,11 +71,11 @@ namespace PxGraf.Datasource.FileDatasource
         {
             List<DatabaseGroupHeader> headers = [];
             string path = PathUtils.BuildAndSanitizePath(rootPath, groupHierarchy);
-            IEnumerable<string> directories = await fileSystem.EnumerateDirectoriesAsync(path);
+            IEnumerable<string> directories = await storageProvider.EnumerateDirectoriesAsync(path);
 
             foreach (string directory in directories)
             {
-                string code = fileSystem.GetDirectoryName(directory);
+                string code = storageProvider.GetDirectoryName(directory);
                 MultilanguageString alias = await GetGroupNameAsync(directory);
                 if (alias.Languages.Any()) // Only include groups with an alias file for one or more languages
                 {
@@ -93,7 +94,7 @@ namespace PxGraf.Datasource.FileDatasource
         public async Task<DateTime> GetLastWriteTimeAsync(PxTableReference tableReference)
         {
             string path = PathUtils.BuildAndSanitizePath(rootPath, tableReference);
-            return await fileSystem.GetLastWriteTimeAsync(path);
+            return await storageProvider.GetLastWriteTimeAsync(path);
         }
 
         /// <summary>
@@ -104,7 +105,7 @@ namespace PxGraf.Datasource.FileDatasource
         public async Task<IReadOnlyMatrixMetadata> GetMatrixMetadataAsync(PxTableReference tableReference)
         {
             string path = PathUtils.BuildAndSanitizePath(rootPath, tableReference);
-            using Stream readStream = await fileSystem.OpenReadAsync(path);
+            using Stream readStream = await storageProvider.OpenReadAsync(path);
             PxFileMetadataReader metadataReader = new();
             Encoding encoding = await metadataReader.GetEncodingAsync(readStream);
             readStream.Position = 0;
@@ -135,7 +136,7 @@ namespace PxGraf.Datasource.FileDatasource
             string path = PathUtils.BuildAndSanitizePath(rootPath, tableReference);
             DataIndexer indexer = new(completeTableMap, meta);
             Matrix<DecimalDataValue> output = new(meta, new DecimalDataValue[indexer.DataLength]);
-            using Stream fileStream = await fileSystem.OpenReadAsync(path);
+            using Stream fileStream = await storageProvider.OpenReadAsync(path);
             PxFileStreamDataReader dataReader = new(fileStream);
             if (cancellationToken is null) await dataReader.ReadDecimalDataValuesAsync(output.Data, 0, meta, completeTableMap);
             else await dataReader.ReadDecimalDataValuesAsync(output.Data, 0, meta, completeTableMap, cancellationToken.Value);
@@ -154,11 +155,11 @@ namespace PxGraf.Datasource.FileDatasource
                 if (newType == DimensionType.Ordinal || newType == DimensionType.Nominal)
                 {
                     meta.Dimensions[i] = new(
-                        meta.Dimensions[i].Code,
-                        meta.Dimensions[i].Name,
-                        meta.Dimensions[i].AdditionalProperties,
-                        meta.Dimensions[i].Values,
-                        newType);
+                      meta.Dimensions[i].Code,
+                 meta.Dimensions[i].Name,
+                          meta.Dimensions[i].AdditionalProperties,
+                       meta.Dimensions[i].Values,
+          newType);
                 }
             }
         }
@@ -251,7 +252,7 @@ namespace PxGraf.Datasource.FileDatasource
         {
             // If the dimension already has a defining type, ordinality should not overrun it
             if (dimension.Type == DimensionType.Unknown ||
-                 dimension.Type == DimensionType.Other)
+              dimension.Type == DimensionType.Other)
             {
                 string propertyKey = PxSyntaxConstants.META_ID_KEY;
                 if (dimension.AdditionalProperties.TryGetValue(propertyKey, out MetaProperty? prop) &&
@@ -274,16 +275,16 @@ namespace PxGraf.Datasource.FileDatasource
         private async Task<MultilanguageString> GetGroupNameAsync(string directoryPath)
         {
             Dictionary<string, string> translatedNames = [];
-            IEnumerable<string> aliasFiles = await fileSystem.EnumerateFilesAsync(directoryPath, PxSyntaxConstants.ALIAS_FILE_FILTER);
+            IEnumerable<string> aliasFiles = await storageProvider.EnumerateFilesAsync(directoryPath, PxSyntaxConstants.ALIAS_FILE_FILTER);
 
             foreach (string aliasFile in aliasFiles)
             {
-                string fileName = fileSystem.GetFileName(aliasFile);
+                string fileName = storageProvider.GetFileName(aliasFile);
                 if (fileName.StartsWith(PxSyntaxConstants.ALIAS_FILE_PREFIX, StringComparison.OrdinalIgnoreCase))
                 {
                     int aliasFileSuffixLength = PxSyntaxConstants.ALIAS_FILE_PREFIX.Length + 1; // +1 for the underscore
                     string lang = new([.. Path.GetFileNameWithoutExtension(fileName).Skip(aliasFileSuffixLength)]);
-                    string alias = await fileSystem.ReadAllTextAsync(aliasFile);
+                    string alias = await storageProvider.ReadAllTextAsync(aliasFile);
                     translatedNames.Add(lang, alias.Trim());
                 }
             }

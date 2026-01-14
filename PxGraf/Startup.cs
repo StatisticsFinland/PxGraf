@@ -139,10 +139,10 @@ namespace PxGraf
             });
 
             services.AddHttpClient(PXWEBCLIENTNAME).ConfigurePrimaryHttpMessageHandler(() =>
-                new HttpClientHandler
-                {
-                    UseDefaultCredentials = true
-                });
+            new HttpClientHandler
+            {
+                UseDefaultCredentials = true
+            });
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<ISqFileInterface, SqFileInterface>();
             services.AddScoped<IAuditLogService, AuditLogService>();
@@ -162,19 +162,19 @@ namespace PxGraf
         {
             if (Configuration.Current.LocalFilesystemDatabaseConfig?.Enabled ?? false)
             {
-                services.AddSingleton<IFileSystem>(provider => new LocalFileSystem(Configuration.Current.LocalFilesystemDatabaseConfig.Encoding));
+                services.AddSingleton<IStorageProvider>(provider => new LocalStorageProvider(Configuration.Current.LocalFilesystemDatabaseConfig.Encoding));
                 services.AddSingleton<IFileDatasource>(provider => new FileDatasource(
-                    provider.GetRequiredService<IFileSystem>(),
+                    provider.GetRequiredService<IStorageProvider>(),
                     Configuration.Current.LocalFilesystemDatabaseConfig.DatabaseRootPath));
                 services.AddSingleton<ICachedDatasource, CachedFileDatasource>();
             }
             else if (Configuration.Current.BlobContainerDatabaseConfig?.Enabled ?? false)
             {
-                services.AddSingleton<IFileSystem>(provider => new BlobContainerFileSystem(
+                services.AddSingleton<IStorageProvider>(provider => new BlobStorageProvider(
                     Configuration.Current.BlobContainerDatabaseConfig.StorageAccountName,
                     Configuration.Current.BlobContainerDatabaseConfig.ContainerName));
                 services.AddSingleton<IFileDatasource>(provider => new FileDatasource(
-                    provider.GetRequiredService<IFileSystem>(),
+                    provider.GetRequiredService<IStorageProvider>(),
                     Configuration.Current.BlobContainerDatabaseConfig.RootPath));
                 services.AddSingleton<ICachedDatasource, CachedFileDatasource>();
             }
