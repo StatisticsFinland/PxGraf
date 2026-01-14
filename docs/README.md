@@ -1,7 +1,7 @@
 # PxGraf
 
 ## Overview
-PxGraf is a tool developed and maintained by Statistics Finland (Tilastokeskus) for visualizing statistical data from Px tables using the PxWeb API, local px database with Px.Utils library, or Azure Blob Storage. The backend, written in C# with ASP.NET Core, fetches px file data from the PxWeb API, local px database using Px.Utils library, or Azure Blob Storage, processes it for visualizations and serves it via REST apis. The frontend, written in TypeScript with React, provides a user interface for selecting and previewing data for visualizations and saving them as queries. The visualizations are drawn using PxVisualizer npm package, also developed and maintained by Statistics Finland.
+PxGraf is a tool developed and maintained by Statistics Finland (Tilastokeskus) for visualizing statistical data from Px tables. It supports multiple data sources including PxWeb API integration, local Px databases with the Px.Utils library, and Azure Blob Storage for cloud-native deployments. The backend, written in C# with ASP.NET Core, provides a unified storage architecture that can fetch data from various sources and store saved queries in either local file systems or Azure Blob Storage. The frontend, written in TypeScript with React, provides a user interface for selecting and previewing data for visualizations and saving them as queries. The visualizations are drawn using PxVisualizer npm package, also developed and maintained by Statistics Finland.
 
 The software is provided as is and Statistics Finland will **not** offer any support for setting up PxGraf or solving issues related to it.
 
@@ -10,8 +10,28 @@ in the [HighCharts shop](https://shop.highsoft.com/?utm_source=npmjs&utm_medium=
 
 ## Core functions
 - **Data visualization:** PxGraf helps users create visualization from px data. It automatically decides which visualization types are available based on the user's selections and what kind of customizations can be made. The user can then choose from available options. The data and visualizations can also be exported in different formats.
-- **Saved queries:** The user can create, save, overwrite, archive and load queries. Saved queries can be shared with other users or published externally. Saved queries are stored in the running environment's file system and the user is provided with an ID representing the saved query. A saved query can be overwritten if it was previously saved in draft state. The frontend save dialogue prompts this as "Publish-ready", false by default. A query is saved as draft if it's not marked as publish-ready.
+- **Saved queries:** The user can create, save, overwrite, archive and load queries. Saved queries can be shared with other users or published externally. Saved queries are stored in configurable storage backends (local file system or Azure Blob Storage) and the user is provided with an ID representing the saved query. A saved query can be overwritten if it was previously saved in draft state. The frontend save dialogue prompts this as "Publish-ready", false by default. A query is saved as draft if it's not marked as publish-ready.
 - **APIs:** PxGraf's APIs provide functionality for processing the data for visualization, and saving and loading queries.
+
+## Storage Architecture
+
+PxGraf features a unified storage architecture that separates data source storage from saved query storage, enabling flexible deployment scenarios:
+
+### Data Sources (Px Files)
+- **Azure Blob Storage**: Cloud-native storage with automatic scaling and high availability
+- **Local File System**: Direct file access for on-premises or single-instance deployments  
+- **PxWeb API**: Integration with existing PxWeb installations
+
+### Saved Queries and Archives
+- **Azure Blob Storage**: Scalable cloud storage with shared access across multiple instances
+- **Local File System**: Traditional local directory storage with structured or legacy configuration
+
+### Mixed Deployment Scenarios
+The architecture supports various combinations:
+- **Full Cloud**: Both data and queries in Azure Blob Storage
+- **Hybrid**: Data in cloud, queries local (or vice versa)
+- **Traditional**: Both data and queries on local file system
+- **Shared Container**: Data and queries in the same Azure storage account with organized paths
 
 ## APIs
 - **Creation API:** Provides endpoints for fetching database listings and Px table metadata. It also provides functionality for metadata validation and providing required contents for the visualization editor. Can be disabled in the appsettings.json file.
@@ -75,11 +95,11 @@ Configuration for the maximum header length and the maximum number of data point
 #### Language
 Configuration for the default language and the available languages in the backend.
 #### pxwebUrl
-The address of the PxWeb server if in use.
+The address of the PxWeb server if in use. Required when using PxWeb API as data source.
 #### savedQueryDirectory
-The directory where saved query files are stored.
-#### archiveFileDirectory
-The directory where archived query files are stored.
+**LEGACY**: The directory where saved query files are stored. Use `LocalQueryStorageConfig` or `BlobQueryStorageConfig` for new deployments.
+#### archiveFileDirectory  
+**LEGACY**: The directory where archived query files are stored. Use `LocalQueryStorageConfig` or `BlobQueryStorageConfig` for new deployments.
 #### FeatureManagement
 Grants or denies access to the Creation API.
 #### DatabaseWhitelist
@@ -91,17 +111,38 @@ Determines whether the local database with Px.Utils or PxWeb api is used.
 #### LocalFileSystemDatabaseConfig.DatabaseRootPath
 The path to the database root directory.
 #### LocalFileSystemDatabaseConfig.Encoding
-Name of the encoding used in the database.
+Name of the encoding used in the database files (e.g., "utf-8", "latin1").
 #### BlobContainerDatabaseConfig
-Optional configuration for the Azure Blob Storage database if in use.
+Optional configuration for Azure Blob Storage database (alternative to local filesystem database).
 #### BlobContainerDatabaseConfig.Enabled
-Determines whether the Azure Blob Storage database is used.
+Determines whether Azure Blob Storage is used as the data source.
 #### BlobContainerDatabaseConfig.StorageAccountName
 Name of the Azure Storage Account containing the Px files.
 #### BlobContainerDatabaseConfig.ContainerName
 Name of the blob container containing the Px files.
 #### BlobContainerDatabaseConfig.RootPath
-Optional root path within the blob container for Px files. This is useful when the same container stores multiple types of files, allowing you to organize Px files under a specific path (e.g., "database/") while keeping other files like saved queries in separate paths.
+Optional root path within the blob container for Px files. Useful when the same container stores multiple types of files, allowing you to organize Px files under a specific path (e.g., "database/px-files/") while keeping other files like saved queries in separate paths within the same container.
+#### LocalQueryStorageConfig
+Configuration for local file system storage of saved queries and archive files (replaces legacy savedQueryDirectory/archiveFileDirectory).
+#### LocalQueryStorageConfig.Enabled
+Whether to use the structured local query storage configuration instead of legacy individual directory settings.
+#### LocalQueryStorageConfig.SavedQueryDirectory
+Directory path for saved query files when using local storage.
+#### LocalQueryStorageConfig.ArchiveFileDirectory
+Directory path for archive files when using local storage.
+#### BlobQueryStorageConfig
+Configuration for Azure Blob Storage of saved queries and archive files.
+#### BlobQueryStorageConfig.Enabled
+Determines whether Azure Blob Storage is used for saved queries and archive files.
+#### BlobQueryStorageConfig.StorageAccountName
+Name of the Azure Storage Account for saved queries and archive files (can be the same as data storage).
+#### BlobQueryStorageConfig.ContainerName
+Name of the blob container for saved queries and archive files (can be the same as data storage).
+#### BlobQueryStorageConfig.SavedQueryPath
+Path within the container for saved query files (default: "saved-queries").
+#### BlobQueryStorageConfig.ArchiveFilePath
+Path within the container for archive files (default: "archive-files").
+
 #### PublicationWebhookConfiguration.EndpointUrl
 URL for optional publication webhook that is called when a query is saved as publish-ready.
 ####  PublicationWebhookConfiguration.AccessTokenHeaderName
@@ -117,12 +158,18 @@ Optional mapping of VisualizationType enum values to custom strings.
 ####  PublicationWebhookConfiguration.MetadataProperties
 Optional mapping of px file metadata property keys to webhook body field names.
 
-Note: If none of the LocalFileSystemDatabaseConfig, BlobContainerDatabaseConfig, or pxwebUrl are configured, the application will result in an error at startup. At least one data source must be configured.
+### Data Source Requirements
 
-## Translation files
+**Important**: At least one data source must be configured for PxGraf to function properly. The application will fail to start if none of the following are configured:
+- `pxwebUrl` (for PxWeb API integration)
+- `LocalFileSystemDatabaseConfig` with `Enabled: true` (for local Px files)  
+- `BlobContainerDatabaseConfig` with `Enabled: true` (for Azure Blob Storage Px files)
 
-### Backend
-Backend translations are located under PxGraf/Pars/translations.json. The file contains translations for English, Swedish and Finnish. Additional languages can be added by adding a new object to the translations.json file. Available languages need also to be added under Language.AvailableLanguages in the appsettings.json file.
+### Storage Configuration Compatibility  
 
-### Frontend
-Frontend translations are located under pxgraf.frontend/src/localization. Each language has its own file with translations for the frontend. The language codes in the file names have to match the language codes in the translationsConfig.json file.
+**Legacy Compatibility**: The system automatically populates the legacy `savedQueryDirectory` and `archiveFileDirectory` fields based on your active storage configuration:
+- **BlobQueryStorageConfig enabled** → Uses `SavedQueryPath` and `ArchiveFilePath`
+- **LocalQueryStorageConfig enabled** → Uses `SavedQueryDirectory` and `ArchiveFileDirectory`  
+- **Legacy configuration** → Uses `savedQueryDirectory` and `archiveFileDirectory` directly
+
+This ensures backward compatibility with existing code while enabling new storage backends.

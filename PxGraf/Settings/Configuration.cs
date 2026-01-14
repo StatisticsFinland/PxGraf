@@ -22,6 +22,8 @@ namespace PxGraf.Settings
         public CorsOptions CorsOptions { get; private set; }
         public LocalFilesystemDatabaseConfig LocalFilesystemDatabaseConfig { get; private set; }
         public BlobContainerDatabaseConfig BlobContainerDatabaseConfig { get; private set; }
+        public LocalQueryStorageConfig LocalQueryStorageConfig { get; private set; }
+        public BlobQueryStorageConfig BlobQueryStorageConfig { get; private set; }
         public string[] DatabaseWhitelist { get; private set; }
 
         public bool AuditLoggingEnabled { get; private set; }
@@ -36,8 +38,6 @@ namespace PxGraf.Settings
             {
                 PxWebUrl = configuration["pxwebUrl"] ?? null,
                 CreationAPI = configuration.GetSection("FeatureManagement:CreationAPI").Get<bool>(),
-                SavedQueryDirectory = configuration["savedQueryDirectory"],
-                ArchiveFileDirectory = configuration["archiveFileDirectory"],
                 QueryOptions = new()
                 {
                     MaxHeaderLength = configuration.GetSection("QueryOptions:MaxHeaderLength").Get<int>(),
@@ -64,12 +64,16 @@ namespace PxGraf.Settings
                 },
                 LocalFilesystemDatabaseConfig = GetLocalDatabaseConfig(configuration),
                 BlobContainerDatabaseConfig = GetBlobContainerDatabaseConfig(configuration),
+                LocalQueryStorageConfig = GetLocalQueryStorageConfig(configuration),
+                BlobQueryStorageConfig = GetBlobQueryStorageConfig(configuration),
                 DatabaseWhitelist = configuration.GetSection("DatabaseWhitelist").Get<string[]>() ?? [],
                 AuditLoggingEnabled = configuration.GetValue<bool?>("LogOptions:AuditLog:Enabled") ?? false,
                 AuditLogHeaders = configuration.GetSection("LogOptions:AuditLog:IncludedHeaders").Get<string[]>() ?? [],
                 PublicationWebhookConfig = GetPublicationWebhookConfig(configuration),
                 ApplicationInsights = new ApplicationInsightsConfig(configuration.GetSection(nameof(ApplicationInsights)))
             };
+
+            SetQueryDirectoryFields(newConfig, configuration);
 
             if (string.IsNullOrEmpty(newConfig.PxWebUrl) &&
                 (newConfig.LocalFilesystemDatabaseConfig == null || !newConfig.LocalFilesystemDatabaseConfig.Enabled) &&
@@ -126,6 +130,55 @@ namespace PxGraf.Settings
             return new BlobContainerDatabaseConfig(enabled, storageAccountName, containerName, rootPath);
         }
 
+        private static LocalQueryStorageConfig GetLocalQueryStorageConfig(IConfiguration configuration)
+        {
+            IConfigurationSection newSection = configuration.GetSection("LocalQueryStorageConfig");
+            if (newSection.Exists())
+            {
+                bool enabled = newSection.GetValue<bool?>("Enabled") ?? false;
+                string savedQueryDirectory = newSection["SavedQueryDirectory"];
+                string archiveFileDirectory = newSection["ArchiveFileDirectory"];
+
+                if (enabled && !string.IsNullOrEmpty(savedQueryDirectory) && !string.IsNullOrEmpty(archiveFileDirectory))
+                {
+                    return new LocalQueryStorageConfig(enabled, savedQueryDirectory, archiveFileDirectory);
+                }
+            }
+
+            // Fallback to legacy configuration if new config doesn't exist
+            string legacySavedQueryDirectory = configuration["savedQueryDirectory"];
+            string legacyArchiveFileDirectory = configuration["archiveFileDirectory"];
+
+            if (!string.IsNullOrEmpty(legacySavedQueryDirectory) && !string.IsNullOrEmpty(legacyArchiveFileDirectory))
+            {
+                return new LocalQueryStorageConfig(true, legacySavedQueryDirectory, legacyArchiveFileDirectory);
+            }
+
+            return null;
+        }
+
+        private static BlobQueryStorageConfig GetBlobQueryStorageConfig(IConfiguration configuration)
+        {
+            IConfigurationSection section = configuration.GetSection("BlobQueryStorageConfig");
+            if (!section.Exists())
+            {
+                return null;
+            }
+
+            bool enabled = section.GetValue<bool?>("Enabled") ?? false;
+            string storageAccountName = section["StorageAccountName"];
+            string containerName = section["ContainerName"];
+            string savedQueryPath = section["SavedQueryPath"];
+            string archiveFilePath = section["ArchiveFilePath"];
+
+            if (!enabled || string.IsNullOrEmpty(storageAccountName) || string.IsNullOrEmpty(containerName))
+            {
+                return null;
+            }
+
+            return new BlobQueryStorageConfig(enabled, storageAccountName, containerName, savedQueryPath, archiveFilePath);
+        }
+
         private static PublicationWebhookConfiguration GetPublicationWebhookConfig(IConfiguration configuration)
         {
             IConfigurationSection section = configuration.GetSection("PublicationWebhookConfiguration");
@@ -144,6 +197,29 @@ namespace PxGraf.Settings
                 VisualizationTypeTranslations = section.GetSection("VisualizationTypeTranslations").Get<Dictionary<string, string>>() ?? [],
                 MetadataProperties = section.GetSection("MetadataProperties").Get<Dictionary<string, string>>() ?? []
             };
+        }
+
+        /// <summary>
+        /// Sets the legacy SavedQueryDirectory and ArchiveFileDirectory fields based on the active storage configuration.
+        /// This ensures backward compatibility with existing code that depends on these fields.
+        /// </summary>
+        private static void SetQueryDirectoryFields(Configuration config, IConfiguration configuration)
+        {
+            if (config.BlobQueryStorageConfig?.Enabled ?? false)
+            {
+                config.SavedQueryDirectory = config.BlobQueryStorageConfig.SavedQueryPath ?? "";
+                config.ArchiveFileDirectory = config.BlobQueryStorageConfig.ArchiveFilePath ?? "";
+            }
+            else if (config.LocalQueryStorageConfig?.Enabled ?? false)
+            {
+                config.SavedQueryDirectory = config.LocalQueryStorageConfig.SavedQueryDirectory;
+                config.ArchiveFileDirectory = config.LocalQueryStorageConfig.ArchiveFileDirectory;
+            }
+            else
+            {
+                config.SavedQueryDirectory = configuration["savedQueryDirectory"];
+                config.ArchiveFileDirectory = configuration["archiveFileDirectory"];
+            }
         }
     }
 }

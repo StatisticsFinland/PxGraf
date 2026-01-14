@@ -1,4 +1,4 @@
-﻿using PxGraf.Models.SavedQueries;
+using PxGraf.Models.SavedQueries;
 using System.Threading.Tasks;
 
 namespace PxGraf.Utility

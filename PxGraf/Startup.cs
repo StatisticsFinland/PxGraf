@@ -16,11 +16,11 @@ using System.Net.Http;
 using System;
 using PxGraf.Datasource;
 using PxGraf.Datasource.Cache;
-using PxGraf.Models.Queries;
 using PxGraf.Datasource.FileDatasource;
 using PxGraf.Datasource.ApiDatasource;
-using PxGraf.Services;
 using System.Text;
+using PxGraf.Storage;
+using PxGraf.Services;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.Extensions.Logging.ApplicationInsights;
 
@@ -151,10 +151,18 @@ namespace PxGraf
             services.AddSingleton<IMultiStateMemoryTaskCache>(provider => new MultiStateMemoryTaskCache(
                 Configuration.Current.CacheOptions.Database.ItemAmountLimit,
                 TimeSpan.FromSeconds(Configuration.Current.CacheOptions.CacheFreshnessCheckIntervalSeconds)));
+
+            ConfigureDataSourceStorage(services);
+            ConfigureQueryFileStorage(services);
+
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+        }
+
+        private static void ConfigureDataSourceStorage(IServiceCollection services)
+        {
             if (Configuration.Current.LocalFilesystemDatabaseConfig?.Enabled ?? false)
             {
-                services.AddSingleton<IFileSystem>(provider => new LocalFileSystem(
-                    Configuration.Current.LocalFilesystemDatabaseConfig.Encoding));
+                services.AddSingleton<IFileSystem>(provider => new LocalFileSystem(Configuration.Current.LocalFilesystemDatabaseConfig.Encoding));
                 services.AddSingleton<IFileDatasource>(provider => new FileDatasource(
                     provider.GetRequiredService<IFileSystem>(),
                     Configuration.Current.LocalFilesystemDatabaseConfig.DatabaseRootPath));
@@ -176,7 +184,43 @@ namespace PxGraf
                 services.AddSingleton<IApiDatasource, PxWebV1ApiInterface>();
                 services.AddSingleton<ICachedDatasource, CachedApiDatasource>();
             }
-            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+        }
+
+        private static void ConfigureQueryFileStorage(IServiceCollection services)
+        {
+            if (Configuration.Current.BlobQueryStorageConfig?.Enabled ?? false)
+            {
+                services.AddSingleton<IStorageProvider>(provider => new BlobStorageProvider(
+                    Configuration.Current.BlobQueryStorageConfig.StorageAccountName,
+                    Configuration.Current.BlobQueryStorageConfig.ContainerName));
+
+                services.AddSingleton<ISqFileInterface>(provider => new SqFileInterface(
+                    provider.GetRequiredService<IStorageProvider>(),
+                    provider.GetRequiredService<IStorageProvider>(),
+                    Configuration.Current.BlobQueryStorageConfig.SavedQueryPath,
+                    Configuration.Current.BlobQueryStorageConfig.ArchiveFilePath));
+            }
+            else if (Configuration.Current.LocalQueryStorageConfig?.Enabled ?? false)
+            {
+                services.AddSingleton<IStorageProvider>(provider => new LocalStorageProvider());
+
+                services.AddSingleton<ISqFileInterface>(provider => new SqFileInterface(
+                    provider.GetRequiredService<IStorageProvider>(),
+                    provider.GetRequiredService<IStorageProvider>(),
+                    Configuration.Current.LocalQueryStorageConfig.SavedQueryDirectory,
+                    Configuration.Current.LocalQueryStorageConfig.ArchiveFileDirectory));
+            }
+            // Fallback to legacy configuration
+            else
+            {
+                services.AddSingleton<IStorageProvider>(provider => new LocalStorageProvider());
+
+                services.AddSingleton<ISqFileInterface>(provider => new SqFileInterface(
+                    provider.GetRequiredService<IStorageProvider>(),
+                    provider.GetRequiredService<IStorageProvider>(),
+                    Configuration.Current.SavedQueryDirectory ?? "",
+                    Configuration.Current.ArchiveFileDirectory ?? ""));
+            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -115,3 +115,80 @@ This configuration will:
 - Store Px files under the "database/" directory in the "container" container
 - Allow you to use other paths like "saved-queries/" or "archived-queries/" for other file types in the same container
 - Provide better organization and separation of concerns within a single container
+
+## Storage Configuration
+
+PxGraf supports multiple storage backends for both data sources (Px files) and saved queries/archives. This allows flexible deployment scenarios from local development to cloud-native setups.
+
+### Data Source Storage
+
+#### Local File System (Default)
+For local development and on-premises deployments:
+```json
+{
+  "LocalFileSystemDatabaseConfig": {
+    "Enabled": true,
+    "DatabaseRootPath": "D:\\path\\to\\px\\database",
+    "Encoding": "latin1"
+  }
+}
+```
+
+#### Azure Blob Storage
+For cloud-native deployments:
+```json
+{
+  "BlobContainerDatabaseConfig": {
+    "Enabled": true,
+    "StorageAccountName": "mycompanydata",
+    "ContainerName": "database",
+    "RootPath": "database/" // Optional: organize files within container
+  }
+}
+```
+
+### Saved Query Storage
+
+#### Local File System (Legacy/Default)
+Legacy configuration (still supported):
+```json
+{
+  "savedQueryDirectory": "C:\\queries",
+  "archiveFileDirectory": "C:\\archives"
+}
+```
+
+#### Local File System (New Configuration)
+New structured configuration:
+```json
+{
+  "LocalQueryStorageConfig": {
+    "Enabled": true,
+    "SavedQueryDirectory": "C:\\queries",
+    "ArchiveFileDirectory": "C:\\archives"
+  }
+}
+```
+
+#### Azure Blob Storage
+Store queries in the cloud:
+```json
+{
+  "BlobQueryStorageConfig": {
+    "Enabled": true,
+    "StorageAccountName": "mycompanydata",
+    "ContainerName": "pxgraf-queries",
+    "SavedQueryPath": "saved-queries", // Path within container
+    "ArchiveFilePath": "archive-files" // Path within container
+  }
+}
+```
+
+**Note:** The system automatically populates the legacy `savedQueryDirectory` and `archiveFileDirectory` fields based on your chosen storage configuration, ensuring backward compatibility with existing code.
+
+### Mixed Storage Scenarios
+
+You can mix storage types - for example:
+- **Hybrid Setup**: Px files from Azure Blob Storage + Queries stored locally
+- **Shared Container**: Both Px files and queries in same container with different paths
+- **Separate Accounts**: Different storage accounts for data vs queries
