@@ -12,7 +12,7 @@ Some good things to know:
 
 ## Only one PxGraf instance
 
-This is the simplest setup. A single instance if PxGraf that serves the frontend SPA and runs the visualization API.
+This is the simplest setup. A single instance of PxGraf that serves the frontend SPA and runs the visualization API.
 
 ![PxGraf setup with one instance](/docs/pxgraf_setup_1.png)
 
