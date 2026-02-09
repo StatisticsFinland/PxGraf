@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	<TargetFrameworks>net8.0</TargetFrameworks>
+	<TargetFrameworks>net9.0</TargetFrameworks>
     <IsPackable>false</IsPackable>
 	  <NoWarn>S3776</NoWarn>
 	  <Configurations>Debug;Release;Test</Configurations>
@@ -28,7 +28,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Px.Utils" Version="1.2.0" />
+    <PackageReference Include="Px.Utils" Version="1.3.1" />
   </ItemGroup>
 
   <ItemGroup>
