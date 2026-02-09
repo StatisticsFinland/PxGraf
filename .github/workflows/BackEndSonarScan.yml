@@ -12,6 +12,9 @@ on:
     branches:
       - 'dev'
 
+env:
+  DOTNET_VERSION: '9.0'
+
 jobs:
  sonar_backend:
     permissions: read-all
@@ -26,7 +29,7 @@ jobs:
       - name: Setup dotnet
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '9.x'
+          dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: Set up JDK
         uses: actions/setup-java@v4
@@ -49,10 +52,10 @@ jobs:
             /d:sonar.scanner.scanAll=false
 
       - name: Build backend
-        run: dotnet build --configuration Test /p:TargetFramework=net8.0
+        run: dotnet build --configuration Test /p:TargetFramework=net${{ env.DOTNET_VERSION }}
 
       - name: Run coverage test
-        run: dotnet-coverage collect "dotnet test --configuration Test --logger trx /p:TargetFramework=net8.0" -f xml -o coverage.xml
+        run: dotnet-coverage collect "dotnet test --configuration Test --logger trx /p:TargetFramework=net${{ env.DOTNET_VERSION }}" -f xml -o coverage.xml
         
       - name: End SonarScanner
         run: dotnet sonarscanner end /d:sonar.token=${{ secrets.SONAR_TOKEN }}
