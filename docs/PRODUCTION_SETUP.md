@@ -16,9 +16,17 @@ Some good things to know:
 In production environments, Application Insights provides comprehensive telemetry for monitoring:
 - **Connection String**: For production, set the Application Insights connection string using environment variables rather than configuration files:
   ```
-  PXGRAF_APPLICATIONINSIGHTS_CONNECTION_STRING=InstrumentationKey=...;IngestionEndpoint=...
+  APPLICATIONINSIGHTS_CONNECTION_STRING=InstrumentationKey=...;IngestionEndpoint=...
   ```
-- **Disabled in Development**: Application Insights is automatically disabled in development environments (when running in DEBUG configuration)
+- **Configuration**: Application Insights is configured in the `ApplicationInsights` section of appsettings.json:
+  ```json
+  "ApplicationInsights": {
+    "ConnectionString": "", // Leave empty in config, use environment variable instead
+    "EnableAdaptiveSampling": false, // Disable to ensure all logs are captured
+    "MinLevel": "Information" // Set appropriate minimum level for production
+  }
+  ```
+- **Environment Variable Priority**: The `APPLICATIONINSIGHTS_CONNECTION_STRING` environment variable takes priority over the configuration file setting
 
 ### Audit Logging
 For compliance and security tracking:

@@ -34,8 +34,10 @@ To enable PxGraf to use Px.Utils, the appsettings.json file must be updated with
 To enable Application Insights telemetry:
 1. Obtain an Application Insights connection string from your Azure portal
 2. Configure it using one of these methods:
-   - Add it to appsettings.json in the `LogOptions.ApplicationInsightsConnectionString` field
-   - Set the environment variable `PXGRAF_APPLICATIONINSIGHTS_CONNECTION_STRING`
+   - Add it to appsettings.json in the `ApplicationInsights.ConnectionString` field
+   - Set the environment variable `APPLICATIONINSIGHTS_CONNECTION_STRING`
+3. Optionally configure the minimum log level by setting `ApplicationInsights.MinLevel` (defaults to "Information")
+4. Optionally configure adaptive sampling by setting `ApplicationInsights.EnableAdaptiveSampling` (defaults to false)
 
 ### Audit Logging
 For security and compliance tracking, enable audit logging:
@@ -51,8 +53,12 @@ Example configuration:
   "AuditLog": {
     "Enabled": true,
     "IncludedHeaders": ["testHeader", "foobar"]
-  },
-  "ApplicationInsightsConnectionString": "InstrumentationKey=00000000-0000-0000-0000-000000000000;IngestionEndpoint=https://region.in.applicationinsights.azure.com/"
+  }
+},
+"ApplicationInsights": {
+  "ConnectionString": "InstrumentationKey=00000000-0000-0000-0000-000000000000;IngestionEndpoint=https://region.in.applicationinsights.azure.com/",
+  "EnableAdaptiveSampling": false,
+  "MinLevel": "Information"
 }
 ```
 

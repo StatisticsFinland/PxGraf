@@ -25,15 +25,11 @@ namespace PxGraf.Settings
 
         public bool AuditLoggingEnabled { get; private set; }
         public string[] AuditLogHeaders { get; private set; }
-        public string ApplicationInsightsConnectionString { get; private set; }
+        public ApplicationInsightsConfig ApplicationInsights { get; private set; }
         public PublicationWebhookConfiguration PublicationWebhookConfig { get; private set; }
 
         public static void Load(IConfiguration configuration)
         {
-            string aiConnectionString = Environment.GetEnvironmentVariable("PXGRAF_APPLICATIONINSIGHTS_CONNECTION_STRING")
-                ?? configuration["LogOptions:ApplicationInsightsConnectionString"]
-                ?? null;
-
             //Set config defaults
             Configuration newConfig = new()
             {
@@ -69,8 +65,8 @@ namespace PxGraf.Settings
                 DatabaseWhitelist = configuration.GetSection("DatabaseWhitelist").Get<string[]>() ?? [],
                 AuditLoggingEnabled = configuration.GetValue<bool?>("LogOptions:AuditLog:Enabled") ?? false,
                 AuditLogHeaders = configuration.GetSection("LogOptions:AuditLog:IncludedHeaders").Get<string[]>() ?? [],
-                ApplicationInsightsConnectionString = aiConnectionString,
-                PublicationWebhookConfig = GetPublicationWebhookConfig(configuration)
+                PublicationWebhookConfig = GetPublicationWebhookConfig(configuration),
+                ApplicationInsights = new ApplicationInsightsConfig(configuration.GetSection(nameof(ApplicationInsights)))
             };
 
             if (string.IsNullOrEmpty(newConfig.PxWebUrl) && (newConfig.LocalFilesystemDatabaseConfig == null || !newConfig.LocalFilesystemDatabaseConfig.Enabled))
