@@ -8,7 +8,8 @@ namespace UnitTests.Fixtures
         {
             return new Dictionary<string, string>()
             {
-                {"pxwebUrl", "http://pxwebtesturl:12345/"},
+                { "DatabaseConfig:Type", "PxWeb"},
+                { "DatabaseConfig:PxWebUrl", "http://pxwebtesturl:12345/"},
                 { "pxgrafUrl", "http://pxgraftesturl:8443/PxGraf"},
                 { "savedQueryDirectory", "goesNowhere"},
                 { "archiveFileDirectory", "goesNowhere"},
@@ -30,7 +31,6 @@ namespace UnitTests.Fixtures
                 { "Language:Available:0", "fi"},
                 { "Language:Available:1", "sv"},
                 { "Language:Available:2", "en"},
-                { "LocalFilesystemDatabaseConfig:Encoding", "latin1"},
                 { "DatabaseWhitelist:0", "StatFin" }
             };
         }

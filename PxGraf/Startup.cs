@@ -144,7 +144,6 @@ namespace PxGraf
                 UseDefaultCredentials = true
             });
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddSingleton<ISqFileInterface, SqFileInterface>();
             services.AddScoped<IAuditLogService, AuditLogService>();
             services.AddScoped<IPublicationWebhookService, PublicationWebhookService>();
             services.AddHttpClient<PublicationWebhookService>();
@@ -160,66 +159,62 @@ namespace PxGraf
 
         private static void ConfigureDataSourceStorage(IServiceCollection services)
         {
-            if (Configuration.Current.LocalFilesystemDatabaseConfig?.Enabled ?? false)
+            switch (Configuration.Current.DatabaseConfig)
             {
-                services.AddSingleton<IStorageProvider>(provider => new LocalStorageProvider(Configuration.Current.LocalFilesystemDatabaseConfig.Encoding));
-                services.AddSingleton<IFileDatasource>(provider => new FileDatasource(
-                    provider.GetRequiredService<IStorageProvider>(),
-                    Configuration.Current.LocalFilesystemDatabaseConfig.DatabaseRootPath));
-                services.AddSingleton<ICachedDatasource, CachedFileDatasource>();
-            }
-            else if (Configuration.Current.BlobContainerDatabaseConfig?.Enabled ?? false)
-            {
-                services.AddSingleton<IStorageProvider>(provider => new BlobStorageProvider(
-                    Configuration.Current.BlobContainerDatabaseConfig.StorageAccountName,
-                    Configuration.Current.BlobContainerDatabaseConfig.ContainerName));
-                services.AddSingleton<IFileDatasource>(provider => new FileDatasource(
-                    provider.GetRequiredService<IStorageProvider>(),
-                    Configuration.Current.BlobContainerDatabaseConfig.RootPath));
-                services.AddSingleton<ICachedDatasource, CachedFileDatasource>();
-            }
-            else
-            {
-                services.AddSingleton<IPxWebConnection, PxWebConnection>();
-                services.AddSingleton<IApiDatasource, PxWebV1ApiInterface>();
-                services.AddSingleton<ICachedDatasource, CachedApiDatasource>();
+                case LocalFilesystemDatabaseConfig localConfig:
+                    LocalStorageProvider localDataProvider = new(localConfig.Encoding);
+                    services.AddSingleton<IFileDatasource>(provider => new FileDatasource(
+                        localDataProvider,
+                        localConfig.DatabaseRootPath));
+                    services.AddSingleton<ICachedDatasource, CachedFileDatasource>();
+                    break;
+                case BlobContainerDatabaseConfig blobConfig:
+                    BlobStorageProvider blobDataProvider = new(
+                        blobConfig.StorageAccountName,
+                        blobConfig.ContainerName);
+                    services.AddSingleton<IFileDatasource>(provider => new FileDatasource(
+                        blobDataProvider,
+                        blobConfig.RootPath));
+                    services.AddSingleton<ICachedDatasource, CachedFileDatasource>();
+                    break;
+                default:
+                    services.AddSingleton<IPxWebConnection, PxWebConnection>();
+                    services.AddSingleton<IApiDatasource, PxWebV1ApiInterface>();
+                    services.AddSingleton<ICachedDatasource, CachedApiDatasource>();
+                    break;
             }
         }
 
         private static void ConfigureQueryFileStorage(IServiceCollection services)
         {
-            if (Configuration.Current.BlobQueryStorageConfig?.Enabled ?? false)
+            switch (Configuration.Current.QueryStorageConfig)
             {
-                services.AddSingleton<IStorageProvider>(provider => new BlobStorageProvider(
-                    Configuration.Current.BlobQueryStorageConfig.StorageAccountName,
-                    Configuration.Current.BlobQueryStorageConfig.ContainerName));
-
-                services.AddSingleton<ISqFileInterface>(provider => new SqFileInterface(
-                    provider.GetRequiredService<IStorageProvider>(),
-                    provider.GetRequiredService<IStorageProvider>(),
-                    Configuration.Current.BlobQueryStorageConfig.SavedQueryPath,
-                    Configuration.Current.BlobQueryStorageConfig.ArchiveFilePath));
-            }
-            else if (Configuration.Current.LocalQueryStorageConfig?.Enabled ?? false)
-            {
-                services.AddSingleton<IStorageProvider>(provider => new LocalStorageProvider());
-
-                services.AddSingleton<ISqFileInterface>(provider => new SqFileInterface(
-                    provider.GetRequiredService<IStorageProvider>(),
-                    provider.GetRequiredService<IStorageProvider>(),
-                    Configuration.Current.LocalQueryStorageConfig.SavedQueryDirectory,
-                    Configuration.Current.LocalQueryStorageConfig.ArchiveFileDirectory));
-            }
-            // Fallback to legacy configuration
-            else
-            {
-                services.AddSingleton<IStorageProvider>(provider => new LocalStorageProvider());
-
-                services.AddSingleton<ISqFileInterface>(provider => new SqFileInterface(
-                    provider.GetRequiredService<IStorageProvider>(),
-                    provider.GetRequiredService<IStorageProvider>(),
-                    Configuration.Current.SavedQueryDirectory ?? "",
-                    Configuration.Current.ArchiveFileDirectory ?? ""));
+                case BlobQueryStorageConfig blobConfig:
+                    BlobStorageProvider blobQueryProvider = new(
+                        blobConfig.StorageAccountName,
+                        blobConfig.ContainerName);
+                    services.AddSingleton<ISqFileInterface>(provider => new SqFileInterface(
+                        blobQueryProvider,
+                        blobQueryProvider,
+                        blobConfig.SavedQueryPath,
+                        blobConfig.ArchiveFilePath));
+                    break;
+                case LocalQueryStorageConfig localConfig:
+                    LocalStorageProvider localQueryProvider = new();
+                    services.AddSingleton<ISqFileInterface>(provider => new SqFileInterface(
+                        localQueryProvider,
+                        localQueryProvider,
+                        localConfig.SavedQueryDirectory,
+                        localConfig.ArchiveFileDirectory));
+                    break;
+                default:
+                    LocalStorageProvider defaultQueryProvider = new();
+                    services.AddSingleton<ISqFileInterface>(provider => new SqFileInterface(
+                        defaultQueryProvider,
+                        defaultQueryProvider,
+                        Configuration.Current.SavedQueryDirectory ?? "",
+                        Configuration.Current.ArchiveFileDirectory ?? ""));
+                    break;
             }
         }
 

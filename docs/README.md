@@ -94,54 +94,46 @@ Configuration for Cross-Origin Resource Sharing. This is used determine which do
 Configuration for the maximum header length and the maximum number of data points that can be included in a query.
 #### Language
 Configuration for the default language and the available languages in the backend.
-#### pxwebUrl
-The address of the PxWeb server if in use. Required when using PxWeb API as data source.
-#### savedQueryDirectory
-**LEGACY**: The directory where saved query files are stored. Use `LocalQueryStorageConfig` or `BlobQueryStorageConfig` for new deployments.
-#### archiveFileDirectory  
-**LEGACY**: The directory where archived query files are stored. Use `LocalQueryStorageConfig` or `BlobQueryStorageConfig` for new deployments.
+#### DatabaseConfig
+Configures the Px file data source. Set `Type` to one of: `PxWeb`, `LocalFileSystem`, or `BlobContainer`. The remaining fields in the section depend on the chosen type. Missing required fields will cause a startup error.
+
+| Type | Required fields | Optional fields |
+|------|----------------|----------------|
+| `PxWeb` | `PxWebUrl` | — |
+| `LocalFileSystem` | `DatabaseRootPath`, `Encoding` | — |
+| `BlobContainer` | `StorageAccountName`, `ContainerName` | `RootPath` |
+
+Example:
+```json
+"DatabaseConfig": {
+  "Type": "PxWeb",
+  "PxWebUrl": "http://localhost:56338/"
+}
+```
+
 #### FeatureManagement
 Grants or denies access to the Creation API.
 #### DatabaseWhitelist
 List of directory or PxWeb database names that are allowed to be accessed and shown as database root directories. If empty, everything is allowed.
-#### LocalFileSystemDatabaseConfig
-Optional configuration for the local database if in use.
-#### LocalFileSystemDatabaseConfig.Enabled
-Determines whether the local database with Px.Utils or PxWeb api is used.
-#### LocalFileSystemDatabaseConfig.DatabaseRootPath
-The path to the database root directory.
-#### LocalFileSystemDatabaseConfig.Encoding
-Name of the encoding used in the database files (e.g., "utf-8", "latin1").
-#### BlobContainerDatabaseConfig
-Optional configuration for Azure Blob Storage database (alternative to local filesystem database).
-#### BlobContainerDatabaseConfig.Enabled
-Determines whether Azure Blob Storage is used as the data source.
-#### BlobContainerDatabaseConfig.StorageAccountName
-Name of the Azure Storage Account containing the Px files.
-#### BlobContainerDatabaseConfig.ContainerName
-Name of the blob container containing the Px files.
-#### BlobContainerDatabaseConfig.RootPath
-Optional root path within the blob container for Px files. Useful when the same container stores multiple types of files, allowing you to organize Px files under a specific path (e.g., "database/px-files/") while keeping other files like saved queries in separate paths within the same container.
-#### LocalQueryStorageConfig
-Configuration for local file system storage of saved queries and archive files (replaces legacy savedQueryDirectory/archiveFileDirectory).
-#### LocalQueryStorageConfig.Enabled
-Whether to use the structured local query storage configuration instead of legacy individual directory settings.
-#### LocalQueryStorageConfig.SavedQueryDirectory
-Directory path for saved query files when using local storage.
-#### LocalQueryStorageConfig.ArchiveFileDirectory
-Directory path for archive files when using local storage.
-#### BlobQueryStorageConfig
-Configuration for Azure Blob Storage of saved queries and archive files.
-#### BlobQueryStorageConfig.Enabled
-Determines whether Azure Blob Storage is used for saved queries and archive files.
-#### BlobQueryStorageConfig.StorageAccountName
-Name of the Azure Storage Account for saved queries and archive files (can be the same as data storage).
-#### BlobQueryStorageConfig.ContainerName
-Name of the blob container for saved queries and archive files (can be the same as data storage).
-#### BlobQueryStorageConfig.SavedQueryPath
-Path within the container for saved query files (default: "saved-queries").
-#### BlobQueryStorageConfig.ArchiveFilePath
-Path within the container for archive files (default: "archive-files").
+
+#### QueryStorageConfig
+Configures where saved queries and archives are stored. Set `Type` to one of: `LocalFileSystem` or `BlobContainer`. Missing required fields will cause a startup error. When this section is absent, the legacy `savedQueryDirectory`/`archiveFileDirectory` top-level settings are used as fallback.
+
+| Type | Required fields | Optional fields |
+|------|----------------|----------------|
+| `LocalFileSystem` | `SavedQueryDirectory`, `ArchiveFileDirectory` | — |
+| `BlobContainer` | `StorageAccountName`, `ContainerName` | `SavedQueryPath`, `ArchiveFilePath` |
+
+Example:
+```json
+"QueryStorageConfig": {
+  "Type": "LocalFileSystem",
+  "SavedQueryDirectory": "C:\\queries",
+  "ArchiveFileDirectory": "C:\\archives"
+}
+```
+##### savedQueryDirectory / archiveFileDirectory
+**LEGACY**: These top-level settings are supported as a fallback when `QueryStorageConfig` is absent.
 
 #### PublicationWebhookConfiguration.EndpointUrl
 URL for optional publication webhook that is called when a query is saved as publish-ready.
@@ -158,18 +150,8 @@ Optional mapping of VisualizationType enum values to custom strings.
 ####  PublicationWebhookConfiguration.MetadataProperties
 Optional mapping of px file metadata property keys to webhook body field names.
 
-### Data Source Requirements
+### Configuration Notes
 
-**Important**: At least one data source must be configured for PxGraf to function properly. The application will fail to start if none of the following are configured:
-- `pxwebUrl` (for PxWeb API integration)
-- `LocalFileSystemDatabaseConfig` with `Enabled: true` (for local Px files)  
-- `BlobContainerDatabaseConfig` with `Enabled: true` (for Azure Blob Storage Px files)
-
-### Storage Configuration Compatibility  
-
-**Legacy Compatibility**: The system automatically populates the legacy `savedQueryDirectory` and `archiveFileDirectory` fields based on your active storage configuration:
-- **BlobQueryStorageConfig enabled** → Uses `SavedQueryPath` and `ArchiveFilePath`
-- **LocalQueryStorageConfig enabled** → Uses `SavedQueryDirectory` and `ArchiveFileDirectory`  
-- **Legacy configuration** → Uses `savedQueryDirectory` and `archiveFileDirectory` directly
-
-This ensures backward compatibility with existing code while enabling new storage backends.
+- **DatabaseConfig is required**: The application will fail to start if the `DatabaseConfig` section is absent or has an invalid `Type`.
+- **QueryStorageConfig is optional**: When absent, the legacy `savedQueryDirectory`/`archiveFileDirectory` top-level keys are used. If neither is present, query storage is unconfigured.
+- **Type values are case-insensitive**: `"pxweb"`, `"PxWeb"`, and `"PXWEB"` are all valid.

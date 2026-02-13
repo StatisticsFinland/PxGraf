@@ -63,10 +63,22 @@ namespace UnitTests.DatasourceTests
             List<string> groupHierarchy = ["level1", "level2"];
             List<string> mockFiles = ["/test/root/level1/level2/table1.px", "/test/root/level1/level2/table2.px"];
 
+            mockStorageProvider.Setup(fs => fs.BuildPath(It.IsAny<string>(), It.IsAny<string>()))
+                .Returns<string, string>((rootPath, userPath) => 
+                {
+                    if (string.IsNullOrEmpty(rootPath)) return userPath;
+                    if (string.IsNullOrEmpty(userPath)) return rootPath;
+                    return $"{rootPath}/{userPath}";
+                });
             mockStorageProvider.Setup(fs => fs.EnumerateFilesAsync(It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(mockFiles);
             mockStorageProvider.Setup(fs => fs.GetRelativePath(It.IsAny<string>(), It.IsAny<string>()))
-                .Returns<string, string>((basePath, targetPath) => Path.GetRelativePath(basePath, targetPath));
+                .Returns<string, string>((basePath, targetPath) => 
+                {
+                    string relativePath = Path.GetRelativePath(basePath, targetPath);
+                    // Normalize to forward slashes to match actual LocalStorageProvider behavior
+                    return relativePath.Replace('\\', '/');
+                });
 
             // Act
             List<PxTableReference> result = await datasource.GetTablesAsync(groupHierarchy);
@@ -84,6 +96,13 @@ namespace UnitTests.DatasourceTests
             List<string> mockDirectories = ["/test/root/level1/subgroup1", "/test/root/level1/subgroup2"];
             List<string> mockAliasFiles = ["Alias_en.txt", "Alias_fi.txt"];
 
+            mockStorageProvider.Setup(fs => fs.BuildPath(It.IsAny<string>(), It.IsAny<string>()))
+                .Returns<string, string>((rootPath, userPath) => 
+                {
+                    if (string.IsNullOrEmpty(rootPath)) return userPath;
+                    if (string.IsNullOrEmpty(userPath)) return rootPath;
+                    return $"{rootPath}/{userPath}";
+                });
             mockStorageProvider.Setup(fs => fs.EnumerateDirectoriesAsync(It.IsAny<string>()))
                 .ReturnsAsync(mockDirectories);
             mockStorageProvider.Setup(fs => fs.GetDirectoryName(It.IsAny<string>()))
@@ -123,18 +142,16 @@ namespace UnitTests.DatasourceTests
         public void Constructor_WithValidParameters_SetsProperties()
         {
             // Arrange
-            const bool enabled = true;
             const string storageAccountName = "teststorageaccount";
             const string containerName = "testcontainer";
             const string rootPath = "database/";
 
             // Act
-            BlobContainerDatabaseConfig config = new(enabled, storageAccountName, containerName, rootPath);
+            BlobContainerDatabaseConfig config = new(storageAccountName, containerName, rootPath);
 
             // Assert
             Assert.Multiple(() =>
             {
-                Assert.That(config.Enabled, Is.EqualTo(enabled));
                 Assert.That(config.StorageAccountName, Is.EqualTo(storageAccountName));
                 Assert.That(config.ContainerName, Is.EqualTo(containerName));
                 Assert.That(config.RootPath, Is.EqualTo(rootPath));
@@ -145,17 +162,15 @@ namespace UnitTests.DatasourceTests
         public void Constructor_WithoutRootPath_SetsEmptyRootPath()
         {
             // Arrange
-            const bool enabled = true;
             const string storageAccountName = "teststorageaccount";
             const string containerName = "testcontainer";
 
             // Act
-            BlobContainerDatabaseConfig config = new(enabled, storageAccountName, containerName);
+            BlobContainerDatabaseConfig config = new(storageAccountName, containerName);
 
             // Assert
             Assert.Multiple(() =>
             {
-                Assert.That(config.Enabled, Is.EqualTo(enabled));
                 Assert.That(config.StorageAccountName, Is.EqualTo(storageAccountName));
                 Assert.That(config.ContainerName, Is.EqualTo(containerName));
                 Assert.That(config.RootPath, Is.EqualTo(""));
@@ -166,42 +181,25 @@ namespace UnitTests.DatasourceTests
         public void Constructor_WithNullRootPath_SetsEmptyRootPath()
         {
             // Arrange
-            const bool enabled = true;
             const string storageAccountName = "teststorageaccount";
             const string containerName = "testcontainer";
 
             // Act
-            BlobContainerDatabaseConfig config = new(enabled, storageAccountName, containerName, null);
+            BlobContainerDatabaseConfig config = new(storageAccountName, containerName, null);
 
             // Assert
             Assert.That(config.RootPath, Is.EqualTo(""));
         }
 
         [Test]
-        public void Constructor_WithDisabledFlag_SetsEnabledToFalse()
-        {
-            // Arrange
-            const bool enabled = false;
-            const string storageAccountName = "teststorageaccount";
-            const string containerName = "testcontainer";
-
-            // Act
-            BlobContainerDatabaseConfig config = new(enabled, storageAccountName, containerName);
-
-            // Assert
-            Assert.That(config.Enabled, Is.False);
-        }
-
-        [Test]
         public void Constructor_WithEmptyStorageAccountName_SetsProperty()
         {
             // Arrange
-            const bool enabled = true;
             const string storageAccountName = "";
             const string containerName = "testcontainer";
 
             // Act
-            BlobContainerDatabaseConfig config = new(enabled, storageAccountName, containerName);
+            BlobContainerDatabaseConfig config = new(storageAccountName, containerName);
 
             // Assert
             Assert.That(config.StorageAccountName, Is.EqualTo(storageAccountName));
@@ -211,12 +209,11 @@ namespace UnitTests.DatasourceTests
         public void Constructor_WithEmptyContainerName_SetsProperty()
         {
             // Arrange
-            const bool enabled = true;
             const string storageAccountName = "teststorageaccount";
             const string containerName = "";
 
             // Act
-            BlobContainerDatabaseConfig config = new(enabled, storageAccountName, containerName);
+            BlobContainerDatabaseConfig config = new(storageAccountName, containerName);
 
             // Assert
             Assert.That(config.ContainerName, Is.EqualTo(containerName));
@@ -233,35 +230,18 @@ namespace UnitTests.DatasourceTests
         public void Constructor_WithValidParameters_SetsProperties()
         {
             // Arrange
-            const bool enabled = true;
             const string databaseRootPath = "/test/path";
             Encoding encoding = Encoding.UTF8;
 
             // Act
-            LocalFilesystemDatabaseConfig config = new(enabled, databaseRootPath, encoding);
+            LocalFilesystemDatabaseConfig config = new(databaseRootPath, encoding);
 
             // Assert
             Assert.Multiple(() =>
            {
-               Assert.That(config.Enabled, Is.EqualTo(enabled));
                Assert.That(config.DatabaseRootPath, Is.EqualTo(databaseRootPath));
                Assert.That(config.Encoding, Is.EqualTo(encoding));
            });
-        }
-
-        [Test]
-        public void Constructor_WithDisabledFlag_SetsEnabledToFalse()
-        {
-            // Arrange
-            const bool enabled = false;
-            const string databaseRootPath = "/test/path";
-            Encoding encoding = Encoding.UTF8;
-
-            // Act
-            LocalFilesystemDatabaseConfig config = new(enabled, databaseRootPath, encoding);
-
-            // Assert
-            Assert.That(config.Enabled, Is.False);
         }
     }
 }

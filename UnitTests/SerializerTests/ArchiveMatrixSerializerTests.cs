@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration;
 using NUnit.Framework.Internal;
 using NUnit.Framework;
 using Px.Utils.Language;
@@ -27,11 +27,11 @@ namespace UnitTests.SerializerTests
 
             Dictionary<string, string> inMemorySettings = new()
             {
-                {"pxwebUrl", "http://pxwebtesturl:12345/"},
+                {"DatabaseConfig:Type", "PxWeb"},
+                {"DatabaseConfig:PxWebUrl", "http://pxwebtesturl:12345/"},
                 {"pxgrafUrl", "http://pxgraftesturl:8443/PxGraf"},
                 {"savedQueryDirectory", "goesNowhere"},
-                {"archiveFileDirectory", "goesNowhere"},
-                {"LocalFilesystemDatabaseConfig:Encoding", "latin1"}
+                {"archiveFileDirectory", "goesNowhere"}
             };
 
             IConfiguration configuration = new ConfigurationBuilder()

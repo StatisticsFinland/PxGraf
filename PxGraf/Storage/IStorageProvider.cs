@@ -39,19 +39,12 @@ namespace PxGraf.Storage
         Task<Stream> OpenReadAsync(string filePath);
 
         /// <summary>
-        /// Asynchronously creates or overwrites a file and returns a writable stream.
-        /// </summary>
-        /// <param name="filePath">Path to the file.</param>
-        /// <returns>Stream for writing to the file.</returns>
-        Task<Stream> CreateAsync(string filePath);
-
-        /// <summary>
-        /// Asynchronously enumerates files in a directory with the specified pattern.
+        /// Asynchronously enumerates files in a directory with the specified file extension.
         /// </summary>
         /// <param name="directoryPath">Path to the directory.</param>
-        /// <param name="searchPattern">File search pattern.</param>
+        /// <param name="fileExtension">File extension to filter by (e.g., ".px", ".txt"). Pass empty string to get all files.</param>
         /// <returns>Enumerable of file paths.</returns>
-        Task<IEnumerable<string>> EnumerateFilesAsync(string directoryPath, string searchPattern);
+        Task<IEnumerable<string>> EnumerateFilesAsync(string directoryPath, string fileExtension);
 
         /// <summary>
         /// Asynchronously enumerates subdirectories in a directory.
@@ -87,6 +80,16 @@ namespace PxGraf.Storage
         /// <param name="paths">Path segments to combine.</param>
         /// <returns>Combined path.</returns>
         string CombinePath(params string[] paths);
+
+        /// <summary>
+        /// Builds a safe path by combining a root path with user-provided path segments.
+        /// Validates that the resulting path stays within the root path boundary.
+        /// </summary>
+        /// <param name="rootPath">Root path that constrains the result.</param>
+        /// <param name="userPath">User-provided path segment to append.</param>
+        /// <returns>Validated combined path.</returns>
+        /// <exception cref="UnauthorizedAccessException">Thrown if the resulting path would escape the root path.</exception>
+        string BuildPath(string rootPath, string userPath);
 
         /// <summary>
         /// Gets the relative path from a base path to a target path.

@@ -47,40 +47,44 @@ For compliance and security tracking:
 
 ## Storage Architecture
 
-PxGraf is built upon unified storage architecture that supports multiple storage backends for both data sources and saved queries, enabling flexible deployment scenarios from local development to cloud-native setups.
+PxGraf is built upon a unified storage architecture with two independent configuration axes:
+1. **Data Source** (`DatabaseConfig.Type`): Exactly one must be set — `PxWeb`, `LocalFileSystem`, or `BlobContainer`.
+2. **Query Storage** (`QueryStorageConfig.Type`): At most one — `LocalFileSystem` or `BlobContainer` (legacy `savedQueryDirectory`/`archiveFileDirectory` settings are also supported as fallback).
 
-### Data Source Storage
+Missing required fields for the chosen type will cause a startup error.
 
-#### Azure Blob Storage
+### Data Source Storage (`DatabaseConfig.Type`)
+
+#### Azure Blob Storage (`BlobContainer`)
 For cloud-native deployments:
 - **Authentication**: Uses Azure Managed Identity via DefaultAzureCredential in production environments
 - **Security**: Supports Azure RBAC and private endpoints for secure access
-- **Configuration**: Requires `BlobContainerDatabaseConfig.StorageAccountName` and `BlobContainerDatabaseConfig.ContainerName`
-- **Organization**: Optional `BlobContainerDatabaseConfig.RootPath` allows organizing Px files under a specific path within the container
+- **Configuration**: Requires `DatabaseConfig.StorageAccountName` and `DatabaseConfig.ContainerName`
+- **Organization**: Optional `DatabaseConfig.RootPath` allows organizing Px files under a specific path within the container
 
-#### Local File System
+#### Local File System (`LocalFileSystem`)
 For on-premises or VM-based deployments:
 - **Performance**: Direct file access provides good performance for local/on-prem scenarios
 - **Simplicity**: No external dependencies beyond the file system
-- **Configuration**: Requires `LocalFileSystemDatabaseConfig.DatabaseRootPath` and encoding settings
+- **Configuration**: Requires `DatabaseConfig.DatabaseRootPath` and `DatabaseConfig.Encoding`
 
-#### PxWeb API Integration
+#### PxWeb API Integration (`PxWeb`)
 For integration with existing PxWeb installations:
 - **Compatibility**: Works with existing PxWeb infrastructure
-- **Configuration**: Requires `pxwebUrl` pointing to the PxWeb API endpoint
+- **Configuration**: Requires `DatabaseConfig.PxWebUrl` pointing to the PxWeb API endpoint
 
-### Saved Query Storage
+### Saved Query Storage (`QueryStorageConfig.Type`)
 
-#### Azure Blob Storage
+#### Azure Blob Storage (`BlobContainer`)
 Store queries and archives in the cloud:
-- **Organization**: Separate paths for queries (`SavedQueryPath`) and archives (`ArchiveFilePath`) are supported
+- **Organization**: Separate paths for queries (`QueryStorageConfig.SavedQueryPath`) and archives (`QueryStorageConfig.ArchiveFilePath`) are supported
 - **Authentication**: Uses the same Managed Identity approach as data sources
-- **Configuration**: Can use the same or different storage account as data sources
+- **Configuration**: Requires `QueryStorageConfig.StorageAccountName` and `QueryStorageConfig.ContainerName`
 
-#### Local File System
+#### Local File System (`LocalFileSystem`)
 For simpler deployments or regulatory requirements:
-- **Legacy Support**: Maintains backward compatibility with existing deployments  
-- **Structured Configuration**: New `LocalQueryStorageConfig` provides better organization
+- **Legacy Support**: Maintains backward compatibility with existing deployments via `savedQueryDirectory`/`archiveFileDirectory` fallback
+- **Configuration**: Requires `QueryStorageConfig.SavedQueryDirectory` and `QueryStorageConfig.ArchiveFileDirectory`
 - **Direct Access**: Fast access when PxGraf runs on the same machine as storage
 
 ### Mixed Storage Scenarios

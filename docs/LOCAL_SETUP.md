@@ -7,28 +7,32 @@
 3. npm
 4. Git
 
-## PxWeb
+## Data Source Configuration
+
+PxGraf requires exactly one data source to be configured. The three options below are mutually exclusive — enable only one.
+
+### PxWeb API
 
 If PxWeb api is to be used, PxGraf requires a connection to PxWeb api for database access.
 
 Development setup can be configured to use a local instance of PxWeb or a remote instance running on a server.
 
-### Running a local instance of PxWeb
+#### Running a local instance of PxWeb
 PxWeb can be ran locally, which can be useful for debugging and easier access to the database files and application settings.
 The source code for PxWeb can be found here: https://github.com/statisticssweden/PxWeb.git
 PxGraf uses the PxWeb API to fetch data from the Px databases. Additional testing databases will be nessessary for development since the default testing database
 that comes with pxweb lacks the necessary metadata (content and time dimensions) for building visualizations with PxGraf.
 
-## Running PxGraf using local px database with Px.Utils
+### Local Px Database with Px.Utils
 PxGraf can be configured to run using the local px database using Px.Utils instead of a PxWeb server. Px.Utils provides a fast way to access Px files on the local px database.
 In order to use Px.Utils, a Px file database must be created on the local system.
-To enable PxGraf to use Px.Utils, the appsettings.json file must be updated with the path to the Px file database (LocalFileSystemDatabaseConfig.DatabaseRootPath) and LocalFileSystemDatabaseConfig.Enabled must be set to true. LocalFileSystemDatabaseConfig.Encoding should match the encoding of the Px and alias files in the database.
+To enable PxGraf to use Px.Utils, set `DatabaseConfig.Type` to `LocalFileSystem` in appsettings.json, along with `DatabaseConfig.DatabaseRootPath` and `DatabaseConfig.Encoding`.
 
-## Running PxGraf using Azure Blob Storage
+### Azure Blob Storage
 PxGraf can be configured to run using Azure Blob Storage as the data source. This is useful for cloud deployments where Px files are stored in Azure Storage.
-To enable PxGraf to use Azure Blob Storage, the appsettings.json file must be updated with the Azure Storage Account name (BlobContainerDatabaseConfig.StorageAccountName), container name (BlobContainerDatabaseConfig.ContainerName), and BlobContainerDatabaseConfig.Enabled must be set to true.
+To enable PxGraf to use Azure Blob Storage, set `DatabaseConfig.Type` to `BlobContainer` in appsettings.json, along with `DatabaseConfig.StorageAccountName` and `DatabaseConfig.ContainerName`.
 
-**Optional Root Path**: You can specify a root path within the container using BlobContainerDatabaseConfig.RootPath. This is particularly useful when the same blob container stores multiple types of files. For example:
+**Optional Root Path**: You can specify a root path within the container using `DatabaseConfig.RootPath`. This is particularly useful when the same blob container stores multiple types of files. For example:
 - Set RootPath to "px-data/" to store Px files under the px-data directory
 - This allows you to use other paths like "saved-queries/" for query files in the same container
 - If not specified, Px files will be stored at the container root
@@ -83,10 +87,10 @@ Example configuration:
 
 1. Make a copy of the appsettings.template.json and rename it to appsettings.json
 2. Replace the placeholders in the appsettings.json file based on your environment.
-3. Set up the database to use one of the supported data sources: PxWeb instance (a), local database using Px.Utils (b), or Azure Blob Storage (c).
-	a. Fill in the address of the remote pxweb server to the appsettings.json file's "pxwebUrl" field. This can be the address of the remote server running PxWeb or localhost if you're running a local instance of PxWeb. If running a local instance of PxWeb, make sure to include the port number.
-	b. Fill in the path to the local px database in the appsettings.json file's "LocalFileSystemDatabaseConfig.DatabaseRootPath" field. Set "LocalFileSystemDatabaseConfig.Enabled" to true. Set "LocalFileSystemDatabaseConfig.Encoding" to the encoding of the Px and alias files in the database.
-	c. Fill in the Azure Storage Account name in the appsettings.json file's "BlobContainerDatabaseConfig.StorageAccountName" field and the container name in "BlobContainerDatabaseConfig.ContainerName" field. Set "BlobContainerDatabaseConfig.Enabled" to true. Optionally, set "BlobContainerDatabaseConfig.RootPath" to organize Px files under a specific path within the container (e.g., "database/"). Ensure you are authenticated with Azure CLI (`az login`) for local development.
+3. Set up the database by setting `DatabaseConfig.Type` in appsettings.json to one of: `PxWeb` (a), `LocalFileSystem` (b), or `BlobContainer` (c). Only one type can be active.
+a. Set `DatabaseConfig.Type` to `PxWeb` and `DatabaseConfig.PxWebUrl` to the address of the PxWeb server. This can be a remote server or localhost if running a local instance of PxWeb. If running a local instance, make sure to include the port number.
+b. Set `DatabaseConfig.Type` to `LocalFileSystem`, `DatabaseConfig.DatabaseRootPath` to the path to the local px database, and `DatabaseConfig.Encoding` to the encoding of the Px and alias files.
+c. Set `DatabaseConfig.Type` to `BlobContainer`, `DatabaseConfig.StorageAccountName` and `DatabaseConfig.ContainerName`. Optionally, set `DatabaseConfig.RootPath` to organize Px files under a specific path within the container (e.g., "database/"). Ensure you are authenticated with Azure CLI (`az login`) for local development.
 4. Build the solution in Visual Studio or run `dotnet build` in the PxGraf folder (See https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-build for more details).
 This will also build the frontend.
 
@@ -102,8 +106,8 @@ Both the backend and the frontend have unit tests. The backend tests can be run 
 Example configuration with root path:
 ```json
 {
-  "BlobContainerDatabaseConfig": {
-    "Enabled": true,
+  "DatabaseConfig": {
+    "Type": "BlobContainer",
     "StorageAccountName": "storage",
     "ContainerName": "container",
     "RootPath": "database/"
@@ -118,39 +122,42 @@ This configuration will:
 
 ## Storage Configuration
 
-PxGraf supports multiple storage backends for both data sources (Px files) and saved queries/archives. This allows flexible deployment scenarios from local development to cloud-native setups.
+PxGraf supports multiple storage backends for both data sources (Px files) and saved queries/archives. These are configured through `DatabaseConfig.Type` and `QueryStorageConfig.Type`.
 
 ### Data Source Storage
 
-#### Local File System (Default)
+Set `DatabaseConfig.Type` to one of the following:
+
+#### LocalFileSystem
 For local development and on-premises deployments:
 ```json
 {
-  "LocalFileSystemDatabaseConfig": {
-    "Enabled": true,
+  "DatabaseConfig": {
+    "Type": "LocalFileSystem",
     "DatabaseRootPath": "D:\\path\\to\\px\\database",
     "Encoding": "latin1"
   }
 }
 ```
 
-#### Azure Blob Storage
+#### BlobContainer
 For cloud-native deployments:
 ```json
 {
-  "BlobContainerDatabaseConfig": {
-    "Enabled": true,
+  "DatabaseConfig": {
+    "Type": "BlobContainer",
     "StorageAccountName": "mycompanydata",
     "ContainerName": "database",
-    "RootPath": "database/" // Optional: organize files within container
+    "RootPath": "database/"
   }
 }
 ```
 
 ### Saved Query Storage
 
-#### Local File System (Legacy/Default)
-Legacy configuration (still supported):
+Set `QueryStorageConfig.Type` to one of the following, or omit the section to use legacy fallback.
+
+#### Legacy (still supported)
 ```json
 {
   "savedQueryDirectory": "C:\\queries",
@@ -158,33 +165,29 @@ Legacy configuration (still supported):
 }
 ```
 
-#### Local File System (New Configuration)
-New structured configuration:
+#### LocalFileSystem
 ```json
 {
-  "LocalQueryStorageConfig": {
-    "Enabled": true,
+  "QueryStorageConfig": {
+    "Type": "LocalFileSystem",
     "SavedQueryDirectory": "C:\\queries",
     "ArchiveFileDirectory": "C:\\archives"
   }
 }
 ```
 
-#### Azure Blob Storage
-Store queries in the cloud:
+#### BlobContainer
 ```json
 {
-  "BlobQueryStorageConfig": {
-    "Enabled": true,
+  "QueryStorageConfig": {
+    "Type": "BlobContainer",
     "StorageAccountName": "mycompanydata",
     "ContainerName": "pxgraf-queries",
-    "SavedQueryPath": "saved-queries", // Path within container
-    "ArchiveFilePath": "archive-files" // Path within container
+    "SavedQueryPath": "saved-queries",
+    "ArchiveFilePath": "archive-files"
   }
 }
 ```
-
-**Note:** The system automatically populates the legacy `savedQueryDirectory` and `archiveFileDirectory` fields based on your chosen storage configuration, ensuring backward compatibility with existing code.
 
 ### Mixed Storage Scenarios
 

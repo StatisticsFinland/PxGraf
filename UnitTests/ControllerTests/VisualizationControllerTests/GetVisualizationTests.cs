@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -37,11 +37,11 @@ namespace UnitTests.ControllerTests.VisualizationControllerTests
 
             Dictionary<string, string> inMemorySettings = new()
             {
-                {"pxwebUrl", "http://pxwebtesturl:12345/"},
+                {"DatabaseConfig:Type", "PxWeb"},
+                {"DatabaseConfig:PxWebUrl", "http://pxwebtesturl:12345/"},
                 {"pxgrafUrl", "http://pxgraftesturl:8443/PxGraf"},
                 {"savedQueryDirectory", "goesNowhere"},
                 {"archiveFileDirectory", "goesNowhere"},
-                {"LocalFileSystemDatabaseConfig:Encoding", "latin1"},
                 {"CacheOptions:Visualization:SlidingExpirationMinutes", "15" },
                 {"CacheOptions:Visualization:AbsoluteExpirationMinutes", "720" },
                 {"CacheOptions:Visualization:ItemAmountLimit", "1000" }

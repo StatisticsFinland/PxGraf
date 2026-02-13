@@ -21,8 +21,21 @@ namespace PxGraf.Storage
     public class BlobStorageProvider(string storageAccountName, string containerName) : IStorageProvider
     {
         private readonly BlobContainerClient containerClient = new(
-        new Uri($"https://{storageAccountName}.blob.core.windows.net/{containerName}"),
-              new DefaultAzureCredential()
+            new Uri($"https://{storageAccountName}.blob.core.windows.net/{containerName}"),
+            new DefaultAzureCredential(new DefaultAzureCredentialOptions()
+            {
+                // TODO: Remove after testing. Exclude everything but Visual Studio
+                ExcludeAzureCliCredential = true,
+                ExcludeAzureDeveloperCliCredential = true,
+                ExcludeEnvironmentCredential = true,
+                ExcludeAzurePowerShellCredential = true,
+                ExcludeInteractiveBrowserCredential = true,
+                ExcludeSharedTokenCacheCredential = true,
+                ExcludeManagedIdentityCredential = true,
+                ExcludeVisualStudioCredential = false,
+                ExcludeVisualStudioCodeCredential = true,
+                ExcludeWorkloadIdentityCredential = true
+            })
         );
 
         /// <inheritdoc/>
@@ -34,7 +47,7 @@ namespace PxGraf.Storage
             {
                 return await blobClient.ExistsAsync();
             }
-            catch
+            catch(FileNotFoundException)
             {
                 return false;
             }
@@ -80,17 +93,9 @@ namespace PxGraf.Storage
             BlobClient blobClient = containerClient.GetBlobClient(blobName);
             return await blobClient.OpenReadAsync();
         }
-        
-        /// <inheritdoc/>
-        public async Task<Stream> CreateAsync(string filePath)
-        {
-            string blobName = ConvertToAzurePath(filePath);
-            BlobClient blobClient = containerClient.GetBlobClient(blobName);
-            return await blobClient.OpenWriteAsync(overwrite: true);
-        }
 
         /// <inheritdoc/>
-        public async Task<IEnumerable<string>> EnumerateFilesAsync(string directoryPath, string searchPattern)
+        public async Task<IEnumerable<string>> EnumerateFilesAsync(string directoryPath, string fileExtension)
         {
             List<string> files = [];
             string prefix = ConvertToAzurePath(directoryPath) ?? "";
@@ -99,19 +104,17 @@ namespace PxGraf.Storage
                 prefix += "/";
             }
 
-            // Extract file extension from search pattern (e.g., "*.px" -> ".px")
-            string fileExtension = searchPattern.Replace("*", "").ToLowerInvariant();
+            // Normalize file extension using shared utility
+            string normalizedExtension = PathNormalizer.NormalizeFileExtension(fileExtension).ToLowerInvariant();
 
             await foreach (BlobItem blobItem in containerClient.GetBlobsAsync(prefix: prefix))
             {
-                if (blobItem.Name.EndsWith(fileExtension, StringComparison.OrdinalIgnoreCase))
+                // Check if the blob is directly in this level (not in a subdirectory)
+                string relativePath = blobItem.Name[prefix.Length..];
+                if (!relativePath.Contains('/') && (string.IsNullOrEmpty(normalizedExtension) ||
+                        blobItem.Name.EndsWith(normalizedExtension, StringComparison.OrdinalIgnoreCase)))
                 {
-                    // Check if the blob is directly in this level (not in a subdirectory)
-                    string relativePath = blobItem.Name[prefix.Length..];
-                    if (!relativePath.Contains('/'))
-                    {
-                        files.Add(blobItem.Name);
-                    }
+                    files.Add(blobItem.Name);
                 }
             }
 
@@ -174,14 +177,53 @@ namespace PxGraf.Storage
         }
 
         /// <inheritdoc/>
+        public string BuildPath(string rootPath, string userPath)
+        {
+            // Convert both to Azure path format
+            string azureRootPath = ConvertToAzurePath(rootPath) ?? "";
+            string azureUserPath = ConvertToAzurePath(userPath) ?? "";
+
+            // Remove any leading slashes from user path to avoid double slashes
+            azureUserPath = azureUserPath.TrimStart('/');
+
+            // Combine paths using shared utility
+            string combinedPath = PathNormalizer.CombinePaths(azureRootPath, azureUserPath);
+
+            // Security check: ensure the combined path doesn't try to escape the root using ".."
+            int rootDepth = PathNormalizer.GetPathDepth(azureRootPath);
+            PathNormalizer.ValidatePathSecurity(combinedPath, rootDepth);
+
+            // Normalize the path by removing "." and resolving ".."
+            return PathNormalizer.NormalizePath(combinedPath);
+        }
+
+        /// <inheritdoc/>
         public string GetRelativePath(string basePath, string targetPath)
         {
             string azureBasePath = ConvertToAzurePath(basePath);
             string azureTargetPath = ConvertToAzurePath(targetPath);
 
+            // Handle empty base path case
+            if (string.IsNullOrEmpty(azureBasePath))
+            {
+                return azureTargetPath;
+            }
+
+            // Ensure we're checking for a path boundary by appending a trailing slash to the base path
+            if (!azureBasePath.EndsWith('/'))
+            {
+                azureBasePath += "/";
+            }
+
             if (azureTargetPath.StartsWith(azureBasePath, StringComparison.OrdinalIgnoreCase))
             {
-                return azureTargetPath.Substring(azureBasePath.Length).TrimStart('/');
+                return azureTargetPath[azureBasePath.Length..];
+            }
+
+            // If target path equals base path exactly (shouldn't happen for files, but handle it)
+            if (azureTargetPath.Equals(azureBasePath, StringComparison.OrdinalIgnoreCase))
+            {
+                return string.Empty;
             }
 
             return azureTargetPath;

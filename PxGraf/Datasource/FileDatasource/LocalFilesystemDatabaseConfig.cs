@@ -6,17 +6,11 @@ namespace PxGraf.Datasource.FileDatasource
     /// <summary>
     /// Configuration for local file system datasource.
     /// </summary>
-    /// <param name="enabled">Whether the local file system datasource is enabled.</param>
     /// <param name="databaseRootPath">Root path to the database directory.</param>
     /// <param name="encoding">Text encoding for reading files.</param>
     [ExcludeFromCodeCoverage]
-    public class LocalFilesystemDatabaseConfig(bool enabled, string databaseRootPath, Encoding encoding)
+    public class LocalFilesystemDatabaseConfig(string databaseRootPath, Encoding encoding) : DatabaseConfig
     {
-        /// <summary>
-        /// Whether the local file system datasource is enabled.
-        /// </summary>
-        public bool Enabled { get; } = enabled;
-
         /// <summary>
         /// Root path to the database directory.
         /// </summary>

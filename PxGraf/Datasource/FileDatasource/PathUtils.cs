@@ -53,17 +53,25 @@ namespace PxGraf.Datasource.FileDatasource
 
         private static string BuildAndSanitizePath(string rootPath, string userPath)
         {
-            // Get the full path of the root folder
-            string rootFullPath = Path.GetFullPath(rootPath);
+            if (!string.IsNullOrEmpty(rootPath))
+            {
+                // Get the full path of the root folder
+                rootPath = Path.GetFullPath(rootPath);
+            }
 
             // Combine the root folder with the user input path
-            string combinedPath = Path.Combine(rootFullPath, userPath);
+            string combinedPath = Path.Combine(rootPath, userPath);
+
+            if (string.IsNullOrEmpty(combinedPath))
+            {
+                return string.Empty;
+            }
 
             // Get the full path of the combined path
             string fullPath = Path.GetFullPath(combinedPath);
 
             // Check if the full path starts with the root folder's full path
-            if (!fullPath.StartsWith(rootFullPath, StringComparison.OrdinalIgnoreCase))
+            if (!fullPath.StartsWith(rootPath, StringComparison.OrdinalIgnoreCase))
             {
                 throw new UnauthorizedAccessException("Access to the path is denied.");
             }

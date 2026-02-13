@@ -10,6 +10,7 @@ using Px.Utils.Models.Metadata;
 using Px.Utils.Models;
 using Px.Utils.PxFile.Data;
 using Px.Utils.PxFile.Metadata;
+using PxGraf.Models.Metadata;
 using PxGraf.Models.Queries;
 using PxGraf.Models.Responses.DatabaseItems;
 using PxGraf.Utility;
@@ -52,12 +53,19 @@ namespace PxGraf.Datasource.FileDatasource
         private async Task<List<PxTableReference>> GetTables(IReadOnlyList<string> groupHierarchy)
         {
             List<PxTableReference> tables = [];
-            string path = PathUtils.BuildAndSanitizePath(rootPath, groupHierarchy);
-            IEnumerable<string> pxFiles = await storageProvider.EnumerateFilesAsync(path, PxSyntaxConstants.PX_FILE_FILTER);
+            string userPath = string.Join("/", groupHierarchy);
+            string path = storageProvider.BuildPath(rootPath, userPath);
+            // Extract file extension from search pattern (e.g., "*.px" -> ".px")
+            string fileExtension = PxSyntaxConstants.PX_FILE_FILTER.Replace("*", "");
+            IEnumerable<string> pxFiles = await storageProvider.EnumerateFilesAsync(path, fileExtension);
 
             foreach (string pxFile in pxFiles)
             {
-                tables.Add(new PxTableReference(storageProvider.GetRelativePath(rootPath, pxFile)));
+                string relativePath = storageProvider.GetRelativePath(rootPath, pxFile);
+                // Use forward slash as separator for cross-platform compatibility
+                // BlobStorageProvider returns paths with forward slashes, and LocalStorageProvider on Windows returns backslashes
+                // but PxTableReference needs consistent separators
+                tables.Add(new PxTableReference(relativePath, '/'));
             }
             return tables;
         }
@@ -70,7 +78,8 @@ namespace PxGraf.Datasource.FileDatasource
         public async Task<List<DatabaseGroupHeader>> GetGroupHeadersAsync(IReadOnlyList<string> groupHierarchy)
         {
             List<DatabaseGroupHeader> headers = [];
-            string path = PathUtils.BuildAndSanitizePath(rootPath, groupHierarchy);
+            string userPath = string.Join("/", groupHierarchy);
+            string path = storageProvider.BuildPath(rootPath, userPath);
             IEnumerable<string> directories = await storageProvider.EnumerateDirectoriesAsync(path);
 
             foreach (string directory in directories)
@@ -93,7 +102,7 @@ namespace PxGraf.Datasource.FileDatasource
         /// <returns>The last time the table has been changed.</returns>
         public async Task<DateTime> GetLastWriteTimeAsync(PxTableReference tableReference)
         {
-            string path = PathUtils.BuildAndSanitizePath(rootPath, tableReference);
+            string path = storageProvider.BuildPath(rootPath, tableReference.ToPath());
             return await storageProvider.GetLastWriteTimeAsync(path);
         }
 
@@ -104,7 +113,7 @@ namespace PxGraf.Datasource.FileDatasource
         /// <returns>The complete metadata from a file.</returns>
         public async Task<IReadOnlyMatrixMetadata> GetMatrixMetadataAsync(PxTableReference tableReference)
         {
-            string path = PathUtils.BuildAndSanitizePath(rootPath, tableReference);
+            string path = storageProvider.BuildPath(rootPath, tableReference.ToPath());
             using Stream readStream = await storageProvider.OpenReadAsync(path);
             PxFileMetadataReader metadataReader = new();
             Encoding encoding = await metadataReader.GetEncodingAsync(readStream);
@@ -114,7 +123,7 @@ namespace PxGraf.Datasource.FileDatasource
             MatrixMetadata meta = await builder.BuildAsync(entries);
             AssignOrdinalDimensionTypes(meta);
             AssignSourceToContentDimensionValues(meta);
-            AssignLanguageToSingleLangProperties(meta, [PxSyntaxConstants.NOTE_KEY, PxSyntaxConstants.VALUENOTE_KEY]);
+            meta.AssignLanguageToSingleLangProperties([PxSyntaxConstants.NOTE_KEY, PxSyntaxConstants.VALUENOTE_KEY]);
             return meta;
         }
 
@@ -133,7 +142,7 @@ namespace PxGraf.Datasource.FileDatasource
             CancellationToken? cancellationToken = null
         )
         {
-            string path = PathUtils.BuildAndSanitizePath(rootPath, tableReference);
+            string path = storageProvider.BuildPath(rootPath, tableReference.ToPath());
             DataIndexer indexer = new(completeTableMap, meta);
             Matrix<DecimalDataValue> output = new(meta, new DecimalDataValue[indexer.DataLength]);
             using Stream fileStream = await storageProvider.OpenReadAsync(path);
@@ -204,46 +213,6 @@ namespace PxGraf.Datasource.FileDatasource
         }
 
         /// <summary>
-        /// Assigns appropriate language properties to single-language metadata properties.
-        /// </summary>
-        /// <param name="meta">The matrix metadata to assign language properties to.</param>
-        /// <param name="keys">List of property keys to process.</param>
-        private static void AssignLanguageToSingleLangProperties(MatrixMetadata meta, List<string> keys)
-        {
-            // Table level
-            AssignLanguagePropertiesAtLevel(meta.AdditionalProperties, keys, meta.DefaultLanguage);
-
-            foreach (Dimension dim in meta.Dimensions)
-            {
-                // Dimension level
-                AssignLanguagePropertiesAtLevel(dim.AdditionalProperties, keys, meta.DefaultLanguage);
-
-                // Dimension value level
-                foreach (DimensionValue val in dim.Values)
-                {
-                    AssignLanguagePropertiesAtLevel(val.AdditionalProperties, keys, meta.DefaultLanguage);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Helper method to assign language properties at a specific metadata level.
-        /// </summary>
-        /// <param name="properties">The properties dictionary to process.</param>
-        /// <param name="keys">List of property keys to process.</param>
-        /// <param name="defaultLanguage">The default language to use.</param>
-        private static void AssignLanguagePropertiesAtLevel(Dictionary<string, MetaProperty> properties, List<string> keys, string defaultLanguage)
-        {
-            foreach (string key in keys)
-            {
-                if (properties.TryGetValue(key, out MetaProperty? prop))
-                {
-                    properties[key] = prop.AsMultiLanguageProperty(defaultLanguage);
-                }
-            }
-        }
-
-        /// <summary>
         /// Assigns a dimension type to the given dimension based on its meta-id property.
         /// </summary>
         /// <param name="dimension">The dimension to analyze.</param>
@@ -275,7 +244,9 @@ namespace PxGraf.Datasource.FileDatasource
         private async Task<MultilanguageString> GetGroupNameAsync(string directoryPath)
         {
             Dictionary<string, string> translatedNames = [];
-            IEnumerable<string> aliasFiles = await storageProvider.EnumerateFilesAsync(directoryPath, PxSyntaxConstants.ALIAS_FILE_FILTER);
+            // Extract file extension from search pattern (e.g., "Alias_*.txt" -> ".txt")
+            string fileExtension = Path.GetExtension(PxSyntaxConstants.ALIAS_FILE_FILTER);
+            IEnumerable<string> aliasFiles = await storageProvider.EnumerateFilesAsync(directoryPath, fileExtension);
 
             foreach (string aliasFile in aliasFiles)
             {
