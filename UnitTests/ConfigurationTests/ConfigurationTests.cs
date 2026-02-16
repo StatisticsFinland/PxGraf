@@ -467,9 +467,9 @@ namespace UnitTests.ConfigurationTests
                 .AddInMemoryCollection(
                     new Dictionary<string, string>
                     {
-                        {"LocalFilesystemDatabaseConfig:Enabled", "true"},
-                        {"LocalFilesystemDatabaseConfig:Encoding", "latin1"},
-                        {"LocalFilesystemDatabaseConfig:DatabaseRootPath", "path/to/database"}
+                        {"DatabaseConfig:Type", "LocalFileSystem"},
+                        {"DatabaseConfig:Encoding", "latin1"},
+                        {"DatabaseConfig:DatabaseRootPath", "path/to/database"}
                     })
                 .Build();
 
@@ -494,7 +494,9 @@ namespace UnitTests.ConfigurationTests
                 .AddInMemoryCollection(
                     new Dictionary<string, string>
                     {
-                        {"pxwebUrl", "http://pxwebtesturl:12345/"},
+                        {"DatabaseConfig:Type", "LocalFileSystem"},
+                        {"DatabaseConfig:Encoding", "latin1"},
+                        {"DatabaseConfig:DatabaseRootPath", "path/to/database"},
                         {"ApplicationInsights:ConnectionString", "InstrumentationKey=test-key;IngestionEndpoint=https://test.com"},
                         {"ApplicationInsights:MinimumLevel", "Debug"},
                         {"ApplicationInsights:EnableAdaptiveSampling", "true"}
@@ -529,7 +531,9 @@ namespace UnitTests.ConfigurationTests
                     .AddInMemoryCollection(
                         new Dictionary<string, string>
                         {
-                            {"pxwebUrl", "http://pxwebtesturl:12345/"},
+                            {"DatabaseConfig:Type", "LocalFileSystem"},
+                            {"DatabaseConfig:Encoding", "latin1"},
+                            {"DatabaseConfig:DatabaseRootPath", "path/to/database"},
                             {"ApplicationInsights:ConnectionString", "InstrumentationKey=config-key;IngestionEndpoint=https://test.com"},
                             {"ApplicationInsights:MinimumLevel", "Warning"}
                         })
