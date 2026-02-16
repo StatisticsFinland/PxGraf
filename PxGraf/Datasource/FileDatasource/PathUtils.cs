@@ -1,24 +1,11 @@
-#nullable enable
-using PxGraf.Models.Queries;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 
 namespace PxGraf.Datasource.FileDatasource
 {
     public static class PathUtils
     {
-        public static string BuildAndSanitizePath(string rootPath, IReadOnlyList<string> groupHierarcy)
-        {
-            return BuildAndSanitizePath(rootPath, Path.Combine([.. groupHierarcy]));
-        }
-
-        public static string BuildAndSanitizePath(string rootPath, PxTableReference reference)
-        {
-            return BuildAndSanitizePath(rootPath, reference.ToPath());
-        }
-
         /// <summary>
         /// Checks whether a given group hierarchy is under a database that has been whitelisted
         /// </summary>
@@ -50,34 +37,5 @@ namespace PxGraf.Datasource.FileDatasource
                 return false;
             }
         }
-
-        private static string BuildAndSanitizePath(string rootPath, string userPath)
-        {
-            if (!string.IsNullOrEmpty(rootPath))
-            {
-                // Get the full path of the root folder
-                rootPath = Path.GetFullPath(rootPath);
-            }
-
-            // Combine the root folder with the user input path
-            string combinedPath = Path.Combine(rootPath, userPath);
-
-            if (string.IsNullOrEmpty(combinedPath))
-            {
-                return string.Empty;
-            }
-
-            // Get the full path of the combined path
-            string fullPath = Path.GetFullPath(combinedPath);
-
-            // Check if the full path starts with the root folder's full path
-            if (!fullPath.StartsWith(rootPath, StringComparison.OrdinalIgnoreCase))
-            {
-                throw new UnauthorizedAccessException("Access to the path is denied.");
-            }
-
-            return fullPath;
-        }
     }
 }
-#nullable disable

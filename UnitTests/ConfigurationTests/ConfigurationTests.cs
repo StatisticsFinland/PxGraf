@@ -555,5 +555,94 @@ namespace UnitTests.ConfigurationTests
                 Environment.SetEnvironmentVariable(envVarName, null);
             }
         }
+
+        [Test]
+        public void ConfigurationLoadTest_InvalidQueryStorageType_ReturnsNull()
+        {
+            IConfiguration configuration = new ConfigurationBuilder()
+                .AddInMemoryCollection(
+                    new Dictionary<string, string>
+                    {
+                        {"DatabaseConfig:Type", "PxWeb"},
+                        {"DatabaseConfig:PxWebUrl", "http://test.com"},
+                        {"QueryStorageConfig:Type", "InvalidType"}
+                    })
+                .Build();
+
+            Configuration.Load(configuration);
+
+            Assert.That(Configuration.Current.QueryStorageConfig, Is.Null);
+        }
+
+        [Test]
+        public void ConfigurationLoadTest_QueryStorageConfigWithEmptyType_ReturnsNull()
+        {
+            IConfiguration configuration = new ConfigurationBuilder()
+                .AddInMemoryCollection(
+                    new Dictionary<string, string>
+                    {
+                        {"DatabaseConfig:Type", "PxWeb"},
+                        {"DatabaseConfig:PxWebUrl", "http://test.com"},
+                        {"QueryStorageConfig:Type", ""}
+                    })
+                .Build();
+
+            Configuration.Load(configuration);
+
+            Assert.That(Configuration.Current.QueryStorageConfig, Is.Null);
+        }
+
+        [Test]
+        public void ConfigurationLoadTest_BlobQueryStorageType_MissingContainerName_ThrowsException()
+        {
+            IConfiguration configuration = new ConfigurationBuilder()
+                .AddInMemoryCollection(
+                    new Dictionary<string, string>
+                    {
+                        {"DatabaseConfig:Type", "PxWeb"},
+                        {"DatabaseConfig:PxWebUrl", "http://test.com"},
+                        {"QueryStorageConfig:Type", "BlobContainer"},
+                        {"QueryStorageConfig:StorageAccountName", "teststorage"}
+                    })
+                .Build();
+
+            Assert.Throws<InvalidConfigurationException>(() => Configuration.Load(configuration));
+        }
+
+        [Test]
+        public void ConfigurationLoadTest_LegacyQueryStorage_PartialConfiguration_ReturnsNull()
+        {
+            IConfiguration configuration = new ConfigurationBuilder()
+                .AddInMemoryCollection(
+                    new Dictionary<string, string>
+                    {
+                        {"DatabaseConfig:Type", "PxWeb"},
+                        {"DatabaseConfig:PxWebUrl", "http://test.com"},
+                        {"savedQueryDirectory", "/path/to/queries"}
+                    })
+                .Build();
+
+            Configuration.Load(configuration);
+
+            Assert.That(Configuration.Current.QueryStorageConfig, Is.Null);
+        }
+
+        [Test]
+        public void ConfigurationLoadTest_LegacyQueryStorage_OnlyArchiveDirectory_ReturnsNull()
+        {
+            IConfiguration configuration = new ConfigurationBuilder()
+                .AddInMemoryCollection(
+                    new Dictionary<string, string>
+                    {
+                        {"DatabaseConfig:Type", "PxWeb"},
+                        {"DatabaseConfig:PxWebUrl", "http://test.com"},
+                        {"archiveFileDirectory", "/path/to/archives"}
+                    })
+                .Build();
+
+            Configuration.Load(configuration);
+
+            Assert.That(Configuration.Current.QueryStorageConfig, Is.Null);
+        }
     }
 }
