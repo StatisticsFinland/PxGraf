@@ -22,20 +22,7 @@ namespace PxGraf.Storage
     {
         private readonly BlobContainerClient containerClient = new(
             new Uri($"https://{storageAccountName}.blob.core.windows.net/{containerName}"),
-            new DefaultAzureCredential(new DefaultAzureCredentialOptions()
-            {
-                // TODO: Remove after testing. Exclude everything but Visual Studio
-                ExcludeAzureCliCredential = true,
-                ExcludeAzureDeveloperCliCredential = true,
-                ExcludeEnvironmentCredential = true,
-                ExcludeAzurePowerShellCredential = true,
-                ExcludeInteractiveBrowserCredential = true,
-                ExcludeSharedTokenCacheCredential = true,
-                ExcludeManagedIdentityCredential = true,
-                ExcludeVisualStudioCredential = false,
-                ExcludeVisualStudioCodeCredential = true,
-                ExcludeWorkloadIdentityCredential = true
-            })
+            new DefaultAzureCredential()
         );
 
         /// <inheritdoc/>
