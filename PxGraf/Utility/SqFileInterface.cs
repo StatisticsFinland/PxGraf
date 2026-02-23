@@ -1,29 +1,42 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using PxGraf.Models.SavedQueries;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading.Tasks;
 using PxGraf.Settings;
+using PxGraf.Storage;
 
 namespace PxGraf.Utility
 {
     /// <summary>
-    /// For interacting with the sq and sqa files.
+    /// For interacting with the sq and sqa files using configurable storage providers.
     /// </summary>
-    [ExcludeFromCodeCoverage] // Not worth it to build abstraction over Filesystem IO in order to test such a simple functionality
-    public class SqFileInterface : ISqFileInterface
+    /// <remarks>
+    /// Constructor for SqFileInterface with configurable storage providers.
+    /// </remarks>
+    /// <param name="savedQueryStorage">Storage provider for saved query files.</param>
+    /// <param name="archiveStorage">Storage provider for archive files.</param>
+    /// <param name="savedQueryPath">Base path for saved query files.</param>
+    /// <param name="archivePath">Base path for archive files.</param>
+    [ExcludeFromCodeCoverage] // Not worth it to build abstraction over storage IO in order to test such simple functionality
+    public class SqFileInterface(IStorageProvider savedQueryStorage, IStorageProvider archiveStorage, string savedQueryPath = "", string archivePath = "") : ISqFileInterface
     {
         private readonly static LockByKey lockScope = new(StringComparer.OrdinalIgnoreCase);
+        private readonly IStorageProvider savedQueryStorage = savedQueryStorage ?? throw new ArgumentNullException(nameof(savedQueryStorage));
+        private readonly IStorageProvider archiveStorage = archiveStorage ?? throw new ArgumentNullException(nameof(archiveStorage));
+        private readonly string savedQueryPath = savedQueryPath ?? "";
+        private readonly string archivePath = archivePath ?? "";
 
         /// <summary>
-        /// Returns true if a saved query file with the given sq id exists withing the specified saved query file location.
+        /// Returns true if a saved query file with the given sq id exists within the specified saved query file location.
         /// </summary>
         public bool SavedQueryExists(string id, string savedQueryDirectory)
         {
             if (InputValidation.ValidateSqIdString(id))
             {
-                return File.Exists(Path.Combine(savedQueryDirectory, id + ".sq"));
+                string filePath = savedQueryStorage.CombinePath(savedQueryPath, savedQueryDirectory, id + ".sq");
+                return savedQueryStorage.FileExistsAsync(filePath).GetAwaiter().GetResult();
             }
             else
             {
@@ -31,15 +44,15 @@ namespace PxGraf.Utility
             }
         }
 
-
         /// <summary>
-        /// Returns true if an archive query file with the given sq id exists withing the specified archive query file location.
+        /// Returns true if an archive query file with the given sq id exists within the specified archive query file location.
         /// </summary>
         public bool ArchiveCubeExists(string id, string archiveDirectory)
         {
             if (InputValidation.ValidateSqIdString(id))
             {
-                return File.Exists(Path.Combine(archiveDirectory, id + ".sqa"));
+                string filePath = archiveStorage.CombinePath(archivePath, archiveDirectory, id + ".sqa");
+                return archiveStorage.FileExistsAsync(filePath).GetAwaiter().GetResult();
             }
             else
             {
@@ -52,10 +65,10 @@ namespace PxGraf.Utility
         /// </summary>
         public async Task<SavedQuery> ReadSavedQueryFromFile(string id, string savedQueryDirectory)
         {
-            string path = Path.Combine(savedQueryDirectory, id + ".sq");
+            string filePath = savedQueryStorage.CombinePath(savedQueryPath, savedQueryDirectory, id + ".sq");
             return await lockScope.RunLocked(
-                path,
-                () => ReadJsonObjectFromFileImpl<SavedQuery>(path)
+                filePath,
+                () => ReadJsonObjectFromFileImpl<SavedQuery>(savedQueryStorage, filePath)
             );
         }
 
@@ -64,26 +77,26 @@ namespace PxGraf.Utility
         /// </summary>
         public async Task<ArchiveCube> ReadArchiveCubeFromFile(string id, string archiveDirectory)
         {
-            string path = Path.Combine(archiveDirectory, id + ".sqa");
+            string filePath = archiveStorage.CombinePath(archivePath, archiveDirectory, id + ".sqa");
             return await lockScope.RunLocked(
-                path,
-                () => ReadJsonObjectFromFileImpl<ArchiveCube>(path)
+                filePath,
+                () => ReadJsonObjectFromFileImpl<ArchiveCube>(archiveStorage, filePath)
             );
         }
 
         /// <summary>
-        /// Implementation for reading serialized objects from a file.
+        /// Implementation for reading serialized objects from a file using storage provider.
         /// </summary>
         /// <returns></returns>
-        private static async Task<T> ReadJsonObjectFromFileImpl<T>(string path)
+        private static async Task<T> ReadJsonObjectFromFileImpl<T>(IStorageProvider storage, string path)
         {
-            string respdata = await File.ReadAllTextAsync(path);
+            string respdata = await storage.ReadAllTextAsync(path);
             return JsonSerializer.Deserialize<T>(respdata, GlobalJsonConverterOptions.Default)
                 ?? throw new JsonException($"Failed to deserialize object from {path}");
         }
-            
+
         /// <summary>
-        /// Asyncronous function for serializing json serializable objects to a file.
+        /// Asynchronous function for serializing json serializable objects to a file.
         /// This function handles locking the file.
         /// </summary>
         /// <param name="fileName">Name of the file to be created</param>
@@ -98,12 +111,11 @@ namespace PxGraf.Utility
             });
         }
 
-        private static void SerializeToFileImpl(string fileName, string filePath, object input)
+        private void SerializeToFileImpl(string fileName, string filePath, object input)
         {
-            Directory.CreateDirectory(filePath); //If the directory does not exist, create it.
-            using FileStream createStream = File.Create(Path.Combine(filePath, fileName));
-            JsonSerializer.Serialize(createStream, input, GlobalJsonConverterOptions.Default);
-            createStream.Flush();
+            string fullPath = savedQueryStorage.CombinePath(savedQueryPath, filePath, fileName);
+            string json = JsonSerializer.Serialize(input, GlobalJsonConverterOptions.Default);
+            savedQueryStorage.WriteAllTextAsync(fullPath, json).GetAwaiter().GetResult();
         }
     }
 }

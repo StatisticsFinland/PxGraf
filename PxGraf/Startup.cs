@@ -16,11 +16,11 @@ using System.Net.Http;
 using System;
 using PxGraf.Datasource;
 using PxGraf.Datasource.Cache;
-using PxGraf.Models.Queries;
 using PxGraf.Datasource.FileDatasource;
 using PxGraf.Datasource.ApiDatasource;
-using PxGraf.Services;
 using System.Text;
+using PxGraf.Storage;
+using PxGraf.Services;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.Extensions.Logging.ApplicationInsights;
 
@@ -47,7 +47,7 @@ namespace PxGraf
             {
                 Language.Localization.Load(Path.Combine(AppContext.BaseDirectory, "Pars", "translations.json"));
             }
-            catch(IOException ex)
+            catch (IOException ex)
             {
                 logger.LogCritical(ex, "A file system error occurred during startup");
             }
@@ -132,38 +132,90 @@ namespace PxGraf
                 {
                     c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "PxGraf.xml"));
                 }
-                catch(IOException ex)
+                catch (IOException ex)
                 {
                     logger.LogCritical(ex, "A file system error was encountered");
                 }
             });
 
             services.AddHttpClient(PXWEBCLIENTNAME).ConfigurePrimaryHttpMessageHandler(() =>
-                new HttpClientHandler
-                {
-                    UseDefaultCredentials = true
-                });
+            new HttpClientHandler
+            {
+                UseDefaultCredentials = true
+            });
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddSingleton<ISqFileInterface, SqFileInterface>();
             services.AddScoped<IAuditLogService, AuditLogService>();
             services.AddScoped<IPublicationWebhookService, PublicationWebhookService>();
             services.AddHttpClient<PublicationWebhookService>();
             services.AddSingleton<IMultiStateMemoryTaskCache>(provider => new MultiStateMemoryTaskCache(
                 Configuration.Current.CacheOptions.Database.ItemAmountLimit,
                 TimeSpan.FromSeconds(Configuration.Current.CacheOptions.CacheFreshnessCheckIntervalSeconds)));
-            if (Configuration.Current.LocalFilesystemDatabaseConfig?.Enabled ?? false)
-            {
-                services.AddSingleton<IFileDatasource>(provider => new LocalFilesystemDatabase(
-                    Configuration.Current.LocalFilesystemDatabaseConfig ));
-                services.AddSingleton<ICachedDatasource, CachedFileDatasource>();
-            }
-            else
-            {
-                services.AddSingleton<IPxWebConnection, PxWebConnection>();
-                services.AddSingleton<IApiDatasource, PxWebV1ApiInterface>();
-                services.AddSingleton<ICachedDatasource, CachedApiDatasource>();
-            }
+
+            ConfigureDataSourceStorage(services);
+            ConfigureQueryFileStorage(services);
+
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+        }
+
+        private static void ConfigureDataSourceStorage(IServiceCollection services)
+        {
+            switch (Configuration.Current.DatabaseConfig)
+            {
+                case LocalFilesystemDatabaseConfig localConfig:
+                    LocalStorageProvider localDataProvider = new(localConfig.Encoding);
+                    services.AddSingleton<IFileDatasource>(provider => new FileDatasource(
+                        localDataProvider,
+                        localConfig.DatabaseRootPath));
+                    services.AddSingleton<ICachedDatasource, CachedFileDatasource>();
+                    break;
+                case BlobContainerDatabaseConfig blobConfig:
+                    BlobStorageProvider blobDataProvider = new(
+                        blobConfig.StorageAccountName,
+                        blobConfig.ContainerName);
+                    services.AddSingleton<IFileDatasource>(provider => new FileDatasource(
+                        blobDataProvider,
+                        blobConfig.RootPath));
+                    services.AddSingleton<ICachedDatasource, CachedFileDatasource>();
+                    break;
+                default:
+                    services.AddSingleton<IPxWebConnection, PxWebConnection>();
+                    services.AddSingleton<IApiDatasource, PxWebV1ApiInterface>();
+                    services.AddSingleton<ICachedDatasource, CachedApiDatasource>();
+                    break;
+            }
+        }
+
+        private static void ConfigureQueryFileStorage(IServiceCollection services)
+        {
+            switch (Configuration.Current.QueryStorageConfig)
+            {
+                case BlobQueryStorageConfig blobConfig:
+                    BlobStorageProvider blobQueryProvider = new(
+                        blobConfig.StorageAccountName,
+                        blobConfig.ContainerName);
+                    services.AddSingleton<ISqFileInterface>(provider => new SqFileInterface(
+                        blobQueryProvider,
+                        blobQueryProvider,
+                        blobConfig.SavedQueryPath,
+                        blobConfig.ArchiveFilePath));
+                    break;
+                case LocalQueryStorageConfig localConfig:
+                    LocalStorageProvider localQueryProvider = new();
+                    services.AddSingleton<ISqFileInterface>(provider => new SqFileInterface(
+                        localQueryProvider,
+                        localQueryProvider,
+                        localConfig.SavedQueryDirectory,
+                        localConfig.ArchiveFileDirectory));
+                    break;
+                default:
+                    LocalStorageProvider defaultQueryProvider = new();
+                    services.AddSingleton<ISqFileInterface>(provider => new SqFileInterface(
+                        defaultQueryProvider,
+                        defaultQueryProvider,
+                        Configuration.Current.SavedQueryDirectory ?? "",
+                        Configuration.Current.ArchiveFileDirectory ?? ""));
+                    break;
+            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

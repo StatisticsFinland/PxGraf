@@ -1,0 +1,247 @@
+using NUnit.Framework;
+using Moq;
+using PxGraf.Datasource.FileDatasource;
+using PxGraf.Models.Queries;
+using PxGraf.Storage;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Text;
+using System.IO;
+using PxGraf.Models.Responses.DatabaseItems;
+
+namespace UnitTests.DatasourceTests
+{
+    /// <summary>
+    /// Unit tests for FileDatasource.
+    /// </summary>
+    [TestFixture]
+    public class FileDatasourceTests
+    {
+        private Mock<IStorageProvider> mockStorageProvider;
+        private FileDatasource datasource;
+        private const string testRootPath = "/test/root";
+
+        [SetUp]
+        public void Setup()
+        {
+            mockStorageProvider = new Mock<IStorageProvider>();
+            datasource = new FileDatasource(mockStorageProvider.Object, testRootPath);
+        }
+
+        [Test]
+        public void Constructor_WithValidParameters_DoesNotThrow()
+        {
+            // Arrange & Act & Assert
+            Assert.That(() => new FileDatasource(mockStorageProvider.Object, testRootPath), Throws.Nothing);
+        }
+
+        [Test]
+        public void Constructor_WithNullStorageProvider_ThrowsArgumentNullException()
+        {
+            // Arrange, Act & Assert
+            Assert.That(() => new FileDatasource(null, testRootPath), Throws.ArgumentNullException);
+        }
+
+        [Test]
+        public void Constructor_WithNullRootPath_DoesNotThrow()
+        {
+            // Arrange, Act & Assert - null rootPath should be converted to empty string
+            Assert.That(() => new FileDatasource(mockStorageProvider.Object, null), Throws.Nothing);
+        }
+
+        [Test]
+        public void Constructor_WithEmptyRootPath_DoesNotThrow()
+        {
+            // Arrange, Act & Assert
+            Assert.That(() => new FileDatasource(mockStorageProvider.Object, ""), Throws.Nothing);
+        }
+
+        [Test]
+        public async Task GetTablesAsync_WithValidHierarchy_ReturnsExpectedTables()
+        {
+            // Arrange
+            List<string> groupHierarchy = ["level1", "level2"];
+            List<string> mockFiles = ["/test/root/level1/level2/table1.px", "/test/root/level1/level2/table2.px"];
+
+            mockStorageProvider.Setup(fs => fs.BuildPath(It.IsAny<string>(), It.IsAny<string>()))
+                .Returns<string, string>((rootPath, userPath) => 
+                {
+                    if (string.IsNullOrEmpty(rootPath)) return userPath;
+                    if (string.IsNullOrEmpty(userPath)) return rootPath;
+                    return $"{rootPath}/{userPath}";
+                });
+            mockStorageProvider.Setup(fs => fs.EnumerateFilesAsync(It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(mockFiles);
+            mockStorageProvider.Setup(fs => fs.GetRelativePath(It.IsAny<string>(), It.IsAny<string>()))
+                .Returns<string, string>((basePath, targetPath) => 
+                {
+                    string relativePath = Path.GetRelativePath(basePath, targetPath);
+                    // Normalize to forward slashes to match actual LocalStorageProvider behavior
+                    return relativePath.Replace('\\', '/');
+                });
+
+            // Act
+            List<PxTableReference> result = await datasource.GetTablesAsync(groupHierarchy);
+
+            // Assert
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Has.Count.EqualTo(2));
+        }
+
+        [Test]
+        public async Task GetGroupHeadersAsync_WithValidHierarchy_ReturnsExpectedGroups()
+        {
+            // Arrange
+            List<string> groupHierarchy = ["level1"];
+            List<string> mockDirectories = ["/test/root/level1/subgroup1", "/test/root/level1/subgroup2"];
+            List<string> mockAliasFiles = ["Alias_en.txt", "Alias_fi.txt"];
+
+            mockStorageProvider.Setup(fs => fs.BuildPath(It.IsAny<string>(), It.IsAny<string>()))
+                .Returns<string, string>((rootPath, userPath) => 
+                {
+                    if (string.IsNullOrEmpty(rootPath)) return userPath;
+                    if (string.IsNullOrEmpty(userPath)) return rootPath;
+                    return $"{rootPath}/{userPath}";
+                });
+            mockStorageProvider.Setup(fs => fs.EnumerateDirectoriesAsync(It.IsAny<string>()))
+                .ReturnsAsync(mockDirectories);
+            mockStorageProvider.Setup(fs => fs.GetDirectoryName(It.IsAny<string>()))
+                .Returns<string>(path => Path.GetFileName(path));
+            mockStorageProvider.Setup(fs => fs.EnumerateFilesAsync(It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(mockAliasFiles);
+            mockStorageProvider.Setup(fs => fs.GetFileName(It.IsAny<string>()))
+                .Returns<string>(path => Path.GetFileName(path));
+            mockStorageProvider.Setup(fs => fs.ReadAllTextAsync(It.IsAny<string>()))
+                .ReturnsAsync("Test Group");
+
+            // Act
+            List<DatabaseGroupHeader> result = await datasource.GetGroupHeadersAsync(groupHierarchy);
+
+            // Assert
+            Assert.That(result, Is.Not.Null);
+        }
+
+        [Test]
+        public void Constructor_WithRootPath_SetsRootPathCorrectly()
+        {
+            // Act
+            FileDatasource datasourceWithRoot = new(mockStorageProvider.Object, testRootPath);
+
+            // Assert - Verify the datasource works with the root path
+            Assert.That(() => datasourceWithRoot.GetTablesAsync([]), Throws.Nothing);
+        }
+    }
+
+    /// <summary>
+    /// Unit tests for BlobContainerDatabaseConfig.
+    /// </summary>
+    [TestFixture]
+    public class BlobContainerDatabaseConfigTests
+    {
+        [Test]
+        public void Constructor_WithValidParameters_SetsProperties()
+        {
+            // Arrange
+            const string storageAccountName = "teststorageaccount";
+            const string containerName = "testcontainer";
+            const string rootPath = "database/";
+
+            // Act
+            BlobContainerDatabaseConfig config = new(storageAccountName, containerName, rootPath);
+
+            // Assert
+            Assert.Multiple(() =>
+            {
+                Assert.That(config.StorageAccountName, Is.EqualTo(storageAccountName));
+                Assert.That(config.ContainerName, Is.EqualTo(containerName));
+                Assert.That(config.RootPath, Is.EqualTo(rootPath));
+            });
+        }
+
+        [Test]
+        public void Constructor_WithoutRootPath_SetsEmptyRootPath()
+        {
+            // Arrange
+            const string storageAccountName = "teststorageaccount";
+            const string containerName = "testcontainer";
+
+            // Act
+            BlobContainerDatabaseConfig config = new(storageAccountName, containerName);
+
+            // Assert
+            Assert.Multiple(() =>
+            {
+                Assert.That(config.StorageAccountName, Is.EqualTo(storageAccountName));
+                Assert.That(config.ContainerName, Is.EqualTo(containerName));
+                Assert.That(config.RootPath, Is.EqualTo(""));
+            });
+        }
+
+        [Test]
+        public void Constructor_WithNullRootPath_SetsEmptyRootPath()
+        {
+            // Arrange
+            const string storageAccountName = "teststorageaccount";
+            const string containerName = "testcontainer";
+
+            // Act
+            BlobContainerDatabaseConfig config = new(storageAccountName, containerName, null);
+
+            // Assert
+            Assert.That(config.RootPath, Is.EqualTo(""));
+        }
+
+        [Test]
+        public void Constructor_WithEmptyStorageAccountName_SetsProperty()
+        {
+            // Arrange
+            const string storageAccountName = "";
+            const string containerName = "testcontainer";
+
+            // Act
+            BlobContainerDatabaseConfig config = new(storageAccountName, containerName);
+
+            // Assert
+            Assert.That(config.StorageAccountName, Is.EqualTo(storageAccountName));
+        }
+
+        [Test]
+        public void Constructor_WithEmptyContainerName_SetsProperty()
+        {
+            // Arrange
+            const string storageAccountName = "teststorageaccount";
+            const string containerName = "";
+
+            // Act
+            BlobContainerDatabaseConfig config = new(storageAccountName, containerName);
+
+            // Assert
+            Assert.That(config.ContainerName, Is.EqualTo(containerName));
+        }
+    }
+
+    /// <summary>
+    /// Unit tests for LocalFilesystemDatabaseConfig.
+    /// </summary>
+    [TestFixture]
+    public class LocalFilesystemDatabaseConfigTests
+    {
+        [Test]
+        public void Constructor_WithValidParameters_SetsProperties()
+        {
+            // Arrange
+            const string databaseRootPath = "/test/path";
+            Encoding encoding = Encoding.UTF8;
+
+            // Act
+            LocalFilesystemDatabaseConfig config = new(databaseRootPath, encoding);
+
+            // Assert
+            Assert.Multiple(() =>
+           {
+               Assert.That(config.DatabaseRootPath, Is.EqualTo(databaseRootPath));
+               Assert.That(config.Encoding, Is.EqualTo(encoding));
+           });
+        }
+    }
+}
