@@ -11,6 +11,8 @@ namespace UnitTests.ConfigurationTests
     [TestFixture]
     public class ApplicationInsightsConfigTests
     {
+        private const string EnvVarName = "TEST_APPLICATIONINSIGHTS_CONNECTION_STRING";
+
         [Test]
         public void Constructor_WhenNoConfigurationProvided_ShouldBeDisabledWithDefaults()
         {
@@ -22,7 +24,7 @@ namespace UnitTests.ConfigurationTests
             IConfigurationSection section = configuration.GetSection("ApplicationInsights");
 
             // Act
-            ApplicationInsightsConfig config = new(section);
+            ApplicationInsightsConfig config = new(section, EnvVarName);
 
             // Assert
             Assert.Multiple(() =>
@@ -48,7 +50,7 @@ namespace UnitTests.ConfigurationTests
             IConfigurationSection section = configuration.GetSection("ApplicationInsights");
 
             // Act
-            ApplicationInsightsConfig config = new(section);
+            ApplicationInsightsConfig config = new(section, EnvVarName);
 
             // Assert
             Assert.Multiple(() =>
@@ -64,10 +66,9 @@ namespace UnitTests.ConfigurationTests
         public void Constructor_WhenEnvironmentVariableSet_ShouldUseEnvironmentVariable()
         {
             // Arrange
-            const string envVarName = "APPLICATIONINSIGHTS_CONNECTION_STRING";
             const string envConnectionString = "InstrumentationKey=env-key;IngestionEndpoint=https://test.com/env";
 
-            Environment.SetEnvironmentVariable(envVarName, envConnectionString);
+            Environment.SetEnvironmentVariable(EnvVarName, envConnectionString);
 
             try
             {
@@ -81,7 +82,7 @@ namespace UnitTests.ConfigurationTests
                 IConfigurationSection section = configuration.GetSection("ApplicationInsights");
 
                 // Act
-                ApplicationInsightsConfig config = new(section);
+                ApplicationInsightsConfig config = new(section, EnvVarName);
 
                 // Assert - Environment variable should take priority
                 Assert.Multiple(() =>
@@ -92,7 +93,7 @@ namespace UnitTests.ConfigurationTests
             }
             finally
             {
-                Environment.SetEnvironmentVariable(envVarName, null);
+                Environment.SetEnvironmentVariable(EnvVarName, null);
             }
         }
 
@@ -100,10 +101,9 @@ namespace UnitTests.ConfigurationTests
         public void Constructor_WhenOnlyEnvironmentVariableSet_ShouldUseEnvironmentVariable()
         {
             // Arrange
-            const string envVarName = "APPLICATIONINSIGHTS_CONNECTION_STRING";
             const string envConnectionString = "InstrumentationKey=env-only-key;IngestionEndpoint=https://env-only.com";
 
-            Environment.SetEnvironmentVariable(envVarName, envConnectionString);
+            Environment.SetEnvironmentVariable(EnvVarName, envConnectionString);
 
             try
             {
@@ -114,7 +114,7 @@ namespace UnitTests.ConfigurationTests
                 IConfigurationSection section = configuration.GetSection("ApplicationInsights");
 
                 // Act
-                ApplicationInsightsConfig config = new(section);
+                ApplicationInsightsConfig config = new(section, EnvVarName);
 
                 // Assert
                 Assert.Multiple(() =>
@@ -125,7 +125,7 @@ namespace UnitTests.ConfigurationTests
             }
             finally
             {
-                Environment.SetEnvironmentVariable(envVarName, null);
+                Environment.SetEnvironmentVariable(EnvVarName, null);
             }
         }
 
@@ -143,7 +143,7 @@ namespace UnitTests.ConfigurationTests
             IConfigurationSection section = configuration.GetSection("ApplicationInsights");
 
             // Act
-            ApplicationInsightsConfig config = new(section);
+            ApplicationInsightsConfig config = new(section, EnvVarName);
 
             // Assert
             Assert.Multiple(() =>
@@ -168,7 +168,7 @@ namespace UnitTests.ConfigurationTests
             IConfigurationSection section = configuration.GetSection("ApplicationInsights");
 
             // Act
-            ApplicationInsightsConfig config = new(section);
+            ApplicationInsightsConfig config = new(section, EnvVarName);
 
             // Assert
             Assert.That(config.MinimumLevel, Is.EqualTo(LogLevel.Debug));
@@ -189,7 +189,7 @@ namespace UnitTests.ConfigurationTests
             IConfigurationSection section = configuration.GetSection("ApplicationInsights");
 
             // Act
-            ApplicationInsightsConfig config = new(section);
+            ApplicationInsightsConfig config = new(section, EnvVarName);
 
             // Assert
             Assert.That(config.MinimumLevel, Is.EqualTo(LogLevel.Information));
@@ -210,7 +210,7 @@ namespace UnitTests.ConfigurationTests
             IConfigurationSection section = configuration.GetSection("ApplicationInsights");
 
             // Act
-            ApplicationInsightsConfig config = new(section);
+            ApplicationInsightsConfig config = new(section, EnvVarName);
 
             // Assert
             Assert.That(config.EnableAdaptiveSampling, Is.True);
@@ -232,7 +232,7 @@ namespace UnitTests.ConfigurationTests
             IConfigurationSection section = configuration.GetSection("ApplicationInsights");
 
             // Act
-            ApplicationInsightsConfig config = new(section);
+            ApplicationInsightsConfig config = new(section, EnvVarName);
 
             // Assert
             Assert.Multiple(() =>
@@ -265,7 +265,7 @@ namespace UnitTests.ConfigurationTests
             IConfigurationSection section = configuration.GetSection("ApplicationInsights");
 
             // Act
-            ApplicationInsightsConfig config = new(section);
+            ApplicationInsightsConfig config = new(section, EnvVarName);
 
             // Assert
             Assert.That(config.MinimumLevel, Is.EqualTo(expectedLevel));

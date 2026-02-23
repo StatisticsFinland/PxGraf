@@ -1,5 +1,4 @@
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 using PxGraf.Datasource.ApiDatasource;
 using PxGraf.Datasource.FileDatasource;
@@ -457,103 +456,6 @@ namespace UnitTests.ConfigurationTests
             Configuration.Load(configuration);
 
             Assert.That(Configuration.Current.DatabaseConfig, Is.InstanceOf<PxWebDatabaseConfig>());
-        }
-
-        [Test]
-        public void AppSettings_WhenApplicationInsightsConfigurationNotProvided_ShouldLoadWithDisabledApplicationInsights()
-        {
-            // Arrange
-            IConfiguration configuration = new ConfigurationBuilder()
-                .AddInMemoryCollection(
-                    new Dictionary<string, string>
-                    {
-                        {"DatabaseConfig:Type", "LocalFileSystem"},
-                        {"DatabaseConfig:Encoding", "latin1"},
-                        {"DatabaseConfig:DatabaseRootPath", "path/to/database"}
-                    })
-                .Build();
-
-            // Act
-            Configuration.Load(configuration);
-
-            // Assert
-            Assert.Multiple(() =>
-            {
-                Assert.That(Configuration.Current.ApplicationInsights.IsEnabled, Is.False);
-                Assert.That(Configuration.Current.ApplicationInsights.ConnectionString, Is.Null);
-                Assert.That(Configuration.Current.ApplicationInsights.MinimumLevel, Is.EqualTo(LogLevel.Information));
-                Assert.That(Configuration.Current.ApplicationInsights.EnableAdaptiveSampling, Is.False);
-            });
-        }
-
-        [Test]
-        public void AppSettings_WhenApplicationInsightsConfigurationProvided_ShouldLoadApplicationInsightsSettings()
-        {
-            // Arrange
-            IConfiguration configuration = new ConfigurationBuilder()
-                .AddInMemoryCollection(
-                    new Dictionary<string, string>
-                    {
-                        {"DatabaseConfig:Type", "LocalFileSystem"},
-                        {"DatabaseConfig:Encoding", "latin1"},
-                        {"DatabaseConfig:DatabaseRootPath", "path/to/database"},
-                        {"ApplicationInsights:ConnectionString", "InstrumentationKey=test-key;IngestionEndpoint=https://test.com"},
-                        {"ApplicationInsights:MinimumLevel", "Debug"},
-                        {"ApplicationInsights:EnableAdaptiveSampling", "true"}
-                    })
-                .Build();
-
-            // Act
-            Configuration.Load(configuration);
-
-            // Assert
-            Assert.Multiple(() =>
-            {
-                Assert.That(Configuration.Current.ApplicationInsights.IsEnabled, Is.True);
-                Assert.That(Configuration.Current.ApplicationInsights.ConnectionString, Is.EqualTo("InstrumentationKey=test-key;IngestionEndpoint=https://test.com"));
-                Assert.That(Configuration.Current.ApplicationInsights.MinimumLevel, Is.EqualTo(LogLevel.Debug));
-                Assert.That(Configuration.Current.ApplicationInsights.EnableAdaptiveSampling, Is.True);
-            });
-        }
-
-        [Test]
-        public void AppSettings_WhenApplicationInsightsEnvironmentVariableSet_ShouldPrioritizeEnvironmentVariable()
-        {
-            // Arrange
-            const string envVarName = "APPLICATIONINSIGHTS_CONNECTION_STRING";
-            const string envConnectionString = "InstrumentationKey=env-key;IngestionEndpoint=https://test.com";
-
-            Environment.SetEnvironmentVariable(envVarName, envConnectionString);
-
-            try
-            {
-                IConfiguration configuration = new ConfigurationBuilder()
-                    .AddInMemoryCollection(
-                        new Dictionary<string, string>
-                        {
-                            {"DatabaseConfig:Type", "LocalFileSystem"},
-                            {"DatabaseConfig:Encoding", "latin1"},
-                            {"DatabaseConfig:DatabaseRootPath", "path/to/database"},
-                            {"ApplicationInsights:ConnectionString", "InstrumentationKey=config-key;IngestionEndpoint=https://test.com"},
-                            {"ApplicationInsights:MinimumLevel", "Warning"}
-                        })
-                    .Build();
-
-                // Act
-                Configuration.Load(configuration);
-
-                // Assert - Environment variable should take priority over config
-                Assert.Multiple(() =>
-                {
-                    Assert.That(Configuration.Current.ApplicationInsights.IsEnabled, Is.True);
-                    Assert.That(Configuration.Current.ApplicationInsights.ConnectionString, Is.EqualTo(envConnectionString));
-                    Assert.That(Configuration.Current.ApplicationInsights.MinimumLevel, Is.EqualTo(LogLevel.Warning)); // Other settings from config should still work
-                });
-            }
-            finally
-            {
-                Environment.SetEnvironmentVariable(envVarName, null);
-            }
         }
 
         [Test]

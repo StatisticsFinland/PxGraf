@@ -32,10 +32,11 @@ namespace PxGraf.Settings
         /// Initializes ApplicationInsights configuration from the provided configuration section.
         /// </summary>
         /// <param name="configurationSection">Configuration section containing ApplicationInsights settings.</param>
-        public ApplicationInsightsConfig(IConfigurationSection configurationSection)
+        /// <param name="envKey">Optional environment variable key for the connection string, default is "APPLICATIONINSIGHTS_CONNECTION_STRING".</param>
+        public ApplicationInsightsConfig(IConfigurationSection configurationSection, string envKey = "APPLICATIONINSIGHTS_CONNECTION_STRING" )
         {
             // Check environment variable first, then config
-            ConnectionString = Environment.GetEnvironmentVariable("APPLICATIONINSIGHTS_CONNECTION_STRING")
+            ConnectionString = Environment.GetEnvironmentVariable(envKey)
                ?? configurationSection.GetValue<string>(nameof(ConnectionString));
 
             // Parse minimum level, default to Information
