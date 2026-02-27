@@ -10,8 +10,9 @@ namespace PxGraf.Settings
     /// <param name="containerName">Name of the blob container.</param>
     /// <param name="savedQueryPath">Optional path within container for saved query files.</param>
     /// <param name="archiveFilePath">Optional path within container for archive files.</param>
+    /// <param name="managedIdentityClientId">Optional Client ID of a User-Assigned Managed Identity for authentication.</param>
     [ExcludeFromCodeCoverage]
-    public class BlobQueryStorageConfig(string storageAccountName, string containerName, string? savedQueryPath, string? archiveFilePath) : IQueryStorageConfig
+    public class BlobQueryStorageConfig(string storageAccountName, string containerName, string? savedQueryPath, string? archiveFilePath, string? managedIdentityClientId = null) : IQueryStorageConfig
     {
         /// <summary>
         /// Name of the Azure Storage Account.
@@ -28,6 +29,12 @@ namespace PxGraf.Settings
 
         /// <inheritdoc/>
         public string ArchiveFilePath { get; } = archiveFilePath ?? "";
+
+        /// <summary>
+        /// Optional Client ID of a User-Assigned Managed Identity.
+        /// When set, DefaultAzureCredential will target this specific identity instead of using the default credential chain.
+        /// </summary>
+        public string? ManagedIdentityClientId { get; } = managedIdentityClientId;
     }
 }
 #nullable restore

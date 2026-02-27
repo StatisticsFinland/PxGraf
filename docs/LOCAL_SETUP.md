@@ -43,6 +43,8 @@ To enable PxGraf to use Azure Blob Storage, set `DatabaseConfig.Type` to `BlobCo
 - Environment variables
 - Visual Studio/Visual Studio Code authentication
 
+**User-Assigned Managed Identity**: If you need to target a specific User-Assigned Managed Identity (e.g., when multiple identities are assigned to the same resource), set the optional `DatabaseConfig.ManagedIdentityClientId` to the Client ID of the desired identity. When omitted, `DefaultAzureCredential` uses its default credential chain.
+
 For local development, the easiest method is to use Azure CLI authentication.
 
 ## Logging Configuration
@@ -90,7 +92,7 @@ Example configuration:
 3. Set up the database by setting `DatabaseConfig.Type` in appsettings.json to one of: `PxWeb` (a), `LocalFileSystem` (b), or `BlobContainer` (c). Only one type can be active.
 a. Set `DatabaseConfig.Type` to `PxWeb` and `DatabaseConfig.PxWebUrl` to the address of the PxWeb server. This can be a remote server or localhost if running a local instance of PxWeb. If running a local instance, make sure to include the port number.
 b. Set `DatabaseConfig.Type` to `LocalFileSystem`, `DatabaseConfig.DatabaseRootPath` to the path to the local px database, and `DatabaseConfig.Encoding` to the encoding of the Px and alias files.
-c. Set `DatabaseConfig.Type` to `BlobContainer`, `DatabaseConfig.StorageAccountName` and `DatabaseConfig.ContainerName`. Optionally, set `DatabaseConfig.RootPath` to organize Px files under a specific path within the container (e.g., "database/"). Ensure you are authenticated with Azure CLI (`az login`) for local development.
+c. Set `DatabaseConfig.Type` to `BlobContainer`, `DatabaseConfig.StorageAccountName` and `DatabaseConfig.ContainerName`. Optionally, set `DatabaseConfig.RootPath` to organize Px files under a specific path within the container (e.g., "database/"). Optionally, set `DatabaseConfig.ManagedIdentityClientId` to the Client ID of a User-Assigned Managed Identity if needed. Ensure you are authenticated with Azure CLI (`az login`) for local development.
 4. Build the solution in Visual Studio or run `dotnet build` in the PxGraf folder (See https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-build for more details).
 This will also build the frontend.
 
@@ -110,7 +112,8 @@ Example configuration with root path:
     "Type": "BlobContainer",
     "StorageAccountName": "storage",
     "ContainerName": "container",
-    "RootPath": "database/"
+    "RootPath": "database/",
+    "ManagedIdentityClientId": ""
   }
 }
 ```
@@ -148,7 +151,8 @@ For cloud-native deployments:
     "Type": "BlobContainer",
     "StorageAccountName": "mycompanydata",
     "ContainerName": "database",
-    "RootPath": "database/"
+    "RootPath": "database/",
+    "ManagedIdentityClientId": ""
   }
 }
 ```
@@ -184,7 +188,8 @@ Set `QueryStorageConfig.Type` to one of the following, or omit the section to us
     "StorageAccountName": "mycompanydata",
     "ContainerName": "pxgraf-queries",
     "SavedQueryPath": "saved-queries",
-    "ArchiveFilePath": "archive-files"
+    "ArchiveFilePath": "archive-files",
+    "ManagedIdentityClientId": ""
   }
 }
 ```

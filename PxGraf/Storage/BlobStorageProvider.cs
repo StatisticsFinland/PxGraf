@@ -17,12 +17,16 @@ namespace PxGraf.Storage
     /// </summary>
     /// <param name="storageAccountName">Name of the Azure Storage Account.</param>
     /// <param name="containerName">Name of the blob container.</param>
+    /// <param name="managedIdentityClientId">Optional Client ID of a User-Assigned Managed Identity. When null, DefaultAzureCredential uses its default credential chain.</param>
     [ExcludeFromCodeCoverage(Justification = "Methods consist mostly of Azure SDK calls")]
-    public class BlobStorageProvider(string storageAccountName, string containerName) : IStorageProvider
+    public class BlobStorageProvider(string storageAccountName, string containerName, string managedIdentityClientId = null) : IStorageProvider
     {
         private readonly BlobContainerClient containerClient = new(
             new Uri($"https://{storageAccountName}.blob.core.windows.net/{containerName}"),
-            new DefaultAzureCredential()
+            new DefaultAzureCredential(new DefaultAzureCredentialOptions
+            {
+                ManagedIdentityClientId = managedIdentityClientId
+            })
         );
 
         /// <inheritdoc/>

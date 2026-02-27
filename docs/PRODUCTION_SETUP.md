@@ -58,6 +58,7 @@ Missing required fields for the chosen type will cause a startup error.
 #### Azure Blob Storage (`BlobContainer`)
 For cloud-native deployments:
 - **Authentication**: Uses Azure Managed Identity via DefaultAzureCredential in production environments
+- **User-Assigned Managed Identity**: Optionally set `DatabaseConfig.ManagedIdentityClientId` to the Client ID of a specific User-Assigned Managed Identity. This is useful when multiple managed identities are assigned to the same Azure resource. When omitted, `DefaultAzureCredential` uses its default credential chain.
 - **Security**: Supports Azure RBAC and private endpoints for secure access
 - **Configuration**: Requires `DatabaseConfig.StorageAccountName` and `DatabaseConfig.ContainerName`
 - **Organization**: Optional `DatabaseConfig.RootPath` allows organizing Px files under a specific path within the container
@@ -79,6 +80,7 @@ For integration with existing PxWeb installations:
 Store queries and archives in the cloud:
 - **Organization**: Separate paths for queries (`QueryStorageConfig.SavedQueryPath`) and archives (`QueryStorageConfig.ArchiveFilePath`) are supported
 - **Authentication**: Uses the same Managed Identity approach as data sources
+- **User-Assigned Managed Identity**: Optionally set `QueryStorageConfig.ManagedIdentityClientId` to target a specific User-Assigned Managed Identity, similar to the data source configuration.
 - **Configuration**: Requires `QueryStorageConfig.StorageAccountName` and `QueryStorageConfig.ContainerName`
 
 #### Local File System (`LocalFileSystem`)
