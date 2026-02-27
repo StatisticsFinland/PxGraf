@@ -32,7 +32,7 @@ namespace PxGraf.Storage
         /// <inheritdoc/>
         public async Task<bool> FileExistsAsync(string filePath)
         {
-            string blobName = ConvertToAzurePath(filePath);
+            string blobName = PathNormalizer.NormalizeToAzurePath(filePath);
             BlobClient blobClient = containerClient.GetBlobClient(blobName);
             try
             {
@@ -47,7 +47,7 @@ namespace PxGraf.Storage
         /// <inheritdoc/>
         public async Task<string> ReadAllTextAsync(string filePath)
         {
-            string blobName = ConvertToAzurePath(filePath);
+            string blobName = PathNormalizer.NormalizeToAzurePath(filePath);
             BlobClient blobClient = containerClient.GetBlobClient(blobName);
             using Stream blobStream = await blobClient.OpenReadAsync();
 
@@ -72,7 +72,7 @@ namespace PxGraf.Storage
         /// <inheritdoc/>
         public async Task WriteAllTextAsync(string filePath, string content)
         {
-            string blobName = ConvertToAzurePath(filePath);
+            string blobName = PathNormalizer.NormalizeToAzurePath(filePath);
             BlobClient blobClient = containerClient.GetBlobClient(blobName);
             await blobClient.UploadAsync(new MemoryStream(Encoding.UTF8.GetBytes(content)), overwrite: true);
         }
@@ -80,7 +80,7 @@ namespace PxGraf.Storage
         /// <inheritdoc/>
         public async Task<Stream> OpenReadAsync(string filePath)
         {
-            string blobName = ConvertToAzurePath(filePath);
+            string blobName = PathNormalizer.NormalizeToAzurePath(filePath);
             BlobClient blobClient = containerClient.GetBlobClient(blobName);
             return await blobClient.OpenReadAsync();
         }
@@ -89,7 +89,7 @@ namespace PxGraf.Storage
         public async Task<IEnumerable<string>> EnumerateFilesAsync(string directoryPath, string fileExtension)
         {
             List<string> files = [];
-            string prefix = ConvertToAzurePath(directoryPath) ?? "";
+            string prefix = PathNormalizer.NormalizeToAzurePath(directoryPath) ?? "";
             if (!string.IsNullOrEmpty(prefix))
             {
                 prefix += "/";
@@ -116,7 +116,7 @@ namespace PxGraf.Storage
         public async Task<IEnumerable<string>> EnumerateDirectoriesAsync(string directoryPath)
         {
             HashSet<string> directories = [];
-            string prefix = ConvertToAzurePath(directoryPath) ?? "";
+            string prefix = PathNormalizer.NormalizeToAzurePath(directoryPath) ?? "";
             if (!string.IsNullOrEmpty(prefix))
             {
                 prefix += "/";
@@ -140,7 +140,7 @@ namespace PxGraf.Storage
         /// <inheritdoc/>
         public async Task<DateTime> GetLastWriteTimeAsync(string filePath)
         {
-            string blobName = ConvertToAzurePath(filePath);
+            string blobName = PathNormalizer.NormalizeToAzurePath(filePath);
             BlobClient blobClient = containerClient.GetBlobClient(blobName);
             BlobProperties properties = await blobClient.GetPropertiesAsync();
             return properties.LastModified.DateTime;
@@ -149,7 +149,7 @@ namespace PxGraf.Storage
         /// <inheritdoc/>
         public string GetDirectoryName(string directoryPath)
         {
-            string azurePath = ConvertToAzurePath(directoryPath);
+            string azurePath = PathNormalizer.NormalizeToAzurePath(directoryPath);
             int lastSlashIndex = azurePath.LastIndexOf('/');
             return lastSlashIndex >= 0 ? azurePath[(lastSlashIndex + 1)..] : azurePath;
         }
@@ -157,42 +157,31 @@ namespace PxGraf.Storage
         /// <inheritdoc/>
         public string GetFileName(string filePath)
         {
-            string azurePath = ConvertToAzurePath(filePath);
+            string azurePath = PathNormalizer.NormalizeToAzurePath(filePath);
             return Path.GetFileName(azurePath);
-        }
-
-        /// <inheritdoc/>
-        public string CombinePath(params string[] paths)
-        {
-            return string.Join("/", paths);
         }
 
         /// <inheritdoc/>
         public string BuildPath(string rootPath, string userPath)
         {
             // Convert both to Azure path format
-            string azureRootPath = ConvertToAzurePath(rootPath) ?? "";
-            string azureUserPath = ConvertToAzurePath(userPath) ?? "";
-
-            // Remove any leading slashes from user path to avoid double slashes
-            azureUserPath = azureUserPath.TrimStart('/');
+            string azureRootPath = PathNormalizer.NormalizeToAzurePath(rootPath) ?? "";
+            string azureUserPath = PathNormalizer.NormalizeToAzurePath(userPath) ?? "";
 
             // Combine paths using shared utility
-            string combinedPath = PathNormalizer.CombinePaths(azureRootPath, azureUserPath);
+            string combinedPath = PathNormalizer.CombineAndNormalizeAzurePaths(azureRootPath, azureUserPath);
 
             // Security check: ensure the combined path doesn't try to escape the root using ".."
-            int rootDepth = PathNormalizer.GetPathDepth(azureRootPath);
-            PathNormalizer.ValidatePathSecurity(combinedPath, rootDepth);
+            PathNormalizer.ValidatePathSecurity(combinedPath, azureRootPath);
 
-            // Normalize the path by removing "." and resolving ".."
-            return PathNormalizer.NormalizePath(combinedPath);
+            return combinedPath;
         }
 
         /// <inheritdoc/>
         public string GetRelativePath(string basePath, string targetPath)
         {
-            string azureBasePath = ConvertToAzurePath(basePath);
-            string azureTargetPath = ConvertToAzurePath(targetPath);
+            string azureBasePath = PathNormalizer.NormalizeToAzurePath(basePath);
+            string azureTargetPath = PathNormalizer.NormalizeToAzurePath(targetPath);
 
             // Handle empty base path case
             if (string.IsNullOrEmpty(azureBasePath))
@@ -220,14 +209,6 @@ namespace PxGraf.Storage
             return azureTargetPath;
         }
 
-        /// <summary>
-        /// Converts Windows-style paths to Azure blob paths.
-        /// </summary>
-        /// <param name="path">Path to convert.</param>
-        /// <returns>Azure blob path.</returns>
-        private static string ConvertToAzurePath(string path)
-        {
-            return path?.Replace('\\', '/') ?? string.Empty;
-        }
+        public string CombinePath(params string[] paths) => PathNormalizer.CombineAndNormalizeAzurePaths(paths);
     }
 }

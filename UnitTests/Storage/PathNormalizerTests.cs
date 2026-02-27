@@ -70,130 +70,106 @@ namespace UnitTests.Storage
 
         #endregion
 
-        #region CombinePaths Tests
+        #region CombineAndNormalizeAzurePaths Tests
 
         [Test]
-        public void CombinePaths_BothEmpty_ReturnsEmpty()
+        public void CombineAndNormalizeAzurePaths_WithNull_ReturnsEmpty()
         {
             // Act
-            string result = PathNormalizer.CombinePaths(string.Empty, string.Empty);
+            string result = PathNormalizer.CombineAndNormalizeAzurePaths(null);
 
             // Assert
             Assert.That(result, Is.EqualTo(string.Empty));
         }
 
         [Test]
-        public void CombinePaths_RootEmpty_ReturnsUserPath()
+        public void CombineAndNormalizeAzurePaths_WithNoArguments_ReturnsEmpty()
         {
             // Act
-            string result = PathNormalizer.CombinePaths(string.Empty, "user/path");
+            string result = PathNormalizer.CombineAndNormalizeAzurePaths();
+
+            // Assert
+            Assert.That(result, Is.EqualTo(string.Empty));
+        }
+
+        [Test]
+        public void CombineAndNormalizeAzurePaths_BothEmpty_ReturnsEmpty()
+        {
+            // Act
+            string result = PathNormalizer.CombineAndNormalizeAzurePaths(string.Empty, string.Empty);
+
+            // Assert
+            Assert.That(result, Is.EqualTo(string.Empty));
+        }
+
+        [Test]
+        public void CombineAndNormalizeAzurePaths_RootEmpty_ReturnsUserPath()
+        {
+            // Act
+            string result = PathNormalizer.CombineAndNormalizeAzurePaths(string.Empty, "user/path");
 
             // Assert
             Assert.That(result, Is.EqualTo("user/path"));
         }
 
         [Test]
-        public void CombinePaths_UserPathEmpty_ReturnsRootPath()
+        public void CombineAndNormalizeAzurePaths_UserPathEmpty_ReturnsRootPath()
         {
             // Act
-            string result = PathNormalizer.CombinePaths("root/path", string.Empty);
+            string result = PathNormalizer.CombineAndNormalizeAzurePaths("root/path", string.Empty);
 
             // Assert
             Assert.That(result, Is.EqualTo("root/path"));
         }
 
         [Test]
-        public void CombinePaths_BothProvided_CombinesWithSlash()
+        public void CombineAndNormalizeAzurePaths_BothProvided_CombinesWithSlash()
         {
             // Act
-            string result = PathNormalizer.CombinePaths("root/path", "user/path");
+            string result = PathNormalizer.CombineAndNormalizeAzurePaths("root/path", "user/path");
 
             // Assert
             Assert.That(result, Is.EqualTo("root/path/user/path"));
         }
 
         [Test]
-        public void CombinePaths_RootWithTrailingSlash_RemovesExtraSlash()
+        public void CombineAndNormalizeAzurePaths_RootWithTrailingSlash_RemovesExtraSlash()
         {
             // Act
-            string result = PathNormalizer.CombinePaths("root/path/", "user/path");
+            string result = PathNormalizer.CombineAndNormalizeAzurePaths("root/path/", "user/path");
 
             // Assert
             Assert.That(result, Is.EqualTo("root/path/user/path"));
         }
 
         [Test]
-        public void CombinePaths_MultipleTrailingSlashes_NormalizesCorrectly()
+        public void CombineAndNormalizeAzurePaths_MultipleTrailingSlashes_NormalizesCorrectly()
         {
             // Act
-            string result = PathNormalizer.CombinePaths("root/path///", "user/path");
+            string result = PathNormalizer.CombineAndNormalizeAzurePaths("root/path///", "user/path");
 
             // Assert
             Assert.That(result, Is.EqualTo("root/path/user/path"));
         }
 
-        #endregion
-
-        #region GetPathDepth Tests
-
         [Test]
-        public void GetPathDepth_WithNull_ReturnsZero()
+        public void CombineAndNormalizeAzurePaths_MoreThanTwoSegments_CombinesAll()
         {
             // Act
-            int result = PathNormalizer.GetPathDepth(null);
+            string result = PathNormalizer.CombineAndNormalizeAzurePaths("root", "middle", "leaf");
 
             // Assert
-            Assert.That(result, Is.EqualTo(0));
+            Assert.That(result, Is.EqualTo("root/middle/leaf"));
         }
 
         [Test]
-        public void GetPathDepth_WithEmptyString_ReturnsZero()
+        public void CombineAndNormalizeAzurePaths_WithBackslashes_NormalizesToForwardSlashes()
         {
             // Act
-            int result = PathNormalizer.GetPathDepth(string.Empty);
+            string result = PathNormalizer.CombineAndNormalizeAzurePaths("root\\path", "user\\path");
 
             // Assert
-            Assert.That(result, Is.EqualTo(0));
-        }
-
-        [Test]
-        public void GetPathDepth_WithSingleSegment_ReturnsOne()
-        {
-            // Act
-            int result = PathNormalizer.GetPathDepth("folder");
-
-            // Assert
-            Assert.That(result, Is.EqualTo(1));
-        }
-
-        [Test]
-        public void GetPathDepth_WithTwoSegments_ReturnsTwo()
-        {
-            // Act
-            int result = PathNormalizer.GetPathDepth("folder/subfolder");
-
-            // Assert
-            Assert.That(result, Is.EqualTo(2));
-        }
-
-        [Test]
-        public void GetPathDepth_WithThreeSegments_ReturnsThree()
-        {
-            // Act
-            int result = PathNormalizer.GetPathDepth("root/folder/subfolder");
-
-            // Assert
-            Assert.That(result, Is.EqualTo(3));
-        }
-
-        [Test]
-        public void GetPathDepth_WithTrailingSlash_IgnoresEmptySegment()
-        {
-            // Act
-            int result = PathNormalizer.GetPathDepth("root/folder/");
-
-            // Assert
-            Assert.That(result, Is.EqualTo(2));
+            Assert.That(result, Is.EqualTo("root/path/user/path"));
         }
 
         #endregion
@@ -204,34 +180,34 @@ namespace UnitTests.Storage
         public void ValidatePathSecurity_WithValidPath_DoesNotThrow()
         {
             // Arrange
-            string path = "root/folder/subfolder";
-            int rootDepth = 1;
+            string combinedPath = "root/folder/subfolder";
+            string rootPath = "root";
 
             // Act & Assert
-            Assert.DoesNotThrow(() => PathNormalizer.ValidatePathSecurity(path, rootDepth));
+            Assert.DoesNotThrow(() => PathNormalizer.ValidatePathSecurity(combinedPath, rootPath));
         }
 
         [Test]
         public void ValidatePathSecurity_WithDotDotWithinBounds_DoesNotThrow()
         {
             // Arrange
-            string path = "root/folder/../other";
-            int rootDepth = 1;
+            string combinedPath = "root/folder/../other";
+            string rootPath = "root";
 
             // Act & Assert
-            Assert.DoesNotThrow(() => PathNormalizer.ValidatePathSecurity(path, rootDepth));
+            Assert.DoesNotThrow(() => PathNormalizer.ValidatePathSecurity(combinedPath, rootPath));
         }
 
         [Test]
         public void ValidatePathSecurity_WithDotDotEscapingRoot_ThrowsUnauthorizedAccessException()
         {
             // Arrange
-            string path = "root/../..";
-            int rootDepth = 1;
+            string combinedPath = "root/../..";
+            string rootPath = "root";
 
             // Act & Assert
             UnauthorizedAccessException exception = Assert.Throws<UnauthorizedAccessException>(
-                () => PathNormalizer.ValidatePathSecurity(path, rootDepth)
+                () => PathNormalizer.ValidatePathSecurity(combinedPath, rootPath)
             );
             Assert.That(exception.Message, Is.EqualTo("Access to the path is denied."));
         }
@@ -240,34 +216,93 @@ namespace UnitTests.Storage
         public void ValidatePathSecurity_WithDotSegments_DoesNotAffectValidation()
         {
             // Arrange
-            string path = "root/./folder/./subfolder";
-            int rootDepth = 1;
+            string combinedPath = "root/./folder/./subfolder";
+            string rootPath = "root";
 
             // Act & Assert
-            Assert.DoesNotThrow(() => PathNormalizer.ValidatePathSecurity(path, rootDepth));
+            Assert.DoesNotThrow(() => PathNormalizer.ValidatePathSecurity(combinedPath, rootPath));
         }
 
         [Test]
-        public void ValidatePathSecurity_WithZeroRootDepth_AllowsAnyPath()
+        public void ValidatePathSecurity_WithEmptyRootPath_AllowsAnyPath()
         {
             // Arrange
-            string path = "folder/subfolder";
-            int rootDepth = 0;
+            string combinedPath = "folder/subfolder";
+            string rootPath = "";
 
             // Act & Assert
-            Assert.DoesNotThrow(() => PathNormalizer.ValidatePathSecurity(path, rootDepth));
+            Assert.DoesNotThrow(() => PathNormalizer.ValidatePathSecurity(combinedPath, rootPath));
         }
 
         [Test]
         public void ValidatePathSecurity_WithMultipleDotDotsEscaping_ThrowsUnauthorizedAccessException()
         {
             // Arrange
-            string path = "root/folder/../../..";
-            int rootDepth = 1;
+            string combinedPath = "root/folder/../../..";
+            string rootPath = "root";
 
             // Act & Assert
             Assert.Throws<UnauthorizedAccessException>(
-                () => PathNormalizer.ValidatePathSecurity(path, rootDepth)
+                () => PathNormalizer.ValidatePathSecurity(combinedPath, rootPath)
+            );
+        }
+
+        [Test]
+        public void ValidatePathSecurity_CaseInsensitive_DoesNotThrow()
+        {
+            // Arrange
+            string combinedPath = "Root/Folder/SubFolder";
+            string rootPath = "root";
+
+            // Act & Assert
+            Assert.DoesNotThrow(() => PathNormalizer.ValidatePathSecurity(combinedPath, rootPath));
+        }
+
+        [Test]
+        public void ValidatePathSecurity_CombinedPathEqualsRoot_DoesNotThrow()
+        {
+            // Arrange
+            string combinedPath = "root";
+            string rootPath = "root";
+
+            // Act & Assert
+            Assert.DoesNotThrow(() => PathNormalizer.ValidatePathSecurity(combinedPath, rootPath));
+        }
+
+        [Test]
+        public void ValidatePathSecurity_WithBackslashes_NormalizesBeforeValidation()
+        {
+            // Arrange
+            string combinedPath = "root\\folder\\subfolder";
+            string rootPath = "root";
+
+            // Act & Assert
+            Assert.DoesNotThrow(() => PathNormalizer.ValidatePathSecurity(combinedPath, rootPath));
+        }
+
+        [Test]
+        public void ValidatePathSecurity_CompletelyDifferentPath_ThrowsUnauthorizedAccessException()
+        {
+            // Arrange
+            string combinedPath = "other/folder";
+            string rootPath = "root";
+
+            // Act & Assert
+            Assert.Throws<UnauthorizedAccessException>(
+                () => PathNormalizer.ValidatePathSecurity(combinedPath, rootPath)
+            );
+        }
+
+        [Test]
+        public void ValidatePathSecurity_PrefixCollision_ThrowsUnauthorizedAccessException()
+        {
+            // Arrange - "rootother" starts with "root" but is not under the "root" directory
+            string combinedPath = "rootother/file";
+            string rootPath = "root";
+
+            // Act & Assert
+            Assert.Throws<UnauthorizedAccessException>(
+                () => PathNormalizer.ValidatePathSecurity(combinedPath, rootPath)
             );
         }
 
@@ -279,7 +314,7 @@ namespace UnitTests.Storage
         public void NormalizePath_WithNull_ReturnsEmptyString()
         {
             // Act
-            string result = PathNormalizer.NormalizePath(null);
+            string result = PathNormalizer.NormalizeToAzurePath(null);
 
             // Assert
             Assert.That(result, Is.EqualTo(string.Empty));
@@ -289,7 +324,7 @@ namespace UnitTests.Storage
         public void NormalizePath_WithEmptyString_ReturnsEmptyString()
         {
             // Act
-            string result = PathNormalizer.NormalizePath(string.Empty);
+            string result = PathNormalizer.NormalizeToAzurePath(string.Empty);
 
             // Assert
             Assert.That(result, Is.EqualTo(string.Empty));
@@ -299,7 +334,7 @@ namespace UnitTests.Storage
         public void NormalizePath_WithSimplePath_ReturnsSame()
         {
             // Act
-            string result = PathNormalizer.NormalizePath("root/folder/subfolder");
+            string result = PathNormalizer.NormalizeToAzurePath("root/folder/subfolder");
 
             // Assert
             Assert.That(result, Is.EqualTo("root/folder/subfolder"));
@@ -309,7 +344,7 @@ namespace UnitTests.Storage
         public void NormalizePath_WithDotSegments_RemovesDots()
         {
             // Act
-            string result = PathNormalizer.NormalizePath("root/./folder/./subfolder");
+            string result = PathNormalizer.NormalizeToAzurePath("root/./folder/./subfolder");
 
             // Assert
             Assert.That(result, Is.EqualTo("root/folder/subfolder"));
@@ -319,7 +354,7 @@ namespace UnitTests.Storage
         public void NormalizePath_WithDotDotSegments_ResolvesProperly()
         {
             // Act
-            string result = PathNormalizer.NormalizePath("root/folder/../subfolder");
+            string result = PathNormalizer.NormalizeToAzurePath("root/folder/../subfolder");
 
             // Assert
             Assert.That(result, Is.EqualTo("root/subfolder"));
@@ -329,7 +364,7 @@ namespace UnitTests.Storage
         public void NormalizePath_WithMultipleDotDots_ResolvesAll()
         {
             // Act
-            string result = PathNormalizer.NormalizePath("root/a/b/c/../../d");
+            string result = PathNormalizer.NormalizeToAzurePath("root/a/b/c/../../d");
 
             // Assert
             Assert.That(result, Is.EqualTo("root/a/d"));
@@ -339,7 +374,7 @@ namespace UnitTests.Storage
         public void NormalizePath_WithDotDotAtStart_IgnoresWhenNothingToGoUp()
         {
             // Act
-            string result = PathNormalizer.NormalizePath("../folder");
+            string result = PathNormalizer.NormalizeToAzurePath("../folder");
 
             // Assert
             Assert.That(result, Is.EqualTo("folder"));
@@ -349,7 +384,7 @@ namespace UnitTests.Storage
         public void NormalizePath_WithMixedDotAndDotDot_NormalizesCorrectly()
         {
             // Act
-            string result = PathNormalizer.NormalizePath("root/./folder/../other/./final");
+            string result = PathNormalizer.NormalizeToAzurePath("root/./folder/../other/./final");
 
             // Assert
             Assert.That(result, Is.EqualTo("root/other/final"));
@@ -359,7 +394,7 @@ namespace UnitTests.Storage
         public void NormalizePath_WithTrailingSlash_RemovesIt()
         {
             // Act
-            string result = PathNormalizer.NormalizePath("root/folder/");
+            string result = PathNormalizer.NormalizeToAzurePath("root/folder/");
 
             // Assert
             Assert.That(result, Is.EqualTo("root/folder"));
@@ -369,10 +404,40 @@ namespace UnitTests.Storage
         public void NormalizePath_WithLeadingSlash_RemovesIt()
         {
             // Act
-            string result = PathNormalizer.NormalizePath("/root/folder");
+            string result = PathNormalizer.NormalizeToAzurePath("/root/folder");
 
             // Assert
             Assert.That(result, Is.EqualTo("root/folder"));
+        }
+
+        [Test]
+        public void NormalizePath_WithBackslashes_ConvertedToForwardSlashes()
+        {
+            // Act
+            string result = PathNormalizer.NormalizeToAzurePath("root\\folder\\subfolder");
+
+            // Assert
+            Assert.That(result, Is.EqualTo("root/folder/subfolder"));
+        }
+
+        [Test]
+        public void NormalizePath_AllSegmentsCollapse_ReturnsEmpty()
+        {
+            // Act
+            string result = PathNormalizer.NormalizeToAzurePath("a/b/../../");
+
+            // Assert
+            Assert.That(result, Is.EqualTo(string.Empty));
+        }
+
+        [Test]
+        public void NormalizePath_WithDuplicateSlashes_RemovesThem()
+        {
+            // Act
+            string result = PathNormalizer.NormalizeToAzurePath("root//folder///subfolder");
+
+            // Assert
+            Assert.That(result, Is.EqualTo("root/folder/subfolder"));
         }
 
         #endregion
@@ -387,8 +452,8 @@ namespace UnitTests.Storage
             string userPath = "./folder/../other";
 
             // Act
-            string combined = PathNormalizer.CombinePaths(rootPath, userPath);
-            string normalized = PathNormalizer.NormalizePath(combined);
+            string combined = PathNormalizer.CombineAndNormalizeAzurePaths(rootPath, userPath);
+            string normalized = PathNormalizer.NormalizeToAzurePath(combined);
 
             // Assert
             Assert.That(normalized, Is.EqualTo("root/base/other"));
@@ -398,12 +463,12 @@ namespace UnitTests.Storage
         public void IntegrationTest_SecurityValidationAndNormalization_WorksTogether()
         {
             // Arrange
-            string path = "root/folder/./subfolder";
-            int rootDepth = 1;
+            string combinedPath = "root/folder/./subfolder";
+            string rootPath = "root";
 
             // Act & Assert
-            Assert.DoesNotThrow(() => PathNormalizer.ValidatePathSecurity(path, rootDepth));
-            string normalized = PathNormalizer.NormalizePath(path);
+            Assert.DoesNotThrow(() => PathNormalizer.ValidatePathSecurity(combinedPath, rootPath));
+            string normalized = PathNormalizer.NormalizeToAzurePath(combinedPath);
             Assert.That(normalized, Is.EqualTo("root/folder/subfolder"));
         }
 

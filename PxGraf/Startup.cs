@@ -197,25 +197,19 @@ namespace PxGraf
                         blobConfig.ManagedIdentityClientId);
                     services.AddSingleton<ISqFileInterface>(provider => new SqFileInterface(
                         blobQueryProvider,
-                        blobQueryProvider,
-                        blobConfig.SavedQueryPath,
-                        blobConfig.ArchiveFilePath));
+                        blobQueryProvider));
                     break;
                 case LocalQueryStorageConfig localConfig:
                     LocalStorageProvider localQueryProvider = new();
                     services.AddSingleton<ISqFileInterface>(provider => new SqFileInterface(
                         localQueryProvider,
-                        localQueryProvider,
-                        localConfig.SavedQueryDirectory,
-                        localConfig.ArchiveFileDirectory));
+                        localQueryProvider));
                     break;
                 default:
                     LocalStorageProvider defaultQueryProvider = new();
                     services.AddSingleton<ISqFileInterface>(provider => new SqFileInterface(
                         defaultQueryProvider,
-                        defaultQueryProvider,
-                        Configuration.Current.SavedQueryDirectory ?? "",
-                        Configuration.Current.ArchiveFileDirectory ?? ""));
+                        defaultQueryProvider));
                     break;
             }
         }
