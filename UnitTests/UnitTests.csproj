@@ -2,6 +2,7 @@
 
   <PropertyGroup>
 	<TargetFramework>net9.0</TargetFramework>
+    <RuntimeIdentifiers>linux-x64;win-x64</RuntimeIdentifiers>
     <IsPackable>false</IsPackable>
 	  <NoWarn>S3776</NoWarn>
 	  <Configurations>Debug;Release;Test</Configurations>
