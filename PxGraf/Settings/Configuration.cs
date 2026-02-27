@@ -156,7 +156,8 @@ namespace PxGraf.Settings
                     $"DatabaseConfig.Type is BlobContainer but {nameof(BlobContainerDatabaseConfig.ContainerName)} is not set.");
 
             string rootPath = section[nameof(BlobContainerDatabaseConfig.RootPath)] ?? "";
-            return new BlobContainerDatabaseConfig(storageAccountName, containerName, rootPath);
+            string managedIdentityClientId = section[nameof(BlobContainerDatabaseConfig.ManagedIdentityClientId)];
+            return new BlobContainerDatabaseConfig(storageAccountName, containerName, rootPath, managedIdentityClientId);
         }
 
         /// <summary>
@@ -218,7 +219,8 @@ namespace PxGraf.Settings
 
             string savedQueryPath = section[nameof(BlobQueryStorageConfig.SavedQueryPath)];
             string archiveFilePath = section[nameof(BlobQueryStorageConfig.ArchiveFilePath)];
-            return new BlobQueryStorageConfig(storageAccountName, containerName, savedQueryPath, archiveFilePath);
+            string managedIdentityClientId = section[nameof(BlobQueryStorageConfig.ManagedIdentityClientId)];
+            return new BlobQueryStorageConfig(storageAccountName, containerName, savedQueryPath, archiveFilePath, managedIdentityClientId);
         }
 
         private static PublicationWebhookConfiguration GetPublicationWebhookConfig(IConfiguration configuration)

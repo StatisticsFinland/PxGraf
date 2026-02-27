@@ -171,7 +171,8 @@ namespace PxGraf
                 case BlobContainerDatabaseConfig blobConfig:
                     BlobStorageProvider blobDataProvider = new(
                         blobConfig.StorageAccountName,
-                        blobConfig.ContainerName);
+                        blobConfig.ContainerName,
+                        blobConfig.ManagedIdentityClientId);
                     services.AddSingleton<IFileDatasource>(provider => new FileDatasource(
                         blobDataProvider,
                         blobConfig.RootPath));
@@ -192,7 +193,8 @@ namespace PxGraf
                 case BlobQueryStorageConfig blobConfig:
                     BlobStorageProvider blobQueryProvider = new(
                         blobConfig.StorageAccountName,
-                        blobConfig.ContainerName);
+                        blobConfig.ContainerName,
+                        blobConfig.ManagedIdentityClientId);
                     services.AddSingleton<ISqFileInterface>(provider => new SqFileInterface(
                         blobQueryProvider,
                         blobQueryProvider,
