@@ -101,7 +101,7 @@ Configures the Px file data source. Set `Type` to one of: `PxWeb`, `LocalFileSys
 |------|----------------|----------------|
 | `PxWeb` | `PxWebUrl` | — |
 | `LocalFileSystem` | `DatabaseRootPath`, `Encoding` | — |
-| `BlobContainer` | `StorageAccountName`, `ContainerName` | `RootPath` |
+| `BlobContainer` | `StorageAccountName`, `ContainerName` | `RootPath`, `ManagedIdentityClientId` |
 
 Example:
 ```json
@@ -122,7 +122,7 @@ Configures where saved queries and archives are stored. Set `Type` to one of: `L
 | Type | Required fields | Optional fields |
 |------|----------------|----------------|
 | `LocalFileSystem` | `SavedQueryDirectory`, `ArchiveFileDirectory` | — |
-| `BlobContainer` | `StorageAccountName`, `ContainerName` | `SavedQueryPath`, `ArchiveFilePath` |
+| `BlobContainer` | `StorageAccountName`, `ContainerName` | `SavedQueryPath`, `ArchiveFilePath`, `ManagedIdentityClientId` |
 
 Example:
 ```json
@@ -155,3 +155,4 @@ Optional mapping of px file metadata property keys to webhook body field names.
 - **DatabaseConfig is required**: The application will fail to start if the `DatabaseConfig` section is absent or has an invalid `Type`.
 - **QueryStorageConfig is optional**: When absent, the legacy `savedQueryDirectory`/`archiveFileDirectory` top-level keys are used. If neither is present, query storage is unconfigured.
 - **Type values are case-insensitive**: `"pxweb"`, `"PxWeb"`, and `"PXWEB"` are all valid.
+- **ManagedIdentityClientId**: When using Azure Blob Storage (`BlobContainer`) for either `DatabaseConfig` or `QueryStorageConfig`, you can optionally specify a `ManagedIdentityClientId`.
