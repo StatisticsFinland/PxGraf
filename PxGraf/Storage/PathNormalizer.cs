@@ -39,7 +39,10 @@ namespace PxGraf.Storage
                 return string.Empty;
             }
 
-            string[] nonEmptyPaths = [.. paths.Where(p => !string.IsNullOrEmpty(p)).Select(NormalizeToAzurePath)];
+            string[] nonEmptyPaths = [.. paths
+                .Where(p => !string.IsNullOrEmpty(p))
+                .Select(NormalizeToAzurePath)
+                .Where(p => !string.IsNullOrEmpty(p))];
             return string.Join("/", nonEmptyPaths);
         }
 

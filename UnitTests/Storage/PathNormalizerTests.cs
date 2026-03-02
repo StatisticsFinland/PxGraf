@@ -172,6 +172,56 @@ namespace UnitTests.Storage
             Assert.That(result, Is.EqualTo("root/path/user/path"));
         }
 
+        [Test]
+        public void CombineAndNormalizeAzurePaths_WithDotSegment_FiltersOutNormalizedEmptySegment()
+        {
+            // Act
+            string result = PathNormalizer.CombineAndNormalizeAzurePaths("root", ".");
+
+            // Assert
+            Assert.That(result, Is.EqualTo("root"));
+        }
+
+        [Test]
+        public void CombineAndNormalizeAzurePaths_WithDotSlashSegment_FiltersOutNormalizedEmptySegment()
+        {
+            // Act
+            string result = PathNormalizer.CombineAndNormalizeAzurePaths("root", "./");
+
+            // Assert
+            Assert.That(result, Is.EqualTo("root"));
+        }
+
+        [Test]
+        public void CombineAndNormalizeAzurePaths_WithSelfCancellingSegment_FiltersOutNormalizedEmptySegment()
+        {
+            // Act
+            string result = PathNormalizer.CombineAndNormalizeAzurePaths("root", "a/..");
+
+            // Assert
+            Assert.That(result, Is.EqualTo("root"));
+        }
+
+        [Test]
+        public void CombineAndNormalizeAzurePaths_WithMultipleNormalizedEmptySegments_FiltersAllOut()
+        {
+            // Act
+            string result = PathNormalizer.CombineAndNormalizeAzurePaths(".", "root", "a/..", "leaf");
+
+            // Assert
+            Assert.That(result, Is.EqualTo("root/leaf"));
+        }
+
+        [Test]
+        public void CombineAndNormalizeAzurePaths_AllSegmentsNormalizeToEmpty_ReturnsEmpty()
+        {
+            // Act
+            string result = PathNormalizer.CombineAndNormalizeAzurePaths(".", "a/..", "./");
+
+            // Assert
+            Assert.That(result, Is.EqualTo(string.Empty));
+        }
+
         #endregion
 
         #region ValidatePathSecurity Tests
