@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace PxGraf.Storage
 {
@@ -29,66 +30,63 @@ namespace PxGraf.Storage
         }
 
         /// <summary>
-        /// Combines two path segments with a forward slash, handling edge cases.
+        /// Combines path segments with a forward slash, handling edge cases.
         /// </summary>
-        /// <param name="rootPath">The root path segment.</param>
-        /// <param name="userPath">The user-provided path segment.</param>
-        /// <returns>Combined path string.</returns>
-        public static string CombinePaths(string rootPath, string userPath)
+        public static string CombineAndNormalizeAzurePaths(params string[] paths)
         {
-            if (string.IsNullOrEmpty(rootPath))
+            if (paths == null || paths.Length == 0)
             {
-                return userPath;
+                return string.Empty;
             }
 
-            if (string.IsNullOrEmpty(userPath))
-            {
-                return rootPath;
-            }
-
-            return $"{rootPath.TrimEnd('/')}/{userPath}";
+            string[] nonEmptyPaths = [.. paths
+                .Where(p => !string.IsNullOrEmpty(p))
+                .Select(NormalizeToAzurePath)
+                .Where(p => !string.IsNullOrEmpty(p))];
+            return string.Join("/", nonEmptyPaths);
         }
 
         /// <summary>
         /// Validates that a path does not escape the root path boundary using ".." segments.
         /// </summary>
         /// <param name="combinedPath">The combined path to validate.</param>
-        /// <param name="rootDepth">The depth of the root path (number of segments).</param>
+        /// <param name="rootPath">The root path to compare against.</param>
         /// <exception cref="UnauthorizedAccessException">Thrown if the path attempts to escape the root boundary.</exception>
-        public static void ValidatePathSecurity(string combinedPath, int rootDepth)
+        public static void ValidatePathSecurity(string combinedPath, string rootPath)
         {
-            string[] segments = combinedPath.Split('/', StringSplitOptions.RemoveEmptyEntries);
-            int depth = 0;
+            string normalizedCombinedPath = NormalizeToAzurePath(combinedPath);
+            string normalizedRootPath = NormalizeToAzurePath(rootPath);
 
-            foreach (string segment in segments)
+            if (string.IsNullOrEmpty(normalizedRootPath))
             {
-                if (segment == "..")
-                {
-                    depth--;
-                    if (depth < rootDepth)
-                    {
-                        throw new UnauthorizedAccessException("Access to the path is denied.");
-                    }
-                }
-                else if (segment != ".")
-                {
-                    depth++;
-                }
+                return;
+            }
+
+            if (normalizedCombinedPath.Equals(normalizedRootPath, StringComparison.OrdinalIgnoreCase))
+            {
+                return;
+            }
+
+            if (!normalizedCombinedPath.StartsWith(normalizedRootPath + "/", StringComparison.OrdinalIgnoreCase))
+            {
+                throw new UnauthorizedAccessException("Access to the path is denied.");
             }
         }
 
         /// <summary>
         /// Normalizes a path by removing "." segments and resolving ".." segments.
+        /// Also converts backslashes to forward slashes and removes duplicate slashes.
         /// </summary>
         /// <param name="path">The path to normalize.</param>
         /// <returns>Normalized path with resolved relative segments.</returns>
-        public static string NormalizePath(string path)
+        public static string NormalizeToAzurePath(string path)
         {
             if (string.IsNullOrEmpty(path))
             {
                 return string.Empty;
             }
 
+            path = path.Replace('\\', '/');
             string[] segments = path.Split('/', StringSplitOptions.RemoveEmptyEntries);
             List<string> normalizedSegments = [];
 
@@ -108,21 +106,6 @@ namespace PxGraf.Storage
             }
 
             return string.Join("/", normalizedSegments);
-        }
-
-        /// <summary>
-        /// Calculates the depth of a path (number of segments).
-        /// </summary>
-        /// <param name="path">The path to analyze.</param>
-        /// <returns>Number of path segments, or 0 if path is empty.</returns>
-        public static int GetPathDepth(string path)
-        {
-            if (string.IsNullOrEmpty(path))
-            {
-                return 0;
-            }
-
-            return path.Split('/', StringSplitOptions.RemoveEmptyEntries).Length;
         }
     }
 }
