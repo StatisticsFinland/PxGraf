@@ -77,7 +77,7 @@ namespace PxGraf
                 services.Configure<LoggerFilterOptions>(options =>
                 {
                     LoggerFilterRule defaultRule = options.Rules.FirstOrDefault(rule =>
-                        rule.ProviderName == "Microsoft.Extensions.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider");
+                        rule.ProviderName == nameof(Microsoft.Extensions.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider));
                     if (defaultRule is not null)
                     {
                         options.Rules.Remove(defaultRule);

@@ -70,10 +70,6 @@ For security and compliance tracking, enable audit logging:
 Example configuration:
 ```json
 "Logging": {
-  "LogLevel": {
-    "Default": "Information",
-    "Microsoft.AspNetCore": "Warning"
-  },
   "ApplicationInsights": {
     "LogLevel": {
       "Default": "Information"

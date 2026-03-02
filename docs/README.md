@@ -71,15 +71,11 @@ LogOptions structure:
 ```
 
 #### Logging
-Configuration for ASP.NET Core logging. Application Insights log levels are controlled through the standard `Logging` section using the `ApplicationInsights` provider key.
+Configuration for Application Insights log levels. This section uses the standard ASP.NET Core logging provider configuration and should **only** contain the `ApplicationInsights` provider key. General log filtering (e.g., suppressing `Microsoft.*` or `System.*` namespaces) is handled in the application code, not in this section. NLog file logging levels are controlled separately via `LogOptions.Level`.
 
 Logging structure:
 ```json
 "Logging": {
-  "LogLevel": {
-    "Default": "Information",
-    "Microsoft.AspNetCore": "Warning"
-  },
   "ApplicationInsights": {
     "LogLevel": {
       "Default": "Information"
@@ -89,7 +85,7 @@ Logging structure:
 ```
 
 #### ApplicationInsights
-Configuration for Azure Application Insights integration for comprehensive telemetry. Log levels for Application Insights are configured through the `Logging` section above, not in this section.
+Connection and telemetry settings for Azure Application Insights. Log levels are configured through the `Logging` section above, not here.
 
 ApplicationInsights structure:
 ```json
