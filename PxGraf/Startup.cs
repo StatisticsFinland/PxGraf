@@ -199,7 +199,7 @@ namespace PxGraf
                         blobQueryProvider,
                         blobQueryProvider));
                     break;
-                case LocalQueryStorageConfig localConfig:
+                case LocalQueryStorageConfig:
                     LocalStorageProvider localQueryProvider = new();
                     services.AddSingleton<ISqFileInterface>(provider => new SqFileInterface(
                         localQueryProvider,
