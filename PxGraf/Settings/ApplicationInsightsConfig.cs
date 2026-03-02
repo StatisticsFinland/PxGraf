@@ -1,5 +1,4 @@
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using System;
 
 namespace PxGraf.Settings
@@ -17,12 +16,6 @@ namespace PxGraf.Settings
         public string ConnectionString { get; }
 
         /// <summary>
-        /// Minimum log level to send to Application Insights.
-        /// Defaults to Information if not specified.
-        /// </summary>
-        public LogLevel MinimumLevel { get; }
-
-        /// <summary>
         /// Whether adaptive sampling is enabled.
         /// Defaults to false to ensure all configured logs are captured.
         /// </summary>
@@ -38,10 +31,6 @@ namespace PxGraf.Settings
             // Check environment variable first, then config
             ConnectionString = Environment.GetEnvironmentVariable(envKey)
                ?? configurationSection.GetValue<string>(nameof(ConnectionString));
-
-            // Parse minimum level, default to Information
-            string levelString = configurationSection.GetValue<string>(nameof(MinimumLevel)) ?? "Information";
-            MinimumLevel = Enum.TryParse<LogLevel>(levelString, true, out LogLevel parsedLevel) ? parsedLevel : LogLevel.Information;
 
             // Get adaptive sampling setting, default to false
             EnableAdaptiveSampling = configurationSection.GetValue<bool>(nameof(EnableAdaptiveSampling), false);

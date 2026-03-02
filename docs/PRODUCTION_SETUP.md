@@ -31,15 +31,26 @@ In production environments, Application Insights provides comprehensive telemetr
   ```
   APPLICATIONINSIGHTS_CONNECTION_STRING=InstrumentationKey=...;IngestionEndpoint=...
   ```
-- **Configuration**: Application Insights is configured in the `ApplicationInsights` section of appsettings.json:
+- **Configuration**: Application Insights is configured using the `ApplicationInsights` section for connection settings and the standard `Logging` section for log level control:
   ```json
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    },
+    "ApplicationInsights": {
+      "LogLevel": {
+        "Default": "Information" // Set appropriate minimum level for production
+      }
+    }
+  },
   "ApplicationInsights": {
     "ConnectionString": "", // Leave empty in config, use environment variable instead
-    "EnableAdaptiveSampling": false, // Disable to ensure all logs are captured
-    "MinLevel": "Information" // Set appropriate minimum level for production
+    "EnableAdaptiveSampling": false // Disable to ensure all logs are captured
   }
   ```
 - **Environment Variable Priority**: The `APPLICATIONINSIGHTS_CONNECTION_STRING` environment variable takes priority over the configuration file setting
+- **Log Levels**: Application Insights log levels are controlled through the standard `Logging.ApplicationInsights.LogLevel` section, which follows the ASP.NET Core logging conventions
 
 ### Audit Logging
 For compliance and security tracking:
