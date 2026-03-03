@@ -59,7 +59,7 @@ To enable Application Insights telemetry:
 2. Configure it using one of these methods:
    - Add it to appsettings.json in the `ApplicationInsights.ConnectionString` field
    - Set the environment variable `APPLICATIONINSIGHTS_CONNECTION_STRING`
-3. Optionally configure the minimum log level by setting `ApplicationInsights.MinLevel` (defaults to "Information")
+3. Configure the minimum log level for Application Insights by setting `Logging.ApplicationInsights.LogLevel.Default` in appsettings.json (defaults to "Information")
 4. Optionally configure adaptive sampling by setting `ApplicationInsights.EnableAdaptiveSampling` (defaults to false)
 
 ### Audit Logging
@@ -69,6 +69,13 @@ For security and compliance tracking, enable audit logging:
 
 Example configuration:
 ```json
+"Logging": {
+  "ApplicationInsights": {
+    "LogLevel": {
+      "Default": "Information"
+    }
+  }
+},
 "LogOptions": {
   "Folder": "C:\\PxGraf\\Logs",
   "SysId": "PxGraf",
@@ -80,8 +87,7 @@ Example configuration:
 },
 "ApplicationInsights": {
   "ConnectionString": "InstrumentationKey=00000000-0000-0000-0000-000000000000;IngestionEndpoint=https://region.in.applicationinsights.azure.com/",
-  "EnableAdaptiveSampling": false,
-  "MinLevel": "Information"
+  "EnableAdaptiveSampling": false
 }
 ```
 

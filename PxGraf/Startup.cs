@@ -22,7 +22,6 @@ using System.Text;
 using PxGraf.Storage;
 using PxGraf.Services;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
-using Microsoft.Extensions.Logging.ApplicationInsights;
 
 namespace PxGraf
 {
@@ -72,9 +71,17 @@ namespace PxGraf
                 };
                 services.AddApplicationInsightsTelemetry(aiOptions);
 
+                // Remove the default Application Insights logger filter rule (Warning level)
+                // that is added by AddApplicationInsightsTelemetry, then allow the standard
+                // Logging configuration section to control the minimum log level.
                 services.Configure<LoggerFilterOptions>(options =>
                 {
-                    options.AddFilter<ApplicationInsightsLoggerProvider>("", aiConfig.MinimumLevel);
+                    LoggerFilterRule defaultRule = options.Rules.FirstOrDefault(rule =>
+                        rule.ProviderName == nameof(Microsoft.Extensions.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider));
+                    if (defaultRule is not null)
+                    {
+                        options.Rules.Remove(defaultRule);
+                    }
                 });
             }
 

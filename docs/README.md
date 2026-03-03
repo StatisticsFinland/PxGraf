@@ -70,21 +70,33 @@ LogOptions structure:
 }
 ```
 
+#### Logging
+Configuration for Application Insights log levels. This section uses the standard ASP.NET Core logging provider configuration and should **only** contain the `ApplicationInsights` provider key. General log filtering (e.g., suppressing `Microsoft.*` or `System.*` namespaces) is handled in the application code, not in this section. NLog file logging levels are controlled separately via `LogOptions.Level`.
+
+Logging structure:
+```json
+"Logging": {
+  "ApplicationInsights": {
+    "LogLevel": {
+      "Default": "Information"
+    }
+  }
+}
+```
+
 #### ApplicationInsights
-Configuration for Azure Application Insights integration for comprehensive telemetry. Application Insights logging is handled through the ASP.NET Core logging pipeline rather than NLog.
+Connection and telemetry settings for Azure Application Insights. Log levels are configured through the `Logging` section above, not here.
 
 ApplicationInsights structure:
 ```json
 "ApplicationInsights": {
   "ConnectionString": "<connection string>",
-  "EnableAdaptiveSampling": false,
-  "MinLevel": "Information"
+  "EnableAdaptiveSampling": false
 }
 ```
 
 - **ConnectionString**: Azure Application Insights connection string. Can also be provided via the `APPLICATIONINSIGHTS_CONNECTION_STRING` environment variable.
 - **EnableAdaptiveSampling**: Whether to enable adaptive sampling (defaults to false to ensure all configured logs are captured).
-- **MinLevel**: Minimum log level to send to Application Insights (defaults to Information).
 
 #### CacheOptions
 Configuration for caching PxWeb data, visualization responses and more.
