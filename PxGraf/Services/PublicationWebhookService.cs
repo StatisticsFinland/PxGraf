@@ -11,6 +11,7 @@ using PxGraf.Settings;
 using PxGraf.Utility;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -85,7 +86,7 @@ namespace PxGraf.Services
 
                 try
                 {
-                    Dictionary<string, object> webhookBody = BuildWebhookBody(queryId, savedQuery, additionalProperties);
+                    Dictionary<string, object> webhookBody = await BuildWebhookBodyAsync(queryId, savedQuery, additionalProperties);
                     string jsonContent = JsonSerializer.Serialize(webhookBody, GlobalJsonConverterOptions.Default);
 
                     using HttpRequestMessage request = new(HttpMethod.Post, _config.EndpointUrl);
@@ -141,7 +142,7 @@ namespace PxGraf.Services
         /// <param name="savedQuery">The saved query object.</param>
         /// <param name="additionalProperties">The metadata additional properties dictionary.</param>
         /// <returns>A dictionary containing the webhook payload.</returns>
-        private Dictionary<string, object> BuildWebhookBody(string queryId, SavedQuery savedQuery, IReadOnlyDictionary<string, MetaProperty> additionalProperties)
+        private async Task<Dictionary<string, object>> BuildWebhookBodyAsync(string queryId, SavedQuery savedQuery, IReadOnlyDictionary<string, MetaProperty> additionalProperties)
         {
             Dictionary<string, object> body = [];
 
@@ -152,7 +153,7 @@ namespace PxGraf.Services
                     ? customName
                     : propertyName.ToString();
 
-                object value = GetPropertyValue(propertyName, queryId, savedQuery);
+                object value = await GetPropertyValueAsync(propertyName, queryId, savedQuery);
                 if (value != null)
                 {
                     body[fieldName] = value;
@@ -190,16 +191,16 @@ namespace PxGraf.Services
         /// <param name="queryId">The query ID.</param>
         /// <param name="savedQuery">The saved query object.</param>
         /// <returns>The property value, or null if the property is not recognized.</returns>
-        private object GetPropertyValue(PublicationPropertyType propertyName, string queryId, SavedQuery savedQuery)
+        private async Task<object> GetPropertyValueAsync(PublicationPropertyType propertyName, string queryId, SavedQuery savedQuery)
         {
             return propertyName switch
             {
                 PublicationPropertyType.Id => queryId,
-                PublicationPropertyType.Header => GetHeader(savedQuery.Query.ChartHeaderEdit, savedQuery),
+                PublicationPropertyType.Header => await GetHeader(savedQuery.Query.ChartHeaderEdit, savedQuery),
                 PublicationPropertyType.Archived => savedQuery.Archived,
                 PublicationPropertyType.ContainsSelectableDimensions => savedQuery.Query.DimensionQueries.Any(q => q.Value.Selectable),
                 PublicationPropertyType.VisualizationType => GetVisualizationType(savedQuery.Settings.VisualizationType),
-                PublicationPropertyType.TableReference => savedQuery.Query.TableReference.ToPath(),
+                PublicationPropertyType.TableReference => Path.GetFileNameWithoutExtension(savedQuery.Query.TableReference.Name),
                 PublicationPropertyType.CreationTime => savedQuery.CreationTime,
                 PublicationPropertyType.Draft => savedQuery.Draft,
                 PublicationPropertyType.Version => savedQuery.Version,

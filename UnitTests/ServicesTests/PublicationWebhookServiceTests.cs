@@ -286,7 +286,7 @@ namespace UnitTests.ServicesTests
                 Assert.That(root.TryGetProperty("ContainsSelectableDimensions", out JsonElement selectableEl), Is.True, "Expected containsselectabledimensions field missing");
                 Assert.That(selectableEl.GetBoolean(), Is.False);
                 Assert.That(root.TryGetProperty("TableReference", out JsonElement tableRefEl), Is.True, "Expected tablereference field missing");
-                Assert.That(tableRefEl.GetString().EndsWith("TestPxFile.px"), Is.True);
+                Assert.That(tableRefEl.GetString().EndsWith("TestPxFile"), Is.True);
                 Assert.That(root.TryGetProperty("Draft", out JsonElement draftEl), Is.True, "Expected draft field missing");
                 Assert.That(draftEl.GetBoolean(), Is.False);
                 Assert.That(root.TryGetProperty("INFO", out _), Is.True, "Expected INFO (mapped NOTE) metadata field missing");
@@ -295,13 +295,13 @@ namespace UnitTests.ServicesTests
                 Assert.That(versionEl.GetString(), Is.EqualTo("1.2"));
 
                 Assert.That(root.TryGetProperty("Header", out JsonElement headerEl), Is.True, "Expected header field missing");
-                if (headerEl.ValueKind == JsonValueKind.Object && headerEl.TryGetProperty("result", out JsonElement headerResultEl) && headerResultEl.ValueKind == JsonValueKind.Object)
+                if (headerEl.ValueKind == JsonValueKind.Object)
                 {
-                    Assert.That(headerResultEl.TryGetProperty("fi", out JsonElement fiHeader), Is.True, "Missing fi header inside header.result");
+                    Assert.That(headerEl.TryGetProperty("fi", out JsonElement fiHeader), Is.True, "Missing fi header");
                     Assert.That(fiHeader.GetString(), Is.EqualTo("value-0 2000-2003 muuttujana variable-2"));
-                    Assert.That(headerResultEl.TryGetProperty("en", out JsonElement enHeader), Is.True, "Missing en header inside header.result");
+                    Assert.That(headerEl.TryGetProperty("en", out JsonElement enHeader), Is.True, "Missing en header");
                     Assert.That(enHeader.GetString(), Is.EqualTo("value-0.en in 2000.en to 2003.en by variable-2.en"));
-                    Assert.That(headerResultEl.TryGetProperty("sv", out JsonElement svHeader), Is.True, "Missing sv header inside header.result");
+                    Assert.That(headerEl.TryGetProperty("sv", out JsonElement svHeader), Is.True, "Missing sv header");
                     Assert.That(svHeader.GetString(), Is.EqualTo("Edited header sv"));
                 }
                 else
