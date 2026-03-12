@@ -30,21 +30,20 @@ namespace PxGraf.Storage
         public async Task<string> ReadAllTextAsync(string filePath, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            return await Task.Factory.StartNew(() =>
+            await using FileStream fs = new(filePath, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize: 4096, FileOptions.Asynchronous);
+            Encoding detectedEncoding = encoding;
+            CharsetDetector cdet = new();
+            byte[] buffer = new byte[1024];
+            int bytesRead = await fs.ReadAsync(buffer.AsMemory(), cancellationToken);
+            cdet.Feed(buffer, 0, bytesRead);
+            cdet.DataEnd();
+            if (cdet.Charset != null)
             {
-                using FileStream fs = File.OpenRead(filePath);
-                Encoding detectedEncoding = encoding;
-                CharsetDetector cdet = new();
-                cdet.Feed(fs);
-                cdet.DataEnd();
-                if (cdet.Charset != null)
-                {
-                    detectedEncoding = Encoding.GetEncoding(cdet.Charset);
-                }
-                fs.Position = 0;
-                using StreamReader sr = new(fs, detectedEncoding);
-                return sr.ReadToEnd();
-            });
+                detectedEncoding = Encoding.GetEncoding(cdet.Charset);
+            }
+            fs.Position = 0;
+            using StreamReader sr = new(fs, detectedEncoding);
+            return await sr.ReadToEndAsync(cancellationToken);
         }
 
         /// <inheritdoc/>

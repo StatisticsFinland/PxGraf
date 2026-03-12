@@ -74,7 +74,7 @@ namespace PxGraf.Storage
         {
             string blobName = PathNormalizer.NormalizeToAzurePath(filePath);
             BlobClient blobClient = containerClient.GetBlobClient(blobName);
-            await blobClient.UploadAsync(new MemoryStream(Encoding.UTF8.GetBytes(content)), overwrite: true, cancellationToken: cancellationToken);
+            await blobClient.UploadAsync(BinaryData.FromString(content), overwrite: true, cancellationToken: cancellationToken);
         }
 
         /// <inheritdoc/>

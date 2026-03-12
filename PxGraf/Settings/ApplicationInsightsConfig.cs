@@ -31,7 +31,7 @@ namespace PxGraf.Settings
             ConnectionString = Environment.GetEnvironmentVariable(envKey)
                ?? configurationSection.GetValue<string>(nameof(ConnectionString));
 
-            // Get adaptive sampling setting, default to false
+            // Get adaptive sampling setting traces per second rate, default to 10 if not set
             TracesPerSecond = configurationSection.GetValue<double>(nameof(TracesPerSecond), 10);
         }
 
