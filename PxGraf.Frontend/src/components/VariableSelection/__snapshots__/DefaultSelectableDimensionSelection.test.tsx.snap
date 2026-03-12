@@ -3,7 +3,7 @@
 exports[`Rendering test renders correctly with default selectable 1`] = `
 <DocumentFragment>
   <div
-    class="MuiAutocomplete-root MuiAutocomplete-hasClearIcon MuiAutocomplete-hasPopupIcon sc-bRKDuR gygJck css-1tlcqt-MuiAutocomplete-root"
+    class="MuiAutocomplete-root MuiAutocomplete-hasClearIcon MuiAutocomplete-hasPopupIcon sc-aXZVf lcTUdh css-1tlcqt-MuiAutocomplete-root"
   >
     <div
       class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-cmpglg-MuiFormControl-root-MuiTextField-root"
@@ -95,7 +95,7 @@ exports[`Rendering test renders correctly with default selectable 1`] = `
 exports[`Rendering test renders correctly without default selectable 1`] = `
 <DocumentFragment>
   <div
-    class="MuiAutocomplete-root MuiAutocomplete-hasPopupIcon sc-bRKDuR gygJck css-1tlcqt-MuiAutocomplete-root"
+    class="MuiAutocomplete-root MuiAutocomplete-hasPopupIcon sc-aXZVf lcTUdh css-1tlcqt-MuiAutocomplete-root"
   >
     <div
       class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-cmpglg-MuiFormControl-root-MuiTextField-root"
@@ -168,7 +168,7 @@ exports[`Rendering test renders correctly without default selectable 1`] = `
 exports[`Rendering test renders correctly without resolved dimension value codes 1`] = `
 <DocumentFragment>
   <div
-    class="MuiAutocomplete-root MuiAutocomplete-hasClearIcon MuiAutocomplete-hasPopupIcon sc-bRKDuR gygJck css-1tlcqt-MuiAutocomplete-root"
+    class="MuiAutocomplete-root MuiAutocomplete-hasClearIcon MuiAutocomplete-hasPopupIcon sc-aXZVf lcTUdh css-1tlcqt-MuiAutocomplete-root"
   >
     <div
       class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-cmpglg-MuiFormControl-root-MuiTextField-root"
