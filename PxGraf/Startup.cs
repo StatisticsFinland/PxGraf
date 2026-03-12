@@ -5,7 +5,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.FeatureManagement;
-using Microsoft.OpenApi.Models;
 using NLog.Extensions.Logging;
 using PxGraf.Settings;
 using PxGraf.Utility;
@@ -22,6 +21,8 @@ using System.Text;
 using PxGraf.Storage;
 using PxGraf.Services;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
+using Microsoft.OpenApi;
+using Microsoft.Extensions.Logging.ApplicationInsights;
 
 namespace PxGraf
 {
@@ -67,7 +68,7 @@ namespace PxGraf
                 ApplicationInsightsServiceOptions aiOptions = new()
                 {
                     ConnectionString = aiConfig.ConnectionString,
-                    EnableAdaptiveSampling = aiConfig.EnableAdaptiveSampling
+                    TracesPerSecond = aiConfig.TracesPerSecond
                 };
                 services.AddApplicationInsightsTelemetry(aiOptions);
 
@@ -77,7 +78,7 @@ namespace PxGraf
                 services.Configure<LoggerFilterOptions>(options =>
                 {
                     LoggerFilterRule defaultRule = options.Rules.FirstOrDefault(rule =>
-                        rule.ProviderName == nameof(Microsoft.Extensions.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider));
+                        rule.ProviderName == nameof(ApplicationInsightsLoggerProvider));
                     if (defaultRule is not null)
                     {
                         options.Rules.Remove(defaultRule);

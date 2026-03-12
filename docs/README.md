@@ -91,12 +91,12 @@ ApplicationInsights structure:
 ```json
 "ApplicationInsights": {
   "ConnectionString": "<connection string>",
-  "EnableAdaptiveSampling": false
+  "TracesPerSecond": 30
 }
 ```
 
 - **ConnectionString**: Azure Application Insights connection string. Can also be provided via the `APPLICATIONINSIGHTS_CONNECTION_STRING` environment variable.
-- **EnableAdaptiveSampling**: Whether to enable adaptive sampling (defaults to false to ensure all configured logs are captured).
+- **TracesPerSecond**: Limits the number of traces sent to Application Insights per second. This replaces the old `EnableAdaptiveSampling` boolean with a more flexible approach.
 
 #### CacheOptions
 Configuration for caching PxWeb data, visualization responses and more.

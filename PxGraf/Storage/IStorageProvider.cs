@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace PxGraf.Storage
@@ -14,51 +15,58 @@ namespace PxGraf.Storage
         /// Checks if a file exists at the specified path.
         /// </summary>
         /// <param name="filePath">Path to the file.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>True if the file exists, false otherwise.</returns>
-        Task<bool> FileExistsAsync(string filePath);
+        Task<bool> FileExistsAsync(string filePath, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Asynchronously reads all text from a file.
         /// </summary>
         /// <param name="filePath">Path to the file.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>Text content of the file.</returns>
-        Task<string> ReadAllTextAsync(string filePath);
+        Task<string> ReadAllTextAsync(string filePath, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Asynchronously writes all text to a file.
         /// </summary>
         /// <param name="filePath">Path to the file.</param>
         /// <param name="content">Content to write to the file.</param>
-        Task WriteAllTextAsync(string filePath, string content);
+        /// <param name="cancellationToken">Cancellation token.</param>
+        Task WriteAllTextAsync(string filePath, string content, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Asynchronously opens a file for reading.
         /// </summary>
         /// <param name="filePath">Path to the file.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>Stream for reading the file.</returns>
-        Task<Stream> OpenReadAsync(string filePath);
+        Task<Stream> OpenReadAsync(string filePath, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Asynchronously enumerates files in a directory with the specified file extension.
         /// </summary>
         /// <param name="directoryPath">Path to the directory.</param>
         /// <param name="fileExtension">File extension to filter by (e.g., ".px", ".txt"). Pass empty string to get all files.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>Enumerable of file paths.</returns>
-        Task<IEnumerable<string>> EnumerateFilesAsync(string directoryPath, string fileExtension);
+        Task<IEnumerable<string>> EnumerateFilesAsync(string directoryPath, string fileExtension, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Asynchronously enumerates subdirectories in a directory.
         /// </summary>
         /// <param name="directoryPath">Path to the directory.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>Enumerable of directory paths.</returns>
-        Task<IEnumerable<string>> EnumerateDirectoriesAsync(string directoryPath);
+        Task<IEnumerable<string>> EnumerateDirectoriesAsync(string directoryPath, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Asynchronously gets the last write time of a file.
         /// </summary>
         /// <param name="filePath">Path to the file.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>Last write time of the file.</returns>
-        Task<DateTime> GetLastWriteTimeAsync(string filePath);
+        Task<DateTime> GetLastWriteTimeAsync(string filePath, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets the name of a directory from its path.

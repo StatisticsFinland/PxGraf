@@ -30,7 +30,7 @@ namespace UnitTests.ConfigurationTests
             {
                 Assert.That(config.IsEnabled, Is.False);
                 Assert.That(config.ConnectionString, Is.Null);
-                Assert.That(config.EnableAdaptiveSampling, Is.False);
+                Assert.That(config.TracesPerSecond.Equals(10));
             });
         }
 
@@ -55,7 +55,7 @@ namespace UnitTests.ConfigurationTests
             {
                 Assert.That(config.IsEnabled, Is.True);
                 Assert.That(config.ConnectionString, Is.EqualTo("InstrumentationKey=test-key;IngestionEndpoint=https://test.com"));
-                Assert.That(config.EnableAdaptiveSampling, Is.False);
+                Assert.That(config.TracesPerSecond.Equals(10));
             });
         }
 
@@ -151,13 +151,13 @@ namespace UnitTests.ConfigurationTests
         }
 
         [Test]
-        public void Constructor_WhenAdaptiveSamplingEnabled_ShouldUseConfiguredValue()
+        public void Constructor_WhenTracesPerSecondSet_ShouldUseConfiguredValue()
         {
             // Arrange
             Dictionary<string, string> configData = new()
             {
                 ["ApplicationInsights:ConnectionString"] = "InstrumentationKey=test-key",
-                ["ApplicationInsights:EnableAdaptiveSampling"] = "true"
+                ["ApplicationInsights:TracesPerSecond"] = "30"
             };
             IConfiguration configuration = new ConfigurationBuilder()
                 .AddInMemoryCollection(configData)
@@ -168,7 +168,7 @@ namespace UnitTests.ConfigurationTests
             ApplicationInsightsConfig config = new(section, EnvVarName);
 
             // Assert
-            Assert.That(config.EnableAdaptiveSampling, Is.True);
+            Assert.That(config.TracesPerSecond.Equals(30));
         }
 
         [Test]
@@ -178,7 +178,7 @@ namespace UnitTests.ConfigurationTests
             Dictionary<string, string> configData = new()
             {
                 ["ApplicationInsights:ConnectionString"] = "InstrumentationKey=full-test-key",
-                ["ApplicationInsights:EnableAdaptiveSampling"] = "true"
+                ["ApplicationInsights:TracesPerSecond"] = "30"
             };
             IConfiguration configuration = new ConfigurationBuilder()
                  .AddInMemoryCollection(configData)
@@ -193,7 +193,7 @@ namespace UnitTests.ConfigurationTests
             {
                 Assert.That(config.IsEnabled, Is.True);
                 Assert.That(config.ConnectionString, Is.EqualTo("InstrumentationKey=full-test-key"));
-                Assert.That(config.EnableAdaptiveSampling, Is.True);
+                Assert.That(config.TracesPerSecond.Equals(30));
             });
         }
 

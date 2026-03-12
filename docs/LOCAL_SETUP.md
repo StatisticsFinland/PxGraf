@@ -60,7 +60,7 @@ To enable Application Insights telemetry:
    - Add it to appsettings.json in the `ApplicationInsights.ConnectionString` field
    - Set the environment variable `APPLICATIONINSIGHTS_CONNECTION_STRING`
 3. Configure the minimum log level for Application Insights by setting `Logging.ApplicationInsights.LogLevel.Default` in appsettings.json (defaults to "Information")
-4. Optionally configure adaptive sampling by setting `ApplicationInsights.EnableAdaptiveSampling` (defaults to false)
+4. Optionally configure adaptive sampling rate by setting `ApplicationInsights.TracesPerSecond` (defaults to 10). This replaces the old `EnableAdaptiveSampling` boolean with a more flexible approach.
 
 ### Audit Logging
 For security and compliance tracking, enable audit logging:
@@ -87,7 +87,7 @@ Example configuration:
 },
 "ApplicationInsights": {
   "ConnectionString": "InstrumentationKey=00000000-0000-0000-0000-000000000000;IngestionEndpoint=https://region.in.applicationinsights.azure.com/",
-  "EnableAdaptiveSampling": false
+  "TracesPerSecond": 30
 }
 ```
 
