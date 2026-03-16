@@ -7,7 +7,7 @@
     "@emotion/styled": "^11.14.0",
     "@mui/icons-material": "^7.3.9",
     "@mui/material": "^7.0.2",
-    "@statisticsfinland/pxvisualizer": "^1.4.2",
+    "@statisticsfinland/pxvisualizer": "^1.4.5",
     "@types/lodash": "^4.17.24",
     "@types/styled-components": "^5.1.36",
     "i18next": "^25.8.18",
