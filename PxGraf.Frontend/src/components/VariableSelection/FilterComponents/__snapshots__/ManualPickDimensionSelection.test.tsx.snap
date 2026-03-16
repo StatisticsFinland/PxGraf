@@ -11,8 +11,8 @@ exports[`Rendering test renders correctly 1`] = `
       <label
         class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined css-113d811-MuiFormLabel-root-MuiInputLabel-root"
         data-shrink="true"
-        for=":r0:"
-        id=":r0:-label"
+        for="_r_0_"
+        id="_r_0_-label"
       >
         variableSelect.itemFilter
       </label>
@@ -72,7 +72,7 @@ exports[`Rendering test renders correctly 1`] = `
           autocapitalize="none"
           autocomplete="off"
           class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputAdornedStart MuiInputBase-inputAdornedEnd MuiAutocomplete-input MuiAutocomplete-inputFocused css-qve9l1-MuiInputBase-input-MuiOutlinedInput-input"
-          id=":r0:"
+          id="_r_0_"
           role="combobox"
           spellcheck="false"
           type="text"

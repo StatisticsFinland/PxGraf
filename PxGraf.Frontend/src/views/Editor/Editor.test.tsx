@@ -11,7 +11,7 @@ import { EVariableType, ETimeVariableInterval, EVisualizationType } from "@stati
 import serializer from "../../testUtils/stripHighchartsHashes";
 import { NavigationProvider } from "contexts/navigationContext";
 import { IValidateTableMetaDataResult } from "api/services/validate-table-metadata";
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { UiLanguageContext } from "contexts/uiLanguageContext";
 import '@testing-library/jest-dom';
 import { IVisualizationOptions } from '../../types/editorContentsResponse';
@@ -173,7 +173,7 @@ const mockVisualizationResult: IVisualizationResult = {
 }
 
 const mockSaveQueryResult: ISaveQueryResult = {
-    isLoading: false,
+    isPending: false,
     isError: false,
     isSuccess: true,
     data: {

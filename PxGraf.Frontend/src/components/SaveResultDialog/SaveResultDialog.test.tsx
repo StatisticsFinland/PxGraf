@@ -20,7 +20,7 @@ jest.mock('react-i18next', () => ({
 }));
 
 const mockSuccessMutation: ISaveQueryResult = {
-    isLoading: false,
+    isPending: false,
     isError: false,
     isSuccess: true,
     data: { id: 'foobar', publicationStatus: EQueryPublicationStatus.Success },
@@ -30,7 +30,7 @@ const mockSuccessMutation: ISaveQueryResult = {
 };
 
 const mockSuccessDraftMutation: ISaveQueryResult = {
-    isLoading: false,
+    isPending: false,
     isError: false,
     isSuccess: true,
     data: { id: 'foobar', publicationStatus: EQueryPublicationStatus.Unpublished },
@@ -40,7 +40,7 @@ const mockSuccessDraftMutation: ISaveQueryResult = {
 };
 
 const mockErrorMutation: ISaveQueryResult = {
-    isLoading: false,
+    isPending: false,
     isError: false,
     isSuccess: true,
     data: { id: 'foobar', publicationStatus: EQueryPublicationStatus.Failed },

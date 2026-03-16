@@ -28,26 +28,26 @@ export const SaveResultDialog: React.FC<ISaveResultDialogProps> = ({
     const { t } = useTranslation();
 
     const HeaderText = () => {
-        if (mutation.isLoading) { return t('saveDialog.saveQuery') }
+        if (mutation.isPending) { return t('saveDialog.saveQuery') }
         if (mutation.isError) { return t('saveResultDialog.fail') }
         if (mutation.isSuccess) { return t('saveResultDialog.success') }
     }
 
     const handleClose = () => {
         // Prevent closing while loading
-        if (mutation.isLoading) {
+        if (mutation.isPending) {
             return;
         }
         onClose();
     };
 
-    const canClose = !mutation.isLoading;
+    const canClose = !mutation.isPending;
 
     return (
         <Dialog
             open={open}
             onClose={handleClose}
-            disableEscapeKeyDown={mutation.isLoading}
+            disableEscapeKeyDown={mutation.isPending}
             scroll='paper'
             aria-labelledby="scroll-dialog-title"
             aria-describedby="scroll-dialog-description"
@@ -68,7 +68,7 @@ export const SaveResultDialog: React.FC<ISaveResultDialogProps> = ({
 }
 
 const SaveDialogContent: React.FC<ISaveDialogContentProps> = ({ result, isDraft }) => {
-    if (result.isLoading) { return <LoadingDialogContent /> }
+    if (result.isPending) { return <LoadingDialogContent /> }
     else if (result.isSuccess) {
         return (
             <SuccessDialogContent

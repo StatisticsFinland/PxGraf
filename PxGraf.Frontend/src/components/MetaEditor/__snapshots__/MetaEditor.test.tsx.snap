@@ -34,7 +34,7 @@ exports[`Rendering test renders correctly 1`] = `
           <label
             class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined css-113d811-MuiFormLabel-root-MuiInputLabel-root"
             data-shrink="true"
-            for=":r0:"
+            for="_r_0_"
           >
             <b>
               editMetadata.header*
@@ -46,7 +46,7 @@ exports[`Rendering test renders correctly 1`] = `
             <input
               aria-invalid="false"
               class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputAdornedEnd css-1dune0f-MuiInputBase-input-MuiOutlinedInput-input"
-              id=":r0:"
+              id="_r_0_"
               type="text"
               value="foo"
             />
@@ -253,7 +253,7 @@ exports[`Rendering test renders correctly 1`] = `
                                     <label
                                       class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined css-113d811-MuiFormLabel-root-MuiInputLabel-root"
                                       data-shrink="true"
-                                      for=":r3:"
+                                      for="_r_3_"
                                     >
                                       editMetadata.valueName: fgfgfg
                                     </label>
@@ -263,7 +263,7 @@ exports[`Rendering test renders correctly 1`] = `
                                       <input
                                         aria-invalid="false"
                                         class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
-                                        id=":r3:"
+                                        id="_r_3_"
                                         type="text"
                                         value="fgfgfg"
                                       />
@@ -290,7 +290,7 @@ exports[`Rendering test renders correctly 1`] = `
                                     <label
                                       class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined css-113d811-MuiFormLabel-root-MuiInputLabel-root"
                                       data-shrink="true"
-                                      for=":r4:"
+                                      for="_r_4_"
                                     >
                                       editMetadata.unit
                                     </label>
@@ -300,7 +300,7 @@ exports[`Rendering test renders correctly 1`] = `
                                       <input
                                         aria-invalid="false"
                                         class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
-                                        id=":r4:"
+                                        id="_r_4_"
                                         type="text"
                                         value="yksikko"
                                       />
@@ -327,7 +327,7 @@ exports[`Rendering test renders correctly 1`] = `
                                     <label
                                       class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined css-113d811-MuiFormLabel-root-MuiInputLabel-root"
                                       data-shrink="true"
-                                      for=":r5:"
+                                      for="_r_5_"
                                     >
                                       editMetadata.source
                                     </label>
@@ -337,7 +337,7 @@ exports[`Rendering test renders correctly 1`] = `
                                       <input
                                         aria-invalid="false"
                                         class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
-                                        id=":r5:"
+                                        id="_r_5_"
                                         type="text"
                                         value="lahde"
                                       />

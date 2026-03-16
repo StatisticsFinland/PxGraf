@@ -4,7 +4,7 @@ import React from 'react';
 import {
   QueryClient,
   QueryClientProvider,
-} from 'react-query';
+} from '@tanstack/react-query';
 import './App.css';
 
 import {

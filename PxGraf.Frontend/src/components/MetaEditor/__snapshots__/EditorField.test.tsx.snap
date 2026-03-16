@@ -8,7 +8,7 @@ exports[`Rendering test renders correctly 1`] = `
     <label
       class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined css-113d811-MuiFormLabel-root-MuiInputLabel-root"
       data-shrink="true"
-      for=":r0:"
+      for="_r_0_"
     >
       <b>
         label*
@@ -20,7 +20,7 @@ exports[`Rendering test renders correctly 1`] = `
       <input
         aria-invalid="false"
         class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputAdornedEnd css-1dune0f-MuiInputBase-input-MuiOutlinedInput-input"
-        id=":r0:"
+        id="_r_0_"
         type="text"
         value="editValue"
       />
@@ -80,7 +80,7 @@ exports[`Rendering test renders correctly if limit close 1`] = `
     <label
       class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined css-113d811-MuiFormLabel-root-MuiInputLabel-root"
       data-shrink="true"
-      for=":r9:"
+      for="_r_9_"
     >
       <b>
         label*
@@ -92,7 +92,7 @@ exports[`Rendering test renders correctly if limit close 1`] = `
       <input
         aria-invalid="false"
         class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputAdornedEnd css-1dune0f-MuiInputBase-input-MuiOutlinedInput-input"
-        id=":r9:"
+        id="_r_9_"
         type="text"
         value="foobarbaz1"
       />
@@ -179,7 +179,7 @@ exports[`Rendering test renders correctly if limit reached 1`] = `
     <label
       class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined css-113d811-MuiFormLabel-root-MuiInputLabel-root"
       data-shrink="true"
-      for=":r6:"
+      for="_r_6_"
     >
       <b>
         label*
@@ -191,7 +191,7 @@ exports[`Rendering test renders correctly if limit reached 1`] = `
       <input
         aria-invalid="false"
         class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputAdornedEnd css-1dune0f-MuiInputBase-input-MuiOutlinedInput-input"
-        id=":r6:"
+        id="_r_6_"
         type="text"
         value="foobarbaz12"
       />
@@ -278,7 +278,7 @@ exports[`Rendering test renders correctly if limit specified but values are shor
     <label
       class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined css-113d811-MuiFormLabel-root-MuiInputLabel-root"
       data-shrink="true"
-      for=":r3:"
+      for="_r_3_"
     >
       <b>
         label*
@@ -290,7 +290,7 @@ exports[`Rendering test renders correctly if limit specified but values are shor
       <input
         aria-invalid="false"
         class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputAdornedEnd css-1dune0f-MuiInputBase-input-MuiOutlinedInput-input"
-        id=":r3:"
+        id="_r_3_"
         type="text"
         value="foo"
       />
@@ -350,7 +350,7 @@ exports[`Rendering test renders correctly if the value hsa not been edited 1`] =
     <label
       class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined css-113d811-MuiFormLabel-root-MuiInputLabel-root"
       data-shrink="true"
-      for=":rc:"
+      for="_r_c_"
     >
       label
     </label>
@@ -360,7 +360,7 @@ exports[`Rendering test renders correctly if the value hsa not been edited 1`] =
       <input
         aria-invalid="false"
         class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
-        id=":rc:"
+        id="_r_c_"
         type="text"
         value="defaultValue"
       />
