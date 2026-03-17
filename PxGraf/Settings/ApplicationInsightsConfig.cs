@@ -16,10 +16,9 @@ namespace PxGraf.Settings
         public string ConnectionString { get; }
 
         /// <summary>
-        /// Whether adaptive sampling is enabled.
-        /// Defaults to false to ensure all configured logs are captured.
+        /// Defines how many trace type telemetry items are sent per second.
         /// </summary>
-        public bool EnableAdaptiveSampling { get; }
+        public double TracesPerSecond { get; }
 
         /// <summary>
         /// Initializes ApplicationInsights configuration from the provided configuration section.
@@ -32,8 +31,8 @@ namespace PxGraf.Settings
             ConnectionString = Environment.GetEnvironmentVariable(envKey)
                ?? configurationSection.GetValue<string>(nameof(ConnectionString));
 
-            // Get adaptive sampling setting, default to false
-            EnableAdaptiveSampling = configurationSection.GetValue<bool>(nameof(EnableAdaptiveSampling), false);
+            // Get adaptive sampling setting traces per second rate, default to 10 if not set
+            TracesPerSecond = configurationSection.GetValue<double>(nameof(TracesPerSecond), 10);
         }
 
         /// <summary>

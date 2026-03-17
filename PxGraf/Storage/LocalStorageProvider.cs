@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Ude;
 
@@ -19,51 +20,54 @@ namespace PxGraf.Storage
         private readonly Encoding encoding = encoding ?? Encoding.UTF8;
 
         /// <inheritdoc/>
-        public async Task<bool> FileExistsAsync(string filePath)
+        public async Task<bool> FileExistsAsync(string filePath, CancellationToken cancellationToken = default)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             return await Task.FromResult(File.Exists(filePath));
         }
 
         /// <inheritdoc/>
-        public async Task<string> ReadAllTextAsync(string filePath)
+        public async Task<string> ReadAllTextAsync(string filePath, CancellationToken cancellationToken = default)
         {
-            return await Task.Factory.StartNew(() =>
+            cancellationToken.ThrowIfCancellationRequested();
+            await using FileStream fs = new(filePath, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize: 4096, FileOptions.Asynchronous);
+            Encoding detectedEncoding = encoding;
+            CharsetDetector cdet = new();
+            byte[] buffer = new byte[1024];
+            int bytesRead = await fs.ReadAsync(buffer.AsMemory(), cancellationToken);
+            cdet.Feed(buffer, 0, bytesRead);
+            cdet.DataEnd();
+            if (cdet.Charset != null)
             {
-                using FileStream fs = File.OpenRead(filePath);
-                Encoding detectedEncoding = encoding;
-                CharsetDetector cdet = new();
-                cdet.Feed(fs);
-                cdet.DataEnd();
-                if (cdet.Charset != null)
-                {
-                    detectedEncoding = Encoding.GetEncoding(cdet.Charset);
-                }
-                fs.Position = 0;
-                using StreamReader sr = new(fs, detectedEncoding);
-                return sr.ReadToEnd();
-            });
+                detectedEncoding = Encoding.GetEncoding(cdet.Charset);
+            }
+            fs.Position = 0;
+            using StreamReader sr = new(fs, detectedEncoding);
+            return await sr.ReadToEndAsync(cancellationToken);
         }
 
         /// <inheritdoc/>
-        public async Task WriteAllTextAsync(string filePath, string content)
+        public async Task WriteAllTextAsync(string filePath, string content, CancellationToken cancellationToken = default)
         {
             string? directoryPath = Path.GetDirectoryName(filePath);
             if (!string.IsNullOrEmpty(directoryPath))
             {
                 Directory.CreateDirectory(directoryPath);
             }
-            await File.WriteAllTextAsync(filePath, content, encoding);
+            await File.WriteAllTextAsync(filePath, content, encoding, cancellationToken);
         }
 
         /// <inheritdoc/>
-        public async Task<Stream> OpenReadAsync(string filePath)
+        public async Task<Stream> OpenReadAsync(string filePath, CancellationToken cancellationToken = default)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             return await Task.FromResult((Stream)File.OpenRead(filePath));
         }
 
         /// <inheritdoc/>
-        public async Task<IEnumerable<string>> EnumerateFilesAsync(string directoryPath, string fileExtension)
+        public async Task<IEnumerable<string>> EnumerateFilesAsync(string directoryPath, string fileExtension, CancellationToken cancellationToken = default)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             string normalizedExtension = PathNormalizer.NormalizeFileExtension(fileExtension);
 
             // Convert extension to search pattern for Directory.EnumerateFiles
@@ -73,14 +77,16 @@ namespace PxGraf.Storage
         }
 
         /// <inheritdoc/>
-        public async Task<IEnumerable<string>> EnumerateDirectoriesAsync(string directoryPath)
+        public async Task<IEnumerable<string>> EnumerateDirectoriesAsync(string directoryPath, CancellationToken cancellationToken = default)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             return await Task.FromResult(Directory.EnumerateDirectories(directoryPath));
         }
 
         /// <inheritdoc/>
-        public async Task<DateTime> GetLastWriteTimeAsync(string filePath)
+        public async Task<DateTime> GetLastWriteTimeAsync(string filePath, CancellationToken cancellationToken = default)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             return await Task.FromResult(File.GetLastWriteTime(filePath));
         }
 

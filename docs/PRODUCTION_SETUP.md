@@ -42,7 +42,7 @@ In production environments, Application Insights provides comprehensive telemetr
   },
   "ApplicationInsights": {
     "ConnectionString": "", // Leave empty in config, use environment variable instead
-    "EnableAdaptiveSampling": false // Disable to ensure all logs are captured
+    "TracesPerSecond": 30 // Limits the number of traces sent to Application Insights per second (adjust as needed for production)
   }
   ```
 - **Environment Variable Priority**: The `APPLICATIONINSIGHTS_CONNECTION_STRING` environment variable takes priority over the configuration file setting

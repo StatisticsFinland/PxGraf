@@ -1,7 +1,7 @@
 /* istanbul ignore file */
 
 import ApiClient from "api/client";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { IValueFilter, Query } from "types/query";
 import { buildTableReference, defaultQueryOptions } from "utils/ApiHelpers";
 
@@ -36,9 +36,9 @@ export const useResolveDimensionFiltersQuery = (idStack: string[], query: Query)
         return [dimensionCode, dimensionQuery.valueFilter]
     }));
 
-    return useQuery(
-        ['filter-dimension', ...idStack, query],
-        () => fetchResolveDimensionFilter(idStack, dimFilters),
-        defaultQueryOptions
-    );
+    return useQuery({
+        queryKey: ['filter-dimension', ...idStack, query],
+        queryFn: () => fetchResolveDimensionFilter(idStack, dimFilters),
+        ...defaultQueryOptions
+    });
 }

@@ -30,13 +30,13 @@ namespace PxGraf.Storage
         );
 
         /// <inheritdoc/>
-        public async Task<bool> FileExistsAsync(string filePath)
+        public async Task<bool> FileExistsAsync(string filePath, CancellationToken cancellationToken = default)
         {
             string blobName = PathNormalizer.NormalizeToAzurePath(filePath);
             BlobClient blobClient = containerClient.GetBlobClient(blobName);
             try
             {
-                return await blobClient.ExistsAsync();
+                return await blobClient.ExistsAsync(cancellationToken);
             }
             catch(FileNotFoundException)
             {
@@ -45,17 +45,17 @@ namespace PxGraf.Storage
         }
 
         /// <inheritdoc/>
-        public async Task<string> ReadAllTextAsync(string filePath)
+        public async Task<string> ReadAllTextAsync(string filePath, CancellationToken cancellationToken = default)
         {
             string blobName = PathNormalizer.NormalizeToAzurePath(filePath);
             BlobClient blobClient = containerClient.GetBlobClient(blobName);
-            using Stream blobStream = await blobClient.OpenReadAsync();
+            using Stream blobStream = await blobClient.OpenReadAsync(cancellationToken: cancellationToken);
 
             // Detect encoding
             Encoding encoding = Encoding.UTF8; // Default fallback
             CharsetDetector cdet = new();
             byte[] buffer = new byte[1024];
-            int bytesRead = await blobStream.ReadAsync(buffer.AsMemory(), CancellationToken.None);
+            int bytesRead = await blobStream.ReadAsync(buffer.AsMemory(), cancellationToken);
             cdet.Feed(buffer, 0, bytesRead);
             cdet.DataEnd();
 
@@ -66,27 +66,27 @@ namespace PxGraf.Storage
 
             blobStream.Position = 0;
             using StreamReader sr = new(blobStream, encoding);
-            return await sr.ReadToEndAsync();
-        }        
+            return await sr.ReadToEndAsync(cancellationToken);
+        }
         
         /// <inheritdoc/>
-        public async Task WriteAllTextAsync(string filePath, string content)
+        public async Task WriteAllTextAsync(string filePath, string content, CancellationToken cancellationToken = default)
         {
             string blobName = PathNormalizer.NormalizeToAzurePath(filePath);
             BlobClient blobClient = containerClient.GetBlobClient(blobName);
-            await blobClient.UploadAsync(new MemoryStream(Encoding.UTF8.GetBytes(content)), overwrite: true);
+            await blobClient.UploadAsync(BinaryData.FromString(content), overwrite: true, cancellationToken: cancellationToken);
         }
 
         /// <inheritdoc/>
-        public async Task<Stream> OpenReadAsync(string filePath)
+        public async Task<Stream> OpenReadAsync(string filePath, CancellationToken cancellationToken = default)
         {
             string blobName = PathNormalizer.NormalizeToAzurePath(filePath);
             BlobClient blobClient = containerClient.GetBlobClient(blobName);
-            return await blobClient.OpenReadAsync();
+            return await blobClient.OpenReadAsync(cancellationToken: cancellationToken);
         }
 
         /// <inheritdoc/>
-        public async Task<IEnumerable<string>> EnumerateFilesAsync(string directoryPath, string fileExtension)
+        public async Task<IEnumerable<string>> EnumerateFilesAsync(string directoryPath, string fileExtension, CancellationToken cancellationToken = default)
         {
             List<string> files = [];
             string prefix = PathNormalizer.NormalizeToAzurePath(directoryPath) ?? "";
@@ -98,7 +98,7 @@ namespace PxGraf.Storage
             // Normalize file extension using shared utility
             string normalizedExtension = PathNormalizer.NormalizeFileExtension(fileExtension).ToLowerInvariant();
 
-            await foreach (BlobItem blobItem in containerClient.GetBlobsAsync(prefix: prefix))
+            await foreach (BlobItem blobItem in containerClient.GetBlobsAsync(BlobTraits.None, BlobStates.None, prefix, cancellationToken))
             {
                 // Check if the blob is directly in this level (not in a subdirectory)
                 string relativePath = blobItem.Name[prefix.Length..];
@@ -113,7 +113,7 @@ namespace PxGraf.Storage
         }
 
         /// <inheritdoc/>
-        public async Task<IEnumerable<string>> EnumerateDirectoriesAsync(string directoryPath)
+        public async Task<IEnumerable<string>> EnumerateDirectoriesAsync(string directoryPath, CancellationToken cancellationToken = default)
         {
             HashSet<string> directories = [];
             string prefix = PathNormalizer.NormalizeToAzurePath(directoryPath) ?? "";
@@ -122,7 +122,7 @@ namespace PxGraf.Storage
                 prefix += "/";
             }
 
-            await foreach (BlobItem blobItem in containerClient.GetBlobsAsync(prefix: prefix))
+            await foreach (BlobItem blobItem in containerClient.GetBlobsAsync(BlobTraits.None, BlobStates.None, prefix, cancellationToken))
             {
                 string relativePath = blobItem.Name[prefix.Length..];
                 int slashIndex = relativePath.IndexOf('/');
@@ -138,11 +138,11 @@ namespace PxGraf.Storage
         }
 
         /// <inheritdoc/>
-        public async Task<DateTime> GetLastWriteTimeAsync(string filePath)
+        public async Task<DateTime> GetLastWriteTimeAsync(string filePath, CancellationToken cancellationToken = default)
         {
             string blobName = PathNormalizer.NormalizeToAzurePath(filePath);
             BlobClient blobClient = containerClient.GetBlobClient(blobName);
-            BlobProperties properties = await blobClient.GetPropertiesAsync();
+            BlobProperties properties = await blobClient.GetPropertiesAsync(cancellationToken: cancellationToken);
             return properties.LastModified.DateTime;
         }
 

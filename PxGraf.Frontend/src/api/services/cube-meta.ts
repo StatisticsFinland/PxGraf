@@ -1,7 +1,7 @@
 /* istanbul ignore file */
 
 import ApiClient from "api/client";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { IMatrixMetadata } from "types/cubeMeta";
 import { defaultQueryOptions } from "utils/ApiHelpers";
 
@@ -24,9 +24,9 @@ const fetchCubeMeta = async(idStack: string[]): Promise<IMatrixMetadata> => {
 }
 
 export const useCubeMetaQuery = (idStack: string[]): ICubeMetaResult => {
-    return useQuery(
-        ['cube-meta', idStack],
-        () => fetchCubeMeta(idStack),
-        defaultQueryOptions
-    );
+    return useQuery({
+        queryKey: ['cube-meta', idStack],
+        queryFn: () => fetchCubeMeta(idStack),
+        ...defaultQueryOptions
+    });
 }

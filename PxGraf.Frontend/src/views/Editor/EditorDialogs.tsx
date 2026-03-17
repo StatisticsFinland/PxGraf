@@ -1,5 +1,5 @@
 import React from 'react';
-import { UseMutationResult } from 'react-query';
+import { UseMutationResult } from '@tanstack/react-query';
 import { SaveDialog } from 'components/SaveDialog/SaveDialog';
 import { SaveResultDialog } from 'components/SaveResultDialog/SaveResultDialog';
 import { EditorContext } from 'contexts/editorContext';
