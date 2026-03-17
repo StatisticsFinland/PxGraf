@@ -26,7 +26,7 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         dotnet-version: ['10.0']
-        node-version: ['21.x']
+        node-version: ['24.x']
         configuration: [ 'Debug' ]
 
     runs-on: ${{ matrix.os }}
