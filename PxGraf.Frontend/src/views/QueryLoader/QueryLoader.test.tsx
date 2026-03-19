@@ -19,25 +19,13 @@ jest.mock('envVars', () => ({
     BasePath: ''
 }));
 
-jest.mock('react-i18next', () => ({
-    ...jest.requireActual('react-i18next'),
-    useTranslation: () => {
-        return {
-            t: (str: string) => str,
-            i18n: {
-                changeLanguage: () => new Promise(() => {}),
-            },
-        };
-    },
-}));
-
 describe('Rendering test', () => {
 
-    it('renders correctly', () => {
+    it('renders correctly', async () => {
         const { asFragment } = render(
             <HashRouter><QueryLoader /></HashRouter>
         );
-        waitFor(() => {
+        await waitFor(() => {
             expect(asFragment()).toMatchSnapshot();
         });
     });

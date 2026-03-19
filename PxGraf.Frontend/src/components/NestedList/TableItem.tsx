@@ -43,7 +43,7 @@ export const TableItem: React.FC<ITableItemProps> = ({ currentPath, item, depth 
                 {item.error ?
                     <ErrorAlert sx={{ pl: depth * 4 }} severity="warning">
                         <AlertTitle>{`${item.name[displayLanguage] ?? item.fileName}`}</AlertTitle>
-                        {getErrorText(item.error)}
+                        {getErrorText(item.error, t)}
                     </ErrorAlert>
                     :
                     <React.Fragment>

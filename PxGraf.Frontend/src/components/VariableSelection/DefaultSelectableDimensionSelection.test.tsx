@@ -67,18 +67,6 @@ const setSelectedVisualizationUserInput = jest.fn();
 const visualizationSettingsUserInput = null;
 const setVisualizationSettingsUserInput = jest.fn();
 
-jest.mock('react-i18next', () => ({
-    ...jest.requireActual('react-i18next'),
-    useTranslation: () => {
-        return {
-            t: (str: string) => str,
-            i18n: {
-                changeLanguage: () => new Promise(() => null),
-            },
-        };
-    },
-}));
-
 describe('Rendering test', () => {
     it('renders correctly with default selectable', () => {
         const { asFragment } = render(

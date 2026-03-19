@@ -19,7 +19,9 @@ import { VisualizationType } from '../../types/visualizationType';
 import { IEditorContentsResult } from '../../api/services/editor-contents';
 import { EditorContext } from '../../contexts/editorContext';
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+    defaultOptions: { queries: { retry: false } },
+});
 const language = "fi";
 const setLanguage = jest.fn();
 const languageTab = "fi";
@@ -27,6 +29,10 @@ const setLanguageTab = jest.fn();
 const availableUiLanguages = ["fi", "sv", "en"];
 const uiContentLanguage = "fi";
 const setUiContentLanguage = jest.fn();
+
+afterEach(() => {
+    queryClient.clear();
+});
 
 jest.mock('react-router-dom', () => ({
     ...jest.requireActual('react-router-dom'),
@@ -41,18 +47,6 @@ jest.mock('envVars', () => ({
     PxGrafUrl: 'pxGrafUrl.fi/',
     PublicUrl: 'publicUrl.fi/',
     BasePath: ''
-}));
-
-jest.mock('react-i18next', () => ({
-    ...jest.requireActual('react-i18next'),
-    useTranslation: () => {
-        return {
-            t: (str: string) => str,
-            i18n: {
-                changeLanguage: () => new Promise(() => ({})),
-            },
-        };
-    },
 }));
 
 jest.mock('api/services/cube-meta', () => ({
@@ -233,7 +227,7 @@ const mockEditorContentsResult: IEditorContentsResult = {
     }
 }
 
-const mockCubeMetaResult: ICubeMetaResult = {
+const initialMockCubeMetaResult: ICubeMetaResult = {
     isLoading: false,
     isError: false,
     data: {
@@ -262,6 +256,8 @@ const mockCubeMetaResult: ICubeMetaResult = {
         ]
     }
 }
+
+let mockCubeMetaResult: ICubeMetaResult;
 
 const mockTableValidationResult: IValidateTableMetaDataResult = {
     isLoading: false,
@@ -339,10 +335,14 @@ jest.mock('api/services/validate-table-metadata', () => ({
     useValidateTableMetadataQuery: () => mockResult,
 }));
 
+beforeEach(() => {
+    mockCubeMetaResult = structuredClone(initialMockCubeMetaResult);
+    mockResult = mockTableValidationResult;
+});
+
 describe('Rendering test', () => {
     beforeAll(() => {
         expect.addSnapshotSerializer(serializer);
-        mockResult = mockTableValidationResult;
     });
 
     it('renders correctly', () => {
@@ -417,39 +417,9 @@ describe('Assertion tests', () => {
     });
 
     it('loads query data from location state', () => {
-        mockResult = mockTableValidationResult;
-        mockCubeMetaResult.isLoading = false;
-        mockCubeMetaResult.isError = false;
-        mockCubeMetaResult.data = {
-            defaultLanguage: 'fi',
-            availableLanguages: ['fi'],
-            additionalProperties: {},
-            dimensions: [
-                {
-                    code: 'code',
-                    name: {
-                        'fi': 'variableName'
-                    },
-                    type: EDimensionType.Content,
-                    values: [
-                        {
-                            code: 'variableValueCode',
-                            name: {
-                                'fi': 'variableValueName'
-                            },
-                            isVirtual: false,
-                            additionalProperties: {},
-                        }
-                    ],
-                    additionalProperties: {}
-                }
-            ]
-        };
-
         const setSelectedVisualizationUserInput = jest.fn();
         const setLoadedQueryId = jest.fn();
         const setLoadedQueryIsDraft = jest.fn();
-        const originalUseContext = React.useContext;
 
         const mockEditorContext = {
             cubeQuery: { variableQueries: {} },
@@ -472,20 +442,13 @@ describe('Assertion tests', () => {
             setPublicationWebhookEnabled: jest.fn()
         };
 
-        // Mock useContext to return the mockEditorContext for EditorContext
-        jest.spyOn(React, 'useContext').mockImplementation(context => {
-            if (context === EditorContext) {
-                return mockEditorContext;
-            }
-            // Return the original context for other contexts
-            return originalUseContext(context);
-        });
-
         render(
             <QueryClientProvider client={queryClient}>
                 <NavigationProvider>
                     <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
-                        <Editor />
+                        <EditorContext.Provider value={mockEditorContext}>
+                            <Editor />
+                        </EditorContext.Provider>
                     </UiLanguageContext.Provider>
                 </NavigationProvider>
             </QueryClientProvider>
@@ -494,34 +457,10 @@ describe('Assertion tests', () => {
         expect(setLoadedQueryId).toHaveBeenCalledWith('test-query-id');
         expect(setLoadedQueryIsDraft).toHaveBeenCalledWith(true);
         expect(setSelectedVisualizationUserInput).toHaveBeenCalledWith(EVisualizationType.HorizontalBarChart);
-
-        jest.restoreAllMocks();
     });
 
     it('calls setPublicationWebhookEnabled when editorContentsResponse has publicationWebhookEnabled property', () => {
-        mockResult = mockTableValidationResult;
-        mockCubeMetaResult.isLoading = false;
-        mockCubeMetaResult.isError = false;
-        mockCubeMetaResult.data = {
-            defaultLanguage: 'fi',
-            availableLanguages: ['fi'],
-            additionalProperties: {},
-            dimensions: [{
-                code: 'code',
-                name: { 'fi': 'variableName' },
-                type: EDimensionType.Content,
-                values: [{
-                    code: 'variableValueCode',
-                    name: { 'fi': 'variableValueName' },
-                    isVirtual: false,
-                    additionalProperties: {}
-                }],
-                additionalProperties: {}
-            }]
-        };
-
         const setPublicationWebhookEnabled = jest.fn();
-        const originalUseContext = React.useContext;
 
         const mockEditorContextWithPublication = {
             cubeQuery: { variableQueries: {} },
@@ -544,19 +483,13 @@ describe('Assertion tests', () => {
             setPublicationWebhookEnabled
         };
 
-        // Mock useContext to return our mock for EditorContext
-        jest.spyOn(React, 'useContext').mockImplementation(context => {
-            if (context === EditorContext) {
-                return mockEditorContextWithPublication;
-            }
-            return originalUseContext(context);
-        });
-
         render(
             <QueryClientProvider client={queryClient}>
                 <NavigationProvider>
                     <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
-                        <Editor />
+                        <EditorContext.Provider value={mockEditorContextWithPublication}>
+                            <Editor />
+                        </EditorContext.Provider>
                     </UiLanguageContext.Provider>
                 </NavigationProvider>
             </QueryClientProvider>
@@ -564,7 +497,5 @@ describe('Assertion tests', () => {
 
         // Verify that setPublicationWebhookEnabled was called with true (from the mocked API response)
         expect(setPublicationWebhookEnabled).toHaveBeenCalledWith(true);
-
-        jest.restoreAllMocks();
     });
 });

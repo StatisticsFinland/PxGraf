@@ -10,18 +10,6 @@ import { EditorContext } from '../../../contexts/editorContext';
 import { VisualizationType } from '../../../types/visualizationType';
 import { IVisualizationOptions } from '../../../types/editorContentsResponse';
 
-jest.mock('react-i18next', () => ({
-    ...jest.requireActual('react-i18next'),
-    useTranslation: () => {
-        return {
-            t: (str: string) => str,
-            i18n: {
-                changeLanguage: () => new Promise(() => null),
-            },
-        };
-    },
-}));
-
 const mockVisualizationRules: IVisualizationOptions = {
     allowManualPivot: false,
     sortingOptions: null,

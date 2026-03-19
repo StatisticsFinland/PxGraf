@@ -38,7 +38,6 @@ describe('getDefaultQueries tests', () => {
             }
         }
         const result = getDefaultQueries(mockDimensions);
-        expect(result).toBeTruthy();
         expect(result).toEqual(expected);
     });
 });
@@ -47,7 +46,6 @@ describe('resolveVariables tests', () => {
     it('Should return the correct object', () => {
         const expected: IDimension[] = [{ code: 'foo', name: { fi: 'nimi' }, type: EDimensionType.Content, values: [] }];
         const result = resolveDimensions(mockDimensions, {'foo': ['bar', 'baz']});
-        expect(result).toBeTruthy();
         expect(result).toEqual(expected);
     });
 });
@@ -75,7 +73,6 @@ describe('getVisualizationOptionsForType tests', () => {
             }
         ];
         const result = getVisualizationOptionsForVisualizationType(mockVisualizationOptions, VisualizationType.LineChart);
-        expect(result).toBeTruthy();
         expect(result).toEqual(mockVisualizationOptions[0]);
     });
 

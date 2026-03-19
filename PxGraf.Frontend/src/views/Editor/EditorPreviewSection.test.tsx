@@ -239,18 +239,6 @@ const mockEditorContentsEmptyVisualizationsAndRejections: IEditorContentsResult 
     }
 };
 
-jest.mock('react-i18next', () => ({
-    ...jest.requireActual('react-i18next'),
-    useTranslation: () => {
-        return {
-            t: (str: string) => str,
-            i18n: {
-                changeLanguage: () => new Promise(() => null),
-            },
-        };
-    },
-}));
-
 jest.mock('api/services/visualization', () => ({
     ...jest.requireActual('api/services/visualization'),
     useVisualizationQuery: (
