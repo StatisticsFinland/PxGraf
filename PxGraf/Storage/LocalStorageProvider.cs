@@ -117,6 +117,11 @@ namespace PxGraf.Storage
                 rootPath = Path.GetFullPath(rootPath);
             }
 
+            if (!rootPath.EndsWith(Path.DirectorySeparatorChar))
+            {
+                rootPath += Path.DirectorySeparatorChar;
+            }
+
             // Combine the root folder with the user input path
             string combinedPath = Path.Combine(rootPath, userPath);
 
