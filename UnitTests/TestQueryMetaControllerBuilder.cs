@@ -1,4 +1,4 @@
-﻿#nullable enable
+#nullable enable
 using Microsoft.Extensions.Logging;
 using Moq;
 using PxGraf.Controllers;
@@ -22,7 +22,7 @@ namespace UnitTests
             Mock<IAuditLogService> auditLogService = new();
 
             sqFileInterface.Setup(fi => fi.SavedQueryExists(It.IsAny<string>(), It.IsAny<string>()))
-                .Returns((string sq, string archivePath) =>
+                .ReturnsAsync((string sq, string archivePath) =>
                 {
                     return savedQueries.ContainsKey($"{archiveRoot}/{sq}");
                 });
@@ -41,7 +41,7 @@ namespace UnitTests
                 });
 
             sqFileInterface.Setup(fi => fi.ArchiveCubeExists(It.IsAny<string>(), It.IsAny<string>()))
-                .Returns((string id, string archivePath) =>
+                .ReturnsAsync((string id, string archivePath) =>
                 {
                     if (archiveCubes == null) return false;
                     return archiveCubes.ContainsKey($"{archiveRoot}/{id}");

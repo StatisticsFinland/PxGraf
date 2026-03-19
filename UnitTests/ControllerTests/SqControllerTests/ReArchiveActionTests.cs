@@ -61,11 +61,14 @@ namespace UnitTests.ControllerTests.SqControllerTests
             _mockCachedDatasource.Setup(c => c.GetMatrixCachedAsync(It.IsAny<PxTableReference>(), It.IsAny<IReadOnlyMatrixMetadata>()))
                 .Returns(Task.Run(() => TestDataCubeBuilder.BuildTestMatrix(cubeParams)));
 
-            _mockSqFileInterface.Setup(s => s.SerializeToFile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<SavedQuery>()))
+            _mockSqFileInterface.Setup(s => s.SerializeToSqFileAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<SavedQuery>()))
+                .Returns(Task.CompletedTask);
+
+            _mockSqFileInterface.Setup(s => s.SerializeToArchiveFileAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<ArchiveCube>()))
                 .Returns(Task.CompletedTask);
 
             _mockSqFileInterface.Setup(s => s.SavedQueryExists(It.IsAny<string>(), It.IsAny<string>()))
-                .Returns(cubeParams.Count > 0);
+                .ReturnsAsync(cubeParams.Count > 0);
 
             _mockSqFileInterface.Setup(s => s.ReadSavedQueryFromFile(It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(Task.Run(() => TestDataCubeBuilder.BuildTestSavedQuery(cubeParams, false, new LineChartVisualizationSettings(null, false, null))));

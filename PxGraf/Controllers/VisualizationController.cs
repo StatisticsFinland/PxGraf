@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Px.Utils.Models.Data.DataValue;
 using Px.Utils.Models.Metadata.Enums;
@@ -103,7 +103,7 @@ namespace PxGraf.Controllers
                     return BadRequest();
                 }
 
-                if (_sqFileInterface.SavedQueryExists(sqId, Configuration.Current.SavedQueryDirectory))
+                if (await _sqFileInterface.SavedQueryExists(sqId, Configuration.Current.SavedQueryDirectory))
                 {
                     _auditLogService.LogAuditEvent(
                         action: CONTROLLER_PATH,

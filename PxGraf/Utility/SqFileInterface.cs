@@ -26,12 +26,12 @@ namespace PxGraf.Utility
         /// <summary>
         /// Returns true if a saved query file with the given sq id exists within the specified saved query file location.
         /// </summary>
-        public bool SavedQueryExists(string id, string savedQueryDirectory)
+        public async Task<bool> SavedQueryExists(string id, string savedQueryDirectory)
         {
             if (InputValidation.ValidateSqIdString(id))
             {
                 string filePath = savedQueryStorage.CombinePath(savedQueryDirectory, id + ".sq");
-                return savedQueryStorage.FileExistsAsync(filePath).GetAwaiter().GetResult();
+                return await savedQueryStorage.FileExistsAsync(filePath);
             }
             else
             {
@@ -42,12 +42,12 @@ namespace PxGraf.Utility
         /// <summary>
         /// Returns true if an archive query file with the given sq id exists within the specified archive query file location.
         /// </summary>
-        public bool ArchiveCubeExists(string id, string archiveDirectory)
+        public async Task<bool> ArchiveCubeExists(string id, string archiveDirectory)
         {
             if (InputValidation.ValidateSqIdString(id))
             {
                 string filePath = archiveStorage.CombinePath(archiveDirectory, id + ".sqa");
-                return archiveStorage.FileExistsAsync(filePath).GetAwaiter().GetResult();
+                return await archiveStorage.FileExistsAsync(filePath);
             }
             else
             {
@@ -91,26 +91,43 @@ namespace PxGraf.Utility
         }
 
         /// <summary>
-        /// Asynchronous function for serializing json serializable objects to a file.
+        /// Asynchronous function for serializing query objects to a file.
         /// This function handles locking the file.
         /// </summary>
         /// <param name="fileName">Name of the file to be created</param>
         /// <param name="filePath">Target file location</param>
         /// <param name="input">This will be serialized to the file</param>
         /// <returns>Serialization task</returns>
-        public async Task SerializeToFile(string fileName, string filePath, object input)
-        {
-            await Task.Factory.StartNew(() =>
-            {
-                lockScope.RunLocked(fileName, () => SerializeToFileImpl(fileName, filePath, input));
-            });
-        }
-
-        private void SerializeToFileImpl(string fileName, string filePath, object input)
+        public async Task SerializeToSqFileAsync(string fileName, string filePath, object input)
         {
             string fullPath = savedQueryStorage.CombinePath(filePath, fileName);
+            await lockScope.RunLocked(
+                fileName,
+                () => SerializeToFileImplAsync(fullPath, input)
+            );
+        }
+
+        /// <summary>
+        /// Asynchronous function for serializing query archive objects to a file.
+        /// This function handles locking the file.
+        /// </summary>
+        /// <param name="fileName">Name of the file to be created</param>
+        /// <param name="filePath">Target file location</param>
+        /// <param name="input">This will be serialized to the file</param>
+        /// <returns>Serialization task</returns>
+        public async Task SerializeToArchiveFileAsync(string fileName, string filePath, object input)
+        {
+            string fullPath = archiveStorage.CombinePath(filePath, fileName);
+            await lockScope.RunLocked(
+                fileName,
+                () => SerializeToFileImplAsync(fullPath, input)
+            );
+        }
+
+        private async Task SerializeToFileImplAsync(string fullPath, object input)
+        {
             string json = JsonSerializer.Serialize(input, GlobalJsonConverterOptions.Default);
-            savedQueryStorage.WriteAllTextAsync(fullPath, json).GetAwaiter().GetResult();
+            await savedQueryStorage.WriteAllTextAsync(fullPath, json);
         }
     }
 }

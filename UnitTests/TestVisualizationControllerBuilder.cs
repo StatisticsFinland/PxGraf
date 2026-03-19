@@ -1,17 +1,14 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Px.Utils.Models.Metadata;
-using Px.Utils.Models.Metadata.Enums;
 using PxGraf.Controllers;
 using PxGraf.Datasource;
 using PxGraf.Datasource.Cache;
 using PxGraf.Models.Queries;
 using PxGraf.Models.Responses;
-using PxGraf.Models.SavedQueries;
 using PxGraf.Services;
-using PxGraf.Settings;
 using PxGraf.Utility;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -49,13 +46,13 @@ namespace UnitTests
                 });
 
             sqFileInterface.Setup(x => x.SavedQueryExists(It.Is<string>(s => s == testQueryId), It.IsAny<string>()))
-                .Returns(savedQueryFound);
-                
+                .ReturnsAsync(savedQueryFound);
+
             sqFileInterface.Setup(x => x.ReadSavedQueryFromFile(It.Is<string>(s => s == testQueryId), It.IsAny<string>()))
                 .ReturnsAsync(() => TestDataCubeBuilder.BuildTestSavedQuery(cubeParams, archived, new LineChartVisualizationSettings(null, false, null)));
-                
+
             sqFileInterface.Setup(x => x.ArchiveCubeExists(It.IsAny<string>(), It.IsAny<string>()))
-                .Returns(true);
+                .ReturnsAsync(true);
                 
             sqFileInterface.Setup(x => x.ReadArchiveCubeFromFile(It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(() => TestDataCubeBuilder.BuildTestArchiveCube(metaParams));
