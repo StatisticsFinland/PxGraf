@@ -78,7 +78,7 @@ describe('Assertion tests', () => {
     });
 
     it('selects first type by default when selectedType is not provided', () => {
-        const { container } = render(
+        render(
             <EditorContext.Provider value={editorContextMock}>
                 <ChartTypeSelector possibleTypes={mockTypes} />
             </EditorContext.Provider>);
