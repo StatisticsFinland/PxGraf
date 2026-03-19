@@ -9,12 +9,12 @@ namespace PxGraf.Utility
     public interface ISqFileInterface
     {
         /// <summary>
-        /// Returns true if a saved query file with the given sq id exists withing the specified saved query file location.
+        /// Returns true if a saved query file with the given sq id exists within the specified saved query file location.
         /// </summary>
         public Task<bool> SavedQueryExists(string id, string savedQueryDirectory);
 
         /// <summary>
-        /// Returns true if an archive query file with the given sq id exists withing the specified archive query file location.
+        /// Returns true if an archive query file with the given sq id exists within the specified archive query file location.
         /// </summary>
         public Task<bool> ArchiveCubeExists(string id, string archiveDirectory);
 
