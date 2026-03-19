@@ -9,6 +9,7 @@ describe('useScrollToElement hook', () => {
 
     afterEach(() => {
         document.body.innerHTML = '';
+        jest.restoreAllMocks();
     });
 
     it('should scroll to given element and focus on first focusable element', () => {
@@ -23,7 +24,7 @@ describe('useScrollToElement hook', () => {
         button.focus = jest.fn();
         dummy.append(button);
         dummy.getBoundingClientRect = jest.fn(() => ({top: targetTop, left: targetLeft} as DOMRect));
-        document.getElementById = jest.fn(() => dummy);
+        jest.spyOn(document, 'getElementById').mockReturnValue(dummy);
 
         renderHook(() => useScrollToElement(targetId, offset));
 
@@ -43,7 +44,7 @@ describe('useScrollToElement hook', () => {
         span.focus = jest.fn();
         dummy.append(span);
         dummy.getBoundingClientRect = jest.fn(() => ({top: targetTop, left: targetLeft} as DOMRect));
-        document.getElementById = jest.fn(() => dummy);
+        jest.spyOn(document, 'getElementById').mockReturnValue(dummy);
 
         renderHook(() => useScrollToElement(targetId, offset));
 
@@ -55,7 +56,7 @@ describe('useScrollToElement hook', () => {
         const targetId = 'test-element-id';
         const offset = 50;
 
-        document.getElementById = jest.fn(() => null);
+        jest.spyOn(document, 'getElementById').mockReturnValue(null);
 
         renderHook(() => useScrollToElement(targetId, offset));
 
@@ -72,7 +73,7 @@ describe('useScrollToElement hook', () => {
         button.focus = jest.fn();
         dummy.append(button);
         dummy.getBoundingClientRect = jest.fn(() => ({top: targetTop, left: targetLeft} as DOMRect));
-        document.getElementById = jest.fn(() => dummy);
+        jest.spyOn(document, 'getElementById').mockReturnValue(dummy);
 
         renderHook(() => useScrollToElement());
 
@@ -88,7 +89,7 @@ describe('useScrollToElement hook', () => {
         const dummy = document.createElement('div');
         dummy.id = targetId;
         dummy.getBoundingClientRect = jest.fn(() => ({top: targetTop, left: targetLeft} as DOMRect));
-        document.getElementById = jest.fn(() => dummy);
+        jest.spyOn(document, 'getElementById').mockReturnValue(dummy);
 
         renderHook(() => useScrollToElement(targetId));
 
@@ -96,7 +97,7 @@ describe('useScrollToElement hook', () => {
     });
 
     it('should not scroll when id is empty string', () => {
-        document.getElementById = jest.fn(() => null);
+        jest.spyOn(document, 'getElementById').mockReturnValue(null);
 
         renderHook(() => useScrollToElement(''));
 
