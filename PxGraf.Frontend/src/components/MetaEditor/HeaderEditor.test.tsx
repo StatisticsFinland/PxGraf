@@ -8,18 +8,6 @@ import { ICubeQuery } from '../../types/query';
 import { IEditorContentsResult } from '../../api/services/editor-contents';
 import { IEditorContentsResponse } from '../../types/editorContentsResponse';
 
-jest.mock('react-i18next', () => ({
-    ...jest.requireActual('react-i18next'),
-    useTranslation: () => {
-        return {
-            t: (str: string) => str,
-            i18n: {
-                changeLanguage: () => new Promise(() => null),
-            },
-        };
-    },
-}));
-
 const data: IEditorContentsResponse = {
     headerText:
     {

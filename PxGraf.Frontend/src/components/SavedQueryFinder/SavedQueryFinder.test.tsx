@@ -1,20 +1,8 @@
 import React from 'react';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitForElementToBeRemoved } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { HashRouter } from 'react-router-dom';
 import { SavedQueryFinder } from './SavedQueryFinder';
-
-jest.mock('react-i18next', () => ({
-    ...jest.requireActual('react-i18next'),
-    useTranslation: () => {
-        return {
-            t: (str: string) => str,
-            i18n: {
-                changeLanguage: () => new Promise(() => null),
-            },
-        };
-    },
-}));
 
 jest.mock('envVars', () => ({
     PxGrafUrl: 'pxGrafUrl.fi/',
@@ -36,14 +24,12 @@ describe('Rendering test', () => {
 });
 
 describe('Assertion test', () => {
-    it('Renders dialog if opened, eliminates dialog if closed', () => {
+    it('Renders dialog if opened, eliminates dialog if closed', async () => {
         render(<HashRouter><SavedQueryFinder /></HashRouter>);
         fireEvent.click(screen.getByText('savedQuery.dialogButtonTxt'));
         expect(screen.getByText('savedQuery.dialogTitleTxt')).toBeInTheDocument();
         fireEvent.click(screen.getByText('savedQuery.closeButton'));
-        setTimeout(() => {
-            expect(screen.queryByText('savedQuery.dialogTitleTxt')).toBeFalsy();
-        }, 1000);
+        await waitForElementToBeRemoved(() => screen.queryByText('savedQuery.dialogTitleTxt'));
     });
 
     it('Renders initial input in the input field', () => {

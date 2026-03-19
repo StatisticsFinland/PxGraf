@@ -1,18 +1,6 @@
 import React from 'react';
 import Header from "./Header";
-import { act, render, waitFor } from '@testing-library/react';
-
-jest.mock('react-i18next', () => ({
-    ...jest.requireActual('react-i18next'),
-    useTranslation: () => {
-        return {
-            t: (str: string) => str,
-            i18n: {
-                changeLanguage: () => new Promise(() => null),
-            },
-        };
-    },
-}));
+import { render, waitFor } from '@testing-library/react';
 
 jest.mock('envVars', () => ({
     PxGrafUrl: 'pxGrafUrl.fi/',

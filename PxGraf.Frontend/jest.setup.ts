@@ -1,33 +1,63 @@
-import { TextEncoder, TextDecoder } from 'util';
-import { ReadableStream, TransformStream, WritableStream } from 'stream/web';
-import { MessageChannel, MessagePort } from 'worker_threads';
+import { TextEncoder, TextDecoder } from 'node:util';
+import { ReadableStream, TransformStream, WritableStream } from 'node:stream/web';
+import { MessageChannel, MessagePort } from 'node:worker_threads';
+import { serialize, deserialize } from 'node:v8';
 
-global.TextEncoder = TextEncoder as typeof global.TextEncoder;
-global.TextDecoder = TextDecoder as typeof global.TextDecoder;
+globalThis.TextEncoder = TextEncoder;
+globalThis.TextDecoder = TextDecoder;
+globalThis.structuredClone ??= <T>(val: T): T => deserialize(serialize(val));
 
 // jsdom v28+ depends on undici which expects web stream APIs in the global scope
-if (typeof globalThis.ReadableStream === 'undefined') {
-    globalThis.ReadableStream = ReadableStream as typeof globalThis.ReadableStream;
-}
-if (typeof globalThis.WritableStream === 'undefined') {
-    globalThis.WritableStream = WritableStream as typeof globalThis.WritableStream;
-}
-if (typeof globalThis.TransformStream === 'undefined') {
-    globalThis.TransformStream = TransformStream as typeof globalThis.TransformStream;
-}
-if (typeof globalThis.MessageChannel === 'undefined') {
-    globalThis.MessageChannel = MessageChannel as typeof globalThis.MessageChannel;
-}
-if (typeof globalThis.MessagePort === 'undefined') {
-    globalThis.MessagePort = MessagePort as typeof globalThis.MessagePort;
-}
+globalThis.ReadableStream ??= ReadableStream as typeof globalThis.ReadableStream;
+globalThis.WritableStream ??= WritableStream as typeof globalThis.WritableStream;
+globalThis.TransformStream ??= TransformStream as typeof globalThis.TransformStream;
+// Polyfill MessageChannel/MessagePort for jsdom, with auto-unref on ports
+// to prevent React scheduler's internal MessageChannel from keeping the Jest worker alive.
+// Setting onmessage implicitly calls ref(), so we patch the setter to re-unref.
+if (globalThis.MessageChannel === undefined) {
+    const patchPort = (port: MessagePort) => {
+        const originalDescriptor = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(port), 'onmessage');
+        if (originalDescriptor?.set) {
+            const setter = originalDescriptor.set;
+            Object.defineProperty(port, 'onmessage', {
+                get: originalDescriptor.get?.bind(port),
+                set(handler) {
+                    setter.call(port, handler);
+                    port.unref();
+                },
+                configurable: true,
+            });
+        }
+    };
 
-if (!window.CSS) window.CSS = {} as any;
-if (!window.CSS.supports) window.CSS.supports = () => true;
+    class UnrefMessageChannel extends MessageChannel {
+        constructor() {
+            super();
+            patchPort(this.port1);
+            patchPort(this.port2);
+        }
+    }
+    globalThis.MessageChannel = UnrefMessageChannel as typeof globalThis.MessageChannel;
+}
+globalThis.MessagePort ??= MessagePort as typeof globalThis.MessagePort;
+
+if (!globalThis.CSS) globalThis.CSS = {} as any;
+if (!globalThis.CSS.supports) globalThis.CSS.supports = () => true;
 
 // Mock envVars to handle import.meta.env in Jest
 jest.mock('envVars', () => ({
     PxGrafUrl: 'http://localhost:3000',
     PublicUrl: '',
     BasePath: ''
+}));
+
+// Centralized react-i18next mock for all test files
+jest.mock('react-i18next', () => ({
+    ...jest.requireActual('react-i18next'),
+    useTranslation: () => ({
+        t: (str: string) => str,
+        i18n: {
+            changeLanguage: () => Promise.resolve(),
+        },
+    }),
 }));

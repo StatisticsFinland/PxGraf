@@ -4,18 +4,6 @@ import UiLanguageContext from 'contexts/uiLanguageContext';
 import '@testing-library/jest-dom';
 import ChartTypeRejectionReasons from './ChartTypeRejectionReasons';
 
-jest.mock('react-i18next', () => ({
-    ...jest.requireActual('react-i18next'),
-    useTranslation: () => {
-        return {
-            t: (str: string) => str,
-            i18n: {
-                changeLanguage: () => new Promise(() => null),
-            },
-        };
-    },
-}));
-
 const setLanguage = jest.fn();
 const language = 'fi';
 const setLanguageTab = jest.fn();

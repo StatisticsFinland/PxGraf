@@ -30,7 +30,7 @@ export const TableInfo: React.FC<ITableInfoProps> = ({ path, item }) => {
                 {item.error ?
                     <ErrorAlert severity="warning">
                         <AlertTitle>{`${item.name[displayLanguage] ?? item.fileName}`}</AlertTitle>
-                        {getErrorText(item.error)}
+                        {getErrorText(item.error, t)}
                     </ErrorAlert>
                     :
                     <ListItemText primary={

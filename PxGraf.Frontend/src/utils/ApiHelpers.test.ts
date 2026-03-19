@@ -44,14 +44,15 @@ const mockBackendOldQueryRespons: IFetchSavedQueryResponse = {
 describe('buildCubeQuery tests', () => {
     it('Should build an object', () => {
         const result = buildCubeQuery(mockQuery, mockMetaEdits, mockIdStack);
-        expect(result).toBeTruthy();
+        expect(result).toHaveProperty('tableReference', { name: 'baz', hierarchy: ['foo', 'bar'] });
+        expect(result).toHaveProperty('variableQueries.foo.selectable', false);
+        expect(result).toHaveProperty('variableQueries.foo.valueEdits');
     });
 });
 
 describe('buildTableReference tests', () => {
     it('Should build an object', () => {
         const result = buildTableReference(mockIdStack);
-        expect(result).toBeTruthy();
         expect(result).toEqual({ name: 'baz', hierarchy: [ 'foo', 'bar' ] });
     });
 });
@@ -64,16 +65,7 @@ jest.mock('envVars', () => ({
 describe('pxGrafUrl tests', () => {
     it('Should build a correct format string', () => {
         const result: string = pxGrafUrl('foobar');
-        expect(result).toBeTruthy();
         expect(result).toEqual('mockedUrl.fi/foobar');
-    });
-});
-
-describe('buildTableReference tests', () => {
-    it('Should build an object', () => {
-        const result = buildTableReference(mockIdStack);
-        expect(result).toBeTruthy();
-        expect(result).toEqual({ name: 'baz', hierarchy: [ 'foo', 'bar' ] });
     });
 });
 
