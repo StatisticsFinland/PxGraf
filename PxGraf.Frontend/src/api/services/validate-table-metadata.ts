@@ -1,7 +1,7 @@
 /* istanbul ignore file */
 
 import ApiClient from "api/client";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { ITableMetaValidationResult } from "types/tableValidation";
 import { defaultQueryOptions } from "utils/ApiHelpers";
 
@@ -25,9 +25,9 @@ const fetchValidateTableMetadata = async (idStack: string[]): Promise<ITableMeta
 }
 
 export const useValidateTableMetadataQuery = (idStack: string[]): IValidateTableMetaDataResult => {
-    return useQuery(
-        ['validate-table-metadata', idStack],
-        () => fetchValidateTableMetadata(idStack),
-        defaultQueryOptions
-    );
+    return useQuery({
+        queryKey: ['validate-table-metadata', idStack],
+        queryFn: () => fetchValidateTableMetadata(idStack),
+        ...defaultQueryOptions
+    });
 }

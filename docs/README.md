@@ -1,7 +1,7 @@
 # PxGraf
 
 ## Overview
-PxGraf is a tool developed and maintained by Statistics Finland (Tilastokeskus) for visualizing statistical data from Px tables using the PxWeb API or local px database with Px.Utils library. The backend, written in C# with ASP.NET Core, fetches px file data from the PxWeb API or local px database using Px.Utils library, processes it for visualizations and serves it via REST apis. The frontend, written in TypeScript with React, provides a user interface for selecting and previewing data for visualizations and saving them as queries. The visualizations are drawn using PxVisualizer npm package, also developed and maintained by Statistics Finland.
+PxGraf is a tool developed and maintained by Statistics Finland (Tilastokeskus) for visualizing statistical data from Px tables. It supports multiple data sources including PxWeb API integration, local Px databases with the Px.Utils library, and Azure Blob Storage for cloud-native deployments. The backend, written in C# with ASP.NET Core, provides a unified storage architecture that can fetch data from various sources and store saved queries in either local file systems or Azure Blob Storage. The frontend, written in TypeScript with React, provides a user interface for selecting and previewing data for visualizations and saving them as queries. The visualizations are drawn using PxVisualizer npm package, also developed and maintained by Statistics Finland.
 
 The software is provided as is and Statistics Finland will **not** offer any support for setting up PxGraf or solving issues related to it.
 
@@ -10,8 +10,28 @@ in the [HighCharts shop](https://shop.highsoft.com/?utm_source=npmjs&utm_medium=
 
 ## Core functions
 - **Data visualization:** PxGraf helps users create visualization from px data. It automatically decides which visualization types are available based on the user's selections and what kind of customizations can be made. The user can then choose from available options. The data and visualizations can also be exported in different formats.
-- **Saved queries:** The user can create, save, overwrite, archive and load queries. Saved queries can be shared with other users or published externally. Saved queries are stored in the running environment's file system and the user is provided with an ID representing the saved query. A saved query can be overwritten if it was previously saved in draft state. The frontend save dialogue prompts this as "Publish-ready", false by default. A query is saved as draft if it's not marked as publish-ready.
+- **Saved queries:** The user can create, save, overwrite, archive and load queries. Saved queries can be shared with other users or published externally. Saved queries are stored in configurable storage backends (local file system or Azure Blob Storage) and the user is provided with an ID representing the saved query. A saved query can be overwritten if it was previously saved in draft state. The frontend save dialogue prompts this as "Publish-ready", false by default. A query is saved as draft if it's not marked as publish-ready.
 - **APIs:** PxGraf's APIs provide functionality for processing the data for visualization, and saving and loading queries.
+
+## Storage Architecture
+
+PxGraf features a unified storage architecture that separates data source storage from saved query storage, enabling flexible deployment scenarios:
+
+### Data Sources (Px Files)
+- **Azure Blob Storage**: Cloud-native storage with automatic scaling and high availability
+- **Local File System**: Direct file access for on-premises or single-instance deployments  
+- **PxWeb API**: Integration with existing PxWeb installations
+
+### Saved Queries and Archives
+- **Azure Blob Storage**: Scalable cloud storage with shared access across multiple instances
+- **Local File System**: Traditional local directory storage with structured or legacy configuration
+
+### Mixed Deployment Scenarios
+The architecture supports various combinations:
+- **Full Cloud**: Both data and queries in Azure Blob Storage
+- **Hybrid**: Data in cloud, queries local (or vice versa)
+- **Traditional**: Both data and queries on local file system
+- **Shared Container**: Data and queries in the same Azure storage account with organized paths
 
 ## APIs
 - **Creation API:** Provides endpoints for fetching database listings and Px table metadata. It also provides functionality for metadata validation and providing required contents for the visualization editor. Can be disabled in the appsettings.json file.
@@ -35,7 +55,6 @@ Configuration for logging such as file save location and logging level. Logging 
 
 The following logging features are available:
 - **Standard Logging**: Configurable text-based logs with customizable log level.
-- **Application Insights**: Azure Application Insights integration for comprehensive telemetry. Can be enabled by providing a connection string in the appsettings.json file or through the PXGRAF_APPLICATIONINSIGHTS_CONNECTION_STRING environment variable.
 - **Audit Logging**: Optional feature for tracking user actions. When enabled, logs HTTP requests with configurable headers to include in the audit trail.
 
 LogOptions structure:
@@ -47,10 +66,37 @@ LogOptions structure:
   "AuditLog": {
     "Enabled": false,
     "IncludedHeaders": []
-  },
-  "ApplicationInsightsConnectionString": "<connection string>"
+  }
 }
 ```
+
+#### Logging
+Configuration for Application Insights log levels. This section uses the standard ASP.NET Core logging provider configuration and should **only** contain the `ApplicationInsights` provider key. General log filtering (e.g., suppressing `Microsoft.*` or `System.*` namespaces) is handled in the application code, not in this section. NLog file logging levels are controlled separately via `LogOptions.Level`.
+
+Logging structure:
+```json
+"Logging": {
+  "ApplicationInsights": {
+    "LogLevel": {
+      "Default": "Information"
+    }
+  }
+}
+```
+
+#### ApplicationInsights
+Connection and telemetry settings for Azure Application Insights. Log levels are configured through the `Logging` section above, not here.
+
+ApplicationInsights structure:
+```json
+"ApplicationInsights": {
+  "ConnectionString": "<connection string>",
+  "TracesPerSecond": 30
+}
+```
+
+- **ConnectionString**: Azure Application Insights connection string. Can also be provided via the `APPLICATIONINSIGHTS_CONNECTION_STRING` environment variable.
+- **TracesPerSecond**: Limits the number of traces sent to Application Insights per second. This replaces the old `EnableAdaptiveSampling` boolean with a more flexible approach.
 
 #### CacheOptions
 Configuration for caching PxWeb data, visualization responses and more.
@@ -60,24 +106,47 @@ Configuration for Cross-Origin Resource Sharing. This is used determine which do
 Configuration for the maximum header length and the maximum number of data points that can be included in a query.
 #### Language
 Configuration for the default language and the available languages in the backend.
-#### pxwebUrl
-The address of the PxWeb server if in use.
-#### savedQueryDirectory
-The directory where saved query files are stored.
-#### archiveFileDirectory
-The directory where archived query files are stored.
+#### DatabaseConfig
+Configures the Px file data source. Set `Type` to one of: `PxWeb`, `LocalFileSystem`, or `BlobContainer`. The remaining fields in the section depend on the chosen type. Missing required fields will cause a startup error.
+
+| Type | Required fields | Optional fields |
+|------|----------------|----------------|
+| `PxWeb` | `PxWebUrl` | — |
+| `LocalFileSystem` | `DatabaseRootPath`, `Encoding` | — |
+| `BlobContainer` | `StorageAccountName`, `ContainerName` | `RootPath`, `ManagedIdentityClientId` |
+
+Example:
+```json
+"DatabaseConfig": {
+  "Type": "PxWeb",
+  "PxWebUrl": "http://localhost:56338/"
+}
+```
+
 #### FeatureManagement
 Grants or denies access to the Creation API.
 #### DatabaseWhitelist
 List of directory or PxWeb database names that are allowed to be accessed and shown as database root directories. If empty, everything is allowed.
-#### LocalFileSystemDatabaseConfig
-Optional configuration for the local database if in use.
-#### LocalFileSystemDatabaseConfig.Enabled
-Determines whether the local database with Px.Utils or PxWeb api is used.
-#### LocalFileSystemDatabaseConfig.DatabaseRootPath
-The path to the database root directory.
-#### LocalFileSystemDatabaseConfig.Encoding
-Name of the encoding used in the database.
+
+#### QueryStorageConfig
+Configures where saved queries and archives are stored. Set `Type` to one of: `LocalFileSystem` or `BlobContainer`. Missing required fields will cause a startup error. When this section is absent, the legacy `savedQueryDirectory`/`archiveFileDirectory` top-level settings are used as fallback.
+
+| Type | Required fields | Optional fields |
+|------|----------------|----------------|
+| `LocalFileSystem` | `SavedQueryDirectory`, `ArchiveFileDirectory` | — |
+| `BlobContainer` | `StorageAccountName`, `ContainerName` | `SavedQueryPath`, `ArchiveFilePath`, `ManagedIdentityClientId` |
+
+Example:
+```json
+"QueryStorageConfig": {
+  "Type": "LocalFileSystem",
+  "SavedQueryDirectory": "C:\\queries",
+  "ArchiveFileDirectory": "C:\\archives"
+}
+```
+##### savedQueryDirectory / archiveFileDirectory
+**LEGACY**: These top-level settings are supported as a fallback when `QueryStorageConfig` is absent.
+
 #### PublicationWebhookConfiguration.EndpointUrl
 URL for optional publication webhook that is called when a query is saved as publish-ready.
 ####  PublicationWebhookConfiguration.AccessTokenHeaderName
@@ -93,12 +162,9 @@ Optional mapping of VisualizationType enum values to custom strings.
 ####  PublicationWebhookConfiguration.MetadataProperties
 Optional mapping of px file metadata property keys to webhook body field names.
 
-Note: If the LocalFileSystemDatabaseConfig block is not present, the PxWeb API is used to fetch data automatically. Providing neither working PxWeb API address nor LocalFileSystemDatabaseConfig will result in an error at application startup.
+### Configuration Notes
 
-## Translation files
-
-### Backend
-Backend translations are located under PxGraf/Pars/translations.json. The file contains translations for English, Swedish and Finnish. Additional languages can be added by adding a new object to the translations.json file. Available languages need also to be added under Language.AvailableLanguages in the appsettings.json file.
-
-### Frontend
-Frontend translations are located under pxgraf.frontend/src/localization. Each language has its own file with translations for the frontend. The language codes in the file names have to match the language codes in the translationsConfig.json file.
+- **DatabaseConfig is required**: The application will fail to start if the `DatabaseConfig` section is absent or has an invalid `Type`.
+- **QueryStorageConfig is optional**: When absent, the legacy `savedQueryDirectory`/`archiveFileDirectory` top-level keys are used. If neither is present, query storage is unconfigured.
+- **Type values are case-insensitive**: `"pxweb"`, `"PxWeb"`, and `"PXWEB"` are all valid.
+- **ManagedIdentityClientId**: When using Azure Blob Storage (`BlobContainer`) for either `DatabaseConfig` or `QueryStorageConfig`, you can optionally specify a `ManagedIdentityClientId`.

@@ -1,7 +1,7 @@
 /* istanbul ignore file */
 
 import ApiClient from "api/client";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { IEditorContentsResponse } from "types/editorContentsResponse";
 import { buildCubeQuery, defaultQueryOptions } from "utils/ApiHelpers";
 import { ICubeQuery, Query } from "types/query";
@@ -27,13 +27,11 @@ const fetchEditorContents = async (idStack: string[], query: Query, metaEdits: I
 
 export const useEditorContentsQuery = (idStack: string[], query: Query, cubeQuery: ICubeQuery): IEditorContentsResult => {
     const queryKey = ['editor-contents', ...idStack, query, cubeQuery];
-    return useQuery(
+    return useQuery({
         queryKey,
-        () => fetchEditorContents(idStack, query, cubeQuery),
-        {
-            ...defaultQueryOptions,
-            enabled: query != null,
-            keepPreviousData: true,
-        }
-    );
+        queryFn: () => fetchEditorContents(idStack, query, cubeQuery),
+        ...defaultQueryOptions,
+        enabled: query != null,
+        placeholderData: (previousData) => previousData,
+    });
 }

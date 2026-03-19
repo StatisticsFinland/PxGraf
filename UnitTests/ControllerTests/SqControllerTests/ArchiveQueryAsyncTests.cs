@@ -96,7 +96,10 @@ namespace UnitTests.ControllerTests.SqControllerTests
             mockCachedDatasource.Setup(c => c.GetMatrixCachedAsync(It.IsAny<PxTableReference>(), It.IsAny<IReadOnlyMatrixMetadata>()))
                 .Returns(Task.Run(() => TestDataCubeBuilder.BuildTestMatrix(cubeParams)));
 
-            mockSqFileInterface.Setup(s => s.SerializeToFile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<SavedQuery>()))
+            mockSqFileInterface.Setup(s => s.SerializeToSqFileAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<SavedQuery>()))
+                .Returns(Task.CompletedTask);
+
+            mockSqFileInterface.Setup(s => s.SerializeToArchiveFileAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<ArchiveCube>()))
                 .Returns(Task.CompletedTask);
 
             mockWebhookService.Setup(w => w.TriggerWebhookAsync(It.IsAny<string>(), It.IsAny<SavedQuery>(), It.IsAny<IReadOnlyDictionary<string, Px.Utils.Models.Metadata.MetaProperties.MetaProperty>>()))
@@ -110,7 +113,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
             // Assert
             Assert.That(result.Value, Is.InstanceOf<SaveQueryResponse>());
             mockSqFileInterface.Verify(
-                s => s.SerializeToFile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<SavedQuery>()), Times.Once);
+                s => s.SerializeToSqFileAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<SavedQuery>()), Times.Once);
 
             // Verify audit log was called with the correct parameters
             mockAuditLogService.Verify(
@@ -183,7 +186,10 @@ namespace UnitTests.ControllerTests.SqControllerTests
             mockCachedDatasource.Setup(c => c.GetMatrixCachedAsync(It.IsAny<PxTableReference>(), It.IsAny<IReadOnlyMatrixMetadata>()))
                 .Returns(Task.Run(() => TestDataCubeBuilder.BuildTestMatrix(cubeParams)));
 
-            mockSqFileInterface.Setup(s => s.SerializeToFile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<SavedQuery>()))
+            mockSqFileInterface.Setup(s => s.SerializeToSqFileAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<SavedQuery>()))
+                .Returns(Task.CompletedTask);
+
+            mockSqFileInterface.Setup(s => s.SerializeToArchiveFileAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<ArchiveCube>()))
                 .Returns(Task.CompletedTask);
 
             mockWebhookService.Setup(w => w.TriggerWebhookAsync(It.IsAny<string>(), It.IsAny<SavedQuery>(), It.IsAny<IReadOnlyDictionary<string, Px.Utils.Models.Metadata.MetaProperties.MetaProperty>>()))
@@ -253,7 +259,10 @@ namespace UnitTests.ControllerTests.SqControllerTests
             mockCachedDatasource.Setup(c => c.GetMatrixCachedAsync(It.IsAny<PxTableReference>(), It.IsAny<IReadOnlyMatrixMetadata>()))
                 .Returns(Task.Run(() => TestDataCubeBuilder.BuildTestMatrix(cubeParams)));
 
-            mockSqFileInterface.Setup(s => s.SerializeToFile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<SavedQuery>()))
+            mockSqFileInterface.Setup(s => s.SerializeToSqFileAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<SavedQuery>()))
+                .Returns(Task.CompletedTask);
+
+            mockSqFileInterface.Setup(s => s.SerializeToArchiveFileAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<ArchiveCube>()))
                 .Returns(Task.CompletedTask);
 
             SqController testController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, mockLogger.Object, mockAuditLogService.Object, mockWebhookService.Object);
@@ -319,7 +328,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
             mockCachedDatasource.Setup(c => c.GetMatrixCachedAsync(It.IsAny<PxTableReference>(), It.IsAny<IReadOnlyMatrixMetadata>()))
                 .Returns(Task.Run(() => TestDataCubeBuilder.BuildTestMatrix(cubeParams)));
 
-            mockSqFileInterface.Setup(s => s.SerializeToFile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<SavedQuery>()))
+            mockSqFileInterface.Setup(s => s.SerializeToSqFileAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<SavedQuery>()))
                 .Returns(Task.CompletedTask);
 
             SqController testController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, mockLogger.Object, mockAuditLogService.Object, mockWebhookService.Object);
@@ -375,7 +384,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
             mockCachedDatasource.Setup(c => c.GetMatrixCachedAsync(It.IsAny<PxTableReference>(), It.IsAny<IReadOnlyMatrixMetadata>()))
                 .Returns(Task.Run(() => TestDataCubeBuilder.BuildTestMatrix(cubeParams)));
 
-            mockSqFileInterface.Setup(s => s.SerializeToFile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<SavedQuery>()))
+            mockSqFileInterface.Setup(s => s.SerializeToSqFileAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<SavedQuery>()))
                 .Returns(Task.CompletedTask);
 
             SqController testController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, mockLogger.Object, mockAuditLogService.Object, mockWebhookService.Object);
@@ -386,7 +395,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
             // Assert
             Assert.That(result.Result, Is.InstanceOf<BadRequestResult>());
             mockSqFileInterface.Verify(
-                s => s.SerializeToFile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<SavedQuery>()), Times.Never);
+                s => s.SerializeToSqFileAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<SavedQuery>()), Times.Never);
 
             // Verify audit log was called with invalid request
             mockAuditLogService.Verify(
@@ -432,7 +441,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
             mockCachedDatasource.Setup(c => c.GetMatrixCachedAsync(It.IsAny<PxTableReference>(), It.IsAny<IReadOnlyMatrixMetadata>()))
                 .Returns(Task.Run(() => TestDataCubeBuilder.BuildTestMatrix(cubeParams)));
 
-            mockSqFileInterface.Setup(s => s.SerializeToFile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<SavedQuery>()))
+            mockSqFileInterface.Setup(s => s.SerializeToSqFileAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<SavedQuery>()))
                 .Returns(Task.CompletedTask);
 
             SqController testController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, mockLogger.Object, mockAuditLogService.Object, mockWebhookService.Object);
@@ -443,7 +452,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
             // Assert
             Assert.That(result.Result, Is.InstanceOf<BadRequestResult>());
             mockSqFileInterface.Verify(
-                s => s.SerializeToFile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<SavedQuery>()), Times.Never);
+                s => s.SerializeToSqFileAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<SavedQuery>()), Times.Never);
 
             // Verify audit log was called with invalid request
             mockAuditLogService.Verify(

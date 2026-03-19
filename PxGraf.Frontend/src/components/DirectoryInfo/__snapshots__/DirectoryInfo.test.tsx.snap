@@ -10,7 +10,7 @@ exports[`Rendering test renders correctly 1`] = `
     tabindex="0"
   >
     <div
-      class="MuiListItemText-root css-cfq8qh-MuiListItemText-root"
+      class="MuiListItemText-root css-1suf81v-MuiListItemText-root"
     >
       <p
         class="MuiTypography-root MuiTypography-body1 css-5arffz-MuiTypography-root"

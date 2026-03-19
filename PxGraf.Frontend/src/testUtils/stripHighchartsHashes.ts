@@ -1,25 +1,24 @@
-import { JSDOM } from 'jsdom';
 import { prettyDOM } from '@testing-library/dom';
 
-const stripHighchartsHashes = (html: string): any => {
-    const dom = new JSDOM(html);
-    const { document } = dom.window;
+const stripHighchartsHashes = (html: string): string => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
 
-    const elementsWithId = document.querySelectorAll('[id^="highcharts-"]');
+    const elementsWithId = doc.querySelectorAll('[id^="highcharts-"]');
     elementsWithId.forEach((element) => {
         const currentId = element.getAttribute('id');
         const newId = currentId.replace(/highcharts-.*/, 'highcharts');
         element.setAttribute('id', newId);
     });
 
-    const elementsWithClipPath = document.querySelectorAll('[clip-path*="highcharts-"]');
+    const elementsWithClipPath = doc.querySelectorAll('[clip-path*="highcharts-"]');
     elementsWithClipPath.forEach((element) => {
         const currentClipPath = element.getAttribute('clip-path');
         const newClipPath = currentClipPath.replace(/#highcharts-\S*\)/, '#highcharts)');
         element.setAttribute('clip-path', newClipPath);
     });
 
-    return dom.serialize();
+    return doc.body.innerHTML;
 };
 
 const serializer = {
@@ -28,8 +27,9 @@ const serializer = {
     },
     serialize(value: HTMLElement) {
         const modifiedHTML = stripHighchartsHashes(value.outerHTML);
-        const modifiedDOM = new JSDOM(modifiedHTML);
-        const modifiedContainer = modifiedDOM.window.document.body.firstChild as HTMLElement;
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(modifiedHTML, 'text/html');
+        const modifiedContainer = doc.body.firstChild as HTMLElement;
 
         return prettyDOM(modifiedContainer, undefined, { highlight: false }) || "";
     },

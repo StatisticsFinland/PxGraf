@@ -1,4 +1,6 @@
 using Microsoft.Extensions.Configuration;
+using PxGraf.Datasource;
+using PxGraf.Datasource.ApiDatasource;
 using PxGraf.Datasource.FileDatasource;
 using PxGraf.Exceptions;
 using PxGraf.Services;
@@ -12,35 +14,41 @@ namespace PxGraf.Settings
     {
         public static Configuration Current { get; private set; }
 
-        public string PxWebUrl { get; private set; }
+        /// <summary>
+        /// The active database (Px file data source) configuration. Exactly one must be set.
+        /// Use pattern matching to determine the concrete type:
+        /// <see cref="PxWebDatabaseConfig"/>, <see cref="LocalFilesystemDatabaseConfig"/>, or <see cref="BlobContainerDatabaseConfig"/>.
+        /// </summary>
+        public DatabaseConfig DatabaseConfig { get; private set; }
+
+        /// <summary>
+        /// The active query storage configuration.
+        /// Use pattern matching to determine the concrete type:
+        /// <see cref="LocalQueryStorageConfig"/> or <see cref="BlobQueryStorageConfig"/>.
+        /// </summary>
+        public IQueryStorageConfig QueryStorageConfig { get; private set; }
+
+        public string PxWebUrl => DatabaseConfig is PxWebDatabaseConfig pxWeb ? pxWeb.PxWebUrl : null;
         public bool CreationAPI { get; private set; }
-        public string SavedQueryDirectory { get; private set; }
-        public string ArchiveFileDirectory { get; private set; }
+        public string SavedQueryDirectory => QueryStorageConfig?.SavedQueryPath;
+        public string ArchiveFileDirectory => QueryStorageConfig?.ArchiveFilePath;
         public QueryOptions QueryOptions { get; private set; }
         public LanguageOptions LanguageOptions { get; private set; }
         public CacheOptions CacheOptions { get; private set; }
         public CorsOptions CorsOptions { get; private set; }
-        public LocalFilesystemDatabaseConfig LocalFilesystemDatabaseConfig { get; private set; }
         public string[] DatabaseWhitelist { get; private set; }
 
         public bool AuditLoggingEnabled { get; private set; }
         public string[] AuditLogHeaders { get; private set; }
-        public string ApplicationInsightsConnectionString { get; private set; }
+        public ApplicationInsightsConfig ApplicationInsights { get; private set; }
         public PublicationWebhookConfiguration PublicationWebhookConfig { get; private set; }
 
         public static void Load(IConfiguration configuration)
         {
-            string aiConnectionString = Environment.GetEnvironmentVariable("PXGRAF_APPLICATIONINSIGHTS_CONNECTION_STRING")
-                ?? configuration["LogOptions:ApplicationInsightsConnectionString"]
-                ?? null;
-
             //Set config defaults
             Configuration newConfig = new()
             {
-                PxWebUrl = configuration["pxwebUrl"] ?? null,
                 CreationAPI = configuration.GetSection("FeatureManagement:CreationAPI").Get<bool>(),
-                SavedQueryDirectory = configuration["savedQueryDirectory"],
-                ArchiveFileDirectory = configuration["archiveFileDirectory"],
                 QueryOptions = new()
                 {
                     MaxHeaderLength = configuration.GetSection("QueryOptions:MaxHeaderLength").Get<int>(),
@@ -65,49 +73,166 @@ namespace PxGraf.Settings
                     AllowAnyOrigin = configuration.GetSection("Cors:AllowAnyOrigin").Get<bool>(),
                     AllowedOrigins = configuration.GetSection("Cors:AllowedOrigins").Get<string[]>(),
                 },
-                LocalFilesystemDatabaseConfig = GetLocalDatabaseConfig(configuration),
-                DatabaseWhitelist = configuration.GetSection("DatabaseWhitelist").Get<string[]>() ?? [],
+                DatabaseConfig = GetDatabaseConfig(configuration),
+                QueryStorageConfig = GetQueryStorageConfig(configuration),
+                DatabaseWhitelist = configuration.GetSection(nameof(DatabaseWhitelist)).Get<string[]>() ?? [],
                 AuditLoggingEnabled = configuration.GetValue<bool?>("LogOptions:AuditLog:Enabled") ?? false,
                 AuditLogHeaders = configuration.GetSection("LogOptions:AuditLog:IncludedHeaders").Get<string[]>() ?? [],
-                ApplicationInsightsConnectionString = aiConnectionString,
-                PublicationWebhookConfig = GetPublicationWebhookConfig(configuration)
+                PublicationWebhookConfig = GetPublicationWebhookConfig(configuration),
+                ApplicationInsights = new ApplicationInsightsConfig(configuration.GetSection(nameof(ApplicationInsights)))
             };
 
-            if (string.IsNullOrEmpty(newConfig.PxWebUrl) && (newConfig.LocalFilesystemDatabaseConfig == null || !newConfig.LocalFilesystemDatabaseConfig.Enabled))
+            if (newConfig.DatabaseConfig == null)
             {
                 throw new InvalidConfigurationException(
-                    "PxWeb URL is not set and Local Filesystem Database is not enabled. " +
-                    "Please configure at least one of these options in the appsettings.json file."
+                    "No database configuration found. " +
+                    "Please set DatabaseConfig.Type to one of: PxWeb, LocalFileSystem, BlobContainer " +
+                    "in the appsettings.json file."
                 );
             }
 
             Current = newConfig;
         }
 
-        private static LocalFilesystemDatabaseConfig GetLocalDatabaseConfig(IConfiguration configuration)
+        /// <summary>
+        /// Reads the DatabaseConfig section, switches on the Type enum, and builds the
+        /// corresponding <see cref="DatabaseConfig"/> subclass. Throws if required fields
+        /// are missing for the selected type.
+        /// </summary>
+        private static DatabaseConfig GetDatabaseConfig(IConfiguration configuration)
         {
-            IConfigurationSection section = configuration.GetSection("LocalFileSystemDatabaseConfig");
+            IConfigurationSection section = configuration.GetSection(nameof(DatabaseConfig));
             if (!section.Exists())
             {
                 return null;
             }
 
-            bool enabled = section.GetValue<bool?>("Enabled") ?? false;
-            string databaseRootPath = section["DatabaseRootPath"];
-            string encodingName = section["Encoding"];
-            Encoding encoding = !string.IsNullOrEmpty(encodingName) ? Encoding.GetEncoding(encodingName) : null;
-
-            if (!enabled || string.IsNullOrEmpty(databaseRootPath) || encoding == null)
+            string typeValue = section["Type"];
+            if (string.IsNullOrEmpty(typeValue) || !Enum.TryParse(typeValue, ignoreCase: true, out DatabaseConfigType type))
             {
                 return null;
             }
 
-            return new LocalFilesystemDatabaseConfig(enabled, databaseRootPath, encoding);
+            return type switch
+            {
+                DatabaseConfigType.PxWeb => BuildPxWebDatabaseConfig(section),
+                DatabaseConfigType.LocalFileSystem => BuildLocalFilesystemDatabaseConfig(section),
+                DatabaseConfigType.BlobContainer => BuildBlobContainerDatabaseConfig(section),
+                _ => null
+            };
+        }
+
+        private static PxWebDatabaseConfig BuildPxWebDatabaseConfig(IConfigurationSection section)
+        {
+            string pxWebUrl = section[nameof(PxWebDatabaseConfig.PxWebUrl)];
+            if (string.IsNullOrWhiteSpace(pxWebUrl))
+                throw new InvalidConfigurationException($"DatabaseConfig.Type is PxWeb but {nameof(PxWebDatabaseConfig.PxWebUrl)} is not set or is empty.");
+            return new PxWebDatabaseConfig(pxWebUrl);
+        }
+
+        private static LocalFilesystemDatabaseConfig BuildLocalFilesystemDatabaseConfig(IConfigurationSection section)
+        {
+            string databaseRootPath = section[nameof(LocalFilesystemDatabaseConfig.DatabaseRootPath)];
+            if (string.IsNullOrWhiteSpace(databaseRootPath))
+                throw new InvalidConfigurationException($"DatabaseConfig.Type is LocalFileSystem but {nameof(LocalFilesystemDatabaseConfig.DatabaseRootPath)} is not set or is empty.");
+
+            string encodingName = section[nameof(LocalFilesystemDatabaseConfig.Encoding)];
+            if (string.IsNullOrWhiteSpace(encodingName))
+                throw new InvalidConfigurationException($"DatabaseConfig.Type is LocalFileSystem but {nameof(LocalFilesystemDatabaseConfig.Encoding)} is not set or is empty.");
+
+            Encoding encoding;
+            try
+            {
+                encoding = Encoding.GetEncoding(encodingName);
+            }
+            catch (ArgumentException ex)
+            {
+                throw new InvalidConfigurationException($"DatabaseConfig.Type is LocalFileSystem but the specified encoding '{encodingName}' is invalid.", ex);
+            }
+            return new LocalFilesystemDatabaseConfig(databaseRootPath, encoding);
+        }
+
+        private static BlobContainerDatabaseConfig BuildBlobContainerDatabaseConfig(IConfigurationSection section)
+        {
+            string storageAccountName = section[nameof(BlobContainerDatabaseConfig.StorageAccountName)];
+            if (string.IsNullOrWhiteSpace(storageAccountName))
+                throw new InvalidConfigurationException($"DatabaseConfig.Type is BlobContainer but {nameof(BlobContainerDatabaseConfig.StorageAccountName)} is not set or is empty.");
+
+            string containerName = section[nameof(BlobContainerDatabaseConfig.ContainerName)];
+            if (string.IsNullOrWhiteSpace(containerName))
+                throw new InvalidConfigurationException($"DatabaseConfig.Type is BlobContainer but {nameof(BlobContainerDatabaseConfig.ContainerName)} is not set or is empty.");
+
+            string rootPath = section[nameof(BlobContainerDatabaseConfig.RootPath)] ?? "";
+            string managedIdentityClientId = section[nameof(BlobContainerDatabaseConfig.ManagedIdentityClientId)];
+            return new BlobContainerDatabaseConfig(storageAccountName, containerName, rootPath, managedIdentityClientId);
+        }
+
+        /// <summary>
+        /// Reads the IQueryStorageConfig section, switches on the Type enum, and builds the
+        /// corresponding <see cref="QueryStorageConfig"/> subclass. Falls back to legacy
+        /// savedQueryDirectory/archiveFileDirectory when the section is absent.
+        /// </summary>
+        private static IQueryStorageConfig GetQueryStorageConfig(IConfiguration configuration)
+        {
+            IConfigurationSection section = configuration.GetSection(nameof(QueryStorageConfig));
+            if (section.Exists())
+            {
+                string typeValue = section["Type"];
+                if (!string.IsNullOrEmpty(typeValue) && Enum.TryParse(typeValue, ignoreCase: true, out QueryStorageConfigType type))
+                {
+                    return type switch
+                    {
+                        QueryStorageConfigType.LocalFileSystem => BuildLocalQueryStorageConfig(section),
+                        QueryStorageConfigType.BlobContainer => BuildBlobQueryStorageConfig(section),
+                        _ => null
+                    };
+                }
+            }
+
+            // Fallback to legacy configuration
+            string legacySavedQueryDirectory = configuration["savedQueryDirectory"];
+            string legacyArchiveFileDirectory = configuration["archiveFileDirectory"];
+
+            if (!string.IsNullOrEmpty(legacySavedQueryDirectory) && !string.IsNullOrEmpty(legacyArchiveFileDirectory))
+            {
+                return new LocalQueryStorageConfig(legacySavedQueryDirectory, legacyArchiveFileDirectory);
+            }
+
+            return null;
+        }
+
+        private static LocalQueryStorageConfig BuildLocalQueryStorageConfig(IConfigurationSection section)
+        {
+            string savedQueryDirectory = section[nameof(LocalQueryStorageConfig.SavedQueryDirectory)]
+                ?? throw new InvalidConfigurationException(
+                    $"IQueryStorageConfig.Type is LocalFileSystem but {nameof(LocalQueryStorageConfig.SavedQueryDirectory)} is not set.");
+
+            string archiveFileDirectory = section[nameof(LocalQueryStorageConfig.ArchiveFileDirectory)]
+                ?? throw new InvalidConfigurationException(
+                    $"IQueryStorageConfig.Type is LocalFileSystem but {nameof(LocalQueryStorageConfig.ArchiveFileDirectory)} is not set.");
+
+            return new LocalQueryStorageConfig(savedQueryDirectory, archiveFileDirectory);
+        }
+
+        private static BlobQueryStorageConfig BuildBlobQueryStorageConfig(IConfigurationSection section)
+        {
+            string storageAccountName = section[nameof(BlobQueryStorageConfig.StorageAccountName)]
+                ?? throw new InvalidConfigurationException(
+                    $"IQueryStorageConfig.Type is BlobContainer but {nameof(BlobQueryStorageConfig.StorageAccountName)} is not set.");
+
+            string containerName = section[nameof(BlobQueryStorageConfig.ContainerName)]
+                ?? throw new InvalidConfigurationException(
+                    $"IQueryStorageConfig.Type is BlobContainer but {nameof(BlobQueryStorageConfig.ContainerName)} is not set.");
+
+            string savedQueryPath = section[nameof(BlobQueryStorageConfig.SavedQueryPath)];
+            string archiveFilePath = section[nameof(BlobQueryStorageConfig.ArchiveFilePath)];
+            string managedIdentityClientId = section[nameof(BlobQueryStorageConfig.ManagedIdentityClientId)];
+            return new BlobQueryStorageConfig(storageAccountName, containerName, savedQueryPath, archiveFilePath, managedIdentityClientId);
         }
 
         private static PublicationWebhookConfiguration GetPublicationWebhookConfig(IConfiguration configuration)
         {
-            IConfigurationSection section = configuration.GetSection("PublicationWebhookConfiguration");
+            IConfigurationSection section = configuration.GetSection(nameof(PublicationWebhookConfiguration));
             if (!section.Exists())
             {
                 return new PublicationWebhookConfiguration();
@@ -115,13 +240,13 @@ namespace PxGraf.Settings
 
             return new PublicationWebhookConfiguration
             {
-                EndpointUrl = section["EndpointUrl"],
-                AccessTokenHeaderName = section["AccessTokenHeaderName"],
-                AccessTokenHeaderValue = section["AccessTokenHeaderValue"],
-                BodyContentPropertyNames = section.GetSection("BodyContentPropertyNames").Get<PublicationPropertyType[]>() ?? [],
-                BodyContentPropertyNameEdits = section.GetSection("BodyContentPropertyNameEdits").Get<Dictionary<PublicationPropertyType, string>>() ?? [],
-                VisualizationTypeTranslations = section.GetSection("VisualizationTypeTranslations").Get<Dictionary<string, string>>() ?? [],
-                MetadataProperties = section.GetSection("MetadataProperties").Get<Dictionary<string, string>>() ?? []
+                EndpointUrl = section[nameof(PublicationWebhookConfiguration.EndpointUrl)],
+                AccessTokenHeaderName = section[nameof(PublicationWebhookConfiguration.AccessTokenHeaderName)],
+                AccessTokenHeaderValue = section[nameof(PublicationWebhookConfiguration.AccessTokenHeaderValue)],
+                BodyContentPropertyNames = section.GetSection(nameof(PublicationWebhookConfiguration.BodyContentPropertyNames)).Get<PublicationPropertyType[]>() ?? [],
+                BodyContentPropertyNameEdits = section.GetSection(nameof(PublicationWebhookConfiguration.BodyContentPropertyNameEdits)).Get<Dictionary<PublicationPropertyType, string>>() ?? [],
+                VisualizationTypeTranslations = section.GetSection(nameof(PublicationWebhookConfiguration.VisualizationTypeTranslations)).Get<Dictionary<string, string>>() ?? [],
+                MetadataProperties = section.GetSection(nameof(PublicationWebhookConfiguration.MetadataProperties)).Get<Dictionary<string, string>>() ?? []
             };
         }
     }

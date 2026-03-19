@@ -9,6 +9,9 @@ const config: Config.InitialOptions = {
         '\\.png$': '<rootDir>/__mocks__/fileMock.ts',
     },
     setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
+    transformIgnorePatterns: [
+        'node_modules/(?!(@exodus/bytes)/)',
+    ],
 };
 
 export default config;
