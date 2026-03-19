@@ -124,36 +124,43 @@ namespace PxGraf.Settings
 
         private static PxWebDatabaseConfig BuildPxWebDatabaseConfig(IConfigurationSection section)
         {
-            string pxWebUrl = section[nameof(PxWebDatabaseConfig.PxWebUrl)]
-                ?? throw new InvalidConfigurationException(
-                    $"DatabaseConfig.Type is PxWeb but {nameof(PxWebDatabaseConfig.PxWebUrl)} is not set.");
-
+            string pxWebUrl = section[nameof(PxWebDatabaseConfig.PxWebUrl)];
+            if (string.IsNullOrWhiteSpace(pxWebUrl))
+                throw new InvalidConfigurationException($"DatabaseConfig.Type is PxWeb but {nameof(PxWebDatabaseConfig.PxWebUrl)} is not set or is empty.");
             return new PxWebDatabaseConfig(pxWebUrl);
         }
 
         private static LocalFilesystemDatabaseConfig BuildLocalFilesystemDatabaseConfig(IConfigurationSection section)
         {
-            string databaseRootPath = section[nameof(LocalFilesystemDatabaseConfig.DatabaseRootPath)]
-                ?? throw new InvalidConfigurationException(
-                    $"DatabaseConfig.Type is LocalFileSystem but {nameof(LocalFilesystemDatabaseConfig.DatabaseRootPath)} is not set.");
+            string databaseRootPath = section[nameof(LocalFilesystemDatabaseConfig.DatabaseRootPath)];
+            if (string.IsNullOrWhiteSpace(databaseRootPath))
+                throw new InvalidConfigurationException($"DatabaseConfig.Type is LocalFileSystem but {nameof(LocalFilesystemDatabaseConfig.DatabaseRootPath)} is not set or is empty.");
 
-            string encodingName = section[nameof(LocalFilesystemDatabaseConfig.Encoding)]
-                ?? throw new InvalidConfigurationException(
-                    $"DatabaseConfig.Type is LocalFileSystem but {nameof(LocalFilesystemDatabaseConfig.Encoding)} is not set.");
+            string encodingName = section[nameof(LocalFilesystemDatabaseConfig.Encoding)];
+            if (string.IsNullOrWhiteSpace(encodingName))
+                throw new InvalidConfigurationException($"DatabaseConfig.Type is LocalFileSystem but {nameof(LocalFilesystemDatabaseConfig.Encoding)} is not set or is empty.");
 
-            Encoding encoding = Encoding.GetEncoding(encodingName);
+            Encoding encoding;
+            try
+            {
+                encoding = Encoding.GetEncoding(encodingName);
+            }
+            catch (ArgumentException ex)
+            {
+                throw new InvalidConfigurationException($"DatabaseConfig.Type is LocalFileSystem but the specified encoding '{encodingName}' is invalid.", ex);
+            }
             return new LocalFilesystemDatabaseConfig(databaseRootPath, encoding);
         }
 
         private static BlobContainerDatabaseConfig BuildBlobContainerDatabaseConfig(IConfigurationSection section)
         {
-            string storageAccountName = section[nameof(BlobContainerDatabaseConfig.StorageAccountName)]
-                ?? throw new InvalidConfigurationException(
-                    $"DatabaseConfig.Type is BlobContainer but {nameof(BlobContainerDatabaseConfig.StorageAccountName)} is not set.");
+            string storageAccountName = section[nameof(BlobContainerDatabaseConfig.StorageAccountName)];
+            if (string.IsNullOrWhiteSpace(storageAccountName))
+                throw new InvalidConfigurationException($"DatabaseConfig.Type is BlobContainer but {nameof(BlobContainerDatabaseConfig.StorageAccountName)} is not set or is empty.");
 
-            string containerName = section[nameof(BlobContainerDatabaseConfig.ContainerName)]
-                ?? throw new InvalidConfigurationException(
-                    $"DatabaseConfig.Type is BlobContainer but {nameof(BlobContainerDatabaseConfig.ContainerName)} is not set.");
+            string containerName = section[nameof(BlobContainerDatabaseConfig.ContainerName)];
+            if (string.IsNullOrWhiteSpace(containerName))
+                throw new InvalidConfigurationException($"DatabaseConfig.Type is BlobContainer but {nameof(BlobContainerDatabaseConfig.ContainerName)} is not set or is empty.");
 
             string rootPath = section[nameof(BlobContainerDatabaseConfig.RootPath)] ?? "";
             string managedIdentityClientId = section[nameof(BlobContainerDatabaseConfig.ManagedIdentityClientId)];
