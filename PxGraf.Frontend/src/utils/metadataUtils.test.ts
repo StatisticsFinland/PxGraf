@@ -103,4 +103,19 @@ describe('getAdditionalProperty tests', () => {
         const propertyValue = getAdditionalPropertyValue('foo', mockProperties);
         expect(propertyValue).toBeNull();
     });
+
+    it('Should return null when additionalProperties is null', () => {
+        const propertyValue = getAdditionalPropertyValue('MOCKPROPERTY_STRING', null);
+        expect(propertyValue).toBeNull();
+    });
+
+    it('Should return null when additionalProperties is undefined', () => {
+        const propertyValue = getAdditionalPropertyValue('MOCKPROPERTY_STRING', undefined);
+        expect(propertyValue).toBeNull();
+    });
+
+    it('Should return null when additionalProperties is an empty object', () => {
+        const propertyValue = getAdditionalPropertyValue('MOCKPROPERTY_STRING', {});
+        expect(propertyValue).toBeNull();
+    });
 });

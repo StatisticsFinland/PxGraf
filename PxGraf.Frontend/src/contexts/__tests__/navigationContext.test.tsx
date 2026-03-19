@@ -31,4 +31,18 @@ describe('navigationContext', () => {
         
         expect(getByText('testDb,testStat,testTable')).toBeInTheDocument(); 
     });
+
+    it('should handle multiple sequential state updates', () => {
+        const { getByText, getByTestId } = render(<NavigationProvider><TestComponent /></NavigationProvider>);
+
+        act(() => {
+            fireEvent.click(getByTestId('button1'));
+        });
+        expect(getByText('testDb,testStat,testTable')).toBeInTheDocument();
+
+        act(() => {
+            fireEvent.click(getByTestId('button1'));
+        });
+        expect(getByText('testDb,testStat,testTable')).toBeInTheDocument();
+    });
 });

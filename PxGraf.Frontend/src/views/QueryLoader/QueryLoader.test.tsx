@@ -39,7 +39,7 @@ describe('Assertion tests', () => {
     });
 
     it('displays loading state', () => {
-        (fetchSavedQuery as jest.Mock).mockImplementation(() => new Promise(() => null));
+        (fetchSavedQuery as jest.Mock).mockImplementation(() => new Promise(() => { /* pending */ }));
         const { getByRole } = render(<HashRouter><QueryLoader /></HashRouter>);
         expect(getByRole('loading')).toBeInTheDocument();
     });
@@ -57,5 +57,20 @@ describe('Assertion tests', () => {
         });
         render(<HashRouter><QueryLoader /></HashRouter>);
         await waitFor(() => expect(mockNavigate.mock.calls[0][0]).toEqual("/editor/bar/baz/foo.px/"));
+    });
+
+    it('displays error when query response has missing tableReference', async () => {
+        (fetchSavedQuery as jest.Mock).mockResolvedValueOnce({
+            query: { tableReference: null, variableQueries: {} },
+            settings: {}
+        });
+        const { getByRole } = render(<HashRouter><QueryLoader /></HashRouter>);
+        await waitFor(() => expect(getByRole('alert')).toBeInTheDocument());
+    });
+
+    it('displays error message text from failed fetch', async () => {
+        (fetchSavedQuery as jest.Mock).mockRejectedValueOnce(new Error('Network timeout'));
+        const { getByText } = render(<HashRouter><QueryLoader /></HashRouter>);
+        await waitFor(() => expect(getByText(/Network timeout/)).toBeInTheDocument());
     });
 });

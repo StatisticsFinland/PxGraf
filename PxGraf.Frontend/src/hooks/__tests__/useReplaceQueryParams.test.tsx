@@ -67,4 +67,32 @@ describe('useReplaceQueryParams hook', () => {
 
         expect(mockNavigate).not.toHaveBeenCalled();
     });
+
+    it('should not call navigate when context tablePath is empty', () => {
+        useParams.mockReturnValueOnce(['testDb', 'testStat']);
+        useNavigationContext.mockReturnValueOnce({
+            tablePath: [],
+            setTablePath: jest.fn(),
+        });
+        const mockNavigate = jest.fn();
+        useNavigate.mockReturnValueOnce(mockNavigate);
+
+        renderHook(() => useReplaceQueryParams('/'));
+
+        expect(mockNavigate).not.toHaveBeenCalled();
+    });
+
+    it('should not call navigate when context tablePath is null', () => {
+        useParams.mockReturnValueOnce(['testDb']);
+        useNavigationContext.mockReturnValueOnce({
+            tablePath: null,
+            setTablePath: jest.fn(),
+        });
+        const mockNavigate = jest.fn();
+        useNavigate.mockReturnValueOnce(mockNavigate);
+
+        renderHook(() => useReplaceQueryParams('/'));
+
+        expect(mockNavigate).not.toHaveBeenCalled();
+    });
 });

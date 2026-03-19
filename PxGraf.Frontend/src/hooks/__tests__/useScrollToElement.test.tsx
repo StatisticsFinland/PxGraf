@@ -79,4 +79,27 @@ describe('useScrollToElement hook', () => {
         expect(window.scrollTo).not.toHaveBeenCalled();
         expect(button.focus).not.toHaveBeenCalled();
     });
+
+    it('should use default offset of 50 when offset is not specified', () => {
+        const targetId = 'default-offset';
+        const targetTop = 200;
+        const targetLeft = 0;
+
+        const dummy = document.createElement('div');
+        dummy.id = targetId;
+        dummy.getBoundingClientRect = jest.fn(() => ({top: targetTop, left: targetLeft} as DOMRect));
+        document.getElementById = jest.fn(() => dummy);
+
+        renderHook(() => useScrollToElement(targetId));
+
+        expect(window.scrollTo).toHaveBeenCalledWith(targetLeft, targetTop - 50);
+    });
+
+    it('should not scroll when id is empty string', () => {
+        document.getElementById = jest.fn(() => null);
+
+        renderHook(() => useScrollToElement(''));
+
+        expect(window.scrollTo).not.toHaveBeenCalled();
+    });
 });

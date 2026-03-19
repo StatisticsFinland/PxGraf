@@ -1,5 +1,6 @@
 import React from 'react';
 import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { ICubeMetaResult } from "api/services/cube-meta";
 import { IFilterDimensionResult } from "api/services/filter-dimension";
 import { ISaveQueryResult } from "api/services/queries";
@@ -497,5 +498,91 @@ describe('Assertion tests', () => {
 
         // Verify that setPublicationWebhookEnabled was called with true (from the mocked API response)
         expect(setPublicationWebhookEnabled).toHaveBeenCalledWith(true);
+    });
+
+    it('renders a loading spinner when cubeMetaResponse is loading', () => {
+        mockCubeMetaResult.data = null;
+        mockCubeMetaResult.isLoading = true;
+        render(
+            <QueryClientProvider client={queryClient}>
+                <NavigationProvider>
+                    <HashRouter>
+                        <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
+                            <Editor />
+                        </UiLanguageContext.Provider>
+                    </HashRouter>
+                </NavigationProvider>
+            </QueryClientProvider>
+        );
+        expect(screen.getByRole('progressbar')).toBeInTheDocument();
+    });
+
+    it('renders an error alert when cubeMetaResponse has an error', () => {
+        mockCubeMetaResult.data = null;
+        mockCubeMetaResult.isLoading = false;
+        mockCubeMetaResult.isError = true;
+        render(
+            <QueryClientProvider client={queryClient}>
+                <NavigationProvider>
+                    <HashRouter>
+                        <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
+                            <Editor />
+                        </UiLanguageContext.Provider>
+                    </HashRouter>
+                </NavigationProvider>
+            </QueryClientProvider>
+        );
+        expect(screen.getByRole('alert')).toBeInTheDocument();
+        expect(screen.getByText('error.contentLoad')).toBeInTheDocument();
+    });
+
+    it('displays dimension name when data is loaded successfully', () => {
+        render(
+            <QueryClientProvider client={queryClient}>
+                <NavigationProvider>
+                    <HashRouter>
+                        <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
+                            <Editor />
+                        </UiLanguageContext.Provider>
+                    </HashRouter>
+                </NavigationProvider>
+            </QueryClientProvider>
+        );
+        expect(screen.getByText('variableName')).toBeInTheDocument();
+    });
+
+    it('renders the chart type selector with available visualization type', () => {
+        render(
+            <QueryClientProvider client={queryClient}>
+                <NavigationProvider>
+                    <HashRouter>
+                        <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
+                            <Editor />
+                        </UiLanguageContext.Provider>
+                    </HashRouter>
+                </NavigationProvider>
+            </QueryClientProvider>
+        );
+        // The mock editor contents has HorizontalBarChart as the only option
+        expect(screen.getByText('chartTypes.HorizontalBarChart')).toBeInTheDocument();
+    });
+
+    it('shows chart rejection reason for unsupported chart type after opening dialog', async () => {
+        render(
+            <QueryClientProvider client={queryClient}>
+                <NavigationProvider>
+                    <HashRouter>
+                        <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
+                            <Editor />
+                        </UiLanguageContext.Provider>
+                    </HashRouter>
+                </NavigationProvider>
+            </QueryClientProvider>
+        );
+        // Click the button to open the rejection reasons dialog
+        const rejectionButton = screen.getByText('rejectionDialog.buttonText');
+        await userEvent.click(rejectionButton);
+        // The mock has a rejection reason for pieChart: { fi: 'huono kaavio' }
+        expect(screen.getByText('huono kaavio')).toBeInTheDocument();
     });
 });

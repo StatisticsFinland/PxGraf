@@ -204,4 +204,123 @@ describe('Assertion test', () => {
         expect(onSaveMock).toHaveBeenCalledTimes(1);
         expect(onCloseMock).toHaveBeenCalledTimes(1);
     });
+
+    it('saves as static when static radio option is selected', () => {
+        render(
+            <EditorContext.Provider value={{
+                cubeQuery: null,
+                setCubeQuery: jest.fn(),
+                query: {},
+                setQuery: jest.fn(),
+                saveDialogOpen: true,
+                setSaveDialogOpen: onCloseMock,
+                selectedVisualizationUserInput: VisualizationType.VerticalBarChart,
+                setSelectedVisualizationUserInput: jest.fn(),
+                visualizationSettingsUserInput: {},
+                setVisualizationSettingsUserInput: jest.fn(),
+                defaultSelectables: {},
+                setDefaultSelectables: jest.fn(),
+                loadedQueryId: '',
+                setLoadedQueryId: jest.fn(),
+                loadedQueryIsDraft: false,
+                setLoadedQueryIsDraft: setIsDraftMock,
+                publicationWebhookEnabled: true,
+                setPublicationWebhookEnabled: jest.fn()
+            }}>
+                <SaveDialog onSave={onSaveMock} />
+            </EditorContext.Provider>
+        );
+        fireEvent.click(screen.getByLabelText('saveDialog.saveStatic'));
+        fireEvent.click(screen.getByText('saveDialog.save'));
+        expect(onSaveMock).toHaveBeenCalledWith(true, true); // static: true, draft: true (publish unchecked)
+    });
+
+    it('does not render publish checkbox when publication webhook is disabled', () => {
+        render(
+            <EditorContext.Provider value={{
+                cubeQuery: null,
+                setCubeQuery: jest.fn(),
+                query: {},
+                setQuery: jest.fn(),
+                saveDialogOpen: true,
+                setSaveDialogOpen: onCloseMock,
+                selectedVisualizationUserInput: VisualizationType.VerticalBarChart,
+                setSelectedVisualizationUserInput: jest.fn(),
+                visualizationSettingsUserInput: {},
+                setVisualizationSettingsUserInput: jest.fn(),
+                defaultSelectables: {},
+                setDefaultSelectables: jest.fn(),
+                loadedQueryId: '',
+                setLoadedQueryId: jest.fn(),
+                loadedQueryIsDraft: false,
+                setLoadedQueryIsDraft: setIsDraftMock,
+                publicationWebhookEnabled: false,
+                setPublicationWebhookEnabled: jest.fn()
+            }}>
+                <SaveDialog onSave={onSaveMock} />
+            </EditorContext.Provider>
+        );
+        expect(screen.queryByText('saveDialog.publish')).not.toBeInTheDocument();
+    });
+
+    it('saves as non-draft when publication webhook is disabled regardless of checkbox', () => {
+        render(
+            <EditorContext.Provider value={{
+                cubeQuery: null,
+                setCubeQuery: jest.fn(),
+                query: {},
+                setQuery: jest.fn(),
+                saveDialogOpen: true,
+                setSaveDialogOpen: onCloseMock,
+                selectedVisualizationUserInput: VisualizationType.VerticalBarChart,
+                setSelectedVisualizationUserInput: jest.fn(),
+                visualizationSettingsUserInput: {},
+                setVisualizationSettingsUserInput: jest.fn(),
+                defaultSelectables: {},
+                setDefaultSelectables: jest.fn(),
+                loadedQueryId: '',
+                setLoadedQueryId: jest.fn(),
+                loadedQueryIsDraft: false,
+                setLoadedQueryIsDraft: setIsDraftMock,
+                publicationWebhookEnabled: false,
+                setPublicationWebhookEnabled: jest.fn()
+            }}>
+                <SaveDialog onSave={onSaveMock} />
+            </EditorContext.Provider>
+        );
+        fireEvent.click(screen.getByText('saveDialog.save'));
+        expect(onSaveMock).toHaveBeenCalledWith(false, false); // draft is always false when webhook disabled
+    });
+
+    it('renders dialog title and radio options when open', () => {
+        render(
+            <EditorContext.Provider value={{
+                cubeQuery: null,
+                setCubeQuery: jest.fn(),
+                query: {},
+                setQuery: jest.fn(),
+                saveDialogOpen: true,
+                setSaveDialogOpen: onCloseMock,
+                selectedVisualizationUserInput: VisualizationType.VerticalBarChart,
+                setSelectedVisualizationUserInput: jest.fn(),
+                visualizationSettingsUserInput: {},
+                setVisualizationSettingsUserInput: jest.fn(),
+                defaultSelectables: {},
+                setDefaultSelectables: jest.fn(),
+                loadedQueryId: '',
+                setLoadedQueryId: jest.fn(),
+                loadedQueryIsDraft: false,
+                setLoadedQueryIsDraft: setIsDraftMock,
+                publicationWebhookEnabled: true,
+                setPublicationWebhookEnabled: jest.fn()
+            }}>
+                <SaveDialog onSave={onSaveMock} />
+            </EditorContext.Provider>
+        );
+        expect(screen.getByText('saveDialog.saveQuery')).toBeInTheDocument();
+        expect(screen.getByLabelText('saveDialog.saveDynamic')).toBeInTheDocument();
+        expect(screen.getByLabelText('saveDialog.saveStatic')).toBeInTheDocument();
+        expect(screen.getByText('saveDialog.cancel')).toBeInTheDocument();
+        expect(screen.getByText('saveDialog.save')).toBeInTheDocument();
+    });
 });
