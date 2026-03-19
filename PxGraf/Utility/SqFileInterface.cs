@@ -61,7 +61,7 @@ namespace PxGraf.Utility
         public async Task<SavedQuery> ReadSavedQueryFromFile(string id, string savedQueryDirectory)
         {
             string filePath = savedQueryStorage.CombinePath(savedQueryDirectory, id + ".sq");
-            return await lockScope.RunLocked(
+            return await lockScope.RunLockedAsync(
                 filePath,
                 () => ReadJsonObjectFromFileImpl<SavedQuery>(savedQueryStorage, filePath)
             );
@@ -73,7 +73,7 @@ namespace PxGraf.Utility
         public async Task<ArchiveCube> ReadArchiveCubeFromFile(string id, string archiveDirectory)
         {
             string filePath = archiveStorage.CombinePath(archiveDirectory, id + ".sqa");
-            return await lockScope.RunLocked(
+            return await lockScope.RunLockedAsync(
                 filePath,
                 () => ReadJsonObjectFromFileImpl<ArchiveCube>(archiveStorage, filePath)
             );
@@ -101,9 +101,9 @@ namespace PxGraf.Utility
         public async Task SerializeToSqFileAsync(string fileName, string filePath, object input)
         {
             string fullPath = savedQueryStorage.CombinePath(filePath, fileName);
-            await lockScope.RunLocked(
-                fileName,
-                () => SerializeToFileImplAsync(fullPath, input)
+            await lockScope.RunLockedAsync(
+                fullPath,
+                () => SerializeToFileImplAsync(savedQueryStorage, fullPath, input)
             );
         }
 
@@ -118,16 +118,16 @@ namespace PxGraf.Utility
         public async Task SerializeToArchiveFileAsync(string fileName, string filePath, object input)
         {
             string fullPath = archiveStorage.CombinePath(filePath, fileName);
-            await lockScope.RunLocked(
-                fileName,
-                () => SerializeToFileImplAsync(fullPath, input)
+            await lockScope.RunLockedAsync(
+                fullPath,
+                () => SerializeToFileImplAsync(archiveStorage, fullPath, input)
             );
         }
 
-        private async Task SerializeToFileImplAsync(string fullPath, object input)
+        private static async Task SerializeToFileImplAsync(IStorageProvider storage, string fullPath, object input)
         {
             string json = JsonSerializer.Serialize(input, GlobalJsonConverterOptions.Default);
-            await savedQueryStorage.WriteAllTextAsync(fullPath, json);
+            await storage.WriteAllTextAsync(fullPath, json);
         }
     }
 }
