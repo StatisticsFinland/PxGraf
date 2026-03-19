@@ -72,6 +72,7 @@ describe('DimensionList', () => {
     });
 
     it('calls selectedChangedHandler when a dimension is clicked', async () => {
+        const user = userEvent.setup();
         const handler = jest.fn();
         renderWithContext({
             title: 'Title',
@@ -79,7 +80,7 @@ describe('DimensionList', () => {
             selectedDimensionCode: 'dim1',
             selectedChangedHandler: handler,
         });
-        await userEvent.click(screen.getByText('Vuosi 1'));
+        await user.click(screen.getByText('Vuosi 1'));
         expect(handler).toHaveBeenCalledWith('dim2');
     });
 

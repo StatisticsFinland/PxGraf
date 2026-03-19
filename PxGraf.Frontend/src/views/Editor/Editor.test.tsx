@@ -580,8 +580,9 @@ describe('Assertion tests', () => {
             </QueryClientProvider>
         );
         // Click the button to open the rejection reasons dialog
+        const user = userEvent.setup();
         const rejectionButton = screen.getByText('rejectionDialog.buttonText');
-        await userEvent.click(rejectionButton);
+        await user.click(rejectionButton);
         // The mock has a rejection reason for pieChart: { fi: 'huono kaavio' }
         expect(screen.getByText('huono kaavio')).toBeInTheDocument();
     });
