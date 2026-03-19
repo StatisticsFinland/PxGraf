@@ -128,8 +128,11 @@ namespace PxGraf.Storage
             // Get the full path of the combined path
             string fullPath = Path.GetFullPath(combinedPath);
 
-            // Check if the full path starts with the root folder's full path
-            if (!fullPath.StartsWith(rootPath, StringComparison.OrdinalIgnoreCase))
+            // Use Path.GetRelativePath to check if fullPath is within rootPath
+            // If the result starts with "..", the path escapes the root directory
+            string relativePath = Path.GetRelativePath(rootPath, fullPath);
+            
+            if (relativePath.StartsWith("..", StringComparison.Ordinal) || Path.IsPathRooted(relativePath))
             {
                 throw new UnauthorizedAccessException("Access to the path is denied.");
             }
