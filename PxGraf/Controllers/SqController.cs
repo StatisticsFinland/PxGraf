@@ -67,7 +67,7 @@ namespace PxGraf.Controllers
             using (_logger.BeginScope(logScope))
             {
                 _logger.LogDebug("Saved query requested.");
-                if (_sqFileInterface.SavedQueryExists(savedQueryId, Configuration.Current.SavedQueryDirectory))
+                if (await _sqFileInterface.SavedQueryExists(savedQueryId, Configuration.Current.SavedQueryDirectory))
                 {
                     using (_logger.BeginScope(new Dictionary<string, object> { [LoggerConstants.SQ_ID] = savedQueryId }))
                     {
@@ -170,7 +170,7 @@ namespace PxGraf.Controllers
                     if (validTypes.Contains(visualizationSettings.VisualizationType))
                     {
                         SavedQuery savedQuery = new(parameters.Query, archived: false, visualizationSettings, DateTime.Now, parameters.Draft);
-                        await _sqFileInterface.SerializeToFile(fileName, Configuration.Current.SavedQueryDirectory, savedQuery);
+                        await _sqFileInterface.SerializeToSqFileAsync(fileName, Configuration.Current.SavedQueryDirectory, savedQuery);
                         WebhookPublicationResult webhookResult = new () { Status = QueryPublicationStatus.Unpublished };
 
                         // Trigger webhook for non-draft queries only if webhook is enabled
@@ -244,10 +244,10 @@ namespace PxGraf.Controllers
                     if (validTypes.Contains(visualizationSettings.VisualizationType))
                     {
                         SavedQuery savedQuery = new(parameters.Query, archived: true, visualizationSettings, DateTime.Now, parameters.Draft);
-                        await _sqFileInterface.SerializeToFile(queryFileName, Configuration.Current.SavedQueryDirectory, savedQuery);
+                        await _sqFileInterface.SerializeToSqFileAsync(queryFileName, Configuration.Current.SavedQueryDirectory, savedQuery);
 
                         string archiveName = $"{guid}.sqa";
-                        await _sqFileInterface.SerializeToFile(archiveName, Configuration.Current.ArchiveFileDirectory, new ArchiveCube(matrix));
+                        await _sqFileInterface.SerializeToArchiveFileAsync(archiveName, Configuration.Current.ArchiveFileDirectory, new ArchiveCube(matrix));
 
                         WebhookPublicationResult webhookResult = new() { Status = QueryPublicationStatus.Unpublished };
 
@@ -296,7 +296,7 @@ namespace PxGraf.Controllers
             using (_logger.BeginScope(logScope))
             {
                 _logger.LogDebug("Re-archiving query.");
-                if (_sqFileInterface.SavedQueryExists(request.SqId, Configuration.Current.SavedQueryDirectory))
+                if (await _sqFileInterface.SavedQueryExists(request.SqId, Configuration.Current.SavedQueryDirectory))
                 {
                     using (_logger.BeginScope(new Dictionary<string, object> { [LoggerConstants.SQ_ID] = request.SqId }))
                     {
@@ -318,10 +318,10 @@ namespace PxGraf.Controllers
                             if (validTypes.Contains(baseQuery.Settings.VisualizationType))
                             {
                                 SavedQuery savedQuery = new(baseQuery.Query, archived: true, baseQuery.Settings, DateTime.Now, request.Draft);
-                                await _sqFileInterface.SerializeToFile(queryFileName, Configuration.Current.SavedQueryDirectory, savedQuery);
+                                await _sqFileInterface.SerializeToSqFileAsync(queryFileName, Configuration.Current.SavedQueryDirectory, savedQuery);
 
                                 string archiveName = $"{guid}.sqa";
-                                await _sqFileInterface.SerializeToFile(archiveName, Configuration.Current.ArchiveFileDirectory, new ArchiveCube(matrix));
+                                await _sqFileInterface.SerializeToArchiveFileAsync(archiveName, Configuration.Current.ArchiveFileDirectory, new ArchiveCube(matrix));
 
                                 WebhookPublicationResult webhookResult = new() { Status = QueryPublicationStatus.Unpublished };
 
@@ -392,7 +392,7 @@ namespace PxGraf.Controllers
                 return false;
             }
 
-            if (_sqFileInterface.SavedQueryExists(id, Configuration.Current.SavedQueryDirectory))
+            if (await _sqFileInterface.SavedQueryExists(id, Configuration.Current.SavedQueryDirectory))
             {
                 SavedQuery savedQuery = await _sqFileInterface.ReadSavedQueryFromFile(id, Configuration.Current.SavedQueryDirectory);
                 return savedQuery.Draft;

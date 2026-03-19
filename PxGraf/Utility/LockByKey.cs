@@ -1,81 +1,87 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PxGraf.Utility
 {
-    [ExcludeFromCodeCoverage] // Unable to find a good way to test a fifo mutex
     public class LockByKey(IEqualityComparer<string> keyComparer)
     {
-        private sealed class LockInfo {
-            public readonly object mutex;
-            public int threadCounter;
-
-            public LockInfo()
-            {
-                mutex = new object();
-                threadCounter = 0;
-            }
+        private sealed class AsyncLockInfo
+        {
+            public readonly SemaphoreSlim semaphore = new(1, 1);
+            public int refCount;
         }
 
-        private readonly Dictionary<string, LockInfo> locks = new(keyComparer);
+        private readonly Dictionary<string, AsyncLockInfo> asyncLocks = new(keyComparer);
 
-        public void RunLocked(string key, Action action)
+        public async Task RunLockedAsync(string key, Func<Task> action)
         {
-            object mutex = Lock(key);
+            SemaphoreSlim semaphore = AsyncLock(key);
             try
             {
-                lock (mutex)
+                await semaphore.WaitAsync();
+                try
                 {
-                    action();
+                    await action();
+                }
+                finally
+                {
+                    semaphore.Release();
                 }
             }
             finally
             {
-                UnLock(key);
+                AsyncUnLock(key);
             }
         }
 
-        public T RunLocked<T>(string key, Func<T> action)
+        public async Task<T> RunLockedAsync<T>(string key, Func<Task<T>> action)
         {
-            object mutex = Lock(key);
+            SemaphoreSlim semaphore = AsyncLock(key);
             try
             {
-                lock (mutex)
+                await semaphore.WaitAsync();
+                try
                 {
-                    return action();
+                    return await action();
+                }
+                finally
+                {
+                    semaphore.Release();
                 }
             }
             finally
             {
-                UnLock(key);
+                AsyncUnLock(key);
             }
         }
 
-        private object Lock(string key)
+        private SemaphoreSlim AsyncLock(string key)
         {
-            lock (locks)
+            lock (asyncLocks)
             {
-                if (!locks.TryGetValue(key, out LockInfo lockByKey))
+                if (!asyncLocks.TryGetValue(key, out AsyncLockInfo info))
                 {
-                    lockByKey = new ();
-                    locks.Add(key, lockByKey);
+                    info = new AsyncLockInfo();
+                    asyncLocks.Add(key, info);
                 }
 
-                lockByKey.threadCounter++;
-                return lockByKey.mutex;
+                info.refCount++;
+                return info.semaphore;
             }
         }
 
-        private void UnLock(string key)
+        private void AsyncUnLock(string key)
         {
-            lock (locks)
+            lock (asyncLocks)
             {
-                LockInfo lockInfo = locks[key];
-                lockInfo.threadCounter--;
-                if (lockInfo.threadCounter <= 0)
+                AsyncLockInfo info = asyncLocks[key];
+                info.refCount--;
+                if (info.refCount <= 0)
                 {
-                    locks.Remove(key);
+                    info.semaphore.Dispose();
+                    asyncLocks.Remove(key);
                 }
             }
         }

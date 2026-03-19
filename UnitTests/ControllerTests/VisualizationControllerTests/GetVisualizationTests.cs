@@ -88,13 +88,13 @@ namespace UnitTests.ControllerTests.VisualizationControllerTests
                 });
 
             _mockSqFileInterface.Setup(x => x.SavedQueryExists(It.Is<string>(id => id == testQueryId), It.IsAny<string>()))
-                .Returns(savedQueryFound);
-            
+                .ReturnsAsync(savedQueryFound);
+
             _mockSqFileInterface.Setup(x => x.ReadSavedQueryFromFile(It.Is<string>(id => id == testQueryId), It.IsAny<string>()))
                 .ReturnsAsync(() => TestDataCubeBuilder.BuildTestSavedQuery(cubeParams, archived, new LineChartVisualizationSettings(null, false, null)));
-            
+
             _mockSqFileInterface.Setup(x => x.ArchiveCubeExists(It.Is<string>(id => id == testQueryId), It.IsAny<string>()))
-                .Returns(true);
+                .ReturnsAsync(true);
             
             _mockSqFileInterface.Setup(x => x.ReadArchiveCubeFromFile(It.Is<string>(id => id == testQueryId), It.IsAny<string>()))
                 .ReturnsAsync(() => TestDataCubeBuilder.BuildTestArchiveCube(metaParams));
