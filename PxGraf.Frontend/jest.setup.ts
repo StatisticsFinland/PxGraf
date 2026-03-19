@@ -11,10 +11,11 @@ globalThis.structuredClone ??= <T>(val: T): T => deserialize(serialize(val));
 globalThis.ReadableStream ??= ReadableStream as typeof globalThis.ReadableStream;
 globalThis.WritableStream ??= WritableStream as typeof globalThis.WritableStream;
 globalThis.TransformStream ??= TransformStream as typeof globalThis.TransformStream;
-// Polyfill MessageChannel/MessagePort for jsdom, with auto-unref on ports
+// Override MessageChannel with node:worker_threads version + auto-unref on ports
 // to prevent React scheduler's internal MessageChannel from keeping the Jest worker alive.
+// jsdom's built-in MessageChannel lacks unref(), so we always replace it.
 // Setting onmessage implicitly calls ref(), so we patch the setter to re-unref.
-if (globalThis.MessageChannel === undefined) {
+{
     const patchPort = (port: MessagePort) => {
         const originalDescriptor = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(port), 'onmessage');
         if (originalDescriptor?.set) {
