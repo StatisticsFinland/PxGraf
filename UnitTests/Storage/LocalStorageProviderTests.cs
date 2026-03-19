@@ -67,6 +67,14 @@ namespace UnitTests.Storage
         }
 
         [Test]
+        public void BuildPath_EmptyRootPath_ReturnsFullPath()
+        {
+            string userPath = "file.txt";
+            string fullPath = provider.BuildPath("", userPath);
+            Assert.That(fullPath, Does.EndWith("file.txt"));
+        }
+
+        [Test]
         public async Task FileExistsAsync_ReturnsCorrectResult()
         {
             string file = Path.Combine(tempRoot, "exists.txt");
