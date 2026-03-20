@@ -38,6 +38,10 @@ describe('Rendering test', () => {
 });
 
 describe('Assertion tests', () => {
+    beforeEach(() => {
+        onTypeSelectedMock.mockClear();
+    });
+
     it('should invoke handler if clicked', () => {
         render(
             <EditorContext.Provider value={editorContextMock}>
@@ -45,5 +49,58 @@ describe('Assertion tests', () => {
             </EditorContext.Provider>);
         fireEvent.click(screen.getByText('chartTypes.bar'));
         expect(onTypeSelectedMock).toHaveBeenCalledTimes(1);
+    });
+
+    it('renders all possible types as buttons', () => {
+        render(
+            <EditorContext.Provider value={editorContextMock}>
+                <ChartTypeSelector possibleTypes={mockTypes} selectedType={'foo'} />
+            </EditorContext.Provider>);
+        expect(screen.getByText('chartTypes.foo')).toBeInTheDocument();
+        expect(screen.getByText('chartTypes.bar')).toBeInTheDocument();
+        expect(screen.getByText('chartTypes.baz')).toBeInTheDocument();
+    });
+
+    it('shows "no possible visualizations" when possibleTypes is empty', () => {
+        render(
+            <EditorContext.Provider value={editorContextMock}>
+                <ChartTypeSelector possibleTypes={[]} selectedType={'foo'} />
+            </EditorContext.Provider>);
+        expect(screen.getByText('general.noPossibleVisualizations')).toBeInTheDocument();
+    });
+
+    it('shows "no possible visualizations" when possibleTypes is null', () => {
+        render(
+            <EditorContext.Provider value={editorContextMock}>
+                <ChartTypeSelector possibleTypes={null} selectedType={'foo'} />
+            </EditorContext.Provider>);
+        expect(screen.getByText('general.noPossibleVisualizations')).toBeInTheDocument();
+    });
+
+    it('selects first type by default when selectedType is not provided', () => {
+        render(
+            <EditorContext.Provider value={editorContextMock}>
+                <ChartTypeSelector possibleTypes={mockTypes} />
+            </EditorContext.Provider>);
+        // First button should be selected (bold text)
+        const firstButton = screen.getByText('chartTypes.foo');
+        expect(firstButton.tagName).toBe('B');
+    });
+
+    it('invokes handler with correct value when different types are clicked', () => {
+        render(
+            <EditorContext.Provider value={editorContextMock}>
+                <ChartTypeSelector possibleTypes={mockTypes} selectedType={'foo'} />
+            </EditorContext.Provider>);
+        fireEvent.click(screen.getByText('chartTypes.baz'));
+        expect(onTypeSelectedMock).toHaveBeenCalledWith('baz');
+    });
+
+    it('renders toggle button group with correct aria-label', () => {
+        render(
+            <EditorContext.Provider value={editorContextMock}>
+                <ChartTypeSelector possibleTypes={mockTypes} selectedType={'foo'} />
+            </EditorContext.Provider>);
+        expect(screen.getByRole('group')).toHaveAttribute('aria-label', 'tooltip.visualizationType');
     });
 });

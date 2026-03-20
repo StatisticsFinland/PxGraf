@@ -390,4 +390,36 @@ describe('getValidatedSettings tests', () => {
         const result = getValidatedSettings(mockVisualizationSettings, VisualizationType.ScatterPlot, mockSortingOptions, mockDimensions, mockQuery);
         expect(result).toEqual({ cutYAxis: false, markerSize: 100 });
     });
+
+    it('Should return the correct object on PyramidChart', () => {
+        const result = getValidatedSettings(mockVisualizationSettings, VisualizationType.PyramidChart, mockSortingOptions, mockDimensions, mockQuery);
+        expect(result).toEqual({ showDataPoints: false });
+    });
+
+    it('Should return an empty object for an unknown visualization type', () => {
+        const result = getValidatedSettings(mockVisualizationSettings, 'UnknownType' as VisualizationType, mockSortingOptions, mockDimensions, mockQuery);
+        expect(result).toEqual({});
+    });
+
+    it('Should use default values when currentSettings is null', () => {
+        const result = getValidatedSettings(null, VisualizationType.LineChart, mockSortingOptions, mockDimensions, mockQuery);
+        expect(result).toEqual({ cutYAxis: false, multiselectableVariableCode: null, showDataPoints: false });
+    });
+
+    it('Should use default values when currentSettings is undefined', () => {
+        const result = getValidatedSettings(undefined, VisualizationType.VerticalBarChart, mockSortingOptions, mockDimensions, mockQuery);
+        expect(result).toEqual({ matchXLabelsToEnd: false, showDataPoints: false });
+    });
+
+    it('Should preserve existing sorting value when it matches a sorting option', () => {
+        const settingsWithSorting: IVisualizationSettings = { sorting: 'bar' };
+        const result = getValidatedSettings(settingsWithSorting, VisualizationType.PieChart, mockSortingOptions, mockDimensions, mockQuery);
+        expect(result.sorting).toBe('bar');
+    });
+
+    it('Should fall back to first sorting option when current sorting is invalid', () => {
+        const settingsWithInvalidSorting: IVisualizationSettings = { sorting: 'nonexistent' };
+        const result = getValidatedSettings(settingsWithInvalidSorting, VisualizationType.PieChart, mockSortingOptions, mockDimensions, mockQuery);
+        expect(result.sorting).toBe('foo');
+    });
 });

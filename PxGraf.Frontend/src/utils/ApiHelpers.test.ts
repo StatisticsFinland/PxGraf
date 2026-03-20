@@ -1,7 +1,7 @@
 import { IFetchSavedQueryResponse } from "api/services/queries";
 import { merge } from "lodash";
 import { FilterType, ICubeQuery, Query } from "types/query";
-import { buildCubeQuery, buildTableReference, extractCubeQuery, extractQuery, pxGrafUrl } from "./ApiHelpers";
+import { buildCubeQuery, buildTableReference, defaultQueryOptions, extractCubeQuery, extractQuery, parseLanguageString, pxGrafUrl } from "./ApiHelpers";
 
 const mockIdStack: string[] = ['foo', 'bar', 'baz'];
 const mockMetaEdits: ICubeQuery = {
@@ -80,5 +80,52 @@ describe('extractCubeQuery tests', () => {
     it('Should extract a CubeQuery object', () => {
         const result = extractCubeQuery(mockBackendOldQueryRespons);
         expect(result).toEqual(mockMetaEdits);
+    });
+});
+
+describe('defaultQueryOptions tests', () => {
+    it('Should have retry set to false', () => {
+        expect(defaultQueryOptions.retry).toBe(false);
+    });
+
+    it('Should have staleTime set to 60000ms', () => {
+        expect(defaultQueryOptions.staleTime).toBe(60000);
+    });
+});
+
+describe('parseLanguageString tests', () => {
+    it('Should format a single language correctly', () => {
+        expect(parseLanguageString(['fi'])).toBe('(FI)');
+    });
+
+    it('Should format multiple languages with comma separation', () => {
+        expect(parseLanguageString(['fi', 'sv', 'en'])).toBe('(FI, SV, EN)');
+    });
+
+    it('Should return empty parens for an empty array', () => {
+        expect(parseLanguageString([])).toBe('()');
+    });
+});
+
+describe('buildTableReference edge cases', () => {
+    it('Should handle a single-item idStack', () => {
+        const result = buildTableReference(['onlyItem']);
+        expect(result).toEqual({ name: 'onlyItem', hierarchy: [] });
+    });
+});
+
+describe('buildCubeQuery edge cases', () => {
+    it('Should handle an empty query object', () => {
+        const emptyQuery: Query = {};
+        const result = buildCubeQuery(emptyQuery, mockMetaEdits, mockIdStack);
+        expect(result).toHaveProperty('tableReference');
+        expect(result).toHaveProperty('variableQueries');
+    });
+
+    it('Should handle empty metaEdits', () => {
+        const emptyEdits: ICubeQuery = { variableQueries: {} };
+        const result = buildCubeQuery(mockQuery, emptyEdits, mockIdStack);
+        expect(result).toHaveProperty('tableReference', { name: 'baz', hierarchy: ['foo', 'bar'] });
+        expect(result).toHaveProperty('variableQueries.foo.selectable', false);
     });
 });

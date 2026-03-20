@@ -357,4 +357,14 @@ describe('Assertion tests', () => {
         expect(result[0].multiselectable).toBe(false);
         expect(result[1].multiselectable).toBe(true);
     });
+
+    it('getSelectables returns empty array when visualizationResponse is null', () => {
+        const result = getSelectables(null);
+        expect(result).toEqual([]);
+    });
+
+    it('getSelectables returns empty array when visualizationResponse is undefined', () => {
+        const result = getSelectables(undefined);
+        expect(result).toEqual([]);
+    });
 });
