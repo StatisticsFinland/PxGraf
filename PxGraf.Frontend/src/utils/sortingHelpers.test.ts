@@ -46,7 +46,7 @@ const mockDimensions: IDimension[] =
         code: "Vuosi",
         name: {
             fi: "Vuosi",
-            sv: "�r",
+            sv: "År",
             en: "Year"
         },
         type: EDimensionType.Time,
@@ -233,7 +233,7 @@ const mockDimensions: IDimension[] =
     {
         code: "FoobarSingle",
         name: {
-            fi: "Yksikk�muuttujaFi",
+            fi: "YksikkömuuttujaFi",
             sv: "SingleValueVariableSv",
             en: "SingleValueVariableEn"
         },
@@ -253,7 +253,7 @@ const mockDimensions: IDimension[] =
     {
         code: "FoobarMissingValueName",
         name: {
-            fi: "Nimet�nArvoMuuttujaFi",
+            fi: "NimetönArvoMuuttujaFi",
             sv: "NamelessValueVariableSv",
             en: "NamelessValueVariableEn"
         },
