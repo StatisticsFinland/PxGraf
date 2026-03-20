@@ -43,7 +43,7 @@ export const SuccessDialogContent: React.FC<ISuccessDialogContentProps> = ({
                 t("saveResultDialog.publicationUnpublished");
         }
 
-        return publicationStatus === EQueryPublicationStatus.Failed ? ("error.webhookResponseError") : t("saveResultDialog.webhookResponseSuccess");
+        return publicationStatus === EQueryPublicationStatus.Failed ? t("error.webhookResponseError") : t("saveResultDialog.webhookResponseSuccess");
     };
 
     const getPublicationAlertSeverity = () => {

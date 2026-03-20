@@ -17,6 +17,10 @@ export const ChartTypeRejectionReasons: React.FC<IChartTypeRejectionReasonsProps
     const { language } = React.useContext(UiLanguageContext);
     const [open, setOpen] = React.useState(false);
 
+    if (!rejectionReasons) {
+        return <></>;
+    }
+
     const rejectionReasonElements: React.ReactNode[] = Object.keys(rejectionReasons).map(key => {
         return (
             <div key={key}>
@@ -29,9 +33,6 @@ export const ChartTypeRejectionReasons: React.FC<IChartTypeRejectionReasonsProps
             </div>
         );
     });
-    if (!rejectionReasons) {
-        return <></>;
-    }
     return (
         <>
             <Button aria-haspopup={true} aria-controls='rejection-dialog' variant={'outlined'} startIcon={<QuestionMarkIcon />} onClick={() => setOpen(true)}>{t("rejectionDialog.buttonText")}</Button>

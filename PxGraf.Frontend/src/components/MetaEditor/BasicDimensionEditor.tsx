@@ -54,7 +54,7 @@ export const BasicDimensionEditor: React.FC<IBasicDimensionEditor> = ({ dimensio
                         label={t("editMetadata.valueName") + ": " + value.name[uiContentLanguage]}
                         key={value.code}
                         defaultValue={value.name[language]}
-                        editValue={dimensionEdits?.valueEdits[value.code]?.nameEdit?.[language]}
+                        editValue={dimensionEdits?.valueEdits?.[value.code]?.nameEdit?.[language]}
                         onChange={newValue => handleChange(newValue, value.code)}
                     />
                 );

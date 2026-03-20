@@ -13,7 +13,7 @@ import { ISortableTableListItem } from 'types/tableListItems';
 export const sortDatabaseItems = <T extends ISortableTableListItem>(data: T[], primaryLanguage: string): T[] => {
     return [...data].sort((a, b) => {
         const textA = a.name[primaryLanguage] || a.name[a.languages[0]];
-        const textB = b.name[primaryLanguage] || b.name[a.languages[0]];
+        const textB = b.name[primaryLanguage] || b.name[b.languages[0]];
 
         return textA.localeCompare(textB, primaryLanguage);
     });

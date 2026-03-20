@@ -42,12 +42,8 @@ export class ApiClientV2 {
     async getAsync(url: string, getParams?: { [key: string]: string }) {
         let getParamPart = '';
         if (getParams) {
-            getParamPart = '?';
-            Object.keys(getParams).forEach((key, index) => {
-                getParamPart += key + '=';
-                getParamPart += getParams[key];
-                if (index + 1 <= Object.keys(getParams).length) getParamPart += '&';
-            });
+            const params = new URLSearchParams(getParams);
+            getParamPart = '?' + params.toString();
         }
         const response = await fetch(this.BASE_URL_V2 + url + getParamPart);
 

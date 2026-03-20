@@ -87,7 +87,7 @@ export const TablePivotSettings: React.FC<ITableSettingsProps> = ({ visualizatio
         const multiValueDimensionCodes = codes
             .map(c => dimensions.find(v => v.code === c))
             .filter(v => dimensions.filter(v => query[v.code].valueFilter.type === 'from' || query[v.code].valueFilter.type === 'all')?.includes(v) || v.values.length > 1)
-            .filter(v => !selectableDimensions?.includes(v) || v.Code === visualizationSettings.multiselectableVariableCode);
+            .filter(v => !selectableDimensions?.includes(v) || v.code === visualizationSettings.multiselectableVariableCode);
         return multiValueDimensionCodes;
     }
 

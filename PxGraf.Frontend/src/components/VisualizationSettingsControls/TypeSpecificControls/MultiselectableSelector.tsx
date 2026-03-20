@@ -22,7 +22,7 @@ export const MultiselectableSelector: React.FC<IMultiselectableSelectorProps> = 
                 sx={{ minWidth: 210 }}
                 labelId="multiselectable-selector-label"
                 id="multiselectable-selector"
-                label={"Monivalitaselausmuuttuja"}
+                label={t("chartSettings.multiSelectVariable")}
                 value={visualizationSettings.multiselectableVariableCode ?? "noMultiselectable"}
                 defaultValue={"noMultiselectable"}
                 onChange={(event) => setVisualizationSettingsUserInput({

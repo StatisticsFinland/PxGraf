@@ -314,7 +314,7 @@ exports[`Rendering test renders correctly without webhook message (failed) 1`] =
         <div
           class="MuiAlert-message css-zioonp-MuiAlert-message"
         >
-          error.webhookResponseError
+          Webhook response error
         </div>
       </div>
     </div>

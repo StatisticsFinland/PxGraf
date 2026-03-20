@@ -59,4 +59,6 @@ export default function QueryLoader() {
             </Container>
         );
     }
+
+    return null;
 }
