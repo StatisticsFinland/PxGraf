@@ -9,7 +9,7 @@ const useReplaceQueryParams = (path: string): void => {
     const { tablePath } = useNavigationContext();
     const tablePathParams = useHierarchyParams();
 
-    const shouldReplace: boolean = tablePath?.length && tablePath.join(',') !== tablePathParams?.join(',');
+    const shouldReplace = Boolean(tablePath?.length) && tablePath.join(',') !== tablePathParams?.join(',');
 
     useEffect(() => {
         if(shouldReplace) {

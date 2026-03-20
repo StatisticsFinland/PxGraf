@@ -22,7 +22,7 @@ describe('useReplaceQueryParams hook', () => {
         mockNavigate.mockClear();
     });
 
-    it('should replace query params and reload if context not matching current params', () => {
+    it('should replace query params if context does not match current params', () => {
         useParams.mockReturnValueOnce(['testDb', 'testStat', 'testTable']);
         useNavigationContext.mockReturnValueOnce({
             tablePath: ['testDb2', 'testStat2', 'testTable2'],
@@ -37,7 +37,7 @@ describe('useReplaceQueryParams hook', () => {
         }, { replace: true});
     });
 
-    it('should replace query params and reload if current params are empty but context is not', () => {
+    it('should replace query params if current params are empty but context is not', () => {
         useParams.mockReturnValueOnce([null, null, null]);
         useNavigationContext.mockReturnValueOnce({
             tablePath: ['testDb', 'testStat', 'testTable'],
