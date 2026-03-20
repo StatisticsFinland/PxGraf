@@ -2,7 +2,6 @@ import { renderHook } from '@testing-library/react';
 import useReplaceQueryParams from 'hooks/useReplaceQueryParams';
 import * as useHierarchyParams from 'hooks/useHierarchyParams';
 import * as navigationContext from 'contexts/navigationContext'
-import { useNavigate } from 'react-router-dom';
 
 const mockNavigate = jest.fn();
 

@@ -52,14 +52,14 @@ export const TablePivotSettings: React.FC<ITableSettingsProps> = ({ visualizatio
 
     const downHandler = () => {
         if (selected == null) return;
-        if (visualizationSettings.columnVariableCodes.includes(selected) && visualizationSettings.columnVariableCodes[visualizationSettings.columnVariableCodes.length - 1] !== selected) {
+        if (visualizationSettings.columnVariableCodes.includes(selected) && visualizationSettings.columnVariableCodes.at(-1) !== selected) {
             const dimsCopy = [...visualizationSettings.columnVariableCodes];
             const i = dimsCopy.indexOf(selected);
             dimsCopy[i] = dimsCopy[i + 1];
             dimsCopy[i + 1] = selected;
             setVisualizationSettingsUserInput({ ...visualizationSettings, columnVariableCodes: dimsCopy });
         }
-        else if (visualizationSettings.rowVariableCodes.includes(selected) && visualizationSettings.rowVariableCodes[visualizationSettings.rowVariableCodes.length - 1] !== selected) {
+        else if (visualizationSettings.rowVariableCodes.includes(selected) && visualizationSettings.rowVariableCodes.at(-1) !== selected) {
             const dimsCopy = [...visualizationSettings.rowVariableCodes];
             const i = dimsCopy.indexOf(selected);
             dimsCopy[i] = dimsCopy[i + 1];

@@ -27,7 +27,7 @@ export const MultiselectableSelector: React.FC<IMultiselectableSelectorProps> = 
                 defaultValue={"noMultiselectable"}
                 onChange={(event) => setVisualizationSettingsUserInput({
                     ...visualizationSettings,
-                    multiselectableVariableCode: event.target.value !== "noMultiselectable" ? event.target.value : null
+                    multiselectableVariableCode: event.target.value === "noMultiselectable" ? null : event.target.value
                 })}
             >
                 <MenuItem value={"noMultiselectable"}>{t("chartSettings.noMultiselectable")}</MenuItem>
