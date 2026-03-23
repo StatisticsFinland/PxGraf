@@ -4,6 +4,7 @@ import { ICubeQuery, Query } from 'types/query';
 
 interface IQueryContext {
     cubeQuery: ICubeQuery;
+    /** Debounced setter (1 s) — accepts a full ICubeQuery value, not a functional updater. */
     setCubeQuery: (newQuery: ICubeQuery) => void;
     query: Query | null;
     setQuery: React.Dispatch<React.SetStateAction<Query | null>>;

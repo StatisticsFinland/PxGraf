@@ -140,7 +140,7 @@ export const Editor = () => {
         if (query != null) {
             return query;
         }
-        else if (dimensions == null) {
+        else if (cubeMetaResponse.data == null) {
             return null;
         }
         else {
@@ -162,7 +162,7 @@ export const Editor = () => {
         if (resolvedDimensionCodesResponse.data != null) {
             return resolvedDimensionCodesResponse.data;
         }
-        else if (dimensions == null) {
+        else if (cubeMetaResponse.data == null) {
             return {};
         }
         else {
