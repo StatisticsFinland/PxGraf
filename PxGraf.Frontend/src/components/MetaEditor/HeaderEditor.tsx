@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { EditorField } from './Editorfield';
 import InfoBubble from 'components/InfoBubble/InfoBubble';
 import styled from 'styled-components';
-import { EditorContext } from '../../contexts/editorContext';
+import { QueryContext } from '../../contexts/queryContext';
 import { MultiLanguageString } from '../../types/multiLanguageString';
 import { IEditorContentsResult } from '../../api/services/editor-contents';
 
@@ -25,7 +25,7 @@ const GridFixer = styled.div`
 export const HeaderEditor: React.FC<IHeaderEditorProps> = ({ editorContentResponse, language, maxLength, style = {} }) => {
     const { t } = useTranslation();
 
-    const { cubeQuery, setCubeQuery } = React.useContext(EditorContext);
+    const { cubeQuery, setCubeQuery } = React.useContext(QueryContext);
     const editValue = cubeQuery?.chartHeaderEdit;
     const editHeader = (title: MultiLanguageString) => setCubeQuery({ ...cubeQuery, chartHeaderEdit: title })
 

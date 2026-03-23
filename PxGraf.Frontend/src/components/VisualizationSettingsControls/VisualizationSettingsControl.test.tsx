@@ -5,7 +5,7 @@ import { IDimension, EDimensionType } from "types/cubeMeta";
 import VisualizationSettingControl from "./VisualizationSettingsControl";
 import { FilterType, Query } from "types/query";
 import { IVisualizationSettings } from '../../types/visualizationSettings';
-import { EditorContext } from '../../contexts/editorContext';
+import { VisualizationContext } from '../../contexts/visualizationContext';
 import { VisualizationType } from '../../types/visualizationType';
 import { IVisualizationOptions } from '../../types/editorContentsResponse';
 
@@ -305,25 +305,13 @@ describe('Assertion tests', () => {
 
     it('updates values properly when user changes switches', () => {
         const { getByLabelText } = render(
-            <EditorContext.Provider value={{
+            <VisualizationContext.Provider value={{
                 defaultSelectables: {},
                 setDefaultSelectables: jest.fn(),
-                cubeQuery: null,
-                setCubeQuery: jest.fn(),
-                query: {},
-                setQuery: jest.fn(),
-                saveDialogOpen: false,
-                setSaveDialogOpen: jest.fn(),
                 selectedVisualizationUserInput: VisualizationType.VerticalBarChart,
                 setSelectedVisualizationUserInput: jest.fn(),
                 visualizationSettingsUserInput: {},
                 setVisualizationSettingsUserInput: mockSettingsChangedHandler,
-                loadedQueryId: '',
-                setLoadedQueryId: jest.fn(),
-                loadedQueryIsDraft: false,
-                setLoadedQueryIsDraft: jest.fn(),
-                publicationWebhookEnabled: true,
-                setPublicationWebhookEnabled: jest.fn()
             }}>
                 <VisualizationSettingControl
                     selectedVisualization={VisualizationType.Table}
@@ -332,7 +320,7 @@ describe('Assertion tests', () => {
                     visualizationOptions={mockVisualizationRules}
                     visualizationSettings={mockVisualizationSettings}
                 />
-            </EditorContext.Provider>
+            </VisualizationContext.Provider>
         );
 
         fireEvent.click(getByLabelText('visualizationSettings.showDataPoints'));

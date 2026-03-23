@@ -2,7 +2,7 @@ import React from 'react';
 import { UseMutationResult } from '@tanstack/react-query';
 import { SaveDialog } from 'components/SaveDialog/SaveDialog';
 import { SaveResultDialog } from 'components/SaveResultDialog/SaveResultDialog';
-import { EditorContext } from 'contexts/editorContext';
+import { SaveContext } from 'contexts/saveContext';
 import { ISaveQueryResponse, ISaveQueryMutationParams } from 'api/services/queries';
 
 interface IEditorDialogsProps {
@@ -10,7 +10,7 @@ interface IEditorDialogsProps {
 }
 
 export const EditorDialogs: React.FC<IEditorDialogsProps> = ({ saveQueryMutation }) => {
-    const { setSaveDialogOpen, setLoadedQueryId, setLoadedQueryIsDraft } = React.useContext(EditorContext);
+    const { setSaveDialogOpen, setLoadedQueryId, setLoadedQueryIsDraft } = React.useContext(SaveContext);
     const [saveResultDialogOpen, setSaveResultDialogOpen] = React.useState(false);
     const [lastSavedAsDraft, setLastSavedAsDraft] = React.useState(false);
 

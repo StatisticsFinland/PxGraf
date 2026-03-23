@@ -5,7 +5,7 @@ import { EMetaPropertyType, IDimension, EDimensionType } from 'types/cubeMeta';
 import { ICubeQuery } from 'types/query';
 import MetaEditor from './MetaEditor';
 import UiLanguageContext from 'contexts/uiLanguageContext';
-import { EditorContext } from 'contexts/editorContext';
+import { QueryContext } from 'contexts/queryContext';
 import { IEditorContentsResult } from '../../api/services/editor-contents';
 import { IEditorContentsResponse } from '../../types/editorContentsResponse';
 
@@ -155,7 +155,7 @@ describe('Rendering test', () => {
     it('renders correctly', () => {
         const { asFragment } = render(
             <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
-                <EditorContext.Provider value={{ cubeQuery: mockCubeQuery, setCubeQuery, query, setQuery, saveDialogOpen, setSaveDialogOpen, selectedVisualizationUserInput, setSelectedVisualizationUserInput, visualizationSettingsUserInput, setVisualizationSettingsUserInput, defaultSelectables, setDefaultSelectables, loadedQueryId: '', setLoadedQueryId: jest.fn(), loadedQueryIsDraft: false, setLoadedQueryIsDraft: jest.fn(), publicationWebhookEnabled: true, setPublicationWebhookEnabled: jest.fn() }}>
+                <QueryContext.Provider value={{ cubeQuery: mockCubeQuery, setCubeQuery, query, setQuery }}>
                     <MetaEditor
                         resolvedDimensions={mockDimensions}
                         editorContentsResponse={defaultHeaderResponseMock}
@@ -163,7 +163,7 @@ describe('Rendering test', () => {
                         language={mockLang}
                         onMetaAccordionOpenChange={mockFunction}
                     />
-                </EditorContext.Provider>
+                </QueryContext.Provider>
             </UiLanguageContext.Provider>
         );
         expect(asFragment()).toMatchSnapshot();
