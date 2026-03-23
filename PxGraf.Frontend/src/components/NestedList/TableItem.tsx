@@ -11,7 +11,7 @@ import { IDatabaseTable } from 'types/tableListItems';
 import { getErrorText } from "../../utils/editorHelpers";
 
 const StyledListItem = styled(ListItem)`
-  background-color: #f8f8f8;
+  background-color: var(--surface-light);
 `;
 
 const ErrorAlert = styled(Alert)`

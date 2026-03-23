@@ -9,7 +9,7 @@ interface ITopNDimensionSelectionProps {
 }
 
 const StyledTextField = styled(TextField)`
-    background-color: #fff;
+    background-color: var(--surface-white);
 `;
 
 export const TopNDimensionSelection: React.FC<ITopNDimensionSelectionProps> = ({ numberOfItems, onNumberChanged }) => {
