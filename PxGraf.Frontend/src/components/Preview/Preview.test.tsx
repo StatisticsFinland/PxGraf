@@ -7,7 +7,8 @@ import { EVariableType, EVisualizationType, ETimeVariableInterval, IQueryVisuali
 import { IVisualizationResult } from "api/services/visualization";
 import serializer from "../../testUtils/stripHighchartsHashes";
 import UiLanguageContext from "../../contexts/uiLanguageContext";
-import { EditorContext } from "../../contexts/editorContext";
+import { QueryContext } from "../../contexts/queryContext";
+import { VisualizationContext } from "../../contexts/visualizationContext";
 import { ISelectableSelections } from "../SelectableVariableMenus/SelectableDimensionMenus";
 import { EDimensionType } from "../../types/cubeMeta";
 
@@ -231,33 +232,28 @@ describe('Rendering test', () => {
                 setUiContentLanguage: jest.fn(),
                 availableUiLanguages: ['fi', 'en', 'sv'],
             }}>
-                <EditorContext.Provider value={{
+                <QueryContext.Provider value={{
                     cubeQuery: mockCubeQueryTextEdits,
                     setCubeQuery,
                     query,
                     setQuery,
-                    saveDialogOpen,
-                    setSaveDialogOpen,
-                    selectedVisualizationUserInput,
-                    setSelectedVisualizationUserInput,
-                    visualizationSettingsUserInput,
-                    setVisualizationSettingsUserInput,
-                    defaultSelectables,
-                    setDefaultSelectables,
-                    loadedQueryId,
-                    setLoadedQueryId,
-                    loadedQueryIsDraft,
-                    setLoadedQueryIsDraft,
-                    publicationWebhookEnabled: true,
-                    setPublicationWebhookEnabled: jest.fn()
                 }}>
-                    <Preview
-                        path={mockPath}
-                        query={mockQuery}
-                        selectedVisualization={mockSelectedVisualization}
-                        visualizationSettings={mockVisualizationSettings}
-                    />
-                </EditorContext.Provider>
+                    <VisualizationContext.Provider value={{
+                        selectedVisualizationUserInput,
+                        setSelectedVisualizationUserInput,
+                        visualizationSettingsUserInput,
+                        setVisualizationSettingsUserInput,
+                        defaultSelectables,
+                        setDefaultSelectables,
+                    }}>
+                        <Preview
+                            path={mockPath}
+                            query={mockQuery}
+                            selectedVisualization={mockSelectedVisualization}
+                            visualizationSettings={mockVisualizationSettings}
+                        />
+                    </VisualizationContext.Provider>
+                </QueryContext.Provider>
             </UiLanguageContext.Provider>);
 
         expect(asFragment()).toMatchSnapshot();

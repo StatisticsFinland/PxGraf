@@ -6,9 +6,7 @@ exports[`Error rendering test renders error correctly when open with error 1`] =
 >
   <div
     aria-hidden="true"
-  >
-    )
-  </div>
+  />
   <div
     class="MuiDialog-root MuiModal-root css-1424xw8-MuiModal-root-MuiDialog-root"
     role="presentation"

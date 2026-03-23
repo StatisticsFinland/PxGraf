@@ -5,7 +5,7 @@ import {
     DialogContent, DialogActions, FormLabel, RadioGroup, Radio, Checkbox
 } from '@mui/material';
 import SaveIcon from '@mui/icons-material/Save';
-import { EditorContext } from '../../contexts/editorContext';
+import { SaveContext } from '../../contexts/saveContext';
 
 interface ISaveDialogProps {
     onSave: (archive: boolean, draft: boolean) => void;
@@ -20,7 +20,7 @@ interface ISaveDialogProps {
 export const SaveDialog: React.FC<ISaveDialogProps> = ({ onSave }) => {
     const { t } = useTranslation();
     const [selected, setSelected] = useState("dynamic");
-    const { saveDialogOpen, setSaveDialogOpen, publicationWebhookEnabled } = React.useContext(EditorContext);
+    const { saveDialogOpen, setSaveDialogOpen, publicationWebhookEnabled } = React.useContext(SaveContext);
     const [saveAsPublished, setSaveAsPublished] = useState(false);
 
     const handleDraftChange = (event: React.ChangeEvent<HTMLInputElement>) => {

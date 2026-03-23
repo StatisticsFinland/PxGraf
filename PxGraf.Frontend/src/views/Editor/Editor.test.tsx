@@ -18,7 +18,9 @@ import '@testing-library/jest-dom';
 import { IVisualizationOptions } from '../../types/editorContentsResponse';
 import { VisualizationType } from '../../types/visualizationType';
 import { IEditorContentsResult } from '../../api/services/editor-contents';
-import { EditorContext } from '../../contexts/editorContext';
+import { QueryContext } from '../../contexts/queryContext';
+import { VisualizationContext } from '../../contexts/visualizationContext';
+import { SaveContext } from '../../contexts/saveContext';
 
 const queryClient = new QueryClient({
     defaultOptions: { queries: { retry: false } },
@@ -422,34 +424,44 @@ describe('Assertion tests', () => {
         const setLoadedQueryId = jest.fn();
         const setLoadedQueryIsDraft = jest.fn();
 
-        const mockEditorContext = {
+        const mockQueryContext = {
             cubeQuery: { variableQueries: {} },
             setCubeQuery: jest.fn(),
             query: null,
             setQuery: jest.fn(),
-            saveDialogOpen: false,
-            setSaveDialogOpen: jest.fn(),
+        };
+
+        const mockVisualizationContext = {
             selectedVisualizationUserInput: null,
             setSelectedVisualizationUserInput,
             visualizationSettingsUserInput: null,
             setVisualizationSettingsUserInput: jest.fn(),
             defaultSelectables: null,
             setDefaultSelectables: jest.fn(),
+        };
+
+        const mockSaveContext = {
+            saveDialogOpen: false,
+            setSaveDialogOpen: jest.fn(),
             loadedQueryId: '',
             setLoadedQueryId,
             loadedQueryIsDraft: false,
             setLoadedQueryIsDraft,
             publicationWebhookEnabled: true,
-            setPublicationWebhookEnabled: jest.fn()
+            setPublicationWebhookEnabled: jest.fn(),
         };
 
         render(
             <QueryClientProvider client={queryClient}>
                 <NavigationProvider>
                     <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
-                        <EditorContext.Provider value={mockEditorContext}>
-                            <Editor />
-                        </EditorContext.Provider>
+                        <QueryContext.Provider value={mockQueryContext}>
+                            <VisualizationContext.Provider value={mockVisualizationContext}>
+                                <SaveContext.Provider value={mockSaveContext}>
+                                    <Editor />
+                                </SaveContext.Provider>
+                            </VisualizationContext.Provider>
+                        </QueryContext.Provider>
                     </UiLanguageContext.Provider>
                 </NavigationProvider>
             </QueryClientProvider>
@@ -463,34 +475,44 @@ describe('Assertion tests', () => {
     it('calls setPublicationWebhookEnabled when editorContentsResponse has publicationWebhookEnabled property', () => {
         const setPublicationWebhookEnabled = jest.fn();
 
-        const mockEditorContextWithPublication = {
+        const mockQueryContext = {
             cubeQuery: { variableQueries: {} },
             setCubeQuery: jest.fn(),
             query: null,
             setQuery: jest.fn(),
-            saveDialogOpen: false,
-            setSaveDialogOpen: jest.fn(),
+        };
+
+        const mockVisualizationContext = {
             selectedVisualizationUserInput: null,
             setSelectedVisualizationUserInput: jest.fn(),
             visualizationSettingsUserInput: null,
             setVisualizationSettingsUserInput: jest.fn(),
             defaultSelectables: null,
             setDefaultSelectables: jest.fn(),
+        };
+
+        const mockSaveContext = {
+            saveDialogOpen: false,
+            setSaveDialogOpen: jest.fn(),
             loadedQueryId: '',
             setLoadedQueryId: jest.fn(),
             loadedQueryIsDraft: false,
             setLoadedQueryIsDraft: jest.fn(),
             publicationWebhookEnabled: true,
-            setPublicationWebhookEnabled
+            setPublicationWebhookEnabled,
         };
 
         render(
             <QueryClientProvider client={queryClient}>
                 <NavigationProvider>
                     <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
-                        <EditorContext.Provider value={mockEditorContextWithPublication}>
-                            <Editor />
-                        </EditorContext.Provider>
+                        <QueryContext.Provider value={mockQueryContext}>
+                            <VisualizationContext.Provider value={mockVisualizationContext}>
+                                <SaveContext.Provider value={mockSaveContext}>
+                                    <Editor />
+                                </SaveContext.Provider>
+                            </VisualizationContext.Provider>
+                        </QueryContext.Provider>
                     </UiLanguageContext.Provider>
                 </NavigationProvider>
             </QueryClientProvider>

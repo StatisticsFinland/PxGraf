@@ -5,7 +5,7 @@ import { UiLanguageContext } from 'contexts/uiLanguageContext';
 import { EditorField } from './Editorfield';
 import styled from 'styled-components';
 import { IDimension } from 'types/cubeMeta';
-import { EditorContext } from '../../contexts/editorContext';
+import { QueryContext } from '../../contexts/queryContext';
 
 const EditorFieldWrapper = styled(Stack)`
   padding: 0px;
@@ -19,7 +19,7 @@ interface IBasicDimensionEditor {
 export const BasicDimensionEditor: React.FC<IBasicDimensionEditor> = ({ dimension, language }) => {
     const { t } = useTranslation();
     const { uiContentLanguage } = React.useContext(UiLanguageContext);
-    const { cubeQuery, setCubeQuery } = React.useContext(EditorContext);
+    const { cubeQuery, setCubeQuery } = React.useContext(QueryContext);
     const dimensionEdits = cubeQuery?.variableQueries[dimension.code];
 
     const handleChange = (newValue: string, valueCode: string) => {

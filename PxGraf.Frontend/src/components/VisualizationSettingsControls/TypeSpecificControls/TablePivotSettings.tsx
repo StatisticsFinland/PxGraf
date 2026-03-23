@@ -9,7 +9,7 @@ import { IVisualizationSettingsProps } from '../VisualizationSettingsControl';
 import { IDimension } from 'types/cubeMeta';
 import styled from 'styled-components';
 import { Query } from "types/query";
-import { EditorContext } from '../../../contexts/editorContext';
+import { VisualizationContext } from '../../../contexts/visualizationContext';
 
 const DimensionListWrapper = styled(Stack)`
     padding: 8px;
@@ -30,7 +30,7 @@ interface ITableSettingsProps extends IVisualizationSettingsProps {
 export const TablePivotSettings: React.FC<ITableSettingsProps> = ({ visualizationSettings, dimensions, selectableDimensions, query }) => {
     const { t } = useTranslation();
     const [selected, setSelected] = useState("");
-    const { setVisualizationSettingsUserInput } = React.useContext(EditorContext);
+    const { setVisualizationSettingsUserInput } = React.useContext(VisualizationContext);
 
     const upHandler = () => {
         if (selected == null) return;

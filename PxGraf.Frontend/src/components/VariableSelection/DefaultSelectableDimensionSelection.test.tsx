@@ -3,7 +3,7 @@ import { render } from "@testing-library/react";
 import { IDimensionValue } from "../../types/cubeMeta";
 import DefaultSelectableDimensionSelection from "./DefaultSelectableDimensionSelection";
 import UiLanguageContext from '../../contexts/uiLanguageContext';
-import { EditorContext } from 'contexts/editorContext';
+import { VisualizationContext } from 'contexts/visualizationContext';
 
 const mockDimensionValues: IDimensionValue[] = [
     {
@@ -71,13 +71,13 @@ describe('Rendering test', () => {
     it('renders correctly with default selectable', () => {
         const { asFragment } = render(
             <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
-                <EditorContext.Provider value={{ cubeQuery, setCubeQuery, query, setQuery, saveDialogOpen, setSaveDialogOpen, selectedVisualizationUserInput, setSelectedVisualizationUserInput, visualizationSettingsUserInput, setVisualizationSettingsUserInput, defaultSelectables, setDefaultSelectables, loadedQueryId: '', setLoadedQueryId: jest.fn(), loadedQueryIsDraft: false, setLoadedQueryIsDraft: jest.fn(), publicationWebhookEnabled: true, setPublicationWebhookEnabled: jest.fn() }}>
+                <VisualizationContext.Provider value={{ defaultSelectables, setDefaultSelectables, selectedVisualizationUserInput, setSelectedVisualizationUserInput, visualizationSettingsUserInput, setVisualizationSettingsUserInput }}>
                     <DefaultSelectableDimensionSelection
                         options={mockDimensionValues}
                         resolvedDimensionValueCodes={mockResolvedCodes}
                         dimensionCode={'foo'}
                     />
-                </EditorContext.Provider>
+                </VisualizationContext.Provider>
             </UiLanguageContext.Provider>);
         expect(asFragment()).toMatchSnapshot();
     });
@@ -85,13 +85,13 @@ describe('Rendering test', () => {
     it('renders correctly without default selectable', () => {
         const { asFragment } = render(
             <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
-                <EditorContext.Provider value={{ cubeQuery, setCubeQuery, query, setQuery, saveDialogOpen, setSaveDialogOpen, selectedVisualizationUserInput, setSelectedVisualizationUserInput, visualizationSettingsUserInput, setVisualizationSettingsUserInput, defaultSelectables: {}, setDefaultSelectables, loadedQueryId: '', setLoadedQueryId: jest.fn(), loadedQueryIsDraft: false, setLoadedQueryIsDraft: jest.fn(), publicationWebhookEnabled: true, setPublicationWebhookEnabled: jest.fn() }}>
+                <VisualizationContext.Provider value={{ defaultSelectables: {}, setDefaultSelectables, selectedVisualizationUserInput, setSelectedVisualizationUserInput, visualizationSettingsUserInput, setVisualizationSettingsUserInput }}>
                     <DefaultSelectableDimensionSelection
                         options={mockDimensionValues}
                         resolvedDimensionValueCodes={mockResolvedCodes}
                         dimensionCode={'foo'}
                     />
-                </EditorContext.Provider>
+                </VisualizationContext.Provider>
             </UiLanguageContext.Provider>);
         expect(asFragment()).toMatchSnapshot();
     });
@@ -99,13 +99,13 @@ describe('Rendering test', () => {
     it('renders correctly without resolved dimension value codes', () => {
         const { asFragment } = render(
             <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
-                <EditorContext.Provider value={{ cubeQuery, setCubeQuery, query, setQuery, saveDialogOpen, setSaveDialogOpen, selectedVisualizationUserInput, setSelectedVisualizationUserInput, visualizationSettingsUserInput, setVisualizationSettingsUserInput, defaultSelectables, setDefaultSelectables, loadedQueryId: '', setLoadedQueryId: jest.fn(), loadedQueryIsDraft: false, setLoadedQueryIsDraft: jest.fn(), publicationWebhookEnabled: true, setPublicationWebhookEnabled: jest.fn() }}>
+                <VisualizationContext.Provider value={{ defaultSelectables, setDefaultSelectables, selectedVisualizationUserInput, setSelectedVisualizationUserInput, visualizationSettingsUserInput, setVisualizationSettingsUserInput }}>
                     <DefaultSelectableDimensionSelection
                         options={mockDimensionValues}
                         resolvedDimensionValueCodes={[]}
                         dimensionCode={'foo'}
                     />
-                </EditorContext.Provider>
+                </VisualizationContext.Provider>
             </UiLanguageContext.Provider>);
         expect(asFragment()).toMatchSnapshot();
     });

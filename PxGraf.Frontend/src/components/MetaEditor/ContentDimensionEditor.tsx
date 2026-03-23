@@ -3,7 +3,7 @@ import React from 'react';
 import { IContentDimensionValue, IDimension } from 'types/cubeMeta';
 import { IDimensionValueEditions } from 'types/query';
 import { ContentDimensionValueEditor } from './ContentDimensionValueEditor';
-import { EditorContext } from '../../contexts/editorContext';
+import { QueryContext } from '../../contexts/queryContext';
 
 interface IContentDimensionEditorProps {
     dimension: IDimension;
@@ -11,7 +11,7 @@ interface IContentDimensionEditorProps {
 }
 
 export const ContentDimensionEditor: React.FC<IContentDimensionEditorProps> = ({ dimension, language }) => {
-    const { cubeQuery, setCubeQuery } = React.useContext(EditorContext);
+    const { cubeQuery, setCubeQuery } = React.useContext(QueryContext);
     const dimensionEdits = cubeQuery?.variableQueries[dimension.code];
 
     const handleChange = (newValueEdits: IDimensionValueEditions, code: string) => {

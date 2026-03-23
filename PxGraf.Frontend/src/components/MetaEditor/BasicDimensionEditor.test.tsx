@@ -5,8 +5,7 @@ import { ICubeQuery } from 'types/query';
 import BasicDimensionEditor from './BasicDimensionEditor';
 import '@testing-library/jest-dom';
 import UiLanguageContext from 'contexts/uiLanguageContext';
-import { EditorContext } from '../../contexts/editorContext';
-import { VisualizationType } from '../../types/visualizationType';
+import { QueryContext } from '../../contexts/queryContext';
 
 const setLanguage = jest.fn();
 const language = 'fi';
@@ -61,28 +60,14 @@ describe('Rendering test', () => {
     it('renders correctly', () => {
         const { asFragment } = render(
             <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
-                <EditorContext.Provider value={{
-                    defaultSelectables: {},
-                    setDefaultSelectables: jest.fn(),
+                <QueryContext.Provider value={{
                     cubeQuery: mockDimEdits,
                     setCubeQuery: mockFunction,
                     query: {},
                     setQuery: jest.fn(),
-                    saveDialogOpen: false,
-                    setSaveDialogOpen: jest.fn(),
-                    selectedVisualizationUserInput: VisualizationType.VerticalBarChart,
-                    setSelectedVisualizationUserInput: jest.fn(),
-                    visualizationSettingsUserInput: {},
-                    setVisualizationSettingsUserInput: jest.fn(),
-                    loadedQueryId: '',
-                    setLoadedQueryId: jest.fn(),
-                    loadedQueryIsDraft: false,
-                    setLoadedQueryIsDraft: jest.fn(),
-                    publicationWebhookEnabled: true,
-                    setPublicationWebhookEnabled: jest.fn()
                 }}>
                     <BasicDimensionEditor language={mockLang} dimension={mockDimension} />
-                </EditorContext.Provider>
+                </QueryContext.Provider>
             </UiLanguageContext.Provider>
         );
         expect(asFragment()).toMatchSnapshot();
@@ -93,28 +78,14 @@ describe('Assertion tests', () => {
     it('Change event should fire when value has changed', () => {
         render(
             <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
-                <EditorContext.Provider value={{
-                    defaultSelectables: {},
-                    setDefaultSelectables: jest.fn(),
+                <QueryContext.Provider value={{
                     cubeQuery: mockDimEdits,
                     setCubeQuery: mockFunction,
                     query: {},
                     setQuery: jest.fn(),
-                    saveDialogOpen: false,
-                    setSaveDialogOpen: jest.fn(),
-                    selectedVisualizationUserInput: VisualizationType.VerticalBarChart,
-                    setSelectedVisualizationUserInput: jest.fn(),
-                    visualizationSettingsUserInput: {},
-                    setVisualizationSettingsUserInput: jest.fn(),
-                    loadedQueryId: '',
-                    setLoadedQueryId: jest.fn(),
-                    loadedQueryIsDraft: false,
-                    setLoadedQueryIsDraft: jest.fn(),
-                    publicationWebhookEnabled: true,
-                    setPublicationWebhookEnabled: jest.fn()
                 }}>
                     <BasicDimensionEditor language={mockLang} dimension={mockDimension} />
-                </EditorContext.Provider>
+                </QueryContext.Provider>
             </UiLanguageContext.Provider>
         );
         fireEvent.change(screen.getByDisplayValue('bar'), { target: { value: 'editValue2' } });

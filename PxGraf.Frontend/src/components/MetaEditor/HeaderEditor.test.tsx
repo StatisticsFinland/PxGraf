@@ -2,8 +2,7 @@ import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import HeaderEditor from './HeaderEditor';
-import { EditorContext } from '../../contexts/editorContext';
-import { VisualizationType } from '../../types/visualizationType';
+import { QueryContext } from '../../contexts/queryContext';
 import { ICubeQuery } from '../../types/query';
 import { IEditorContentsResult } from '../../api/services/editor-contents';
 import { IEditorContentsResponse } from '../../types/editorContentsResponse';
@@ -43,28 +42,14 @@ const mockCubeQuery: ICubeQuery = {
 describe('Rendering test', () => {
     it('renders correctly', () => {
         const { asFragment } = render(
-            <EditorContext.Provider value={{
-                defaultSelectables: {},
-                setDefaultSelectables: jest.fn(),
+            <QueryContext.Provider value={{
                 cubeQuery: mockCubeQuery,
                 setCubeQuery: mockFunction,
                 query: {},
                 setQuery: jest.fn(),
-                saveDialogOpen: false,
-                setSaveDialogOpen: jest.fn(),
-                selectedVisualizationUserInput: VisualizationType.VerticalBarChart,
-                setSelectedVisualizationUserInput: jest.fn(),
-                visualizationSettingsUserInput: {},
-                setVisualizationSettingsUserInput: jest.fn(),
-                loadedQueryId: '',
-                setLoadedQueryId: jest.fn(),
-                loadedQueryIsDraft: false,
-                setLoadedQueryIsDraft: jest.fn(),
-                publicationWebhookEnabled: true,
-                setPublicationWebhookEnabled: jest.fn()
             }}>
                 <HeaderEditor editorContentResponse={mockDefaultResponse} language={mockLang} style={{}} />
-            </EditorContext.Provider>
+            </QueryContext.Provider>
         );
         expect(asFragment()).toMatchSnapshot();
     });
@@ -73,28 +58,14 @@ describe('Rendering test', () => {
 describe('Assertion tests', () => {
     it('Change event should fire when value has changed', () => {
         render(
-            <EditorContext.Provider value={{
-                defaultSelectables: {},
-                setDefaultSelectables: jest.fn(),
+            <QueryContext.Provider value={{
                 cubeQuery: mockCubeQuery,
                 setCubeQuery: mockFunction,
                 query: {},
                 setQuery: jest.fn(),
-                saveDialogOpen: false,
-                setSaveDialogOpen: jest.fn(),
-                selectedVisualizationUserInput: VisualizationType.VerticalBarChart,
-                setSelectedVisualizationUserInput: jest.fn(),
-                visualizationSettingsUserInput: {},
-                setVisualizationSettingsUserInput: jest.fn(),
-                loadedQueryId: '',
-                setLoadedQueryId: jest.fn(),
-                loadedQueryIsDraft: false,
-                setLoadedQueryIsDraft: jest.fn(),
-                publicationWebhookEnabled: true,
-                setPublicationWebhookEnabled: jest.fn()
             }}>
                 <HeaderEditor editorContentResponse={mockDefaultResponse} language={mockLang} style={{}} />
-            </EditorContext.Provider>
+            </QueryContext.Provider>
         );
         fireEvent.change(screen.getByDisplayValue(mockCubeQuery.chartHeaderEdit['fi']), { target: { value: 'editValue2' } });
         expect(mockFunction).toHaveBeenCalledTimes(1);
