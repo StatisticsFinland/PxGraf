@@ -7,13 +7,14 @@ jest.mock('i18next', () => ({
     t: (key: string) => key,
 }));
 
-// Suppress console.error output from the ErrorBoundary and React during tests
-const originalConsoleError = console.error;
-beforeAll(() => {
-    console.error = jest.fn();
+let consoleErrorSpy: jest.SpyInstance;
+
+beforeEach(() => {
+    consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
 });
-afterAll(() => {
-    console.error = originalConsoleError;
+
+afterEach(() => {
+    consoleErrorSpy.mockRestore();
 });
 
 const ThrowingComponent = () => {
@@ -94,12 +95,16 @@ describe('Assertion tests', () => {
         expect(screen.getByText('Recovered content')).toBeInTheDocument();
     });
 
-    it('logs the error via console.error', () => {
+    it('logs the error via console.error with the caught error', () => {
         render(
             <ErrorBoundary>
                 <ThrowingComponent />
             </ErrorBoundary>
         );
-        expect(console.error).toHaveBeenCalled();
+        expect(consoleErrorSpy).toHaveBeenCalledWith(
+            'ErrorBoundary caught an error:',
+            expect.any(Error),
+            expect.objectContaining({ componentStack: expect.any(String) })
+        );
     });
 });

@@ -1,5 +1,34 @@
 import { createTheme } from "@mui/material";
 
+interface CustomPalette {
+    tableHover: string;
+    textGray: string;
+    textBlack: string;
+    selectedBlue: string;
+    selectedBlueLight: string;
+    selectedBlueDark: string;
+    editorfieldOutline: string;
+    editorfieldBackground: string;
+    editorfieldOutlineEdited: string;
+    editorfieldBackgroundEdited: string;
+    warningOrange: string;
+    surfaceLight: string;
+    surfaceWhite: string;
+    borderLight: string;
+    textMuted: string;
+    infoBlue: string;
+    shadowColor: string;
+}
+
+declare module '@mui/material/styles' {
+    interface Palette {
+        custom: CustomPalette;
+    }
+    interface PaletteOptions {
+        custom?: CustomPalette;
+    }
+}
+
 const palette = {
     primary: {
         main: '#1A56EC',
@@ -58,13 +87,13 @@ const theme = createTheme({
                 {
                     props: { variant: 'contained' },
                     style:{
-                        color: 'white',
+                        color: palette.custom.surfaceWhite,
                         backgroundColor: palette.custom.selectedBlue,
                         '&:hover': {
                             backgroundColor: palette.custom.selectedBlueDark,
                         },
                         '&:focus-visible': {
-                            outline: '2px solid black',
+                            outline: `2px solid ${palette.custom.textBlack}`,
                             backgroundColor: palette.custom.selectedBlueDark,
                         },
                         '&:active': {
@@ -89,7 +118,7 @@ const theme = createTheme({
                         backgroundColor: palette.custom.selectedBlueLight,
                     },
                     '&:active': {
-                        color: 'white',
+                        color: palette.custom.surfaceWhite,
                         backgroundColor: palette.custom.selectedBlue,
                     }
                 }
