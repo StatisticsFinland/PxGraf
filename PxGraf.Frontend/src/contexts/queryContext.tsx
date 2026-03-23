@@ -1,5 +1,3 @@
-/* istanbul ignore file */
-
 import { debounce } from 'lodash';
 import * as React from 'react';
 import { ICubeQuery, Query } from 'types/query';

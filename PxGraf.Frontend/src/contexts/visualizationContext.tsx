@@ -1,5 +1,3 @@
-/* istanbul ignore file */
-
 import * as React from 'react';
 import { IVisualizationSettings } from 'types/visualizationSettings';
 import { VisualizationType } from 'types/visualizationType';

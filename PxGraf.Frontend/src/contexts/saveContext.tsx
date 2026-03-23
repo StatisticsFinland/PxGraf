@@ -1,5 +1,3 @@
-/* istanbul ignore file */
-
 import * as React from 'react';
 
 interface ISaveContext {
