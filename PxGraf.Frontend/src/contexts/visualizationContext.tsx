@@ -3,12 +3,12 @@ import { IVisualizationSettings } from 'types/visualizationSettings';
 import { VisualizationType } from 'types/visualizationType';
 
 interface IVisualizationContext {
-    selectedVisualizationUserInput: VisualizationType;
-    setSelectedVisualizationUserInput: React.Dispatch<React.SetStateAction<VisualizationType>>;
-    visualizationSettingsUserInput: IVisualizationSettings;
-    setVisualizationSettingsUserInput: React.Dispatch<React.SetStateAction<IVisualizationSettings>>;
-    defaultSelectables: { [key: string]: string[] };
-    setDefaultSelectables: React.Dispatch<React.SetStateAction<{ [key: string]: string[] }>>;
+    selectedVisualizationUserInput: VisualizationType | null;
+    setSelectedVisualizationUserInput: React.Dispatch<React.SetStateAction<VisualizationType | null>>;
+    visualizationSettingsUserInput: IVisualizationSettings | null;
+    setVisualizationSettingsUserInput: React.Dispatch<React.SetStateAction<IVisualizationSettings | null>>;
+    defaultSelectables: { [key: string]: string[] } | null;
+    setDefaultSelectables: React.Dispatch<React.SetStateAction<{ [key: string]: string[] } | null>>;
 }
 
 export const VisualizationContext = React.createContext<IVisualizationContext>({
@@ -21,9 +21,9 @@ export const VisualizationContext = React.createContext<IVisualizationContext>({
 });
 
 export const VisualizationProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [selectedVisualizationUserInput, setSelectedVisualizationUserInput] = React.useState(null);
-    const [visualizationSettingsUserInput, setVisualizationSettingsUserInput] = React.useState(null);
-    const [defaultSelectables, setDefaultSelectables] = React.useState(null);
+    const [selectedVisualizationUserInput, setSelectedVisualizationUserInput] = React.useState<VisualizationType | null>(null);
+    const [visualizationSettingsUserInput, setVisualizationSettingsUserInput] = React.useState<IVisualizationSettings | null>(null);
+    const [defaultSelectables, setDefaultSelectables] = React.useState<{ [key: string]: string[] } | null>(null);
 
     const contextValue = React.useMemo(() => ({
         selectedVisualizationUserInput, setSelectedVisualizationUserInput,

@@ -5,20 +5,20 @@ import { ICubeQuery, Query } from 'types/query';
 interface IQueryContext {
     cubeQuery: ICubeQuery;
     setCubeQuery: (newQuery: ICubeQuery) => void;
-    query: Query;
-    setQuery: React.Dispatch<React.SetStateAction<Query>>;
+    query: Query | null;
+    setQuery: React.Dispatch<React.SetStateAction<Query | null>>;
 }
 
 export const QueryContext = React.createContext<IQueryContext>({
-    cubeQuery: null,
+    cubeQuery: { variableQueries: {} },
     setCubeQuery: () => { /* no base implementation */ },
     query: null,
     setQuery: () => { /* no base implementation */ },
 });
 
 export const QueryProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [cubeQuery, setCubeQueryState] = React.useState({ variableQueries: {} });
-    const [query, setQuery] = React.useState(null);
+    const [cubeQuery, setCubeQueryState] = React.useState<ICubeQuery>({ variableQueries: {} });
+    const [query, setQuery] = React.useState<Query | null>(null);
 
     const debouncedCubeQuery = React.useMemo(() => {
         return debounce((newQuery: ICubeQuery) => {
