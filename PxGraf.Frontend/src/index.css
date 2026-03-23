@@ -16,6 +16,20 @@
     --editorfield-outline-edited: #949400;
     --editorfield-background-edited: #FFFFDD;
     --warning-orange: #E06D10;
+
+    /* Surface & background */
+    --surface-light: #f8f8f8;
+    --surface-white: #ffffff;
+
+    /* Borders */
+    --border-light: #dcdcdc;
+
+    /* Text */
+    --text-muted: #cccccc;
+
+    /* Info bubble */
+    --info-blue: #0073b0;
+    --shadow-color: #737373;
 }
 
 body {

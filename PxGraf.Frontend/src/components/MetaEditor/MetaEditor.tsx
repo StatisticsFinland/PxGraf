@@ -42,7 +42,7 @@ const GridFixer = styled.div`
 `;
 
 const StyledAccordionDetails = styled(AccordionDetails)`
-  background-color: #f8f8f8;
+  background-color: var(--surface-light);
 `;
 
 export interface INewEditMetaEditor {

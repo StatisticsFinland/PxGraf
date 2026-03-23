@@ -119,7 +119,10 @@
     "contentVariableMissing": "Taulukosta puuttuu sisältömuuttuja. Ota yhteyttä tämän taulukon tuottajaan tai ylläpitoon. ",
     "timeVariableMissing": "Taulukosta puuttuu aikamuuttuja. Ota yhteyttä tämän taulukon tuottajaan tai ylläpitoon. ",
     "variablesMissingValues": "Taulukosta puuttuu muuttujan arvoja. Ota yhteyttä tämän taulukon tuottajaan tai ylläpitoon. ",
-    "webhookResponseError": "Siirto epäonnistui."
+    "webhookResponseError": "Siirto epäonnistui.",
+    "boundaryTitle": "Jokin meni pieleen",
+    "boundaryMessage": "Tapahtui odottamaton virhe. Yritä uudelleen.",
+    "boundaryRetry": "Yritä uudelleen"
   },
   "rejectionDialog":{
     "buttonText": "Muut kuviotyypit",

@@ -119,7 +119,10 @@
     "contentVariableMissing": "Tabellen saknar innehållsvariabel. Kontakta tabellens producent eller administratör. ",
     "timeVariableMissing": "Tabellen saknar tidsvariabel. Kontakta tabellens producent eller administratör. ",
     "variablesMissingValues": "Tabellen saknar variabelvärden. Kontakta tabellens producent eller administratör. ",
-    "webhookResponseError": "Misslyckades att exportera."
+    "webhookResponseError": "Misslyckades att exportera.",
+    "boundaryTitle": "Något gick fel",
+    "boundaryMessage": "Ett oväntat fel uppstod. Försök igen.",
+    "boundaryRetry": "Försök igen"
   },
   "rejectionDialog": {
     "buttonText": "Övriga diagramtyper",
