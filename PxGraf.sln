@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.3.32825.248
+# Visual Studio Version 18
+VisualStudioVersion = 18.4.11605.240 stable
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PxGraf", "PxGraf\PxGraf.csproj", "{34F3D4F9-A121-4610-925C-C65005D12940}"
 EndProject
@@ -39,6 +39,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{6CD3
 		.github\scripts\check_version_changes.sh = .github\scripts\check_version_changes.sh
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "plans", "plans", "{11FA9DE7-FBF8-4113-B773-A59F1E7E380A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,6 +73,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{9722791C-4582-42C9-873B-B04B66369E50} = {A7A9AA2F-492F-494C-8850-CC98FC6BEB8F}
 		{6CD31513-990A-4FA8-BC92-48249CA96FCC} = {A7A9AA2F-492F-494C-8850-CC98FC6BEB8F}
+		{11FA9DE7-FBF8-4113-B773-A59F1E7E380A} = {C3438262-2BAE-4156-85CD-0A1556E5EAC6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6DCAEC5A-BCC8-416E-AF5E-933E20EC5C25}
