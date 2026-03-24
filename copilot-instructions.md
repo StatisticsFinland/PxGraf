@@ -1,3 +1,7 @@
+Architecture context:
+- Before starting any task, read `docs/architecture.md` to understand the solution structure, project layout, key data flows, and where relevant code lives. This reduces exploration time and avoids incorrect assumptions about file locations or responsibilities.
+- Update `docs/architecture.md` if you make any changes to the solution structure, project layout, or key data flows. This ensures that the documentation remains accurate and helpful for future reference.
+
 Follow these guidelines when writing code:
 
 Coding conventions:
@@ -26,3 +30,4 @@ Unit testing:
 
 Other:
 - When refactoring code, update the documentation comments to reflect the changes made.
+- Before starting large refactoring tasks or adding new features, create a plan markdown file in the `docs/plans` directory outlining the steps you intend to take. Update this plan as you progress. This helps maintain a clear roadmap and allows for the developer to track progress and make adjustments as needed.
