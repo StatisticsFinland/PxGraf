@@ -61,6 +61,14 @@ namespace PxGraf.Storage
         Task<IEnumerable<string>> EnumerateDirectoriesAsync(string directoryPath, CancellationToken cancellationToken = default);
 
         /// <summary>
+        /// Performs a lightweight check to verify that a directory or storage prefix is accessible.
+        /// </summary>
+        /// <param name="directoryPath">Path to the directory or prefix.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>True if the directory is accessible, false otherwise.</returns>
+        Task<bool> ProbeDirectoryAsync(string directoryPath, CancellationToken cancellationToken = default);
+
+        /// <summary>
         /// Asynchronously gets the last write time of a file.
         /// </summary>
         /// <param name="filePath">Path to the file.</param>

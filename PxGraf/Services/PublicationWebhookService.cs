@@ -315,7 +315,7 @@ namespace PxGraf.Services
         /// <returns>True if the endpoint returns a 200 response, false otherwise.</returns>
         public async Task<bool> CheckWebhookReachabilityAsync()
         {
-            if (!_config.IsEnabled)
+            if (!_config.IsEnabled || !_config.HasHealthCheckEndpoint)
             {
                 return false;
             }
@@ -331,7 +331,7 @@ namespace PxGraf.Services
                 HttpResponseMessage response = await httpClient.SendAsync(request);
                 return response.IsSuccessStatusCode;
             }
-            catch (HttpRequestException)
+            catch (Exception ex) when (ex is not OperationCanceledException)
             {
                 return false;
             }

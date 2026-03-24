@@ -138,6 +138,25 @@ namespace PxGraf.Storage
         }
 
         /// <inheritdoc/>
+        public async Task<bool> ProbeDirectoryAsync(string directoryPath, CancellationToken cancellationToken = default)
+        {
+            string prefix = PathNormalizer.NormalizeToAzurePath(directoryPath) ?? "";
+            if (!string.IsNullOrEmpty(prefix))
+            {
+                prefix += "/";
+            }
+
+            // Enumerate at most one blob to verify that the container and prefix are accessible.
+            await foreach (BlobItem _ in containerClient.GetBlobsAsync(BlobTraits.None, BlobStates.None, prefix, cancellationToken))
+            {
+                return true;
+            }
+
+            // No blobs found but listing succeeded — storage is accessible.
+            return true;
+        }
+
+        /// <inheritdoc/>
         public async Task<DateTime> GetLastWriteTimeAsync(string filePath, CancellationToken cancellationToken = default)
         {
             string blobName = PathNormalizer.NormalizeToAzurePath(filePath);

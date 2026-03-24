@@ -125,7 +125,7 @@ namespace PxGraf.Utility
         }
 
         /// <summary>
-        /// Checks whether the saved query storage directory is accessible by enumerating files.
+        /// Checks whether the saved query storage directory is accessible.
         /// </summary>
         /// <param name="directory">The saved query directory path.</param>
         /// <returns>True if the directory can be accessed, false otherwise.</returns>
@@ -133,8 +133,7 @@ namespace PxGraf.Utility
         {
             try
             {
-                await savedQueryStorage.EnumerateFilesAsync(directory, ".sq");
-                return true;
+                return await savedQueryStorage.ProbeDirectoryAsync(directory);
             }
             catch (Exception ex) when (ex is not OperationCanceledException)
             {
@@ -143,7 +142,7 @@ namespace PxGraf.Utility
         }
 
         /// <summary>
-        /// Checks whether the archive file storage directory is accessible by enumerating files.
+        /// Checks whether the archive file storage directory is accessible.
         /// </summary>
         /// <param name="directory">The archive file directory path.</param>
         /// <returns>True if the directory can be accessed, false otherwise.</returns>
@@ -151,8 +150,7 @@ namespace PxGraf.Utility
         {
             try
             {
-                await archiveStorage.EnumerateFilesAsync(directory, ".sqa");
-                return true;
+                return await archiveStorage.ProbeDirectoryAsync(directory);
             }
             catch (Exception ex) when (ex is not OperationCanceledException)
             {

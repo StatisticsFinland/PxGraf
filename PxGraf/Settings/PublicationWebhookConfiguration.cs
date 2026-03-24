@@ -1,4 +1,5 @@
 using PxGraf.Services;
+using System;
 using System.Collections.Generic;
 
 namespace PxGraf.Settings
@@ -76,26 +77,27 @@ namespace PxGraf.Settings
         /// <summary>
         /// Gets a value indicating whether the webhook configuration is valid and enabled.
         /// </summary>
-        public bool IsEnabled => !string.IsNullOrEmpty(BaseUrl) && !string.IsNullOrEmpty(WebhookEndpointPath) && BodyContentPropertyNames?.Length > 0;
+        public bool IsEnabled => !string.IsNullOrWhiteSpace(BaseUrl) && !string.IsNullOrWhiteSpace(WebhookEndpointPath) && BodyContentPropertyNames?.Length > 0;
 
         /// <summary>
         /// Gets a value indicating whether a health check endpoint is configured for the webhook service.
         /// </summary>
-        public bool HasHealthCheckEndpoint => !string.IsNullOrEmpty(HealthCheckUrl);
+        public bool HasHealthCheckEndpoint => !string.IsNullOrWhiteSpace(HealthCheckEndpointPath) && HealthCheckUrl is not null;
 
         /// <summary>
         /// Gets a value indicating whether access token authentication is configured.
         /// </summary>
-        public bool HasAccessToken => !string.IsNullOrEmpty(AccessTokenHeaderName) && !string.IsNullOrEmpty(AccessTokenHeaderValue);
+        public bool HasAccessToken => !string.IsNullOrWhiteSpace(AccessTokenHeaderName) && !string.IsNullOrWhiteSpace(AccessTokenHeaderValue);
 
         private static string CombineUrl(string baseUrl, string path)
         {
-            if (string.IsNullOrEmpty(baseUrl) || string.IsNullOrEmpty(path))
+            if (string.IsNullOrWhiteSpace(baseUrl) || string.IsNullOrWhiteSpace(path))
             {
                 return null;
             }
 
-            return baseUrl.TrimEnd('/') + "/" + path.TrimStart('/');
+            string combined = baseUrl.Trim().TrimEnd('/') + "/" + path.Trim().TrimStart('/');
+            return Uri.TryCreate(combined, UriKind.Absolute, out _) ? combined : null;
         }
     }
 }
