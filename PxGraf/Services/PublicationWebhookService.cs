@@ -11,6 +11,7 @@ using PxGraf.Settings;
 using PxGraf.Utility;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -313,6 +314,7 @@ namespace PxGraf.Services
         /// Checks whether the publication webhook endpoint is reachable by sending a GET request to its info endpoint.
         /// </summary>
         /// <returns>True if the endpoint returns a 200 response, false otherwise.</returns>
+        [ExcludeFromCodeCoverage(Justification = "This method involves making actual HTTP requests to external endpoints, which is not ideal for unit testing.")]
         public async Task<bool> CheckWebhookReachabilityAsync()
         {
             if (!_config.IsEnabled || !_config.HasHealthCheckEndpoint)

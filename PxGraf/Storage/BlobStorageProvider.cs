@@ -146,13 +146,12 @@ namespace PxGraf.Storage
                 prefix += "/";
             }
 
-            // Enumerate at most one blob to verify that the container and prefix are accessible.
-            await foreach (BlobItem _ in containerClient.GetBlobsAsync(BlobTraits.None, BlobStates.None, prefix, cancellationToken))
-            {
-                return true;
-            }
-
-            // No blobs found but listing succeeded — storage is accessible.
+            // Fetch the first page to verify that the container and prefix are accessible.
+            // The result is discarded — any failure will surface as an exception.
+            await using IAsyncEnumerator<BlobItem> enumerator = containerClient
+                .GetBlobsAsync(BlobTraits.None, BlobStates.None, prefix, cancellationToken)
+                .GetAsyncEnumerator(cancellationToken);
+            await enumerator.MoveNextAsync();
             return true;
         }
 
