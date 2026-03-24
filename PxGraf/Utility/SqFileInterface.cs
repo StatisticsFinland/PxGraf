@@ -136,7 +136,7 @@ namespace PxGraf.Utility
                 await savedQueryStorage.EnumerateFilesAsync(directory, ".sq");
                 return true;
             }
-            catch
+            catch (Exception ex) when (ex is not OperationCanceledException)
             {
                 return false;
             }
@@ -154,7 +154,7 @@ namespace PxGraf.Utility
                 await archiveStorage.EnumerateFilesAsync(directory, ".sqa");
                 return true;
             }
-            catch
+            catch (Exception ex) when (ex is not OperationCanceledException)
             {
                 return false;
             }

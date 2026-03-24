@@ -60,7 +60,7 @@ namespace PxGraf.Services
                 await datasource.GetGroupContentsCachedAsync([]);
                 return new DatabaseHealthStatus(Database, Healthy);
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not OperationCanceledException)
             {
                 logger.LogWarning(ex, "Health check failed for database {DatabaseId}", Database);
                 return new DatabaseHealthStatus(Database, Unhealthy);
@@ -79,7 +79,7 @@ namespace PxGraf.Services
                 bool accessible = await accessCheck();
                 return new ServiceHealthStatus(serviceId, accessible ? Healthy : Unhealthy);
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not OperationCanceledException)
             {
                 logger.LogWarning(ex, "Health check failed for service {ServiceId}", serviceId);
                 return new ServiceHealthStatus(serviceId, Unhealthy);
@@ -96,7 +96,7 @@ namespace PxGraf.Services
                 bool reachable = await webhookService.CheckWebhookReachabilityAsync();
                 return new ServiceHealthStatus("publication-webhook", reachable ? Healthy : Unhealthy);
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not OperationCanceledException)
             {
                 logger.LogWarning(ex, "Health check failed for service publication-webhook");
                 return new ServiceHealthStatus("publication-webhook", Unhealthy);
