@@ -26,7 +26,7 @@ Unit testing:
 - Use NUnit as the unit testing framework.
 - Use Moq for mocking dependencies in unit tests.
 - Use the Assert.That() syntax for all assertions.
-- When making multiple assertions in a single test, group them using Assert.Multiple().
+- When making multiple assertions in a single test, group them `using (Assert.EnterMultipleScope()) { ... }`.
 
 Other:
 - When refactoring code, update the documentation comments to reflect the changes made.
