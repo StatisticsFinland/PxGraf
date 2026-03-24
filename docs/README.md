@@ -36,6 +36,7 @@ The architecture supports various combinations:
 ## APIs
 - **Creation API:** Provides endpoints for fetching database listings and Px table metadata. It also provides functionality for metadata validation and providing required contents for the visualization editor. Can be disabled in the appsettings.json file.
 - **Info API:** Provides information about the application. Its single endpoint returns the application's name, version and the environment it is running in.
+- **Health API:** Provides a health check endpoint that probes all configured dependencies (database connection, saved query storage, archive storage, and optionally the publication webhook) and returns an aggregated health status. Returns HTTP 200 when all dependencies are healthy, or HTTP 503 when any dependency is unhealthy.
 - **Query meta API:** Provides an endpoint that returns the metadata for a saved query given its ID.
 - **Saved query API:** Used for managing saved queries. Provides endpoints for fetching a saved query, saving a new query, archiving a query and re-archiving an existing query. If publication webhook is configured, the queries can be saved as draft or publish-ready. When saved as draft, the query id will be overwritten in the next save operation. Publish-ready queries can not be overwritten and saving a publish-ready query will also trigger the publication webhook. Webhook's response is expected to contain a Messages field as a MultilanguageString that will be shown in the editor UI after the save process is completed.
 - **Visualization API:** Provides an endpoint for fetching visualization data for a saved query given its ID. More information about the response format can be found in VISUALIZATION_RESPONSE.md
@@ -147,8 +148,12 @@ Example:
 ##### savedQueryDirectory / archiveFileDirectory
 **LEGACY**: These top-level settings are supported as a fallback when `QueryStorageConfig` is absent.
 
-#### PublicationWebhookConfiguration.EndpointUrl
-URL for optional publication webhook that is called when a query is saved as publish-ready.
+#### PublicationWebhookConfiguration.BaseUrl
+Base URL of the webhook service (e.g., "https://example.com").
+#### PublicationWebhookConfiguration.WebhookEndpointPath
+Path appended to BaseUrl for webhook POST requests (e.g., "/api/publish").
+#### PublicationWebhookConfiguration.HealthCheckEndpointPath
+Optional path appended to BaseUrl for health check GET requests (e.g., "/api/info"). When omitted, the health endpoint will not probe the webhook service.
 ####  PublicationWebhookConfiguration.AccessTokenHeaderName
 Optional HTTP header name for access token authentication.
 ####  PublicationWebhookConfiguration.AccessTokenHeaderValue

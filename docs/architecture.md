@@ -38,6 +38,7 @@ All controller routes are under `/api/`. The `CreationAPI` feature flag gates th
 | `VisualizationController` | `api/sq/visualization` | ❌ | `GET {sqId}` — serve visualization for a saved query (cached with multi-state memory cache) |
 | `QueryMetaController` | `api/sq/meta` | ❌ | `GET {savedQueryId}` — return saved query metadata (header, archived status, visualization type) |
 | `InfoController` | `api/info` | ❌ | Application info endpoint |
+| `HealthController` | `api/health` | ❌ | Health check endpoint — probes all configured dependencies (database, storage, webhook) and returns 200/503 |
 | `ErrorController` | `api/error` | ❌ | Global error handler |
 
 ### Data Access Layer (`Datasource/`)
@@ -91,7 +92,7 @@ Supported chart types (enum `VisualizationType`): VerticalBarChart, GroupVertica
 |---|---|---|
 | `Models/Queries/` | `MatrixQuery`, `DimensionQuery`, `ValueFilters`, `PxTableReference`, `FilterRequest`, `VisualizationSettings`, `Layout` | Query structure and dimension filtering |
 | `Models/Requests/` | `ChartRequest`, `SaveQueryParams`, `ReArchiveRequest`, `VisualizationCreationSettings` | API request DTOs |
-| `Models/Responses/` | `EditorContentsResponse`, `VisualizationResponse`, `QueryMetaResponse`, `SaveQueryResponse`, `ReArchiveResponse`, `TableMetaValidationResult`, `DatabaseGroupContents`, `DatabaseGroupHeader`, `DatabaseTable` | API response DTOs |
+| `Models/Responses/` | `EditorContentsResponse`, `VisualizationResponse`, `QueryMetaResponse`, `SaveQueryResponse`, `ReArchiveResponse`, `TableMetaValidationResult`, `DatabaseGroupContents`, `DatabaseGroupHeader`, `DatabaseTable`, `HealthResponse`, `DatabaseHealthStatus`, `ServiceHealthStatus` | API response DTOs |
 | `Models/SavedQueries/` | `SavedQuery`, `ArchiveCube`, versioned types (`V1_0`, `V1_1`, `V1_2`, `V10`, `V11`) | Persisted query + archive formats with version migration |
 | `Models/Metadata/` | `HeaderBuildingUtilities`, `MatrixMetadataExtensions`, `DimensionExtensions`, `DimensionValueExtensions` | Metadata processing and header generation |
 | `Data/MetaData/` | `CubeMeta`, `Variable`, `VariableValue`, `ContentComponent` | Legacy metadata model types |
@@ -108,7 +109,8 @@ Key config sections: `DatabaseConfig`, `QueryStorageConfig`, `CacheOptions`, `Co
 | Type | Purpose |
 |---|---|
 | `AuditLogService` / `IAuditLogService` | Structured audit logging |
-| `PublicationWebhookService` / `IPublicationWebhookService` | HTTP webhook for query publication events |
+| `PublicationWebhookService` / `IPublicationWebhookService` | HTTP webhook for query publication events; also exposes `CheckWebhookReachabilityAsync` for health probing |
+| `HealthCheckService` / `IHealthCheckService` | Probes all configured dependencies (database, saved query storage, archive storage, publication webhook) and returns aggregated `HealthResponse` |
 
 ### Other Backend Folders
 
@@ -284,7 +286,7 @@ NUnit 4 + Moq 4. Tests mirror backend structure.
 | `ControllerTests/SqControllerTests/` | `GetSavedQueryAsyncTests`, `SaveQueryAsyncTest`, `ArchiveQueryAsyncTests`, `ReArchiveActionTests` |
 | `ControllerTests/VisualizationControllerTests/` | `GetVisualizationTests` |
 | `ControllerTests/QueryMetaControllerTests/` | `GetQueryMetaTests` |
-| `ControllerTests/` | `ErrorControllerTests` |
+| `ControllerTests/` | `ErrorControllerTests`, `HealthControllerTests` |
 | `ChartTypeSelectionTests/` | Per-chart-type tests (BasicVerticalBarChart, LineChart, PieChart, ScatterPlot, Table, etc.) |
 | `DatasourceTests/` | `FileDatasourceTests`, `CachedApiDataSourceTests`, `CachedFileDatasourceTests`, `MultiStateMemoryTaskCacheTests`, `PxWebV1ApiInterfaceTests`, `PathUtilsTests` |
 | `Storage/` | `LocalStorageProviderTests`, `PathNormalizerTests` |
@@ -295,7 +297,7 @@ NUnit 4 + Moq 4. Tests mirror backend structure.
 | `SortingTests/` | `DimensionSortingOptionsTests` |
 | `Visualization/` | `PxVisualizerCubeAdapterTests`, `DimensionOrderingTests` |
 | `ModelTests/` | `ValueFilterTests` |
-| `ServicesTests/` | `AuditLogServiceTests`, `PublicationWebhookServiceTests` |
+| `ServicesTests/` | `AuditLogServiceTests`, `PublicationWebhookServiceTests`, `HealthCheckServiceTests` |
 | `ConfigurationTests/` | `ConfigurationTests`, `ApplicationInsightsConfigTests` |
 | `UtilityFunctionsTests/` | `InputValidationTests`, `CartesianProductTest`, `PxFileReferenceTests`, `LockByKeyTests`, `MetaPropertyExtensionsTests` |
 | `PxWebInterfaceTests/` | `ModelExtensionsTests` + fixtures |

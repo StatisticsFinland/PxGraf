@@ -43,7 +43,8 @@ namespace UnitTests.ControllerTests.SqControllerTests
             // Set up configuration with webhook enabled
             Dictionary<string, string> configDict = new(TestInMemoryConfiguration.Get())
             {
-                { "PublicationWebhookConfiguration:EndpointUrl", "https://example.com/webhook" },
+                { "PublicationWebhookConfiguration:BaseUrl", "https://example.com" },
+                { "PublicationWebhookConfiguration:WebhookEndpointPath", "/webhook" },
                 { "PublicationWebhookConfiguration:BodyContentPropertyNames:0", "id" }
             };
 
@@ -116,10 +117,11 @@ namespace UnitTests.ControllerTests.SqControllerTests
             // Set up configuration with webhook enabled
             Dictionary<string, string> configDict = new(TestInMemoryConfiguration.Get())
             {
-                { "PublicationWebhookConfiguration:EndpointUrl", "https://example.com/webhook" },
+                { "PublicationWebhookConfiguration:BaseUrl", "https://example.com" },
+                { "PublicationWebhookConfiguration:WebhookEndpointPath", "/webhook" },
                 { "PublicationWebhookConfiguration:BodyContentPropertyNames:0", "id" }
             };
-            
+
             IConfiguration configuration = new ConfigurationBuilder()
                 .AddInMemoryCollection(configDict)
                 .Build();

@@ -89,7 +89,7 @@ namespace PxGraf.Services
                     Dictionary<string, object> webhookBody = await BuildWebhookBodyAsync(queryId, savedQuery, additionalProperties);
                     string jsonContent = JsonSerializer.Serialize(webhookBody, GlobalJsonConverterOptions.Default);
 
-                    using HttpRequestMessage request = new(HttpMethod.Post, _config.EndpointUrl);
+                    using HttpRequestMessage request = new(HttpMethod.Post, _config.WebhookUrl);
                     request.Content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
                     if (_config.HasAccessToken)
@@ -97,7 +97,7 @@ namespace PxGraf.Services
                         request.Headers.Add(_config.AccessTokenHeaderName, _config.AccessTokenHeaderValue);
                     }
 
-                    logger.LogInformation("Sending publication webhook for query to {EndpointUrl}", _config.EndpointUrl);
+                    logger.LogInformation("Sending publication webhook for query to {WebhookUrl}", _config.WebhookUrl);
 
                     HttpResponseMessage response = await httpClient.SendAsync(request);
 
@@ -306,6 +306,34 @@ namespace PxGraf.Services
             {
                 logger.LogError(ex, "Unexpected error while extracting messages from webhook response");
                 return null;
+            }
+        }
+
+        /// <summary>
+        /// Checks whether the publication webhook endpoint is reachable by sending a GET request to its info endpoint.
+        /// </summary>
+        /// <returns>True if the endpoint returns a 200 response, false otherwise.</returns>
+        public async Task<bool> CheckWebhookReachabilityAsync()
+        {
+            if (!_config.IsEnabled)
+            {
+                return false;
+            }
+
+            try
+            {
+                using HttpRequestMessage request = new(HttpMethod.Get, _config.HealthCheckUrl);
+                if (_config.HasAccessToken)
+                {
+                    request.Headers.Add(_config.AccessTokenHeaderName, _config.AccessTokenHeaderValue);
+                }
+
+                HttpResponseMessage response = await httpClient.SendAsync(request);
+                return response.IsSuccessStatusCode;
+            }
+            catch (HttpRequestException)
+            {
+                return false;
             }
         }
     }
