@@ -77,7 +77,7 @@ namespace PxGraf.Settings
         /// <summary>
         /// Gets a value indicating whether the webhook configuration is valid and enabled.
         /// </summary>
-        public bool IsEnabled => !string.IsNullOrWhiteSpace(BaseUrl) && !string.IsNullOrWhiteSpace(WebhookEndpointPath) && BodyContentPropertyNames?.Length > 0;
+        public bool IsEnabled => !string.IsNullOrWhiteSpace(BaseUrl) && !string.IsNullOrWhiteSpace(WebhookEndpointPath) && BodyContentPropertyNames?.Length > 0 && WebhookUrl is not null;
 
         /// <summary>
         /// Gets a value indicating whether a health check endpoint is configured for the webhook service.

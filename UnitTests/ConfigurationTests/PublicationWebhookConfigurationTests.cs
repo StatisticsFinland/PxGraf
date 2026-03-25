@@ -113,6 +113,19 @@ namespace UnitTests.ConfigurationTests
             Assert.That(config.IsEnabled, Is.False);
         }
 
+        [Test]
+        public void IsEnabled_MalformedWebhookUrl_ReturnsFalse()
+        {
+            PublicationWebhookConfiguration config = new()
+            {
+                BaseUrl = "not-a-url",
+                WebhookEndpointPath = "/api/publish",
+                BodyContentPropertyNames = [PublicationPropertyType.Id]
+            };
+
+            Assert.That(config.IsEnabled, Is.False);
+        }
+
         #endregion
 
         #region WebhookUrl
