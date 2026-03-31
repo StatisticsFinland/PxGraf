@@ -76,7 +76,9 @@ namespace UnitTests.ServicesTests
             Dictionary<string, string> configDict = TestInMemoryConfiguration.Get().ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
             if (enableWebhook)
             {
-                configDict.Add("PublicationWebhookConfiguration:EndpointUrl", "https://example.com/webhook");
+                configDict.Add("PublicationWebhookConfiguration:BaseUrl", "https://example.com");
+                configDict.Add("PublicationWebhookConfiguration:WebhookEndpointPath", "/webhook");
+                configDict.Add("PublicationWebhookConfiguration:HealthCheckEndpointPath", "/info");
                 configDict.Add("PublicationWebhookConfiguration:AccessTokenHeaderName", "Authorization");
                 configDict.Add("PublicationWebhookConfiguration:AccessTokenHeaderValue", "Bearer test-token");
                 configDict.Add("PublicationWebhookConfiguration:BodyContentPropertyNames:0", "id");

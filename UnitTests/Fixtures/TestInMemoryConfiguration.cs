@@ -31,7 +31,8 @@ namespace UnitTests.Fixtures
                 { "Language:Available:0", "fi"},
                 { "Language:Available:1", "sv"},
                 { "Language:Available:2", "en"},
-                { "DatabaseWhitelist:0", "StatFin" }
+                { "DatabaseWhitelist:0", "StatFin" },
+                { "FeatureManagement:CreationAPI", "true" }
             };
         }
     }

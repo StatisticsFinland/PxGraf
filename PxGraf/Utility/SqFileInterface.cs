@@ -124,6 +124,40 @@ namespace PxGraf.Utility
             );
         }
 
+        /// <summary>
+        /// Checks whether the saved query storage directory is accessible.
+        /// </summary>
+        /// <param name="directory">The saved query directory path.</param>
+        /// <returns>True if the directory can be accessed, false otherwise.</returns>
+        public async Task<bool> CanAccessSavedQueriesAsync(string directory)
+        {
+            try
+            {
+                return await savedQueryStorage.ProbeDirectoryAsync(directory);
+            }
+            catch (Exception ex) when (ex is not OperationCanceledException)
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Checks whether the archive file storage directory is accessible.
+        /// </summary>
+        /// <param name="directory">The archive file directory path.</param>
+        /// <returns>True if the directory can be accessed, false otherwise.</returns>
+        public async Task<bool> CanAccessArchivesAsync(string directory)
+        {
+            try
+            {
+                return await archiveStorage.ProbeDirectoryAsync(directory);
+            }
+            catch (Exception ex) when (ex is not OperationCanceledException)
+            {
+                return false;
+            }
+        }
+
         private static async Task SerializeToFileImplAsync(IStorageProvider storage, string fullPath, object input)
         {
             string json = JsonSerializer.Serialize(input, GlobalJsonConverterOptions.Default);

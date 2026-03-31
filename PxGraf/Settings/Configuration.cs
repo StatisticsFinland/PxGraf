@@ -240,7 +240,9 @@ namespace PxGraf.Settings
 
             return new PublicationWebhookConfiguration
             {
-                EndpointUrl = section[nameof(PublicationWebhookConfiguration.EndpointUrl)],
+                BaseUrl = section[nameof(PublicationWebhookConfiguration.BaseUrl)],
+                WebhookEndpointPath = section[nameof(PublicationWebhookConfiguration.WebhookEndpointPath)],
+                HealthCheckEndpointPath = section[nameof(PublicationWebhookConfiguration.HealthCheckEndpointPath)],
                 AccessTokenHeaderName = section[nameof(PublicationWebhookConfiguration.AccessTokenHeaderName)],
                 AccessTokenHeaderValue = section[nameof(PublicationWebhookConfiguration.AccessTokenHeaderValue)],
                 BodyContentPropertyNames = section.GetSection(nameof(PublicationWebhookConfiguration.BodyContentPropertyNames)).Get<PublicationPropertyType[]>() ?? [],
