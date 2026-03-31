@@ -98,10 +98,7 @@ namespace PxGraf.Services
                         request.Headers.Add(_config.AccessTokenHeaderName, _config.AccessTokenHeaderValue);
                     }
 
-                    if (logger.IsEnabled(LogLevel.Information))
-                    {
-                        logger.LogInformation("Sending publication webhook for query to {WebhookUrl}", _config.WebhookUrl);
-                    }
+                    logger.LogInformation("Sending publication webhook for query to {WebhookUrl}", _config.WebhookUrl);
 
                     HttpResponseMessage response = await httpClient.SendAsync(request);
 
@@ -109,10 +106,7 @@ namespace PxGraf.Services
 
                     if (response.IsSuccessStatusCode)
                     {
-                        if (logger.IsEnabled(LogLevel.Information))
-                        {
-                            logger.LogInformation("Publication webhook for query sent successfully. Status: {StatusCode}", response.StatusCode);
-                        }
+                        logger.LogInformation("Publication webhook for query sent successfully. Status: {StatusCode}", response.StatusCode);
                         return new WebhookPublicationResult
                         {
                             Status = QueryPublicationStatus.Success,
@@ -121,11 +115,8 @@ namespace PxGraf.Services
                     }
                     else
                     {
-                        if (logger.IsEnabled(LogLevel.Warning))
-                        {
-                            logger.LogWarning("Publication webhook for query failed. Status: {StatusCode}, Reason: {ReasonPhrase}",
-                                response.StatusCode, response.ReasonPhrase);
-                        }
+                        logger.LogWarning("Publication webhook for query failed. Status: {StatusCode}, Reason: {ReasonPhrase}",
+                            response.StatusCode, response.ReasonPhrase);
                         return new WebhookPublicationResult
                         {
                             Status = QueryPublicationStatus.Failed,
@@ -251,10 +242,7 @@ namespace PxGraf.Services
         /// <returns>Always returns null.</returns>
         private object LogUnknownPropertyAndReturnNull(string propertyName)
         {
-            if (logger.IsEnabled(LogLevel.Warning))
-            {
-                logger.LogWarning("Unknown property name in webhook configuration: {PropertyName}", propertyName);
-            }
+            logger.LogWarning("Unknown property name in webhook configuration: {PropertyName}", propertyName);
             return null;
         }
 
@@ -307,18 +295,12 @@ namespace PxGraf.Services
                     return webhookResponse.Messages;
                 }
 
-                if (logger.IsEnabled(LogLevel.Warning))
-                {
-                    logger.LogWarning("Webhook response content could not be parsed as valid message format. Content: {ResponseContent}", responseContent);
-                }
+                logger.LogWarning("Webhook response content could not be parsed as valid message format. Content: {ResponseContent}", responseContent);
                 return null;
             }
             catch (JsonException ex)
             {
-                if (logger.IsEnabled(LogLevel.Warning))
-                {
-                    logger.LogWarning(ex, "Failed to parse webhook response as JSON. Response content: {ResponseContent}", response?.Content);
-                }
+                logger.LogWarning(ex, "Failed to parse webhook response as JSON.");
                 return null;
             }
             catch (Exception ex)
