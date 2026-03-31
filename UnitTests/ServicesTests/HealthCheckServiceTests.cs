@@ -40,9 +40,10 @@ namespace UnitTests.ServicesTests
             _mockLogger = new Mock<ILogger<HealthCheckService>>();
         }
 
-        private static void LoadPxWebConfig(bool enableWebhook = false, bool enableWebhookHealthCheck = true)
+        private static void LoadPxWebConfig(bool enableWebhook = false, bool enableWebhookHealthCheck = true, bool creationAPIEnabled = true)
         {
             Dictionary<string, string> config = TestInMemoryConfiguration.Get();
+            config["FeatureManagement:CreationAPI"] = creationAPIEnabled.ToString();
             if (enableWebhook)
             {
                 config["PublicationWebhookConfiguration:BaseUrl"] = "https://example.com";
@@ -462,6 +463,35 @@ namespace UnitTests.ServicesTests
         {
             // Arrange
             LoadPxWebConfig(enableWebhook: true, enableWebhookHealthCheck: false);
+            _mockDatasource
+                .Setup(ds => ds.GetGroupContentsCachedAsync(It.IsAny<IReadOnlyList<string>>()))
+                .ReturnsAsync(new DatabaseGroupContents([], []));
+            _mockSqFileInterface
+                .Setup(sq => sq.CanAccessSavedQueriesAsync(It.IsAny<string>()))
+                .ReturnsAsync(true);
+            _mockSqFileInterface
+                .Setup(sq => sq.CanAccessArchivesAsync(It.IsAny<string>()))
+                .ReturnsAsync(true);
+
+            HealthCheckService service = BuildService();
+
+            // Act
+            HealthResponse result = await service.CheckHealthAsync();
+
+            // Assert
+            using (Assert.EnterMultipleScope())
+            {
+                Assert.That(result.Status, Is.EqualTo("healthy"));
+                Assert.That(result.Services.Any(s => s.Id == "publication-webhook"), Is.False);
+                _mockWebhookService.Verify(ws => ws.CheckWebhookReachabilityAsync(), Times.Never);
+            }
+        }
+
+        [Test]
+        public async Task CheckHealthAsync_WebhookEnabledButCreationAPIDisabled_NoWebhookEntry_StillHealthy()
+        {
+            // Arrange
+            LoadPxWebConfig(enableWebhook: true, creationAPIEnabled: false);
             _mockDatasource
                 .Setup(ds => ds.GetGroupContentsCachedAsync(It.IsAny<IReadOnlyList<string>>()))
                 .ReturnsAsync(new DatabaseGroupContents([], []));

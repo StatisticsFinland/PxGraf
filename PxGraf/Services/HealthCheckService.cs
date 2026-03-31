@@ -39,7 +39,7 @@ namespace PxGraf.Services
             List<DatabaseHealthStatus> databases = [dbTask.Result];
             List<ServiceHealthStatus> services = [sqTask.Result, archiveTask.Result];
 
-            if (Configuration.Current.PublicationWebhookConfig is { IsEnabled: true, HasHealthCheckEndpoint: true })
+            if (Configuration.Current.CreationAPI && Configuration.Current.PublicationWebhookConfig is { IsEnabled: true, HasHealthCheckEndpoint: true })
             {
                 services.Add(await ProbeWebhookAsync());
             }
