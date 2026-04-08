@@ -43,6 +43,11 @@ namespace PxGraf.Settings
         public ApplicationInsightsConfig ApplicationInsights { get; private set; }
         public PublicationWebhookConfiguration PublicationWebhookConfig { get; private set; }
 
+        private static readonly Dictionary<string, Func<Configuration, bool>> FeatureFlags = new(StringComparer.OrdinalIgnoreCase)
+        {
+            ["CreationAPI"] = c => c.CreationAPI
+        };
+
         public static void Load(IConfiguration configuration)
         {
             //Set config defaults
@@ -92,6 +97,15 @@ namespace PxGraf.Settings
             }
 
             Current = newConfig;
+        }
+
+        /// <summary>
+        /// Returns whether the named feature flag is enabled in the current configuration.
+        /// Unknown feature names are treated as enabled (visible) by default.
+        /// </summary>
+        public bool IsFeatureEnabled(string featureName)
+        {
+            return !FeatureFlags.TryGetValue(featureName, out Func<Configuration, bool> accessor) || accessor(this);
         }
 
         /// <summary>

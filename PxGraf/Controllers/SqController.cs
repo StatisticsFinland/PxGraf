@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.FeatureManagement.Mvc;
@@ -57,6 +58,9 @@ namespace PxGraf.Controllers
         /// If saved query with the provided ID is not found, "Not Found" response is returned.
         /// </returns>
         [HttpGet("{savedQueryId}")]
+        [ProducesResponseType<SaveQueryParams>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<SaveQueryParams>> GetSavedQueryAsync([FromRoute] string savedQueryId)
         {
             Dictionary<string, object> logScope = new()
@@ -131,6 +135,8 @@ namespace PxGraf.Controllers
         /// <param name="parameters">Parameters for saving the query.</param>
         /// <returns><see cref="SaveQueryResponse"/> object that contains the id of the saved query.</returns>
         [HttpPost("save")]
+        [ProducesResponseType<SaveQueryResponse>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<SaveQueryResponse>> SaveQueryAsync([FromBody] SaveQueryParams parameters)
         {
             string actionPath = $"{CONTROLLER_PATH}/save";
@@ -203,6 +209,8 @@ namespace PxGraf.Controllers
         /// <param name="parameters">Parameters for saving the query.</param>
         /// <returns><see cref="SaveQueryResponse"/> object that contains the name of the archived query.</returns>
         [HttpPost("archive")]
+        [ProducesResponseType<SaveQueryResponse>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<SaveQueryResponse>> ArchiveQueryAsync([FromBody] SaveQueryParams parameters)
         {
             string actionPath = $"{CONTROLLER_PATH}/archive";
@@ -285,6 +293,9 @@ namespace PxGraf.Controllers
         /// <param name="request"><see cref="ReArchiveRequest"/> object that contains the ID of the query to be rearchived.</param>
         /// <returns><see cref="ReArchiveResponse"/> object that contains the ID of the rearchived query.</returns>
         [HttpPost("re-archive")]
+        [ProducesResponseType<ReArchiveResponse>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<ReArchiveResponse>> ReArchiveExistingQueryAsync([FromBody] ReArchiveRequest request)
         {
             string actionPath = $"{CONTROLLER_PATH}/re-archive";

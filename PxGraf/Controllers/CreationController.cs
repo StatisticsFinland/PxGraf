@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.FeatureManagement.Mvc;
@@ -48,6 +49,9 @@ namespace PxGraf.Controllers
         /// If a database whitelist is configured and the database is not whitelisted, "Not Found" response is returned.
         /// </returns>
         [HttpGet("data-bases/{*dbPath}")]
+        [ProducesResponseType<DatabaseGroupContents>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<DatabaseGroupContents>> GetDataBaseListingAsync([FromRoute] string dbPath)
         {
             Dictionary<string, object> logScope = new() { 
@@ -105,6 +109,9 @@ namespace PxGraf.Controllers
         /// If the database is not whitelisted, "Not Found" response is returned.
         /// </returns>
         [HttpGet("cube-meta/{*tablePath}")]
+        [ProducesResponseType<IReadOnlyMatrixMetadata>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<IReadOnlyMatrixMetadata>> GetCubeMetaAsync([FromRoute] string tablePath)
         {
             using(_logger.BeginScope(new Dictionary<string, object> {
@@ -150,6 +157,8 @@ namespace PxGraf.Controllers
         /// If the database is not whitelisted, "Not Found" response is returned.
         /// </returns>
         [HttpGet("validate-table-metadata/{*tablePath}")]
+        [ProducesResponseType<TableMetaValidationResult>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<TableMetaValidationResult>> ValidateTableMetaData([FromRoute] string tablePath)
         {
             using (_logger.BeginScope(new Dictionary<string, object>
@@ -196,6 +205,7 @@ namespace PxGraf.Controllers
         /// <param name="filterRequest">Filter request object containing the table reference and the filter.</param>
         /// <returns>Dictionary with dimension codes as keys and their value codes as values</returns>
         [HttpPost("filter-dimension")]
+        [ProducesResponseType<Dictionary<string, List<string>>>(StatusCodes.Status200OK)]
         public async Task<ActionResult<Dictionary<string, List<string>>>> GetDimensionFilterResultAsync([FromBody] FilterRequest filterRequest)
         {
             using (_logger.BeginScope(new Dictionary<string, object>
@@ -244,6 +254,7 @@ namespace PxGraf.Controllers
         /// <returns><see cref="EditorContentsResponse"/> object that contains the size of the resulting matrix, maximum supported size, header text, maximum header length, visualization options for accepted visualization types and rejection reasons.</returns>
 #nullable enable
         [HttpPost("editor-contents")]
+        [ProducesResponseType<EditorContentsResponse>(StatusCodes.Status200OK)]
         public async Task<ActionResult<EditorContentsResponse>> GetEditorContents([FromBody] MatrixQuery query)
         {
             using (_logger.BeginScope(new Dictionary<string, object>
@@ -350,6 +361,8 @@ namespace PxGraf.Controllers
         /// If the request is missing values for any dimension or the selected visualization type is not valid, "Bad Request" response is returned.
         /// </returns>
         [HttpPost("visualization")]
+        [ProducesResponseType<VisualizationResponse>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<VisualizationResponse>> GetVisualizationAsync([FromBody] ChartRequest request)
         {
             using (_logger.BeginScope(new Dictionary<string, object>
