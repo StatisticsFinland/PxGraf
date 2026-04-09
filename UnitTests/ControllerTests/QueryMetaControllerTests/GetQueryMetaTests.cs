@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -37,11 +37,11 @@ namespace UnitTests.ControllerTests.QueryMetaControllerTests
 
             Dictionary<string, string> inMemorySettings = new()
             {
-                {"pxwebUrl", "http://pxwebtesturl:12345/"},
+                {"DatabaseConfig:Type", "PxWeb"},
+                {"DatabaseConfig:PxWebUrl", "http://pxwebtesturl:12345/"},
                 {"pxgrafUrl", "http://pxgraftesturl:8443/PxGraf"},
                 {"savedQueryDirectory", "goesNowhere"},
-                {"archiveFileDirectory", "goesNowhere"},
-                {"LocalFilesystemDatabaseConfig:Encoding", "latin1"}
+                {"archiveFileDirectory", "goesNowhere"}
             };
 
             IConfiguration configuration = new ConfigurationBuilder()
@@ -67,7 +67,7 @@ namespace UnitTests.ControllerTests.QueryMetaControllerTests
         private void SetupMocksForSuccessfulQuery(SavedQuery savedQuery, List<DimensionParameters> dimParams, bool isArchived = false, ArchiveCube archiveCube = null)
         {
             _sqFileInterface.Setup(fi => fi.SavedQueryExists(It.IsAny<string>(), It.IsAny<string>()))
-                .Returns(true);
+                .ReturnsAsync(true);
 
             _sqFileInterface.Setup(fi => fi.ReadSavedQueryFromFile(It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(savedQuery);
@@ -80,7 +80,7 @@ namespace UnitTests.ControllerTests.QueryMetaControllerTests
             else
             {
                 _sqFileInterface.Setup(fi => fi.ArchiveCubeExists(It.IsAny<string>(), It.IsAny<string>()))
-                    .Returns(archiveCube != null);
+                    .ReturnsAsync(archiveCube != null);
 
                 if (archiveCube != null)
                 {
@@ -178,8 +178,8 @@ namespace UnitTests.ControllerTests.QueryMetaControllerTests
         {
             // Arrange
             _sqFileInterface.Setup(fi => fi.SavedQueryExists(It.IsAny<string>(), It.IsAny<string>()))
-                .Returns(false);
-            
+                .ReturnsAsync(false);
+
             QueryMetaController controller = CreateController();
 
             // Act
@@ -270,8 +270,8 @@ namespace UnitTests.ControllerTests.QueryMetaControllerTests
             SavedQuery sq = TestDataCubeBuilder.BuildTestSavedQuery(dimParams, false, settings);
             
             _sqFileInterface.Setup(fi => fi.SavedQueryExists(It.IsAny<string>(), It.IsAny<string>()))
-                .Returns(true);
-            
+                .ReturnsAsync(true);
+
             _sqFileInterface.Setup(fi => fi.ReadSavedQueryFromFile(It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(sq);
             

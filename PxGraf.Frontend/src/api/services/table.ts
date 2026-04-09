@@ -1,7 +1,7 @@
 /* istanbul ignore file */
 
 import ApiClient from "api/client";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { defaultQueryOptions } from "utils/ApiHelpers";
 import { IDatabaseGroupContents } from "types/tableListItems";
 
@@ -26,10 +26,11 @@ const fetchTable = async (idStack: string[]): Promise<IDatabaseGroupContents> =>
 };
 
 export const useTableQuery = (idStack: string[]): ITableResult => {
-    const result = useQuery(
-        ["table", idStack],
-        () => fetchTable(idStack),
-        defaultQueryOptions);
+    const result = useQuery({
+        queryKey: ["table", idStack],
+        queryFn: () => fetchTable(idStack),
+        ...defaultQueryOptions
+    });
 
     return result;
 };

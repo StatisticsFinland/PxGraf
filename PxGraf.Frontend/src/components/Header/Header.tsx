@@ -68,7 +68,7 @@ const Header: React.FC = () => {
     // Show different top title for editor and database/table selection
     const title = location.pathname?.split("/")[1] == "editor" ? t("general.editorTitle") : t("general.selectDatabaseTitle");
 
-    const ref = React.useRef<HTMLAnchorElement>();
+    const ref = React.useRef<HTMLAnchorElement>(null);
 
     React.useEffect(() => {
       if(ref.current) ref.current.focus();

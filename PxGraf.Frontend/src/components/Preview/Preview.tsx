@@ -154,6 +154,7 @@ export const Preview: React.FC<IPreviewProps> = ({ path, query, selectedVisualiz
                         selectedVariableCodes={resolvedSelections}
                         showTableSources={true}
                         showLastUpdated={true}
+                        showTableUnits={true}
                     />
                 </ChartWrapper>}
         </>

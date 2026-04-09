@@ -80,7 +80,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
             mockCachedDatasource.Setup(c => c.GetMatrixCachedAsync(It.IsAny<PxTableReference>(), It.IsAny<IReadOnlyMatrixMetadata>()))
                 .Returns(Task.Run(() => TestDataCubeBuilder.BuildTestMatrix(cubeParams)));
 
-            mockSqFileInterface.Setup(s => s.SerializeToFile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<SavedQuery>()))
+            mockSqFileInterface.Setup(s => s.SerializeToSqFileAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<SavedQuery>()))
                 .Returns(Task.CompletedTask);
 
             mockWebhookService.Setup(s => s.TriggerWebhookAsync(It.IsAny<string>(), It.IsAny<SavedQuery>(), It.IsAny<IReadOnlyDictionary<string, MetaProperty>>()))
@@ -103,7 +103,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
             ActionResult<SaveQueryResponse> actionResult = await testController.SaveQueryAsync(testInput);
             Assert.That(actionResult.Value, Is.InstanceOf<SaveQueryResponse>());
             mockSqFileInterface.Verify(
-                s => s.SerializeToFile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<SavedQuery>()), Times.Once);
+                s => s.SerializeToSqFileAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<SavedQuery>()), Times.Once);
             mockWebhookService.Verify(
                 w => w.TriggerWebhookAsync(It.IsAny<string>(), It.IsAny<SavedQuery>(), It.IsAny<IReadOnlyDictionary<string, MetaProperty>>()),
                 Times.Once);
@@ -153,7 +153,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
             mockCachedDatasource.Setup(c => c.GetMatrixCachedAsync(It.IsAny<PxTableReference>(), It.IsAny<IReadOnlyMatrixMetadata>()))
                 .Returns(Task.Run(() => TestDataCubeBuilder.BuildTestMatrix(cubeParams)));
 
-            mockSqFileInterface.Setup(s => s.SerializeToFile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<SavedQuery>()))
+            mockSqFileInterface.Setup(s => s.SerializeToSqFileAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<SavedQuery>()))
                 .Returns(Task.CompletedTask);
 
             mockWebhookService.Setup(w => w.TriggerWebhookAsync(It.IsAny<string>(), It.IsAny<SavedQuery>(), It.IsAny<IReadOnlyDictionary<string, Px.Utils.Models.Metadata.MetaProperties.MetaProperty>>()))
@@ -219,7 +219,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
             mockCachedDatasource.Setup(c => c.GetMatrixCachedAsync(It.IsAny<PxTableReference>(), It.IsAny<IReadOnlyMatrixMetadata>()))
                 .Returns(Task.Run(() => TestDataCubeBuilder.BuildTestMatrix(cubeParams)));
 
-            mockSqFileInterface.Setup(s => s.SerializeToFile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<SavedQuery>()))
+            mockSqFileInterface.Setup(s => s.SerializeToSqFileAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<SavedQuery>()))
                 .Returns(Task.CompletedTask);
 
             SaveQueryParams testInput = new()
@@ -291,7 +291,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
             mockCachedDatasource.Setup(c => c.GetMatrixCachedAsync(It.IsAny<PxTableReference>(), It.IsAny<IReadOnlyMatrixMetadata>()))
                 .Returns(Task.Run(() => TestDataCubeBuilder.BuildTestMatrix(cubeParams)));
 
-            mockSqFileInterface.Setup(s => s.SerializeToFile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<SavedQuery>()))
+            mockSqFileInterface.Setup(s => s.SerializeToSqFileAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<SavedQuery>()))
                 .Returns(Task.CompletedTask);
 
             SaveQueryParams testInput = new()
