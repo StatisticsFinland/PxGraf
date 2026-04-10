@@ -86,7 +86,7 @@ namespace PxGraf.Utility
         /// <returns></returns>
         private static async Task<T> ReadJsonObjectFromFileImpl<T>(IStorageProvider storage, string path)
         {
-            Stream stream = await storage.OpenReadAsync(path);
+            using Stream stream = await storage.OpenReadAsync(path);
             return await JsonSerializer.DeserializeAsync<T>(stream, GlobalJsonConverterOptions.Default)
                 ?? throw new JsonException($"Failed to deserialize object from {path}");
         }
