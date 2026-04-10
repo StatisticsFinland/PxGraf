@@ -5,6 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using PxGraf.Settings;
 using PxGraf.Storage;
+using System.IO;
 
 namespace PxGraf.Utility
 {
@@ -85,8 +86,8 @@ namespace PxGraf.Utility
         /// <returns></returns>
         private static async Task<T> ReadJsonObjectFromFileImpl<T>(IStorageProvider storage, string path)
         {
-            string respdata = await storage.ReadAllTextAsync(path);
-            return JsonSerializer.Deserialize<T>(respdata, GlobalJsonConverterOptions.Default)
+            Stream stream = await storage.OpenReadAsync(path);
+            return await JsonSerializer.DeserializeAsync<T>(stream, GlobalJsonConverterOptions.Default)
                 ?? throw new JsonException($"Failed to deserialize object from {path}");
         }
 
