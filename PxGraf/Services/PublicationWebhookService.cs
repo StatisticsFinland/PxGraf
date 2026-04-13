@@ -100,8 +100,7 @@ namespace PxGraf.Services
 
                     logger.LogInformation("Sending publication webhook for query to {WebhookUrl}", _config.WebhookUrl);
 
-                    HttpResponseMessage response = await httpClient.SendAsync(request);
-
+                    using HttpResponseMessage response = await httpClient.SendAsync(request);
                     MultilanguageString messages = await ExtractMessagesFromResponse(response);
 
                     if (response.IsSuccessStatusCode)
@@ -330,11 +329,12 @@ namespace PxGraf.Services
                     request.Headers.Add(_config.AccessTokenHeaderName, _config.AccessTokenHeaderValue);
                 }
 
-                HttpResponseMessage response = await httpClient.SendAsync(request);
+                using HttpResponseMessage response = await httpClient.SendAsync(request);
                 return response.IsSuccessStatusCode;
             }
             catch (Exception ex) when (ex is not OperationCanceledException)
             {
+                logger.LogDebug(ex, "Unexpected error while checking publication webhook reachability.");
                 return false;
             }
         }
