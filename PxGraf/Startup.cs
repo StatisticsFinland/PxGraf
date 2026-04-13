@@ -242,7 +242,7 @@ namespace PxGraf
 
             app.UseSwagger(c =>
             {
-                c.RouteTemplate = "/{documentName}/document.json";
+                c.RouteTemplate = "{documentName}/document.json";
             });
             app.UseSwaggerUI(c =>
             {

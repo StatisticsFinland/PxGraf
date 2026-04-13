@@ -9,13 +9,15 @@ const useReplaceQueryParams = (path: string): void => {
     const { tablePath } = useNavigationContext();
     const tablePathParams = useHierarchyParams();
 
-    const shouldReplace = Boolean(tablePath?.length) && tablePath.join(',') !== tablePathParams?.join(',');
+    const tablePathKey = tablePath?.join(',') ?? '';
+    const tablePathParamsKey = tablePathParams?.join(',') ?? '';
+    const shouldReplace = Boolean(tablePath?.length) && tablePathKey !== tablePathParamsKey;
 
     useEffect(() => {
         if(shouldReplace) {
-            navigate({pathname: path, search: `?tablePath=${tablePath.join(',')}`}, { replace: true });
+            navigate({pathname: path, search: `?tablePath=${tablePathKey}`}, { replace: true });
         }
-    }, [navigate, path, routerLocation, shouldReplace]);
+    }, [navigate, path, routerLocation, shouldReplace, tablePathKey, tablePathParamsKey]);
 }
 
 export default useReplaceQueryParams;

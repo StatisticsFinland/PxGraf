@@ -26,11 +26,21 @@ const mockSuccessDraftMutation: ISaveQueryResult = {
     }
 };
 
-const mockErrorMutation: ISaveQueryResult = {
+const mockFailedPublicationMutation: ISaveQueryResult = {
     isPending: false,
     isError: false,
     isSuccess: true,
     data: { id: 'foobar', publicationStatus: EQueryPublicationStatus.Failed },
+    mutate: function (_property: any): void {
+        throw new Error('Function not implemented.');
+    }
+};
+
+const mockRequestErrorMutation: ISaveQueryResult = {
+    isPending: false,
+    isError: true,
+    isSuccess: false,
+    data: null,
     mutate: function (_property: any): void {
         throw new Error('Function not implemented.');
     }
@@ -70,10 +80,19 @@ describe('Rendering test', () => {
     });
 });
 
-describe('Error rendering test', () => {
-    it('renders error correctly when open with error', () => {
+describe('Failed publication status rendering test', () => {
+    it('renders correctly when publication status is Failed', () => {
         const dom = render(
-                <SaveResultDialog mutation={mockErrorMutation} onClose={onCloseMock} open={true} />
+                <SaveResultDialog mutation={mockFailedPublicationMutation} onClose={onCloseMock} open={true} />
+        );
+        expect(dom.baseElement).toMatchSnapshot();
+    });
+});
+
+describe('Request error rendering test', () => {
+    it('renders correctly when request isError is true', () => {
+        const dom = render(
+                <SaveResultDialog mutation={mockRequestErrorMutation} onClose={onCloseMock} open={true} />
         );
         expect(dom.baseElement).toMatchSnapshot();
     });
