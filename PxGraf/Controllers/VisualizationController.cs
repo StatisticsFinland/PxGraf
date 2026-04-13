@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Px.Utils.Models.Data.DataValue;
@@ -57,6 +58,9 @@ namespace PxGraf.Controllers
         /// <param name="sqId">The id of the saved query</param>
         /// <returns><see cref="VisualizationResponse"/> object containing the properties of the visualization</returns>
         [HttpGet("{sqId}")]
+        [ProducesResponseType<VisualizationResponse>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<VisualizationResponse>> GetVisualization([FromRoute] string sqId)
         {
             Dictionary<string, object> logScope = new()

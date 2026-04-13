@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Px.Utils.Language;
@@ -34,6 +35,8 @@ namespace PxGraf.Controllers
         /// If no query for the given ID is found, "Not Found" response is returned.
         /// </returns>
         [HttpGet("{savedQueryId}")]
+        [ProducesResponseType<QueryMetaResponse>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<QueryMetaResponse>> GetQueryMeta([FromRoute] string savedQueryId)
         {
             Dictionary<string, object> logScope = new()
