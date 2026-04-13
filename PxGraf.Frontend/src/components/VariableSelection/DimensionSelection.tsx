@@ -19,7 +19,7 @@ import styled from 'styled-components';
 import { IDimension } from 'types/cubeMeta';
 import { FilterType, IDimensionQuery, Query } from 'types/query';
 import DefaultSelectableDimensionSelection from './DefaultSelectableDimensionSelection';
-import { EditorContext } from '../../contexts/editorContext';
+import { QueryContext } from '../../contexts/queryContext';
 
 interface IDimensionSelectionProps {
     dimension: IDimension
@@ -40,7 +40,7 @@ const ComponentWrapper = styled(Stack)`
 export const DimensionSelection: React.FC<IDimensionSelectionProps> = ({ dimension, resolvedDimensionValueCodes, query }) => {
     const [anchorEl, setAnchorEl] = useState(null);
     const { t } = useTranslation();
-    const { setQuery } = React.useContext(EditorContext);
+    const { setQuery } = React.useContext(QueryContext);
     const dimensionQuery = query[dimension.code];
 
     const onQueryChanged = (newQuery: IDimensionQuery) => {
@@ -129,9 +129,9 @@ export const DimensionSelection: React.FC<IDimensionSelectionProps> = ({ dimensi
             </SelectorWrapper>
 
             {
-                dimensionQuery.valueFilter.type !== FilterType.Item ? (
+                dimensionQuery.valueFilter.type === FilterType.Item ? null : (
                     <ResultList dimensionValues={dimension.values} resolvedDimensionValueCodes={resolvedDimensionValueCodes} />
-                ) : null
+                )
             }
 
             <SelectabilitySwitch onChange={value => onChangeMUIWrapper({ ...dimensionQuery, selectable: value })} selected={dimensionQuery.selectable} />

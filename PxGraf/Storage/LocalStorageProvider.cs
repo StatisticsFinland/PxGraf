@@ -84,6 +84,13 @@ namespace PxGraf.Storage
         }
 
         /// <inheritdoc/>
+        public Task<bool> ProbeDirectoryAsync(string directoryPath, CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            return Task.FromResult(Directory.Exists(directoryPath));
+        }
+
+        /// <inheritdoc/>
         public async Task<DateTime> GetLastWriteTimeAsync(string filePath, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();

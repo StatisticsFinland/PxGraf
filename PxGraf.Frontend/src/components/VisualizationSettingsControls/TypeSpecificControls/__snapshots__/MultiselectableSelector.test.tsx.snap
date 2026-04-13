@@ -52,7 +52,7 @@ exports[`Rendering test renders correctly 1`] = `
           class="css-ex8a5f-MuiNotchedOutlined-root"
         >
           <span>
-            Monivalitaselausmuuttuja
+            chartSettings.multiSelectVariable
           </span>
         </legend>
       </fieldset>

@@ -11,6 +11,7 @@ using PxGraf.Settings;
 using PxGraf.Utility;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -89,7 +90,7 @@ namespace PxGraf.Services
                     Dictionary<string, object> webhookBody = await BuildWebhookBodyAsync(queryId, savedQuery, additionalProperties);
                     string jsonContent = JsonSerializer.Serialize(webhookBody, GlobalJsonConverterOptions.Default);
 
-                    using HttpRequestMessage request = new(HttpMethod.Post, _config.EndpointUrl);
+                    using HttpRequestMessage request = new(HttpMethod.Post, _config.WebhookUrl);
                     request.Content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
                     if (_config.HasAccessToken)
@@ -97,10 +98,9 @@ namespace PxGraf.Services
                         request.Headers.Add(_config.AccessTokenHeaderName, _config.AccessTokenHeaderValue);
                     }
 
-                    logger.LogInformation("Sending publication webhook for query to {EndpointUrl}", _config.EndpointUrl);
+                    logger.LogInformation("Sending publication webhook for query to {WebhookUrl}", _config.WebhookUrl);
 
-                    HttpResponseMessage response = await httpClient.SendAsync(request);
-
+                    using HttpResponseMessage response = await httpClient.SendAsync(request);
                     MultilanguageString messages = await ExtractMessagesFromResponse(response);
 
                     if (response.IsSuccessStatusCode)
@@ -115,7 +115,7 @@ namespace PxGraf.Services
                     else
                     {
                         logger.LogWarning("Publication webhook for query failed. Status: {StatusCode}, Reason: {ReasonPhrase}",
-                        response.StatusCode, response.ReasonPhrase);
+                            response.StatusCode, response.ReasonPhrase);
                         return new WebhookPublicationResult
                         {
                             Status = QueryPublicationStatus.Failed,
@@ -299,13 +299,43 @@ namespace PxGraf.Services
             }
             catch (JsonException ex)
             {
-                logger.LogWarning(ex, "Failed to parse webhook response as JSON. Response content: {ResponseContent}", response?.Content);
+                logger.LogWarning(ex, "Failed to parse webhook response as JSON.");
                 return null;
             }
             catch (Exception ex)
             {
                 logger.LogError(ex, "Unexpected error while extracting messages from webhook response");
                 return null;
+            }
+        }
+
+        /// <summary>
+        /// Checks whether the publication webhook endpoint is reachable by sending a GET request to its info endpoint.
+        /// </summary>
+        /// <returns>True if the endpoint returns a 200 response, false otherwise.</returns>
+        [ExcludeFromCodeCoverage(Justification = "This method involves making actual HTTP requests to external endpoints, which is not ideal for unit testing.")]
+        public async Task<bool> CheckWebhookReachabilityAsync()
+        {
+            if (!_config.IsEnabled || !_config.HasHealthCheckEndpoint)
+            {
+                return false;
+            }
+
+            try
+            {
+                using HttpRequestMessage request = new(HttpMethod.Get, _config.HealthCheckUrl);
+                if (_config.HasAccessToken)
+                {
+                    request.Headers.Add(_config.AccessTokenHeaderName, _config.AccessTokenHeaderValue);
+                }
+
+                using HttpResponseMessage response = await httpClient.SendAsync(request);
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex) when (ex is not OperationCanceledException)
+            {
+                logger.LogDebug(ex, "Unexpected error while checking publication webhook reachability.");
+                return false;
             }
         }
     }

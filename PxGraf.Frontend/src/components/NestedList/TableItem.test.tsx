@@ -6,18 +6,6 @@ import { MemoryRouter } from 'react-router-dom';
 import { TableItem } from './TableItem';
 import { EDatabaseTableError, IDatabaseTable } from '../../types/tableListItems';
 
-jest.mock('react-i18next', () => ({
-    ...jest.requireActual('react-i18next'),
-    useTranslation: () => {
-        return {
-            t: (str: string) => str,
-            i18n: {
-                changeLanguage: () => new Promise(() => null),
-            },
-        };
-    },
-}));
-
 jest.mock('envVars', () => ({
     PxGrafUrl: 'pxGrafUrl.fi/',
     PublicUrl: 'publicUrl.fi/',

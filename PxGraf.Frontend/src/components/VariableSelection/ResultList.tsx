@@ -26,7 +26,7 @@ const NoPaddingListItem = styled(ListItem)`
 `;
 
 const StyledEm = styled.em`
-    color: #ccc;
+    color: var(--text-muted);
 `;
 
 const StyledSkeleton = styled(Skeleton)`

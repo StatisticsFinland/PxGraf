@@ -8,7 +8,7 @@
     "search": "Search",
     "selectDatabaseTitle": "Select database table",
     "editorTitle": "Selecting variables and making a visualisation",
-    "contentLink": "Gå till innehållet"
+    "contentLink": "Go to content"
   },
   "navbar": {
     "logoAlt": "Go to the home page"
@@ -119,7 +119,10 @@
     "contentVariableMissing": "Content variable missing from the table. Please contact the producer of this table or maintenance. ",
     "timeVariableMissing": "Time variable missing from the table. Please contact the producer of this table or maintenance. ",
     "variablesMissingValues": "Variable values missing from the table. Please contact the producer of this table or maintenance. ",
-    "webhookResponseError": "Export failed."
+    "webhookResponseError": "Export failed.",
+    "boundaryTitle": "Something went wrong",
+    "boundaryMessage": "An unexpected error occurred. Please try again.",
+    "boundaryRetry": "Try again"
   },
   "rejectionDialog": {
     "buttonText": "Other chart types",

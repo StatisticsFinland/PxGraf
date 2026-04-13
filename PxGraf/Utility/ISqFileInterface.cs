@@ -39,5 +39,19 @@ namespace PxGraf.Utility
         /// Serialize a json serializable query archive object and write it to an archive file.
         /// </summary>
         public Task SerializeToArchiveFileAsync(string fileName, string filePath, object input);
+
+        /// <summary>
+        /// Checks whether the saved query storage directory is accessible.
+        /// </summary>
+        /// <param name="directory">The saved query directory path.</param>
+        /// <returns>True if the directory can be accessed, false otherwise.</returns>
+        public Task<bool> CanAccessSavedQueriesAsync(string directory);
+
+        /// <summary>
+        /// Checks whether the archive file storage directory is accessible.
+        /// </summary>
+        /// <param name="directory">The archive file directory path.</param>
+        /// <returns>True if the directory can be accessed, false otherwise.</returns>
+        public Task<bool> CanAccessArchivesAsync(string directory);
     }
 }

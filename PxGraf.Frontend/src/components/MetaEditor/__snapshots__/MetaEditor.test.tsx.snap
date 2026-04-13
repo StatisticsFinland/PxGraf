@@ -178,7 +178,7 @@ exports[`Rendering test renders correctly 1`] = `
                   role="region"
                 >
                   <div
-                    class="MuiAccordionDetails-root sc-dLMFT fNoKWi css-1lj39kh-MuiAccordionDetails-root"
+                    class="MuiAccordionDetails-root sc-dLMFT frypaN css-1lj39kh-MuiAccordionDetails-root"
                   >
                     <div
                       class="sc-jlZhev hxqCKM MuiBox-root css-1mc6bnb"

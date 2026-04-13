@@ -29,7 +29,7 @@ exports[`Rendering test renders correctly 1`] = `
     </button>
   </div>
   <div
-    class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiAccordion-root MuiAccordion-rounded Mui-expanded MuiAccordion-gutters sc-dLMFT cnKokz css-1808mag-MuiPaper-root-MuiAccordion-root"
+    class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiAccordion-root MuiAccordion-rounded Mui-expanded MuiAccordion-gutters sc-dLMFT bSWlSE css-1808mag-MuiPaper-root-MuiAccordion-root"
     style="--Paper-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12);"
   >
     <h3
@@ -86,7 +86,7 @@ exports[`Rendering test renders correctly 1`] = `
             role="region"
           >
             <div
-              class="MuiAccordionDetails-root sc-cPiKLY SoFTh css-1lj39kh-MuiAccordionDetails-root"
+              class="MuiAccordionDetails-root sc-cPiKLY jYkpdy css-1lj39kh-MuiAccordionDetails-root"
             >
               <div
                 class="MuiStack-root sc-kpDqfp bBTtYc css-1sazv7p-MuiStack-root"
@@ -114,7 +114,7 @@ exports[`Rendering test renders correctly 1`] = `
                     </svg>
                   </span>
                   <div
-                    class="MuiAutocomplete-root MuiAutocomplete-hasClearIcon MuiAutocomplete-hasPopupIcon sc-iGgWBk cNSUmN css-o5oj2-MuiAutocomplete-root"
+                    class="MuiAutocomplete-root MuiAutocomplete-hasClearIcon MuiAutocomplete-hasPopupIcon sc-iGgWBk eZCLgH css-o5oj2-MuiAutocomplete-root"
                   >
                     <div
                       class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-cmpglg-MuiFormControl-root-MuiTextField-root"
@@ -264,7 +264,7 @@ exports[`Rendering test renders correctly 1`] = `
     </div>
   </div>
   <div
-    class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiAccordion-root MuiAccordion-rounded Mui-expanded MuiAccordion-gutters sc-dLMFT cnKokz css-1808mag-MuiPaper-root-MuiAccordion-root"
+    class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiAccordion-root MuiAccordion-rounded Mui-expanded MuiAccordion-gutters sc-dLMFT bSWlSE css-1808mag-MuiPaper-root-MuiAccordion-root"
     style="--Paper-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12);"
   >
     <h3
@@ -321,7 +321,7 @@ exports[`Rendering test renders correctly 1`] = `
             role="region"
           >
             <div
-              class="MuiAccordionDetails-root sc-cPiKLY SoFTh css-1lj39kh-MuiAccordionDetails-root"
+              class="MuiAccordionDetails-root sc-cPiKLY jYkpdy css-1lj39kh-MuiAccordionDetails-root"
             >
               <div
                 class="MuiStack-root sc-kpDqfp bBTtYc css-1sazv7p-MuiStack-root"
@@ -349,7 +349,7 @@ exports[`Rendering test renders correctly 1`] = `
                     </svg>
                   </span>
                   <div
-                    class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root sc-imWYAH cdZgLa css-cmpglg-MuiFormControl-root-MuiTextField-root"
+                    class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root sc-imWYAH fcGBZU css-cmpglg-MuiFormControl-root-MuiTextField-root"
                   >
                     <label
                       class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined css-113d811-MuiFormLabel-root-MuiInputLabel-root"
@@ -491,7 +491,7 @@ exports[`Rendering test renders correctly 1`] = `
     </div>
   </div>
   <div
-    class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiAccordion-root MuiAccordion-rounded Mui-expanded MuiAccordion-gutters sc-dLMFT cnKokz css-1808mag-MuiPaper-root-MuiAccordion-root"
+    class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiAccordion-root MuiAccordion-rounded Mui-expanded MuiAccordion-gutters sc-dLMFT bSWlSE css-1808mag-MuiPaper-root-MuiAccordion-root"
     style="--Paper-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12);"
   >
     <h3
@@ -548,7 +548,7 @@ exports[`Rendering test renders correctly 1`] = `
             role="region"
           >
             <div
-              class="MuiAccordionDetails-root sc-cPiKLY SoFTh css-1lj39kh-MuiAccordionDetails-root"
+              class="MuiAccordionDetails-root sc-cPiKLY jYkpdy css-1lj39kh-MuiAccordionDetails-root"
             >
               <div
                 class="MuiStack-root sc-kpDqfp bBTtYc css-1sazv7p-MuiStack-root"
@@ -576,7 +576,7 @@ exports[`Rendering test renders correctly 1`] = `
                     </svg>
                   </span>
                   <div
-                    class="MuiAutocomplete-root MuiAutocomplete-hasClearIcon MuiAutocomplete-hasPopupIcon sc-iGgWBk cNSUmN css-o5oj2-MuiAutocomplete-root"
+                    class="MuiAutocomplete-root MuiAutocomplete-hasClearIcon MuiAutocomplete-hasPopupIcon sc-iGgWBk eZCLgH css-o5oj2-MuiAutocomplete-root"
                   >
                     <div
                       class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-cmpglg-MuiFormControl-root-MuiTextField-root"
@@ -749,7 +749,7 @@ exports[`Rendering test renders correctly 1`] = `
     </div>
   </div>
   <div
-    class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiAccordion-root MuiAccordion-rounded Mui-expanded MuiAccordion-gutters sc-dLMFT cnKokz css-1808mag-MuiPaper-root-MuiAccordion-root"
+    class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiAccordion-root MuiAccordion-rounded Mui-expanded MuiAccordion-gutters sc-dLMFT bSWlSE css-1808mag-MuiPaper-root-MuiAccordion-root"
     style="--Paper-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12);"
   >
     <h3
@@ -806,7 +806,7 @@ exports[`Rendering test renders correctly 1`] = `
             role="region"
           >
             <div
-              class="MuiAccordionDetails-root sc-cPiKLY SoFTh css-1lj39kh-MuiAccordionDetails-root"
+              class="MuiAccordionDetails-root sc-cPiKLY jYkpdy css-1lj39kh-MuiAccordionDetails-root"
             >
               <div
                 class="MuiStack-root sc-kpDqfp bBTtYc css-1sazv7p-MuiStack-root"
@@ -834,7 +834,7 @@ exports[`Rendering test renders correctly 1`] = `
                     </svg>
                   </span>
                   <div
-                    class="MuiAutocomplete-root MuiAutocomplete-hasClearIcon MuiAutocomplete-hasPopupIcon sc-kAycey kGkCFb css-1tlcqt-MuiAutocomplete-root"
+                    class="MuiAutocomplete-root MuiAutocomplete-hasClearIcon MuiAutocomplete-hasPopupIcon sc-kAycey cEYeGt css-1tlcqt-MuiAutocomplete-root"
                   >
                     <div
                       class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-cmpglg-MuiFormControl-root-MuiTextField-root"
@@ -1013,7 +1013,7 @@ exports[`Rendering test renders correctly 1`] = `
     </div>
   </div>
   <div
-    class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiAccordion-root MuiAccordion-rounded Mui-expanded MuiAccordion-gutters sc-dLMFT cnKokz css-1808mag-MuiPaper-root-MuiAccordion-root"
+    class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiAccordion-root MuiAccordion-rounded Mui-expanded MuiAccordion-gutters sc-dLMFT bSWlSE css-1808mag-MuiPaper-root-MuiAccordion-root"
     style="--Paper-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12);"
   >
     <h3
@@ -1070,7 +1070,7 @@ exports[`Rendering test renders correctly 1`] = `
             role="region"
           >
             <div
-              class="MuiAccordionDetails-root sc-cPiKLY SoFTh css-1lj39kh-MuiAccordionDetails-root"
+              class="MuiAccordionDetails-root sc-cPiKLY jYkpdy css-1lj39kh-MuiAccordionDetails-root"
             >
               <div
                 class="MuiStack-root sc-kpDqfp bBTtYc css-1sazv7p-MuiStack-root"
@@ -1199,7 +1199,7 @@ exports[`Rendering test renders correctly 1`] = `
     </div>
   </div>
   <div
-    class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiAccordion-root MuiAccordion-rounded Mui-expanded MuiAccordion-gutters sc-dLMFT cnKokz css-1808mag-MuiPaper-root-MuiAccordion-root"
+    class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiAccordion-root MuiAccordion-rounded Mui-expanded MuiAccordion-gutters sc-dLMFT bSWlSE css-1808mag-MuiPaper-root-MuiAccordion-root"
     style="--Paper-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12);"
   >
     <h3
@@ -1256,7 +1256,7 @@ exports[`Rendering test renders correctly 1`] = `
             role="region"
           >
             <div
-              class="MuiAccordionDetails-root sc-cPiKLY SoFTh css-1lj39kh-MuiAccordionDetails-root"
+              class="MuiAccordionDetails-root sc-cPiKLY jYkpdy css-1lj39kh-MuiAccordionDetails-root"
             >
               <div
                 class="MuiStack-root sc-kpDqfp bBTtYc css-1sazv7p-MuiStack-root"
@@ -1284,7 +1284,7 @@ exports[`Rendering test renders correctly 1`] = `
                     </svg>
                   </span>
                   <div
-                    class="MuiAutocomplete-root MuiAutocomplete-hasClearIcon MuiAutocomplete-hasPopupIcon sc-iGgWBk cNSUmN css-o5oj2-MuiAutocomplete-root"
+                    class="MuiAutocomplete-root MuiAutocomplete-hasClearIcon MuiAutocomplete-hasPopupIcon sc-iGgWBk eZCLgH css-o5oj2-MuiAutocomplete-root"
                   >
                     <div
                       class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-cmpglg-MuiFormControl-root-MuiTextField-root"
@@ -1434,7 +1434,7 @@ exports[`Rendering test renders correctly 1`] = `
     </div>
   </div>
   <div
-    class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiAccordion-root MuiAccordion-rounded Mui-expanded MuiAccordion-gutters sc-dLMFT cnKokz css-1808mag-MuiPaper-root-MuiAccordion-root"
+    class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiAccordion-root MuiAccordion-rounded Mui-expanded MuiAccordion-gutters sc-dLMFT bSWlSE css-1808mag-MuiPaper-root-MuiAccordion-root"
     style="--Paper-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12);"
   >
     <h3
@@ -1491,7 +1491,7 @@ exports[`Rendering test renders correctly 1`] = `
             role="region"
           >
             <div
-              class="MuiAccordionDetails-root sc-cPiKLY SoFTh css-1lj39kh-MuiAccordionDetails-root"
+              class="MuiAccordionDetails-root sc-cPiKLY jYkpdy css-1lj39kh-MuiAccordionDetails-root"
             >
               <div
                 class="MuiStack-root sc-kpDqfp bBTtYc css-1sazv7p-MuiStack-root"
@@ -1519,7 +1519,7 @@ exports[`Rendering test renders correctly 1`] = `
                     </svg>
                   </span>
                   <div
-                    class="MuiAutocomplete-root MuiAutocomplete-hasClearIcon MuiAutocomplete-hasPopupIcon sc-iGgWBk cNSUmN css-o5oj2-MuiAutocomplete-root"
+                    class="MuiAutocomplete-root MuiAutocomplete-hasClearIcon MuiAutocomplete-hasPopupIcon sc-iGgWBk eZCLgH css-o5oj2-MuiAutocomplete-root"
                   >
                     <div
                       class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-cmpglg-MuiFormControl-root-MuiTextField-root"
@@ -1669,7 +1669,7 @@ exports[`Rendering test renders correctly 1`] = `
     </div>
   </div>
   <div
-    class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiAccordion-root MuiAccordion-rounded Mui-expanded MuiAccordion-gutters sc-dLMFT cnKokz css-1808mag-MuiPaper-root-MuiAccordion-root"
+    class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiAccordion-root MuiAccordion-rounded Mui-expanded MuiAccordion-gutters sc-dLMFT bSWlSE css-1808mag-MuiPaper-root-MuiAccordion-root"
     style="--Paper-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12);"
   >
     <h3
@@ -1726,7 +1726,7 @@ exports[`Rendering test renders correctly 1`] = `
             role="region"
           >
             <div
-              class="MuiAccordionDetails-root sc-cPiKLY SoFTh css-1lj39kh-MuiAccordionDetails-root"
+              class="MuiAccordionDetails-root sc-cPiKLY jYkpdy css-1lj39kh-MuiAccordionDetails-root"
             >
               <div
                 class="MuiStack-root sc-kpDqfp bBTtYc css-1sazv7p-MuiStack-root"
@@ -1754,7 +1754,7 @@ exports[`Rendering test renders correctly 1`] = `
                     </svg>
                   </span>
                   <div
-                    class="MuiAutocomplete-root MuiAutocomplete-hasClearIcon MuiAutocomplete-hasPopupIcon sc-iGgWBk cNSUmN css-o5oj2-MuiAutocomplete-root"
+                    class="MuiAutocomplete-root MuiAutocomplete-hasClearIcon MuiAutocomplete-hasPopupIcon sc-iGgWBk eZCLgH css-o5oj2-MuiAutocomplete-root"
                   >
                     <div
                       class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-cmpglg-MuiFormControl-root-MuiTextField-root"

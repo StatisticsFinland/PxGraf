@@ -33,7 +33,7 @@ namespace PxGraf
 
         readonly string PxGrafAllowSpecificOrigins = "_pxGrafAllowSpecificOrigins";
         private readonly ILogger logger;
-        private const string swaggerDocName = "api";
+        private const string swaggerDocName = "openapi";
 
         private IHostEnvironment HostEnvironment { get; }
 
@@ -132,10 +132,13 @@ namespace PxGraf
 
             services.AddSwaggerGen(c =>
             {
-                c.CustomSchemaIds(type => type.ToString());
-
-                c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
-                c.SwaggerDoc(swaggerDocName, new OpenApiInfo { Title = "PxGraf", Version = "v1" });
+                OpenApiInfo apiInfo = new()
+                {
+                    Title = "PxGraf",
+                    Version = "v1",
+                    Description = "API for creating and serving statistical visualizations from PX data sources."
+                };
+                c.SwaggerDoc(swaggerDocName, apiInfo);
                 try
                 {
                     c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "PxGraf.xml"));
@@ -155,6 +158,7 @@ namespace PxGraf
             services.AddScoped<IAuditLogService, AuditLogService>();
             services.AddScoped<IPublicationWebhookService, PublicationWebhookService>();
             services.AddHttpClient<PublicationWebhookService>();
+            services.AddScoped<IHealthCheckService, HealthCheckService>();
             services.AddSingleton<IMultiStateMemoryTaskCache>(provider => new MultiStateMemoryTaskCache(
                 Configuration.Current.CacheOptions.Database.ItemAmountLimit,
                 TimeSpan.FromSeconds(Configuration.Current.CacheOptions.CacheFreshnessCheckIntervalSeconds)));
@@ -236,15 +240,14 @@ namespace PxGraf
                 app.UseDeveloperExceptionPage();
             }
 
-            // Swagger requires this seemingly redundant setup to work properly with a custom api route prefix.
             app.UseSwagger(c =>
             {
-                c.RouteTemplate = "{documentName}/swagger/swagger.json";
+                c.RouteTemplate = "{documentName}/document.json";
             });
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("swagger.json", "PxGraf");
-                c.RoutePrefix = $"{swaggerDocName}/swagger";
+                c.SwaggerEndpoint($"/{swaggerDocName}/document.json", "PxGraf");
+                c.RoutePrefix = swaggerDocName;
             });
 
             app.UseExceptionHandler("/api/error");

@@ -16,11 +16,11 @@ const InfoButton = styled.button`
 `;
 
 const PopperInfo = styled.div`
-    background-color: #0073b0;
-    color: #fff;
+    background-color: var(--info-blue);
+    color: var(--surface-white);
     border: none;
     padding: 16px;
-    box-shadow: 3px 3px 10px #737373;
+    box-shadow: 3px 3px 10px var(--shadow-color);
     border-radius: 5px;
     max-width: 300px;
 `;

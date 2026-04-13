@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { FormControlLabel, FormControl, Switch, Typography } from '@mui/material';
 import { IVisualizationSettings } from "types/visualizationSettings";
 import styled from "styled-components";
-import { EditorContext } from '../../../contexts/editorContext';
+import { VisualizationContext } from '../../../contexts/visualizationContext';
 
 const HiddenFormControl = styled(FormControl)`
     display: none !important;
@@ -25,7 +25,7 @@ interface IVisualizationSettingsSwitchProps {
 export const VisualizationSettingsSwitch: React.FC<IVisualizationSettingsSwitchProps> = ({ selected, visualizationSettings, label, changeProperty, hidden }) => {
     const { t } = useTranslation();
     const Control = hidden ? HiddenFormControl : FormControl;
-    const { setVisualizationSettingsUserInput } = React.useContext(EditorContext);
+    const { setVisualizationSettingsUserInput } = React.useContext(VisualizationContext);
 
     return (
         <Control fullWidth>

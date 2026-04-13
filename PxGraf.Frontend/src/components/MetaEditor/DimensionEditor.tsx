@@ -11,7 +11,7 @@ const ContentWrapper = styled(Stack)`
 `;
 
 const StyledEm = styled.em`
-  color: #ccc;
+  color: var(--text-muted);
 `;
 
 interface IDimensionEditorProps {

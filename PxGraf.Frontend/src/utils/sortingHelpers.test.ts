@@ -46,7 +46,7 @@ const mockDimensions: IDimension[] =
         code: "Vuosi",
         name: {
             fi: "Vuosi",
-            sv: "År",
+            sv: "Ã…r",
             en: "Year"
         },
         type: EDimensionType.Time,
@@ -233,7 +233,7 @@ const mockDimensions: IDimension[] =
     {
         code: "FoobarSingle",
         name: {
-            fi: "YksikkömuuttujaFi",
+            fi: "YksikkÃ¶muuttujaFi",
             sv: "SingleValueVariableSv",
             en: "SingleValueVariableEn"
         },
@@ -253,7 +253,7 @@ const mockDimensions: IDimension[] =
     {
         code: "FoobarMissingValueName",
         name: {
-            fi: "NimetönArvoMuuttujaFi",
+            fi: "NimetÃ¶nArvoMuuttujaFi",
             sv: "NamelessValueVariableSv",
             en: "NamelessValueVariableEn"
         },
@@ -312,5 +312,42 @@ describe('Assertion tests', () => {
         const expected = ["1.px", "2.px", "0.px"];
         const result = sortedData.map((item) => item.fileName);
         expect(result).toEqual(expected);
+    });
+});
+
+describe('sortedDimensions edge cases', () => {
+    it('Should return an empty array for empty input', () => {
+        const result = sortedDimensions([]);
+        expect(result).toEqual([]);
+    });
+
+    it('Should handle dimensions with no content or time types', () => {
+        const otherOnly: IDimension[] = [
+            {
+                code: 'other1',
+                name: { fi: 'Muu' },
+                type: EDimensionType.Other,
+                values: [
+                    { code: 'a', name: { fi: 'aFi' }, isVirtual: false },
+                    { code: 'b', name: { fi: 'bFi' }, isVirtual: false }
+                ]
+            }
+        ];
+        const result = sortedDimensions(otherOnly);
+        expect(result).toHaveLength(1);
+        expect(result[0].code).toBe('other1');
+    });
+});
+
+describe('sortDatabaseItems edge cases', () => {
+    it('Should return an empty array for empty input', () => {
+        const result = sortDatabaseItems([], 'fi');
+        expect(result).toEqual([]);
+    });
+
+    it('Should not mutate the original array', () => {
+        const original = [...mockTableData];
+        sortDatabaseItems(mockTableData, mockPrimaryLanguage);
+        expect(mockTableData).toEqual(original);
     });
 });
