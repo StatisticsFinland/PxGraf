@@ -103,23 +103,23 @@ namespace UnitTests.ConfigurationTests
         // Test controller types for attribute detection
         private class UngatedController
         {
-#pragma warning disable S1144 // Mark members as static
+#pragma warning disable S1144,S3218,CA1822 // Mark members as static
             public void FakeAction()
             {
                 // Method intentionally left empty.
             }
-#pragma warning restore S1144 // Mark members as static
+#pragma warning restore S1144,S3218,CA1822 // Mark members as static
         }
 
         [FeatureGate("CreationAPI")]
         private class GatedController
         {
-#pragma warning disable S1144 // Mark members as static
+#pragma warning disable S1144,S3218,CA1822 // Mark members as static
             public void FakeAction()
             {
                 // Method intentionally left empty.
             }
-#pragma warning restore S1144 // Mark members as static
+#pragma warning restore S1144,S3218,CA1822 // Mark members as static
         }
     }
 }
