@@ -59,6 +59,7 @@ namespace PxGraf.Controllers
         /// <returns><see cref="VisualizationResponse"/> object containing the properties of the visualization</returns>
         [HttpGet("{sqId}")]
         [ProducesResponseType<VisualizationResponse>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<VisualizationResponse>> GetVisualization([FromRoute] string sqId)
         {

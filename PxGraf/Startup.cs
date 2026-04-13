@@ -246,8 +246,8 @@ namespace PxGraf
             });
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("openapi/document.json", "PxGraf");
-                c.RoutePrefix = string.Empty;
+                c.SwaggerEndpoint($"/{swaggerDocName}/document.json", "PxGraf");
+                c.RoutePrefix = swaggerDocName;
             });
 
             app.UseExceptionHandler("/api/error");

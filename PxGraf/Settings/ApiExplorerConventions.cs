@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.ApplicationModels;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.FeatureManagement.Mvc;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,13 +24,9 @@ namespace PxGraf.Settings
             IEnumerable<FeatureGateAttribute> gates = action.Controller.ControllerType.GetCustomAttributes<FeatureGateAttribute>(inherit: true)
                 .Concat(action.ActionMethod.GetCustomAttributes<FeatureGateAttribute>(inherit: true));
 
-            foreach (FeatureGateAttribute gate in gates)
+            if (gates.Any(gate => gate.Features.Any(f => !Configuration.Current.IsFeatureEnabled(f))))
             {
-                if (gate.Features.Any(f => !Configuration.Current.IsFeatureEnabled(f)))
-                {
-                    action.ApiExplorer.IsVisible = false;
-                    return;
-                }
+                action.ApiExplorer.IsVisible = false;
             }
         }
     }
