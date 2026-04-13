@@ -3,7 +3,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import SaveResultDialog from './SaveResultDialog';
 import { EQueryPublicationStatus } from "types/saveQuery";
-import { ISaveQueryResult } from 'api/services/queries';
+import { ISaveQueryMutationParams, ISaveQueryResult } from 'api/services/queries';
 
 
 const mockSuccessMutation: ISaveQueryResult = {
@@ -11,9 +11,7 @@ const mockSuccessMutation: ISaveQueryResult = {
     isError: false,
     isSuccess: true,
     data: { id: 'foobar', publicationStatus: EQueryPublicationStatus.Success },
-    mutate: function (_property: any): void {
-        throw new Error('Function not implemented.');
-    }
+    mutate: jest.fn<void, [ISaveQueryMutationParams]>()
 };
 
 const mockSuccessDraftMutation: ISaveQueryResult = {
@@ -21,9 +19,7 @@ const mockSuccessDraftMutation: ISaveQueryResult = {
     isError: false,
     isSuccess: true,
     data: { id: 'foobar', publicationStatus: EQueryPublicationStatus.Unpublished },
-    mutate: function (_property: any): void {
-        throw new Error('Function not implemented.');
-    }
+    mutate: jest.fn<void, [ISaveQueryMutationParams]>()
 };
 
 const mockFailedPublicationMutation: ISaveQueryResult = {
@@ -31,9 +27,7 @@ const mockFailedPublicationMutation: ISaveQueryResult = {
     isError: false,
     isSuccess: true,
     data: { id: 'foobar', publicationStatus: EQueryPublicationStatus.Failed },
-    mutate: function (_property: any): void {
-        throw new Error('Function not implemented.');
-    }
+    mutate: jest.fn<void, [ISaveQueryMutationParams]>()
 };
 
 const mockRequestErrorMutation: ISaveQueryResult = {
@@ -41,9 +35,7 @@ const mockRequestErrorMutation: ISaveQueryResult = {
     isError: true,
     isSuccess: false,
     data: null,
-    mutate: function (_property: any): void {
-        throw new Error('Function not implemented.');
-    }
+    mutate: jest.fn<void, [ISaveQueryMutationParams]>()
 };
 
 const onCloseMock = jest.fn();
