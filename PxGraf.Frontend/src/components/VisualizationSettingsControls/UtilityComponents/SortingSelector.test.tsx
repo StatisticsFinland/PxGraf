@@ -2,7 +2,7 @@ import { render } from '@testing-library/react';
 import { ISortingOption } from "../../../types/editorContentsResponse";
 import { IVisualizationSettings } from "../../../types/visualizationSettings";
 import UiLanguageContext from '../../../contexts/uiLanguageContext';
-import { EditorContext } from '../../../contexts/editorContext';
+import { VisualizationContext } from '../../../contexts/visualizationContext';
 import React from 'react';
 import SortingSelector from './SortingSelector';
 import userEvent from '@testing-library/user-event';
@@ -42,33 +42,21 @@ const languageContext =
 };
 
 const editorContext = {
-    cubeQuery: null,
-    setCubeQuery: jest.fn(),
-    query: null,
-    setQuery: jest.fn(),
-    saveDialogOpen: false,
-    setSaveDialogOpen: jest.fn(),
     selectedVisualizationUserInput: null,
     setSelectedVisualizationUserInput: jest.fn(),
     visualizationSettingsUserInput: null,
     setVisualizationSettingsUserInput: jest.fn(),
     defaultSelectables: null,
     setDefaultSelectables: jest.fn(),
-    loadedQueryId: '',
-    setLoadedQueryId: jest.fn(),
-    loadedQueryIsDraft: false,
-    setLoadedQueryIsDraft: jest.fn(),
-    publicationWebhookEnabled: true,
-    setPublicationWebhookEnabled: jest.fn()
 };
 
 describe('rendering test', () => {
     it('renders sorting selector correctly', () => {
         const { asFragment } = render(
             <UiLanguageContext.Provider value={languageContext}>
-                <EditorContext.Provider value={editorContext}>
+                <VisualizationContext.Provider value={editorContext}>
                     <SortingSelector visualizationSettings={visualizationSettings} sortingOptions={sortingOptions} />
-                </EditorContext.Provider>
+                </VisualizationContext.Provider>
             </UiLanguageContext.Provider>
         );
 
@@ -82,9 +70,9 @@ describe('functionality test', () => {
         const mockSetVisualizationSettingsUserInput = jest.fn();
         const { getByLabelText, getByText } = render(
             <UiLanguageContext.Provider value={languageContext}>
-                <EditorContext.Provider value={{ ...editorContext, setVisualizationSettingsUserInput: mockSetVisualizationSettingsUserInput }}>
+                <VisualizationContext.Provider value={{ ...editorContext, setVisualizationSettingsUserInput: mockSetVisualizationSettingsUserInput }}>
                     <SortingSelector visualizationSettings={visualizationSettings} sortingOptions={sortingOptions} />
-                </EditorContext.Provider>
+                </VisualizationContext.Provider>
             </UiLanguageContext.Provider>
         );
         const sortingSelector = getByLabelText('chartSettings.sort');

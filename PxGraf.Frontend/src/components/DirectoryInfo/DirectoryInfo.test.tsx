@@ -19,18 +19,6 @@ jest.mock('envVars', () => ({
     BasePath: ''
 }));
 
-jest.mock('react-i18next', () => ({
-    ...jest.requireActual('react-i18next'),
-    useTranslation: () => {
-        return {
-            t: (str: string) => str,
-            i18n: {
-                changeLanguage: () => new Promise(() => null),
-            },
-        };
-    },
-}));
-
 jest.mock('api/services/table', () => ({
     ...jest.requireActual('api/services/table'),
     useTableQuery: () => {
@@ -64,7 +52,7 @@ describe('Rendering test', () => {
 
 describe('Assertion tests', () => {
     it('should contain a specific link with a specific text', () => {
-        const expectedHref = '/table-list/a/s/d/1/2/3/foo-group/';
+        const expectedHref = '/table-list/asd123/foo-group/';
         render(<MemoryRouter><DirectoryInfo path={mockPath} item={mockItem} /></MemoryRouter>);
         expect(screen.getByText(mockItem.name[language])).toBeInTheDocument();
         expect(screen.getByRole('link').getAttribute('href')).toEqual(expectedHref);

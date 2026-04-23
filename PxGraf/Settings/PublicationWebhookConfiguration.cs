@@ -1,4 +1,5 @@
 using PxGraf.Services;
+using System;
 using System.Collections.Generic;
 
 namespace PxGraf.Settings
@@ -9,9 +10,20 @@ namespace PxGraf.Settings
     public class PublicationWebhookConfiguration
     {
         /// <summary>
-        /// The endpoint URL where the webhook POST request will be sent.
+        /// The base URL of the webhook service (e.g., "https://example.com").
         /// </summary>
-        public string EndpointUrl { get; set; }
+        public string BaseUrl { get; set; }
+
+        /// <summary>
+        /// The path appended to <see cref="BaseUrl"/> for webhook POST requests (e.g., "/api/publish").
+        /// </summary>
+        public string WebhookEndpointPath { get; set; }
+
+        /// <summary>
+        /// Optional path appended to <see cref="BaseUrl"/> for health check GET requests (e.g., "/api/info").
+        /// When omitted, the health endpoint will not probe the webhook service.
+        /// </summary>
+        public string HealthCheckEndpointPath { get; set; }
 
         /// <summary>
         /// Optional name of the HTTP header used for access token authentication.
@@ -53,13 +65,39 @@ namespace PxGraf.Settings
         public Dictionary<string, string> MetadataProperties { get; set; } = [];
 
         /// <summary>
+        /// Gets the full webhook POST URL by combining <see cref="BaseUrl"/> and <see cref="WebhookEndpointPath"/>.
+        /// </summary>
+        public string WebhookUrl => CombineUrl(BaseUrl, WebhookEndpointPath);
+
+        /// <summary>
+        /// Gets the full health check GET URL by combining <see cref="BaseUrl"/> and <see cref="HealthCheckEndpointPath"/>.
+        /// </summary>
+        public string HealthCheckUrl => CombineUrl(BaseUrl, HealthCheckEndpointPath);
+
+        /// <summary>
         /// Gets a value indicating whether the webhook configuration is valid and enabled.
         /// </summary>
-        public bool IsEnabled => !string.IsNullOrEmpty(EndpointUrl) && BodyContentPropertyNames?.Length > 0;
+        public bool IsEnabled => !string.IsNullOrWhiteSpace(BaseUrl) && !string.IsNullOrWhiteSpace(WebhookEndpointPath) && BodyContentPropertyNames?.Length > 0 && WebhookUrl is not null;
+
+        /// <summary>
+        /// Gets a value indicating whether a health check endpoint is configured for the webhook service.
+        /// </summary>
+        public bool HasHealthCheckEndpoint => !string.IsNullOrWhiteSpace(HealthCheckEndpointPath) && HealthCheckUrl is not null;
 
         /// <summary>
         /// Gets a value indicating whether access token authentication is configured.
         /// </summary>
-        public bool HasAccessToken => !string.IsNullOrEmpty(AccessTokenHeaderName) && !string.IsNullOrEmpty(AccessTokenHeaderValue);
+        public bool HasAccessToken => !string.IsNullOrWhiteSpace(AccessTokenHeaderName) && !string.IsNullOrWhiteSpace(AccessTokenHeaderValue);
+
+        private static string CombineUrl(string baseUrl, string path)
+        {
+            if (string.IsNullOrWhiteSpace(baseUrl) || string.IsNullOrWhiteSpace(path))
+            {
+                return null;
+            }
+
+            string combined = baseUrl.Trim().TrimEnd('/') + "/" + path.Trim().TrimStart('/');
+            return Uri.TryCreate(combined, UriKind.Absolute, out _) ? combined : null;
+        }
     }
 }

@@ -7,18 +7,6 @@ import { MemoryRouter } from 'react-router-dom';
 import TableTreeSelection from './TableTreeSelection';
 import { NavigationProvider } from 'contexts/navigationContext';
 
-jest.mock('react-i18next', () => ({
-    ...jest.requireActual('react-i18next'),
-    useTranslation: () => {
-        return {
-            t: (str: string) => str,
-            i18n: {
-                changeLanguage: () => new Promise(() => ({})),
-            },
-        };
-    },
-}));
-
 jest.mock('envVars', () => ({
     PxGrafUrl: 'pxGrafUrl.fi/',
     PublicUrl: 'publicUrl.fi/',

@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { ToggleButton, ToggleButtonGroup } from '@mui/material';
 import React from 'react';
-import { EditorContext } from '../../contexts/editorContext';
+import { VisualizationContext } from '../../contexts/visualizationContext';
 
 interface IChartTypeSelectorProps {
     possibleTypes: string[];
@@ -11,9 +11,9 @@ interface IChartTypeSelectorProps {
 export const ChartTypeSelector: React.FC<IChartTypeSelectorProps> = ({ possibleTypes, selectedType }) => {
     const { t } = useTranslation();
     const isSelected = (type) => {
-        return !selectedType ? type === possibleTypes[0] : selectedType === type;
+        return selectedType ? selectedType === type : type === possibleTypes[0];
     };
-    const { setSelectedVisualizationUserInput } = React.useContext(EditorContext);
+    const { setSelectedVisualizationUserInput } = React.useContext(VisualizationContext);
 
     return (
         <ToggleButtonGroup

@@ -46,3 +46,12 @@ Visualization API provides an endpoint for retrieving data required for renderin
 | Function Name | API Route | Parameters | Returns |
 |---------------|-----------|------------|---------|
 | GetVisualization | GET: {*sqId*} | sqId: The id of the saved query provided in the url. | VisualizationResponse object that contains the data that PxVisualizer needs to render the visualization in the front end user interface including the data, settings and metadata. |
+
+# Health API (/api/health)
+Health API provides an endpoint for checking the health of all configured dependencies. It probes the database connection, saved query storage, archive file storage, and optionally the publication webhook service (when configured with a health check endpoint). Returns HTTP 200 with a HealthResponse when all probes are healthy, or HTTP 503 when any probe is unhealthy.
+
+## Endpoints
+
+| Function Name | API Route | Parameters | Returns |
+|---------------|-----------|------------|---------|
+| GetHealthAsync | GET | None | HealthResponse object containing overall status ("healthy" or "unhealthy"), a list of DatabaseHealthStatus objects for each database probe, and a list of ServiceHealthStatus objects for each service probe (saved-query-storage, archive-file-storage, and optionally publication-webhook). |

@@ -14,7 +14,7 @@ interface IStartingFromDimensionSelectionProps {
 const StyledAutocomplete = styled(Autocomplete)`
     flex-basis: 0;
     flex-grow: 1;
-    background-color: #fff;
+    background-color: var(--surface-white);
 `;
 
 export const StartingFromDimensionSelection: React.FC<IStartingFromDimensionSelectionProps> = ({ options, startingCode, onQueryChanged }) => {

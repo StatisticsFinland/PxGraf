@@ -1,25 +1,33 @@
-﻿using Microsoft.AspNetCore.Mvc.ApplicationModels;
-using PxGraf.Controllers;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
+using Microsoft.FeatureManagement.Mvc;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
 namespace PxGraf.Settings
 {
     /// <summary>
-    /// Class for setting visibility of API controllers in Swagger. CreationController is only visible if the CreationAPI feature is enabled.
+    /// Hides controllers and actions from the OpenAPI document when their <see cref="FeatureGateAttribute"/> feature flags are disabled.
     /// </summary>
     public class ApiExplorerConventions : IActionModelConvention
     {
         public void Apply(ActionModel action)
         {
-            // ErrorController has been set to be ignored in Swagger. Setting shows as null in the API explorer.
+            // Controllers explicitly marked as ignored (e.g. ErrorController) show as null.
             if (action.ApiExplorer.IsVisible is null)
             {
                 action.ApiExplorer.IsVisible = false;
                 return;
             }
 
-            bool isCreationController = action.Controller.ControllerType == typeof(CreationController);
-            bool isCreationApiEnabled = Configuration.Current.CreationAPI;
-            action.ApiExplorer.IsVisible = !isCreationController || isCreationApiEnabled;
+            // Collect FeatureGate attributes from both the controller and the action.
+            IEnumerable<FeatureGateAttribute> gates = action.Controller.ControllerType.GetCustomAttributes<FeatureGateAttribute>(inherit: true)
+                .Concat(action.ActionMethod.GetCustomAttributes<FeatureGateAttribute>(inherit: true));
+
+            if (gates.Any(gate => gate.Features.Any(f => !Configuration.Current.IsFeatureEnabled(f))))
+            {
+                action.ApiExplorer.IsVisible = false;
+            }
         }
     }
 }

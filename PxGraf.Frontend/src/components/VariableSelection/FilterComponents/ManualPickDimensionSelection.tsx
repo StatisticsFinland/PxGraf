@@ -15,7 +15,7 @@ const StyledAutocomplete = styled(Autocomplete)`
     flex-basis: 0;
     flex-grow: 1;
     width: 90%;
-    background-color: #fff;
+    background-color: var(--surface-white);
 `;
 
 export const ManualPickDimensionSelection: React.FC<ManualPickDimensionSelectionProps> = ({ options, selectedValues, onQueryChanged }) => {

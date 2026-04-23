@@ -15,7 +15,7 @@ const mockT = jest.fn((key: string) => {
 
 const mockI18n = {
     language: 'en',
-    changeLanguage: () => new Promise(() => { })
+    changeLanguage: () => Promise.resolve()
 };
 
 jest.mock('react-i18next', () => ({

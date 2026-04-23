@@ -7,7 +7,8 @@ import { EVariableType, EVisualizationType, ETimeVariableInterval, IQueryVisuali
 import { IVisualizationResult } from "api/services/visualization";
 import serializer from "../../testUtils/stripHighchartsHashes";
 import UiLanguageContext from "../../contexts/uiLanguageContext";
-import { EditorContext } from "../../contexts/editorContext";
+import { QueryContext } from "../../contexts/queryContext";
+import { VisualizationContext } from "../../contexts/visualizationContext";
 import { ISelectableSelections } from "../SelectableVariableMenus/SelectableDimensionMenus";
 import { EDimensionType } from "../../types/cubeMeta";
 
@@ -192,18 +193,6 @@ const mockVisualizationSettings: IVisualizationSettings = {
     ]
 };
 
-jest.mock('react-i18next', () => ({
-    ...jest.requireActual('react-i18next'),
-    useTranslation: () => {
-        return {
-            t: (str: string) => str,
-            i18n: {
-                changeLanguage: () => new Promise(() => null),
-            },
-        };
-    },
-}));
-
 jest.mock('api/services/visualization', () => ({
     ...jest.requireActual('api/services/visualization'),
     useVisualizationQuery: () => {
@@ -243,33 +232,28 @@ describe('Rendering test', () => {
                 setUiContentLanguage: jest.fn(),
                 availableUiLanguages: ['fi', 'en', 'sv'],
             }}>
-                <EditorContext.Provider value={{
+                <QueryContext.Provider value={{
                     cubeQuery: mockCubeQueryTextEdits,
                     setCubeQuery,
                     query,
                     setQuery,
-                    saveDialogOpen,
-                    setSaveDialogOpen,
-                    selectedVisualizationUserInput,
-                    setSelectedVisualizationUserInput,
-                    visualizationSettingsUserInput,
-                    setVisualizationSettingsUserInput,
-                    defaultSelectables,
-                    setDefaultSelectables,
-                    loadedQueryId,
-                    setLoadedQueryId,
-                    loadedQueryIsDraft,
-                    setLoadedQueryIsDraft,
-                    publicationWebhookEnabled: true,
-                    setPublicationWebhookEnabled: jest.fn()
                 }}>
-                    <Preview
-                        path={mockPath}
-                        query={mockQuery}
-                        selectedVisualization={mockSelectedVisualization}
-                        visualizationSettings={mockVisualizationSettings}
-                    />
-                </EditorContext.Provider>
+                    <VisualizationContext.Provider value={{
+                        selectedVisualizationUserInput,
+                        setSelectedVisualizationUserInput,
+                        visualizationSettingsUserInput,
+                        setVisualizationSettingsUserInput,
+                        defaultSelectables,
+                        setDefaultSelectables,
+                    }}>
+                        <Preview
+                            path={mockPath}
+                            query={mockQuery}
+                            selectedVisualization={mockSelectedVisualization}
+                            visualizationSettings={mockVisualizationSettings}
+                        />
+                    </VisualizationContext.Provider>
+                </QueryContext.Provider>
             </UiLanguageContext.Provider>);
 
         expect(asFragment()).toMatchSnapshot();
@@ -368,5 +352,15 @@ describe('Assertion tests', () => {
         expect(result[1].dimension.code).toBe('Vuosi');
         expect(result[0].multiselectable).toBe(false);
         expect(result[1].multiselectable).toBe(true);
+    });
+
+    it('getSelectables returns empty array when visualizationResponse is null', () => {
+        const result = getSelectables(null);
+        expect(result).toEqual([]);
+    });
+
+    it('getSelectables returns empty array when visualizationResponse is undefined', () => {
+        const result = getSelectables(undefined);
+        expect(result).toEqual([]);
     });
 });

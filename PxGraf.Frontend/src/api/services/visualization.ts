@@ -58,6 +58,7 @@ export const useVisualizationQuery = (
         if (settings == null || selectedVisualization == null) return false;
         const requireSorting = ["horizontalBarChart", "groupHorizontalBarChart", "stackedHorizontalBarChart", "percentHorizontalBarChart", "pieChart"];
         if (requireSorting.includes(selectedVisualization) && settings.sorting == null) return false;
+        return true;
     }
 
     return useQuery({

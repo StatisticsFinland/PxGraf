@@ -4,7 +4,7 @@ import { UiLanguageContext } from 'contexts/uiLanguageContext';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import { IDimensionValue } from 'types/cubeMeta';
-import { EditorContext } from 'contexts/editorContext';
+import { VisualizationContext } from 'contexts/visualizationContext';
 
 interface IDefaultSelectableDimensionSelection {
     dimensionCode: string;
@@ -21,7 +21,7 @@ const StyledAutocomplete = styled(Autocomplete)`
 
 export const DefaultSelectableDimensionSelection: React.FC<IDefaultSelectableDimensionSelection> = ({ dimensionCode, resolvedDimensionValueCodes, options }) => {
     const { language } = React.useContext(UiLanguageContext);
-    const { defaultSelectables, setDefaultSelectables } = React.useContext(EditorContext);
+    const { defaultSelectables, setDefaultSelectables } = React.useContext(VisualizationContext);
     const { t } = useTranslation();
 
     // Note: array filtering to support selecting multiple values in the future

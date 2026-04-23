@@ -18,5 +18,11 @@ namespace PxGraf.Services
         /// <param name="additionalProperties">The metadata additional properties dictionary.</param>
         /// <returns>A task representing the asynchronous operation with publication result.</returns>
         Task<WebhookPublicationResult> TriggerWebhookAsync(string queryId, SavedQuery savedQuery, IReadOnlyDictionary<string, MetaProperty> additionalProperties);
+
+        /// <summary>
+        /// Checks whether the publication webhook endpoint is reachable by sending a GET request to its info endpoint.
+        /// </summary>
+        /// <returns>True if the endpoint returns a 200 response, false otherwise.</returns>
+        Task<bool> CheckWebhookReachabilityAsync();
     }
 }

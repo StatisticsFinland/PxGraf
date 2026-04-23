@@ -1,10 +1,58 @@
 import { createTheme } from "@mui/material";
 
+interface CustomPalette {
+    tableHover: string;
+    textGray: string;
+    textBlack: string;
+    selectedBlue: string;
+    selectedBlueLight: string;
+    selectedBlueDark: string;
+    editorfieldOutline: string;
+    editorfieldBackground: string;
+    editorfieldOutlineEdited: string;
+    editorfieldBackgroundEdited: string;
+    warningOrange: string;
+    surfaceLight: string;
+    surfaceWhite: string;
+    borderLight: string;
+    textMuted: string;
+    infoBlue: string;
+    shadowColor: string;
+}
+
+declare module '@mui/material/styles' {
+    interface Palette {
+        custom: CustomPalette;
+    }
+    interface PaletteOptions {
+        custom?: CustomPalette;
+    }
+}
+
 const palette = {
     primary: {
         main: '#1A56EC',
         dark: '#1A3061',
         light: '#E8EEFD',  
+    },
+    custom: {
+        tableHover: '#d1ddfb',
+        textGray: '#666666',
+        textBlack: '#000000',
+        selectedBlue: '#1870C9',
+        selectedBlueLight: '#EDF4FB',
+        selectedBlueDark: '#072840',
+        editorfieldOutline: '#839583',
+        editorfieldBackground: '#EEFFEE',
+        editorfieldOutlineEdited: '#949400',
+        editorfieldBackgroundEdited: '#FFFFDD',
+        warningOrange: '#E06D10',
+        surfaceLight: '#f8f8f8',
+        surfaceWhite: '#ffffff',
+        borderLight: '#dcdcdc',
+        textMuted: '#cccccc',
+        infoBlue: '#0073b0',
+        shadowColor: '#737373',
     }
 }
 
@@ -29,7 +77,7 @@ const theme = createTheme({
             styleOverrides: {
                 root: {
                     '& .MuiChip-deleteIcon': {
-                        color: 'var(--text-gray) !important'
+                        color: `${palette.custom.textGray} !important`
                     },
                 }
             }
@@ -39,17 +87,17 @@ const theme = createTheme({
                 {
                     props: { variant: 'contained' },
                     style:{
-                        color: 'white',
-                        backgroundColor: 'var(--selected-blue)',
+                        color: palette.custom.surfaceWhite,
+                        backgroundColor: palette.custom.selectedBlue,
                         '&:hover': {
-                            backgroundColor: 'var(--selected-blue-dark)',
+                            backgroundColor: palette.custom.selectedBlueDark,
                         },
                         '&:focus-visible': {
-                            outline: '2px solid black',
-                            backgroundColor: 'var(--selected-blue-dark)',
+                            outline: `2px solid ${palette.custom.textBlack}`,
+                            backgroundColor: palette.custom.selectedBlueDark,
                         },
                         '&:active': {
-                            backgroundColor: 'var(--selected-blue)',
+                            backgroundColor: palette.custom.selectedBlue,
                         }
                     }
                 }
@@ -60,18 +108,18 @@ const theme = createTheme({
             },
             styleOverrides: {
                 root: {
-                    color: 'var(--selected-blue)',
+                    color: palette.custom.selectedBlue,
                     outlineColor: 'inherit',
                     '&:hover': {
-                        backgroundColor: 'var(--selected-blue-light)',
+                        backgroundColor: palette.custom.selectedBlueLight,
                     },
                     '&:focus-visible': {
                         outline: `2px solid ${palette.primary.dark}`,
-                        backgroundColor: 'var(--selected-blue-light)',
+                        backgroundColor: palette.custom.selectedBlueLight,
                     },
                     '&:active': {
-                        color: 'white',
-                        backgroundColor: 'var(--selected-blue)',
+                        color: palette.custom.surfaceWhite,
+                        backgroundColor: palette.custom.selectedBlue,
                     }
                 }
             }
@@ -117,14 +165,14 @@ const theme = createTheme({
             styleOverrides: {
                 root: {
                     '& .MuiToggleButton-root': {
-                        color: 'var(--text-gray)',
+                        color: palette.custom.textGray,
                         border: '1px solid',
                         borderColor: 'inherit',
                         outline: 'unset',
                     },
                     '& .Mui-selected': {
-                        color: 'var(--selected-blue) !important',
-                        backgroundColor: 'var(--selected-blue-light) !important',
+                        color: `${palette.custom.selectedBlue} !important`,
+                        backgroundColor: `${palette.custom.selectedBlueLight} !important`,
                         outline: '2px solid',
                         margin: '2px',
                     },
@@ -150,11 +198,11 @@ const theme = createTheme({
             styleOverrides: {
                 root: {
                     '& .MuiSwitch-switchBase': {
-                        color: 'var(--text-gray)',
+                        color: palette.custom.textGray,
                         outlineWidth: '2px',
                         outlineColor: 'inherit',
                         '&.Mui-checked': {
-                            color: 'var(--selected-blue)',
+                            color: palette.custom.selectedBlue,
                         }
                     }
                 }
@@ -164,7 +212,7 @@ const theme = createTheme({
             styleOverrides: {
                 standardWarning: {
                     '& .MuiAlert-icon': {
-                        color: 'var(--warning-orange)'
+                        color: palette.custom.warningOrange
                     }
                 }
             }

@@ -4,7 +4,7 @@ import { IVisualizationSettingsProps } from '../VisualizationSettingsControl';
 import { IDimension } from "types/cubeMeta";
 import { UiLanguageContext } from 'contexts/uiLanguageContext';
 import { useTranslation } from 'react-i18next';
-import { EditorContext } from '../../../contexts/editorContext';
+import { VisualizationContext } from '../../../contexts/visualizationContext';
 
 interface IMultiselectableSelectorProps extends IVisualizationSettingsProps {
     dimensions: IDimension[]
@@ -13,7 +13,7 @@ interface IMultiselectableSelectorProps extends IVisualizationSettingsProps {
 export const MultiselectableSelector: React.FC<IMultiselectableSelectorProps> = ({ visualizationSettings, dimensions  }) => {
     const { t } = useTranslation();
     const { language, languageTab } = React.useContext(UiLanguageContext);
-    const { setVisualizationSettingsUserInput } = React.useContext(EditorContext);
+    const { setVisualizationSettingsUserInput } = React.useContext(VisualizationContext);
 
     return (
         <FormControl>
@@ -22,12 +22,12 @@ export const MultiselectableSelector: React.FC<IMultiselectableSelectorProps> = 
                 sx={{ minWidth: 210 }}
                 labelId="multiselectable-selector-label"
                 id="multiselectable-selector"
-                label={"Monivalitaselausmuuttuja"}
+                label={t("chartSettings.multiSelectVariable")}
                 value={visualizationSettings.multiselectableVariableCode ?? "noMultiselectable"}
                 defaultValue={"noMultiselectable"}
                 onChange={(event) => setVisualizationSettingsUserInput({
                     ...visualizationSettings,
-                    multiselectableVariableCode: event.target.value !== "noMultiselectable" ? event.target.value : null
+                    multiselectableVariableCode: event.target.value === "noMultiselectable" ? null : event.target.value
                 })}
             >
                 <MenuItem value={"noMultiselectable"}>{t("chartSettings.noMultiselectable")}</MenuItem>

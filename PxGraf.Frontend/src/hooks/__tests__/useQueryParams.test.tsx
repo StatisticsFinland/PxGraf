@@ -75,4 +75,27 @@ describe('useQueryParams hook', () => {
 
         expect(resultParams.get('doesNotExist')).toBeNull();
     });
+
+    it('should return empty params for empty search string', () => {
+        const mockLocation = createMockLocation('');
+
+        (useLocation as jest.Mock).mockReturnValueOnce(mockLocation);
+
+        const renderResult = renderHook(() => useQueryParams());
+        const resultParams = renderResult.result.current;
+
+        expect(resultParams.toString()).toBe('');
+        expect(resultParams.get('anything')).toBeNull();
+    });
+
+    it('should return empty params for search with only question mark', () => {
+        const mockLocation = createMockLocation('?');
+
+        (useLocation as jest.Mock).mockReturnValueOnce(mockLocation);
+
+        const renderResult = renderHook(() => useQueryParams());
+        const resultParams = renderResult.result.current;
+
+        expect(resultParams.toString()).toBe('');
+    });
 });
