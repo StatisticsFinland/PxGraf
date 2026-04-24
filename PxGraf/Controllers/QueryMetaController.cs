@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Px.Utils.Language;
 using Px.Utils.Models.Metadata.ExtensionMethods;
@@ -34,6 +35,8 @@ namespace PxGraf.Controllers
         /// If no query for the given ID is found, "Not Found" response is returned.
         /// </returns>
         [HttpGet("{savedQueryId}")]
+        [ProducesResponseType<QueryMetaResponse>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<QueryMetaResponse>> GetQueryMeta([FromRoute] string savedQueryId)
         {
             Dictionary<string, object> logScope = new()
@@ -44,7 +47,7 @@ namespace PxGraf.Controllers
             using (_logger.BeginScope(logScope))
             {
                 _logger.LogDebug("Query meta requested GET: api/sq/meta/");
-                if (_sqFileInterface.SavedQueryExists(savedQueryId, Configuration.Current.SavedQueryDirectory))
+                if (await _sqFileInterface.SavedQueryExists(savedQueryId, Configuration.Current.SavedQueryDirectory))
                 {
                     using (_logger.BeginScope(new Dictionary<string, object> { [LoggerConstants.SQ_ID] = savedQueryId }))
                     {
@@ -94,7 +97,7 @@ namespace PxGraf.Controllers
         {
             if (savedQuery.Archived)
             {
-                if (_sqFileInterface.ArchiveCubeExists(id, Configuration.Current.ArchiveFileDirectory))
+                if (await _sqFileInterface.ArchiveCubeExists(id, Configuration.Current.ArchiveFileDirectory))
                 {
                     ArchiveCube archiveCube = await _sqFileInterface.ReadArchiveCubeFromFile(id, Configuration.Current.ArchiveFileDirectory);
                     return archiveCube.Meta;

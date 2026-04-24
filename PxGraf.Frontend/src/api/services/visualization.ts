@@ -2,7 +2,7 @@
 
 import ApiClient from "api/client";
 import { IQueryVisualizationResponse } from "@statisticsfinland/pxvisualizer";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { ICubeQuery, Query } from "types/query";
 import { IVisualizationSettings } from "types/visualizationSettings";
 
@@ -58,17 +58,16 @@ export const useVisualizationQuery = (
         if (settings == null || selectedVisualization == null) return false;
         const requireSorting = ["horizontalBarChart", "groupHorizontalBarChart", "stackedHorizontalBarChart", "percentHorizontalBarChart", "pieChart"];
         if (requireSorting.includes(selectedVisualization) && settings.sorting == null) return false;
+        return true;
     }
 
-    return useQuery(
+    return useQuery({
         queryKey,
-        () => fetchVisualization(idStack, query, cubeQuery, language, selectedVisualization, visualizationSettings),
-        {
-            ...defaultQueryOptions,
-            enabled:
-                query != null &&
-                checkSettingsValidity(selectedVisualization, visualizationSettings),
-            keepPreviousData: true,
-        }
-    );
+        queryFn: () => fetchVisualization(idStack, query, cubeQuery, language, selectedVisualization, visualizationSettings),
+        ...defaultQueryOptions,
+        enabled:
+            query != null &&
+            checkSettingsValidity(selectedVisualization, visualizationSettings),
+        placeholderData: (previousData) => previousData,
+    });
 }

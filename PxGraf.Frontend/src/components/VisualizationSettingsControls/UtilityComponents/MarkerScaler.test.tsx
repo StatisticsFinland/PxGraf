@@ -3,21 +3,9 @@ import '@testing-library/jest-dom';
 import { render, screen, fireEvent } from '@testing-library/react';
 import MarkerScaler from "./MarkerScaler";
 import { IVisualizationSettings } from '../../../types/visualizationSettings';
-import { EditorContext } from '../../../contexts/editorContext';
+import { VisualizationContext } from '../../../contexts/visualizationContext';
 import { VisualizationType } from '../../../types/visualizationType';
 import { IVisualizationOptions } from '../../../types/editorContentsResponse';
-
-jest.mock('react-i18next', () => ({
-    ...jest.requireActual('react-i18next'),
-    useTranslation: () => {
-        return {
-            t: (str: string) => str,
-            i18n: {
-                changeLanguage: () => new Promise(() => null),
-            },
-        };
-    },
-}));
 
 const mockVisualizationRules: IVisualizationOptions = {
     allowManualPivot: null,
@@ -62,29 +50,19 @@ describe('Assertion tests', () => {
     it('MarkerScaler onChange and onChangeCommitted should work properly', () => {
         const mockSettingsChangedHandler = jest.fn();
         render(
-            <EditorContext.Provider value={{
+            <VisualizationContext.Provider value={{
                 defaultSelectables: {},
                 setDefaultSelectables: jest.fn(),
-                cubeQuery: null,
-                setCubeQuery: jest.fn(),
-                query: {},
-                setQuery: jest.fn(),
-                saveDialogOpen: false,
-                setSaveDialogOpen: jest.fn(),
                 selectedVisualizationUserInput: VisualizationType.VerticalBarChart,
                 setSelectedVisualizationUserInput: jest.fn(),
                 visualizationSettingsUserInput: {},
                 setVisualizationSettingsUserInput: mockSettingsChangedHandler,
-                loadedQueryId: '',
-                setLoadedQueryId: jest.fn(),
-                loadedQueryIsDraft: false,
-                setLoadedQueryIsDraft: jest.fn()
             }}>
                 <MarkerScaler
                     visualizationOptions={mockVisualizationRules}
                     visualizationSettings={mockVisualizationSettings}
                 />
-            </EditorContext.Provider>
+            </VisualizationContext.Provider>
         );
 
         const slider = screen.getByRole('slider');

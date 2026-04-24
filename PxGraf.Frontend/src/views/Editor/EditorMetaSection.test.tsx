@@ -220,18 +220,6 @@ const editorContentsResult: IEditorContentsResult = {
 
 const selectedVisualizationMock: VisualizationType = VisualizationType.HorizontalBarChart
 
-jest.mock('react-i18next', () => ({
-    ...jest.requireActual('react-i18next'),
-    useTranslation: () => {
-        return {
-            t: (str: string) => str,
-            i18n: {
-                changeLanguage: () => new Promise(() => null),
-            },
-        };
-    },
-}));
-
 const language = "fi";
 const setLanguage = jest.fn();
 const languageTab = "fi";

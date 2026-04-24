@@ -4,7 +4,7 @@ import React from 'react';
 import {
   QueryClient,
   QueryClientProvider,
-} from 'react-query';
+} from '@tanstack/react-query';
 import './App.css';
 
 import {
@@ -18,6 +18,7 @@ import './i18n';
 import styled from 'styled-components';
 import { NavigationProvider } from 'contexts/navigationContext';
 import theme from 'styles/materialTheme';
+import ErrorBoundary from 'components/ErrorBoundary/ErrorBoundary';
 
 const BodyWrapper = styled(Box)`
   min-height: 100vh;
@@ -35,9 +36,11 @@ function App() {
         <NavigationProvider>
           <ThemeProvider theme={theme}>
             <CssBaseline />
-            <BodyWrapper>
-              <Router />
-            </BodyWrapper>
+            <ErrorBoundary>
+              <BodyWrapper>
+                <Router />
+              </BodyWrapper>
+            </ErrorBoundary>
           </ThemeProvider>
         </NavigationProvider>
       </UiLanguageProvider>

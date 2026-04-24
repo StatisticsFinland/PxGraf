@@ -1,4 +1,4 @@
-﻿namespace PxGraf.Utility
+namespace PxGraf.Utility
 {
     public static class LoggerConstants
     {
@@ -8,5 +8,6 @@
         public const string SQ_ID = "SavedQueryId";
         public const string INVALID_OR_MISSING_SQID = "Invalid or missing saved query id.";
         public const string INVALID_VISUALIZATION = "Invalid visualization.";
+        public const string FUNC_NAME = "FunctionName";
     }
 }

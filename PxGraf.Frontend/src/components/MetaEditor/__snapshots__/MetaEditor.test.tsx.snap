@@ -1,19 +1,19 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`Rendering test renders correctly 1`] = `
 <DocumentFragment>
   <div
-    class="sc-jJAtPt fcYSSE MuiBox-root css-0"
+    class="sc-kpDqfp kCKSnF MuiBox-root css-0"
   >
     <div
-      class="sc-cXawGu eIgiUZ"
+      class="sc-dhKdcy elZQdn"
     >
       <div
-        class="sc-jMsorb bPDcPk"
+        class="sc-jXbUNf cEYnqm"
       >
         <button
           aria-label="tooltip.open: editMetadata.header"
-          class="sc-gDpztx cfyTqi"
+          class="sc-gsFSXt jMCyKe"
         >
           <svg
             aria-hidden="true"
@@ -34,19 +34,19 @@ exports[`Rendering test renders correctly 1`] = `
           <label
             class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined css-113d811-MuiFormLabel-root-MuiInputLabel-root"
             data-shrink="true"
-            for=":r0:"
+            for="_r_0_"
           >
             <b>
               editMetadata.header*
             </b>
           </label>
           <div
-            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd sc-fYsHOw haRbkY css-jupps9-MuiInputBase-root-MuiOutlinedInput-root"
+            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd sc-gEvEes jnzMHb css-jupps9-MuiInputBase-root-MuiOutlinedInput-root"
           >
             <input
               aria-invalid="false"
               class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputAdornedEnd css-1dune0f-MuiInputBase-input-MuiOutlinedInput-input"
-              id=":r0:"
+              id="_r_0_"
               type="text"
               value="foo"
             />
@@ -80,10 +80,10 @@ exports[`Rendering test renders correctly 1`] = `
             </div>
             <fieldset
               aria-hidden="true"
-              class="MuiOutlinedInput-notchedOutline css-1ll44ll-MuiOutlinedInput-notchedOutline"
+              class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
             >
               <legend
-                class="css-w1u3ce"
+                class="css-ex8a5f-MuiNotchedOutlined-root"
               >
                 <span>
                   editMetadata.header
@@ -98,14 +98,14 @@ exports[`Rendering test renders correctly 1`] = `
       </div>
     </div>
     <div
-      class="sc-cZSric hYCtuM"
+      class="sc-cPiKLY hbJcxi"
     >
       <div
-        class="sc-jPkiSJ jXuexO"
+        class="sc-jEACwF jclZoL"
       >
         <button
           aria-label="tooltip.open: editMetadata.editorTitle"
-          class="sc-gDpztx cfyTqi"
+          class="sc-gsFSXt jMCyKe"
         >
           <svg
             aria-hidden="true"
@@ -120,7 +120,7 @@ exports[`Rendering test renders correctly 1`] = `
           </svg>
         </button>
         <div
-          class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiAccordion-root MuiAccordion-rounded Mui-expanded MuiAccordion-gutters sc-cUiCeM iJasQw css-1808mag-MuiPaper-root-MuiAccordion-root"
+          class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiAccordion-root MuiAccordion-rounded Mui-expanded MuiAccordion-gutters sc-dAlyuI cPIluc css-1808mag-MuiPaper-root-MuiAccordion-root"
           style="--Paper-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12);"
         >
           <h3
@@ -173,15 +173,15 @@ exports[`Rendering test renders correctly 1`] = `
               >
                 <div
                   aria-labelledby="panel1a-header"
-                  class="MuiAccordion-region"
+                  class="MuiAccordion-region css-at4ued-MuiAccordion-region"
                   id="panel1a-content"
                   role="region"
                 >
                   <div
-                    class="MuiAccordionDetails-root sc-lixPIL jiOYVN css-1lj39kh-MuiAccordionDetails-root"
+                    class="MuiAccordionDetails-root sc-dLMFT frypaN css-1lj39kh-MuiAccordionDetails-root"
                   >
                     <div
-                      class="sc-jScdur dQKvNq MuiBox-root css-1mc6bnb"
+                      class="sc-jlZhev hxqCKM MuiBox-root css-1mc6bnb"
                     >
                       <div
                         class="MuiTabs-root css-jhczcq-MuiTabs-root"
@@ -225,7 +225,7 @@ exports[`Rendering test renders correctly 1`] = `
                       </div>
                     </div>
                     <div
-                      class="sc-dcKlJK UkaPH MuiBox-root css-0"
+                      class="sc-cwHptO fjpGx MuiBox-root css-0"
                     >
                       <div
                         aria-labelledby="simple-tab-0"
@@ -233,7 +233,7 @@ exports[`Rendering test renders correctly 1`] = `
                         role="tabpanel"
                       >
                         <div
-                          class="sc-Qotzb dvSRyf MuiBox-root css-0"
+                          class="sc-aXZVf eSKBbS MuiBox-root css-0"
                         >
                           <div
                             class="MuiGrid-root MuiGrid-container MuiGrid-direction-xs-row MuiGrid-spacing-xs-3 css-1u8xl8z-MuiGrid-root"
@@ -245,7 +245,7 @@ exports[`Rendering test renders correctly 1`] = `
                                 class="MuiPaper-root MuiPaper-outlined MuiPaper-rounded css-i9zgug-MuiPaper-root"
                               >
                                 <div
-                                  class="MuiStack-root sc-dKREkF fdWzrp css-1sazv7p-MuiStack-root"
+                                  class="MuiStack-root sc-eqUAAB bIpVLn css-1sazv7p-MuiStack-root"
                                 >
                                   <div
                                     class="MuiFormControl-root css-1iw3t7y-MuiFormControl-root"
@@ -253,26 +253,26 @@ exports[`Rendering test renders correctly 1`] = `
                                     <label
                                       class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined css-113d811-MuiFormLabel-root-MuiInputLabel-root"
                                       data-shrink="true"
-                                      for=":r3:"
+                                      for="_r_3_"
                                     >
                                       editMetadata.valueName: fgfgfg
                                     </label>
                                     <div
-                                      class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl sc-fYsHOw cRLXqm css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
+                                      class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl sc-gEvEes imPffV css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
                                     >
                                       <input
                                         aria-invalid="false"
                                         class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
-                                        id=":r3:"
+                                        id="_r_3_"
                                         type="text"
                                         value="fgfgfg"
                                       />
                                       <fieldset
                                         aria-hidden="true"
-                                        class="MuiOutlinedInput-notchedOutline css-1ll44ll-MuiOutlinedInput-notchedOutline"
+                                        class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
                                       >
                                         <legend
-                                          class="css-w1u3ce"
+                                          class="css-ex8a5f-MuiNotchedOutlined-root"
                                         >
                                           <span>
                                             editMetadata.valueName: fgfgfg
@@ -290,26 +290,26 @@ exports[`Rendering test renders correctly 1`] = `
                                     <label
                                       class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined css-113d811-MuiFormLabel-root-MuiInputLabel-root"
                                       data-shrink="true"
-                                      for=":r4:"
+                                      for="_r_4_"
                                     >
                                       editMetadata.unit
                                     </label>
                                     <div
-                                      class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl sc-fYsHOw cRLXqm css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
+                                      class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl sc-gEvEes imPffV css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
                                     >
                                       <input
                                         aria-invalid="false"
                                         class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
-                                        id=":r4:"
+                                        id="_r_4_"
                                         type="text"
                                         value="yksikko"
                                       />
                                       <fieldset
                                         aria-hidden="true"
-                                        class="MuiOutlinedInput-notchedOutline css-1ll44ll-MuiOutlinedInput-notchedOutline"
+                                        class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
                                       >
                                         <legend
-                                          class="css-w1u3ce"
+                                          class="css-ex8a5f-MuiNotchedOutlined-root"
                                         >
                                           <span>
                                             editMetadata.unit
@@ -327,26 +327,26 @@ exports[`Rendering test renders correctly 1`] = `
                                     <label
                                       class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined css-113d811-MuiFormLabel-root-MuiInputLabel-root"
                                       data-shrink="true"
-                                      for=":r5:"
+                                      for="_r_5_"
                                     >
                                       editMetadata.source
                                     </label>
                                     <div
-                                      class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl sc-fYsHOw cRLXqm css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
+                                      class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl sc-gEvEes imPffV css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
                                     >
                                       <input
                                         aria-invalid="false"
                                         class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
-                                        id=":r5:"
+                                        id="_r_5_"
                                         type="text"
                                         value="lahde"
                                       />
                                       <fieldset
                                         aria-hidden="true"
-                                        class="MuiOutlinedInput-notchedOutline css-1ll44ll-MuiOutlinedInput-notchedOutline"
+                                        class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
                                       >
                                         <legend
-                                          class="css-w1u3ce"
+                                          class="css-ex8a5f-MuiNotchedOutlined-root"
                                         >
                                           <span>
                                             editMetadata.source

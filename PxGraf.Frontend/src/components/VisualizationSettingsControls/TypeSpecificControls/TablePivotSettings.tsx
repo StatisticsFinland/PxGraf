@@ -9,7 +9,7 @@ import { IVisualizationSettingsProps } from '../VisualizationSettingsControl';
 import { IDimension } from 'types/cubeMeta';
 import styled from 'styled-components';
 import { Query } from "types/query";
-import { EditorContext } from '../../../contexts/editorContext';
+import { VisualizationContext } from '../../../contexts/visualizationContext';
 
 const DimensionListWrapper = styled(Stack)`
     padding: 8px;
@@ -30,7 +30,7 @@ interface ITableSettingsProps extends IVisualizationSettingsProps {
 export const TablePivotSettings: React.FC<ITableSettingsProps> = ({ visualizationSettings, dimensions, selectableDimensions, query }) => {
     const { t } = useTranslation();
     const [selected, setSelected] = useState("");
-    const { setVisualizationSettingsUserInput } = React.useContext(EditorContext);
+    const { setVisualizationSettingsUserInput } = React.useContext(VisualizationContext);
 
     const upHandler = () => {
         if (selected == null) return;
@@ -52,14 +52,14 @@ export const TablePivotSettings: React.FC<ITableSettingsProps> = ({ visualizatio
 
     const downHandler = () => {
         if (selected == null) return;
-        if (visualizationSettings.columnVariableCodes.includes(selected) && visualizationSettings.columnVariableCodes[visualizationSettings.columnVariableCodes.length - 1] !== selected) {
+        if (visualizationSettings.columnVariableCodes.includes(selected) && visualizationSettings.columnVariableCodes.at(-1) !== selected) {
             const dimsCopy = [...visualizationSettings.columnVariableCodes];
             const i = dimsCopy.indexOf(selected);
             dimsCopy[i] = dimsCopy[i + 1];
             dimsCopy[i + 1] = selected;
             setVisualizationSettingsUserInput({ ...visualizationSettings, columnVariableCodes: dimsCopy });
         }
-        else if (visualizationSettings.rowVariableCodes.includes(selected) && visualizationSettings.rowVariableCodes[visualizationSettings.rowVariableCodes.length - 1] !== selected) {
+        else if (visualizationSettings.rowVariableCodes.includes(selected) && visualizationSettings.rowVariableCodes.at(-1) !== selected) {
             const dimsCopy = [...visualizationSettings.rowVariableCodes];
             const i = dimsCopy.indexOf(selected);
             dimsCopy[i] = dimsCopy[i + 1];
@@ -87,7 +87,7 @@ export const TablePivotSettings: React.FC<ITableSettingsProps> = ({ visualizatio
         const multiValueDimensionCodes = codes
             .map(c => dimensions.find(v => v.code === c))
             .filter(v => dimensions.filter(v => query[v.code].valueFilter.type === 'from' || query[v.code].valueFilter.type === 'all')?.includes(v) || v.values.length > 1)
-            .filter(v => !selectableDimensions?.includes(v) || v.Code === visualizationSettings.multiselectableVariableCode);
+            .filter(v => !selectableDimensions?.includes(v) || v.code === visualizationSettings.multiselectableVariableCode);
         return multiValueDimensionCodes;
     }
 

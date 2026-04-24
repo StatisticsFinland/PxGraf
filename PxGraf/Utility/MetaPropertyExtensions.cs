@@ -1,4 +1,4 @@
-﻿using Px.Utils.Models.Metadata.MetaProperties;
+using Px.Utils.Models.Metadata.MetaProperties;
 using System;
 
 namespace PxGraf.Utility
@@ -9,7 +9,7 @@ namespace PxGraf.Utility
         {
             if (property is MultilanguageStringProperty mlsp) return mlsp;
             else if (property is StringProperty sp) return new MultilanguageStringProperty(new(lang, sp.Value));
-            else throw new ArgumentException($"Property of type {property.GetType()} can not be converted to multilanguage string property.");
+            else throw new ArgumentException($"PublicationPropertyType of type {property.GetType()} can not be converted to multilanguage string property.");
         }
     }
 }

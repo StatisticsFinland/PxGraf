@@ -2,20 +2,7 @@ import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { SaveDialog } from './SaveDialog';
-import { EditorContext } from '../../contexts/editorContext';
-import { VisualizationType } from '../../types/visualizationType';
-
-jest.mock('react-i18next', () => ({
-    ...jest.requireActual('react-i18next'),
-    useTranslation: () => {
-        return {
-            t: (str: string) => str,
-            i18n: {
-                changeLanguage: () => new Promise(() => null),
-            },
-        };
-    },
-}));
+import { SaveContext } from '../../contexts/saveContext';
 
 const onCloseMock = jest.fn();
 const onSaveMock = jest.fn(() => { });
@@ -29,26 +16,36 @@ describe('Rendering test', () => {
 
     it('renders correctly when open', () => {
         const dom = render(
-            <EditorContext.Provider value={{
-                cubeQuery: null,
-                setCubeQuery: jest.fn(),
-                query: {},
-                setQuery: jest.fn(),
+            <SaveContext.Provider value={{
                 saveDialogOpen: true,
                 setSaveDialogOpen: onCloseMock,
-                selectedVisualizationUserInput: VisualizationType.VerticalBarChart,
-                setSelectedVisualizationUserInput: jest.fn(),
-                visualizationSettingsUserInput: {},
-                setVisualizationSettingsUserInput: jest.fn(),
-                defaultSelectables: {},
-                setDefaultSelectables: jest.fn(),
                 loadedQueryId: '',
                 setLoadedQueryId: jest.fn(),
                 loadedQueryIsDraft: false,
-                setLoadedQueryIsDraft: setIsDraftMock
+                setLoadedQueryIsDraft: setIsDraftMock,
+                publicationWebhookEnabled: true,
+                setPublicationWebhookEnabled: jest.fn()
             }}>
                 <SaveDialog onSave={onSaveMock} />
-            </EditorContext.Provider>
+            </SaveContext.Provider>
+        );
+        expect(dom.baseElement).toMatchSnapshot();
+    });
+
+    it('renders correctly when open and publication webhook is disabled', () => {
+        const dom = render(
+            <SaveContext.Provider value={{
+                saveDialogOpen: true,
+                setSaveDialogOpen: onCloseMock,
+                loadedQueryId: '',
+                setLoadedQueryId: jest.fn(),
+                loadedQueryIsDraft: false,
+                setLoadedQueryIsDraft: setIsDraftMock,
+                publicationWebhookEnabled: false,
+                setPublicationWebhookEnabled: jest.fn()
+            }}>
+                <SaveDialog onSave={onSaveMock} />
+            </SaveContext.Provider>
         );
         expect(dom.baseElement).toMatchSnapshot();
     });
@@ -63,26 +60,18 @@ describe('Assertion test', () => {
 
     it('invokes close function when cancel button is clicked', () => {
         render(
-            <EditorContext.Provider value={{
-                cubeQuery: null,
-                setCubeQuery: jest.fn(),
-                query: {},
-                setQuery: jest.fn(),
+            <SaveContext.Provider value={{
                 saveDialogOpen: true,
                 setSaveDialogOpen: onCloseMock,
-                selectedVisualizationUserInput: VisualizationType.VerticalBarChart,
-                setSelectedVisualizationUserInput: jest.fn(),
-                visualizationSettingsUserInput: {},
-                setVisualizationSettingsUserInput: jest.fn(),
-                defaultSelectables: {},
-                setDefaultSelectables: jest.fn(),
                 loadedQueryId: '',
                 setLoadedQueryId: jest.fn(),
                 loadedQueryIsDraft: false,
-                setLoadedQueryIsDraft: setIsDraftMock
+                setLoadedQueryIsDraft: setIsDraftMock,
+                publicationWebhookEnabled: true,
+                setPublicationWebhookEnabled: jest.fn()
             }}>
                 <SaveDialog onSave={onSaveMock} />
-            </EditorContext.Provider>
+            </SaveContext.Provider>
         );
         fireEvent.click(screen.getByText('saveDialog.cancel'));
         expect(onCloseMock).toHaveBeenCalledTimes(1);
@@ -90,26 +79,18 @@ describe('Assertion test', () => {
 
     it('invokes save and close function when save button is clicked', () => {
         render(
-            <EditorContext.Provider value={{
-                cubeQuery: null,
-                setCubeQuery: jest.fn(),
-                query: {},
-                setQuery: jest.fn(),
+            <SaveContext.Provider value={{
                 saveDialogOpen: true,
                 setSaveDialogOpen: onCloseMock,
-                selectedVisualizationUserInput: VisualizationType.VerticalBarChart,
-                setSelectedVisualizationUserInput: jest.fn(),
-                visualizationSettingsUserInput: {},
-                setVisualizationSettingsUserInput: jest.fn(),
-                defaultSelectables: {},
-                setDefaultSelectables: jest.fn(),
                 loadedQueryId: '',
                 setLoadedQueryId: jest.fn(),
                 loadedQueryIsDraft: false,
-                setLoadedQueryIsDraft: setIsDraftMock
+                setLoadedQueryIsDraft: setIsDraftMock,
+                publicationWebhookEnabled: true,
+                setPublicationWebhookEnabled: jest.fn()
             }}>
                 <SaveDialog onSave={onSaveMock} />
-            </EditorContext.Provider>
+            </SaveContext.Provider>
         );
         fireEvent.click(screen.getByText('saveDialog.save'));
         expect(onSaveMock).toHaveBeenCalledTimes(1);
@@ -118,26 +99,18 @@ describe('Assertion test', () => {
 
     it('invokes save and close function with draft as true when publish checkbox is unchecked', () => {
         render(
-            <EditorContext.Provider value={{
-                cubeQuery: null,
-                setCubeQuery: jest.fn(),
-                query: {},
-                setQuery: jest.fn(),
+            <SaveContext.Provider value={{
                 saveDialogOpen: true,
                 setSaveDialogOpen: onCloseMock,
-                selectedVisualizationUserInput: VisualizationType.VerticalBarChart,
-                setSelectedVisualizationUserInput: jest.fn(),
-                visualizationSettingsUserInput: {},
-                setVisualizationSettingsUserInput: jest.fn(),
-                defaultSelectables: {},
-                setDefaultSelectables: jest.fn(),
                 loadedQueryId: '',
                 setLoadedQueryId: jest.fn(),
                 loadedQueryIsDraft: false,
-                setLoadedQueryIsDraft: setIsDraftMock
+                setLoadedQueryIsDraft: setIsDraftMock,
+                publicationWebhookEnabled: true,
+                setPublicationWebhookEnabled: jest.fn()
             }}>
                 <SaveDialog onSave={onSaveMock} />
-            </EditorContext.Provider>
+            </SaveContext.Provider>
         );
 
         // Checkbox is unchecked by default (saveAsPublished = false)
@@ -149,26 +122,18 @@ describe('Assertion test', () => {
 
     it('invokes save and close function with draft as false when publish checkbox is checked', () => {
         render(
-            <EditorContext.Provider value={{
-                cubeQuery: null,
-                setCubeQuery: jest.fn(),
-                query: {},
-                setQuery: jest.fn(),
+            <SaveContext.Provider value={{
                 saveDialogOpen: true,
                 setSaveDialogOpen: onCloseMock,
-                selectedVisualizationUserInput: VisualizationType.VerticalBarChart,
-                setSelectedVisualizationUserInput: jest.fn(),
-                visualizationSettingsUserInput: {},
-                setVisualizationSettingsUserInput: jest.fn(),
-                defaultSelectables: {},
-                setDefaultSelectables: jest.fn(),
                 loadedQueryId: '',
                 setLoadedQueryId: jest.fn(),
                 loadedQueryIsDraft: false,
-                setLoadedQueryIsDraft: setIsDraftMock
+                setLoadedQueryIsDraft: setIsDraftMock,
+                publicationWebhookEnabled: true,
+                setPublicationWebhookEnabled: jest.fn()
             }}>
                 <SaveDialog onSave={onSaveMock} />
-            </EditorContext.Provider>
+            </SaveContext.Provider>
         );
 
         // Check the publish checkbox
@@ -177,5 +142,84 @@ describe('Assertion test', () => {
         expect(onSaveMock).toHaveBeenCalledWith(false, false); // static: false, draft: false
         expect(onSaveMock).toHaveBeenCalledTimes(1);
         expect(onCloseMock).toHaveBeenCalledTimes(1);
+    });
+
+    it('saves as static when static radio option is selected', () => {
+        render(
+            <SaveContext.Provider value={{
+                saveDialogOpen: true,
+                setSaveDialogOpen: onCloseMock,
+                loadedQueryId: '',
+                setLoadedQueryId: jest.fn(),
+                loadedQueryIsDraft: false,
+                setLoadedQueryIsDraft: setIsDraftMock,
+                publicationWebhookEnabled: true,
+                setPublicationWebhookEnabled: jest.fn()
+            }}>
+                <SaveDialog onSave={onSaveMock} />
+            </SaveContext.Provider>
+        );
+        fireEvent.click(screen.getByLabelText('saveDialog.saveStatic'));
+        fireEvent.click(screen.getByText('saveDialog.save'));
+        expect(onSaveMock).toHaveBeenCalledWith(true, true); // static: true, draft: true (publish unchecked)
+    });
+
+    it('does not render publish checkbox when publication webhook is disabled', () => {
+        render(
+            <SaveContext.Provider value={{
+                saveDialogOpen: true,
+                setSaveDialogOpen: onCloseMock,
+                loadedQueryId: '',
+                setLoadedQueryId: jest.fn(),
+                loadedQueryIsDraft: false,
+                setLoadedQueryIsDraft: setIsDraftMock,
+                publicationWebhookEnabled: false,
+                setPublicationWebhookEnabled: jest.fn()
+            }}>
+                <SaveDialog onSave={onSaveMock} />
+            </SaveContext.Provider>
+        );
+        expect(screen.queryByText('saveDialog.publish')).not.toBeInTheDocument();
+    });
+
+    it('saves as non-draft when publication webhook is disabled regardless of checkbox', () => {
+        render(
+            <SaveContext.Provider value={{
+                saveDialogOpen: true,
+                setSaveDialogOpen: onCloseMock,
+                loadedQueryId: '',
+                setLoadedQueryId: jest.fn(),
+                loadedQueryIsDraft: false,
+                setLoadedQueryIsDraft: setIsDraftMock,
+                publicationWebhookEnabled: false,
+                setPublicationWebhookEnabled: jest.fn()
+            }}>
+                <SaveDialog onSave={onSaveMock} />
+            </SaveContext.Provider>
+        );
+        fireEvent.click(screen.getByText('saveDialog.save'));
+        expect(onSaveMock).toHaveBeenCalledWith(false, false); // draft is always false when webhook disabled
+    });
+
+    it('renders dialog title and radio options when open', () => {
+        render(
+            <SaveContext.Provider value={{
+                saveDialogOpen: true,
+                setSaveDialogOpen: onCloseMock,
+                loadedQueryId: '',
+                setLoadedQueryId: jest.fn(),
+                loadedQueryIsDraft: false,
+                setLoadedQueryIsDraft: setIsDraftMock,
+                publicationWebhookEnabled: true,
+                setPublicationWebhookEnabled: jest.fn()
+            }}>
+                <SaveDialog onSave={onSaveMock} />
+            </SaveContext.Provider>
+        );
+        expect(screen.getByText('saveDialog.saveQuery')).toBeInTheDocument();
+        expect(screen.getByLabelText('saveDialog.saveDynamic')).toBeInTheDocument();
+        expect(screen.getByLabelText('saveDialog.saveStatic')).toBeInTheDocument();
+        expect(screen.getByText('saveDialog.cancel')).toBeInTheDocument();
+        expect(screen.getByText('saveDialog.save')).toBeInTheDocument();
     });
 });

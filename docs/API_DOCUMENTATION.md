@@ -26,7 +26,7 @@ Query meta API provides an endpoint for retrieving metadata of a saved query.
 | GetQueryMeta | GET: {*savedQueryId*} | savedQueryId: The id of the saved query provided in the url. | QueryMetaResponse object that contains the metadata of the saved query including the header, archival status, selected visualization type, etc. |
 
 # Saved query API (/api/sq/)
-SQ api provides endpoints for retrieving, saving, archiving and re-archiving queries. When saving, archiving or re-archiving queries, if an id is provided with the SaveQueryParams object and a draft state saved query file is found, it is overwritten. If no id is provided, or the previously saved query is not in draft state, a new id is generated for the query.
+SQ api provides endpoints for retrieving, saving, archiving and re-archiving queries. When saving, archiving or re-archiving queries, if an id is provided with the SaveQueryParams object and a draft state saved query file is found, it is overwritten. If no id is provided, or the previously saved query is not in draft state, a new id is generated for the query. Optional webhook can be configured to be called when a query is saved as publish-ready.
 
 ## Endpoints
 
@@ -46,3 +46,12 @@ Visualization API provides an endpoint for retrieving data required for renderin
 | Function Name | API Route | Parameters | Returns |
 |---------------|-----------|------------|---------|
 | GetVisualization | GET: {*sqId*} | sqId: The id of the saved query provided in the url. | VisualizationResponse object that contains the data that PxVisualizer needs to render the visualization in the front end user interface including the data, settings and metadata. |
+
+# Health API (/api/health)
+Health API provides an endpoint for checking the health of all configured dependencies. It probes the database connection, saved query storage, archive file storage, and optionally the publication webhook service (when configured with a health check endpoint). Returns HTTP 200 with a HealthResponse when all probes are healthy, or HTTP 503 when any probe is unhealthy.
+
+## Endpoints
+
+| Function Name | API Route | Parameters | Returns |
+|---------------|-----------|------------|---------|
+| GetHealthAsync | GET | None | HealthResponse object containing overall status ("healthy" or "unhealthy"), a list of DatabaseHealthStatus objects for each database probe, and a list of ServiceHealthStatus objects for each service probe (saved-query-storage, archive-file-storage, and optionally publication-webhook). |

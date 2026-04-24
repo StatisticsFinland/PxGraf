@@ -5,7 +5,7 @@ import {
     DialogContent, DialogActions, FormLabel, RadioGroup, Radio, Checkbox
 } from '@mui/material';
 import SaveIcon from '@mui/icons-material/Save';
-import { EditorContext } from '../../contexts/editorContext';
+import { SaveContext } from '../../contexts/saveContext';
 
 interface ISaveDialogProps {
     onSave: (archive: boolean, draft: boolean) => void;
@@ -20,7 +20,7 @@ interface ISaveDialogProps {
 export const SaveDialog: React.FC<ISaveDialogProps> = ({ onSave }) => {
     const { t } = useTranslation();
     const [selected, setSelected] = useState("dynamic");
-    const { saveDialogOpen, setSaveDialogOpen } = React.useContext(EditorContext);
+    const { saveDialogOpen, setSaveDialogOpen, publicationWebhookEnabled } = React.useContext(SaveContext);
     const [saveAsPublished, setSaveAsPublished] = useState(false);
 
     const handleDraftChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -28,7 +28,8 @@ export const SaveDialog: React.FC<ISaveDialogProps> = ({ onSave }) => {
     };
 
     const saveAndClose = () => {
-        const isDraft = !saveAsPublished;
+        // When publication is disabled, always save as published (non-draft)
+        const isDraft = publicationWebhookEnabled ? !saveAsPublished : false;
         onSave(selected === "static", isDraft);
         setSaveDialogOpen(false);
     };
@@ -55,15 +56,17 @@ export const SaveDialog: React.FC<ISaveDialogProps> = ({ onSave }) => {
                         <FormControlLabel value="dynamic" control={<Radio />} label={t("saveDialog.saveDynamic")} />
                         <FormControlLabel value="static" control={<Radio />} label={t("saveDialog.saveStatic")} />
                     </RadioGroup>
-                    <FormControlLabel
-                        control={
-                            <Checkbox 
-                                checked={saveAsPublished} 
-                                onChange={handleDraftChange} 
-                            />
-                        }
-                        label={t("saveDialog.publish")}
-                    />
+                    {publicationWebhookEnabled && (
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    checked={saveAsPublished}
+                                    onChange={handleDraftChange}
+                                />
+                            }
+                            label={t("saveDialog.publish")}
+                        />
+                    )}
                 </FormControl>
             </DialogContent>
             <DialogActions>

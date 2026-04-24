@@ -1,23 +1,11 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import UiLanguageContext from 'contexts/uiLanguageContext';
 import '@testing-library/jest-dom';
 import { MemoryRouter } from 'react-router-dom';
 import NestedList from './NestedList';
 import { IDatabaseGroupContents } from 'types/tableListItems';
 import { ITableResult } from 'api/services/table';
-
-jest.mock('react-i18next', () => ({
-    ...jest.requireActual('react-i18next'),
-    useTranslation: () => {
-        return {
-            t: (str: string) => str,
-            i18n: {
-                changeLanguage: () => new Promise(() => null),
-            },
-        };
-    },
-}));
 
 jest.mock('envVars', () => ({
     PxGrafUrl: 'pxGrafUrl.fi/',
@@ -128,5 +116,49 @@ describe('Assertion tests', () => {
             </MemoryRouter>
         );
         expect(asFragment().textContent).toContain('foo-fi');
+    });
+
+    it('displays loading skeletons when data is loading', () => {
+        mockTableQueryResult.isLoading = true;
+        mockTableQueryResult.isError = false;
+        mockTableQueryResult.data = null;
+        const { container } = render(
+            <MemoryRouter>
+                <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
+                    <NestedList depth={mockDepth} path={mockPath} />
+                </UiLanguageContext.Provider>
+            </MemoryRouter>
+        );
+        expect(container.querySelectorAll('.MuiSkeleton-root').length).toBeGreaterThan(0);
+    });
+
+    it('displays error alert when query fails', () => {
+        mockTableQueryResult.isLoading = false;
+        mockTableQueryResult.isError = true;
+        mockTableQueryResult.data = null;
+        render(
+            <MemoryRouter>
+                <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
+                    <NestedList depth={mockDepth} path={mockPath} />
+                </UiLanguageContext.Provider>
+            </MemoryRouter>
+        );
+        expect(screen.getByRole('alert')).toBeInTheDocument();
+        expect(screen.getByText('error.contentLoad')).toBeInTheDocument();
+    });
+
+    it('renders group and table items when data is loaded', () => {
+        mockTableQueryResult.isLoading = false;
+        mockTableQueryResult.isError = false;
+        mockTableQueryResult.data = mockDatabaseContents;
+        const { container } = render(
+            <MemoryRouter>
+                <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
+                    <NestedList depth={mockDepth} path={mockPath} />
+                </UiLanguageContext.Provider>
+            </MemoryRouter>
+        );
+        expect(container.textContent).toContain('foo-fi');
+        expect(container.textContent).toContain('foo3-fi');
     });
 });

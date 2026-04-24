@@ -26,11 +26,11 @@ const TitleWrapper = styled.div`
 `;
 
 const StyledAccordionDetails = styled(AccordionDetails)`
-    background-color: #f8f8f8;
+    background-color: var(--surface-light);
 `;
 
 const StyledAccordion = styled(Accordion)`
-    border-top: 1px solid #dcdcdc;
+    border-top: 1px solid var(--border-light);
 `;
 
 /**

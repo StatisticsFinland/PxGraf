@@ -5,7 +5,7 @@
     "jsx": "react",
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "target": "es2016",
+    "target": "ES2022",
     "module": "ES2020",
     "moduleResolution": "node",
     "noEmit": true,

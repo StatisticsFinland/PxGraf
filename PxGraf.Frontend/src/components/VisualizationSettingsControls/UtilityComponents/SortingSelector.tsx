@@ -5,7 +5,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { UiLanguageContext } from 'contexts/uiLanguageContext';
 import { IVisualizationSettings } from '../../../types/visualizationSettings';
-import { EditorContext } from '../../../contexts/editorContext';
+import { VisualizationContext } from '../../../contexts/visualizationContext';
 import { ISortingOption } from '../../../types/editorContentsResponse';
 
 interface ISortingSelectorProps {
@@ -16,7 +16,7 @@ interface ISortingSelectorProps {
 export const SortingSelector: React.FC<ISortingSelectorProps> = ({ sortingOptions, visualizationSettings }) => {
     const { t } = useTranslation();
     const { uiContentLanguage } = React.useContext(UiLanguageContext);
-    const { setVisualizationSettingsUserInput } = React.useContext(EditorContext);
+    const { setVisualizationSettingsUserInput } = React.useContext(VisualizationContext);
 
     return (
         <FormControl>

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.FeatureManagement.Mvc;
 using Px.Utils.Models.Data.DataValue;
@@ -34,15 +35,17 @@ namespace PxGraf.Controllers
     /// <param name="sqFileInterface">Instance of a <see cref="ISqFileInterface"/> object. Used for interacting with saved queries.</param>
     /// <param name="logger"><see cref="ILogger"/> instance used for logging.</param>
     /// <param name="auditLogService">Service for logging audit events.</param>
+    /// <param name="webhookService">Service for sending publication webhooks.</param>
     [FeatureGate("CreationAPI")]
     [ApiController]
     [Route("api/sq")]
-    public class SqController(ICachedDatasource datasource, ISqFileInterface sqFileInterface, ILogger<SqController> logger, IAuditLogService auditLogService) : ControllerBase
+    public class SqController(ICachedDatasource datasource, ISqFileInterface sqFileInterface, ILogger<SqController> logger, IAuditLogService auditLogService, IPublicationWebhookService webhookService) : ControllerBase
     {
         private readonly ICachedDatasource _cachedDatasource = datasource;
         private readonly ISqFileInterface _sqFileInterface = sqFileInterface;
         private readonly ILogger<SqController> _logger = logger;
         private readonly IAuditLogService _auditLogService = auditLogService;
+        private readonly IPublicationWebhookService _webhookService = webhookService;
         private const string CONTROLLER_PATH = "api/sq";
 
         /// <summary>
@@ -55,6 +58,9 @@ namespace PxGraf.Controllers
         /// If saved query with the provided ID is not found, "Not Found" response is returned.
         /// </returns>
         [HttpGet("{savedQueryId}")]
+        [ProducesResponseType<SaveQueryParams>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<SaveQueryParams>> GetSavedQueryAsync([FromRoute] string savedQueryId)
         {
             Dictionary<string, object> logScope = new()
@@ -65,7 +71,7 @@ namespace PxGraf.Controllers
             using (_logger.BeginScope(logScope))
             {
                 _logger.LogDebug("Saved query requested.");
-                if (_sqFileInterface.SavedQueryExists(savedQueryId, Configuration.Current.SavedQueryDirectory))
+                if (await _sqFileInterface.SavedQueryExists(savedQueryId, Configuration.Current.SavedQueryDirectory))
                 {
                     using (_logger.BeginScope(new Dictionary<string, object> { [LoggerConstants.SQ_ID] = savedQueryId }))
                     {
@@ -129,6 +135,8 @@ namespace PxGraf.Controllers
         /// <param name="parameters">Parameters for saving the query.</param>
         /// <returns><see cref="SaveQueryResponse"/> object that contains the id of the saved query.</returns>
         [HttpPost("save")]
+        [ProducesResponseType<SaveQueryResponse>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<SaveQueryResponse>> SaveQueryAsync([FromBody] SaveQueryParams parameters)
         {
             string actionPath = $"{CONTROLLER_PATH}/save";
@@ -168,9 +176,21 @@ namespace PxGraf.Controllers
                     if (validTypes.Contains(visualizationSettings.VisualizationType))
                     {
                         SavedQuery savedQuery = new(parameters.Query, archived: false, visualizationSettings, DateTime.Now, parameters.Draft);
-                        await _sqFileInterface.SerializeToFile(fileName, Configuration.Current.SavedQueryDirectory, savedQuery);
+                        await _sqFileInterface.SerializeToSqFileAsync(fileName, Configuration.Current.SavedQueryDirectory, savedQuery);
+                        WebhookPublicationResult webhookResult = new () { Status = QueryPublicationStatus.Unpublished };
 
-                        SaveQueryResponse saveQueryResponse = new() { Id = guid };
+                        // Trigger webhook for non-draft queries only if webhook is enabled
+                        if (!parameters.Draft && Configuration.Current.PublicationWebhookConfig.IsEnabled)
+                        {
+                            webhookResult = await _webhookService.TriggerWebhookAsync(guid, savedQuery, filteredMeta.AdditionalProperties);
+                        }
+
+                        SaveQueryResponse saveQueryResponse = new()
+                        {
+                            Id = guid,
+                            PublicationStatus = webhookResult.Status,
+                            PublicationMessage = webhookResult.Messages
+                        };
                         _logger.LogInformation("Query saved successfully.");
                         _logger.LogDebug("Returning save query result.");
                         return saveQueryResponse;
@@ -189,6 +209,8 @@ namespace PxGraf.Controllers
         /// <param name="parameters">Parameters for saving the query.</param>
         /// <returns><see cref="SaveQueryResponse"/> object that contains the name of the archived query.</returns>
         [HttpPost("archive")]
+        [ProducesResponseType<SaveQueryResponse>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<SaveQueryResponse>> ArchiveQueryAsync([FromBody] SaveQueryParams parameters)
         {
             string actionPath = $"{CONTROLLER_PATH}/archive";
@@ -230,13 +252,27 @@ namespace PxGraf.Controllers
                     if (validTypes.Contains(visualizationSettings.VisualizationType))
                     {
                         SavedQuery savedQuery = new(parameters.Query, archived: true, visualizationSettings, DateTime.Now, parameters.Draft);
-                        await _sqFileInterface.SerializeToFile(queryFileName, Configuration.Current.SavedQueryDirectory, savedQuery);
+                        await _sqFileInterface.SerializeToSqFileAsync(queryFileName, Configuration.Current.SavedQueryDirectory, savedQuery);
 
                         string archiveName = $"{guid}.sqa";
-                        await _sqFileInterface.SerializeToFile(archiveName, Configuration.Current.ArchiveFileDirectory, new ArchiveCube(matrix));
+                        await _sqFileInterface.SerializeToArchiveFileAsync(archiveName, Configuration.Current.ArchiveFileDirectory, new ArchiveCube(matrix));
+
+                        WebhookPublicationResult webhookResult = new() { Status = QueryPublicationStatus.Unpublished };
+
+                        // Trigger webhook for non-draft queries only if webhook is enabled
+                        if (!parameters.Draft && Configuration.Current.PublicationWebhookConfig.IsEnabled)
+                        {
+                            webhookResult = await _webhookService.TriggerWebhookAsync(guid, savedQuery, filteredMeta.AdditionalProperties);
+                        }
+
                         _logger.LogInformation("Query archived successfully.");
                         _logger.LogDebug("Returning archive query result.");
-                        return new SaveQueryResponse() { Id = guid };
+                        return new SaveQueryResponse()
+                        {
+                            Id = guid,
+                            PublicationStatus = webhookResult.Status,
+                            PublicationMessage = webhookResult.Messages
+                        };
                     }
 
                     // If visualization type is not given or it is not valid return 400.
@@ -257,6 +293,9 @@ namespace PxGraf.Controllers
         /// <param name="request"><see cref="ReArchiveRequest"/> object that contains the ID of the query to be rearchived.</param>
         /// <returns><see cref="ReArchiveResponse"/> object that contains the ID of the rearchived query.</returns>
         [HttpPost("re-archive")]
+        [ProducesResponseType<ReArchiveResponse>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<ReArchiveResponse>> ReArchiveExistingQueryAsync([FromBody] ReArchiveRequest request)
         {
             string actionPath = $"{CONTROLLER_PATH}/re-archive";
@@ -268,7 +307,7 @@ namespace PxGraf.Controllers
             using (_logger.BeginScope(logScope))
             {
                 _logger.LogDebug("Re-archiving query.");
-                if (_sqFileInterface.SavedQueryExists(request.SqId, Configuration.Current.SavedQueryDirectory))
+                if (await _sqFileInterface.SavedQueryExists(request.SqId, Configuration.Current.SavedQueryDirectory))
                 {
                     using (_logger.BeginScope(new Dictionary<string, object> { [LoggerConstants.SQ_ID] = request.SqId }))
                     {
@@ -290,13 +329,27 @@ namespace PxGraf.Controllers
                             if (validTypes.Contains(baseQuery.Settings.VisualizationType))
                             {
                                 SavedQuery savedQuery = new(baseQuery.Query, archived: true, baseQuery.Settings, DateTime.Now, request.Draft);
-                                await _sqFileInterface.SerializeToFile(queryFileName, Configuration.Current.SavedQueryDirectory, savedQuery);
+                                await _sqFileInterface.SerializeToSqFileAsync(queryFileName, Configuration.Current.SavedQueryDirectory, savedQuery);
 
                                 string archiveName = $"{guid}.sqa";
-                                await _sqFileInterface.SerializeToFile(archiveName, Configuration.Current.ArchiveFileDirectory, new ArchiveCube(matrix));
+                                await _sqFileInterface.SerializeToArchiveFileAsync(archiveName, Configuration.Current.ArchiveFileDirectory, new ArchiveCube(matrix));
+
+                                WebhookPublicationResult webhookResult = new() { Status = QueryPublicationStatus.Unpublished };
+
+                                // Trigger webhook for non-draft queries only if webhook is enabled
+                                if (!request.Draft && Configuration.Current.PublicationWebhookConfig.IsEnabled)
+                                {
+                                    webhookResult = await _webhookService.TriggerWebhookAsync(guid, savedQuery, filteredMeta.AdditionalProperties);
+                                }
+
                                 _logger.LogInformation("Query re-archived successfully.");
                                 _logger.LogDebug("Returning re-archive query result.");
-                                return new ReArchiveResponse() { NewSqId = guid };
+                                return new ReArchiveResponse()
+                                {
+                                    NewSqId = guid,
+                                    PublicationStatus = webhookResult.Status,
+                                    PublicationMessage = webhookResult.Messages
+                                };
                             }
 
                             // If visualization type is not valid for the new data return 400.
@@ -350,7 +403,7 @@ namespace PxGraf.Controllers
                 return false;
             }
 
-            if (_sqFileInterface.SavedQueryExists(id, Configuration.Current.SavedQueryDirectory))
+            if (await _sqFileInterface.SavedQueryExists(id, Configuration.Current.SavedQueryDirectory))
             {
                 SavedQuery savedQuery = await _sqFileInterface.ReadSavedQueryFromFile(id, Configuration.Current.SavedQueryDirectory);
                 return savedQuery.Draft;

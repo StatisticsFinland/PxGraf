@@ -1,7 +1,6 @@
 import { IDimension } from 'types/cubeMeta';
 import { FilterType, IDimensionQuery } from 'types/query';
 import { getDefaultFilter } from './dimensionSelectionHelpers';
-import { useTranslation } from 'react-i18next';
 import { EDatabaseTableError } from '../types/tableListItems';
 import { IVisualizationOptions } from '../types/editorContentsResponse';
 import { VisualizationType } from '../types/visualizationType';
@@ -22,8 +21,7 @@ export const resolveDimensions = (dimensions: IDimension[], resolvedDimensionCod
     return dimensions.map(v => { return { code: v.code, name: v.name, type: v.type, values: v.values.filter(val => resolvedDimensionCodes?.[v.code]?.includes(val.code)) } as IDimension });
 }
 
-export const getErrorText = (error: EDatabaseTableError) => {
-    const { t } = useTranslation();
+export const getErrorText = (error: EDatabaseTableError, t: (key: string) => string) => {
     switch (error) {
         case EDatabaseTableError.contentDimensionMissing:
             return t("error.contentVariableMissing");

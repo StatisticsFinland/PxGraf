@@ -2,7 +2,9 @@ import React, { useEffect } from 'react';
 import { useParams, useLocation } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
 import { Box, Stack, Divider, Container, CircularProgress, Alert } from '@mui/material';
-import { EditorContext } from 'contexts/editorContext';
+import { QueryContext } from 'contexts/queryContext';
+import { VisualizationContext } from 'contexts/visualizationContext';
+import { SaveContext } from 'contexts/saveContext';
 import { getDefaultQueries, getVisualizationOptionsForVisualizationType, resolveDimensions } from 'utils/editorHelpers';
 import EditorFilterSection from './EditorFilterSection';
 import EditorFooterSection from './EditorFooterSection';
@@ -68,21 +70,19 @@ export const Editor = () => {
 
     // statemanagement
     const {
-        cubeQuery,
-        query,
-        selectedVisualizationUserInput,
-        visualizationSettingsUserInput,
-        setQuery,
-        setCubeQuery,
-        setVisualizationSettingsUserInput,
-        setSelectedVisualizationUserInput,
-        defaultSelectables,
-        setDefaultSelectables,
-        loadedQueryId,
-        setLoadedQueryId,
-        loadedQueryIsDraft,
-        setLoadedQueryIsDraft
-    } = React.useContext(EditorContext);
+        cubeQuery, setCubeQuery,
+        query, setQuery,
+    } = React.useContext(QueryContext);
+    const {
+        selectedVisualizationUserInput, setSelectedVisualizationUserInput,
+        visualizationSettingsUserInput, setVisualizationSettingsUserInput,
+        defaultSelectables, setDefaultSelectables,
+    } = React.useContext(VisualizationContext);
+    const {
+        loadedQueryId, setLoadedQueryId,
+        loadedQueryIsDraft, setLoadedQueryIsDraft,
+        setPublicationWebhookEnabled,
+    } = React.useContext(SaveContext);
 
     const { setTablePath } = useNavigationContext();
 
@@ -140,29 +140,37 @@ export const Editor = () => {
         if (query != null) {
             return query;
         }
-        else if (dimensions != null) {
-            return getDefaultQueries(dimensions);
+        else if (cubeMetaResponse.data == null) {
+            return null;
         }
         else {
-            return null;
+            return getDefaultQueries(dimensions);
         }
     }, [query, cubeMetaResponse.data]);
 
     const editorContentsResponse = useEditorContentsQuery(path, modifiedQuery, cubeQuery);
+
+    // Update publication enabled state when editor contents are loaded
+    useEffect(() => {
+        if (editorContentsResponse.data?.publicationWebhookEnabled !== undefined) {
+            setPublicationWebhookEnabled(editorContentsResponse.data.publicationWebhookEnabled);
+        }
+    }, [editorContentsResponse.data?.publicationWebhookEnabled, setPublicationWebhookEnabled]);
+
     const resolvedDimensionCodesResponse = useResolveDimensionFiltersQuery(path, modifiedQuery);
     const resolvedDimensionCodes = React.useMemo(() => {
         if (resolvedDimensionCodesResponse.data != null) {
             return resolvedDimensionCodesResponse.data;
         }
-        else if (dimensions != null) {
+        else if (cubeMetaResponse.data == null) {
+            return {};
+        }
+        else {
             const dimCodesNoVals = {}
             dimensions.forEach(v => {
                 dimCodesNoVals[v.code] = [];
             })
             return dimCodesNoVals;
-        }
-        else {
-            return {};
         }
     }, [resolvedDimensionCodesResponse, cubeMetaResponse.data]);
     const resolvedDimensions = React.useMemo(() => {

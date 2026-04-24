@@ -3,7 +3,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { IVisualizationSettingsProps } from '../VisualizationSettingsControl';
 import styled from 'styled-components';
-import { EditorContext } from '../../../contexts/editorContext';
+import { VisualizationContext } from '../../../contexts/visualizationContext';
 
 const FormControlWrapper = styled(Stack)`
     gap: 40px;
@@ -19,7 +19,7 @@ export const MarkerScaler: React.FC<IVisualizationSettingsProps> = ({ visualizat
     const { t } = useTranslation();
     // We dont want to trigger the api call every time the slider moves, only when the change is committed.
     const [sliderValue, setSliderValue] = React.useState(visualizationSettings.markerSize);
-    const { setVisualizationSettingsUserInput } = React.useContext(EditorContext);
+    const { setVisualizationSettingsUserInput } = React.useContext(VisualizationContext);
 
     const marks = [
         {

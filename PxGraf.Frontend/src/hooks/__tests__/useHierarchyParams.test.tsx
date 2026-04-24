@@ -13,6 +13,7 @@ const createMockLocation = (query: string): Location => ({
     key: null,
     pathname: '/',
     hash: '',
+    unstable_mask: null,
 });
 
 describe('useHierarchyParams hook', () => {
@@ -47,5 +48,27 @@ describe('useHierarchyParams hook', () => {
         const resultValue = renderResult.result.current;
 
         expect(resultValue).toEqual(['testDb', 'testTable']);
+    });
+
+    it('should return array with empty string for empty tablePath value', () => {
+        const mockLocation = createMockLocation('?tablePath=');
+
+        (useLocation as jest.Mock).mockReturnValueOnce(mockLocation);
+
+        const renderResult = renderHook(() => useHierarchyParams());
+        const resultValue = renderResult.result.current;
+
+        expect(resultValue).toEqual(['']);
+    });
+
+    it('should return single-element array for tablePath without commas', () => {
+        const mockLocation = createMockLocation('?tablePath=singleTable');
+
+        (useLocation as jest.Mock).mockReturnValueOnce(mockLocation);
+
+        const renderResult = renderHook(() => useHierarchyParams());
+        const resultValue = renderResult.result.current;
+
+        expect(resultValue).toEqual(['singleTable']);
     });
 });

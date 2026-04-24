@@ -1,5 +1,5 @@
 /* istanbul ignore file */
-
+import { MultiLanguageString } from "types/multiLanguageString";
 /* Query - dimension queries*/
 
 /**
@@ -40,11 +40,6 @@ export interface IValueFilter {
     query?: string[] | string | number
 }
 
-/**
- * Type for string supporting multiple languages.
- */
-type MultiLanguageString = { [key: string]: string };
-
 /* CubeQuery - meta data editions*/
 
 /**
@@ -73,7 +68,7 @@ export interface IDimensionEditions {
  * @property {IContentComponentEdition} contentComponent - The content component edition containing source and unit.
   */
 export interface IDimensionValueEditions {
-    nameEdit? : MultiLanguageString;
+    nameEdit?: MultiLanguageString;
     contentComponent? : IContentComponentEdition;
 }
 
@@ -83,8 +78,8 @@ export interface IDimensionValueEditions {
  * @property {MultiLanguageString} unitEdit - Edition of the unit.
  */
 interface IContentComponentEdition {
-    sourceEdit? : MultiLanguageString;
-    unitEdit? : MultiLanguageString;
+    sourceEdit?: MultiLanguageString;
+    unitEdit?: MultiLanguageString;
 }
 
 /**
@@ -101,6 +96,6 @@ export interface IQueryInfo {
     sizeWarningLimit: number;
     maximumSupportedSize: number;
     validVisualizations: string[];
-    visualizationRejectionReasons: {[key: string]: MultiLanguageString};
+    visualizationRejectionReasons: { [key: string]: MultiLanguageString };
     maximumHeaderLength: number;
 }

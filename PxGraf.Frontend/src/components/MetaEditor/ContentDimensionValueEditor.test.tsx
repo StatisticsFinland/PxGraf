@@ -6,18 +6,6 @@ import { IDimensionValueEditions } from 'types/query';
 import ContentDimensionValueEditor from './ContentDimensionValueEditor';
 import UiLanguageContext from 'contexts/uiLanguageContext';
 
-jest.mock('react-i18next', () => ({
-    ...jest.requireActual('react-i18next'),
-    useTranslation: () => {
-        return {
-            t: (str: string) => str,
-            i18n: {
-                changeLanguage: () => new Promise(() => null),
-            },
-        };
-    },
-}));
-
 const setLanguage = jest.fn();
 const language = 'fi';
 const setLanguageTab = jest.fn();

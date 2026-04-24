@@ -13,7 +13,7 @@ import { ISortableTableListItem } from 'types/tableListItems';
 export const sortDatabaseItems = <T extends ISortableTableListItem>(data: T[], primaryLanguage: string): T[] => {
     return [...data].sort((a, b) => {
         const textA = a.name[primaryLanguage] || a.name[a.languages[0]];
-        const textB = b.name[primaryLanguage] || b.name[a.languages[0]];
+        const textB = b.name[primaryLanguage] || b.name[b.languages[0]];
 
         return textA.localeCompare(textB, primaryLanguage);
     });
@@ -39,7 +39,7 @@ export const sortedDimensions = (dimensions: IDimension[]): IDimension[] => {
         else if (dimension.type === EDimensionType.Time) {
             timeDimensions.push(dimension);
         }
-        else if (dimension.values.filter(vv => getValueIsSumValue(vv, dimension)).length > 0) {
+        else if (dimension.values.some(vv => getValueIsSumValue(vv, dimension))) {
             eliminationDimensions.push(dimension);
         }
         else if (dimension.values.length === 1) {
@@ -54,10 +54,7 @@ export const sortedDimensions = (dimensions: IDimension[]): IDimension[] => {
     if (contentDimension) {
         sortedDimensions.push(contentDimension);
     }
-    sortedDimensions.push(...timeDimensions);
-    sortedDimensions.push(...otherDimensions);
-    sortedDimensions.push(...eliminationDimensions);
-    sortedDimensions.push(...singleValueDimensions);
+    sortedDimensions.push(...timeDimensions, ...otherDimensions, ...eliminationDimensions, ...singleValueDimensions);
 
     return sortedDimensions;
 }

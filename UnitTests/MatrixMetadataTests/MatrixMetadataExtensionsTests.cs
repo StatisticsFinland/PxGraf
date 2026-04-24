@@ -1,4 +1,4 @@
-﻿#nullable enable
+#nullable enable
 using NUnit.Framework;
 using Px.Utils.Language;
 using Px.Utils.Models.Metadata;
@@ -212,6 +212,145 @@ namespace UnitTests.MatrixMetadataTests
 
             // Assert
             Assert.That(result, Is.Null);
+        }
+
+        [Test]
+        public void AssignLanguageToSingleLangPropertiesConvertsStringPropertiesToMultilanguageAtTableLevel()
+        {
+            // Arrange
+            MatrixMetadata meta = TestDataCubeBuilder.BuildTestMeta(_metaParams);
+            meta.AdditionalProperties.Add("TEST_KEY", new StringProperty("TestValue"));
+
+            // Act
+            meta.AssignLanguageToSingleLangProperties(["TEST_KEY"]);
+
+            // Assert
+            Assert.That(meta.AdditionalProperties.ContainsKey("TEST_KEY"));
+            Assert.That(meta.AdditionalProperties["TEST_KEY"], Is.TypeOf<MultilanguageStringProperty>());
+            MultilanguageStringProperty mlsProp = (MultilanguageStringProperty)meta.AdditionalProperties["TEST_KEY"];
+            Assert.That(mlsProp.Value["fi"], Is.EqualTo("TestValue"));
+        }
+
+        [Test]
+        public void AssignLanguageToSingleLangPropertiesConvertsStringPropertiesToMultilanguageAtDimensionLevel()
+        {
+            // Arrange
+            MatrixMetadata meta = TestDataCubeBuilder.BuildTestMeta(_metaParams);
+            meta.Dimensions[0].AdditionalProperties.Add("DIM_TEST_KEY", new StringProperty("DimTestValue"));
+
+            // Act
+            meta.AssignLanguageToSingleLangProperties(["DIM_TEST_KEY"]);
+
+            // Assert
+            Assert.That(meta.Dimensions[0].AdditionalProperties.ContainsKey("DIM_TEST_KEY"));
+            Assert.That(meta.Dimensions[0].AdditionalProperties["DIM_TEST_KEY"], Is.TypeOf<MultilanguageStringProperty>());
+            MultilanguageStringProperty mlsProp = (MultilanguageStringProperty)meta.Dimensions[0].AdditionalProperties["DIM_TEST_KEY"];
+            Assert.That(mlsProp.Value["fi"], Is.EqualTo("DimTestValue"));
+        }
+
+        [Test]
+        public void AssignLanguageToSingleLangPropertiesConvertsStringPropertiesToMultilanguageAtDimensionValueLevel()
+        {
+            // Arrange
+            MatrixMetadata meta = TestDataCubeBuilder.BuildTestMeta(_metaParams);
+            meta.Dimensions[0].Values[0].AdditionalProperties.Add("VALUE_TEST_KEY", new StringProperty("ValueTestValue"));
+
+            // Act
+            meta.AssignLanguageToSingleLangProperties(["VALUE_TEST_KEY"]);
+
+            // Assert
+            Assert.That(meta.Dimensions[0].Values[0].AdditionalProperties.ContainsKey("VALUE_TEST_KEY"));
+            Assert.That(meta.Dimensions[0].Values[0].AdditionalProperties["VALUE_TEST_KEY"], Is.TypeOf<MultilanguageStringProperty>());
+            MultilanguageStringProperty mlsProp = (MultilanguageStringProperty)meta.Dimensions[0].Values[0].AdditionalProperties["VALUE_TEST_KEY"];
+            Assert.That(mlsProp.Value["fi"], Is.EqualTo("ValueTestValue"));
+        }
+
+        [Test]
+        public void AssignLanguageToSingleLangPropertiesHandlesMultipleKeys()
+        {
+            // Arrange
+            MatrixMetadata meta = TestDataCubeBuilder.BuildTestMeta(_metaParams);
+            meta.AdditionalProperties.Add("KEY1", new StringProperty("Value1"));
+            meta.AdditionalProperties.Add("KEY2", new StringProperty("Value2"));
+            meta.Dimensions[0].AdditionalProperties.Add("KEY1", new StringProperty("DimValue1"));
+
+            // Act
+            meta.AssignLanguageToSingleLangProperties(["KEY1", "KEY2"]);
+
+            // Assert
+            Assert.That(meta.AdditionalProperties["KEY1"], Is.TypeOf<MultilanguageStringProperty>());
+            Assert.That(meta.AdditionalProperties["KEY2"], Is.TypeOf<MultilanguageStringProperty>());
+            Assert.That(meta.Dimensions[0].AdditionalProperties["KEY1"], Is.TypeOf<MultilanguageStringProperty>());
+            
+            MultilanguageStringProperty tableProp1 = (MultilanguageStringProperty)meta.AdditionalProperties["KEY1"];
+            MultilanguageStringProperty tableProp2 = (MultilanguageStringProperty)meta.AdditionalProperties["KEY2"];
+            MultilanguageStringProperty dimProp1 = (MultilanguageStringProperty)meta.Dimensions[0].AdditionalProperties["KEY1"];
+            
+            Assert.That(tableProp1.Value["fi"], Is.EqualTo("Value1"));
+            Assert.That(tableProp2.Value["fi"], Is.EqualTo("Value2"));
+            Assert.That(dimProp1.Value["fi"], Is.EqualTo("DimValue1"));
+        }
+
+        [Test]
+        public void AssignLanguageToSingleLangPropertiesDoesNotModifyNonMatchingKeys()
+        {
+            // Arrange
+            MatrixMetadata meta = TestDataCubeBuilder.BuildTestMeta(_metaParams);
+            meta.AdditionalProperties.Add("TARGET_KEY", new StringProperty("TargetValue"));
+            meta.AdditionalProperties.Add("OTHER_KEY", new StringProperty("OtherValue"));
+
+            // Act
+            meta.AssignLanguageToSingleLangProperties(["TARGET_KEY"]);
+
+            // Assert
+            Assert.That(meta.AdditionalProperties["TARGET_KEY"], Is.TypeOf<MultilanguageStringProperty>());
+            Assert.That(meta.AdditionalProperties["OTHER_KEY"], Is.TypeOf<StringProperty>());
+        }
+
+        [Test]
+        public void AssignLanguageToSingleLangPropertiesHandlesEmptyKeysList()
+        {
+            // Arrange
+            MatrixMetadata meta = TestDataCubeBuilder.BuildTestMeta(_metaParams);
+            meta.AdditionalProperties.Add("TEST_KEY", new StringProperty("TestValue"));
+
+            // Act
+            meta.AssignLanguageToSingleLangProperties([]);
+
+            // Assert
+            Assert.That(meta.AdditionalProperties["TEST_KEY"], Is.TypeOf<StringProperty>());
+        }
+
+        [Test]
+        public void AssignLanguageToSingleLangPropertiesHandlesNonExistentKeys()
+        {
+            // Arrange
+            MatrixMetadata meta = TestDataCubeBuilder.BuildTestMeta(_metaParams);
+
+            // Act & Assert - Should not throw
+            Assert.DoesNotThrow(() => meta.AssignLanguageToSingleLangProperties(["NON_EXISTENT_KEY"]));
+        }
+
+        [Test]
+        public void AssignLanguageToSingleLangPropertiesLeavesMultilanguagePropertiesUnchanged()
+        {
+            // Arrange
+            MatrixMetadata meta = TestDataCubeBuilder.BuildTestMeta(_metaParams);
+            Dictionary<string, string> translations = new()
+            {
+                { "fi", "TestFi" },
+                { "en", "TestEn" }
+            };
+            meta.AdditionalProperties.Add("TEST_KEY", new MultilanguageStringProperty(new MultilanguageString(translations)));
+
+            // Act
+            meta.AssignLanguageToSingleLangProperties(["TEST_KEY"]);
+
+            // Assert
+            Assert.That(meta.AdditionalProperties["TEST_KEY"], Is.TypeOf<MultilanguageStringProperty>());
+            MultilanguageStringProperty mlsProp = (MultilanguageStringProperty)meta.AdditionalProperties["TEST_KEY"];
+            Assert.That(mlsProp.Value["fi"], Is.EqualTo("TestFi"));
+            Assert.That(mlsProp.Value["en"], Is.EqualTo("TestEn"));
         }
     }
 }

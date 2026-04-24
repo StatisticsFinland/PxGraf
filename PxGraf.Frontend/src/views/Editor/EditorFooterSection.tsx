@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Button } from '@mui/material';
 import SaveIcon from '@mui/icons-material/Save';
-import { EditorContext } from 'contexts/editorContext';
+import { SaveContext } from 'contexts/saveContext';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import InfoBubble from 'components/InfoBubble/InfoBubble';
@@ -17,7 +17,7 @@ const FooterBtnWrapper = styled(Box)`
 
 export const EditorFooterSection: React.FC = () => {
     
-    const { setSaveDialogOpen } = React.useContext(EditorContext);
+    const { setSaveDialogOpen } = React.useContext(SaveContext);
     
     const { t } = useTranslation();
     

@@ -1,4 +1,4 @@
-﻿#nullable enable
+#nullable enable
 using Px.Utils.Language;
 using Px.Utils.Models.Metadata.Dimensions;
 using Px.Utils.Models.Metadata.Enums;
@@ -6,6 +6,7 @@ using Px.Utils.Models.Metadata.ExtensionMethods;
 using Px.Utils.Models.Metadata.MetaProperties;
 using Px.Utils.Models.Metadata;
 using PxGraf.Models.Queries;
+using PxGraf.Utility;
 using System.Collections.Generic;
 using System.Linq;
 using System;
@@ -122,13 +123,53 @@ namespace PxGraf.Models.Metadata
         /// </summary>
         /// <param name="meta">Metadata object to be searched.</param>
         /// <param name="propertyKey">Key of the property to be searched.</param>
-        /// <returns>Property value as a <see cref="MultilanguageString"/> object if it exists, otherwise null.</returns>
+        /// <returns>PublicationPropertyType value as a <see cref="MultilanguageString"/> object if it exists, otherwise null.</returns>
         public static MultilanguageString? GetMatrixMultilanguageProperty(this IReadOnlyMatrixMetadata meta, string propertyKey)
         {
             if (meta.AdditionalProperties.TryGetValue(propertyKey, out MetaProperty? prop) &&
                 prop is MultilanguageStringProperty mlsProp) return mlsProp.Value;
 
             return null;
+        }
+
+        /// <summary>
+        /// Assigns appropriate language properties to single-language metadata properties.
+        /// </summary>
+        /// <param name="meta">The matrix metadata to assign language properties to.</param>
+        /// <param name="keys">List of property keys to process.</param>
+        public static void AssignLanguageToSingleLangProperties(this MatrixMetadata meta, List<string> keys)
+        {
+            // Table level
+            AssignLanguagePropertiesAtLevel(meta.AdditionalProperties, keys, meta.DefaultLanguage);
+
+            foreach (Dimension dim in meta.Dimensions)
+            {
+                // Dimension level
+                AssignLanguagePropertiesAtLevel(dim.AdditionalProperties, keys, meta.DefaultLanguage);
+
+                // Dimension value level
+                foreach (DimensionValue val in dim.Values)
+                {
+                    AssignLanguagePropertiesAtLevel(val.AdditionalProperties, keys, meta.DefaultLanguage);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Helper method to assign language properties at a specific metadata level.
+        /// </summary>
+        /// <param name="properties">The properties dictionary to process.</param>
+        /// <param name="keys">List of property keys to process.</param>
+        /// <param name="defaultLanguage">The default language to use.</param>
+        private static void AssignLanguagePropertiesAtLevel(Dictionary<string, MetaProperty> properties, List<string> keys, string defaultLanguage)
+        {
+            foreach (string key in keys)
+            {
+                if (properties.TryGetValue(key, out MetaProperty? prop))
+                {
+                    properties[key] = prop.AsMultiLanguageProperty(defaultLanguage);
+                }
+            }
         }
 
     }

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using PxGraf.Models.Responses;
 using System.Reflection;
 
 namespace PxGraf.Controllers
@@ -16,7 +17,7 @@ namespace PxGraf.Controllers
     /// <param name="logger"><see cref="ILogger"/> instance used for logging API calls.</param>
     [ApiController]
     [Route("api/info")]
-    [ProducesResponseType<int>(StatusCodes.Status200OK)]
+    [ProducesResponseType<InfoResponse>(StatusCodes.Status200OK)]
     public class InfoController(IWebHostEnvironment env, ILogger<InfoController> logger) : ControllerBase
     {
         private readonly string _name = env.ApplicationName;
@@ -33,12 +34,7 @@ namespace PxGraf.Controllers
         public IActionResult Get()
         {
             _logger.LogDebug("api/info: API info requested: Name: {Name}, Environment: {Environment}, Version: {Version}", _name, _environment, _version);
-            return Ok(new
-            {
-                Name = _name,
-                Environment = _environment,
-                Version = _version
-            });
+            return Ok(new InfoResponse(_name, _environment, _version));
         }
     }
 }

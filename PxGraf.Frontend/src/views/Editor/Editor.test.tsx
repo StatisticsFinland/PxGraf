@@ -1,5 +1,6 @@
 import React from 'react';
 import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { ICubeMetaResult } from "api/services/cube-meta";
 import { IFilterDimensionResult } from "api/services/filter-dimension";
 import { ISaveQueryResult } from "api/services/queries";
@@ -11,15 +12,19 @@ import { EVariableType, ETimeVariableInterval, EVisualizationType } from "@stati
 import serializer from "../../testUtils/stripHighchartsHashes";
 import { NavigationProvider } from "contexts/navigationContext";
 import { IValidateTableMetaDataResult } from "api/services/validate-table-metadata";
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { UiLanguageContext } from "contexts/uiLanguageContext";
 import '@testing-library/jest-dom';
 import { IVisualizationOptions } from '../../types/editorContentsResponse';
 import { VisualizationType } from '../../types/visualizationType';
 import { IEditorContentsResult } from '../../api/services/editor-contents';
-import { EditorContext } from '../../contexts/editorContext';
+import { QueryContext } from '../../contexts/queryContext';
+import { VisualizationContext } from '../../contexts/visualizationContext';
+import { SaveContext } from '../../contexts/saveContext';
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+    defaultOptions: { queries: { retry: false } },
+});
 const language = "fi";
 const setLanguage = jest.fn();
 const languageTab = "fi";
@@ -27,6 +32,10 @@ const setLanguageTab = jest.fn();
 const availableUiLanguages = ["fi", "sv", "en"];
 const uiContentLanguage = "fi";
 const setUiContentLanguage = jest.fn();
+
+afterEach(() => {
+    queryClient.clear();
+});
 
 jest.mock('react-router-dom', () => ({
     ...jest.requireActual('react-router-dom'),
@@ -41,18 +50,6 @@ jest.mock('envVars', () => ({
     PxGrafUrl: 'pxGrafUrl.fi/',
     PublicUrl: 'publicUrl.fi/',
     BasePath: ''
-}));
-
-jest.mock('react-i18next', () => ({
-    ...jest.requireActual('react-i18next'),
-    useTranslation: () => {
-        return {
-            t: (str: string) => str,
-            i18n: {
-                changeLanguage: () => new Promise(() => ({})),
-            },
-        };
-    },
 }));
 
 jest.mock('api/services/cube-meta', () => ({
@@ -90,7 +87,7 @@ jest.mock('@statisticsfinland/pxvisualizer', () => {
         Chart: (...args: any[]) => {
             return (
                 <pre data-testid={'Chart'}>
-                   args={JSON.stringify(args)}
+                    args={JSON.stringify(args)}
                 </pre>
             );
         }
@@ -108,7 +105,7 @@ const mockVisualizationResult: IVisualizationResult = {
     isLoading: false,
     isError: false,
     data: {
-        data: [ 1, 2, 3, 4 ],
+        data: [1, 2, 3, 4],
         missingDataInfo: {},
         dataNotes: [],
         rowVariableCodes: ["foobar2"],
@@ -147,8 +144,8 @@ const mockVisualizationResult: IVisualizationResult = {
                     source: { fi: "sourcefi2", sv: "sourcesv2", en: "sourceen2" },
                     numberOfDecimals: 0,
                     lastUpdated: "2021-01-01T00:00:00Z"
-                }
-            }],
+                    }
+                }],
         }, {
             code: "foobar2",
             name: { fi: "foo2", sv: "bar2", en: "foobar2" },
@@ -165,42 +162,43 @@ const mockVisualizationResult: IVisualizationResult = {
                 name: { fi: "fyy2", sv: "bör2", en: "fyybör2" },
                 note: { fi: "fuu2", sv: "baar2", en: "fuubaar2" },
                 isSum: false,
-                contentComponent: null,
+                    contentComponent: null,
+                    }],
             }],
-        }],
-        tableReference: { hierarchy: ["foo", "bar"], name:  "foobar_table" },
+        tableReference: { hierarchy: ["foo", "bar"], name: "foobar_table" },
     },
 }
 
 const mockSaveQueryResult: ISaveQueryResult = {
-    isLoading: false,
+    isPending: false,
     isError: false,
     isSuccess: true,
     data: {
-        id: 'id'
+        id: 'id',
+        publicationStatus: 0
     },
     mutate: jest.fn()
 }
 
 const mockVisualizationSettingsResult: IVisualizationOptions = {
-        type: VisualizationType.HorizontalBarChart,
-        allowManualPivot: false,
-        allowMultiselect: false,
-        sortingOptions: {
-            default: [
-                {
-                    code: 'DESCENDING',
-                    description: {
-                        'fi': 'Laskeva'
-                    }
+    type: VisualizationType.HorizontalBarChart,
+    allowManualPivot: false,
+    allowMultiselect: false,
+    sortingOptions: {
+        default: [
+            {
+                code: 'DESCENDING',
+                description: {
+                    'fi': 'Laskeva'
                 }
-            ],
-            pivoted: []
-        },
-        allowShowingDataPoints: true,
-        allowCuttingYAxis: true,
-        allowMatchXLabelsToEnd: true,
-        allowSetMarkerScale: true
+            }
+        ],
+        pivoted: []
+    },
+    allowShowingDataPoints: true,
+    allowCuttingYAxis: true,
+    allowMatchXLabelsToEnd: true,
+    allowSetMarkerScale: true
 }
 
 const mockFilterDimensionResult: IFilterDimensionResult = {
@@ -228,10 +226,11 @@ const mockEditorContentsResult: IEditorContentsResult = {
         headerText: {
             'fi': 'header'
         },
+        publicationWebhookEnabled: true
     }
 }
 
-const mockCubeMetaResult: ICubeMetaResult = {
+const initialMockCubeMetaResult: ICubeMetaResult = {
     isLoading: false,
     isError: false,
     data: {
@@ -260,6 +259,8 @@ const mockCubeMetaResult: ICubeMetaResult = {
         ]
     }
 }
+
+let mockCubeMetaResult: ICubeMetaResult;
 
 const mockTableValidationResult: IValidateTableMetaDataResult = {
     isLoading: false,
@@ -337,10 +338,14 @@ jest.mock('api/services/validate-table-metadata', () => ({
     useValidateTableMetadataQuery: () => mockResult,
 }));
 
+beforeEach(() => {
+    mockCubeMetaResult = structuredClone(initialMockCubeMetaResult);
+    mockResult = mockTableValidationResult;
+});
+
 describe('Rendering test', () => {
     beforeAll(() => {
         expect.addSnapshotSerializer(serializer);
-        mockResult = mockTableValidationResult;
     });
 
     it('renders correctly', () => {
@@ -373,7 +378,7 @@ describe('Rendering test', () => {
             </QueryClientProvider>
         );
         expect(asFragment()).toMatchSnapshot();
-    
+
     });
 });
 
@@ -415,73 +420,48 @@ describe('Assertion tests', () => {
     });
 
     it('loads query data from location state', () => {
-        mockResult = mockTableValidationResult;
-        mockCubeMetaResult.isLoading = false;
-        mockCubeMetaResult.isError = false;
-        mockCubeMetaResult.data = {
-            defaultLanguage: 'fi',
-            availableLanguages: ['fi'],
-            additionalProperties: {},
-            dimensions: [
-                {
-                    code: 'code',
-                    name: {
-                        'fi': 'variableName'
-                    },
-                    type: EDimensionType.Content,
-                    values: [
-                        {
-                            code: 'variableValueCode',
-                            name: {
-                                'fi': 'variableValueName'
-                            },
-                            isVirtual: false,
-                            additionalProperties: {},
-                        }
-                    ],
-                    additionalProperties: {}
-                }
-            ]
-        };
-
         const setSelectedVisualizationUserInput = jest.fn();
         const setLoadedQueryId = jest.fn();
         const setLoadedQueryIsDraft = jest.fn();
-        const originalUseContext = React.useContext;
 
-        const mockEditorContext = {
+        const mockQueryContext = {
             cubeQuery: { variableQueries: {} },
             setCubeQuery: jest.fn(),
             query: null,
             setQuery: jest.fn(),
-            saveDialogOpen: false,
-            setSaveDialogOpen: jest.fn(),
+        };
+
+        const mockVisualizationContext = {
             selectedVisualizationUserInput: null,
             setSelectedVisualizationUserInput,
             visualizationSettingsUserInput: null,
             setVisualizationSettingsUserInput: jest.fn(),
             defaultSelectables: null,
             setDefaultSelectables: jest.fn(),
+        };
+
+        const mockSaveContext = {
+            saveDialogOpen: false,
+            setSaveDialogOpen: jest.fn(),
             loadedQueryId: '',
             setLoadedQueryId,
             loadedQueryIsDraft: false,
-            setLoadedQueryIsDraft
+            setLoadedQueryIsDraft,
+            publicationWebhookEnabled: true,
+            setPublicationWebhookEnabled: jest.fn(),
         };
-
-        // Mock useContext to return the mockEditorContext for EditorContext
-        jest.spyOn(React, 'useContext').mockImplementation(context => {
-            if (context === EditorContext) {
-                return mockEditorContext;
-            }
-            // Return the original context for other contexts
-            return originalUseContext(context);
-        });
 
         render(
             <QueryClientProvider client={queryClient}>
                 <NavigationProvider>
                     <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
-                        <Editor />
+                        <QueryContext.Provider value={mockQueryContext}>
+                            <VisualizationContext.Provider value={mockVisualizationContext}>
+                                <SaveContext.Provider value={mockSaveContext}>
+                                    <Editor />
+                                </SaveContext.Provider>
+                            </VisualizationContext.Provider>
+                        </QueryContext.Provider>
                     </UiLanguageContext.Provider>
                 </NavigationProvider>
             </QueryClientProvider>
@@ -490,7 +470,142 @@ describe('Assertion tests', () => {
         expect(setLoadedQueryId).toHaveBeenCalledWith('test-query-id');
         expect(setLoadedQueryIsDraft).toHaveBeenCalledWith(true);
         expect(setSelectedVisualizationUserInput).toHaveBeenCalledWith(EVisualizationType.HorizontalBarChart);
+    });
 
-        jest.restoreAllMocks();
+    it('calls setPublicationWebhookEnabled when editorContentsResponse has publicationWebhookEnabled property', () => {
+        const setPublicationWebhookEnabled = jest.fn();
+
+        const mockQueryContext = {
+            cubeQuery: { variableQueries: {} },
+            setCubeQuery: jest.fn(),
+            query: null,
+            setQuery: jest.fn(),
+        };
+
+        const mockVisualizationContext = {
+            selectedVisualizationUserInput: null,
+            setSelectedVisualizationUserInput: jest.fn(),
+            visualizationSettingsUserInput: null,
+            setVisualizationSettingsUserInput: jest.fn(),
+            defaultSelectables: null,
+            setDefaultSelectables: jest.fn(),
+        };
+
+        const mockSaveContext = {
+            saveDialogOpen: false,
+            setSaveDialogOpen: jest.fn(),
+            loadedQueryId: '',
+            setLoadedQueryId: jest.fn(),
+            loadedQueryIsDraft: false,
+            setLoadedQueryIsDraft: jest.fn(),
+            publicationWebhookEnabled: true,
+            setPublicationWebhookEnabled,
+        };
+
+        render(
+            <QueryClientProvider client={queryClient}>
+                <NavigationProvider>
+                    <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
+                        <QueryContext.Provider value={mockQueryContext}>
+                            <VisualizationContext.Provider value={mockVisualizationContext}>
+                                <SaveContext.Provider value={mockSaveContext}>
+                                    <Editor />
+                                </SaveContext.Provider>
+                            </VisualizationContext.Provider>
+                        </QueryContext.Provider>
+                    </UiLanguageContext.Provider>
+                </NavigationProvider>
+            </QueryClientProvider>
+        );
+
+        // Verify that setPublicationWebhookEnabled was called with true (from the mocked API response)
+        expect(setPublicationWebhookEnabled).toHaveBeenCalledWith(true);
+    });
+
+    it('renders a loading spinner when cubeMetaResponse is loading', () => {
+        mockCubeMetaResult.data = null;
+        mockCubeMetaResult.isLoading = true;
+        render(
+            <QueryClientProvider client={queryClient}>
+                <NavigationProvider>
+                    <HashRouter>
+                        <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
+                            <Editor />
+                        </UiLanguageContext.Provider>
+                    </HashRouter>
+                </NavigationProvider>
+            </QueryClientProvider>
+        );
+        expect(screen.getByRole('progressbar')).toBeInTheDocument();
+    });
+
+    it('renders an error alert when cubeMetaResponse has an error', () => {
+        mockCubeMetaResult.data = null;
+        mockCubeMetaResult.isLoading = false;
+        mockCubeMetaResult.isError = true;
+        render(
+            <QueryClientProvider client={queryClient}>
+                <NavigationProvider>
+                    <HashRouter>
+                        <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
+                            <Editor />
+                        </UiLanguageContext.Provider>
+                    </HashRouter>
+                </NavigationProvider>
+            </QueryClientProvider>
+        );
+        expect(screen.getByRole('alert')).toBeInTheDocument();
+        expect(screen.getByText('error.contentLoad')).toBeInTheDocument();
+    });
+
+    it('displays dimension name when data is loaded successfully', () => {
+        render(
+            <QueryClientProvider client={queryClient}>
+                <NavigationProvider>
+                    <HashRouter>
+                        <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
+                            <Editor />
+                        </UiLanguageContext.Provider>
+                    </HashRouter>
+                </NavigationProvider>
+            </QueryClientProvider>
+        );
+        expect(screen.getByText('variableName')).toBeInTheDocument();
+    });
+
+    it('renders the chart type selector with available visualization type', () => {
+        render(
+            <QueryClientProvider client={queryClient}>
+                <NavigationProvider>
+                    <HashRouter>
+                        <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
+                            <Editor />
+                        </UiLanguageContext.Provider>
+                    </HashRouter>
+                </NavigationProvider>
+            </QueryClientProvider>
+        );
+        // The mock editor contents has HorizontalBarChart as the only option
+        expect(screen.getByText('chartTypes.HorizontalBarChart')).toBeInTheDocument();
+    });
+
+    it('shows chart rejection reason for unsupported chart type after opening dialog', async () => {
+        render(
+            <QueryClientProvider client={queryClient}>
+                <NavigationProvider>
+                    <HashRouter>
+                        <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
+                            <Editor />
+                        </UiLanguageContext.Provider>
+                    </HashRouter>
+                </NavigationProvider>
+            </QueryClientProvider>
+        );
+        // Click the button to open the rejection reasons dialog
+        const user = userEvent.setup();
+        const rejectionButton = screen.getByText('rejectionDialog.buttonText');
+        await user.click(rejectionButton);
+        // The mock has a rejection reason for pieChart: { fi: 'huono kaavio' }
+        expect(screen.getByText('huono kaavio')).toBeInTheDocument();
     });
 });

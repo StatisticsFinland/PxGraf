@@ -10,7 +10,8 @@ import { Chart, IQueryVisualizationResponse } from '@statisticsfinland/pxvisuali
 import useSelections from 'components/SelectableVariableMenus/hooks/useSelections';
 import InfoBubble from 'components/InfoBubble/InfoBubble';
 import { IVariable } from '../../types/visualizationResponse';
-import { EditorContext } from '../../contexts/editorContext';
+import { QueryContext } from '../../contexts/queryContext';
+import { VisualizationContext } from '../../contexts/visualizationContext';
 import UiLanguageContext from '../../contexts/uiLanguageContext';
 import { EDimensionType } from '../../types/cubeMeta';
 
@@ -100,7 +101,8 @@ export const getResolvedSelections = (selectables: ISelectabilityInfo[], selecti
 export const Preview: React.FC<IPreviewProps> = ({ path, query, selectedVisualization, visualizationSettings }) => {
     const { t } = useTranslation();
     const { languageTab } = React.useContext(UiLanguageContext);
-    const { cubeQuery, defaultSelectables } = React.useContext(EditorContext);
+    const { cubeQuery } = React.useContext(QueryContext);
+    const { defaultSelectables } = React.useContext(VisualizationContext);
     const { data, isLoading, isError } = useVisualizationQuery(path, query, cubeQuery, languageTab, selectedVisualization, visualizationSettings);
     const showVisualization = data && !isLoading && !isError;
     const { selections, setSelections } = useSelections();
@@ -146,7 +148,17 @@ export const Preview: React.FC<IPreviewProps> = ({ path, query, selectedVisualiz
                 selectables={selectables}
                 multiselectableDimensionCode={visualizationSettings?.multiselectableVariableCode}
             />
-            {showVisualization && <ChartWrapper className='tk-table' $previewSize={size}><Chart locale={languageTab} pxGraphData={data} selectedVariableCodes={resolvedSelections} /></ChartWrapper>}
+            {showVisualization &&
+                <ChartWrapper className='tk-table' $previewSize={size}>
+                    <Chart
+                        locale={languageTab}
+                        pxGraphData={data}
+                        selectedVariableCodes={resolvedSelections}
+                        showTableSources={true}
+                        showLastUpdated={true}
+                        showTableUnits={true}
+                    />
+                </ChartWrapper>}
         </>
     );
 }

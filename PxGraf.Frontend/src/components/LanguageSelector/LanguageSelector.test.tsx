@@ -4,18 +4,6 @@ import '@testing-library/jest-dom';
 import { LanguageSelector } from './LanguageSelector';
 import UiLanguageContext from 'contexts/uiLanguageContext';
 
-jest.mock('react-i18next', () => ({
-    ...jest.requireActual('react-i18next'),
-    useTranslation: () => {
-        return {
-            t: (str: string) => str,
-            i18n: {
-                changeLanguage: () => new Promise(() => null),
-            },
-        };
-    },
-}));
-
 const setLanguage = jest.fn();
 const language = 'fi';
 const setLanguageTab = jest.fn();
@@ -43,8 +31,8 @@ describe('Assertion tests', () => {
             </UiLanguageContext.Provider>
         );
         fireEvent.click(screen.getByText('FI'));
-        expect(setLanguage).toBeCalledTimes(1);
+        expect(setLanguage).toHaveBeenCalledTimes(1);
         fireEvent.click(screen.getByText('SV'));
-        expect(setLanguage).toBeCalledTimes(2);
+        expect(setLanguage).toHaveBeenCalledTimes(2);
     });
 });

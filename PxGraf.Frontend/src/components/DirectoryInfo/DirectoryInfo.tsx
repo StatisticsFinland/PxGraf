@@ -15,7 +15,7 @@ export const DirectoryInfo: React.FC<IDirectoryInfoProps> = ({ path, item }) => 
     const { language } = React.useContext(UiLanguageContext);
     const displayLanguage = item.languages.includes(language) ? language : item.languages[0];
 
-    const currentPath = [...path, item.code];
+    const currentPath = [path, item.code];
     return (
         <>
             <ListItemButton id="mainContent" component={Link} to={urls.tableList(currentPath)}>

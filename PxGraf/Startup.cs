@@ -5,7 +5,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.FeatureManagement;
-using Microsoft.OpenApi.Models;
 using NLog.Extensions.Logging;
 using PxGraf.Settings;
 using PxGraf.Utility;
@@ -16,12 +15,14 @@ using System.Net.Http;
 using System;
 using PxGraf.Datasource;
 using PxGraf.Datasource.Cache;
-using PxGraf.Models.Queries;
 using PxGraf.Datasource.FileDatasource;
 using PxGraf.Datasource.ApiDatasource;
-using PxGraf.Services;
 using System.Text;
+using PxGraf.Storage;
+using PxGraf.Services;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
+using Microsoft.OpenApi;
+using Microsoft.Extensions.Logging.ApplicationInsights;
 
 namespace PxGraf
 {
@@ -32,7 +33,7 @@ namespace PxGraf
 
         readonly string PxGrafAllowSpecificOrigins = "_pxGrafAllowSpecificOrigins";
         private readonly ILogger logger;
-        private const string swaggerDocName = "api";
+        private const string swaggerDocName = "openapi";
 
         private IHostEnvironment HostEnvironment { get; }
 
@@ -44,9 +45,9 @@ namespace PxGraf
             Configuration.Load(configuration);
             try
             {
-                Language.Localization.Load(Path.Combine(AppContext.BaseDirectory, "Pars/translations.json"));
+                Language.Localization.Load(Path.Combine(AppContext.BaseDirectory, "Pars", "translations.json"));
             }
-            catch(IOException ex)
+            catch (IOException ex)
             {
                 logger.LogCritical(ex, "A file system error occurred during startup");
             }
@@ -60,14 +61,31 @@ namespace PxGraf
         [SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "After evaluating the function and CORS permissions, we have deemed the warning to be unnecessary.")]
         public void ConfigureServices(IServiceCollection services)
         {
-#if !DEBUG
-            string aiConnectionString = Configuration.Current.ApplicationInsightsConnectionString;
-            ApplicationInsightsServiceOptions aiOptions = new()
+            // Configure Application Insights if connection string is available
+            ApplicationInsightsConfig aiConfig = Configuration.Current.ApplicationInsights;
+            if (aiConfig.IsEnabled)
             {
-                ConnectionString = aiConnectionString
-            };
-            services.AddApplicationInsightsTelemetry(aiOptions);
-#endif
+                ApplicationInsightsServiceOptions aiOptions = new()
+                {
+                    ConnectionString = aiConfig.ConnectionString,
+                    TracesPerSecond = aiConfig.TracesPerSecond
+                };
+                services.AddApplicationInsightsTelemetry(aiOptions);
+
+                // Remove the default Application Insights logger filter rule (Warning level)
+                // that is added by AddApplicationInsightsTelemetry, then allow the standard
+                // Logging configuration section to control the minimum log level.
+                services.Configure<LoggerFilterOptions>(options =>
+                {
+                    LoggerFilterRule defaultRule = options.Rules.FirstOrDefault(rule =>
+                        rule.ProviderName == nameof(ApplicationInsightsLoggerProvider));
+                    if (defaultRule is not null)
+                    {
+                        options.Rules.Remove(defaultRule);
+                    }
+                });
+            }
+
             services.AddFeatureManagement();
             services.AddResponseCaching();
             services.AddCors(options =>
@@ -114,44 +132,98 @@ namespace PxGraf
 
             services.AddSwaggerGen(c =>
             {
-                c.CustomSchemaIds(type => type.ToString());
-
-                c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
-                c.SwaggerDoc(swaggerDocName, new OpenApiInfo { Title = "PxGraf", Version = "v1" });
+                OpenApiInfo apiInfo = new()
+                {
+                    Title = "PxGraf",
+                    Version = "v1",
+                    Description = "API for creating and serving statistical visualizations from PX data sources."
+                };
+                c.SwaggerDoc(swaggerDocName, apiInfo);
                 try
                 {
                     c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "PxGraf.xml"));
                 }
-                catch(IOException ex)
+                catch (IOException ex)
                 {
                     logger.LogCritical(ex, "A file system error was encountered");
                 }
             });
 
             services.AddHttpClient(PXWEBCLIENTNAME).ConfigurePrimaryHttpMessageHandler(() =>
-                new HttpClientHandler
-                {
-                    UseDefaultCredentials = true
-                });
+            new HttpClientHandler
+            {
+                UseDefaultCredentials = true
+            });
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddSingleton<ISqFileInterface, SqFileInterface>();
             services.AddScoped<IAuditLogService, AuditLogService>();
+            services.AddScoped<IPublicationWebhookService, PublicationWebhookService>();
+            services.AddHttpClient<PublicationWebhookService>();
+            services.AddScoped<IHealthCheckService, HealthCheckService>();
             services.AddSingleton<IMultiStateMemoryTaskCache>(provider => new MultiStateMemoryTaskCache(
                 Configuration.Current.CacheOptions.Database.ItemAmountLimit,
                 TimeSpan.FromSeconds(Configuration.Current.CacheOptions.CacheFreshnessCheckIntervalSeconds)));
-            if (Configuration.Current.LocalFilesystemDatabaseConfig?.Enabled ?? false)
-            {
-                services.AddSingleton<IFileDatasource>(provider => new LocalFilesystemDatabase(
-                    Configuration.Current.LocalFilesystemDatabaseConfig ));
-                services.AddSingleton<ICachedDatasource, CachedFileDatasource>();
-            }
-            else
-            {
-                services.AddSingleton<IPxWebConnection, PxWebConnection>();
-                services.AddSingleton<IApiDatasource, PxWebV1ApiInterface>();
-                services.AddSingleton<ICachedDatasource, CachedApiDatasource>();
-            }
+
+            ConfigureDataSourceStorage(services);
+            ConfigureQueryFileStorage(services);
+
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+        }
+
+        private static void ConfigureDataSourceStorage(IServiceCollection services)
+        {
+            switch (Configuration.Current.DatabaseConfig)
+            {
+                case LocalFilesystemDatabaseConfig localConfig:
+                    LocalStorageProvider localDataProvider = new(localConfig.Encoding);
+                    services.AddSingleton<IFileDatasource>(provider => new FileDatasource(
+                        localDataProvider,
+                        localConfig.DatabaseRootPath));
+                    services.AddSingleton<ICachedDatasource, CachedFileDatasource>();
+                    break;
+                case BlobContainerDatabaseConfig blobConfig:
+                    BlobStorageProvider blobDataProvider = new(
+                        blobConfig.StorageAccountName,
+                        blobConfig.ContainerName,
+                        blobConfig.ManagedIdentityClientId);
+                    services.AddSingleton<IFileDatasource>(provider => new FileDatasource(
+                        blobDataProvider,
+                        blobConfig.RootPath));
+                    services.AddSingleton<ICachedDatasource, CachedFileDatasource>();
+                    break;
+                default:
+                    services.AddSingleton<IPxWebConnection, PxWebConnection>();
+                    services.AddSingleton<IApiDatasource, PxWebV1ApiInterface>();
+                    services.AddSingleton<ICachedDatasource, CachedApiDatasource>();
+                    break;
+            }
+        }
+
+        private static void ConfigureQueryFileStorage(IServiceCollection services)
+        {
+            switch (Configuration.Current.QueryStorageConfig)
+            {
+                case BlobQueryStorageConfig blobConfig:
+                    BlobStorageProvider blobQueryProvider = new(
+                        blobConfig.StorageAccountName,
+                        blobConfig.ContainerName,
+                        blobConfig.ManagedIdentityClientId);
+                    services.AddSingleton<ISqFileInterface>(provider => new SqFileInterface(
+                        blobQueryProvider,
+                        blobQueryProvider));
+                    break;
+                case LocalQueryStorageConfig:
+                    LocalStorageProvider localQueryProvider = new();
+                    services.AddSingleton<ISqFileInterface>(provider => new SqFileInterface(
+                        localQueryProvider,
+                        localQueryProvider));
+                    break;
+                default:
+                    LocalStorageProvider defaultQueryProvider = new();
+                    services.AddSingleton<ISqFileInterface>(provider => new SqFileInterface(
+                        defaultQueryProvider,
+                        defaultQueryProvider));
+                    break;
+            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -168,15 +240,14 @@ namespace PxGraf
                 app.UseDeveloperExceptionPage();
             }
 
-            // Swagger requires this seemingly redundant setup to work properly with a custom api route prefix.
             app.UseSwagger(c =>
             {
-                c.RouteTemplate = "{documentName}/swagger/swagger.json";
+                c.RouteTemplate = "{documentName}/document.json";
             });
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("swagger.json", "PxGraf");
-                c.RoutePrefix = $"{swaggerDocName}/swagger";
+                c.SwaggerEndpoint($"/{swaggerDocName}/document.json", "PxGraf");
+                c.RoutePrefix = swaggerDocName;
             });
 
             app.UseExceptionHandler("/api/error");

@@ -5,20 +5,7 @@ import { EMetaPropertyType, IDimension, EDimensionType } from 'types/cubeMeta';
 import { ICubeQuery, IDimensionEditions } from 'types/query';
 import DimensionEditor from './DimensionEditor';
 import UiLanguageContext from 'contexts/uiLanguageContext';
-import { EditorContext } from '../../contexts/editorContext';
-import { VisualizationType } from '../../types/visualizationType';
-
-jest.mock('react-i18next', () => ({
-    ...jest.requireActual('react-i18next'),
-    useTranslation: () => {
-        return {
-            t: (str: string) => str,
-            i18n: {
-                changeLanguage: () => new Promise(() => null),
-            },
-        };
-    },
-}));
+import { QueryContext } from '../../contexts/queryContext';
 
 const mockDimension: IDimension = {
     code: 'foo',
@@ -87,26 +74,14 @@ describe('Rendering test', () => {
     it('renders correctly', () => {
         const { asFragment } = render(
             <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
-                <EditorContext.Provider value={{
+                <QueryContext.Provider value={{
                     cubeQuery: mockCubeQuery,
                     setCubeQuery: jest.fn(),
                     query: {},
                     setQuery: jest.fn(),
-                    saveDialogOpen: false,
-                    setSaveDialogOpen: jest.fn(),
-                    selectedVisualizationUserInput: VisualizationType.VerticalBarChart,
-                    setSelectedVisualizationUserInput: jest.fn(),
-                    visualizationSettingsUserInput: {},
-                    setVisualizationSettingsUserInput: jest.fn(),
-                    defaultSelectables: {},
-                    setDefaultSelectables: jest.fn(),
-                    loadedQueryId: '',
-                    setLoadedQueryId: jest.fn(),
-                    loadedQueryIsDraft: false,
-                    setLoadedQueryIsDraft: jest.fn()
                 }}>
                     <DimensionEditor language={mockLang} dimension={mockDimension} />
-                </EditorContext.Provider>
+                </QueryContext.Provider>
             </UiLanguageContext.Provider>
         );
         expect(asFragment()).toMatchSnapshot();

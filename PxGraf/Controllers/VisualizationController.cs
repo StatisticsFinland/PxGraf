@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Px.Utils.Models.Data.DataValue;
 using Px.Utils.Models.Metadata.Enums;
@@ -57,6 +58,9 @@ namespace PxGraf.Controllers
         /// <param name="sqId">The id of the saved query</param>
         /// <returns><see cref="VisualizationResponse"/> object containing the properties of the visualization</returns>
         [HttpGet("{sqId}")]
+        [ProducesResponseType<VisualizationResponse>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<VisualizationResponse>> GetVisualization([FromRoute] string sqId)
         {
             Dictionary<string, object> logScope = new()
@@ -103,7 +107,7 @@ namespace PxGraf.Controllers
                     return BadRequest();
                 }
 
-                if (_sqFileInterface.SavedQueryExists(sqId, Configuration.Current.SavedQueryDirectory))
+                if (await _sqFileInterface.SavedQueryExists(sqId, Configuration.Current.SavedQueryDirectory))
                 {
                     _auditLogService.LogAuditEvent(
                         action: CONTROLLER_PATH,

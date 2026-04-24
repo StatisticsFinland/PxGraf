@@ -1,16 +1,22 @@
 /* istanbul ignore file */
 import ApiClient from "api/client";
-import { useMutation, useQuery, UseMutationResult } from "react-query";
+import { useMutation, useQuery, UseMutationResult } from "@tanstack/react-query";
 import { ICubeQuery, Query } from "types/query";
+import { EQueryPublicationStatus } from "types/saveQuery";
 import { IVisualizationSettings } from "types/visualizationSettings";
 import { buildCubeQuery, defaultQueryOptions } from "utils/ApiHelpers";
+import { MultiLanguageString } from "types/multiLanguageString";
 
 /**
  * Response object for saving a query.
  * @property {string} id - The id of the saved query.
+ * @property {EQueryPublicationStatus} publicationStatus - The publication status of the saved query.
+ * @property {MultiLanguageString} publicationMessage - Localized publication messages from webhook response.
  */
 export interface ISaveQueryResponse {
     id: string;
+    publicationStatus: EQueryPublicationStatus;
+    publicationMessage?: MultiLanguageString;
 }
 
 /**
@@ -45,14 +51,14 @@ export interface ISaveQueryMutationParams {
 
 /**
  * Interface for save query result
- * @property {boolean} isLoading - Flag to indicate if the data is still loading.
+ * @property {boolean} isPending - Flag to indicate if the mutation is pending.
  * @property {boolean} isError - Flag to indicate if an error occurred during loading.
  * @property {boolean} isSuccess - Flag to indicate if the request was successful.
  * @property {ISaveQueryResponse} data - The save query response data.
  * @property {function} mutate - Function to mutate the state of the query.
  */
 export interface ISaveQueryResult {
-    isLoading: boolean;
+    isPending: boolean;
     isError: boolean;
     isSuccess: boolean;
     data: ISaveQueryResponse;
@@ -107,11 +113,11 @@ export const fetchSavedQuery = async (queryId: string): Promise<IFetchSavedQuery
 };
 
 export const useFetchSavedQuery = (queryId: string): IFetchSavedQueryResult => {
-    return useQuery(
-        [queryId],
-        () => fetchSavedQuery(queryId),
-        defaultQueryOptions
-    );
+    return useQuery({
+        queryKey: [queryId],
+        queryFn: () => fetchSavedQuery(queryId),
+        ...defaultQueryOptions
+    });
 };
 
 export const useSaveMutation = (
@@ -122,8 +128,8 @@ export const useSaveMutation = (
     visualizationSettings: IVisualizationSettings,
     id: string
 ): UseMutationResult<ISaveQueryResponse, unknown, ISaveQueryMutationParams> => {
-    return useMutation(
-        (params: ISaveQueryMutationParams) => sendSaveRequest(
+    return useMutation({
+        mutationFn: (params: ISaveQueryMutationParams) => sendSaveRequest(
             idStack,
             query,
             metaEdits,
@@ -132,6 +138,6 @@ export const useSaveMutation = (
             params,
             id
         ),
-        { retry: false }
-    );
+        retry: false
+    });
 }
