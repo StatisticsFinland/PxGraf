@@ -1,0 +1,9 @@
+2026-04-24 13:48:53.3393 Info Registered target NLog.Targets.FileTarget(Name=own)
+2026-04-24 13:48:53.3402 Info Registered target NLog.Targets.FileTarget(Name=audit)
+2026-04-24 13:48:53.3450 Info NLog, Version=6.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 6.1.1.5033. Product version: 6.1.1+0e83056311dfcda0493d7db60b7191d0927eb5da. GlobalAssemblyCache: False
+2026-04-24 13:48:53.4096 Info Configuration initialized: TargetNames=audit, own, ConfigItems=50, AutoReload=true, FilePath=/Users/anne-siritronnes/repos/PX-fork/PxGraf/PxGraf/bin/Debug/net10.0/nlog.config
+2026-04-24 13:48:53.5128 Info LogFactory shutting down ...
+2026-04-24 13:48:53.5128 Info Closing old configuration.
+2026-04-24 13:48:53.5175 Info LogFactory shutdown completed.
+2026-04-24 13:48:53.5175 Info AppDomain Shutting down. LogFactory closing...
+2026-04-24 13:48:53.5175 Info LogFactory has been disposed.

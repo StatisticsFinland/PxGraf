@@ -11,6 +11,7 @@ using PxGraf.Models.SavedQueries;
 using PxGraf.Services;
 using PxGraf.Settings;
 using PxGraf.Utility;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -49,7 +50,7 @@ namespace PxGraf.Controllers
                 _logger.LogDebug("Query meta requested GET: api/sq/meta/");
                 if (await _sqFileInterface.SavedQueryExists(savedQueryId, Configuration.Current.SavedQueryDirectory))
                 {
-                    using (_logger.BeginScope(new Dictionary<string, object> { [LoggerConstants.SQ_ID] = savedQueryId }))
+                    using (_logger.BeginScope(new Dictionary<string, object> { [LoggerConstants.SQ_ID] = savedQueryId.Replace(Environment.NewLine, "") }))
                     {
                         _auditLogService.LogAuditEvent(
                             action: "api/sq/meta",

@@ -9,6 +9,7 @@ There is an ongoing work making deploy to nais test to work. Time to live is set
 *Important! This fork is only ment to be run locally or for short periods in nais test cluster*
 
 TODOS:
+[] Code not running locally after last pull from upstream
 [] Update api reference to the new PX-api structure
 [] Make deploy to nais test work
 [] Remove volunerabilities

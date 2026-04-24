@@ -73,7 +73,7 @@ namespace PxGraf.Controllers
                 _logger.LogDebug("Saved query requested.");
                 if (await _sqFileInterface.SavedQueryExists(savedQueryId, Configuration.Current.SavedQueryDirectory))
                 {
-                    using (_logger.BeginScope(new Dictionary<string, object> { [LoggerConstants.SQ_ID] = savedQueryId }))
+                    using (_logger.BeginScope(new Dictionary<string, object> { [LoggerConstants.SQ_ID] = savedQueryId.Replace(Environment.NewLine, "") }))
                     {
                         _auditLogService.LogAuditEvent(
                             action: CONTROLLER_PATH,
@@ -151,7 +151,7 @@ namespace PxGraf.Controllers
                 string guid = await GetIsDraftAsync(parameters.Id) ? parameters.Id : Guid.NewGuid().ToString();
                 string fileName = $"{guid}.sq";
 
-                using (_logger.BeginScope(new Dictionary<string, object> { [LoggerConstants.SQ_ID] = guid }))
+                using (_logger.BeginScope(new Dictionary<string, object> { [LoggerConstants.SQ_ID] = guid.Replace(Environment.NewLine, "") }))
                 {
                     _auditLogService.LogAuditEvent(
                         action: actionPath,
@@ -224,7 +224,7 @@ namespace PxGraf.Controllers
                 _logger.LogDebug("Archiving request received.");
                 string guid = await GetIsDraftAsync(parameters.Id) ? parameters.Id : Guid.NewGuid().ToString();
                 string queryFileName = $"{guid}.sq";
-                using (_logger.BeginScope(new Dictionary<string, object> { [LoggerConstants.SQ_ID] = guid }))
+                using (_logger.BeginScope(new Dictionary<string, object> { [LoggerConstants.SQ_ID] = guid.Replace(Environment.NewLine, "") }))
                 {
                     _auditLogService.LogAuditEvent(
                         action: actionPath,
@@ -309,7 +309,7 @@ namespace PxGraf.Controllers
                 _logger.LogDebug("Re-archiving query.");
                 if (await _sqFileInterface.SavedQueryExists(request.SqId, Configuration.Current.SavedQueryDirectory))
                 {
-                    using (_logger.BeginScope(new Dictionary<string, object> { [LoggerConstants.SQ_ID] = request.SqId }))
+                    using (_logger.BeginScope(new Dictionary<string, object> { [LoggerConstants.SQ_ID] = request.SqId.Replace(Environment.NewLine, "") }))
                     {
                         _auditLogService.LogAuditEvent(
                             action: actionPath,

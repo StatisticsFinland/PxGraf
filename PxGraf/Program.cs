@@ -54,7 +54,6 @@ namespace PxGraf
                  .UseNLog()
                  .ConfigureAppConfiguration((hostingContext, config) =>
                  {
-                     config.Sources.Clear();
                      config.SetBasePath(Directory.GetCurrentDirectory());
                      config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: false);
                      config.AddEnvironmentVariables();

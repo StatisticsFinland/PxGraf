@@ -84,7 +84,7 @@ namespace PxGraf.Controllers
 
                 if (itemCacheState == MultiStateMemoryTaskCache.CacheEntryState.Fresh)
                 {
-                    _logger.LogDebug("Fresh cache hit for {SqId}", sqId);
+                    _logger.LogDebug("Fresh cache hit for {SqId}", sqId.Replace(Environment.NewLine, ""));
                     VisualizationResponse response = await cachedRespTask;
                     Response.Headers.CacheControl = $"{maxAge}";
                     _logger.LogDebug("Returning visualization.");
@@ -93,7 +93,7 @@ namespace PxGraf.Controllers
 
                 if (itemCacheState == MultiStateMemoryTaskCache.CacheEntryState.Stale)
                 {
-                    _logger.LogDebug("Stale cache hit for {SqId}", sqId);
+                    _logger.LogDebug("Stale cache hit for {SqId}", sqId.Replace(Environment.NewLine, ""));
                     VisualizationResponse response = await cachedRespTask;
                     _ = HandleStaleCacheResponseAsync(sqId, response); // OBS: No await
                     Response.Headers.CacheControl = $"max-age=0"; // Already stale, so no max-age
@@ -103,7 +103,7 @@ namespace PxGraf.Controllers
 
                 if (itemCacheState == MultiStateMemoryTaskCache.CacheEntryState.Error)
                 {
-                    _logger.LogWarning("Cache error for {SqId}", sqId);
+                    _logger.LogWarning("Cache error for {SqId}", sqId.Replace(Environment.NewLine, ""));
                     return BadRequest();
                 }
 
@@ -114,7 +114,7 @@ namespace PxGraf.Controllers
                         resource: sqId
                         );
 
-                    _logger.LogDebug("Cache miss for {SqId}", sqId);
+                    _logger.LogDebug("Cache miss for {SqId}", sqId.Replace(Environment.NewLine, ""));
                     SavedQuery sq = await _sqFileInterface.ReadSavedQueryFromFile(sqId, Configuration.Current.SavedQueryDirectory);
                     Task<VisualizationResponse> newResponseTask = BuildNewResponseAsync(sqId, sq);
                     _taskCache.Set(sqId, newResponseTask, SlidingExpiration, AbsoluteExpiration);

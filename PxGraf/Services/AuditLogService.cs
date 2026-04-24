@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using PxGraf.Settings;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace PxGraf.Services
 {
@@ -34,7 +35,7 @@ namespace PxGraf.Services
             {
                 logger.LogInformation("Audit Event: action={Action}, resource={Resource}, user={User}, clientIP={ClientIP}",
                     action,
-                    resource,
+                    resource.Replace(Environment.NewLine, ""),
                     httpContext.User.Identity?.Name ?? "Anonymous",
                     httpContext.Connection.RemoteIpAddress?.ToString() ?? "Unknown"
                     );

@@ -69,7 +69,7 @@ namespace PxGraf.Controllers
                 }
 
                 // Add validated dbPath to the logging scope
-                using (_logger.BeginScope(new Dictionary<string, object> { [LoggerConstants.DB_PATH] = dbPath }))
+                using (_logger.BeginScope(new Dictionary<string, object> { [LoggerConstants.DB_PATH] = dbPath.Replace(Environment.NewLine, "") }))
                 {
                     if (hierarchy.Length > 0 && !PathUtils.IsDatabaseWhitelisted(hierarchy, databaseWhitelist))
                     {

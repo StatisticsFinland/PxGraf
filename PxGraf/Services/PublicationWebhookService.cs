@@ -70,7 +70,7 @@ namespace PxGraf.Services
             using (logger.BeginScope(new Dictionary<string, object>()
             {
                 [LoggerConstants.FUNC_NAME] = nameof(TriggerWebhookAsync),
-                [LoggerConstants.SQ_ID] = queryId
+                [LoggerConstants.SQ_ID] = queryId.Replace(Environment.NewLine, "")
             }))
             {
                 if (!_config.IsEnabled)
