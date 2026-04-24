@@ -1,5 +1,19 @@
 # PxGraf
 
+## SSB-Fork
+
+For SSB it is convenient to be able to test PXGraf locally or on nais test cluster. Because some hard coded dependencies and api settings, we need to modify the original source code to make it work in SSB context. This repo is just to store these changes.
+
+There is an ongoing work making deploy to nais test to work. Time to live is set to 48h in `nais.yaml` to make sure application is taken down when not in use. 
+
+*Important! This fork is only ment to be run locally or for short periods in nais test cluster*
+
+TODOS:
+[] Update api reference to the new PX-api structure
+[] Make deploy to nais test work
+[] Remove volunerabilities
+[] Remove functionality not relevant for SSB
+
 ## Overview
 PxGraf is a tool developed and maintained by Statistics Finland (Tilastokeskus) for visualizing statistical data from Px tables. It supports multiple data sources including PxWeb API integration, local Px databases with the Px.Utils library, and Azure Blob Storage for cloud-native deployments. The backend, written in C# with ASP.NET Core, provides a unified storage architecture that can fetch data from various sources and store saved queries in either local file systems or Azure Blob Storage. The frontend, written in TypeScript with React, provides a user interface for selecting and previewing data for visualizations and saving them as queries. The visualizations are drawn using PxVisualizer npm package, also developed and maintained by Statistics Finland.
 
