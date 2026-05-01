@@ -65,7 +65,7 @@
     "jest": "^30.3.0",
     "jest-editor-support": "^32.0.0-beta.1",
     "jest-environment-jsdom": "^30.3.0",
-    "jest-junit": "^16.0.0",
+    "jest-junit": "^17.0.0",
     "jest-sonar-reporter": "^2.0.0",
     "jsdom": "^29.0.0",
     "ts-jest": "^29.4.6",
