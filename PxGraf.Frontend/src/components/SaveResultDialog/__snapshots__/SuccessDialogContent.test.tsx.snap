@@ -6,7 +6,7 @@ exports[`Rendering test renders correctly when closed 1`] = `
     class="MuiDialogContent-root MuiDialogContent-dividers css-10bxh4q-MuiDialogContent-root"
   >
     <div
-      class="MuiFormControl-root sc-gEvEes HwpMG css-1iw3t7y-MuiFormControl-root"
+      class="MuiFormControl-root sc-gtcBCx hoLdIB css-1iw3t7y-MuiFormControl-root"
     >
       <label
         class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined css-113d811-MuiFormLabel-root-MuiInputLabel-root"
@@ -16,7 +16,7 @@ exports[`Rendering test renders correctly when closed 1`] = `
         Selection identifier
       </label>
       <div
-        class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd sc-aXZVf ccKimk css-jupps9-MuiInputBase-root-MuiOutlinedInput-root"
+        class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd sc-bdDsCe emeDgd css-jupps9-MuiInputBase-root-MuiOutlinedInput-root"
       >
         <input
           aria-invalid="false"
@@ -73,7 +73,7 @@ exports[`Rendering test renders correctly when open (draft) 1`] = `
       class="MuiDialogContent-root MuiDialogContent-dividers css-10bxh4q-MuiDialogContent-root"
     >
       <div
-        class="MuiFormControl-root sc-gEvEes HwpMG css-1iw3t7y-MuiFormControl-root"
+        class="MuiFormControl-root sc-gtcBCx hoLdIB css-1iw3t7y-MuiFormControl-root"
       >
         <label
           class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined css-113d811-MuiFormLabel-root-MuiInputLabel-root"
@@ -83,7 +83,7 @@ exports[`Rendering test renders correctly when open (draft) 1`] = `
           Selection identifier
         </label>
         <div
-          class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd sc-aXZVf ccKimk css-jupps9-MuiInputBase-root-MuiOutlinedInput-root"
+          class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd sc-bdDsCe emeDgd css-jupps9-MuiInputBase-root-MuiOutlinedInput-root"
         >
           <input
             aria-invalid="false"
@@ -141,7 +141,7 @@ exports[`Rendering test renders correctly with webhook success message 1`] = `
       class="MuiDialogContent-root MuiDialogContent-dividers css-10bxh4q-MuiDialogContent-root"
     >
       <div
-        class="MuiFormControl-root sc-gEvEes HwpMG css-1iw3t7y-MuiFormControl-root"
+        class="MuiFormControl-root sc-gtcBCx hoLdIB css-1iw3t7y-MuiFormControl-root"
       >
         <label
           class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined css-113d811-MuiFormLabel-root-MuiInputLabel-root"
@@ -151,7 +151,7 @@ exports[`Rendering test renders correctly with webhook success message 1`] = `
           Selection identifier
         </label>
         <div
-          class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd sc-aXZVf ccKimk css-jupps9-MuiInputBase-root-MuiOutlinedInput-root"
+          class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd sc-bdDsCe emeDgd css-jupps9-MuiInputBase-root-MuiOutlinedInput-root"
         >
           <input
             aria-invalid="false"
@@ -235,7 +235,7 @@ exports[`Rendering test renders correctly without webhook message (failed) 1`] =
       class="MuiDialogContent-root MuiDialogContent-dividers css-10bxh4q-MuiDialogContent-root"
     >
       <div
-        class="MuiFormControl-root sc-gEvEes HwpMG css-1iw3t7y-MuiFormControl-root"
+        class="MuiFormControl-root sc-gtcBCx hoLdIB css-1iw3t7y-MuiFormControl-root"
       >
         <label
           class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined css-113d811-MuiFormLabel-root-MuiInputLabel-root"
@@ -245,7 +245,7 @@ exports[`Rendering test renders correctly without webhook message (failed) 1`] =
           Selection identifier
         </label>
         <div
-          class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd sc-aXZVf ccKimk css-jupps9-MuiInputBase-root-MuiOutlinedInput-root"
+          class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd sc-bdDsCe emeDgd css-jupps9-MuiInputBase-root-MuiOutlinedInput-root"
         >
           <input
             aria-invalid="false"
@@ -329,7 +329,7 @@ exports[`Rendering test renders correctly without webhook message (success) 1`] 
       class="MuiDialogContent-root MuiDialogContent-dividers css-10bxh4q-MuiDialogContent-root"
     >
       <div
-        class="MuiFormControl-root sc-gEvEes HwpMG css-1iw3t7y-MuiFormControl-root"
+        class="MuiFormControl-root sc-gtcBCx hoLdIB css-1iw3t7y-MuiFormControl-root"
       >
         <label
           class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined css-113d811-MuiFormLabel-root-MuiInputLabel-root"
@@ -339,7 +339,7 @@ exports[`Rendering test renders correctly without webhook message (success) 1`] 
           Selection identifier
         </label>
         <div
-          class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd sc-aXZVf ccKimk css-jupps9-MuiInputBase-root-MuiOutlinedInput-root"
+          class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd sc-bdDsCe emeDgd css-jupps9-MuiInputBase-root-MuiOutlinedInput-root"
         >
           <input
             aria-invalid="false"

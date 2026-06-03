@@ -3,14 +3,14 @@
 exports[`Rendering test renders correctly 1`] = `
 <DocumentFragment>
   <div
-    class="sc-iGgWBk eLJcbZ"
+    class="sc-jSppWd hALHgh"
   >
     <div
-      class="sc-dcJsrX cMSwT"
+      class="sc-eCQgVK fLnhcr"
     >
       <button
         aria-label="tooltip.open: editMetadata.header"
-        class="sc-gEvEes iyPTpc"
+        class="sc-gtcBCx gUCgDH"
       >
         <svg
           aria-hidden="true"
@@ -37,7 +37,7 @@ exports[`Rendering test renders correctly 1`] = `
           </b>
         </label>
         <div
-          class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd sc-aXZVf djJESr css-jupps9-MuiInputBase-root-MuiOutlinedInput-root"
+          class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd sc-bdDsCe fBqFXC css-jupps9-MuiInputBase-root-MuiOutlinedInput-root"
         >
           <input
             aria-invalid="false"

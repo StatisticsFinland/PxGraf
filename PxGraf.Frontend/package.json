@@ -1,6 +1,6 @@
 {
   "name": "pxgraf",
-  "version": "2.5.15",
+  "version": "2.5.16",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -8,6 +8,7 @@
     "@mui/icons-material": "^7.3.9",
     "@mui/material": "^7.0.2",
     "@statisticsfinland/pxvisualizer": "^1.4.5",
+    "@tanstack/react-query": "^5.90.21",
     "@types/lodash": "^4.17.24",
     "@types/styled-components": "^5.1.36",
     "i18next": "^25.8.18",
@@ -18,8 +19,7 @@
     "react-i18next": "^16.5.8",
     "react-router-dom": "^7.13.1",
     "styled-components": "^6.3.11",
-    "web-vitals": "^5.1.0",
-    "@tanstack/react-query": "^5.90.21"
+    "web-vitals": "^5.1.0"
   },
   "scripts": {
     "start": "vite",
@@ -65,7 +65,7 @@
     "jest": "^30.3.0",
     "jest-editor-support": "^32.0.0-beta.1",
     "jest-environment-jsdom": "^30.3.0",
-    "jest-junit": "^16.0.0",
+    "jest-junit": "^17.0.0",
     "jest-sonar-reporter": "^2.0.0",
     "jsdom": "^29.0.0",
     "ts-jest": "^29.4.6",
