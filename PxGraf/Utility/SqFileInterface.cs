@@ -61,6 +61,7 @@ namespace PxGraf.Utility
         /// </summary>
         public async Task<SavedQuery> ReadSavedQueryFromFile(string id, string savedQueryDirectory)
         {
+            if(!InputValidation.ValidateSqIdString(id)) throw new ArgumentException("The provided id is not a valid saved query id string.");
             string filePath = savedQueryStorage.CombinePath(savedQueryDirectory, id + ".sq");
             return await lockScope.RunLockedAsync(
                 filePath,
@@ -73,6 +74,7 @@ namespace PxGraf.Utility
         /// </summary>
         public async Task<ArchiveCube> ReadArchiveCubeFromFile(string id, string archiveDirectory)
         {
+            if(!InputValidation.ValidateSqIdString(id)) throw new ArgumentException("The provided id is not a valid saved query id string.");
             string filePath = archiveStorage.CombinePath(archiveDirectory, id + ".sqa");
             return await lockScope.RunLockedAsync(
                 filePath,

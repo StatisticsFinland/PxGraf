@@ -66,6 +66,70 @@ namespace UnitTests.UtilityFunctionsTests
             Assert.That(InputValidation.ValidateSqIdString(null), Is.False);
         }
 
+        // Path traversal attempts
+        [Test]
+        public void InvalidSqId_DotDotSlashTraversalTest()
+        {
+            Assert.That(InputValidation.ValidateSqIdString("../../../etc/passwd"), Is.False);
+        }
+
+        [Test]
+        public void InvalidSqId_DotDotBackslashTraversalTest()
+        {
+            Assert.That(InputValidation.ValidateSqIdString("..\\..\\windows\\system32"), Is.False);
+        }
+
+        [Test]
+        public void InvalidSqId_UrlEncodedTraversalTest()
+        {
+            // %2e%2e%2f is URL-encoded ../
+            Assert.That(InputValidation.ValidateSqIdString("%2e%2e%2fetc%2fpasswd"), Is.False);
+        }
+
+        [Test]
+        public void InvalidSqId_AbsoluteUnixPathTest()
+        {
+            Assert.That(InputValidation.ValidateSqIdString("/etc/passwd"), Is.False);
+        }
+
+        [Test]
+        public void InvalidSqId_NullByteTraversalTest()
+        {
+            // Null byte injection can truncate strings in some contexts
+            Assert.That(InputValidation.ValidateSqIdString("a3af0d90-eeeb-4840-bc14-87f53bc7c8fe\0.txt"), Is.False);
+        }
+
+        // Injection attempts
+        [Test]
+        public void InvalidSqId_SqlInjectionTest()
+        {
+            Assert.That(InputValidation.ValidateSqIdString("a3af0d90'; DROP TABLE saved_queries--"), Is.False);
+        }
+
+        [Test]
+        public void InvalidSqId_CommandInjectionTest()
+        {
+            Assert.That(InputValidation.ValidateSqIdString("a3af0d90; rm -rf /"), Is.False);
+        }
+
+        [Test]
+        public void InvalidSqId_CrlfInjectionTest()
+        {
+            Assert.That(InputValidation.ValidateSqIdString("a3af0d90-eeeb\r\nX-Header: injected"), Is.False);
+        }
+
+        [Test]
+        public void InvalidSqId_XssInjectionTest()
+        {
+            Assert.That(InputValidation.ValidateSqIdString("<script>alert(1)</script>"), Is.False);
+        }
+
+        [Test]
+        public void InvalidSqId_TemplateInjectionTest()
+        {
+            Assert.That(InputValidation.ValidateSqIdString("{{7*7}}"), Is.False);
+        }
+
         [Test]
         public void ValidFilePathPartTest()
         {
