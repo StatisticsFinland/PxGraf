@@ -95,8 +95,9 @@ namespace UnitTests.UtilityFunctionsTests
         [Test]
         public void InvalidSqId_NullByteTraversalTest()
         {
-            // Null byte injection can truncate strings in some contexts
-            Assert.That(InputValidation.ValidateSqIdString("a3af0d90-eeeb-4840-bc14-87f53bc7c8fe\0.txt"), Is.False);
+            // Null byte injection can truncate strings in some contexts.
+            // Input is otherwise a valid SqId to specifically test null-byte rejection.
+            Assert.That(InputValidation.ValidateSqIdString("a3af0d90-eeeb-4840-bc14-87f53bc7c8fe\0"), Is.False);
         }
 
         // Injection attempts
