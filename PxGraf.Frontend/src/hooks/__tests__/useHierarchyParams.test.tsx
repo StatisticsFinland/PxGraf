@@ -12,8 +12,7 @@ const createMockLocation = (query: string): Location => ({
     state: null,
     key: null,
     pathname: '/',
-    hash: '',
-    unstable_mask: null,
+    hash: ''
 });
 
 describe('useHierarchyParams hook', () => {
