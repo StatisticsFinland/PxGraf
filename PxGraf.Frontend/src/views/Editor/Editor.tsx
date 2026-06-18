@@ -69,8 +69,7 @@ export const Editor = () => {
 
     React.useEffect(() => {
         document.title = `${t("pages.editor")} | PxGraf`;
-        // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional: only set title on mount
-    }, []);
+    }, [t]);
 
     // statemanagement
     const {

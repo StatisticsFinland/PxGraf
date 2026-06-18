@@ -81,9 +81,9 @@ describe('QueryContext', () => {
 
         const CapturingComponent = () => {
             const { cubeQuery, setCubeQuery } = React.useContext(QueryContext);
-            React.useEffect(() => {
+            React.useLayoutEffect(() => {
                 setCubeQueryRef = setCubeQuery;
-            });
+            }, [setCubeQuery]);
             return <div data-testid="cubeQuery">{JSON.stringify(cubeQuery)}</div>;
         };
 

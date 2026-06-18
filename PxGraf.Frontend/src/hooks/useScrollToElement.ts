@@ -13,8 +13,7 @@ const useScrollToElement = (id?: string, offset = 50) => {
             focusableElement?.focus();
         }
      
-        // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional: offset is a stable default parameter, only re-run when id changes
-    }, [id]);
+    }, [id, offset]);
 };
 
 export default useScrollToElement;

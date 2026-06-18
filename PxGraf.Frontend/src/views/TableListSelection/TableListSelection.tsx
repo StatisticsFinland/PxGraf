@@ -36,8 +36,7 @@ export const TableListSelection: React.FC = () => {
 
     React.useEffect(() => {
         document.title = `${t("pages.tableList")} | PxGraf`;
-        // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional: only set title on mount
-    }, []);
+    }, [t]);
 
     const sortedGroups: IDatabaseGroupHeader[] = React.useMemo(() => {
         if (!data?.headers) return null;
