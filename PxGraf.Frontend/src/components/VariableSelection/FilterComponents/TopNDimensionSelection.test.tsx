@@ -9,7 +9,7 @@ describe('Rendering test', () => {
     it('renders correctly', () => {
         const { asFragment } = render(<TopNDimensionSelection
             numberOfItems={2}
-            onNumberChanged={(_newValue: number) => { }}
+            onNumberChanged={() => { }}
         ></TopNDimensionSelection>);
         expect(asFragment()).toMatchSnapshot();
     });

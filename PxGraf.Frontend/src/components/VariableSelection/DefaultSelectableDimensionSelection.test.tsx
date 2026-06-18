@@ -56,12 +56,6 @@ const setUiContentLanguage = jest.fn();
 
 const defaultSelectables = { foo: ['2018'] };
 const setDefaultSelectables = jest.fn();
-const cubeQuery = null;
-const setCubeQuery = jest.fn();
-const query = null;
-const setQuery = jest.fn();
-const saveDialogOpen = false;
-const setSaveDialogOpen = jest.fn();
 const selectedVisualizationUserInput = null;
 const setSelectedVisualizationUserInput = jest.fn();
 const visualizationSettingsUserInput = null;

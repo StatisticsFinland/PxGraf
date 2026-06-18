@@ -7,7 +7,7 @@ import { ISelectabilityInfo } from '../Preview/Preview';
 import { EDimensionType } from 'types/cubeMeta'; 
 import userEvent from '@testing-library/user-event';
 
-const mockSetSelections = jest.fn((selections: ISelectableSelections | ((prevState: ISelectableSelections) => ISelectableSelections)) => {
+const mockSetSelections = jest.fn(() => {
     return;
 });
 

@@ -56,6 +56,7 @@ export const UiLanguageProvider: React.FC<{ children: React.ReactNode }> = ({ ch
 
     React.useEffect(() => {
         loadLanguages();
+        // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional: only load languages on mount
     }, []);
 
     const setUiLang = (lang: string) => {
@@ -65,6 +66,7 @@ export const UiLanguageProvider: React.FC<{ children: React.ReactNode }> = ({ ch
 
     const contextValue = React.useMemo(() => {
         return { language, setLanguage: setUiLang, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }
+        // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional: setUiLang is a local function that captures current state
     }, [language, languageTab, availableUiLanguages, uiContentLanguage]);
 
     return (

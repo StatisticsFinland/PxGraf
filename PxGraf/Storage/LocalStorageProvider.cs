@@ -20,10 +20,10 @@ namespace PxGraf.Storage
         private readonly Encoding encoding = encoding ?? Encoding.UTF8;
 
         /// <inheritdoc/>
-        public async Task<bool> FileExistsAsync(string filePath, CancellationToken cancellationToken = default)
+        public Task<bool> FileExistsAsync(string filePath, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            return await Task.FromResult(File.Exists(filePath));
+            return Task.FromResult(File.Exists(filePath));
         }
 
         /// <inheritdoc/>
@@ -58,14 +58,14 @@ namespace PxGraf.Storage
         }
 
         /// <inheritdoc/>
-        public async Task<Stream> OpenReadAsync(string filePath, CancellationToken cancellationToken = default)
+        public Task<Stream> OpenReadAsync(string filePath, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            return await Task.FromResult((Stream)File.OpenRead(filePath));
+            return Task.FromResult((Stream)File.OpenRead(filePath));
         }
 
         /// <inheritdoc/>
-        public async Task<IEnumerable<string>> EnumerateFilesAsync(string directoryPath, string fileExtension, CancellationToken cancellationToken = default)
+        public Task<IEnumerable<string>> EnumerateFilesAsync(string directoryPath, string fileExtension, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
             string normalizedExtension = PathNormalizer.NormalizeFileExtension(fileExtension);
@@ -73,14 +73,14 @@ namespace PxGraf.Storage
             // Convert extension to search pattern for Directory.EnumerateFiles
             string searchPattern = string.IsNullOrEmpty(normalizedExtension) ? "*" : $"*{normalizedExtension}";
             
-            return await Task.FromResult(Directory.EnumerateFiles(directoryPath, searchPattern));
+            return Task.FromResult(Directory.EnumerateFiles(directoryPath, searchPattern));
         }
 
         /// <inheritdoc/>
-        public async Task<IEnumerable<string>> EnumerateDirectoriesAsync(string directoryPath, CancellationToken cancellationToken = default)
+        public Task<IEnumerable<string>> EnumerateDirectoriesAsync(string directoryPath, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            return await Task.FromResult(Directory.EnumerateDirectories(directoryPath));
+            return Task.FromResult(Directory.EnumerateDirectories(directoryPath));
         }
 
         /// <inheritdoc/>
@@ -91,10 +91,10 @@ namespace PxGraf.Storage
         }
 
         /// <inheritdoc/>
-        public async Task<DateTime> GetLastWriteTimeAsync(string filePath, CancellationToken cancellationToken = default)
+        public Task<DateTime> GetLastWriteTimeAsync(string filePath, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            return await Task.FromResult(File.GetLastWriteTime(filePath));
+            return Task.FromResult(File.GetLastWriteTime(filePath));
         }
 
         /// <inheritdoc/>

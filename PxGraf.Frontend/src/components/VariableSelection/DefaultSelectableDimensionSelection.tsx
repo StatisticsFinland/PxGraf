@@ -40,6 +40,7 @@ export const DefaultSelectableDimensionSelection: React.FC<IDefaultSelectableDim
                 setDefaultSelectables(defaultSelectablesCopy);
             }
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional: only react to resolvedDimensionValueCodes changes to avoid infinite loops
     }, [resolvedDimensionValueCodes]);
 
     const handleChange = (_evt, value: IDimensionValue) => {

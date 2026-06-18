@@ -34,10 +34,8 @@ namespace PxGraf.Services
             Task<ServiceHealthStatus> sqTask = ProbeStorageAsync("saved-query-storage", () => sqFileInterface.CanAccessSavedQueriesAsync(Configuration.Current.SavedQueryDirectory));
             Task<ServiceHealthStatus> archiveTask = ProbeStorageAsync("archive-file-storage", () => sqFileInterface.CanAccessArchivesAsync(Configuration.Current.ArchiveFileDirectory));
 
-            await Task.WhenAll(dbTask, sqTask, archiveTask);
-
-            List<DatabaseHealthStatus> databases = [dbTask.Result];
-            List<ServiceHealthStatus> services = [sqTask.Result, archiveTask.Result];
+            List<DatabaseHealthStatus> databases = [await dbTask];
+            List<ServiceHealthStatus> services = [await sqTask, await archiveTask];
 
             if (Configuration.Current.CreationAPI && Configuration.Current.PublicationWebhookConfig is { IsEnabled: true, HasHealthCheckEndpoint: true })
             {

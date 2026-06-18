@@ -20,18 +20,6 @@ const mockDefaultResponse: IEditorContentsResult = {
     data: data
 };
 
-const mockDefaultResponseLoading: IEditorContentsResult = {
-    isLoading: true,
-    isError: false,
-    data: data
-};
-
-const mockDefaultResponseError: IEditorContentsResult = {
-    isLoading: false,
-    isError: true,
-    data: data
-};
-
 const mockLang = 'fi';
 const mockFunction = jest.fn();
 const mockCubeQuery: ICubeQuery = {

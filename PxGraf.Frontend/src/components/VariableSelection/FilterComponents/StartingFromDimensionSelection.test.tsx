@@ -47,7 +47,7 @@ describe('Rendering test', () => {
         const { asFragment } = render(<StartingFromDimensionSelection
             options={mockDimensionValues}
             startingCode={"2019"}
-            onQueryChanged={(newCode) => null}
+            onQueryChanged={() => null}
         ></StartingFromDimensionSelection>);
         expect(asFragment()).toMatchSnapshot();
     });

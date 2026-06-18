@@ -205,16 +205,10 @@ const setDefaultSelectables = jest.fn();
 const setCubeQuery = jest.fn();
 const query = null;
 const setQuery = jest.fn();
-const saveDialogOpen = false;
-const setSaveDialogOpen = jest.fn();
 const selectedVisualizationUserInput = null;
 const setSelectedVisualizationUserInput = jest.fn();
 const visualizationSettingsUserInput = null;
 const setVisualizationSettingsUserInput = jest.fn();
-const loadedQueryId = '';
-const setLoadedQueryId = jest.fn();
-const loadedQueryIsDraft = false;
-const setLoadedQueryIsDraft = jest.fn();
 
 describe('Rendering test', () => {
     beforeAll(() => {

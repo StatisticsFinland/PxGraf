@@ -72,7 +72,7 @@ const Header: React.FC = () => {
 
     React.useEffect(() => {
       if(ref.current) ref.current.focus();
-    }, [ref?.current, location.pathname])
+    }, [location.pathname])
 
     const focusOnContent = () => {
         const mainContentElement = document.getElementById("mainContent");

@@ -25,15 +25,6 @@ export default function QueryLoader() {
     const [pathProcessingState, setPathProcessingState] = useState(PathProcessingState.Idle);
     const navigate = useNavigate();
 
-    useEffect(() => {
-        setPathProcessingState(PathProcessingState.Loading);
-        fetchQueryAndRedirect(sqid);
-    }, [sqid]);
-
-    React.useEffect(() => {
-        document.title = `${t("pages.sqid")} | PxGraf`;
-    }, []);
-
     const fetchQueryAndRedirect = async (queryId: string) => {
         try {
             const result = await fetchSavedQuery(queryId);
@@ -44,6 +35,17 @@ export default function QueryLoader() {
             setQueryFetchError(error.message);
         }
     }
+
+    useEffect(() => {
+        setPathProcessingState(PathProcessingState.Loading);
+        fetchQueryAndRedirect(sqid);
+        // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional: fetchQueryAndRedirect is stable in behavior, only re-run when sqid changes
+    }, [sqid]);
+
+    React.useEffect(() => {
+        document.title = `${t("pages.sqid")} | PxGraf`;
+        // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional: only set title on mount
+    }, []);
 
     if (pathProcessingState === PathProcessingState.Loading) {
         return (

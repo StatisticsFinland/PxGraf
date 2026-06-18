@@ -25,6 +25,7 @@ export const TableTreeSelection: React.FC = () => {
 
   React.useEffect(() => {
       document.title = `${t("pages.tableTreeSelection")} | PxGraf`;
+      // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional: only set title on mount
   }, []);
 
   return (
