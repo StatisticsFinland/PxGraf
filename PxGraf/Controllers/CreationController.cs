@@ -35,6 +35,7 @@ namespace PxGraf.Controllers
     [Route("api/creation")]
     public class CreationController(ICachedDatasource datasource, ILogger<CreationController> logger, IAuditLogService auditLogService) : ControllerBase
     {
+        private const double WarningQuerySizeRatio = 0.75;
         private readonly ICachedDatasource _datasource = datasource;
         private readonly ILogger<CreationController> _logger = logger;
         private readonly IAuditLogService _auditLogService = auditLogService;
@@ -282,7 +283,7 @@ namespace PxGraf.Controllers
                     {
                         Size = 0,
                         MaximumSupportedSize = maxQuerySize,
-                        SizeWarningLimit = Convert.ToInt32(maxQuerySize * 0.75),
+                        SizeWarningLimit = Convert.ToInt32(maxQuerySize * WarningQuerySizeRatio),
                         HeaderText = new MultilanguageString(Configuration.Current.LanguageOptions.Available.Select(lang => new KeyValuePair<string, string>(lang, string.Empty))),
                         MaximumHeaderLength = Configuration.Current.QueryOptions.MaxHeaderLength,
                         VisualizationOptions = [],
@@ -303,7 +304,7 @@ namespace PxGraf.Controllers
                     {
                         Size = includedValuesCount,
                         MaximumSupportedSize = maxQuerySize,
-                        SizeWarningLimit = Convert.ToInt32(maxQuerySize * 0.75),
+                        SizeWarningLimit = Convert.ToInt32(maxQuerySize * WarningQuerySizeRatio),
                         HeaderText = new MultilanguageString(Configuration.Current.LanguageOptions.Available.Select(lang => new KeyValuePair<string, string>(lang, string.Empty))),
                         MaximumHeaderLength = Configuration.Current.QueryOptions.MaxHeaderLength,
                         VisualizationOptions = [],
@@ -341,7 +342,7 @@ namespace PxGraf.Controllers
                 {
                     Size = includedValuesCount,
                     MaximumSupportedSize = maxQuerySize,
-                    SizeWarningLimit = Convert.ToInt32(maxQuerySize * 0.75),
+                    SizeWarningLimit = Convert.ToInt32(maxQuerySize * WarningQuerySizeRatio),
                     HeaderText = HeaderBuildingUtilities.GetHeader(filteredMeta, query, true),
                     MaximumHeaderLength = Configuration.Current.QueryOptions.MaxHeaderLength,
                     VisualizationOptions = visualizationOptions,

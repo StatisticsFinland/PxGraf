@@ -22,28 +22,29 @@ export default function QueryLoader() {
     const { t } = useTranslation();
     const sqid = useParams()["*"];
     const [queryFetchError, setQueryFetchError] = useState("");
-    const [pathProcessingState, setPathProcessingState] = useState(PathProcessingState.Idle);
+    const [pathProcessingState, setPathProcessingState] = useState(sqid ? PathProcessingState.Loading : PathProcessingState.Idle);
     const navigate = useNavigate();
 
-    useEffect(() => {
-        setPathProcessingState(PathProcessingState.Loading);
-        fetchQueryAndRedirect(sqid);
-    }, [sqid]);
-
-    React.useEffect(() => {
-        document.title = `${t("pages.sqid")} | PxGraf`;
-    }, []);
-
-    const fetchQueryAndRedirect = async (queryId: string) => {
+    const fetchQueryAndRedirect = React.useCallback(async (queryId: string) => {
         try {
             const result = await fetchSavedQuery(queryId);
             const url = `/editor/${result.query.tableReference.hierarchy.join('/')}/${result.query.tableReference.name}/`
             navigate(url, { state: { result: result, queryId: queryId } });
-        } catch (error) {
+        } catch (error: unknown) {
             setPathProcessingState(PathProcessingState.Error);
-            setQueryFetchError(error.message);
+            setQueryFetchError(error instanceof Error ? error.message : String(error));
         }
-    }
+    }, [navigate]);
+
+    useEffect(() => {
+        if (!sqid) return;
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- setState calls in fetchQueryAndRedirect happen asynchronously after await, not synchronously in the effect body
+        fetchQueryAndRedirect(sqid);
+    }, [sqid, fetchQueryAndRedirect]);
+
+    React.useEffect(() => {
+        document.title = `${t("pages.sqid")} | PxGraf`;
+    }, [t]);
 
     if (pathProcessingState === PathProcessingState.Loading) {
         return (

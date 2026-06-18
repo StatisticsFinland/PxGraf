@@ -9,7 +9,7 @@ exports[`Rendering test renders correctly 1`] = `
       class="sc-bCgoVd jbAaJp MuiBox-root css-1mc6bnb"
     >
       <div
-        class="sc-ikBzZv jNwkba"
+        class="sc-kLEbxe kudccx"
       >
         <p
           class="MuiTypography-root MuiTypography-body2 sc-ivKqQM crquHl css-1wle3ir-MuiTypography-root"
@@ -586,13 +586,13 @@ exports[`Rendering test renders correctly 1`] = `
       />
     </div>
     <div
-      class="sc-giQkEn dufkIK"
+      class="sc-iJSMbW dAXTrx"
     >
       <div
-        class="sc-ezjgic dymapY"
+        class="sc-giQkEn bfRCrL"
       >
         <div
-          class="sc-kLEbxe fTMQqS"
+          class="sc-bYgEKt itYSax"
         >
           <button
             aria-label="tooltip.open: tooltip.visualizationType"
@@ -611,7 +611,7 @@ exports[`Rendering test renders correctly 1`] = `
             </svg>
           </button>
           <div
-            class="sc-bYgEKt jZRdrB"
+            class="sc-ezjgic bLULkP"
           >
             <div
               aria-label="tooltip.visualizationType"
@@ -657,7 +657,7 @@ exports[`Rendering test renders correctly 1`] = `
           </button>
         </div>
         <div
-          class="sc-kLEbxe fTMQqS"
+          class="sc-bYgEKt itYSax"
         >
           <div
             aria-live="polite"

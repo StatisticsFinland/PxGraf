@@ -64,9 +64,12 @@ export const Editor = () => {
     const location = useLocation();
     const { result }: { result: IFetchSavedQueryResponse } = location?.state ? location.state : { result: null };
 
+    // hooks and support functions
+    const { t } = useTranslation();
+
     React.useEffect(() => {
         document.title = `${t("pages.editor")} | PxGraf`;
-    }, []);
+    }, [t]);
 
     // statemanagement
     const {
@@ -96,10 +99,9 @@ export const Editor = () => {
             setLoadedQueryId(result.id);
             setLoadedQueryIsDraft(result.draft);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional: context setters are stable, only re-run when result changes
     }, [result]);
 
-    // hooks and support functions
-    const { t } = useTranslation();
     const params = useParams();
     const pathStr = params["*"];
     const path = React.useMemo(
@@ -111,6 +113,7 @@ export const Editor = () => {
         if (path.length) {
             setTablePath(path);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional: setTablePath is a stable context setter
     }, [path]);
 
     // queries and other functionality
@@ -132,8 +135,10 @@ export const Editor = () => {
             setLanguageTab(contentLanguages[0]);
             setUiContentLanguage(contentLanguage)
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional: only react to language/contentLanguages changes, other deps would cause loops
     }, [language, contentLanguages]);
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional: dimensions reference changes with cubeMetaResponse.data which triggers dependent memos
     const dimensions: IDimension[] = cubeMetaResponse.data?.dimensions ?? [];
 
     const modifiedQuery = React.useMemo(() => {
@@ -146,6 +151,7 @@ export const Editor = () => {
         else {
             return getDefaultQueries(dimensions);
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional: dimensions is derived from cubeMetaResponse.data which is already a dep
     }, [query, cubeMetaResponse.data]);
 
     const editorContentsResponse = useEditorContentsQuery(path, modifiedQuery, cubeQuery);
@@ -172,6 +178,7 @@ export const Editor = () => {
             })
             return dimCodesNoVals;
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional: dimensions is derived from cubeMetaResponse.data which is already a dep
     }, [resolvedDimensionCodesResponse, cubeMetaResponse.data]);
     const resolvedDimensions = React.useMemo(() => {
         if (cubeMetaResponse.data != null && dimensions != null) {
@@ -180,6 +187,7 @@ export const Editor = () => {
         else {
             return null;
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional: dimensions is derived from cubeMetaResponse.data which is already a dep
     }, [cubeMetaResponse.data, resolvedDimensionCodes]);
 
     const selectedVisualization = React.useMemo(() => {

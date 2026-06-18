@@ -36,7 +36,7 @@ export const TableListSelection: React.FC = () => {
 
     React.useEffect(() => {
         document.title = `${t("pages.tableList")} | PxGraf`;
-    }, []);
+    }, [t]);
 
     const sortedGroups: IDatabaseGroupHeader[] = React.useMemo(() => {
         if (!data?.headers) return null;

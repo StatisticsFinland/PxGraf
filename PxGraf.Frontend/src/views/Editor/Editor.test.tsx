@@ -84,7 +84,7 @@ jest.mock('@statisticsfinland/pxvisualizer', () => {
     const lib = jest.requireActual("@statisticsfinland/pxvisualizer");
     return {
         ...lib,
-        Chart: (...args: any[]) => {
+        Chart: (...args: unknown[]) => {
             return (
                 <pre data-testid={'Chart'}>
                     args={JSON.stringify(args)}

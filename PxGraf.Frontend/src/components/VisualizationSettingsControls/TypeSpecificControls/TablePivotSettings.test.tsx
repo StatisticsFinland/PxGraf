@@ -164,12 +164,6 @@ const setUiContentLanguage = jest.fn();
 
 const defaultSelectables = {};
 const setDefaultSelectables = jest.fn();
-const cubeQuery = null;
-const setCubeQuery = jest.fn();
-const query = {};
-const setQuery = jest.fn();
-const saveDialogOpen = false;
-const setSaveDialogOpen = jest.fn();
 const selectedVisualizationUserInput = VisualizationType.VerticalBarChart;
 const setSelectedVisualizationUserInput = jest.fn();
 const visualizationSettingsUserInput = {};

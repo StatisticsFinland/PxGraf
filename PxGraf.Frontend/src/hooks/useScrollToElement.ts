@@ -13,7 +13,7 @@ const useScrollToElement = (id?: string, offset = 50) => {
             focusableElement?.focus();
         }
      
-    }, [id]);
+    }, [id, offset]);
 };
 
 export default useScrollToElement;

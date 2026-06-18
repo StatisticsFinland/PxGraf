@@ -3,7 +3,7 @@ import EditorPreviewSection from "./EditorPreviewSection";
 import { render } from "@testing-library/react";
 import { IVisualizationResult } from "api/services/visualization";
 import { EVisualizationType, EVariableType, ETimeVariableInterval } from "@statisticsfinland/pxvisualizer";
-import { FilterType, ICubeQuery, Query } from "types/query";
+import { FilterType, Query } from "types/query";
 import { IVisualizationSettings } from "types/visualizationSettings";
 import { VisualizationType } from "types/visualizationType";
 import serializer from "../../testUtils/stripHighchartsHashes";
@@ -241,13 +241,7 @@ const mockEditorContentsEmptyVisualizationsAndRejections: IEditorContentsResult 
 
 jest.mock('api/services/visualization', () => ({
     ...jest.requireActual('api/services/visualization'),
-    useVisualizationQuery: (
-        idStack: string[],
-        query: Query,
-        cubeQuery: ICubeQuery,
-        language: string,
-        selectedVisualization: string,
-        visualizationSettings: IVisualizationSettings) => {
+    useVisualizationQuery: () => {
         return mockVisualizationQueryResult;
     },
 }));

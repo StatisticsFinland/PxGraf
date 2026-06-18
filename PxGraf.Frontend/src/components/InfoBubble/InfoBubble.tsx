@@ -31,7 +31,7 @@ const StyledPopper = styled(Popper)`
 
 export const InfoBubble: React.FC<IInfoBubbleProps> = ({ info, ariaLabel, placement = 'auto', id = null }) => {
     const [open, setOpen] = React.useState(false);
-    const anchorElement = React.useRef(null);
+    const [anchorElement, setAnchorElement] = React.useState<HTMLButtonElement | null>(null);
     const { t } = useTranslation();
 
     // Event listener for pressing the escape key to close the info bubble
@@ -61,11 +61,11 @@ export const InfoBubble: React.FC<IInfoBubbleProps> = ({ info, ariaLabel, placem
                 onMouseEnter={() => setOpen(true)}
                 onMouseLeave={() => setOpen(false)}
                 onClick={() => setOpen(!open)}
-                ref={anchorElement}
+                ref={setAnchorElement}
             >
                 <InfoIcon color={'info'} />
             </InfoButton>
-            <StyledPopper role="alert" keepMounted popperOptions={{ placement: placement }} open={open} anchorEl={anchorElement.current} onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)} >
+            <StyledPopper role="alert" keepMounted popperOptions={{ placement: placement }} open={open} anchorEl={anchorElement} onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)} >
                 <PopperInfo>
                     {info}
                 </PopperInfo>

@@ -47,12 +47,6 @@ const MetaEditorWrapper = styled(Box)`
   grid-column: span 12;
 `;
 
-const ResponseWrapper = styled(Box)`
-    justify-self: center;
-    align-self: center;
-    align-items: center;
-    margin: 32px;
-`;
 const GridFixer = styled.div`
     display: grid;
     grid-column: span 12;
@@ -117,6 +111,7 @@ export const EditorMetaSection: React.FC<IEditorMetaSectionProps> = ({ editorCon
         if (contentLanguages.includes(language)) {
             setLanguageTab(language);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional: only react to language changes, contentLanguages/setLanguageTab are stable
     }, [language]);
 
     const { t } = useTranslation();

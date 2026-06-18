@@ -139,17 +139,9 @@ const mockCubeQuery: ICubeQuery = {
     }
 };
 
-const defaultSelectables = { foo: ['2018'] };
-const setDefaultSelectables = jest.fn();
 const setCubeQuery = jest.fn();
 const query = null;
 const setQuery = jest.fn();
-const saveDialogOpen = false;
-const setSaveDialogOpen = jest.fn();
-const selectedVisualizationUserInput = null;
-const setSelectedVisualizationUserInput = jest.fn();
-const visualizationSettingsUserInput = null;
-const setVisualizationSettingsUserInput = jest.fn();
 
 describe('Rendering test', () => {
     it('renders correctly', () => {

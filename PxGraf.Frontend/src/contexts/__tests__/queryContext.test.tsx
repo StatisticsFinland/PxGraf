@@ -2,7 +2,7 @@ import React from 'react';
 import { QueryContext, QueryProvider } from 'contexts/queryContext';
 import { act, render, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { FilterType } from 'types/query';
+import { FilterType, ICubeQuery } from 'types/query';
 
 const TestComponent = () => {
     const { cubeQuery, setCubeQuery, query, setQuery } = React.useContext(QueryContext);
@@ -77,11 +77,13 @@ describe('QueryContext', () => {
     });
 
     it('should only apply the last cubeQuery when called rapidly', async () => {
-        let setCubeQueryRef: (q: any) => void;
+        let setCubeQueryRef: (q: ICubeQuery) => void;
 
         const CapturingComponent = () => {
             const { cubeQuery, setCubeQuery } = React.useContext(QueryContext);
-            setCubeQueryRef = setCubeQuery;
+            React.useLayoutEffect(() => {
+                setCubeQueryRef = setCubeQuery;
+            }, [setCubeQuery]);
             return <div data-testid="cubeQuery">{JSON.stringify(cubeQuery)}</div>;
         };
 

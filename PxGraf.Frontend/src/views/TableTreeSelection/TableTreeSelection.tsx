@@ -25,7 +25,7 @@ export const TableTreeSelection: React.FC = () => {
 
   React.useEffect(() => {
       document.title = `${t("pages.tableTreeSelection")} | PxGraf`;
-  }, []);
+  }, [t]);
 
   return (
     <TableTreeSelectionWrapper maxWidth="md">
