@@ -34,6 +34,9 @@ namespace PxGraf.Services
             Task<ServiceHealthStatus> sqTask = ProbeStorageAsync("saved-query-storage", () => sqFileInterface.CanAccessSavedQueriesAsync(Configuration.Current.SavedQueryDirectory));
             Task<ServiceHealthStatus> archiveTask = ProbeStorageAsync("archive-file-storage", () => sqFileInterface.CanAccessArchivesAsync(Configuration.Current.ArchiveFileDirectory));
 
+            // Ensure all probes complete before reading results, preventing unobserved task exceptions
+            await Task.WhenAll(dbTask, sqTask, archiveTask);
+
             List<DatabaseHealthStatus> databases = [await dbTask];
             List<ServiceHealthStatus> services = [await sqTask, await archiveTask];
 

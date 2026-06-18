@@ -23,7 +23,14 @@ namespace PxGraf.Storage
         public Task<bool> FileExistsAsync(string filePath, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            return Task.FromResult(File.Exists(filePath));
+            try
+            {
+                return Task.FromResult(File.Exists(filePath));
+            }
+            catch (Exception ex)
+            {
+                return Task.FromException<bool>(ex);
+            }
         }
 
         /// <inheritdoc/>
@@ -61,40 +68,75 @@ namespace PxGraf.Storage
         public Task<Stream> OpenReadAsync(string filePath, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            return Task.FromResult((Stream)File.OpenRead(filePath));
+            try
+            {
+                return Task.FromResult((Stream)File.OpenRead(filePath));
+            }
+            catch (Exception ex)
+            {
+                return Task.FromException<Stream>(ex);
+            }
         }
 
         /// <inheritdoc/>
         public Task<IEnumerable<string>> EnumerateFilesAsync(string directoryPath, string fileExtension, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            string normalizedExtension = PathNormalizer.NormalizeFileExtension(fileExtension);
+            try
+            {
+                string normalizedExtension = PathNormalizer.NormalizeFileExtension(fileExtension);
 
-            // Convert extension to search pattern for Directory.EnumerateFiles
-            string searchPattern = string.IsNullOrEmpty(normalizedExtension) ? "*" : $"*{normalizedExtension}";
-            
-            return Task.FromResult(Directory.EnumerateFiles(directoryPath, searchPattern));
+                // Convert extension to search pattern for Directory.EnumerateFiles
+                string searchPattern = string.IsNullOrEmpty(normalizedExtension) ? "*" : $"*{normalizedExtension}";
+
+                return Task.FromResult(Directory.EnumerateFiles(directoryPath, searchPattern));
+            }
+            catch (Exception ex)
+            {
+                return Task.FromException<IEnumerable<string>>(ex);
+            }
         }
 
         /// <inheritdoc/>
         public Task<IEnumerable<string>> EnumerateDirectoriesAsync(string directoryPath, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            return Task.FromResult(Directory.EnumerateDirectories(directoryPath));
+            try
+            {
+                return Task.FromResult(Directory.EnumerateDirectories(directoryPath));
+            }
+            catch (Exception ex)
+            {
+                return Task.FromException<IEnumerable<string>>(ex);
+            }
         }
 
         /// <inheritdoc/>
         public Task<bool> ProbeDirectoryAsync(string directoryPath, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            return Task.FromResult(Directory.Exists(directoryPath));
+            try
+            {
+                return Task.FromResult(Directory.Exists(directoryPath));
+            }
+            catch (Exception ex)
+            {
+                return Task.FromException<bool>(ex);
+            }
         }
 
         /// <inheritdoc/>
         public Task<DateTime> GetLastWriteTimeAsync(string filePath, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            return Task.FromResult(File.GetLastWriteTime(filePath));
+            try
+            {
+                return Task.FromResult(File.GetLastWriteTime(filePath));
+            }
+            catch (Exception ex)
+            {
+                return Task.FromException<DateTime>(ex);
+            }
         }
 
         /// <inheritdoc/>
