@@ -37,10 +37,11 @@ export const EditorField: React.FC<IEditorFieldProps> = ({ label, defaultValue, 
     }, [defaultValue, editValue]);
 
     return (
-        <FormControl variant="outlined" style={style}>
+        <FormControl variant="outlined" size="small" style={style}>
             <InputLabel htmlFor={inputId}>{isEdited ? <b>{label + '*'}</b> : label}</InputLabel>
             <StyledOutlinedInput
                 id={inputId}
+                size="small"
                 type='text'
                 value={localValue}
                 onChange={evt => {

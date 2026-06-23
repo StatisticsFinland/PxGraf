@@ -1,7 +1,5 @@
 import React, { useEffect } from 'react';
-import { Box, Tabs, Tab } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
-import Typography from '@mui/material/Typography';
+import { Box, Tabs, Tab, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import MetaEditor from 'components/MetaEditor/MetaEditor';
 import ChartTypeSelector from 'components/ChartTypeSelector/ChartTypeSelector';
 import { useTranslation } from 'react-i18next';
@@ -13,9 +11,9 @@ import { IDimension } from 'types/cubeMeta';
 import { VisualizationType } from 'types/visualizationType';
 import { Query } from 'types/query';
 import ChartTypeRejectionReasons from 'components/ChartTypeRejectionReasons/ChartTypeRejectionReasons';
-import CellCount from 'components/CellCount/CellCount';
 import InfoBubble from 'components/InfoBubble/InfoBubble';
 import UiLanguageContext from 'contexts/uiLanguageContext';
+import { EPreviewSize } from 'types/previewSize';
 import { IEditorContentsResult } from '../../api/services/editor-contents';
 import { getVisualizationOptionsForVisualizationType } from '../../utils/editorHelpers';
 import { IVisualizationSettings } from '../../types/visualizationSettings';
@@ -23,19 +21,14 @@ import { IVisualizationSettings } from '../../types/visualizationSettings';
 const MetaWrapper = styled(Box)`
   grid-area: 'parameters';
   display: grid;
-  gap: 16px;
+  gap: 8px;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-  padding: 24px;
+  padding: 8px 16px 16px 16px;
 `;
 
 const TabWrapper = styled(Box)`
   border-bottom: 8px;
   grid-column: span 12;
-`;
-
-const StyledSecondaryText = styled(Typography)`
-  margin-bottom: -2px;
-  margin-top: -2px;
 `;
 
 const StyledTab = styled(Tab)`
@@ -52,8 +45,24 @@ const GridFixer = styled.div`
     grid-column: span 12;
     padding-left: 16px;
     padding-right: 16px;
-    padding-top: 8px;
-    padding-bottom: 8px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+`;
+
+const VisualizationSettingsRow = styled.div`
+    display: flex;
+    align-items: center;
+    grid-column: span 12;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+`;
+
+const PreviewSizeControlWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    margin-left: auto;
 `;
 
 const ChartTypeSelectorWrapper = styled.div`
@@ -85,6 +94,8 @@ interface IEditorMetaSectionProps {
     dimensionQuery: Query;
     contentLanguages: string[];
     visualizationSettings: IVisualizationSettings;
+    previewSize: EPreviewSize;
+    onPreviewSizeChange: (size: EPreviewSize) => void;
 }
 
 const TitleWrapper = styled.div`
@@ -101,8 +112,10 @@ const TitleWrapper = styled.div`
  * @param {Query} dimensionQuery: Query object containing the selected values for each dimension.
  * @param {string[]} contentLanguages: List of available content languages.
  * @param {IVisualizationSettings} visualizationSettings: Visualization settings for the selected visualization type.
+ * @param {EPreviewSize} previewSize: The current preview size selection.
+ * @param {(size: EPreviewSize) => void} onPreviewSizeChange: Callback for when the preview size changes.
  */
-export const EditorMetaSection: React.FC<IEditorMetaSectionProps> = ({ editorContentsResponse, selectedVisualization, resolvedDimensions, dimensionQuery, contentLanguages, visualizationSettings }) => {
+export const EditorMetaSection: React.FC<IEditorMetaSectionProps> = ({ editorContentsResponse, selectedVisualization, resolvedDimensions, dimensionQuery, contentLanguages, visualizationSettings, previewSize, onPreviewSizeChange }) => {
     const { language, languageTab, setLanguageTab } = React.useContext(UiLanguageContext);
     const [isMetaAccordionOpen, setIsMetaAccordionOpen] = React.useState(false);
 
@@ -115,7 +128,6 @@ export const EditorMetaSection: React.FC<IEditorMetaSectionProps> = ({ editorCon
     }, [language]);
 
     const { t } = useTranslation();
-    const theme = useTheme();
 
     const handleMetaAccordionOpenChange = () => {
         setIsMetaAccordionOpen(!isMetaAccordionOpen);
@@ -134,21 +146,20 @@ export const EditorMetaSection: React.FC<IEditorMetaSectionProps> = ({ editorCon
         <MetaWrapper>
             <TabWrapper sx={{ borderColor: 'divider' }}>
                 <TitleWrapper>
-                    <StyledSecondaryText variant="body2" sx={{color: theme.palette.text.secondary}}>{t("editor.contentLanguage")}</StyledSecondaryText>
+                    <Tabs value={languageTab} onChange={(evt, newLanguageTab) => setLanguageTab(newLanguageTab)} aria-label={t("editor.contentLanguage")}>
+                        {contentLanguages.map(editLanguage =>
+                            <StyledTab
+                                sx={{minWidth: 'auto'}}
+                                label={editLanguage}
+                                value={editLanguage}
+                                key={editLanguage}
+                                aria-label={`${t("editor.contentLanguage")}: ${t("lang.local." + editLanguage)}`}
+                                {...a11yProps(editLanguage)}
+                            />
+                        )}
+                    </Tabs>
                     <InfoBubble info={t("infoText.langTab")} ariaLabel={t("editor.contentLanguage")} />
                 </TitleWrapper>
-                <Tabs value={languageTab} onChange={(evt, newLanguageTab) => setLanguageTab(newLanguageTab)}>
-                    {contentLanguages.map(editLanguage =>
-                        <StyledTab
-                            sx={{minWidth: 'auto'}}
-                            label={editLanguage}
-                            value={editLanguage}
-                            key={editLanguage}
-                            aria-label={`${t("editor.contentLanguage")}: ${t("lang.local." + editLanguage)}`}
-                            {...a11yProps(editLanguage)}
-                        />
-                    )}
-                </Tabs>
             </TabWrapper>
             <MetaEditorWrapper>
                 {contentLanguages.map(editLanguage =>
@@ -176,18 +187,35 @@ export const EditorMetaSection: React.FC<IEditorMetaSectionProps> = ({ editorCon
                         </ButtonGroupWrapper>
                         {(editorContentsResponse.data?.visualizationRejectionReasons && Object.keys(editorContentsResponse.data?.visualizationRejectionReasons).length > 0) ? <ChartTypeRejectionReasons rejectionReasons={editorContentsResponse.data?.visualizationRejectionReasons} /> : <></>}
                     </FlexContentWrapper>
-                    <FlexContentWrapper>
-                        {(editorContentsResponse.data?.size && editorContentsResponse.data?.maximumSupportedSize && editorContentsResponse.data?.sizeWarningLimit) ? <CellCount size={editorContentsResponse.data?.size} maximumSize={editorContentsResponse.data?.maximumSupportedSize} warningLimit={editorContentsResponse.data?.sizeWarningLimit} /> : <></>}
-                    </FlexContentWrapper>
+                    <PreviewSizeControlWrapper>
+                        <InfoBubble info={t("infoText.rescaleButtons")} ariaLabel={t('tooltip.visualizationSize')} />
+                        <ToggleButtonGroup
+                            size="small"
+                            color="primary"
+                            exclusive
+                            value={previewSize}
+                            aria-label={t('tooltip.visualizationSize')}
+                            onChange={(_, val) => val != null && onPreviewSizeChange(val)}
+                        >
+                            {Object.entries(EPreviewSize).map(([label, value]) => (
+                                <ToggleButton
+                                    key={value}
+                                    value={value}
+                                >
+                                    {t(`previewSize.${label.toLowerCase()}`)}
+                                </ToggleButton>
+                            ))}
+                        </ToggleButtonGroup>
+                    </PreviewSizeControlWrapper>
                 </ChartTypeSelectorWrapper>
             </GridFixer>
-                {selectedVisualization != null && <VisualizationSettingControl
+                {selectedVisualization != null && <VisualizationSettingsRow><VisualizationSettingControl
                     selectedVisualization={selectedVisualization}
                     dimensions={resolvedDimensions}
                     dimensionQuery={dimensionQuery}
                     visualizationOptions={getVisualizationOptionsForVisualizationType(editorContentsResponse.data.visualizationOptions, selectedVisualization)}
                     visualizationSettings={visualizationSettings}
-            />}
+                /></VisualizationSettingsRow>}
         </MetaWrapper>
     );
 }

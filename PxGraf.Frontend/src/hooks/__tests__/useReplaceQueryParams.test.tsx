@@ -23,13 +23,22 @@ describe('useReplaceQueryParams hook', () => {
     });
 
     it('should replace query params if context does not match current params', () => {
-        useParams.mockReturnValueOnce(['testDb', 'testStat', 'testTable']);
-        useNavigationContext.mockReturnValueOnce({
-            tablePath: ['testDb2', 'testStat2', 'testTable2'],
+        // First render: mount guard skips navigate
+        useParams.mockReturnValue(['testDb', 'testStat', 'testTable']);
+        useNavigationContext.mockReturnValue({
+            tablePath: ['testDb', 'testStat', 'testTable'],
             setTablePath: jest.fn(),
         });
 
-        renderHook(() => useReplaceQueryParams('/'));
+        const { rerender } = renderHook(() => useReplaceQueryParams('/'));
+        expect(mockNavigate).not.toHaveBeenCalled();
+
+        // Second render: context changed (simulates user folder click)
+        useNavigationContext.mockReturnValue({
+            tablePath: ['testDb2', 'testStat2', 'testTable2'],
+            setTablePath: jest.fn(),
+        });
+        rerender();
 
         expect(mockNavigate).toHaveBeenCalledWith({
             pathname: '/',
@@ -38,13 +47,22 @@ describe('useReplaceQueryParams hook', () => {
     });
 
     it('should replace query params if current params are empty but context is not', () => {
-        useParams.mockReturnValueOnce([null, null, null]);
-        useNavigationContext.mockReturnValueOnce({
-            tablePath: ['testDb', 'testStat', 'testTable'],
+        // First render: mount guard skips navigate
+        useParams.mockReturnValue([null, null, null]);
+        useNavigationContext.mockReturnValue({
+            tablePath: null,
             setTablePath: jest.fn(),
         });
 
-        renderHook(() => useReplaceQueryParams('/my-route'));
+        const { rerender } = renderHook(() => useReplaceQueryParams('/my-route'));
+        expect(mockNavigate).not.toHaveBeenCalled();
+
+        // Second render: context updated (simulates user interaction)
+        useNavigationContext.mockReturnValue({
+            tablePath: ['testDb', 'testStat', 'testTable'],
+            setTablePath: jest.fn(),
+        });
+        rerender();
 
         expect(mockNavigate).toHaveBeenCalledWith({
             pathname: '/my-route',

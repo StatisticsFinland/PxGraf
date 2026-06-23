@@ -1,9 +1,10 @@
 import React, { useRef } from 'react';
-import { useMediaQuery, Typography, Button, Box, Stack } from '@mui/material';
+import { useMediaQuery, Button, Box, Stack } from '@mui/material';
 import styled from 'styled-components';
 import LanguageSelector from 'components/LanguageSelector/LanguageSelector';
 import SavedQueryFinder from 'components/SavedQueryFinder/SavedQueryFinder';
 import { useNavigationContext } from 'contexts/navigationContext';
+import BreadcrumbNav from './BreadcrumbNav';
 import logo from 'images/pxgraf-logo.png';
 import logo_small from 'images/pxgraf-logo-small.png';
 import { useTranslation } from 'react-i18next';
@@ -11,7 +12,7 @@ import { useLocation } from 'react-router-dom';
 import { BasePath } from '../../envVars';
 
 const Logo = styled.img`
-  height: 60px;
+  height: 40px;
   padding-right: 24px;
 
   @media (max-width: 800px) {
@@ -20,7 +21,7 @@ const Logo = styled.img`
 `;
 
 const HeaderWrapper = styled(Box)`
-  min-height: 75px;
+  min-height: 56px;
 `;
 
 const LangSelectorWrapper = styled(Stack)`
@@ -28,7 +29,7 @@ const LangSelectorWrapper = styled(Stack)`
 `;
 
 const MenuRowWrapper = styled(Stack)`
-  padding: 8px;
+  padding: 4px;
   width: 100%;
   align-items: center;
   justify-content: flex-start;
@@ -43,14 +44,14 @@ const LinkWrapper = styled.div`
   gap: 5px;
 `;
 
-const TitleWrapper = styled.div`
-  padding-left: 8px;
-  min-width: 20%;
+const BreadcrumbWrapper = styled.div`
+  padding-left: 16px;
+  flex: 1;
 `;
 
 /**
  * Header component displayed on top of the page in all views.
- * Contains the logo, page title, language selector, and database selector link.
+ * Contains the logo, table path breadcrumb, language selector, and saved query finder.
  */
 const Header: React.FC = () => {
     const { t } = useTranslation();
@@ -64,9 +65,6 @@ const Header: React.FC = () => {
     if (tablePath?.length) {
         indexUrl = `${BasePath}/?tablePath=${tablePath.join(',')}`;
     }
-
-    // Show different top title for editor and database/table selection
-    const title = location.pathname?.split("/")[1] == "editor" ? t("general.editorTitle") : t("general.selectDatabaseTitle");
 
     const ref = React.useRef<HTMLAnchorElement>(null);
 
@@ -86,11 +84,10 @@ const Header: React.FC = () => {
             <MenuRowWrapper direction="row" ref={headerRef}>
                 <Button sx={{ position: 'absolute', left: '-9999px' }} href="#" onClick={(e) => { e.preventDefault(); focusOnContent(); }} ref={ref}>{t('general.contentLink')}</Button>
                 <a href={indexUrl}><Logo alt={t('navbar.logoAlt')} src={isNarrowScreen ? logo_small : logo} /></a>
-                <TitleWrapper>
-                    <Typography variant="h1">{title}</Typography>
-                </TitleWrapper>
+                <BreadcrumbWrapper>
+                    {tablePath?.length > 0 && <BreadcrumbNav tablePath={tablePath} />}
+                </BreadcrumbWrapper>
                 <LinkWrapper>
-                    <Button href={indexUrl}>{t('general.databaseSelectorLink')}</Button>
                     <SavedQueryFinder oldQueryId={queryId} />
                 </LinkWrapper>
                 <LangSelectorWrapper direction="row-reverse" marginLeft="auto">

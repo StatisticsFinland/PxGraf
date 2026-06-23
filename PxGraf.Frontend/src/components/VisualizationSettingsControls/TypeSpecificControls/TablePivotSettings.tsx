@@ -13,12 +13,21 @@ import { VisualizationContext } from '../../../contexts/visualizationContext';
 
 const DimensionListWrapper = styled(Stack)`
     padding: 8px;
+    gap: 8px;
     align-items: center;
-    min-width: 375px;
+    min-width: 500px;
+    border: 1px solid rgba(0, 0, 0, 0.23);
+    border-radius: 4px;
 `;
 
 const IconWrapper = styled(Stack)`
-    min-width: 75px;
+    flex-shrink: 0;
+`;
+
+const HoverIconButton = styled(IconButton)`
+    &&:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+    }
 `;
 
 interface ITableSettingsProps extends IVisualizationSettingsProps {
@@ -101,15 +110,15 @@ export const TablePivotSettings: React.FC<ITableSettingsProps> = ({ visualizatio
                     selectedChangedHandler={(newSel) => setSelected(newSel)}
                 />
                 <IconWrapper>
-                    <IconButton aria-label={t('tableSettings.up')} onClick={() => upHandler()}>
+                    <HoverIconButton aria-label={t('tableSettings.up')} onClick={() => upHandler()}>
                         <ArrowUpwardIcon />
-                    </IconButton>
-                    <IconButton aria-label={t('tableSettings.down')} onClick={() => downHandler()}>
+                    </HoverIconButton>
+                    <HoverIconButton aria-label={t('tableSettings.down')} onClick={() => downHandler()}>
                         <ArrowDownwardIcon />
-                    </IconButton>
-                    <IconButton aria-label={t('tableSettings.swap')} onClick={() => swapHandler()}>
+                    </HoverIconButton>
+                    <HoverIconButton aria-label={t('tableSettings.swap')} onClick={() => swapHandler()}>
                         <SwapHorizIcon />
-                    </IconButton>
+                    </HoverIconButton>
                 </IconWrapper>
                 <DimensionList
                     title={t("chartSettings.columnVariables")}

@@ -5,6 +5,7 @@ import { SaveContext } from 'contexts/saveContext';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import InfoBubble from 'components/InfoBubble/InfoBubble';
+import CellCount from 'components/CellCount/CellCount';
 
 const FooterBtnWrapper = styled(Box)`
     grid-area: 'footer';
@@ -15,7 +16,13 @@ const FooterBtnWrapper = styled(Box)`
 `;
 
 
-export const EditorFooterSection: React.FC = () => {
+interface IEditorFooterSectionProps {
+    size?: number;
+    maximumSize?: number;
+    warningLimit?: number;
+}
+
+export const EditorFooterSection: React.FC<IEditorFooterSectionProps> = ({ size, maximumSize, warningLimit }) => {
     
     const { setSaveDialogOpen } = React.useContext(SaveContext);
     
@@ -23,8 +30,9 @@ export const EditorFooterSection: React.FC = () => {
     
     return(
         <FooterBtnWrapper>
+            {(size != null && maximumSize != null && warningLimit != null) ? <Box sx={{ marginRight: 'auto' }}><CellCount size={size} maximumSize={maximumSize} warningLimit={warningLimit} /></Box> : <></>}
             <InfoBubble info={t('infoText.save')} ariaLabel={t("editor.save")} />
-            <Button variant="contained" startIcon={<SaveIcon />} onClick={() => setSaveDialogOpen(true)}>
+            <Button variant="contained" size="small" startIcon={<SaveIcon />} onClick={() => setSaveDialogOpen(true)}>
                 {t("editor.save")}
             </Button>
         </FooterBtnWrapper>

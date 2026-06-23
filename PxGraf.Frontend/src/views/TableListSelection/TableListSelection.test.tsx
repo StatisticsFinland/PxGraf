@@ -5,6 +5,7 @@ import UiLanguageContext from 'contexts/uiLanguageContext';
 import '@testing-library/jest-dom';
 import { MemoryRouter } from 'react-router-dom';
 import TableListSelection from './TableListSelection';
+import { NavigationProvider } from 'contexts/navigationContext';
 
 jest.mock('envVars', () => ({
     PxGrafUrl: 'pxGrafUrl.fi/',
@@ -72,7 +73,9 @@ describe('Rendering test', () => {
         const { asFragment } = render(
             <MemoryRouter>
                 <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
-                    <TableListSelection />
+                    <NavigationProvider>
+                        <TableListSelection />
+                    </NavigationProvider>
                 </UiLanguageContext.Provider>
             </MemoryRouter>);
         expect(asFragment()).toMatchSnapshot();
@@ -84,7 +87,9 @@ describe('Assertion tests', () => {
         const { asFragment } = render(
             <MemoryRouter>
                 <UiLanguageContext.Provider value={{ language: "fr", setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
-                    <TableListSelection />
+                    <NavigationProvider>
+                        <TableListSelection />
+                    </NavigationProvider>
                 </UiLanguageContext.Provider>
             </MemoryRouter>);
         expect(asFragment().textContent).toContain('foo1-fi');

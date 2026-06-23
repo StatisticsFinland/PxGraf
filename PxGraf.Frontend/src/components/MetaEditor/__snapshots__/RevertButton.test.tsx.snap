@@ -9,7 +9,7 @@ exports[`Rendering test renders correctly 1`] = `
   >
     <button
       aria-label="editMetadata.discardChanges"
-      class="MuiButtonBase-root MuiIconButton-root MuiIconButton-edgeEnd MuiIconButton-sizeMedium css-1ysp02-MuiButtonBase-root-MuiIconButton-root"
+      class="MuiButtonBase-root MuiIconButton-root MuiIconButton-edgeEnd MuiIconButton-sizeSmall css-1eswsun-MuiButtonBase-root-MuiIconButton-root"
       tabindex="0"
       type="button"
     >

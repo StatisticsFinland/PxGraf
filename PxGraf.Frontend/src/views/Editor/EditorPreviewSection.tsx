@@ -2,6 +2,7 @@ import React from 'react';
 import { Box } from '@mui/material';
 import styled from 'styled-components';
 import Preview from 'components/Preview/Preview';
+import { EPreviewSize } from 'types/previewSize';
 import { Query } from 'types/query';
 import { VisualizationType } from 'types/visualizationType';
 import { IVisualizationSettings } from 'types/visualizationSettings';
@@ -13,8 +14,10 @@ const PreviewWrapper = styled(Box)`
     display: block;
     position: relative;
     grid-template-rows: auto 1fr;
-    padding: 16px;
+    padding: 8px;
     gap: 16px;
+    overflow-y: auto;
+    min-height: 0;
 `;
 
 const GuideTextWrapper = styled.div`
@@ -29,6 +32,7 @@ interface IEditorPreviewSectionProps {
     selectedVisualization: VisualizationType;
     visualizationSettings: IVisualizationSettings;
     editorContents: IEditorContentsResult;
+    previewSize: EPreviewSize;
 }
 
 /**
@@ -38,8 +42,9 @@ interface IEditorPreviewSectionProps {
  * @param {VisualizationType} visualizationType Selected visualization type.
  * @param {IVisualizationSettings} visualizationSettings Selected visualization settings.
  * @param {IEditorContentsResponse} editorContents Contents of the editor. This includes the visualization options and rejection reasons.
+ * @param {EPreviewSize} previewSize The current preview size for the chart.
  */
-export const EditorPreviewSection: React.FC<IEditorPreviewSectionProps> = ({ path, query, selectedVisualization, visualizationSettings, editorContents }) => {
+export const EditorPreviewSection: React.FC<IEditorPreviewSectionProps> = ({ path, query, selectedVisualization, visualizationSettings, editorContents, previewSize }) => {
     const { t } = useTranslation();
 
     if (!editorContents.data?.visualizationOptions?.length) {
@@ -65,6 +70,7 @@ export const EditorPreviewSection: React.FC<IEditorPreviewSectionProps> = ({ pat
                 query={query}
                 selectedVisualization={selectedVisualization}
                 visualizationSettings={visualizationSettings}
+                previewSize={previewSize}
             />
         </PreviewWrapper>
     );

@@ -2,6 +2,7 @@ import React from 'react';
 import Header from "./Header";
 import { render, screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
+import { useNavigationContext } from '../../contexts/navigationContext';
 
 jest.mock('envVars', () => ({
     PxGrafUrl: 'pxGrafUrl.fi/',
@@ -21,8 +22,15 @@ jest.mock('react-router-dom', () => ({
 
 jest.mock('../../contexts/navigationContext', () => ({
     ...jest.requireActual('../../contexts/navigationContext'),
-    useNavigationContext: () => ({tablePath: null})
+    useNavigationContext: jest.fn(() => ({tablePath: null}))
 }))
+
+jest.mock('./BreadcrumbNav', () => ({
+    __esModule: true,
+    default: ({ tablePath }: { tablePath: string[] }) => <div data-testid="breadcrumb-nav">{tablePath.join('/')}</div>
+}));
+
+const mockUseNavigationContext = useNavigationContext as jest.Mock;
 
 describe('Header component', () => {
     it('should render correctly', async () => {
@@ -34,20 +42,6 @@ describe('Header component', () => {
 });
 
 describe('Assertion tests', () => {
-    it('renders the page title', async () => {
-        render(<Header />);
-        await waitFor(() => {
-            expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument();
-        });
-    });
-
-    it('renders the database selector link', async () => {
-        render(<Header />);
-        await waitFor(() => {
-            expect(screen.getByText('general.databaseSelectorLink')).toBeInTheDocument();
-        });
-    });
-
     it('renders the logo image with alt text', async () => {
         render(<Header />);
         await waitFor(() => {
@@ -59,6 +53,15 @@ describe('Assertion tests', () => {
         render(<Header />);
         await waitFor(() => {
             expect(screen.getByText('general.contentLink')).toBeInTheDocument();
+        });
+    });
+
+    it('renders breadcrumb nav when tablePath is set', async () => {
+        mockUseNavigationContext.mockReturnValueOnce({ tablePath: ['db1', 'stat1', 'table1'] });
+        render(<Header />);
+        await waitFor(() => {
+            expect(screen.getByTestId('breadcrumb-nav')).toBeInTheDocument();
+            expect(screen.getByText('db1/stat1/table1')).toBeInTheDocument();
         });
     });
 });
