@@ -19,6 +19,7 @@ exports[`Rendering test renders correctly 1`] = `
             style="overflow: hidden; margin-bottom: 0px;"
           >
             <div
+              aria-label="editor.contentLanguage"
               class="MuiTabs-list MuiTabs-flexContainer css-hzcega-MuiTabs-list"
               role="tablist"
             >

@@ -146,7 +146,7 @@ export const EditorMetaSection: React.FC<IEditorMetaSectionProps> = ({ editorCon
         <MetaWrapper>
             <TabWrapper sx={{ borderColor: 'divider' }}>
                 <TitleWrapper>
-                    <Tabs value={languageTab} onChange={(evt, newLanguageTab) => setLanguageTab(newLanguageTab)}>
+                    <Tabs value={languageTab} onChange={(evt, newLanguageTab) => setLanguageTab(newLanguageTab)} aria-label={t("editor.contentLanguage")}>
                         {contentLanguages.map(editLanguage =>
                             <StyledTab
                                 sx={{minWidth: 'auto'}}

@@ -33,7 +33,7 @@ export const LanguageSelector: React.FC = () => {
     return (
         <SelectorWrapper direction="row" alignItems="center" flexWrap='wrap'>
             {availableUiLanguages.map(lang => (
-                <StyledLangButton size="small" href='#' selected={language === lang} aria-label={`${t('general.uiLanguage')}: ${i18n.getFixedT(lang)('lang.self')}`} key={lang} onClick={() => setLanguage(lang)}>
+                <StyledLangButton size="small" selected={language === lang} aria-label={`${t('general.uiLanguage')}: ${i18n.getFixedT(lang)('lang.self')}`} key={lang} onClick={() => setLanguage(lang)}>
                     <LangText text={i18n.getFixedT(lang)('lang.self')} />
                 </StyledLangButton>
             ))}

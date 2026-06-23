@@ -5,42 +5,42 @@ exports[`Rendering test renders correctly 1`] = `
   <div
     class="MuiStack-root sc-hKVpXn iVxcKl css-7a4jik-MuiStack-root"
   >
-    <a
+    <button
       aria-label="general.uiLanguage: lang.self.fi"
       class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeSmall MuiButton-textSizeSmall MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeSmall MuiButton-textSizeSmall MuiButton-colorPrimary sc-eCQgVK eRDGmw css-1ccsd5i-MuiButtonBase-root-MuiButton-root"
-      href="#"
       tabindex="0"
+      type="button"
     >
       <p
         class="MuiTypography-root MuiTypography-body1 css-rizt0-MuiTypography-root"
       >
         lang.self.fi
       </p>
-    </a>
-    <a
+    </button>
+    <button
       aria-label="general.uiLanguage: lang.self.en"
       class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeSmall MuiButton-textSizeSmall MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeSmall MuiButton-textSizeSmall MuiButton-colorPrimary sc-eCQgVK fHCjUC css-1ccsd5i-MuiButtonBase-root-MuiButton-root"
-      href="#"
       tabindex="0"
+      type="button"
     >
       <p
         class="MuiTypography-root MuiTypography-body1 css-rizt0-MuiTypography-root"
       >
         lang.self.en
       </p>
-    </a>
-    <a
+    </button>
+    <button
       aria-label="general.uiLanguage: lang.self.sv"
       class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeSmall MuiButton-textSizeSmall MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeSmall MuiButton-textSizeSmall MuiButton-colorPrimary sc-eCQgVK fHCjUC css-1ccsd5i-MuiButtonBase-root-MuiButton-root"
-      href="#"
       tabindex="0"
+      type="button"
     >
       <p
         class="MuiTypography-root MuiTypography-body1 css-rizt0-MuiTypography-root"
       >
         lang.self.sv
       </p>
-    </a>
+    </button>
     <button
       aria-label="tooltip.open: general.uiLanguage"
       class="sc-bdDsCe fVRDsd"

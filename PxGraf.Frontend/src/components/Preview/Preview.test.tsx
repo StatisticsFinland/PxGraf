@@ -343,7 +343,7 @@ describe('Assertion tests', () => {
         };
         
         const result = getSelectables(mockVisualizationResponseWithSelectables, mockVisualizationSettingsWithMultiselect);
-        expect(result.length).toBe(2);
+        expect(result).toHaveLength(2);
         expect(result[0].dimension.code).toBe('Tiedot');
         expect(result[1].dimension.code).toBe('Vuosi');
         expect(result[0].multiselectable).toBe(false);

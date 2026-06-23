@@ -45,7 +45,7 @@ export const TableListItem: React.FC<ITableListItemProps> = ({ currentPath, item
             // Use history.replaceState to avoid React Router re-renders of the tree.
             setTablePath([...currentPath]);
             const url = `${BasePath}/?tablePath=${currentPath.join(',')}`;
-            window.history.replaceState(null, '', url);
+            globalThis.history.replaceState(null, '', url);
         }
     };
 

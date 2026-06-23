@@ -18,6 +18,7 @@ const BreadcrumbLink = styled(Link)`
 `;
 
 interface IBreadcrumbItem {
+    code: string;
     type: 'directory' | 'table';
     label: string;
     to: string | null;
@@ -59,6 +60,7 @@ const BreadcrumbNav: React.FC<IBreadcrumbNavProps> = ({ tablePath }) => {
             const foundHeader = result.data.headers?.find(h => h.code === code);
             const foundFile = result.data.files?.find(f => f.fileName === code);
             if (foundHeader) {
+                type = 'directory';
                 const displayLang = foundHeader.languages.includes(language) ? language : foundHeader.languages[0];
                 label = foundHeader.name[displayLang] ?? code;
             } else if (foundFile) {
@@ -78,7 +80,7 @@ const BreadcrumbNav: React.FC<IBreadcrumbNavProps> = ({ tablePath }) => {
             to = `/?tablePath=${tablePath.slice(0, index + 1).join(',')}`;
         }
 
-        return { type, label, to };
+        return { code, type, label, to };
     });
 
     return (
@@ -105,7 +107,7 @@ const BreadcrumbNav: React.FC<IBreadcrumbNavProps> = ({ tablePath }) => {
                     </BreadcrumbLink>
                 ) : (
                     <Typography
-                        key={`current-${index}`}
+                        key={item.code}
                         component="span"
                         color={item.type === 'table' ? 'text.primary' : 'primary'}
                     >
