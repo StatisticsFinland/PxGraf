@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { CircularProgress, Alert, ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { CircularProgress, Alert } from '@mui/material';
 import { ISelectableSelections, SelectableDimensionMenus } from 'components/SelectableVariableMenus/SelectableDimensionMenus';
 import styled from 'styled-components';
 import React from 'react';
@@ -8,12 +8,12 @@ import { IVisualizationSettings } from 'types/visualizationSettings';
 import { useVisualizationQuery } from 'api/services/visualization';
 import { Chart, IQueryVisualizationResponse } from '@statisticsfinland/pxvisualizer';
 import useSelections from 'components/SelectableVariableMenus/hooks/useSelections';
-import InfoBubble from 'components/InfoBubble/InfoBubble';
 import { IVariable } from '../../types/visualizationResponse';
 import { QueryContext } from '../../contexts/queryContext';
 import { VisualizationContext } from '../../contexts/visualizationContext';
 import UiLanguageContext from '../../contexts/uiLanguageContext';
 import { EDimensionType } from '../../types/cubeMeta';
+import { EPreviewSize } from 'types/previewSize';
 
 export interface ISelectabilityInfo {
     dimension: IVariable;
@@ -25,6 +25,7 @@ interface IPreviewProps {
     query: Query;
     selectedVisualization: string;
     visualizationSettings: IVisualizationSettings;
+    previewSize: EPreviewSize;
 }
 
 const ResponseWrapper = styled.div`
@@ -36,15 +37,6 @@ const ResponseWrapper = styled.div`
   justify-content: center;
 `;
 
-const FlexContentWrapper = styled.div`
-    display: flex;
-    align-items: center;
-    padding-bottom: 8px;
-    padding-left: 8px;
-    padding-right: 8px;
-    margin-bottom: 10px;
-`;
-
 interface IChartWrapperProps {
     $previewSize: EPreviewSize;
 }
@@ -53,17 +45,6 @@ const ChartWrapper = styled.div<IChartWrapperProps>`
     width: ${p => p.$previewSize};
     margin: auto;
 `;
-
-enum EPreviewSize {
-    XL = '100%',
-    L = '1200px',
-    M = '992px',
-    S = '768px',
-    XS = '576px',
-    XXS = '390px',
-    XXXS = '360px',
-    XXXXS = '320px'
-}
 
 export const getSelectables = (visualizationResponse: IQueryVisualizationResponse, visualizationSettings?: IVisualizationSettings): ISelectabilityInfo[] => {
     if (!visualizationResponse) return [];
@@ -97,8 +78,9 @@ export const getResolvedSelections = (selectables: ISelectabilityInfo[], selecti
  * @param {Query} query Object that represents the current query.
  * @param {string} selectedVisualization Name of the visualization type selected for the visualization.
  * @param {IVisualizationSettings} visualizationSettings Visualization settings object.
+ * @param {EPreviewSize} previewSize The current preview size to render the chart at.
  */
-export const Preview: React.FC<IPreviewProps> = ({ path, query, selectedVisualization, visualizationSettings }) => {
+export const Preview: React.FC<IPreviewProps> = ({ path, query, selectedVisualization, visualizationSettings, previewSize }) => {
     const { t } = useTranslation();
     const { languageTab } = React.useContext(UiLanguageContext);
     const { cubeQuery } = React.useContext(QueryContext);
@@ -106,18 +88,11 @@ export const Preview: React.FC<IPreviewProps> = ({ path, query, selectedVisualiz
     const { data, isLoading, isError } = useVisualizationQuery(path, query, cubeQuery, languageTab, selectedVisualization, visualizationSettings);
     const showVisualization = data && !isLoading && !isError;
     const { selections, setSelections } = useSelections();
-    const [size, setSize] = React.useState<EPreviewSize>(EPreviewSize.XL);
     const selectables = getSelectables(data, visualizationSettings);
 
     const resolvedSelections = React.useMemo(() => {
         return getResolvedSelections(selectables, selections, defaultSelectables, visualizationSettings?.multiselectableVariableCode);
     }, [selectables, selections, defaultSelectables, visualizationSettings]);
-
-    const buttons = Object.values(EPreviewSize).map((value) =>
-        <ToggleButton selected={size === value} value={value} key={value} onClick={() => setSize(value)}>
-            {size === value ? <b>{value}</b> : value}
-        </ToggleButton>
-    );
 
     if (isLoading || (!data && !isError)) {
         return (
@@ -135,13 +110,6 @@ export const Preview: React.FC<IPreviewProps> = ({ path, query, selectedVisualiz
 
     return (
         <>
-            {showVisualization &&
-                <FlexContentWrapper>
-                    <InfoBubble info={t("infoText.rescaleButtons")} ariaLabel={t('tooltip.visualizationSize')} />
-                    <ToggleButtonGroup aria-label={t('tooltip.visualizationSize')} color={'primary'} exclusive>
-                        {buttons}
-                    </ToggleButtonGroup>
-                </FlexContentWrapper>}
             <SelectableDimensionMenus
                 setSelections={setSelections}
                 selections={resolvedSelections}
@@ -149,7 +117,7 @@ export const Preview: React.FC<IPreviewProps> = ({ path, query, selectedVisualiz
                 multiselectableDimensionCode={visualizationSettings?.multiselectableVariableCode}
             />
             {showVisualization &&
-                <ChartWrapper className='tk-table' $previewSize={size}>
+                <ChartWrapper className='tk-table' $previewSize={previewSize}>
                     <Chart
                         locale={languageTab}
                         pxGraphData={data}

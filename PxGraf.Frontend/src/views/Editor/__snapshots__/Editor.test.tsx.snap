@@ -3,39 +3,22 @@
 exports[`Rendering test renders correctly 1`] = `
 <DocumentFragment>
   <div
-  class="MuiStack-root css-m69qwo-MuiStack-root"
+  class="sc-gHbteL dwRsuh MuiBox-root css-0"
 >
   <div
-    class="sc-folSZX isdgta MuiBox-root css-ve9ogo"
+    class="sc-bqqMSY lbtQ MuiBox-root css-ve9ogo"
   >
     <div
-      class="sc-bqqMSY caqzcx"
+      class="sc-iqkkDd zqhTE"
     >
       <p
         class="MuiTypography-root MuiTypography-body2 css-1wle3ir-MuiTypography-root"
       >
         variableSelect.title
       </p>
-      <button
-        aria-label="tooltip.open: variableSelect.title"
-        class="sc-iqkkDd dZtsC"
-        id="mainContent"
-      >
-        <svg
-          aria-hidden="true"
-          class="MuiSvgIcon-root MuiSvgIcon-colorInfo MuiSvgIcon-fontSizeMedium css-ocq0ss-MuiSvgIcon-root"
-          data-testid="InfoIcon"
-          focusable="false"
-          viewBox="0 0 24 24"
-        >
-          <path
-            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m1 15h-2v-6h2zm0-8h-2V7h2z"
-          />
-        </svg>
-      </button>
     </div>
     <div
-      class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiAccordion-root MuiAccordion-rounded Mui-expanded MuiAccordion-gutters sc-hCcPtG gjYMFl css-1808mag-MuiPaper-root-MuiAccordion-root"
+      class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiAccordion-root MuiAccordion-rounded Mui-expanded MuiAccordion-gutters sc-dYjPD gpuxsh css-1808mag-MuiPaper-root-MuiAccordion-root"
       style="--Paper-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12);"
     >
       <h3
@@ -92,7 +75,7 @@ exports[`Rendering test renders correctly 1`] = `
               role="region"
             >
               <div
-                class="MuiAccordionDetails-root sc-krVzYl jEIFev css-1lj39kh-MuiAccordionDetails-root"
+                class="MuiAccordionDetails-root sc-crPgjm dJDmhi css-1lj39kh-MuiAccordionDetails-root"
               >
                 <div
                   class="MuiStack-root sc-kEbgWM cjPnPc css-1sazv7p-MuiStack-root"
@@ -156,7 +139,18 @@ exports[`Rendering test renders correctly 1`] = `
                               aria-label="selectable.open"
                               class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium MuiAutocomplete-popupIndicator css-2y136s-MuiButtonBase-root-MuiIconButton-root-MuiAutocomplete-popupIndicator"
                               tabindex="-1"
-                              title="selectable.o...
+                              title="selectable.open"
+                              type="button"
+                            >
+                              <svg
+                                aria-hidden="true"
+                                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1umw9bq-MuiSvgIcon-root"
+                                data-testid="ArrowDropDownIcon"
+                                focusable="false"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  d="M7 10l5 5 5-5z...
 </DocumentFragment>
 `;
 

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useParams, useLocation } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
-import { Box, Stack, Divider, Container, CircularProgress, Alert } from '@mui/material';
+import { Box, Divider, Container, CircularProgress, Alert } from '@mui/material';
 import { QueryContext } from 'contexts/queryContext';
 import { VisualizationContext } from 'contexts/visualizationContext';
 import { SaveContext } from 'contexts/saveContext';
@@ -22,25 +22,29 @@ import { UiLanguageContext } from 'contexts/uiLanguageContext';
 import { IDimension } from '../../types/cubeMeta';
 import { useEditorContentsQuery } from '../../api/services/editor-contents';
 import { getValidatedSettings } from '../../utils/ChartSettingHelpers';
+import { EPreviewSize } from 'types/previewSize';
 
 //Used to set the width of the dimension selection and preview margin in pixels
 const dimensionSelectionWidth = 450;
 //Max width in % for dimension selection and preview margin
 const dimensionSelectionMaxWidthPercentage = 33;
 
+const EditorLayout = styled(Box)`
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    overflow: hidden;
+`;
+
 const MetaPreviewSectionWrapper = styled(Box)`
-    flex: 2 0;
+    flex: 1;
+    min-width: 0;
     display: grid;
     gap: 0;
     grid-template-columns: 1fr;
     grid-template-rows: auto auto 1fr auto auto;
     grid-template-areas: 'parameters' 'parameters-preview-div' 'preview' 'preview-footer-div' 'footer';
-    min-height: 100%;
-    margin-left: ${dimensionSelectionWidth}px;
-
-    @media (max-width: ${dimensionSelectionWidth / (dimensionSelectionMaxWidthPercentage / 100) }px) {
-        margin-left: ${dimensionSelectionMaxWidthPercentage}%;
-    }
+    overflow: hidden;
 `;
 
 const PreviewDivider = styled(Divider)`
@@ -223,6 +227,8 @@ export const Editor = () => {
     const saveId = loadedQueryId && loadedQueryIsDraft ? loadedQueryId : '';
     const saveQueryMutation = useSaveMutation(path, modifiedQuery, cubeQuery, selectedVisualization, visualizationSettings, saveId);
 
+    const [previewSize, setPreviewSize] = React.useState<EPreviewSize>(EPreviewSize.Desktop);
+
     const errorContainer = (errorMessage: string) => {
         return (
             <Container sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'center' }}>
@@ -257,7 +263,7 @@ export const Editor = () => {
 
     // return the actual component
     return (
-        <Stack direction="row">
+        <EditorLayout>
             <EditorFilterSection
                 dimensions={dimensions}
                 resolvedDimensionCodes={resolvedDimensionCodes}
@@ -274,6 +280,8 @@ export const Editor = () => {
                     dimensionQuery={modifiedQuery}
                     contentLanguages={contentLanguages}
                     visualizationSettings={visualizationSettings}
+                    previewSize={previewSize}
+                    onPreviewSizeChange={setPreviewSize}
                 />
                 <PreviewDivider />
                 <EditorPreviewSection
@@ -282,12 +290,17 @@ export const Editor = () => {
                     editorContents={editorContentsResponse}
                     visualizationSettings={visualizationSettings}
                     selectedVisualization={selectedVisualization}
+                    previewSize={previewSize}
                 />
                 <FooterDivider />
-                <EditorFooterSection />
+                <EditorFooterSection
+                    size={editorContentsResponse.data?.size}
+                    maximumSize={editorContentsResponse.data?.maximumSupportedSize}
+                    warningLimit={editorContentsResponse.data?.sizeWarningLimit}
+                />
                 <EditorDialogs saveQueryMutation={saveQueryMutation} />
             </MetaPreviewSectionWrapper>
-        </Stack>
+        </EditorLayout>
     );
 }
 

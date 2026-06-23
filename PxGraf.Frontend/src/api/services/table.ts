@@ -17,7 +17,7 @@ export interface ITableResult {
     data: IDatabaseGroupContents;
 }
 
-const fetchTable = async (idStack: string[]): Promise<IDatabaseGroupContents> => {
+export const fetchTable = async (idStack: string[]): Promise<IDatabaseGroupContents> => {
     const client = new ApiClient();
     const path = idStack.join("/");
     const url = "creation/data-bases/" + path;
@@ -25,12 +25,16 @@ const fetchTable = async (idStack: string[]): Promise<IDatabaseGroupContents> =>
     return await client.getAsync(url);
 };
 
+export const tableQueryKey = (idStack: string[]) => ["table", idStack] as const;
+
+export const tableQueryOptions = (idStack: string[]) => ({
+    queryKey: tableQueryKey(idStack),
+    queryFn: () => fetchTable(idStack),
+    ...defaultQueryOptions,
+});
+
 export const useTableQuery = (idStack: string[]): ITableResult => {
-    const result = useQuery({
-        queryKey: ["table", idStack],
-        queryFn: () => fetchTable(idStack),
-        ...defaultQueryOptions
-    });
+    const result = useQuery(tableQueryOptions(idStack));
 
     return result;
 };

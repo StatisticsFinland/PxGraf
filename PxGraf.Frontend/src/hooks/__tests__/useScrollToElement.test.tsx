@@ -81,7 +81,7 @@ describe('useScrollToElement hook', () => {
         expect(button.focus).not.toHaveBeenCalled();
     });
 
-    it('should use default offset of 50 when offset is not specified', () => {
+    it('should use default offset of 70 when offset is not specified', () => {
         const targetId = 'default-offset';
         const targetTop = 200;
         const targetLeft = 0;
@@ -93,7 +93,7 @@ describe('useScrollToElement hook', () => {
 
         renderHook(() => useScrollToElement(targetId));
 
-        expect(window.scrollTo).toHaveBeenCalledWith(targetLeft, targetTop - 50);
+        expect(window.scrollTo).toHaveBeenCalledWith(targetLeft, targetTop - 70);
     });
 
     it('should not scroll when id is empty string', () => {

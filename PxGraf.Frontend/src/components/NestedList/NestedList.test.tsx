@@ -13,6 +13,11 @@ jest.mock('envVars', () => ({
     BasePath: ''
 }));
 
+jest.mock('contexts/navigationContext', () => ({
+    ...jest.requireActual('contexts/navigationContext'),
+    useNavigationContext: () => ({ tablePath: null, setTablePath: jest.fn() })
+}));
+
 const mockDatabaseContents: IDatabaseGroupContents = {
     headers: [
         {

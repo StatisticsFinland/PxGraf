@@ -13,6 +13,8 @@ import NestedList from './NestedList';
 import { UiLanguageContext } from 'contexts/uiLanguageContext';
 import { parseLanguageString } from 'utils/ApiHelpers';
 import { IDatabaseGroupHeader } from 'types/tableListItems';
+import { useNavigationContext } from 'contexts/navigationContext';
+import { BasePath } from '../../envVars';
 
 interface ITableListItemProps {
     currentPath: string[];
@@ -32,10 +34,24 @@ export const TableListItem: React.FC<ITableListItemProps> = ({ currentPath, item
     const { t } = useTranslation();
     const [isOpen, setIsOpen] = React.useState(initialOpenState ?? false);
     const { language } = React.useContext(UiLanguageContext);
+    const { setTablePath } = useNavigationContext();
     const displayLanguage = item.languages.includes(language) ? language : item.languages[0];
+
+    const handleToggle = () => {
+        const newIsOpen = !isOpen;
+        setIsOpen(newIsOpen);
+        if (newIsOpen) {
+            // Update context (for breadcrumb) and URL (for bookmarks) directly.
+            // Use history.replaceState to avoid React Router re-renders of the tree.
+            setTablePath([...currentPath]);
+            const url = `${BasePath}/?tablePath=${currentPath.join(',')}`;
+            window.history.replaceState(null, '', url);
+        }
+    };
 
     return <React.Fragment key={`${item.code}-key`}>
         <ListItem
+            id={currentPath.join('-')}
             secondaryAction={depth >= 1 ?
                 <Tooltip title={t("tableSelect.listView")} aria-label={`${t("tableSelect.listView")}: ${item.name[displayLanguage]}`}>
                     <IconButton edge="end" component={Link} to={urls.tableList(currentPath)} >
@@ -43,7 +59,7 @@ export const TableListItem: React.FC<ITableListItemProps> = ({ currentPath, item
                     </IconButton>
                 </Tooltip> : <></>
             }>
-            <ListItemButton sx={{ pl: depth * 4 }} onClick={() => setIsOpen(!isOpen)} aria-expanded={isOpen}>
+            <ListItemButton sx={{ pl: depth * 4 }} onClick={handleToggle} aria-expanded={isOpen}>
                 <ListItemIcon sx={{ minWidth: '32px' }}>
                     {isOpen ? <ExpandLess /> : <ExpandMore />}
                 </ListItemIcon>

@@ -4,7 +4,6 @@
     "results": "Results",
     "noPossibleVisualizations": "Visualisation cannot be formed with the selected values. Try changing your selection.",
     "uiLanguage": "User interface language",
-    "databaseSelectorLink": "Database table selection",
     "search": "Search",
     "selectDatabaseTitle": "Select database table",
     "editorTitle": "Selecting variables and making a visualisation",
@@ -14,9 +13,7 @@
     "logoAlt": "Go to the home page"
   },
   "lang": {
-    "fi": "suomi",
-    "sv": "svenska",
-    "en": "English",
+    "self": "In english",
     "local": {
       "fi": "suomi",
       "sv": "ruotsi",
@@ -58,8 +55,8 @@
     "fromFilter": "from the selected value forward",
     "topFilter": "n latest values",
     "itemFilter": "manual selection",
-    "selectable": "Move the mark to the right to allow the variable to be browsed",
-    "title": "Select the values manually from the variables or utilise the dynamic alternatives in the menu. The user interface is updated immediately according to your selections.",
+    "selectable": "Selectable",
+    "title": "The user interface is updated immediately according to your selections.",
     "openMenu": "Open the menu",
     "closeMenu": "Close the menu"
   },
@@ -155,7 +152,7 @@
   },
   "selectable": {
     "noSelections": "No selectable values",
-    "labelText": "Default value of the variable visible in the visualisation",
+    "labelText": "Default selection of the selectable variable",
     "open": "Open",
     "close": "Close",
     "clear": "Clear"
@@ -181,7 +178,16 @@
     "visualizationConfig": "Chart type-specific selections",
     "visualizationSize": "Chart size selection for preview"
   },
+  "previewSize": {
+    "full": "100%",
+    "desktop": "Desktop",
+    "tablet": "Tablet",
+    "mobile": "Mobile"
+  },
   "visualizationSettings": {
     "showDataPoints": "Show data values in the graph"
+  },
+  "header": {
+    "tableBreadcrumb": "Table path"
   }
 }

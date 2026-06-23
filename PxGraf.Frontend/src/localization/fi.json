@@ -4,7 +4,6 @@
     "results": "Tulokset",
     "noPossibleVisualizations": "Valitsemillasi arvoilla ei voida muodostaa visualisointia. Kokeile muuttaa poimintaasi.",
     "uiLanguage": "Käyttöliittymän kielivalinta",
-    "databaseSelectorLink": "Tietokantataulukon valinta",
     "search": "Haku",
     "selectDatabaseTitle": "Valitse tietokantataulukko",
     "editorTitle": "Muuttujien valinta ja visualisoinnin teko",
@@ -14,9 +13,7 @@
     "logoAlt": "Siirry etusivulle"
   },
   "lang": {
-    "fi": "suomi",
-    "sv": "svenska",
-    "en": "English",
+    "self": "Suomeksi",
     "local": {
       "fi": "suomi",
       "sv": "ruotsi",
@@ -58,8 +55,8 @@
     "fromFilter": "valitusta arvosta eteenpäin",
     "topFilter": "n viimeisintä arvoa",
     "itemFilter": "manuaalinen valinta",
-    "selectable": "Siirrä täppä oikealle, jos haluat että muuttuja on selattava",
-    "title": "Valitse muuttujista arvoja manuaalisesti tai hyödynnä menun dynaamisia vaihtoehtoja. Käyttöliittymä päivittyy heti valintojesi mukaisesti.",
+    "selectable": "Selattava",
+    "title": "Käyttöliittymä päivittyy heti valintojesi mukaisesti.",
     "openMenu": "Avaa valikko",
     "closeMenu": "Sulje valikko"
   },
@@ -155,7 +152,7 @@
   },
   "selectable": {
     "noSelections": "Ei valittavia arvoja",
-    "labelText": "Visualisoinnissa näkyvä muuttujan oletusarvo",
+    "labelText": "Selausmuuttujan oletusvalinta",
     "open": "Avaa",
     "close": "Sulje",
     "clear": "Tyhjennä"
@@ -181,7 +178,16 @@
     "visualizationConfig": "Kuviotyyppikohtaiset valinnat",
     "visualizationSize": "Kuvion kokovalinta esikatselua varten"
   },
+  "previewSize": {
+    "full": "100%",
+    "desktop": "Työpöytä",
+    "tablet": "Tabletti",
+    "mobile": "Mobiili"
+  },
   "visualizationSettings": {
     "showDataPoints": "Näytä kuviossa data-arvot"
+  },
+  "header": {
+    "tableBreadcrumb": "Taulukon polku"
   }
 }

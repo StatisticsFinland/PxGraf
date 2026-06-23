@@ -20,6 +20,7 @@ export const ChartTypeSelector: React.FC<IChartTypeSelectorProps> = ({ possibleT
             aria-label={t('tooltip.visualizationType')}
             value={"1"}
             exclusive
+            size="small"
         >
             {!possibleTypes || possibleTypes.length < 1
                 ? <span>{t("general.noPossibleVisualizations")}</span>
