@@ -61,5 +61,51 @@ namespace UnitTests.ModelTests
             string[] expected = ["val1", "val2"];
             Assert.That(output, Is.EquivalentTo(expected));
         }
+
+        private readonly List<string> codes = ["val0", "val1", "val2", "val3", "val4"];
+
+        [Test]
+        public void TopFilter_FilterCodes_ReturnsLastN()
+        {
+            TopFilter filter = new(2);
+            IEnumerable<string> output = filter.Filter(codes);
+            string[] expected = ["val3", "val4"];
+            Assert.That(output, Is.EquivalentTo(expected));
+        }
+
+        [Test]
+        public void FromFilter_FilterCodes_ReturnsFromCode()
+        {
+            FromFilter filter = new("val2");
+            IEnumerable<string> output = filter.Filter(codes);
+            string[] expected = ["val2", "val3", "val4"];
+            Assert.That(output, Is.EquivalentTo(expected));
+        }
+
+        [Test]
+        public void FromFilter_FilterCodes_WithUnmatchingCode_ReturnsEmpty()
+        {
+            FromFilter filter = new("val5");
+            IEnumerable<string> output = filter.Filter(codes);
+            Assert.That(output, Is.Empty);
+        }
+
+        [Test]
+        public void AllFilter_FilterCodes_ReturnsAll()
+        {
+            AllFilter filter = new();
+            IEnumerable<string> output = filter.Filter(codes);
+            string[] expected = ["val0", "val1", "val2", "val3", "val4"];
+            Assert.That(output, Is.EquivalentTo(expected));
+        }
+
+        [Test]
+        public void ItemFilter_FilterCodes_ReturnsMatchingCodes()
+        {
+            ItemFilter filter = new(["val1", "val2"]);
+            IEnumerable<string> output = filter.Filter(codes);
+            string[] expected = ["val1", "val2"];
+            Assert.That(output, Is.EquivalentTo(expected));
+        }
     }
 }

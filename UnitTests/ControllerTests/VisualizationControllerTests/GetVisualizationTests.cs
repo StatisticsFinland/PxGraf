@@ -99,12 +99,15 @@ namespace UnitTests.ControllerTests.VisualizationControllerTests
             _mockSqFileInterface.Setup(x => x.ReadArchiveCubeFromFile(It.Is<string>(id => id == testQueryId), It.IsAny<string>()))
                 .ReturnsAsync(() => TestDataCubeBuilder.BuildTestArchiveCube(metaParams));
 
+            Mock<IVirtualValueComputationService> mockVirtualValueComputationService = new();
+
             VisualizationController controller = new(
                 _mockSqFileInterface.Object, 
                 _mockTaskCache.Object, 
                 _mockCachedDatasource.Object, 
                 _mockLogger.Object,
-                _mockAuditLogService.Object)
+                _mockAuditLogService.Object,
+                mockVirtualValueComputationService.Object)
             {
                 ControllerContext = new ControllerContext()
                 {

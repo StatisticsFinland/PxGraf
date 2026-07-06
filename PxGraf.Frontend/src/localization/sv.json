@@ -189,5 +189,37 @@
   },
   "header": {
     "tableBreadcrumb": "Tabellsökväg"
+  },
+  "computedValues": {
+    "button": "Beräknade värden",
+    "dialogTitle": "Beräknade värden",
+    "addNew": "Lägg till ny",
+    "editTitle": "Redigera beräknat värde",
+    "edit": "Redigera",
+    "delete": "Ta bort",
+    "noValues": "Inga beräknade värden definierade.",
+    "operator": "Operation",
+    "operatorSum": "Summa",
+    "operatorSubtraction": "Subtraktion",
+    "operatorMultiplication": "Multiplikation",
+    "operatorDivision": "Division",
+    "selectValues": "Välj värden",
+    "baseValue": "Basvärde",
+    "subtractValue": "Värde att subtrahera",
+    "multiplyByValue": "Multiplicera med värde",
+    "dividendValue": "Täljare",
+    "divisorValue": "Nämnare",
+    "constant": "Konstant",
+    "useConstant": "Använd konstant",
+    "useValue": "Använd värde",
+    "save": "Spara",
+    "cancel": "Avbryt",
+    "close": "Stäng",
+    "placeholderName": "Beräknat",
+    "validationMinOperands": "Välj minst 2 värden",
+    "validationSelectValue": "Välj ett värde",
+    "validationEnterConstant": "Ange en konstant",
+    "validationDivisionByZero": "Konstanten kan inte vara noll",
+    "hasDependents": "Andra beräknade värden är beroende av detta värde"
   }
 }

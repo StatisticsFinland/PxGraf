@@ -189,5 +189,37 @@
   },
   "header": {
     "tableBreadcrumb": "Table path"
+  },
+  "computedValues": {
+    "button": "Computed values",
+    "dialogTitle": "Computed values",
+    "addNew": "Add new",
+    "editTitle": "Edit computed value",
+    "edit": "Edit",
+    "delete": "Delete",
+    "noValues": "No computed values defined.",
+    "operator": "Operation",
+    "operatorSum": "Sum",
+    "operatorSubtraction": "Subtraction",
+    "operatorMultiplication": "Multiplication",
+    "operatorDivision": "Division",
+    "selectValues": "Select values",
+    "baseValue": "Base value",
+    "subtractValue": "Value to subtract",
+    "multiplyByValue": "Multiply by value",
+    "dividendValue": "Dividend",
+    "divisorValue": "Divisor",
+    "constant": "Constant",
+    "useConstant": "Use constant",
+    "useValue": "Use value",
+    "save": "Save",
+    "cancel": "Cancel",
+    "close": "Close",
+    "placeholderName": "Computed",
+    "validationMinOperands": "Select at least 2 values",
+    "validationSelectValue": "Select a value",
+    "validationEnterConstant": "Enter a constant",
+    "validationDivisionByZero": "Constant cannot be zero",
+    "hasDependents": "Other computed values depend on this value"
   }
 }

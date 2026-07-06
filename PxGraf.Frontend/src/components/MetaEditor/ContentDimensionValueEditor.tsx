@@ -6,6 +6,7 @@ import EditorField from './Editorfield';
 import styled from 'styled-components';
 import { IContentDimensionValue } from 'types/cubeMeta';
 import { IDimensionValueEditions } from 'types/query';
+import { MultiLanguageString } from 'types/multiLanguageString';
 import { getAdditionalPropertyValue } from '../../utils/metadataUtils';
 import { sourceKey } from '../../utils/keywordConstants';
 
@@ -28,7 +29,7 @@ export const ContentDimensionValueEditor: React.FC<IContentDimensionValueEditorP
         <Paper variant="outlined">
             <EditorFieldWrapper spacing={2}>
                 <EditorField
-                    label={t("editMetadata.valueName") + ": " + dimensionValue.name[uiContentLanguage]}
+                    label={t("editMetadata.valueName") + ": " + (dimensionValue.name[uiContentLanguage] ?? valueEdits?.nameEdit?.[uiContentLanguage] ?? dimensionValue.code)}
                     defaultValue={dimensionValue.name[language]}
                     editValue={valueEdits?.nameEdit?.[language]}
                     onChange={newValue => {
@@ -44,7 +45,7 @@ export const ContentDimensionValueEditor: React.FC<IContentDimensionValueEditorP
                 />
                 <EditorField
                     label={t("editMetadata.unit")}
-                    defaultValue={dimensionValue?.unit[language] ?? ''}
+                    defaultValue={dimensionValue?.unit?.[language] ?? ''}
                     editValue={valueEdits?.contentComponent?.unitEdit?.[language]}
                     onChange={newValue => {
                         const newValueEdit: IDimensionValueEditions = {
@@ -62,7 +63,7 @@ export const ContentDimensionValueEditor: React.FC<IContentDimensionValueEditorP
                 />
                 <EditorField
                     label={t("editMetadata.source")}
-                    defaultValue={getAdditionalPropertyValue(sourceKey, dimensionValue?.additionalProperties)[language] ?? ''}
+                    defaultValue={(getAdditionalPropertyValue(sourceKey, dimensionValue?.additionalProperties) as MultiLanguageString)?.[language] ?? ''}
                     editValue={valueEdits?.contentComponent?.sourceEdit?.[language]}
                     onChange={newValue => {
                         const newValueEdit: IDimensionValueEditions = {

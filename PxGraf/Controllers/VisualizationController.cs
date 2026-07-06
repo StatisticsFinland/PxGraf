@@ -8,7 +8,9 @@ using Px.Utils.Models.Metadata;
 using Px.Utils.Models;
 using PxGraf.Datasource.Cache;
 using PxGraf.Datasource;
+using PxGraf.Exceptions;
 using PxGraf.Models.Metadata;
+using PxGraf.Models.Queries;
 using PxGraf.Models.Responses;
 using PxGraf.Models.SavedQueries;
 using PxGraf.Services;
@@ -31,18 +33,20 @@ namespace PxGraf.Controllers
     /// <param name="cachedDatasource">The cached datasource</param>
     /// <param name="logger">The logger interface</param>
     /// <param name="auditLogService">Service for logging audit events.</param>
+    /// <param name="virtualValueComputationService">Service for computing virtual dimension values.</param>
     /// <remarks>
     /// Default constructor.
     /// </remarks>
     [ApiController]
     [Route("api/sq/visualization")]
-    public class VisualizationController(ISqFileInterface sqFileInterface, IMultiStateMemoryTaskCache taskCache, ICachedDatasource cachedDatasource, ILogger<VisualizationController> logger, IAuditLogService auditLogService) : ControllerBase
+    public class VisualizationController(ISqFileInterface sqFileInterface, IMultiStateMemoryTaskCache taskCache, ICachedDatasource cachedDatasource, ILogger<VisualizationController> logger, IAuditLogService auditLogService, IVirtualValueComputationService virtualValueComputationService) : ControllerBase
     {
         private readonly ICachedDatasource _cachedDatasource = cachedDatasource;
         private readonly IMultiStateMemoryTaskCache _taskCache = taskCache;
         private readonly ISqFileInterface _sqFileInterface = sqFileInterface;
         private readonly ILogger<VisualizationController> _logger = logger;
         private readonly IAuditLogService _auditLogService = auditLogService;
+        private readonly IVirtualValueComputationService _virtualValueComputationService = virtualValueComputationService;
 
         private static CacheValues CacheValues => Configuration.Current.CacheOptions.Visualization;
         private static readonly TimeSpan AbsoluteExpiration = TimeSpan.FromMinutes(CacheValues.AbsoluteExpirationMinutes);
@@ -120,7 +124,15 @@ namespace PxGraf.Controllers
                     _taskCache.Set(sqId, newResponseTask, SlidingExpiration, AbsoluteExpiration);
                     Response.Headers.CacheControl = $"{maxAge}";
                     _logger.LogDebug("Returning visualization.");
-                    return await newResponseTask; // Return directly if archived
+                    try
+                    {
+                        return await newResponseTask; // Return directly if archived
+                    }
+                    catch (EmptyDimensionException ex)
+                    {
+                        _logger.LogDebug(ex, "Saved query {SqId} produced an empty dimension; returning 400.", sqId);
+                        return BadRequest();
+                    }
                 }
                 else
                 {
@@ -173,8 +185,22 @@ namespace PxGraf.Controllers
             else
             {
                 IReadOnlyMatrixMetadata meta = await _cachedDatasource.GetMatrixMetadataCachedAsync(sq.Query.TableReference);
-                IReadOnlyMatrixMetadata filteredMetes = meta.FilterDimensionValues(sq.Query);
-                Matrix<DecimalDataValue> matrix = await _cachedDatasource.GetMatrixAsync(sq.Query.TableReference, filteredMetes);
+
+                (IReadOnlyMatrixMetadata fetchMeta, MatrixMap outputMap) = meta.BuildVirtualValueMaps(sq.Query);
+
+                // Guard: bail out gracefully if any dimension has 0 values (matches the check in GetVisualizationAsync).
+                if (fetchMeta.GetSize() == 0 || outputMap.GetSize() == 0)
+                {
+                    _logger.LogWarning("One or more dimensions have no included values for saved query {SqId}", sqId);
+                    throw new EmptyDimensionException($"Saved query '{sqId}' produced a matrix with one or more empty dimensions.");
+                }
+
+                Matrix<DecimalDataValue> matrix = await _cachedDatasource.GetMatrixAsync(sq.Query.TableReference, fetchMeta);
+
+                if (sq.Query.DimensionQueries.Values.Any(dq => dq.VirtualValueDefinitions?.Count > 0))
+                    matrix = _virtualValueComputationService.ApplyVirtualValues(matrix, sq.Query);
+                matrix = matrix.GetTransform(outputMap);
+
                 return PxVisualizerCubeAdapter.BuildVisualizationResponse(matrix, sq);
             }
         }

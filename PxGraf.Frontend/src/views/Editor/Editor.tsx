@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
 import { useParams, useLocation } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
+import i18n from 'i18next';
 import { Box, Divider, Container, CircularProgress, Alert } from '@mui/material';
 import { QueryContext } from 'contexts/queryContext';
 import { VisualizationContext } from 'contexts/visualizationContext';
 import { SaveContext } from 'contexts/saveContext';
-import { getDefaultQueries, getVisualizationOptionsForVisualizationType, resolveDimensions } from 'utils/editorHelpers';
+import { getDefaultQueries, getVisualizationOptionsForVisualizationType, resolveDimensions, enrichDimensionsWithVirtualValues } from 'utils/editorHelpers';
 import EditorFilterSection from './EditorFilterSection';
 import EditorFooterSection from './EditorFooterSection';
 import EditorPreviewSection from './EditorPreviewSection';
@@ -20,6 +21,7 @@ import { useNavigationContext } from 'contexts/navigationContext';
 import { useValidateTableMetadataQuery } from 'api/services/validate-table-metadata';
 import { UiLanguageContext } from 'contexts/uiLanguageContext';
 import { IDimension } from '../../types/cubeMeta';
+import { VirtualValueOperator } from 'types/query';
 import { useEditorContentsQuery } from '../../api/services/editor-contents';
 import { getValidatedSettings } from '../../utils/ChartSettingHelpers';
 import { EPreviewSize } from 'types/previewSize';
@@ -194,6 +196,26 @@ export const Editor = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional: dimensions is derived from cubeMetaResponse.data which is already a dep
     }, [cubeMetaResponse.data, resolvedDimensionCodes]);
 
+    const enrichedDimensions = React.useMemo(() => {
+        const availableLanguages = cubeMetaResponse.data?.availableLanguages ?? [];
+        const translateForLang = (lang: string, operator: VirtualValueOperator): string => {
+            const key = `computedValues.operator${operator.charAt(0).toUpperCase()}${operator.slice(1)}`;
+            return i18n.t(key, { lng: lang });
+        };
+        return enrichDimensionsWithVirtualValues(dimensions, modifiedQuery, availableLanguages, translateForLang, cubeQuery);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional: dimensions is derived from cubeMetaResponse.data which is already a dep
+    }, [cubeMetaResponse.data, modifiedQuery, cubeQuery]);
+
+    const enrichedResolvedDimensions = React.useMemo(() => {
+        if (!resolvedDimensions) return null;
+        const availableLanguages = cubeMetaResponse.data?.availableLanguages ?? [];
+        const translateForLang = (lang: string, operator: VirtualValueOperator): string => {
+            const key = `computedValues.operator${operator.charAt(0).toUpperCase()}${operator.slice(1)}`;
+            return i18n.t(key, { lng: lang });
+        };
+        return enrichDimensionsWithVirtualValues(resolvedDimensions, modifiedQuery, availableLanguages, translateForLang, null, true);
+    }, [resolvedDimensions, modifiedQuery, cubeMetaResponse.data]);
+
     const selectedVisualization = React.useMemo(() => {
         if (editorContentsResponse.data?.visualizationOptions?.length > 0) {
             if (editorContentsResponse.data?.visualizationOptions?.some(options => options.type === selectedVisualizationUserInput)) {
@@ -265,7 +287,7 @@ export const Editor = () => {
     return (
         <EditorLayout>
             <EditorFilterSection
-                dimensions={dimensions}
+                dimensions={enrichedDimensions}
                 resolvedDimensionCodes={resolvedDimensionCodes}
                 queries={modifiedQuery}
                 width={dimensionSelectionWidth}
@@ -275,7 +297,7 @@ export const Editor = () => {
             <MetaPreviewSectionWrapper>
                 <EditorMetaSection
                     editorContentsResponse={editorContentsResponse}
-                    resolvedDimensions={resolvedDimensions}
+                    resolvedDimensions={enrichedResolvedDimensions}
                     selectedVisualization={selectedVisualization}
                     dimensionQuery={modifiedQuery}
                     contentLanguages={contentLanguages}

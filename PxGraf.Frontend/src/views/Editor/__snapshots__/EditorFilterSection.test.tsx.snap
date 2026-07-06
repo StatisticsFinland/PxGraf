@@ -161,6 +161,20 @@ exports[`Rendering test renders correctly 1`] = `
                       </li>
                     </ul>
                   </div>
+                  <span
+                    class="MuiBadge-root css-63ezxx-MuiBadge-root"
+                  >
+                    <button
+                      class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeSmall MuiButton-outlinedSizeSmall MuiButton-colorPrimary css-wyro15-MuiButtonBase-root-MuiButton-root"
+                      tabindex="0"
+                      type="button"
+                    >
+                      computedValues.button
+                    </button>
+                    <span
+                      class="MuiBadge-badge MuiBadge-standard MuiBadge-invisible MuiBadge-anchorOriginTopRight MuiBadge-anchorOriginTopRightRectangular MuiBadge-overlapRectangular MuiBadge-colorPrimary css-utacyy-MuiBadge-badge"
+                    />
+                  </span>
                   <div
                     class="MuiFormControl-root MuiFormControl-fullWidth css-ytlejw-MuiFormControl-root"
                   >
@@ -203,8 +217,8 @@ exports[`Rendering test renders correctly 1`] = `
                       <label
                         class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined css-19qnlrw-MuiFormLabel-root-MuiInputLabel-root"
                         data-shrink="false"
-                        for="_r_1_"
-                        id="_r_1_-label"
+                        for="_r_3_"
+                        id="_r_3_-label"
                       >
                         selectable.labelText
                       </label>
@@ -218,7 +232,7 @@ exports[`Rendering test renders correctly 1`] = `
                           autocapitalize="none"
                           autocomplete="off"
                           class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputAdornedEnd MuiAutocomplete-input MuiAutocomplete-inputFocused css-1dune0f-MuiInputBase-input-MuiOutlinedInput-input"
-                          id="_r_1_"
+                          id="_r_3_"
                           role="combobox"
                           spellcheck="false"
                           type="text"

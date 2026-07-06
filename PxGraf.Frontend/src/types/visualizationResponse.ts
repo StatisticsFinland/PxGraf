@@ -25,7 +25,6 @@ export interface IVariable {
  * @property { MultiLanguageString } note - The multi language note of the value.
  * @property { boolean } isSum - Flag to indicate if the value is an elimination value.
  * @property { IContentComponent } contentComponent - The content variable component of the value.
- * @property { IVirtualComponent[] } virtualComponents - List of virtual components.
  */
 export interface IVariableValue {
     code: string,
@@ -33,7 +32,6 @@ export interface IVariableValue {
     note: MultiLanguageString,
     isSum: boolean,
     contentComponent?: IContentComponent
-    virtualComponents?: IVirtualComponent[]
 }
 
 /**
@@ -48,14 +46,4 @@ export interface IContentComponent {
     source: MultiLanguageString,
     numberOfDecimals: number,
     lastUpdated: string
-}
-
-/**
- * Interface for virtual component properties.
- * @property {string} operator - The operator of the virtual component.
- * @property {string[]} operandCoded - List of coded operands.
- */
-export interface IVirtualComponent {
-    operator: string,
-    operandCoded: string[]
 }

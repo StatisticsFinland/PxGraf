@@ -189,5 +189,37 @@
   },
   "header": {
     "tableBreadcrumb": "Taulukon polku"
+  },
+  "computedValues": {
+    "button": "Lasketut arvot",
+    "dialogTitle": "Lasketut arvot",
+    "addNew": "Lisää uusi",
+    "editTitle": "Muokkaa laskettua arvoa",
+    "edit": "Muokkaa",
+    "delete": "Poista",
+    "noValues": "Ei laskettuja arvoja määritelty.",
+    "operator": "Operaatio",
+    "operatorSum": "Summa",
+    "operatorSubtraction": "Vähennyslasku",
+    "operatorMultiplication": "Kertolasku",
+    "operatorDivision": "Jakolasku",
+    "selectValues": "Valitse arvot",
+    "baseValue": "Perusarvo",
+    "subtractValue": "Vähennettävä arvo",
+    "multiplyByValue": "Kerrottava arvo",
+    "dividendValue": "Jaettava",
+    "divisorValue": "Jakaja",
+    "constant": "Vakio",
+    "useConstant": "Käytä vakiota",
+    "useValue": "Käytä arvoa",
+    "save": "Tallenna",
+    "cancel": "Peruuta",
+    "close": "Sulje",
+    "placeholderName": "Laskettu",
+    "validationMinOperands": "Valitse vähintään 2 arvoa",
+    "validationSelectValue": "Valitse arvo",
+    "validationEnterConstant": "Syötä vakio",
+    "validationDivisionByZero": "Vakio ei voi olla nolla",
+    "hasDependents": "Muut lasketut arvot ovat riippuvaisia tästä arvosta"
   }
 }

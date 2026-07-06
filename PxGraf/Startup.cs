@@ -156,6 +156,8 @@ namespace PxGraf
             });
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IAuditLogService, AuditLogService>();
+            services.AddScoped<IVirtualValueValidationService, VirtualValueValidationService>();
+            services.AddScoped<IVirtualValueComputationService, VirtualValueComputationService>();
             services.AddScoped<IPublicationWebhookService, PublicationWebhookService>();
             services.AddHttpClient<PublicationWebhookService>();
             services.AddScoped<IHealthCheckService, HealthCheckService>();

@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Http;
+#nullable enable
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.FeatureManagement.Mvc;
 using Px.Utils.Models.Data.DataValue;
+using Px.Utils.Models.Metadata.Dimensions;
 using Px.Utils.Models.Metadata.Enums;
 using Px.Utils.Models.Metadata;
 using Px.Utils.Models;
@@ -15,13 +17,13 @@ using PxGraf.Models.Queries;
 using PxGraf.Models.Requests;
 using PxGraf.Models.Responses;
 using PxGraf.Models.SavedQueries;
+using PxGraf.Services;
 using PxGraf.Settings;
 using PxGraf.Utility;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
-using PxGraf.Services;
 
 namespace PxGraf.Controllers
 {
@@ -36,16 +38,20 @@ namespace PxGraf.Controllers
     /// <param name="logger"><see cref="ILogger"/> instance used for logging.</param>
     /// <param name="auditLogService">Service for logging audit events.</param>
     /// <param name="webhookService">Service for sending publication webhooks.</param>
+    /// <param name="virtualValueValidationService">Service for validating virtual value definitions.</param>
+    /// <param name="virtualValueComputationService">Service for computing virtual dimension values.</param>
     [FeatureGate("CreationAPI")]
     [ApiController]
     [Route("api/sq")]
-    public class SqController(ICachedDatasource datasource, ISqFileInterface sqFileInterface, ILogger<SqController> logger, IAuditLogService auditLogService, IPublicationWebhookService webhookService) : ControllerBase
+    public class SqController(ICachedDatasource datasource, ISqFileInterface sqFileInterface, ILogger<SqController> logger, IAuditLogService auditLogService, IPublicationWebhookService webhookService, IVirtualValueValidationService virtualValueValidationService, IVirtualValueComputationService virtualValueComputationService) : ControllerBase
     {
         private readonly ICachedDatasource _cachedDatasource = datasource;
         private readonly ISqFileInterface _sqFileInterface = sqFileInterface;
         private readonly ILogger<SqController> _logger = logger;
         private readonly IAuditLogService _auditLogService = auditLogService;
         private readonly IPublicationWebhookService _webhookService = webhookService;
+        private readonly IVirtualValueValidationService _virtualValueValidationService = virtualValueValidationService;
+        private readonly IVirtualValueComputationService _virtualValueComputationService = virtualValueComputationService;
         private const string CONTROLLER_PATH = "api/sq";
 
         /// <summary>
@@ -82,20 +88,24 @@ namespace PxGraf.Controllers
 
                         SavedQuery savedQuery = await _sqFileInterface.ReadSavedQueryFromFile(savedQueryId, Configuration.Current.SavedQueryDirectory);
                         IReadOnlyMatrixMetadata meta = await _cachedDatasource.GetMatrixMetadataCachedAsync(savedQuery.Query.TableReference);
-                        IReadOnlyMatrixMetadata filteredMeta = meta.FilterDimensionValues(savedQuery.Query);
 
-                        if (meta.Dimensions.Any(v => v.Values.Count == 0))
+                        (IReadOnlyMatrixMetadata fetchMeta, MatrixMap outputMap) = meta.BuildVirtualValueMaps(savedQuery.Query);
+                        if (outputMap.DimensionMaps.Any(dm => dm.ValueCodes.Count == 0))
                         {
-                            _logger.LogWarning("Saved query return metadata which contains dimensions with no values.");
-                            BadRequest();
+                            _logger.LogWarning("Saved query metadata contains dimensions with no selected output values.");
+                            return BadRequest();
                         }
 
-                        Matrix<DecimalDataValue> matrix = await _cachedDatasource.GetMatrixCachedAsync(savedQuery.Query.TableReference, filteredMeta);
+                        Matrix<DecimalDataValue> matrix = await _cachedDatasource.GetMatrixCachedAsync(savedQuery.Query.TableReference, fetchMeta);
                         if (matrix == null)
                         {
                             _logger.LogWarning("Fetching data based on the saved query failed.");
                             return BadRequest();
                         }
+
+                        if (savedQuery.Query.DimensionQueries.Values.Any(dq => dq.VirtualValueDefinitions?.Count > 0))
+                            matrix = _virtualValueComputationService.ApplyVirtualValues(matrix, savedQuery.Query);
+                        matrix = matrix.GetTransform(outputMap);
 
                         IReadOnlyList<VisualizationType> validTypes = ChartTypeSelector.Selector.GetValidChartTypes(savedQuery.Query, matrix);
 
@@ -108,7 +118,7 @@ namespace PxGraf.Controllers
                         SaveQueryParams saveQueryParams = new()
                         {
                             Query = savedQuery.Query,
-                            Settings = VisualizationCreationSettings.FromVisualizationSettings(savedQuery, filteredMeta),
+                            Settings = VisualizationCreationSettings.FromVisualizationSettings(savedQuery, matrix.Metadata),
                             Draft = savedQuery.Draft,
                             Id = savedQueryId
                         };
@@ -159,18 +169,43 @@ namespace PxGraf.Controllers
                     );
 
                     IReadOnlyMatrixMetadata tableMeta = await _cachedDatasource.GetMatrixMetadataCachedAsync(parameters.Query.TableReference);
-                    IReadOnlyMatrixMetadata filteredMeta = tableMeta.FilterDimensionValues(parameters.Query);
 
-                    VisualizationSettings visualizationSettings = parameters.Settings.ToVisualizationSettings(filteredMeta, parameters.Query);
+                    // Validate virtual value definitions before saving
+                    foreach (KeyValuePair<string, DimensionQuery> dimEntry in parameters.Query.DimensionQueries)
+                    {
+                        if (dimEntry.Value.VirtualValueDefinitions?.Count > 0)
+                        {
+                            IReadOnlyDimension dimension = tableMeta.Dimensions.First(d => d.Code == dimEntry.Key);
+                            List<string> realValueCodes = [.. dimension.Values.Select(v => v.Code)];
+                            if (!_virtualValueValidationService.Validate(dimEntry.Value.VirtualValueDefinitions, realValueCodes, out string? validationError))
+                            {
+                                _logger.LogWarning("Virtual value validation failed for dimension {DimCode}.", dimEntry.Key);
+                                return BadRequest(new { error = validationError });
+                            }
+                        }
+                    }
 
-                    // All dimensions must have atleast one value selected
-                    if (!filteredMeta.Dimensions.Any(v => v.Values.Count != 0) || !ValidateVisualizationSettings(filteredMeta, visualizationSettings))
+                    (IReadOnlyMatrixMetadata fetchMeta, MatrixMap outputMap) = tableMeta.BuildVirtualValueMaps(parameters.Query);
+                    if (outputMap.DimensionMaps.Any(dm => dm.ValueCodes.Count == 0))
+                    {
+                        _logger.LogWarning("One or more dimensions have no selected output values.");
+                        return BadRequest();
+                    }
+
+                    Matrix<DecimalDataValue> dataCube = await _cachedDatasource.GetMatrixCachedAsync(parameters.Query.TableReference, fetchMeta);
+
+                    if (parameters.Query.DimensionQueries.Values.Any(dq => dq.VirtualValueDefinitions?.Count > 0))
+                        dataCube = _virtualValueComputationService.ApplyVirtualValues(dataCube, parameters.Query);
+                    dataCube = dataCube.GetTransform(outputMap);
+
+                    VisualizationSettings visualizationSettings = parameters.Settings.ToVisualizationSettings(dataCube.Metadata, parameters.Query);
+
+                    // All dimensions must have at least one value selected
+                    if (dataCube.Metadata.Dimensions.Any(v => v.Values.Count == 0) || !ValidateVisualizationSettings(dataCube.Metadata, visualizationSettings))
                     {
                         _logger.LogWarning("Query is missing values for a dimension.");
                         return BadRequest();
                     }
-
-                    Matrix<DecimalDataValue> dataCube = await _cachedDatasource.GetMatrixCachedAsync(parameters.Query.TableReference, filteredMeta);
 
                     IReadOnlyList<VisualizationType> validTypes = ChartTypeSelector.Selector.GetValidChartTypes(parameters.Query, dataCube);
                     if (validTypes.Contains(visualizationSettings.VisualizationType))
@@ -182,6 +217,7 @@ namespace PxGraf.Controllers
                         // Trigger webhook for non-draft queries only if webhook is enabled
                         if (!parameters.Draft && Configuration.Current.PublicationWebhookConfig.IsEnabled)
                         {
+                            IReadOnlyMatrixMetadata filteredMeta = tableMeta.FilterDimensionValues(parameters.Query);
                             webhookResult = await _webhookService.TriggerWebhookAsync(guid, savedQuery, filteredMeta.AdditionalProperties);
                         }
 
@@ -232,12 +268,41 @@ namespace PxGraf.Controllers
                     );
 
                     IReadOnlyMatrixMetadata meta = await _cachedDatasource.GetMatrixMetadataCachedAsync(parameters.Query.TableReference);
-                    IReadOnlyMatrixMetadata filteredMeta = meta.FilterDimensionValues(parameters.Query);
 
-                    VisualizationSettings visualizationSettings = parameters.Settings.ToVisualizationSettings(filteredMeta, parameters.Query);
+                    // Validate virtual value definitions BEFORE writing any files
+                    foreach (KeyValuePair<string, DimensionQuery> dimEntry in parameters.Query.DimensionQueries)
+                    {
+                        if (dimEntry.Value.VirtualValueDefinitions?.Count > 0)
+                        {
+                            IReadOnlyDimension dimension = meta.Dimensions.First(d => d.Code == dimEntry.Key);
+                            List<string> realValueCodes = [.. dimension.Values.Select(v => v.Code)];
+                            if (!_virtualValueValidationService.Validate(dimEntry.Value.VirtualValueDefinitions, realValueCodes, out string? error))
+                            {
+                                _logger.LogWarning("Virtual value validation failed for dimension {DimCode}.", dimEntry.Key);
+                                return BadRequest(new { error });
+                            }
+                        }
+                    }
 
-                    // All dimensions must have atleast one value selected
-                    if (filteredMeta.Dimensions.Any(v => v.Values.Count == 0) || !ValidateVisualizationSettings(filteredMeta, visualizationSettings))
+                    var (fetchMeta, outputMap) = meta.BuildVirtualValueMaps(parameters.Query);
+                    if (outputMap.DimensionMaps.Any(dm => dm.ValueCodes.Count == 0))
+                    {
+                        _logger.LogWarning("One or more dimensions have no selected output values.");
+                        _auditLogService.LogAuditEvent(
+                            action: actionPath,
+                            resource: LoggerConstants.INVALID_VISUALIZATION
+                        );
+                        return BadRequest();
+                    }
+
+                    Matrix<DecimalDataValue> matrix = await _cachedDatasource.GetMatrixCachedAsync(parameters.Query.TableReference, fetchMeta);
+
+                    if (parameters.Query.DimensionQueries.Values.Any(dq => dq.VirtualValueDefinitions?.Count > 0))
+                        matrix = _virtualValueComputationService.ApplyVirtualValues(matrix, parameters.Query);
+                    matrix = matrix.GetTransform(outputMap);
+
+                    VisualizationSettings visualizationSettings = parameters.Settings.ToVisualizationSettings(matrix.Metadata, parameters.Query);
+                    if (matrix.Metadata.Dimensions.Any(v => v.Values.Count == 0) || !ValidateVisualizationSettings(matrix.Metadata, visualizationSettings))
                     {
                         _logger.LogWarning("Query is missing values for a dimension.");
                         _auditLogService.LogAuditEvent(
@@ -247,7 +312,6 @@ namespace PxGraf.Controllers
                         return BadRequest();
                     }
 
-                    Matrix<DecimalDataValue> matrix = await _cachedDatasource.GetMatrixCachedAsync(parameters.Query.TableReference, filteredMeta);
                     IReadOnlyList<VisualizationType> validTypes = ChartTypeSelector.Selector.GetValidChartTypes(parameters.Query, matrix);
                     if (validTypes.Contains(visualizationSettings.VisualizationType))
                     {
@@ -262,6 +326,7 @@ namespace PxGraf.Controllers
                         // Trigger webhook for non-draft queries only if webhook is enabled
                         if (!parameters.Draft && Configuration.Current.PublicationWebhookConfig.IsEnabled)
                         {
+                            IReadOnlyMatrixMetadata filteredMeta = meta.FilterDimensionValues(parameters.Query);
                             webhookResult = await _webhookService.TriggerWebhookAsync(guid, savedQuery, filteredMeta.AdditionalProperties);
                         }
 
@@ -322,8 +387,34 @@ namespace PxGraf.Controllers
                             string guid = await GetIsDraftAsync(request.SqId) ? request.SqId : Guid.NewGuid().ToString();
                             string queryFileName = $"{guid}.sq";
                             IReadOnlyMatrixMetadata meta = await _cachedDatasource.GetMatrixMetadataCachedAsync(baseQuery.Query.TableReference);
-                            IReadOnlyMatrixMetadata filteredMeta = meta.FilterDimensionValues(baseQuery.Query);
-                            Matrix<DecimalDataValue> matrix = await _cachedDatasource.GetMatrixCachedAsync(baseQuery.Query.TableReference, filteredMeta);
+
+                            // Validate virtual value definitions BEFORE writing any files
+                            foreach (KeyValuePair<string, DimensionQuery> dimEntry in baseQuery.Query.DimensionQueries)
+                            {
+                                if (dimEntry.Value.VirtualValueDefinitions?.Count > 0)
+                                {
+                                    IReadOnlyDimension dimension = meta.Dimensions.First(d => d.Code == dimEntry.Key);
+                                    List<string> realValueCodes = [.. dimension.Values.Select(v => v.Code)];
+                                    if (!_virtualValueValidationService.Validate(dimEntry.Value.VirtualValueDefinitions, realValueCodes, out string? error))
+                                    {
+                                        _logger.LogWarning("Virtual value validation failed for dimension {DimCode}.", dimEntry.Key);
+                                        return BadRequest(new { error });
+                                    }
+                                }
+                            }
+
+                            var (fetchMeta, outputMap) = meta.BuildVirtualValueMaps(baseQuery.Query);
+                            if (outputMap.DimensionMaps.Any(dm => dm.ValueCodes.Count == 0))
+                            {
+                                _logger.LogWarning("One or more dimensions have no selected output values.");
+                                return BadRequest();
+                            }
+
+                            Matrix<DecimalDataValue> matrix = await _cachedDatasource.GetMatrixCachedAsync(baseQuery.Query.TableReference, fetchMeta);
+
+                            if (baseQuery.Query.DimensionQueries.Values.Any(dq => dq.VirtualValueDefinitions?.Count > 0))
+                                matrix = _virtualValueComputationService.ApplyVirtualValues(matrix, baseQuery.Query);
+                            matrix = matrix.GetTransform(outputMap);
 
                             IReadOnlyList<VisualizationType> validTypes = ChartTypeSelector.Selector.GetValidChartTypes(baseQuery.Query, matrix);
                             if (validTypes.Contains(baseQuery.Settings.VisualizationType))
@@ -339,6 +430,7 @@ namespace PxGraf.Controllers
                                 // Trigger webhook for non-draft queries only if webhook is enabled
                                 if (!request.Draft && Configuration.Current.PublicationWebhookConfig.IsEnabled)
                                 {
+                                    IReadOnlyMatrixMetadata filteredMeta = meta.FilterDimensionValues(baseQuery.Query);
                                     webhookResult = await _webhookService.TriggerWebhookAsync(guid, savedQuery, filteredMeta.AdditionalProperties);
                                 }
 

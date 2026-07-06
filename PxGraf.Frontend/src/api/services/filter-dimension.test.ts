@@ -35,8 +35,8 @@ describe('useResolveDimensionFiltersQuery', () => {
 
     it('transforms query dimension filters and calls the correct endpoint', async () => {
         const mockQuery: Query = {
-            dim1: { valueFilter: { type: FilterType.All }, selectable: false, virtualValueDefinitions: null },
-            dim2: { valueFilter: { type: FilterType.Item, query: ['a', 'b'] }, selectable: true, virtualValueDefinitions: null }
+            dim1: { valueFilter: { type: FilterType.All }, selectable: false, virtualValueDefinitions: [] },
+            dim2: { valueFilter: { type: FilterType.Item, query: ['a', 'b'] }, selectable: true, virtualValueDefinitions: [] }
         };
         const mockData = { dim1: ['val1'], dim2: ['a', 'b'] };
         mockPostAsync.mockResolvedValueOnce(mockData);
@@ -88,7 +88,7 @@ describe('useResolveDimensionFiltersQuery', () => {
 
     it('sets isError when fetch fails', async () => {
         const mockQuery: Query = {
-            dim1: { valueFilter: { type: FilterType.All }, selectable: false, virtualValueDefinitions: null }
+            dim1: { valueFilter: { type: FilterType.All }, selectable: false, virtualValueDefinitions: [] }
         };
         mockPostAsync.mockRejectedValueOnce(new Error('Network error'));
 

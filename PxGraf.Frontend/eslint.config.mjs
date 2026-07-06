@@ -32,4 +32,18 @@ export default [
             react: { version: 'detect' },
         },
     },
+    // Context files legitimately export both context objects and Provider components
+    {
+        files: ['src/contexts/*.{ts,tsx}'],
+        rules: {
+            'react-refresh/only-export-components': 'off',
+        },
+    },
+    // These files export utility helpers alongside components by design
+    {
+        files: ['src/Router.tsx', 'src/components/Preview/Preview.tsx'],
+        rules: {
+            'react-refresh/only-export-components': 'off',
+        },
+    },
 ];

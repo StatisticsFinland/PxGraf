@@ -57,12 +57,15 @@ namespace UnitTests
             sqFileInterface.Setup(x => x.ReadArchiveCubeFromFile(It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(() => TestDataCubeBuilder.BuildTestArchiveCube(metaParams));
 
+            Mock<IVirtualValueComputationService> virtualValueComputationService = new();
+
             VisualizationController controller = new(
                 sqFileInterface.Object, 
                 taskCache.Object, 
                 mockCachedDatasource.Object, 
                 logger.Object,
-                auditLogService.Object)
+                auditLogService.Object,
+                virtualValueComputationService.Object)
             {
                 ControllerContext = new ControllerContext()
                 {

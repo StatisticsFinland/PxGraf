@@ -11,6 +11,11 @@ namespace PxGraf.Language
         public string TitleVariablePlural { get; set; }
         public string Source { get; set; }
         public string Unit { get; set; }
+        public string ComputedValuePlaceholder { get; set; }
+        public string SumPlaceholder { get; set; }
+        public string SubtractionPlaceholder { get; set; }
+        public string MultiplicationPlaceholder { get; set; }
+        public string DivisionPlaceholder { get; set; }
 
         public RejectionReasonTranslation RejectionReasons { get; set; }
         public ChartTypeTranslation ChartTypes { get; set; }

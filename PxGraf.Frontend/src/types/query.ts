@@ -18,16 +18,76 @@ export enum FilterType {
     From = 'from'
 }
 
+export type VirtualValueOperator = 'sum' | 'subtraction' | 'multiplication' | 'division';
+
+export interface ISumDefinition {
+    type: 'sum';
+    code: string;
+    operandCodes: string[];
+    constant?: number;
+}
+
+export interface ISubtractionOfTwoDefinition {
+    type: 'subtractionOfTwo';
+    code: string;
+    minuend: string;
+    subtrahend: string;
+}
+
+export interface ISubtractionByConstantDefinition {
+    type: 'subtractionByConstant';
+    code: string;
+    operand: string;
+    constant: number;
+}
+
+export interface IMultiplicationOfTwoDefinition {
+    type: 'multiplicationOfTwo';
+    code: string;
+    leftOperand: string;
+    rightOperand: string;
+}
+
+export interface IMultiplicationByConstantDefinition {
+    type: 'multiplicationByConstant';
+    code: string;
+    operand: string;
+    constant: number;
+}
+
+export interface IDivisionOfTwoDefinition {
+    type: 'divisionOfTwo';
+    code: string;
+    dividend: string;
+    divisor: string;
+}
+
+export interface IDivisionByConstantDefinition {
+    type: 'divisionByConstant';
+    code: string;
+    operand: string;
+    constant: number;
+}
+
+export type IVirtualValueDefinition =
+    | ISumDefinition
+    | ISubtractionOfTwoDefinition
+    | ISubtractionByConstantDefinition
+    | IMultiplicationOfTwoDefinition
+    | IMultiplicationByConstantDefinition
+    | IDivisionOfTwoDefinition
+    | IDivisionByConstantDefinition;
+
 /**
  * Interface for dimension query properties.
  * @property {IValueFilter} valueFilter - Reference to value filter.
  * @property {boolean} selectable - Selected selectable dimension.
- * @property {any} virtualValueDefinitions - Virtual value definitions.
-  */
+ * @property {IVirtualValueDefinition[]} virtualValueDefinitions - Virtual value definitions.
+ */
 export interface IDimensionQuery {
     valueFilter: IValueFilter
     selectable: boolean
-    virtualValueDefinitions
+    virtualValueDefinitions: IVirtualValueDefinition[];
 }
 
 /**

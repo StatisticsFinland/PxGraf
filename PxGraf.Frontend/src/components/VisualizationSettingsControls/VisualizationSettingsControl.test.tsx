@@ -116,10 +116,7 @@ const mockDimensionQuery: Query = {
             type: FilterType.Item,
             query: 'barfoo1'
         },
-        virtualValueDefinitions: [
-            'asd',
-            '123'
-        ]
+        virtualValueDefinitions: []
     },
     'foobar3': {
         selectable: false,
@@ -127,10 +124,7 @@ const mockDimensionQuery: Query = {
             type: FilterType.Item,
             query: 'barfoo1'
         },
-        virtualValueDefinitions: [
-            'asd',
-            '123'
-        ]
+        virtualValueDefinitions: []
     },
     'foobar2': {
         selectable: false,
@@ -138,10 +132,7 @@ const mockDimensionQuery: Query = {
             type: FilterType.Item,
             query: 'barfoo1'
         },
-        virtualValueDefinitions: [
-            'asd',
-            '123'
-        ]
+        virtualValueDefinitions: []
     },
     'foobar1': {
         selectable: false,
@@ -149,10 +140,7 @@ const mockDimensionQuery: Query = {
             type: FilterType.Item,
             query: 'barfoo1'
         },
-        virtualValueDefinitions: [
-            'asd',
-            '123'
-        ]
+        virtualValueDefinitions: []
     }
 }
 

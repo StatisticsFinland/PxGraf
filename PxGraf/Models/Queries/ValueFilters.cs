@@ -13,6 +13,12 @@ namespace PxGraf.Models.Queries
     public interface IValueFilter
     {
         public abstract IEnumerable<IReadOnlyDimensionValue> Filter(IReadOnlyList<IReadOnlyDimensionValue> values);
+
+        /// <summary>
+        /// Filters a list of value codes using the same logic as <see cref="Filter(IReadOnlyList{IReadOnlyDimensionValue})"/>,
+        /// operating directly on code strings without requiring full dimension value objects.
+        /// </summary>
+        public abstract IEnumerable<string> Filter(IReadOnlyList<string> codes);
     }
 
     /// <summary>
@@ -25,6 +31,11 @@ namespace PxGraf.Models.Queries
         public IEnumerable<IReadOnlyDimensionValue> Filter(IReadOnlyList<IReadOnlyDimensionValue> values)
         {
             return values.Skip(values.Count - Count);
+        }
+
+        public IEnumerable<string> Filter(IReadOnlyList<string> codes)
+        {
+            return codes.Skip(codes.Count - Count);
         }
     }
 
@@ -47,6 +58,19 @@ namespace PxGraf.Models.Queries
                 return Enumerable.Empty<DimensionValue>();
             }
         }
+
+        public IEnumerable<string> Filter(IReadOnlyList<string> codes)
+        {
+            int index = codes.ToList().IndexOf(Code);
+            if (index >= 0)
+            {
+                return codes.Skip(index);
+            }
+            else
+            {
+                return Enumerable.Empty<string>();
+            }
+        }
     }
 
     /// <summary>
@@ -57,6 +81,11 @@ namespace PxGraf.Models.Queries
         public IEnumerable<IReadOnlyDimensionValue> Filter(IReadOnlyList<IReadOnlyDimensionValue> values)
         {
             return values;
+        }
+
+        public IEnumerable<string> Filter(IReadOnlyList<string> codes)
+        {
+            return codes;
         }
     }
 
@@ -70,6 +99,11 @@ namespace PxGraf.Models.Queries
         public IEnumerable<IReadOnlyDimensionValue> Filter(IReadOnlyList<IReadOnlyDimensionValue> values)
         {
             return values.Where(value => Codes.Contains(value.Code));
+        }
+
+        public IEnumerable<string> Filter(IReadOnlyList<string> codes)
+        {
+            return codes.Where(Codes.Contains);
         }
     }
 }

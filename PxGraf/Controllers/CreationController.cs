@@ -27,18 +27,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
+using Px.Utils.Models.Metadata.ExtensionMethods;
 
 namespace PxGraf.Controllers
 {
     [FeatureGate("CreationAPI")]
     [ApiController]
     [Route("api/creation")]
-    public class CreationController(ICachedDatasource datasource, ILogger<CreationController> logger, IAuditLogService auditLogService) : ControllerBase
+    public class CreationController(ICachedDatasource datasource, ILogger<CreationController> logger, IAuditLogService auditLogService, IVirtualValueComputationService virtualValueComputationService) : ControllerBase
     {
-        private const double WarningQuerySizeRatio = 0.75;
         private readonly ICachedDatasource _datasource = datasource;
         private readonly ILogger<CreationController> _logger = logger;
         private readonly IAuditLogService _auditLogService = auditLogService;
+        private readonly IVirtualValueComputationService _virtualValueComputationService = virtualValueComputationService;
         private readonly string[] databaseWhitelist = Configuration.Current.DatabaseWhitelist;
 
         /// <summary>
@@ -231,9 +232,12 @@ namespace PxGraf.Controllers
                     {
                         if (tableMeta.Dimensions.FirstOrDefault(dimension => dimension.Code == filter.Key) is IReadOnlyDimension dimension)
                         {
-                            IEnumerable<IReadOnlyDimensionValue> filteredValues = filter.Value.Filter(dimension.Values);
-                            List<string> filteredValueCodes = [.. filteredValues.Select(value => value.Code)];
-                            return filteredValueCodes;
+                            if (filterRequest.VirtualValueDefinitions != null &&
+                                filterRequest.VirtualValueDefinitions.TryGetValue(filter.Key, out List<string> virtualCodes))
+                            {
+                                return filter.Value.Filter([.. dimension.ValueCodes, .. virtualCodes]).ToList();
+                            }
+                            return filter.Value.Filter(dimension.ValueCodes).ToList();
                         }
                         else
                         {
@@ -273,28 +277,23 @@ namespace PxGraf.Controllers
                 );
 
                 int maxQuerySize = Configuration.Current.QueryOptions.MaxQuerySize;
-                bool publicationWebhookEnabled = Configuration.Current.PublicationWebhookConfig.IsEnabled;
 
                 if (query.DimensionQueries.Count == 0)
                 {
-                    _logger.LogDebug("Query did not contain any dimension queries.");
-                    _logger.LogDebug("Returning empty editor contents result.");
-                    return new EditorContentsResponse()
-                    {
-                        Size = 0,
-                        MaximumSupportedSize = maxQuerySize,
-                        SizeWarningLimit = Convert.ToInt32(maxQuerySize * WarningQuerySizeRatio),
-                        HeaderText = new MultilanguageString(Configuration.Current.LanguageOptions.Available.Select(lang => new KeyValuePair<string, string>(lang, string.Empty))),
-                        MaximumHeaderLength = Configuration.Current.QueryOptions.MaxHeaderLength,
-                        VisualizationOptions = [],
-                        VisualizationRejectionReasons = [],
-                        PublicationWebhookEnabled = publicationWebhookEnabled
-                    };
+                    _logger.LogDebug("Query did not contain any dimension queries, returning empty editor contents result.");
+                    return EditorContentsResponse.Empty;
                 }
 
                 IReadOnlyMatrixMetadata tableMeta = await _datasource.GetMatrixMetadataCachedAsync(query.TableReference);
-                IReadOnlyMatrixMetadata filteredMeta = tableMeta.FilterDimensionValues(query);
-                int includedValuesCount = filteredMeta.Dimensions.Select(x => x.Values.Count).Aggregate((a, x) => a * x);
+
+                (IReadOnlyMatrixMetadata? fetchMeta, MatrixMap? outputMap) = tableMeta.BuildVirtualValueMaps(query);
+                if (outputMap.GetSize() ==  0)
+                {
+                    _logger.LogDebug("One or more dimensions have no selected output values. Returning empty editor contents result.");
+                    return EditorContentsResponse.Empty;
+                }
+
+                int includedValuesCount = fetchMeta.Dimensions.Select(x => x.Values.Count).Aggregate((a, x) => a * x);
 
                 if (includedValuesCount == 0 || includedValuesCount > maxQuerySize)
                 {
@@ -304,16 +303,22 @@ namespace PxGraf.Controllers
                     {
                         Size = includedValuesCount,
                         MaximumSupportedSize = maxQuerySize,
-                        SizeWarningLimit = Convert.ToInt32(maxQuerySize * WarningQuerySizeRatio),
+                        SizeWarningLimit = Convert.ToInt32(maxQuerySize * Configuration.Current.QueryOptions.QuerySizeWarningRatio),
                         HeaderText = new MultilanguageString(Configuration.Current.LanguageOptions.Available.Select(lang => new KeyValuePair<string, string>(lang, string.Empty))),
                         MaximumHeaderLength = Configuration.Current.QueryOptions.MaxHeaderLength,
                         VisualizationOptions = [],
                         VisualizationRejectionReasons = [],
-                        PublicationWebhookEnabled = publicationWebhookEnabled
+                        PublicationWebhookEnabled = Configuration.Current.PublicationWebhookConfig.IsEnabled
                     };
                 }
 
-                Matrix<DecimalDataValue> matrix = await _datasource.GetMatrixCachedAsync(query.TableReference, filteredMeta);
+                Matrix<DecimalDataValue> matrix = await _datasource.GetMatrixCachedAsync(query.TableReference, fetchMeta);
+
+                if (query.DimensionQueries.Values.Any(dq => dq.VirtualValueDefinitions?.Count > 0))
+                    matrix = _virtualValueComputationService.ApplyVirtualValues(matrix, query);
+                matrix = matrix.GetTransform(outputMap);
+
+                int outputValuesCount = matrix.Metadata.Dimensions.Select(x => x.Values.Count).Aggregate((a, x) => a * x);
 
                 Dictionary<VisualizationType, MultilanguageString> rejectionReasons = [];
                 List<VisualizationOption> visualizationOptions = [];
@@ -333,21 +338,21 @@ namespace PxGraf.Controllers
                     }
                     else  // no rejection reasons == valid visualization type
                     {
-                        visualizationOptions.Add(GetVisualizationOption(reasonKvp.Key, filteredMeta, query));
+                        visualizationOptions.Add(GetVisualizationOption(reasonKvp.Key, matrix.Metadata, query));
                     }
                 }
 
-                _logger.LogDebug("Returning editor contents result with size {IncludedValuesCount} and {VisualizationOptionsCount} visualization options.", includedValuesCount, visualizationOptions.Count);
+                _logger.LogDebug("Returning editor contents result with size {OutputValuesCount} and {VisualizationOptionsCount} visualization options.", outputValuesCount, visualizationOptions.Count);
                 return new EditorContentsResponse()
                 {
-                    Size = includedValuesCount,
+                    Size = outputValuesCount,
                     MaximumSupportedSize = maxQuerySize,
-                    SizeWarningLimit = Convert.ToInt32(maxQuerySize * WarningQuerySizeRatio),
-                    HeaderText = HeaderBuildingUtilities.GetHeader(filteredMeta, query, true),
+                    SizeWarningLimit = Convert.ToInt32(maxQuerySize * Configuration.Current.QueryOptions.QuerySizeWarningRatio),
+                    HeaderText = HeaderBuildingUtilities.GetHeader(matrix.Metadata, query, true),
                     MaximumHeaderLength = Configuration.Current.QueryOptions.MaxHeaderLength,
                     VisualizationOptions = visualizationOptions,
                     VisualizationRejectionReasons = rejectionReasons,
-                    PublicationWebhookEnabled = publicationWebhookEnabled
+                    PublicationWebhookEnabled = Configuration.Current.PublicationWebhookConfig.IsEnabled
                 };
             }
         }
@@ -380,23 +385,31 @@ namespace PxGraf.Controllers
 
                 _logger.LogDebug("Requesting visualization. POST: api/creation/visualization");
                 IReadOnlyMatrixMetadata completeMeta = await _datasource.GetMatrixMetadataCachedAsync(request.Query.TableReference);
-                IReadOnlyMatrixMetadata filteredMeta = completeMeta.FilterDimensionValues(request.Query);
 
-                // The resulting cube would have volume 0
-                if (filteredMeta.Dimensions.Any(d => d.Values.Count == 0))
+                var (fetchMeta, outputMap) = completeMeta.BuildVirtualValueMaps(request.Query);
+                if (outputMap.DimensionMaps.Any(dm => dm.ValueCodes.Count == 0))
+                {
+                    _logger.LogDebug("One or more dimensions have no selected output values.");
+                    return BadRequest();
+                }
+
+                // The resulting cube would have volume 0 (e.g. filter produced empty after expansion)
+                if (fetchMeta.Dimensions.Any(d => d.Values.Count == 0))
                 {
                     _logger.LogDebug("One or more dimensions have no included values.");
                     return BadRequest();
                 }
 
-                Matrix<DecimalDataValue> matrix = await _datasource.GetMatrixCachedAsync(request.Query.TableReference, filteredMeta);
-                IChartTypeSelector selector = ChartTypeSelector.Selector;
+                Matrix<DecimalDataValue> matrix = await _datasource.GetMatrixCachedAsync(request.Query.TableReference, fetchMeta);
 
+                if (request.Query.DimensionQueries.Values.Any(dq => dq.VirtualValueDefinitions?.Count > 0))
+                    matrix = _virtualValueComputationService.ApplyVirtualValues(matrix, request.Query);
+                matrix = matrix.GetTransform(outputMap);
+
+                IChartTypeSelector selector = ChartTypeSelector.Selector;
                 if (selector.GetValidChartTypes(request.Query, matrix).Contains(request.VisualizationSettings.SelectedVisualization))
                 {
-                    VisualizationSettings vSettings =
-                        request.VisualizationSettings.ToVisualizationSettings(filteredMeta, request.Query);
-
+                    VisualizationSettings vSettings = request.VisualizationSettings.ToVisualizationSettings(matrix.Metadata, request.Query);
                     VisualizationResponse visualizationResponse = PxVisualizerCubeAdapter.BuildVisualizationResponse(matrix, request.Query, vSettings);
                     _logger.LogDebug("Returning visualization result.");
 

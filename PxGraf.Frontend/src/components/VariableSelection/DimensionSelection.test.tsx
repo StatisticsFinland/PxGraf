@@ -1,5 +1,6 @@
 import React from 'react';
-import { render } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
+import '@testing-library/jest-dom';
 import { IDimension, EDimensionType } from "types/cubeMeta";
 import { FilterType, Query } from "types/query";
 import DimensionSelection from "./DimensionSelection";
@@ -61,7 +62,7 @@ const mockQuery: Query = {
             query: 4
         },
         selectable: false,
-        virtualValueDefinitions: null
+        virtualValueDefinitions: []
     }
 };
 
@@ -86,5 +87,45 @@ describe('Rendering test', () => {
         </UiLanguageContext.Provider>
         );
         expect(asFragment()).toMatchSnapshot();
+    });
+});
+
+describe('Stale virtual code regression', () => {
+    it('does not crash and omits stale codes when FilterType.Item query references a missing value code', () => {
+        const dimensionWithOnlyReal: IDimension = {
+            ...mockDimension,
+            values: [
+                {
+                    code: '2018',
+                    name: { fi: '2018', sv: '2018', en: '2018' },
+                    isVirtual: false,
+                },
+            ],
+        };
+        const queryWithStaleCode: Query = {
+            Vuosi: {
+                valueFilter: {
+                    type: FilterType.Item,
+                    query: ['2018', 'stale_virtual_code'],
+                },
+                selectable: false,
+                virtualValueDefinitions: [],
+            },
+        };
+        expect(() =>
+            render(
+                <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
+                    <DimensionSelection
+                        dimension={dimensionWithOnlyReal}
+                        resolvedDimensionValueCodes={['2018']}
+                        query={queryWithStaleCode}
+                    />
+                </UiLanguageContext.Provider>
+            )
+        ).not.toThrow();
+
+        // '2018' chip is rendered; 'stale_virtual_code' chip is not
+        expect(screen.getByText('2018')).toBeInTheDocument();
+        expect(screen.queryByText('stale_virtual_code')).not.toBeInTheDocument();
     });
 });
