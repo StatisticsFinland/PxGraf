@@ -110,6 +110,29 @@ describe('BreadcrumbNav', () => {
         });
     });
 
+    it('sets aria-current="page" on the last plain-text segment', async () => {
+        renderBreadcrumb(['db1', 'stat1'], [{ data: null }, { data: null }]);
+        await waitFor(() => {
+            expect(screen.getByText('stat1')).toHaveAttribute('aria-current', 'page');
+        });
+    });
+
+    it('does not set aria-current on non-last plain-text segments', async () => {
+        // Only the last segment is plain text when it is a non-linked table;
+        // intermediate directory segments always have links, but this confirms
+        // aria-current is absent when there is a single-item breadcrumb that is
+        // nonetheless not the last item (edge: all items have links except the last).
+        renderBreadcrumb(['db1', 'stat1', 'table1'], [{ data: null }, { data: null }, { data: null }]);
+        await waitFor(() => {
+            // On non-editor route the last segment ('table1') has no link
+            const lastSegment = screen.getByText('table1');
+            expect(lastSegment).toHaveAttribute('aria-current', 'page');
+            // The intermediate segment 'stat1' is rendered as a link and must not have aria-current
+            const midLink = screen.getByRole('link', { name: 'stat1' });
+            expect(midLink).not.toHaveAttribute('aria-current');
+        });
+    });
+
     it('calls useQueries with correct parent paths for each segment', () => {
         renderBreadcrumb(['db1', 'stat1', 'table1'], [{ data: null }, { data: null }, { data: null }]);
         expect(mockUseQueries).toHaveBeenCalledWith(

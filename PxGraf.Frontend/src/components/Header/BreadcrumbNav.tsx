@@ -110,6 +110,7 @@ const BreadcrumbNav: React.FC<IBreadcrumbNavProps> = ({ tablePath }) => {
                         key={item.code}
                         component="span"
                         color={item.type === 'table' ? 'text.primary' : 'primary'}
+                        aria-current={index === items.length - 1 ? 'page' : undefined}
                     >
                         {item.label}
                     </Typography>
