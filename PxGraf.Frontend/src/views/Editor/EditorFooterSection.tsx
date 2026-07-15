@@ -8,7 +8,7 @@ import InfoBubble from 'components/InfoBubble/InfoBubble';
 import CellCount from 'components/CellCount/CellCount';
 
 const FooterBtnWrapper = styled(Box)`
-    grid-area: 'footer';
+    grid-area: footer;
     display: flex;
     justify-content: flex-end;
     align-items: center;

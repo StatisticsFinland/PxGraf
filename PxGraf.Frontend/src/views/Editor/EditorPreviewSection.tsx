@@ -10,12 +10,10 @@ import { useTranslation } from 'react-i18next';
 import { IEditorContentsResult } from '../../api/services/editor-contents';
 
 const PreviewWrapper = styled(Box)`
-    grid-area: 'preview';
+    grid-area: preview;
     display: block;
     position: relative;
-    grid-template-rows: auto 1fr;
     padding: 8px;
-    gap: 16px;
     overflow-y: auto;
     min-height: 0;
 `;

@@ -19,7 +19,7 @@ import { getVisualizationOptionsForVisualizationType } from '../../utils/editorH
 import { IVisualizationSettings } from '../../types/visualizationSettings';
 
 const MetaWrapper = styled(Box)`
-  grid-area: 'parameters';
+  grid-area: parameters;
   display: grid;
   gap: 8px;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
