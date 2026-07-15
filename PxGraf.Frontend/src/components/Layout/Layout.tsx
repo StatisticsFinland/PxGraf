@@ -18,12 +18,12 @@ const HeaderArea = styled.div`
     background-color: white;
 `;
 
-const ContentArea = styled.div`
+const ContentArea = styled.main`
     overflow-y: auto;
     min-height: 0;
 `;
 
-const EditorContentArea = styled.div`
+const EditorContentArea = styled.main`
     overflow: hidden;
     min-height: 0;
 `;

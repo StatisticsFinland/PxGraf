@@ -21,7 +21,7 @@ const ErrorAlert = styled(Alert)`
 export const TableInfo: React.FC<ITableInfoProps> = ({ path, item }) => {
     const { t } = useTranslation();
     const { language } = React.useContext(UiLanguageContext);
-    const currentPath = [path, item.fileName];
+    const currentPath = [...path.split('/').filter(Boolean), item.fileName];
     const displayLanguage = item.languages.includes(language) ? language : item.languages[0];
 
     return (

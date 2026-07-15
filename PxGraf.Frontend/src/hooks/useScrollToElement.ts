@@ -31,7 +31,7 @@ const useScrollToElement = (id?: string, offset = 70) => {
                 window.scrollTo(rect.left + window.scrollX, rect.top + window.scrollY - offset);
             }
 
-            const focusableElement: HTMLElement = element.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+            const focusableElement = element.querySelector<HTMLElement>('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
             focusableElement?.focus();
         }
      
