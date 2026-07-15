@@ -29,9 +29,9 @@ interface IBreadcrumbNavProps {
 }
 
 /**
- * Breadcrumb navigation showing the current table path with translated names as links.
- * Non-last segments link to the table tree with that level expanded.
- * The last segment links to the editor for the full path.
+ * Breadcrumb navigation showing the current table path with translated names.
+ * Directory segments link to the table tree with that level expanded.
+ * The table segment is linked only on the editor route.
  */
 const BreadcrumbNav: React.FC<IBreadcrumbNavProps> = ({ tablePath }) => {
     const { t } = useTranslation();
