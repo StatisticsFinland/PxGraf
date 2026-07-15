@@ -220,7 +220,6 @@ The editor state was decomposed from a single monolithic `EditorContext` into th
 |---|---|
 | `useHierarchyParams` | Extracts path hierarchy from URL params |
 | `useQueryParams` | URL query parameter parsing |
-| `useReplaceQueryParams` | URL query parameter replacement |
 | `useScrollToElement` | Scroll-to-element behavior |
 
 ### Types (`src/types/`)
@@ -270,7 +269,7 @@ Jest 30 + Testing Library. Tests are co-located with source files using `*.test.
 | Components | Co-located `*.test.tsx` files for each component (e.g., `Preview.test.tsx`, `ChartTypeSelector.test.tsx`, `SaveDialog.test.tsx`, `ErrorBoundary.test.tsx`) |
 | API services | `cube-meta.test.ts`, `editor-contents.test.ts`, `filter-dimension.test.ts`, `queries.test.ts`, `table.test.ts`, `validate-table-metadata.test.ts`, `visualization.test.ts` |
 | Utils | `ApiHelpers.test.ts`, `ChartSettingHelpers.test.ts`, `componentHelpers.test.ts`, `dimensionSelectionHelpers.test.ts`, `editorHelpers.test.ts`, `metadataUtils.test.ts`, `sortingHelpers.test.ts` |
-| Hooks | `useHierarchyParams.test.tsx`, `useQueryParams.test.tsx`, `useReplaceQueryParams.test.tsx`, `useScrollToElement.test.tsx` |
+| Hooks | `useHierarchyParams.test.tsx`, `useQueryParams.test.tsx`, `useScrollToElement.test.tsx` |
 
 ---
 
