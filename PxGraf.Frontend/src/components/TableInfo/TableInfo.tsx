@@ -26,7 +26,7 @@ export const TableInfo: React.FC<ITableInfoProps> = ({ path, item }) => {
 
     return (
         <>
-            <ListItemButton id="mainContent" component={Link} to={urls.editor(currentPath)}>
+            <ListItemButton component={Link} to={urls.editor(currentPath)}>
                 {item.error ?
                     <ErrorAlert severity="warning">
                         <AlertTitle>{`${item.name[displayLanguage] ?? item.fileName}`}</AlertTitle>

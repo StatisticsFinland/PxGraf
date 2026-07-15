@@ -232,7 +232,7 @@ export const Editor = () => {
     const errorContainer = (errorMessage: string) => {
         return (
             <Container sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'center' }}>
-                <CubeMetaAlert id="mainContent" severity="error">{errorMessage}</CubeMetaAlert>
+                <CubeMetaAlert severity="error">{errorMessage}</CubeMetaAlert>
             </Container>
         );
     }
@@ -241,7 +241,7 @@ export const Editor = () => {
     if (cubeMetaResponse.isLoading || tableValidityResponse.isLoading) {
         return (
             <Container sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <CircularProgress id="mainContent" />
+                <CircularProgress />
             </Container>
         );
     }

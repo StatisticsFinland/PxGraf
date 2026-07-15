@@ -31,7 +31,7 @@ const EditorContentArea = styled.div`
 export const PageLayout: React.FC<{ element: ReactNode }> = ({ element }) => (
     <LayoutWrapper>
         <HeaderArea><Header /><Divider /></HeaderArea>
-        <ContentArea>{element}</ContentArea>
+        <ContentArea id="mainContent" tabIndex={-1}>{element}</ContentArea>
     </LayoutWrapper>
 );
 
@@ -43,7 +43,7 @@ export const EditorRoute: React.FC = () => {
     return (
         <LayoutWrapper>
             <HeaderArea><Header /><Divider /></HeaderArea>
-            <EditorContentArea>
+            <EditorContentArea id="mainContent" tabIndex={-1}>
                 <EditorProvider key={editorKey}>
                     <Editor />
                 </EditorProvider>

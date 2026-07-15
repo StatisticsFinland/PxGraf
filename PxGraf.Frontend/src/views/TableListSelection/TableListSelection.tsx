@@ -66,7 +66,7 @@ export const TableListSelection: React.FC = () => {
         content =
             <>
                 <ListItem>
-                    <TableQueryAlert id="mainContent" severity="error">{t("error.contentLoad")}</TableQueryAlert>
+                    <TableQueryAlert severity="error">{t("error.contentLoad")}</TableQueryAlert>
                 </ListItem>
                 <Divider />
             </>

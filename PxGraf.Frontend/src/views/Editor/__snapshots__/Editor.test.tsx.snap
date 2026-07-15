@@ -161,7 +161,6 @@ exports[`Rendering test renders correctly when cubeMetaResponse is loading 1`] =
 >
   <span
     class="MuiCircularProgress-root MuiCircularProgress-indeterminate MuiCircularProgress-colorPrimary css-1wxecgq-MuiCircularProgress-root"
-    id="mainContent"
     role="progressbar"
     style="width: 40px; height: 40px;"
   >

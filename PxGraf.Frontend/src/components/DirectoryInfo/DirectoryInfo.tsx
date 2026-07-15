@@ -18,7 +18,7 @@ export const DirectoryInfo: React.FC<IDirectoryInfoProps> = ({ path, item }) => 
     const currentPath = [path, item.code];
     return (
         <>
-            <ListItemButton id="mainContent" component={Link} to={urls.tableList(currentPath)}>
+            <ListItemButton component={Link} to={urls.tableList(currentPath)}>
                 <ListItemText primary={
                     <Typography variant="body1" sx={{ ...spacing(1) }}>
                         {item.name[displayLanguage]}
