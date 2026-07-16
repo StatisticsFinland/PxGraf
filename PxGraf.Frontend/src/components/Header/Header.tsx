@@ -61,6 +61,10 @@ const Header: React.FC = () => {
     const { tablePath } = useNavigationContext();
     const headerRef = useRef(null);
 
+    const showBreadcrumb = location.pathname === '/' ||
+        location.pathname.startsWith('/editor/') ||
+        location.pathname.startsWith('/table-list/');
+
     let indexUrl: string = BasePath || '/';
     if (tablePath?.length) {
         indexUrl = `${BasePath}/?tablePath=${tablePath.join(',')}`;
@@ -85,7 +89,7 @@ const Header: React.FC = () => {
                 <Button sx={{ position: 'absolute', left: '-9999px' }} href="#" onClick={(e) => { e.preventDefault(); focusOnContent(); }} ref={ref}>{t('general.contentLink')}</Button>
                 <a href={indexUrl}><Logo alt={t('navbar.logoAlt')} src={isNarrowScreen ? logo_small : logo} /></a>
                 <BreadcrumbWrapper>
-                    {tablePath?.length > 0 && <BreadcrumbNav tablePath={tablePath} />}
+                    {showBreadcrumb && tablePath?.length > 0 && <BreadcrumbNav tablePath={tablePath} />}
                 </BreadcrumbWrapper>
                 <LinkWrapper>
                     <SavedQueryFinder oldQueryId={queryId} />

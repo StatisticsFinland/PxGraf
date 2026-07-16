@@ -14,6 +14,7 @@ jest.mock('react-router-dom', () => ({
     ...jest.requireActual('react-router-dom'),
     useLocation: () => ({
         foo: 'bar',
+        pathname: '/',
     }),
     useNavigate: () => ({
         navigate: jest.fn(),
