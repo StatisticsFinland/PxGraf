@@ -8,7 +8,7 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import ListViewIcon from '@mui/icons-material/ListAltOutlined';
 
-import { urls } from 'Router';
+import { urls } from 'routes/urls';
 import NestedList from './NestedList';
 import { UiLanguageContext } from 'contexts/uiLanguageContext';
 import { parseLanguageString } from 'utils/ApiHelpers';

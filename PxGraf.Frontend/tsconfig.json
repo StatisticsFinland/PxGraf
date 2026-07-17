@@ -13,6 +13,7 @@
     "resolveJsonModule": true,
     "paths": {
       "Router": ["./src/Router.tsx"],
+      "routes/urls": ["./src/routes/urls.ts"],
       "envVars": ["./src/envVars.ts"],
       "contexts": ["./src/contexts"],
       "contexts/*": ["./src/contexts/*"],

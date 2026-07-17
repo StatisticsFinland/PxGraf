@@ -8,20 +8,6 @@ import TableTreeSelection from "views/TableTreeSelection/TableTreeSelection";
 import QueryLoader from "views/QueryLoader/QueryLoader";
 import { PageLayout, EditorRoute } from "components/Layout/Layout";
 
-/**
- * URL paths for tables in the editor and table list views.
- * @param {string[]} path - The path to the table
- */
-export const urls = {
-    editor: (path: string[]) => {
-        return `/editor/${path.join("/")}/`;
-    },
-    tableTree: `/`,
-    tableList: (path: string[]) => {
-        return `/table-list/${path.join("/")}/`;
-    }
-}
-
 export function Router() {
     return (
         <Routes>

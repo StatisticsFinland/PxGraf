@@ -6,7 +6,7 @@ import { tableQueryOptions } from 'api/services/table';
 import { UiLanguageContext } from 'contexts/uiLanguageContext';
 import { useNavigationContext } from 'contexts/navigationContext';
 import { useTranslation } from 'react-i18next';
-import { urls } from 'Router';
+import { urls } from 'routes/urls';
 import styled from 'styled-components';
 
 const BreadcrumbLink = styled(Link)`

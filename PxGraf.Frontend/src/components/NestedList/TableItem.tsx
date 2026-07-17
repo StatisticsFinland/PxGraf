@@ -4,7 +4,7 @@ import React from 'react';
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
-import { urls } from "Router";
+import { urls } from 'routes/urls';
 import { UiLanguageContext } from "contexts/uiLanguageContext";
 import { parseLanguageString } from 'utils/ApiHelpers';
 import { IDatabaseTable } from 'types/tableListItems';

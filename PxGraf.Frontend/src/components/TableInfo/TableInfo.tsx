@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
 import { ListItemText, ListItemButton, Typography, Divider, Alert, AlertTitle } from '@mui/material';
 import React from 'react';
-import { urls } from 'Router';
+import { urls } from 'routes/urls';
 import { spacing } from 'utils/componentHelpers';
 import UiLanguageContext from 'contexts/uiLanguageContext';
 import { IDatabaseTable } from 'types/tableListItems';

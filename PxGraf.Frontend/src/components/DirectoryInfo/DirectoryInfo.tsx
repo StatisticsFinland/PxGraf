@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { ListItemText, ListItemButton, Typography, Divider } from '@mui/material';
-import { urls } from 'Router';
+import { urls } from 'routes/urls';
 import React from 'react';
 import { spacing } from 'utils/componentHelpers';
 import { UiLanguageContext } from 'contexts/uiLanguageContext';
