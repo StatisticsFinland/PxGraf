@@ -11,12 +11,6 @@ jest.mock('envVars', () => ({
     BasePath: ''
 }));
 
-jest.mock('Router', () => ({
-    urls: {
-        editor: (path: string[]) => `/editor/${path.join('/')}/`
-    }
-}));
-
 const mockUseQueries = jest.fn();
 jest.mock('@tanstack/react-query', () => ({
     ...jest.requireActual('@tanstack/react-query'),
