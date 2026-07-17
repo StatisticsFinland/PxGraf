@@ -28,6 +28,41 @@ interface IBreadcrumbNavProps {
     tablePath: string[];
 }
 
+interface IBreadcrumbRenderItemProps {
+    item: IBreadcrumbItem;
+    index: number;
+    itemCount: number;
+    tablePath: string[];
+    setTablePath: (path: string[]) => void;
+}
+
+const BreadcrumbItem: React.FC<IBreadcrumbRenderItemProps> = ({ item, index, itemCount, tablePath, setTablePath }) => {
+    const color = item.type === 'table' ? 'text.primary' : 'primary';
+    if (item.to) {
+        return (
+            <BreadcrumbLink
+                to={item.to}
+                aria-current={item.type === 'table' ? 'page' : undefined}
+                state={item.type === 'table' ? { resetEditor: true } : undefined}
+                onClick={item.type === 'directory' ? () => setTablePath(tablePath.slice(0, index + 1)) : undefined}
+            >
+                <Typography component="span" color={color}>
+                    {item.label}
+                </Typography>
+            </BreadcrumbLink>
+        );
+    }
+    return (
+        <Typography
+            component="span"
+            color={color}
+            aria-current={index === itemCount - 1 ? 'page' : undefined}
+        >
+            {item.label}
+        </Typography>
+    );
+};
+
 /**
  * Breadcrumb navigation showing the current table path with translated names.
  * Directory segments link to the table tree with that level expanded.
@@ -90,31 +125,14 @@ const BreadcrumbNav: React.FC<IBreadcrumbNavProps> = ({ tablePath }) => {
             sx={{ '& .MuiBreadcrumbs-separator': { color: 'primary.main' } }}
         >
             {items.map((item, index) => (
-                item.to ? (
-                    <BreadcrumbLink
-                        key={item.to}
-                        to={item.to}
-                        aria-current={item.type === 'table' ? 'page' : undefined}
-                        state={item.type === 'table' ? { resetEditor: true } : undefined}
-                        onClick={item.type === 'directory' ? () => setTablePath(tablePath.slice(0, index + 1)) : undefined}
-                    >
-                        <Typography
-                            component="span"
-                            color={item.type === 'table' ? 'text.primary' : 'primary'}
-                        >
-                            {item.label}
-                        </Typography>
-                    </BreadcrumbLink>
-                ) : (
-                    <Typography
-                        key={item.code}
-                        component="span"
-                        color={item.type === 'table' ? 'text.primary' : 'primary'}
-                        aria-current={index === items.length - 1 ? 'page' : undefined}
-                    >
-                        {item.label}
-                    </Typography>
-                )
+                <BreadcrumbItem
+                    key={item.to ?? item.code}
+                    item={item}
+                    index={index}
+                    itemCount={items.length}
+                    tablePath={tablePath}
+                    setTablePath={setTablePath}
+                />
             ))}
         </Breadcrumbs>
     );
