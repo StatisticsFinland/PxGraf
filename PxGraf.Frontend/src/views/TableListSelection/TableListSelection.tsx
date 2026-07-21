@@ -33,7 +33,7 @@ export const TableListSelection: React.FC = () => {
     const { setTablePath } = useNavigationContext();
 
     const params = useParams();
-    const path = params["*"].split("/").filter(p => p.length > 0);
+    const path = (params["*"] ?? "").split("/").filter(p => p.length > 0);
     const { isLoading, isError, data } = useTableQuery(path);
 
     const pathKey = path.join(',');

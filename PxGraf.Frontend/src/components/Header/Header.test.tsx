@@ -34,11 +34,9 @@ jest.mock('./BreadcrumbNav', () => ({
 const mockUseNavigationContext = useNavigationContext as jest.Mock;
 
 describe('Header component', () => {
-    it('should render correctly', async () => {
+    it('should render correctly', () => {
         const { asFragment } = render(<Header />);
-        await waitFor(() => {
-            expect(asFragment()).toMatchSnapshot();
-        });
+        expect(asFragment()).toMatchSnapshot();
     })
 });
 
