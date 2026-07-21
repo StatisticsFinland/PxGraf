@@ -28,10 +28,11 @@ export const VisualizationSettingsSwitch: React.FC<IVisualizationSettingsSwitchP
     const { setVisualizationSettingsUserInput } = React.useContext(VisualizationContext);
 
     return (
-        <Control fullWidth>
+        <Control>
             <FormControlLabel
                 control={
                     <Switch
+                        size="small"
                         checked={selected}
                         onChange={(event) => setVisualizationSettingsUserInput({ ...visualizationSettings, [changeProperty]: event.target.checked })}
                     />

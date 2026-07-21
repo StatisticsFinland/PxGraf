@@ -9,6 +9,7 @@ import styled from 'styled-components';
 import { useTableQuery } from 'api/services/table';
 import { IDatabaseGroupHeader, IDatabaseTable } from 'types/tableListItems';
 import { sortDatabaseItems } from 'utils/sortingHelpers';
+import { useNavigationContext } from 'contexts/navigationContext';
 
 const TableQueryAlert = styled(Alert)`
   width: 100%;
@@ -29,10 +30,20 @@ const TableListSelectionWrapper = styled(Container)`
 export const TableListSelection: React.FC = () => {
     const { t } = useTranslation();
     const { language } = React.useContext(UiLanguageContext);
+    const { setTablePath } = useNavigationContext();
 
     const params = useParams();
-    const path = params["*"].split("/").filter(p => p.length > 0);
+    const path = (params["*"] ?? "").split("/").filter(p => p.length > 0);
     const { isLoading, isError, data } = useTableQuery(path);
+
+    const pathKey = path.join(',');
+    React.useEffect(() => {
+        setTablePath(prev => {
+            const prevKey = prev?.join(',') ?? '';
+            if (prevKey === pathKey) return prev;
+            return pathKey.length > 0 ? pathKey.split(',') : null;
+        });
+    }, [setTablePath, pathKey]);
 
     React.useEffect(() => {
         document.title = `${t("pages.tableList")} | PxGraf`;
@@ -55,7 +66,7 @@ export const TableListSelection: React.FC = () => {
         content =
             <>
                 <ListItem>
-                    <TableQueryAlert id="mainContent" severity="error">{t("error.contentLoad")}</TableQueryAlert>
+                    <TableQueryAlert severity="error">{t("error.contentLoad")}</TableQueryAlert>
                 </ListItem>
                 <Divider />
             </>

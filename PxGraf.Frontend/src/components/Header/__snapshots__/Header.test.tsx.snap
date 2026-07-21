@@ -3,10 +3,10 @@
 exports[`Header component should render correctly 1`] = `
 <DocumentFragment>
   <div
-    class="sc-jrIDTr jtSWkG MuiBox-root css-0"
+    class="sc-iCECmn fAoKCf MuiBox-root css-0"
   >
     <div
-      class="MuiStack-root sc-iqkkDd gqUbQC css-m69qwo-MuiStack-root"
+      class="MuiStack-root sc-qdQOe gYlImE css-m69qwo-MuiStack-root"
     >
       <a
         class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary Mui-focusVisible MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-65lmr2-MuiButtonBase-root-MuiButton-root"
@@ -23,29 +23,16 @@ exports[`Header component should render correctly 1`] = `
       >
         <img
           alt="navbar.logoAlt"
-          class="sc-qdQOe cIeTM"
+          class="sc-gKkgUA HSWqY"
           src="test-file-stub"
         />
       </a>
       <div
-        class="sc-dYjPD iUOpRe"
-      >
-        <h1
-          class="MuiTypography-root MuiTypography-h1 css-10l7o3s-MuiTypography-root"
-        >
-          general.selectDatabaseTitle
-        </h1>
-      </div>
+        class="sc-kEbgWM bQwGBb"
+      />
       <div
-        class="sc-crPgjm hILzSH"
+        class="sc-jrIDTr iTRLpx"
       >
-        <a
-          class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-1uent87-MuiButtonBase-root-MuiButton-root"
-          href="/"
-          tabindex="0"
-        >
-          general.databaseSelectorLink
-        </a>
         <button
           class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorPrimary css-1blvszr-MuiButtonBase-root-MuiButton-root"
           tabindex="0"
@@ -55,39 +42,27 @@ exports[`Header component should render correctly 1`] = `
         </button>
       </div>
       <div
-        class="MuiStack-root sc-kEbgWM hGPUgb css-1os650h-MuiStack-root"
+        class="MuiStack-root sc-fuztkK jcpIFj css-1os650h-MuiStack-root"
       >
         <div
-          class="MuiStack-root sc-eCQgVK clVryv css-nen11g-MuiStack-root"
+          class="MuiStack-root sc-hKVpXn iVxcKl css-7a4jik-MuiStack-root"
         >
-          <div
-            class="sc-gKkgUA oaXWM"
+          <button
+            aria-label="tooltip.open: general.uiLanguage"
+            class="sc-bdDsCe fVRDsd"
           >
-            <p
-              class="MuiTypography-root MuiTypography-body2 sc-jSppWd iemUHM css-1wle3ir-MuiTypography-root"
+            <svg
+              aria-hidden="true"
+              class="MuiSvgIcon-root MuiSvgIcon-colorInfo MuiSvgIcon-fontSizeMedium css-ocq0ss-MuiSvgIcon-root"
+              data-testid="InfoIcon"
+              focusable="false"
+              viewBox="0 0 24 24"
             >
-              general.uiLanguage
-            </p>
-            <button
-              aria-label="tooltip.open: general.uiLanguage"
-              class="sc-gtcBCx gUCgDH"
-            >
-              <svg
-                aria-hidden="true"
-                class="MuiSvgIcon-root MuiSvgIcon-colorInfo MuiSvgIcon-fontSizeMedium css-ocq0ss-MuiSvgIcon-root"
-                data-testid="InfoIcon"
-                focusable="false"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m1 15h-2v-6h2zm0-8h-2V7h2z"
-                />
-              </svg>
-            </button>
-          </div>
-          <div
-            class="MuiStack-root css-1d0f7f9-MuiStack-root"
-          />
+              <path
+                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m1 15h-2v-6h2zm0-8h-2V7h2z"
+              />
+            </svg>
+          </button>
         </div>
       </div>
     </div>

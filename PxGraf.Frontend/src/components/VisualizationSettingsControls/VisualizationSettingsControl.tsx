@@ -26,10 +26,17 @@ export interface IVisualizationSettingsProps {
     visualizationSettings: IVisualizationSettings,
 }
 
-const SettingsWrapper = styled.div`
+const SettingsRow = styled.div`
     display: flex;
-    padding-left: 24px;
+    flex-direction: row;
     align-items: center;
+    padding-left: 8px;
+`;
+
+const ControlsWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 16px;
 `;
 
 export const VisualizationSettingControl: React.FC<IVisualizationSettingControlProps> = ({
@@ -54,78 +61,72 @@ export const VisualizationSettingControl: React.FC<IVisualizationSettingControlP
     const showMultiselectableSelector: boolean = visualizationOptions?.allowMultiselect && selectableDimensionsExcludingContent.length > 0;
 
     return (
-        <div>
+        <SettingsRow>
             <InfoBubble info={t('infoText.visualizationConfiguration')} ariaLabel={t('tooltip.visualizationConfig')} />
-            {(showTableSettings || showSortingOptions || showMarkerScaler || showMultiselectableSelector) && (
-                <SettingsWrapper>
-                    {showTableSettings && (
-                        <TablePivotSettings
-                            visualizationOptions={visualizationOptions}
-                            dimensions={dimensions}
-                            selectableDimensions={selectableDimensions}
-                            query={dimensionQuery}
-                            visualizationSettings={visualizationSettings}
-                        />
-                    )}
-                    {showSortingOptions && (
-                        <SortingSelector
-                            visualizationSettings={visualizationSettings}
-                            sortingOptions={sortingOptions}
-                        />
-                    )}
-                    {showMarkerScaler && (
-                        <MarkerScaler
-                            visualizationOptions={visualizationOptions}
-                            visualizationSettings={visualizationSettings}
-                        />
-                    )}
-                    {showMultiselectableSelector && (
-                        <MultiselectableSelector
-                            visualizationOptions={visualizationOptions}
-                            dimensions={selectableDimensionsExcludingContent}
-                            visualizationSettings={visualizationSettings}
-                        />
-                    )}
-                </SettingsWrapper>
-            )}
-            {(showYAxisCutting || showMatchXLabelsToEnd || showPivot || showDataPoints) && (
-                <SettingsWrapper>
-                    {showYAxisCutting && (
-                        <VisualizationSettingsSwitch
-                            selected={visualizationSettings.cutYAxis}
-                            label="chartSettings.cutYAxis"
-                            changeProperty="cutYAxis"
-                            visualizationSettings={visualizationSettings}
-                        />
-                    )}
-                    {showMatchXLabelsToEnd && (
-                        <VisualizationSettingsSwitch
-                            selected={visualizationSettings.matchXLabelsToEnd}
-                            label="chartSettings.matchXLabelsToEnd"
-                            changeProperty="matchXLabelsToEnd"
-                            hidden={true}
-                            visualizationSettings={visualizationSettings}
-                        />
-                    )}
-                    {(showPivot) && (
-                        <VisualizationSettingsSwitch
-                            selected={visualizationSettings.pivotRequested}
-                            label="chartSettings.pivot"
-                            changeProperty="pivotRequested"
-                            visualizationSettings={visualizationSettings}
-                        />
-                    )}
-                    {showDataPoints && (
-                        <VisualizationSettingsSwitch
-                            selected={visualizationSettings.showDataPoints}
-                            label="visualizationSettings.showDataPoints"
-                            changeProperty="showDataPoints"
-                            visualizationSettings={visualizationSettings}
-                        />
-                    )}
-                </SettingsWrapper>
-            )}
-        </div>
+            <ControlsWrapper>
+                {showTableSettings && (
+                    <TablePivotSettings
+                        visualizationOptions={visualizationOptions}
+                        dimensions={dimensions}
+                        selectableDimensions={selectableDimensions}
+                        query={dimensionQuery}
+                        visualizationSettings={visualizationSettings}
+                    />
+                )}
+                {showSortingOptions && (
+                    <SortingSelector
+                        visualizationSettings={visualizationSettings}
+                        sortingOptions={sortingOptions}
+                    />
+                )}
+                {showMarkerScaler && (
+                    <MarkerScaler
+                        visualizationOptions={visualizationOptions}
+                        visualizationSettings={visualizationSettings}
+                    />
+                )}
+                {showMultiselectableSelector && (
+                    <MultiselectableSelector
+                        visualizationOptions={visualizationOptions}
+                        dimensions={selectableDimensionsExcludingContent}
+                        visualizationSettings={visualizationSettings}
+                    />
+                )}
+                {showYAxisCutting && (
+                    <VisualizationSettingsSwitch
+                        selected={visualizationSettings.cutYAxis}
+                        label="chartSettings.cutYAxis"
+                        changeProperty="cutYAxis"
+                        visualizationSettings={visualizationSettings}
+                    />
+                )}
+                {showMatchXLabelsToEnd && (
+                    <VisualizationSettingsSwitch
+                        selected={visualizationSettings.matchXLabelsToEnd}
+                        label="chartSettings.matchXLabelsToEnd"
+                        changeProperty="matchXLabelsToEnd"
+                        hidden={true}
+                        visualizationSettings={visualizationSettings}
+                    />
+                )}
+                {showPivot && (
+                    <VisualizationSettingsSwitch
+                        selected={visualizationSettings.pivotRequested}
+                        label="chartSettings.pivot"
+                        changeProperty="pivotRequested"
+                        visualizationSettings={visualizationSettings}
+                    />
+                )}
+                {showDataPoints && (
+                    <VisualizationSettingsSwitch
+                        selected={visualizationSettings.showDataPoints}
+                        label="visualizationSettings.showDataPoints"
+                        changeProperty="showDataPoints"
+                        visualizationSettings={visualizationSettings}
+                    />
+                )}
+            </ControlsWrapper>
+        </SettingsRow>
     )
 }
 

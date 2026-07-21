@@ -6,53 +6,57 @@ exports[`Rendering test renders correctly 1`] = `
     class="MuiFormControl-root MuiFormControl-fullWidth css-ytlejw-MuiFormControl-root"
   >
     <div
-      class="MuiStack-root sc-gtcBCx dCkIcm css-m69qwo-MuiStack-root"
+      class="MuiStack-root sc-hKVpXn kmHOtI css-m69qwo-MuiStack-root"
     >
-      <ul
-        class="MuiList-root MuiList-padding MuiList-dense MuiList-subheader sc-bdDsCe dYIBqr css-h1es49-MuiList-root"
+      <div
+        class="sc-bdDsCe PuwAe"
       >
-        <li
-          class="MuiListSubheader-root MuiListSubheader-gutters MuiListSubheader-sticky css-l328gy-MuiListSubheader-root"
+        <div
+          class="sc-gtcBCx dOaCQt"
         >
           chartSettings.rowVariables
-        </li>
-        <div
-          class="MuiButtonBase-root MuiListItemButton-root MuiListItemButton-dense MuiListItemButton-gutters MuiListItemButton-root MuiListItemButton-dense MuiListItemButton-gutters css-2knotq-MuiButtonBase-root-MuiListItemButton-root"
-          role="button"
-          tabindex="0"
+        </div>
+        <ul
+          class="MuiList-root MuiList-padding MuiList-dense sc-dkXsAU jIbMot css-b7dj7n-MuiList-root"
         >
           <div
-            class="MuiListItemText-root MuiListItemText-dense css-1suf81v-MuiListItemText-root"
+            class="MuiButtonBase-root MuiListItemButton-root MuiListItemButton-dense MuiListItemButton-gutters MuiListItemButton-root MuiListItemButton-dense MuiListItemButton-gutters css-2knotq-MuiButtonBase-root-MuiListItemButton-root"
+            role="button"
+            tabindex="0"
           >
-            <span
-              class="MuiTypography-root MuiTypography-body2 MuiListItemText-primary css-7ctihp-MuiTypography-root"
+            <div
+              class="MuiListItemText-root MuiListItemText-dense css-1suf81v-MuiListItemText-root"
             >
-              foo1 2
-            </span>
+              <span
+                class="MuiTypography-root MuiTypography-body2 MuiListItemText-primary css-7ctihp-MuiTypography-root"
+              >
+                foo1 2
+              </span>
+            </div>
           </div>
-        </div>
-        <div
-          class="MuiButtonBase-root MuiListItemButton-root MuiListItemButton-dense MuiListItemButton-gutters MuiListItemButton-root MuiListItemButton-dense MuiListItemButton-gutters css-2knotq-MuiButtonBase-root-MuiListItemButton-root"
-          role="button"
-          tabindex="0"
-        >
           <div
-            class="MuiListItemText-root MuiListItemText-dense css-1suf81v-MuiListItemText-root"
+            class="MuiButtonBase-root MuiListItemButton-root MuiListItemButton-dense MuiListItemButton-gutters MuiListItemButton-root MuiListItemButton-dense MuiListItemButton-gutters css-2knotq-MuiButtonBase-root-MuiListItemButton-root"
+            role="button"
+            tabindex="0"
           >
-            <span
-              class="MuiTypography-root MuiTypography-body2 MuiListItemText-primary css-7ctihp-MuiTypography-root"
+            <div
+              class="MuiListItemText-root MuiListItemText-dense css-1suf81v-MuiListItemText-root"
             >
-              foo3 2
-            </span>
+              <span
+                class="MuiTypography-root MuiTypography-body2 MuiListItemText-primary css-7ctihp-MuiTypography-root"
+              >
+                foo3 2
+              </span>
+            </div>
           </div>
-        </div>
-      </ul>
+        </ul>
+      </div>
       <div
-        class="MuiStack-root sc-dkXsAU jLBdQA css-nen11g-MuiStack-root"
+        class="MuiStack-root sc-eCQgVK lkaYzx css-nen11g-MuiStack-root"
       >
         <button
           aria-label="tableSettings.up"
-          class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-53g0n7-MuiButtonBase-root-MuiIconButton-root"
+          class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium sc-jSppWd bohRcl css-53g0n7-MuiButtonBase-root-MuiIconButton-root"
           tabindex="0"
           type="button"
         >
@@ -70,7 +74,7 @@ exports[`Rendering test renders correctly 1`] = `
         </button>
         <button
           aria-label="tableSettings.down"
-          class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-53g0n7-MuiButtonBase-root-MuiIconButton-root"
+          class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium sc-jSppWd bohRcl css-53g0n7-MuiButtonBase-root-MuiIconButton-root"
           tabindex="0"
           type="button"
         >
@@ -88,7 +92,7 @@ exports[`Rendering test renders correctly 1`] = `
         </button>
         <button
           aria-label="tableSettings.swap"
-          class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-53g0n7-MuiButtonBase-root-MuiIconButton-root"
+          class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium sc-jSppWd bohRcl css-53g0n7-MuiButtonBase-root-MuiIconButton-root"
           tabindex="0"
           type="button"
         >
@@ -105,45 +109,49 @@ exports[`Rendering test renders correctly 1`] = `
           </svg>
         </button>
       </div>
-      <ul
-        class="MuiList-root MuiList-padding MuiList-dense MuiList-subheader sc-bdDsCe dYIBqr css-h1es49-MuiList-root"
+      <div
+        class="sc-bdDsCe PuwAe"
       >
-        <li
-          class="MuiListSubheader-root MuiListSubheader-gutters MuiListSubheader-sticky css-l328gy-MuiListSubheader-root"
+        <div
+          class="sc-gtcBCx dOaCQt"
         >
           chartSettings.columnVariables
-        </li>
-        <div
-          class="MuiButtonBase-root MuiListItemButton-root MuiListItemButton-dense MuiListItemButton-gutters MuiListItemButton-root MuiListItemButton-dense MuiListItemButton-gutters css-2knotq-MuiButtonBase-root-MuiListItemButton-root"
-          role="button"
-          tabindex="0"
+        </div>
+        <ul
+          class="MuiList-root MuiList-padding MuiList-dense sc-dkXsAU jIbMot css-b7dj7n-MuiList-root"
         >
           <div
-            class="MuiListItemText-root MuiListItemText-dense css-1suf81v-MuiListItemText-root"
+            class="MuiButtonBase-root MuiListItemButton-root MuiListItemButton-dense MuiListItemButton-gutters MuiListItemButton-root MuiListItemButton-dense MuiListItemButton-gutters css-2knotq-MuiButtonBase-root-MuiListItemButton-root"
+            role="button"
+            tabindex="0"
           >
-            <span
-              class="MuiTypography-root MuiTypography-body2 MuiListItemText-primary css-7ctihp-MuiTypography-root"
+            <div
+              class="MuiListItemText-root MuiListItemText-dense css-1suf81v-MuiListItemText-root"
             >
-              foo2 2
-            </span>
+              <span
+                class="MuiTypography-root MuiTypography-body2 MuiListItemText-primary css-7ctihp-MuiTypography-root"
+              >
+                foo2 2
+              </span>
+            </div>
           </div>
-        </div>
-        <div
-          class="MuiButtonBase-root MuiListItemButton-root MuiListItemButton-dense MuiListItemButton-gutters MuiListItemButton-root MuiListItemButton-dense MuiListItemButton-gutters css-2knotq-MuiButtonBase-root-MuiListItemButton-root"
-          role="button"
-          tabindex="0"
-        >
           <div
-            class="MuiListItemText-root MuiListItemText-dense css-1suf81v-MuiListItemText-root"
+            class="MuiButtonBase-root MuiListItemButton-root MuiListItemButton-dense MuiListItemButton-gutters MuiListItemButton-root MuiListItemButton-dense MuiListItemButton-gutters css-2knotq-MuiButtonBase-root-MuiListItemButton-root"
+            role="button"
+            tabindex="0"
           >
-            <span
-              class="MuiTypography-root MuiTypography-body2 MuiListItemText-primary css-7ctihp-MuiTypography-root"
+            <div
+              class="MuiListItemText-root MuiListItemText-dense css-1suf81v-MuiListItemText-root"
             >
-              foo4 2
-            </span>
+              <span
+                class="MuiTypography-root MuiTypography-body2 MuiListItemText-primary css-7ctihp-MuiTypography-root"
+              >
+                foo4 2
+              </span>
+            </div>
           </div>
-        </div>
-      </ul>
+        </ul>
+      </div>
     </div>
   </div>
 </DocumentFragment>

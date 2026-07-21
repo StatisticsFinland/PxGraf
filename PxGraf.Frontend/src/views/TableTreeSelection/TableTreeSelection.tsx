@@ -4,15 +4,11 @@ import { useTranslation } from 'react-i18next';
 import { List, ListSubheader, Container } from '@mui/material';
 import { NestedList } from 'components/NestedList/NestedList';
 import styled from 'styled-components';
-import InfoBubble from 'components/InfoBubble/InfoBubble';
-import useReplaceQueryParams from 'hooks/useReplaceQueryParams';
+import useHierarchyParams from 'hooks/useHierarchyParams';
+import { useNavigationContext } from 'contexts/navigationContext';
 
 const TableTreeSelectionWrapper = styled(Container)`
   padding: 8px;
-`;
-
-const SubHeaderWrapper = styled.div`
-  display: flex;
 `;
 
 /**
@@ -21,7 +17,20 @@ const SubHeaderWrapper = styled.div`
  */
 export const TableTreeSelection: React.FC = () => {
   const { t } = useTranslation();
-  useReplaceQueryParams('/');
+  const { setTablePath } = useNavigationContext();
+  const hierarchyParams = useHierarchyParams();
+
+  // Sync URL → context on mount and when URL changes via React Router navigation
+  // (e.g. breadcrumb click, browser back/forward). This does NOT fire on folder
+  // clicks because those use history.replaceState which bypasses React Router.
+  const hierarchyKey = hierarchyParams.join(',');
+  React.useEffect(() => {
+      setTablePath(prev => {
+          const prevKey = prev?.join(',') ?? '';
+          if (prevKey === hierarchyKey) return prev;
+          return hierarchyKey.length > 0 ? hierarchyKey.split(',') : null;
+      });
+  }, [setTablePath, hierarchyKey]);
 
   React.useEffect(() => {
       document.title = `${t("pages.tableTreeSelection")} | PxGraf`;
@@ -34,7 +43,7 @@ export const TableTreeSelection: React.FC = () => {
         aria-labelledby="nested-list-subheader"
         subheader={
             <ListSubheader component="div" id="nested-list-subheader">
-                <SubHeaderWrapper><div>{t("tableSelect.title")}</div><InfoBubble info={t("infoText.treeSelection")} ariaLabel={t("tableSelect.title")} id="mainContent" /></SubHeaderWrapper>
+                {t("tableSelect.title")}
           </ListSubheader>
         }
       >

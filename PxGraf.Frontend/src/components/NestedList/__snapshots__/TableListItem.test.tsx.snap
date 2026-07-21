@@ -4,6 +4,7 @@ exports[`Rendering test renders correctly 1`] = `
 <DocumentFragment>
   <li
     class="MuiListItem-root MuiListItem-gutters MuiListItem-padding css-1p4qrhw-MuiListItem-root"
+    id="foo-bar-baz"
   >
     <div
       aria-expanded="false"

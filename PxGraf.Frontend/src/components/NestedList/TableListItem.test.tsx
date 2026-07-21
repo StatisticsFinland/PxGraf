@@ -5,6 +5,7 @@ import '@testing-library/jest-dom';
 import { MemoryRouter } from 'react-router-dom';
 import { TableListItem } from './TableListItem';
 import { IDatabaseGroupHeader } from 'types/tableListItems';
+import { NavigationProvider } from 'contexts/navigationContext';
 
 jest.mock('envVars', () => ({
     PxGrafUrl: 'pxGrafUrl.fi/',
@@ -38,7 +39,9 @@ describe('Rendering test', () => {
         const { asFragment } = render(
             <MemoryRouter>
                 <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
-                    <TableListItem currentPath={mockPath} item={mockItem} depth={mockDepth} />
+                    <NavigationProvider>
+                        <TableListItem currentPath={mockPath} item={mockItem} depth={mockDepth} />
+                    </NavigationProvider>
                 </UiLanguageContext.Provider>
             </MemoryRouter>);
         expect(asFragment()).toMatchSnapshot();
@@ -50,7 +53,9 @@ describe('Assertion tests', () => {
         const { asFragment } = render(
             <MemoryRouter>
                 <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
-                    <TableListItem currentPath={[]} item={mockItem} depth={0} />
+                    <NavigationProvider>
+                        <TableListItem currentPath={[]} item={mockItem} depth={0} />
+                    </NavigationProvider>
                 </UiLanguageContext.Provider>
             </MemoryRouter>);
         expect(asFragment().textContent).toContain('seppodbid (FI, EN)');
@@ -60,7 +65,9 @@ describe('Assertion tests', () => {
         const { asFragment } = render(
             <MemoryRouter>
                 <UiLanguageContext.Provider value={{ language: "sv", setLanguage, languageTab: "sv", setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
-                    <TableListItem currentPath={[]} item={mockItem} depth={0} />
+                    <NavigationProvider>
+                        <TableListItem currentPath={[]} item={mockItem} depth={0} />
+                    </NavigationProvider>
                 </UiLanguageContext.Provider>
             </MemoryRouter>);
         expect(asFragment().textContent).toContain('seppodbid (FI, EN)');

@@ -4,7 +4,6 @@
     "results": "Resultat",
     "noPossibleVisualizations": "En visualisering kan inte skapas utgående från de värden du valt. Försök att ändra ditt uttag.",
     "uiLanguage": "Språk för användargränssnitt",
-    "databaseSelectorLink": "Databasval",
     "search": "Sök",
     "selectDatabaseTitle": "Välj databastabellen",
     "editorTitle": "Val av variabler och visualisering",
@@ -14,9 +13,7 @@
     "logoAlt": "Till förstasidan"
   },
   "lang": {
-    "fi": "suomi",
-    "sv": "svenska",
-    "en": "English",
+    "self": "På svenska",
     "local": {
       "fi": "suomi",
       "sv": "ruotsi",
@@ -58,8 +55,8 @@
     "fromFilter": "från det valda värdet framåt",
     "topFilter": "n senaste värden",
     "itemFilter": "manuellt val",
-    "selectable": "Flytta spaken till höger om du vill att variabeln ska ha valmöjligheter",
-    "title": "Välj manuellt värden bland variablerna eller använd de dynamiska alternativen i menyn. Användargränssnittet uppdateras genast enligt dina val.",
+    "selectable": "Valmöjligheter",
+    "title": "Användargränssnittet uppdateras genast enligt dina val.",
     "openMenu": "Öppna menyn",
     "closeMenu": "Stäng menyn"
   },
@@ -155,7 +152,7 @@
   },
   "selectable": {
     "noSelections": "Inga valbara värden",
-    "labelText": "Variabelns standardvärde som visas i visualiseringen",
+    "labelText": "Standardval för den valbara variabeln",
     "open": "Öppna",
     "close": "Stäng",
     "clear": "Tömma"
@@ -181,7 +178,16 @@
     "visualizationConfig": "Diagramtypsspecifika val",
     "visualizationSize": "Val av diagramstorlek för förhandsvisning"
   },
+  "previewSize": {
+    "full": "100%",
+    "desktop": "Skrivbord",
+    "tablet": "Surfplatta",
+    "mobile": "Mobil"
+  },
   "visualizationSettings": {
     "showDataPoints": "Visa datavärden i diagrammet"
+  },
+  "header": {
+    "tableBreadcrumb": "Tabellsökväg"
   }
 }

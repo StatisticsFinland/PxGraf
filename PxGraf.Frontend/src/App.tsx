@@ -21,10 +21,11 @@ import theme from 'styles/materialTheme';
 import ErrorBoundary from 'components/ErrorBoundary/ErrorBoundary';
 
 const BodyWrapper = styled(Box)`
-  min-height: 100vh;
+  height: 100vh;
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: auto auto 1fr;
+  grid-template-rows: 1fr;
+  overflow: hidden;
 `;
 
 const queryClient = new QueryClient()

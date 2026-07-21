@@ -17,6 +17,7 @@ export const RevertButton: React.FC<IRevertButtonProps> = ({ onClick }) => {
                     aria-label={t("editMetadata.discardChanges")}
                     onClick={() => onClick()}
                     edge="end"
+                    size="small"
                 >
                     <UndoIcon />
                 </IconButton>

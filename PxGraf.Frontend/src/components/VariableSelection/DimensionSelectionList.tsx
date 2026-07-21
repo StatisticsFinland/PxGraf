@@ -4,7 +4,6 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DimensionSelection from './DimensionSelection';
 import { IDimension } from 'types/cubeMeta';
 import { Query } from 'types/query';
-import InfoBubble from 'components/InfoBubble/InfoBubble';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { useTheme } from '@mui/material/styles';
@@ -44,15 +43,6 @@ export const DimensionSelectionList: React.FC<DimensionSelectionListProps> = ({ 
     const theme = useTheme();
     const { uiContentLanguage } = React.useContext(UiLanguageContext);
 
-    const infoContent = (
-        <>
-            {t("infoText.selectableButton")}
-            <br />
-            <br />
-            {t("infoText.selectableInput")}
-        </>
-    );
-
     const selectedValues = (code: string ) => {
         //Formats the text to show 0 if no values are selected
         return resolvedDimensionCodes?.[code] ? resolvedDimensionCodes[code].length : 0;
@@ -62,7 +52,6 @@ export const DimensionSelectionList: React.FC<DimensionSelectionListProps> = ({ 
         <>
             <TitleWrapper>
                 <Typography variant="body2" sx={{ color: theme.palette.text.secondary }}>{t('variableSelect.title')}</Typography>
-                <InfoBubble info={infoContent} ariaLabel={t('variableSelect.title')} id="mainContent" />
             </TitleWrapper>
             {sortedDimensions(dimensions).map(dimension => {
                 return (

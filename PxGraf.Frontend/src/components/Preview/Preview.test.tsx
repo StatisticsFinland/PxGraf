@@ -3,6 +3,7 @@ import React from 'react';
 import { FilterType, ICubeQuery, Query } from "types/query";
 import { IVisualizationSettings } from "types/visualizationSettings";
 import Preview, { ISelectabilityInfo, getSelectables, getResolvedSelections } from "./Preview";
+import { EPreviewSize } from 'types/previewSize';
 import { EVariableType, EVisualizationType, ETimeVariableInterval, IQueryVisualizationResponse } from "@statisticsfinland/pxvisualizer";
 import { IVisualizationResult } from "api/services/visualization";
 import serializer from "../../testUtils/stripHighchartsHashes";
@@ -245,6 +246,7 @@ describe('Rendering test', () => {
                             query={mockQuery}
                             selectedVisualization={mockSelectedVisualization}
                             visualizationSettings={mockVisualizationSettings}
+                            previewSize={EPreviewSize.Desktop}
                         />
                     </VisualizationContext.Provider>
                 </QueryContext.Provider>
@@ -341,7 +343,7 @@ describe('Assertion tests', () => {
         };
         
         const result = getSelectables(mockVisualizationResponseWithSelectables, mockVisualizationSettingsWithMultiselect);
-        expect(result.length).toBe(2);
+        expect(result).toHaveLength(2);
         expect(result[0].dimension.code).toBe('Tiedot');
         expect(result[1].dimension.code).toBe('Vuosi');
         expect(result[0].multiselectable).toBe(false);

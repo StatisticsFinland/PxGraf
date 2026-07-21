@@ -8,6 +8,7 @@ import { VisualizationType } from "types/visualizationType";
 import { UiLanguageContext } from "contexts/uiLanguageContext";
 import { IEditorContentsResult } from '../../api/services/editor-contents';
 import { IEditorContentsResponse, IVisualizationOptions } from '../../types/editorContentsResponse';
+import { EPreviewSize } from 'types/previewSize';
 
 const mockDimensions: IDimension[] = [
     {
@@ -239,6 +240,8 @@ describe('Rendering test', () => {
                     dimensionQuery={mockQuery}
                     contentLanguages={["fi", "sv", "en"]}
                     visualizationSettings={mockVisualizationSettings}
+                    previewSize={EPreviewSize.Desktop}
+                    onPreviewSizeChange={() => {}}
                 />
                 </UiLanguageContext.Provider>
             );

@@ -8,6 +8,7 @@ import { IVisualizationSettings } from "types/visualizationSettings";
 import { VisualizationType } from "types/visualizationType";
 import serializer from "../../testUtils/stripHighchartsHashes";
 import { IEditorContentsResult } from '../../api/services/editor-contents';
+import { EPreviewSize } from 'types/previewSize';
 
 jest.mock('envVars', () => ({
     PxGrafUrl: 'pxGrafUrl.fi/',
@@ -277,6 +278,7 @@ describe('Rendering test', () => {
                 selectedVisualization={mockSelectedVisualization as VisualizationType}
                 visualizationSettings={mockVisualizationSettings}
                 editorContents={mockEditorContents}
+                previewSize={EPreviewSize.Desktop}
             />);
         expect(asFragment()).toMatchSnapshot();
     });
@@ -288,6 +290,7 @@ describe('Rendering test', () => {
                 selectedVisualization={mockSelectedVisualization as VisualizationType}
                 visualizationSettings={mockVisualizationSettings}
                 editorContents={mockEditorContentsNoValidVisualization}
+                previewSize={EPreviewSize.Desktop}
             />);
         expect(asFragment()).toMatchSnapshot();
     });
@@ -299,6 +302,7 @@ describe('Rendering test', () => {
                 selectedVisualization={mockSelectedVisualization as VisualizationType}
                 visualizationSettings={mockVisualizationSettings}
                 editorContents={mockEditorContentsEmptyVisualizationsAndRejections}
+                previewSize={EPreviewSize.Desktop}
             />);
         expect(asFragment()).toMatchSnapshot();
     });

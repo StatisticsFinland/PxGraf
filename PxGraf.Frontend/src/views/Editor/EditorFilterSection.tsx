@@ -15,21 +15,13 @@ interface EditorFilterSectionProps {
 
 const SelectorWrapper = styled(Box)<{width: number, $maxWidthPercentage: number}>`
   max-width: ${props => props.$maxWidthPercentage}%;
-  flex: 0 1 ${props => props.width}px;
-  position: fixed;
-  top: 0;
+  flex: 0 0 ${props => props.width}px;
   width: ${props => props.width}px;
-  height: calc(100vh - 100px);
-  margin-top: 98px;
-  overflow: auto;
+  height: 100%;
+  overflow-y: auto;
   padding-bottom: 50px;
   background-color: white;
-  z-index: 5;
-  border-top: thin solid rgba(0, 0, 0, 0.12);
-
-  @media (max-width: 980px) {
-    margin-top: 144px;
-  }
+  border-right: thin solid rgba(0, 0, 0, 0.12);
 `;
 
 /**
