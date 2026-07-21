@@ -107,8 +107,6 @@ namespace PxGraf.Services
 
             DimensionValue newValue = CreateVirtualDimensionValue(dimension, def, resolvedName, languages);
 
-            try
-            {
             switch (def)
             {
                 case SumDefinition sum:
@@ -182,9 +180,7 @@ namespace PxGraf.Services
                         valueIndex);
                     if (div.Constant == 0.0)
                     {
-                        _logger.LogWarning(
-                            "Virtual value '{Code}' in dimension '{Dimension}' has a zero constant divisor. All computed cells will be set to 'can not represent'.",
-                            div.Code, dimensionCode);
+                        _logger.LogWarning("Virtual value has a zero constant divisor. All computed cells will be set to 'can not represent'.");
                         matrix = matrix.ApplyToSubMap(
                             BuildConstantTargetMap(matrix, dimensionCode, div.Code),
                             _ => new DecimalDataValue(0m, DataValueType.CanNotRepresent));
@@ -199,19 +195,6 @@ namespace PxGraf.Services
 
                 default:
                     throw new InvalidOperationException($"Unsupported virtual value definition type '{def.GetType().Name}' for code '{def.Code}'.");
-            }
-            }
-            catch (DivideByZeroException ex)
-            {
-                _logger.LogWarning(ex,
-                    "Unexpected divide-by-zero in virtual value '{Code}' in dimension '{Dimension}'. Replacing with 'can not represent'.",
-                    def.Code, dimensionCode);
-                if (matrix.Metadata.Dimensions.First(d => d.Code == dimensionCode).Values.Any(v => v.Code == def.Code))
-                {
-                    matrix = matrix.ApplyToSubMap(
-                        BuildConstantTargetMap(matrix, dimensionCode, def.Code),
-                        _ => new DecimalDataValue(0m, DataValueType.CanNotRepresent));
-                }
             }
 
             return matrix;
