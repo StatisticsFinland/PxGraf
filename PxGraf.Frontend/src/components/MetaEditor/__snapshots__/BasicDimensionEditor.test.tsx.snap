@@ -3,7 +3,7 @@
 exports[`Rendering test renders correctly 1`] = `
 <DocumentFragment>
   <div
-    class="sc-gtcBCx laCyUO"
+    class="sc-gsDLFA eclUoB"
   >
     <div
       class="MuiGrid-root MuiGrid-container MuiGrid-direction-xs-row MuiGrid-spacing-xs-3 css-1u8xl8z-MuiGrid-root"
@@ -25,7 +25,7 @@ exports[`Rendering test renders correctly 1`] = `
             </b>
           </label>
           <div
-            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall MuiInputBase-adornedEnd sc-bdDsCe fBqFXC css-jupps9-MuiInputBase-root-MuiOutlinedInput-root"
+            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall MuiInputBase-adornedEnd sc-bdvvNz bsNdpO css-jupps9-MuiInputBase-root-MuiOutlinedInput-root"
           >
             <input
               aria-invalid="false"

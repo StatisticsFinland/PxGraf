@@ -33,6 +33,7 @@ export const EditorField: React.FC<IEditorFieldProps> = ({ label, defaultValue, 
 
     React.useEffect(() => {
         const value = editValue ?? defaultValue;
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional: syncs local state when props change
         setLocalValue(value);
     }, [defaultValue, editValue]);
 

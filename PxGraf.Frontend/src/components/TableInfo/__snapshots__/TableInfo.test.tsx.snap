@@ -3,13 +3,13 @@
 exports[`Rendering test renders correctly 1`] = `
 <DocumentFragment>
   <a
-    class="MuiButtonBase-root MuiListItemButton-root MuiListItemButton-gutters MuiListItemButton-root MuiListItemButton-gutters css-4bx69l-MuiButtonBase-root-MuiListItemButton-root"
+    class="MuiButtonBase-root MuiListItemButton-root MuiListItemButton-gutters css-4bx69l-MuiButtonBase-root-MuiListItemButton-root"
     data-discover="true"
     href="/editor/asd123/id/"
     tabindex="0"
   >
     <div
-      class="MuiListItemText-root css-1suf81v-MuiListItemText-root"
+      class="MuiListItemText-root css-cfq8qh-MuiListItemText-root"
     >
       <span
         class="MuiTypography-root MuiTypography-body1 MuiListItemText-primary css-rizt0-MuiTypography-root"

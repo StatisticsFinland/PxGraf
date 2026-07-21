@@ -3,13 +3,13 @@
 exports[`Rendering test renders correctly 1`] = `
 <DocumentFragment>
   <div
-  class="sc-gHbteL dwRsuh MuiBox-root css-0"
+  class="sc-gGCDhO iafzeg MuiBox-root css-0"
 >
   <div
-    class="sc-bqqMSY lbtQ MuiBox-root css-ve9ogo"
+    class="sc-bqiQet jrqqsa MuiBox-root css-ve9ogo"
   >
     <div
-      class="sc-iqkkDd zqhTE"
+      class="sc-iqshrI kAFCZx"
     >
       <p
         class="MuiTypography-root MuiTypography-body2 css-1wle3ir-MuiTypography-root"
@@ -18,7 +18,7 @@ exports[`Rendering test renders correctly 1`] = `
       </p>
     </div>
     <div
-      class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiAccordion-root MuiAccordion-rounded Mui-expanded MuiAccordion-gutters sc-dYjPD gpuxsh css-1808mag-MuiPaper-root-MuiAccordion-root"
+      class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiAccordion-root MuiAccordion-rounded Mui-expanded MuiAccordion-gutters sc-eggEi hbEiTq css-1808mag-MuiPaper-root-MuiAccordion-root"
       style="--Paper-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12);"
     >
       <h3
@@ -75,13 +75,13 @@ exports[`Rendering test renders correctly 1`] = `
               role="region"
             >
               <div
-                class="MuiAccordionDetails-root sc-crPgjm dJDmhi css-1lj39kh-MuiAccordionDetails-root"
+                class="MuiAccordionDetails-root sc-crHjuH XPMOA css-1lj39kh-MuiAccordionDetails-root"
               >
                 <div
-                  class="MuiStack-root sc-kEbgWM cjPnPc css-1sazv7p-MuiStack-root"
+                  class="MuiStack-root sc-kDTkih cfmeLJ css-1sazv7p-MuiStack-root"
                 >
                   <div
-                    class="MuiStack-root sc-jrIDTr eeuQxt css-m69qwo-MuiStack-root"
+                    class="MuiStack-root sc-jrQAHW gaUHM css-m69qwo-MuiStack-root"
                   >
                     <span
                       aria-label="variableSelect.openMenu"
@@ -103,7 +103,7 @@ exports[`Rendering test renders correctly 1`] = `
                       </svg>
                     </span>
                     <div
-                      class="MuiAutocomplete-root MuiAutocomplete-hasPopupIcon sc-jSppWd iJXiSX css-o5oj2-MuiAutocomplete-root"
+                      class="MuiAutocomplete-root MuiAutocomplete-hasPopupIcon sc-jRQzZg jLufGu css-o5oj2-MuiAutocomplete-root"
                     >
                       <div
                         class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-cmpglg-MuiFormControl-root-MuiTextField-root"
@@ -150,7 +150,7 @@ exports[`Rendering test renders correctly 1`] = `
                                 viewBox="0 0 24 24"
                               >
                                 <path
-                                  d="M7 10l5 5 5-5z...
+                                  d="M7 10l5 5 5-5...
 </DocumentFragment>
 `;
 
