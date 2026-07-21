@@ -3,10 +3,10 @@
 exports[`Rendering test renders correctly 1`] = `
 <DocumentFragment>
   <div
-    class="sc-bqqMSY cbaybI MuiBox-root css-0"
+    class="sc-bqiQet kOZSsa MuiBox-root css-0"
   >
     <div
-      class="sc-iqkkDd zqhTE"
+      class="sc-iqshrI kAFCZx"
     >
       <p
         class="MuiTypography-root MuiTypography-body2 css-1wle3ir-MuiTypography-root"
@@ -15,7 +15,7 @@ exports[`Rendering test renders correctly 1`] = `
       </p>
     </div>
     <div
-      class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiAccordion-root MuiAccordion-rounded Mui-expanded MuiAccordion-gutters sc-dYjPD gpuxsh css-1808mag-MuiPaper-root-MuiAccordion-root"
+      class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiAccordion-root MuiAccordion-rounded Mui-expanded MuiAccordion-gutters sc-eggEi hbEiTq css-1808mag-MuiPaper-root-MuiAccordion-root"
       style="--Paper-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12);"
     >
       <h3
@@ -72,13 +72,13 @@ exports[`Rendering test renders correctly 1`] = `
               role="region"
             >
               <div
-                class="MuiAccordionDetails-root sc-crPgjm dJDmhi css-1lj39kh-MuiAccordionDetails-root"
+                class="MuiAccordionDetails-root sc-crHjuH XPMOA css-1lj39kh-MuiAccordionDetails-root"
               >
                 <div
-                  class="MuiStack-root sc-kEbgWM cjPnPc css-1sazv7p-MuiStack-root"
+                  class="MuiStack-root sc-kDTkih cfmeLJ css-1sazv7p-MuiStack-root"
                 >
                   <div
-                    class="MuiStack-root sc-jrIDTr eeuQxt css-m69qwo-MuiStack-root"
+                    class="MuiStack-root sc-jrQAHW gaUHM css-m69qwo-MuiStack-root"
                   >
                     <span
                       aria-label="variableSelect.openMenu"
@@ -100,7 +100,7 @@ exports[`Rendering test renders correctly 1`] = `
                       </svg>
                     </span>
                     <div
-                      class="sc-gKkgUA gfREpc MuiBox-root css-0"
+                      class="sc-gKckfV djrEN MuiBox-root css-0"
                     >
                       <p
                         class="MuiTypography-root MuiTypography-body1 css-rizt0-MuiTypography-root"
@@ -110,7 +110,7 @@ exports[`Rendering test renders correctly 1`] = `
                     </div>
                   </div>
                   <div
-                    class="MuiStack-root sc-eCQgVK ehigaw css-nen11g-MuiStack-root"
+                    class="MuiStack-root sc-eCIkhf hOKibC css-nen11g-MuiStack-root"
                   >
                     <p
                       class="MuiTypography-root MuiTypography-body1 css-rizt0-MuiTypography-root"
@@ -118,13 +118,13 @@ exports[`Rendering test renders correctly 1`] = `
                       general.results:
                     </p>
                     <ul
-                      class="MuiList-root MuiList-padding MuiList-dense sc-bdDsCe lcgotI css-st2ob2-MuiList-root"
+                      class="MuiList-root MuiList-padding MuiList-dense sc-bdvvNz kmsnlU css-st2ob2-MuiList-root"
                     >
                       <li
-                        class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding sc-gtcBCx hlejmV css-qyw6ft-MuiListItem-root"
+                        class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding sc-gsDLFA gTnRse css-qyw6ft-MuiListItem-root"
                       >
                         <div
-                          class="MuiListItemText-root MuiListItemText-dense css-1suf81v-MuiListItemText-root"
+                          class="MuiListItemText-root MuiListItemText-dense css-cfq8qh-MuiListItemText-root"
                         >
                           <span
                             class="MuiTypography-root MuiTypography-body2 MuiListItemText-primary css-7ctihp-MuiTypography-root"
@@ -134,10 +134,10 @@ exports[`Rendering test renders correctly 1`] = `
                         </div>
                       </li>
                       <li
-                        class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding sc-gtcBCx hlejmV css-qyw6ft-MuiListItem-root"
+                        class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding sc-gsDLFA gTnRse css-qyw6ft-MuiListItem-root"
                       >
                         <div
-                          class="MuiListItemText-root MuiListItemText-dense css-1suf81v-MuiListItemText-root"
+                          class="MuiListItemText-root MuiListItemText-dense css-cfq8qh-MuiListItemText-root"
                         >
                           <span
                             class="MuiTypography-root MuiTypography-body2 MuiListItemText-primary css-7ctihp-MuiTypography-root"
@@ -147,10 +147,10 @@ exports[`Rendering test renders correctly 1`] = `
                         </div>
                       </li>
                       <li
-                        class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding sc-gtcBCx hlejmV css-qyw6ft-MuiListItem-root"
+                        class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding sc-gsDLFA gTnRse css-qyw6ft-MuiListItem-root"
                       >
                         <div
-                          class="MuiListItemText-root MuiListItemText-dense css-1suf81v-MuiListItemText-root"
+                          class="MuiListItemText-root MuiListItemText-dense css-cfq8qh-MuiListItemText-root"
                         >
                           <span
                             class="MuiTypography-root MuiTypography-body2 MuiListItemText-primary css-7ctihp-MuiTypography-root"
@@ -180,11 +180,11 @@ exports[`Rendering test renders correctly 1`] = `
                             type="checkbox"
                           />
                           <span
-                            class="MuiSwitch-thumb css-17jyosd-MuiSwitch-thumb"
+                            class="MuiSwitch-thumb css-1mw77bv-MuiSwitch-thumb"
                           />
                         </span>
                         <span
-                          class="MuiSwitch-track css-tj8d99-MuiSwitch-track"
+                          class="MuiSwitch-track css-1kf3qur-MuiSwitch-track"
                         />
                       </span>
                       <span
@@ -195,7 +195,7 @@ exports[`Rendering test renders correctly 1`] = `
                     </label>
                   </div>
                   <div
-                    class="MuiAutocomplete-root MuiAutocomplete-hasPopupIcon sc-qdQOe eGuQwZ css-1tlcqt-MuiAutocomplete-root"
+                    class="MuiAutocomplete-root MuiAutocomplete-hasPopupIcon sc-pVTZz kLIrWg css-1tlcqt-MuiAutocomplete-root"
                   >
                     <div
                       class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-cmpglg-MuiFormControl-root-MuiTextField-root"

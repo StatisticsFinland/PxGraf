@@ -5,7 +5,7 @@ exports[`Rendering test renders correctly with values within range 1`] = `
   <button
     aria-controls="rejection-dialog"
     aria-haspopup="true"
-    class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorPrimary css-1blvszr-MuiButtonBase-root-MuiButton-root"
+    class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorPrimary css-14ca1rq-MuiButtonBase-root-MuiButton-root"
     tabindex="0"
     type="button"
   >
