@@ -12,13 +12,13 @@ namespace PxGraf.Models.Queries
     [JsonConverter(typeof(ValueFilterJsonConverter))]
     public interface IValueFilter
     {
-        public abstract IEnumerable<IReadOnlyDimensionValue> Filter(IReadOnlyList<IReadOnlyDimensionValue> values);
+        public IEnumerable<IReadOnlyDimensionValue> Filter(IReadOnlyList<IReadOnlyDimensionValue> values);
 
         /// <summary>
         /// Filters a list of value codes using the same logic as <see cref="Filter(IReadOnlyList{IReadOnlyDimensionValue})"/>,
         /// operating directly on code strings without requiring full dimension value objects.
         /// </summary>
-        public abstract IEnumerable<string> Filter(IReadOnlyList<string> codes);
+        public IEnumerable<string> Filter(IReadOnlyList<string> codes);
     }
 
     /// <summary>
