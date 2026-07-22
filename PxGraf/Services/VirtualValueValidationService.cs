@@ -82,7 +82,7 @@ namespace PxGraf.Services
                     }
                 }
 
-                if (def is DivisionByConstantDefinition divByConstant && divByConstant.Constant == 0.0)
+                if (def is DivisionByConstantDefinition divByConstant && System.Math.Abs(divByConstant.Constant) <= double.Epsilon)
                 {
                     errorMessage = $"Virtual value '{def.Code}': division by a zero constant is not allowed.";
                     return false;

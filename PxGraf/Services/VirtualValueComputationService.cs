@@ -178,7 +178,7 @@ namespace PxGraf.Services
                         newValue,
                         new DimensionMap(dimensionCode, [div.Operand]),
                         valueIndex);
-                    if (div.Constant == 0.0)
+                    if (Math.Abs(div.Constant) <= double.Epsilon)
                     {
                         _logger.LogWarning("Virtual value has a zero constant divisor. All computed cells will be set to 'can not represent'.");
                         matrix = matrix.ApplyToSubMap(
@@ -220,10 +220,16 @@ namespace PxGraf.Services
                 return new DimensionValue(def.Code, resolvedName);
             }
 
-            ContentDimensionValue firstOperand = (ContentDimensionValue)contentDimension.Values
-                .First(v => v.Code == def.GetOperandCodes()[0]);
+            IReadOnlyList<string> operandCodes = def.GetOperandCodes();
+            if (operandCodes.Count == 0)
+            {
+                throw new InvalidOperationException($"Virtual value '{def.Code}': definition contains no operand codes.");
+            }
 
-            int precision = def.GetOperandCodes()
+            ContentDimensionValue firstOperand = (ContentDimensionValue)contentDimension.Values
+                .First(v => v.Code == operandCodes[0]);
+
+            int precision = operandCodes
                 .Select(code => contentDimension.Values.First(v => v.Code == code))
                 .OfType<ContentDimensionValue>()
                 .Min(cdv => cdv.Precision);

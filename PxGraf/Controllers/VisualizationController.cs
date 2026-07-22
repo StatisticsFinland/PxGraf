@@ -122,11 +122,12 @@ namespace PxGraf.Controllers
                     SavedQuery sq = await _sqFileInterface.ReadSavedQueryFromFile(sqId, Configuration.Current.SavedQueryDirectory);
                     Task<VisualizationResponse> newResponseTask = BuildNewResponseAsync(sqId, sq);
                     _taskCache.Set(sqId, newResponseTask, SlidingExpiration, AbsoluteExpiration);
-                    Response.Headers.CacheControl = $"{maxAge}";
                     _logger.LogDebug("Returning visualization.");
                     try
                     {
-                        return await newResponseTask; // Return directly if archived
+                        VisualizationResponse result = await newResponseTask;
+                        Response.Headers.CacheControl = $"{maxAge}";
+                        return result;
                     }
                     catch (EmptyDimensionException ex)
                     {

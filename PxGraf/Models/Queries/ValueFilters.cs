@@ -48,28 +48,26 @@ namespace PxGraf.Models.Queries
 
         public IEnumerable<IReadOnlyDimensionValue> Filter(IReadOnlyList<IReadOnlyDimensionValue> values)
         {
-            int index = values.ToList().FindIndex(value => value.Code == Code);
-            if (index >= 0)
+            for (int i = 0; i < values.Count; i++)
             {
-                return values.Skip(index);
+                if (values[i].Code == Code)
+                {
+                    return values.Skip(i);
+                }
             }
-            else
-            {
-                return Enumerable.Empty<DimensionValue>();
-            }
+            return Enumerable.Empty<DimensionValue>();
         }
 
         public IEnumerable<string> Filter(IReadOnlyList<string> codes)
         {
-            int index = codes.ToList().IndexOf(Code);
-            if (index >= 0)
+            for (int i = 0; i < codes.Count; i++)
             {
-                return codes.Skip(index);
+                if (codes[i] == Code)
+                {
+                    return codes.Skip(i);
+                }
             }
-            else
-            {
-                return Enumerable.Empty<string>();
-            }
+            return Enumerable.Empty<string>();
         }
     }
 

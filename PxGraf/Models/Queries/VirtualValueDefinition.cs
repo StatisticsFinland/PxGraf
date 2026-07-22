@@ -147,7 +147,7 @@ namespace PxGraf.Models.Queries
 
     /// <summary>
     /// Computes a virtual value as an operand code divided by a constant (Operand ÷ Constant).
-    /// Zero is not validated away; cells are set to missing at computation time.
+    /// A zero constant is rejected during validation and is not a valid input.
     /// </summary>
     public class DivisionByConstantDefinition : VirtualValueDefinition
     {
@@ -157,7 +157,7 @@ namespace PxGraf.Models.Queries
         public string Operand { get; set; }
 
         /// <summary>
-        /// The constant to divide the operand by. Zero is not validated away; cells are set to missing at computation time.
+        /// The constant to divide the operand by. Must be non-zero; a zero value is rejected during validation.
         /// </summary>
         public double Constant { get; set; }
 
