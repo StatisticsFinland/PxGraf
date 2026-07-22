@@ -76,4 +76,44 @@ describe('SumOperationForm', () => {
         await user.click(option);
         expect(mockOnChange).toHaveBeenCalledWith(['2018'], undefined);
     });
+
+    it('renders both toggle buttons', () => {
+        renderForm();
+        expect(screen.getByRole('button', { name: 'computedValues.useValue' })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: 'computedValues.constant' })).toBeInTheDocument();
+    });
+
+    it('shows constant field when initialized with a constant value', () => {
+        renderForm(['2018', '2019'], 5);
+        expect(screen.getByLabelText('computedValues.constant')).toBeInTheDocument();
+        expect(screen.getByLabelText('computedValues.constant')).toHaveValue(5);
+    });
+
+    it('calls onChange when toggling to constant mode', async () => {
+        const user = userEvent.setup();
+        const mockOnChange = jest.fn();
+        renderForm(['2018', '2019'], undefined, mockOnChange);
+        await user.click(screen.getByRole('button', { name: 'computedValues.constant' }));
+        expect(mockOnChange).toHaveBeenCalledWith(['2018', '2019'], 0);
+    });
+
+    it('calls onChange when toggling back to value mode', async () => {
+        const user = userEvent.setup();
+        const mockOnChange = jest.fn();
+        renderForm(['2018', '2019'], undefined, mockOnChange);
+        await user.click(screen.getByRole('button', { name: 'computedValues.constant' }));
+        mockOnChange.mockClear();
+        await user.click(screen.getByRole('button', { name: 'computedValues.useValue' }));
+        expect(mockOnChange).toHaveBeenCalledWith(['2018', '2019'], undefined);
+    });
+
+    it('defaults constant to 0 when a non-numeric value is entered', async () => {
+        const user = userEvent.setup();
+        const mockOnChange = jest.fn();
+        renderForm([], undefined, mockOnChange);
+        await user.click(screen.getByRole('button', { name: 'computedValues.constant' }));
+        const constantInput = screen.getByLabelText('computedValues.constant');
+        fireEvent.change(constantInput, { target: { value: 'abc' } });
+        expect(mockOnChange).toHaveBeenCalledWith([], 0);
+    });
 });

@@ -89,4 +89,67 @@ describe('DivisionOperationForm', () => {
         expect(screen.getByText('computedValues.divisorValue', { selector: 'label' })).toBeInTheDocument();
         expect(screen.queryByLabelText('computedValues.constant')).not.toBeInTheDocument();
     });
+
+    it('renders both toggle buttons', () => {
+        renderForm();
+        expect(screen.getByRole('button', { name: 'computedValues.useValue' })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: 'computedValues.constant' })).toBeInTheDocument();
+    });
+
+    it('initializes in constant mode when constant prop is provided', () => {
+        renderForm(['2018'], 5);
+        expect(screen.getByLabelText('computedValues.constant')).toBeInTheDocument();
+        expect(screen.getByLabelText('computedValues.constant')).toHaveValue(5);
+        expect(screen.queryByText('computedValues.divisorValue', { selector: 'label' })).not.toBeInTheDocument();
+    });
+
+    it('calls onChange when toggling to constant mode', async () => {
+        const user = userEvent.setup();
+        const mockOnChange = jest.fn();
+        renderForm(['2018'], undefined, mockOnChange);
+        await user.click(screen.getByRole('button', { name: 'computedValues.constant' }));
+        expect(mockOnChange).toHaveBeenCalledWith(['2018'], 1);
+    });
+
+    it('calls onChange when toggling back to value mode', async () => {
+        const user = userEvent.setup();
+        const mockOnChange = jest.fn();
+        renderForm(['2018'], undefined, mockOnChange);
+        await user.click(screen.getByRole('button', { name: 'computedValues.constant' }));
+        mockOnChange.mockClear();
+        await user.click(screen.getByRole('button', { name: 'computedValues.useValue' }));
+        expect(mockOnChange).toHaveBeenCalledWith(['2018'], undefined);
+    });
+
+    it('defaults constant to 0 when a non-numeric value is entered', async () => {
+        const user = userEvent.setup();
+        const mockOnChange = jest.fn();
+        renderForm([], undefined, mockOnChange);
+        await user.click(screen.getByRole('button', { name: 'computedValues.constant' }));
+        const constantInput = screen.getByLabelText('computedValues.constant');
+        fireEvent.change(constantInput, { target: { value: 'abc' } });
+        expect(mockOnChange).toHaveBeenCalledWith([], 0);
+    });
+
+    it('calls onChange when dividend value is changed', async () => {
+        const user = userEvent.setup();
+        const mockOnChange = jest.fn();
+        renderForm([], undefined, mockOnChange);
+        const comboboxes = screen.getAllByRole('combobox');
+        await user.click(comboboxes[0]);
+        const option = await screen.findByRole('option', { name: '2018' });
+        await user.click(option);
+        expect(mockOnChange).toHaveBeenCalledWith(['2018'], undefined);
+    });
+
+    it('calls onChange when divisor value is changed', async () => {
+        const user = userEvent.setup();
+        const mockOnChange = jest.fn();
+        renderForm(['2018'], undefined, mockOnChange);
+        const comboboxes = screen.getAllByRole('combobox');
+        await user.click(comboboxes[1]);
+        const option = await screen.findByRole('option', { name: '2019' });
+        await user.click(option);
+        expect(mockOnChange).toHaveBeenCalledWith(['2018', '2019'], undefined);
+    });
 });
