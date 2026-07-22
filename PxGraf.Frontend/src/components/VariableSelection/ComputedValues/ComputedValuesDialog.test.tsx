@@ -5,7 +5,7 @@ import userEvent from '@testing-library/user-event';
 import { ComputedValuesDialog } from './ComputedValuesDialog';
 import { UiLanguageContext } from 'contexts/uiLanguageContext';
 import { IDimension, EDimensionType } from 'types/cubeMeta';
-import { FilterType, IDimensionQuery, ISumDefinition } from 'types/query';
+import { FilterType, IDimensionQuery, ISumDefinition, IDivisionByConstantDefinition } from 'types/query';
 
 const mockDimension: IDimension = {
     code: 'Vuosi',
@@ -258,5 +258,143 @@ describe('ComputedValuesDialog — dependency safeguard', () => {
         const deleteButton = screen.getByRole('button', { name: 'computedValues.delete' });
         expect(editButton).not.toBeDisabled();
         expect(deleteButton).not.toBeDisabled();
+    });
+});
+
+describe('ComputedValuesDialog — dialog title', () => {
+    it('shows dialogTitle heading in list view', () => {
+        renderDialog();
+        expect(screen.getByRole('heading', { name: 'computedValues.dialogTitle' })).toBeInTheDocument();
+    });
+
+    it('shows addNew heading when adding a new computed value', async () => {
+        const user = userEvent.setup();
+        renderDialog();
+        await user.click(screen.getByRole('button', { name: 'computedValues.addNew' }));
+        expect(screen.getByRole('heading', { name: 'computedValues.addNew' })).toBeInTheDocument();
+    });
+
+    it('shows editTitle heading when editing an existing computed value', async () => {
+        const user = userEvent.setup();
+        const queryWithDef: IDimensionQuery = {
+            ...baseDimensionQuery,
+            virtualValueDefinitions: [
+                { type: 'sum', code: 'virtual_1', operandCodes: ['2018', '2019'] } as ISumDefinition,
+            ],
+        };
+        renderDialog(queryWithDef);
+        await user.click(screen.getByRole('button', { name: 'computedValues.edit' }));
+        expect(screen.getByRole('heading', { name: 'computedValues.editTitle' })).toBeInTheDocument();
+    });
+});
+
+describe('ComputedValuesDialog — close behavior', () => {
+    it('calls onClose when the Close button is clicked in list view', async () => {
+        const user = userEvent.setup();
+        const mockOnClose = jest.fn();
+        renderDialog(baseDimensionQuery, jest.fn(), mockOnClose);
+        await user.click(screen.getByRole('button', { name: 'computedValues.close' }));
+        expect(mockOnClose).toHaveBeenCalledTimes(1);
+    });
+});
+
+describe('ComputedValuesDialog — operator selection', () => {
+    it('shows MultiplicationOperationForm when multiplication operator is selected', async () => {
+        const user = userEvent.setup();
+        renderDialog();
+        await user.click(screen.getByRole('button', { name: 'computedValues.addNew' }));
+        await user.click(screen.getByRole('button', { name: 'computedValues.operatorMultiplication' }));
+        expect(screen.getByText('computedValues.multiplyByValue', { selector: 'label' })).toBeInTheDocument();
+    });
+
+    it('resets the operand form when the operator is changed', async () => {
+        const user = userEvent.setup();
+        renderDialog();
+        await user.click(screen.getByRole('button', { name: 'computedValues.addNew' }));
+        await user.click(screen.getByRole('button', { name: 'computedValues.operatorSubtraction' }));
+        expect(screen.getByText('computedValues.subtractValue', { selector: 'label' })).toBeInTheDocument();
+        await user.click(screen.getByRole('button', { name: 'computedValues.operatorSum' }));
+        expect(screen.queryByText('computedValues.subtractValue', { selector: 'label' })).not.toBeInTheDocument();
+    });
+});
+
+describe('ComputedValuesDialog — validation', () => {
+    it('shows validationMinOperands error when saving a sum with no operands selected', async () => {
+        const user = userEvent.setup();
+        renderDialog();
+        await user.click(screen.getByRole('button', { name: 'computedValues.addNew' }));
+        await user.click(screen.getByRole('button', { name: 'computedValues.save' }));
+        expect(screen.getByText('computedValues.validationMinOperands')).toBeInTheDocument();
+    });
+
+    it('shows validationSelectValue error when saving a subtraction with no operand selected', async () => {
+        const user = userEvent.setup();
+        renderDialog();
+        await user.click(screen.getByRole('button', { name: 'computedValues.addNew' }));
+        await user.click(screen.getByRole('button', { name: 'computedValues.operatorSubtraction' }));
+        await user.click(screen.getByRole('button', { name: 'computedValues.save' }));
+        expect(screen.getByText('computedValues.validationSelectValue')).toBeInTheDocument();
+    });
+
+    it('shows validationDivisionByZero error when editing a division with a constant of zero', async () => {
+        const user = userEvent.setup();
+        const divByZeroDef: IDivisionByConstantDefinition = {
+            type: 'divisionByConstant',
+            code: 'virtual_1',
+            operand: '2018',
+            constant: 0,
+        };
+        const queryWithDef: IDimensionQuery = {
+            ...baseDimensionQuery,
+            virtualValueDefinitions: [divByZeroDef],
+        };
+        renderDialog(queryWithDef);
+        await user.click(screen.getByRole('button', { name: 'computedValues.edit' }));
+        await user.click(screen.getByRole('button', { name: 'computedValues.save' }));
+        expect(screen.getAllByText('computedValues.validationDivisionByZero').length).toBeGreaterThan(0);
+    });
+});
+
+describe('ComputedValuesDialog — save', () => {
+    it('calls onQueryChanged with the replaced definition and returns to list view when saving an edit', async () => {
+        const user = userEvent.setup();
+        const mockOnQueryChanged = jest.fn();
+        const definition: ISumDefinition = {
+            type: 'sum',
+            code: 'virtual_1',
+            operandCodes: ['2018', '2019'],
+        };
+        const queryWithDef: IDimensionQuery = {
+            ...baseDimensionQuery,
+            virtualValueDefinitions: [definition],
+        };
+        renderDialog(queryWithDef, mockOnQueryChanged);
+        await user.click(screen.getByRole('button', { name: 'computedValues.edit' }));
+        await user.click(screen.getByRole('button', { name: 'computedValues.save' }));
+        expect(mockOnQueryChanged).toHaveBeenCalledWith(
+            expect.objectContaining({
+                virtualValueDefinitions: [expect.objectContaining({ code: 'virtual_1', type: 'sum' })],
+            })
+        );
+        expect(screen.getByRole('button', { name: 'computedValues.close' })).toBeInTheDocument();
+    });
+
+    it('calls onQueryChanged with the new definition and returns to list view when saving a new value', async () => {
+        const user = userEvent.setup();
+        const mockOnQueryChanged = jest.fn();
+        renderDialog(baseDimensionQuery, mockOnQueryChanged);
+        await user.click(screen.getByRole('button', { name: 'computedValues.addNew' }));
+        const autocompleteInput = screen.getByLabelText('computedValues.selectValues');
+        await user.click(autocompleteInput);
+        await user.click(await screen.findByRole('option', { name: '2018' }));
+        await user.click(autocompleteInput);
+        await user.click(await screen.findByRole('option', { name: '2019' }));
+        await user.click(screen.getByRole('button', { name: 'computedValues.save' }));
+        expect(mockOnQueryChanged).toHaveBeenCalledWith(
+            expect.objectContaining({
+                virtualValueDefinitions: [expect.objectContaining({ type: 'sum' })],
+            })
+        );
+        expect(screen.getByRole('button', { name: 'computedValues.close' })).toBeInTheDocument();
     });
 });
