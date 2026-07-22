@@ -269,9 +269,9 @@ namespace PxGraf.Services
             {
                 foreach (string operand in def.GetOperandCodes())
                 {
-                    if (virtualCodes.Contains(operand) && dependencies.ContainsKey(def.Code))
+                    if (virtualCodes.Contains(operand) && dependencies.TryGetValue(def.Code, out HashSet<string>? defDependencies))
                     {
-                        if (dependencies[def.Code].Add(operand))
+                        if (defDependencies.Add(operand))
                         {
                             inDegree[def.Code]++;
                         }
