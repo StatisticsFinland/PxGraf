@@ -36,7 +36,8 @@ namespace PxGraf.Models.Queries
     public class SumDefinition : VirtualValueDefinition
     {
         /// <summary>
-        /// Codes of the dimension values to sum. Must contain at least 2 entries.
+        /// Codes of the dimension values to sum. Must contain at least 1 entry.
+        /// A single entry is valid when <see cref="Constant"/> is also provided.
         /// </summary>
         public List<string> OperandCodes { get; set; }
 

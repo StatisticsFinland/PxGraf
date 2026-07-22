@@ -90,7 +90,7 @@ namespace UnitTests.ControllerTests.CreationControllerTests
                 ValueFilter = new ItemFilter(["value-0", "value-2"]),
                 VirtualValueDefinitions =
                 [
-                    new SumDefinition { Code = "value-2", OperandCodes = ["value-1"] }
+                    new SumDefinition { Code = "value-2", OperandCodes = ["value-1"], Constant = 0.0 }
                 ]
             };
 

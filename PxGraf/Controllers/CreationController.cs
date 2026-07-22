@@ -296,7 +296,7 @@ namespace PxGraf.Controllers
 
                 long fetchSize = fetchMeta.GetSize();
 
-                if (outputMapSize == 0 || outputMapSize > maxQuerySize || fetchSize > maxQuerySize)
+                if (outputMapSize > maxQuerySize || fetchSize > maxQuerySize)
                 {
                     _logger.LogDebug("Output size {OutputMapSize} or fetch size {FetchSize} exceeds maximum query size {MaxQuerySize}. Returning response with no valid visualization types.", outputMapSize, fetchSize, maxQuerySize);
                     return new EditorContentsResponse()
