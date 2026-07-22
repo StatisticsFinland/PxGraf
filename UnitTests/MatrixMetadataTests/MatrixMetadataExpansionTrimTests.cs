@@ -150,7 +150,7 @@ namespace UnitTests.MatrixMetadataTests
             List<string> resultCodes = fetchMeta.Dimensions.First(d => d.Code == "dim1").Values.Select(v => v.Code).ToList();
             using (Assert.EnterMultipleScope())
             {
-                Assert.That(resultCodes, Is.EqualTo(new[] { "a" }));
+                Assert.That(resultCodes, Is.EqualTo(["a"]));
                 Assert.That(resultCodes, Does.Not.Contain("does_not_exist"));
             }
         }
@@ -200,7 +200,7 @@ namespace UnitTests.MatrixMetadataTests
 
             // Assert
             List<string> resultCodes = fetchMeta.Dimensions.First(d => d.Code == "dim1").Values.Select(v => v.Code).ToList();
-            Assert.That(resultCodes, Is.EqualTo(new[] { "a", "c" }));
+            Assert.That(resultCodes, Is.EqualTo(["a", "c"]));
         }
 
         // ---- TrimOperandOnlyValues ----
@@ -219,7 +219,7 @@ namespace UnitTests.MatrixMetadataTests
 
             // Assert
             List<string> resultCodes = result.Metadata.Dimensions.First(d => d.Code == "dim1").Values.Select(v => v.Code).ToList();
-            Assert.That(resultCodes, Is.EqualTo(new[] { "a", "b" }));
+            Assert.That(resultCodes, Is.EqualTo(["a", "b"]));
         }
 
         [Test]
