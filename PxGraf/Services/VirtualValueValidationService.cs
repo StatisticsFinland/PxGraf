@@ -132,8 +132,8 @@ namespace PxGraf.Services
                 // Find all definitions that depend on this node and reduce their in-degree.
                 foreach (VirtualValueDefinition def in definitions)
                 {
-                    if (!dependencies.ContainsKey(def.Code)) continue;
-                    if (!dependencies[def.Code].Contains(node)) continue;
+                    if (!dependencies.TryGetValue(def.Code, out HashSet<string>? defDependencies)) continue;
+                    if (!defDependencies.Contains(node)) continue;
 
                     inDegree[def.Code]--;
                     if (inDegree[def.Code] == 0)

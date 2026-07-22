@@ -44,8 +44,8 @@ namespace PxGraf.Models.Metadata
         }
 
         /// <summary>
-        /// Builds both the database-fetch metadata and the output map in a single pass,
-        /// calling <see cref="FilterDimensionValues"/> exactly once.
+        /// Builds both the database-fetch metadata and the output map in a single pass over
+        /// each dimension in <paramref name="completeMeta"/>.
         /// <para>
         /// <c>fetchMeta</c>: metadata containing the real value codes needed to read data from the
         /// database (user-selected values plus any additional operand codes for virtual value computation).

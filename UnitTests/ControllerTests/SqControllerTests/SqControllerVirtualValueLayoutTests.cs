@@ -147,7 +147,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
             query.DimensionQueries["variable-1"].ValueFilter = new ItemFilter(["2000", "2001", "virtual_time_1"]);
             query.DimensionQueries["variable-1"].VirtualValueDefinitions =
             [
-                new SumDefinition { Code = "virtual_time_1", OperandCodes = ["2002"] }
+                new SumDefinition { Code = "virtual_time_1", OperandCodes = ["2002"], Constant = 0.0 }
             ];
 
             return new SaveQueryParams()
@@ -181,7 +181,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
             query.DimensionQueries["variable-1"].ValueFilter = new ItemFilter(["2000", "2001", "virtual_time_1"]);
             query.DimensionQueries["variable-1"].VirtualValueDefinitions =
             [
-                new SumDefinition { Code = "virtual_time_1", OperandCodes = ["2002"] }
+                new SumDefinition { Code = "virtual_time_1", OperandCodes = ["2002"], Constant = 0.0 }
             ];
 
             // Build the matrix with the post-pipeline shape (3 time values: 2 real + 1 virtual).

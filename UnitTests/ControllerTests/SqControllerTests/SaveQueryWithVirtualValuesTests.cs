@@ -4,7 +4,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
-using Px.Utils.Language;
 using Px.Utils.Models;
 using Px.Utils.Models.Data.DataValue;
 using Px.Utils.Models.Metadata;
@@ -146,7 +145,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
 
             List<VirtualValueDefinition> defs =
             [
-                new SumDefinition { Code = "virtual_1", OperandCodes = ["value-0"] }
+                new SumDefinition { Code = "virtual_1", OperandCodes = ["value-0"], Constant = 0.0 }
             ];
             (_, SaveQueryParams saveParams) = BuildSaveParams(defs);
 

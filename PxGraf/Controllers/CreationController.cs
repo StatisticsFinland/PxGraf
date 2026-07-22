@@ -286,22 +286,22 @@ namespace PxGraf.Controllers
 
                 IReadOnlyMatrixMetadata tableMeta = await _datasource.GetMatrixMetadataCachedAsync(query.TableReference);
 
-                (IReadOnlyMatrixMetadata? fetchMeta, MatrixMap? outputMap) = tableMeta.BuildVirtualValueMaps(query);
-                if (outputMap.GetSize() ==  0)
+                (IReadOnlyMatrixMetadata fetchMeta, MatrixMap outputMap) = tableMeta.BuildVirtualValueMaps(query);
+                long outputMapSize = outputMap.GetSize();
+                if (outputMapSize ==  0)
                 {
                     _logger.LogDebug("One or more dimensions have no selected output values. Returning empty editor contents result.");
                     return EditorContentsResponse.Empty;
                 }
 
-                int includedValuesCount = fetchMeta.Dimensions.Select(x => x.Values.Count).Aggregate((a, x) => a * x);
+                long fetchSize = fetchMeta.GetSize();
 
-                if (includedValuesCount == 0 || includedValuesCount > maxQuerySize)
+                if (outputMapSize == 0 || outputMapSize > maxQuerySize || fetchSize > maxQuerySize)
                 {
-                    _logger.LogDebug("Resulting matrix would have size {IncludedValuesCount}, which is either 0 or exceeds the maximum supported size of {MaxQuerySize}.", includedValuesCount, maxQuerySize);
-                    _logger.LogDebug("Returning editor contents result with no valid visualization types.");
+                    _logger.LogDebug("Output size {OutputMapSize} or fetch size {FetchSize} exceeds maximum query size {MaxQuerySize}. Returning response with no valid visualization types.", outputMapSize, fetchSize, maxQuerySize);
                     return new EditorContentsResponse()
                     {
-                        Size = includedValuesCount,
+                        Size = outputMapSize,
                         MaximumSupportedSize = maxQuerySize,
                         SizeWarningLimit = Convert.ToInt32(maxQuerySize * Configuration.Current.QueryOptions.QuerySizeWarningRatio),
                         HeaderText = new MultilanguageString(Configuration.Current.LanguageOptions.Available.Select(lang => new KeyValuePair<string, string>(lang, string.Empty))),
@@ -317,8 +317,6 @@ namespace PxGraf.Controllers
                 if (query.DimensionQueries.Values.Any(dq => dq.VirtualValueDefinitions?.Count > 0))
                     matrix = _virtualValueComputationService.ApplyVirtualValues(matrix, query);
                 matrix = matrix.GetTransform(outputMap);
-
-                int outputValuesCount = matrix.Metadata.Dimensions.Select(x => x.Values.Count).Aggregate((a, x) => a * x);
 
                 Dictionary<VisualizationType, MultilanguageString> rejectionReasons = [];
                 List<VisualizationOption> visualizationOptions = [];
@@ -342,10 +340,10 @@ namespace PxGraf.Controllers
                     }
                 }
 
-                _logger.LogDebug("Returning editor contents result with size {OutputValuesCount} and {VisualizationOptionsCount} visualization options.", outputValuesCount, visualizationOptions.Count);
+                _logger.LogDebug("Returning editor contents result with size {OutputValuesCount} and {VisualizationOptionsCount} visualization options.", outputMapSize, visualizationOptions.Count);
                 return new EditorContentsResponse()
                 {
-                    Size = outputValuesCount,
+                    Size = outputMapSize,
                     MaximumSupportedSize = maxQuerySize,
                     SizeWarningLimit = Convert.ToInt32(maxQuerySize * Configuration.Current.QueryOptions.QuerySizeWarningRatio),
                     HeaderText = HeaderBuildingUtilities.GetHeader(matrix.Metadata, query, true),
@@ -386,7 +384,7 @@ namespace PxGraf.Controllers
                 _logger.LogDebug("Requesting visualization. POST: api/creation/visualization");
                 IReadOnlyMatrixMetadata completeMeta = await _datasource.GetMatrixMetadataCachedAsync(request.Query.TableReference);
 
-                var (fetchMeta, outputMap) = completeMeta.BuildVirtualValueMaps(request.Query);
+                (IReadOnlyMatrixMetadata fetchMeta, MatrixMap outputMap) = completeMeta.BuildVirtualValueMaps(request.Query);
                 if (outputMap.DimensionMaps.Any(dm => dm.ValueCodes.Count == 0))
                 {
                     _logger.LogDebug("One or more dimensions have no selected output values.");

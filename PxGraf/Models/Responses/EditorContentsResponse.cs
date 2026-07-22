@@ -13,7 +13,7 @@ namespace PxGraf.Models.Responses
         /// <summary>
         /// Current size of the query.
         /// </summary>
-        public required int Size { get; set; }
+        public required long Size { get; set; }
 
         /// <summary>
         /// The limit when the end user should be warned that the size of the query is getting larger than is practical.
