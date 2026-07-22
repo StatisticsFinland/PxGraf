@@ -58,6 +58,15 @@ function resolveValueName(code: string, dimension: IDimension, uiContentLanguage
     return code;
 }
 
+function operatorSymbol(def: IVirtualValueDefinition): string {
+    switch (getOperatorType(def)) {
+        case 'sum': return '+';
+        case 'subtraction': return '-';
+        case 'multiplication': return '×';
+        case 'division': return '÷';
+    }
+}
+
 function operatorLabel(operator: VirtualValueOperator, t: (key: string) => string): string {
     switch (operator) {
         case 'sum': return t('computedValues.operatorSum');
@@ -93,12 +102,19 @@ const DefinitionListView: React.FC<DefinitionListViewProps> = ({
                         .map(code => resolveValueName(code, dimension, uiContentLanguage))
                         .join(', ');
                     const defConstant = getConstant(def);
-                    const constantPart = defConstant === undefined ? '' : ` + ${defConstant}`;
+                    const constantPart = defConstant === undefined ? '' : ` ${operatorSymbol(def)} ${defConstant}`;
                     return (
                         <ListItem
                             key={def.code}
-                            secondaryAction={
-                                <Stack direction="row" spacing={0.5} alignItems="center">
+                            disablePadding
+                            sx={{ py: 0.5, alignItems: 'flex-start' }}
+                        >
+                            <ListItemText
+                                primary={`${resolveValueName(def.code, dimension, uiContentLanguage)} — ${operatorLabel(getOperatorType(def), t)}`}
+                                secondary={`${operandNames}${constantPart}`}
+                                sx={{ flex: 1, minWidth: 0 }}
+                            />
+                            <Stack direction="row" spacing={0.5} alignItems="center" sx={{ flexShrink: 0, ml: 1 }}>
                                     {dependedOnCodes.has(def.code) && (
                                         <Tooltip title={t('computedValues.hasDependents')}>
                                             <span style={{ display: 'inline-flex', alignItems: 'center' }}>
@@ -129,14 +145,6 @@ const DefinitionListView: React.FC<DefinitionListViewProps> = ({
                                         </IconButton>
                                     </span>
                                 </Stack>
-                            }
-                            disablePadding
-                            sx={{ py: 0.5 }}
-                        >
-                            <ListItemText
-                                primary={`${resolveValueName(def.code, dimension, uiContentLanguage)} — ${operatorLabel(getOperatorType(def), t)}`}
-                                secondary={`${operandNames}${constantPart}`}
-                            />
                         </ListItem>
                     );
                 })}

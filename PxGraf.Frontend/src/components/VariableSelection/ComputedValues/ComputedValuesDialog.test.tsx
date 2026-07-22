@@ -5,7 +5,7 @@ import userEvent from '@testing-library/user-event';
 import { ComputedValuesDialog } from './ComputedValuesDialog';
 import { UiLanguageContext } from 'contexts/uiLanguageContext';
 import { IDimension, EDimensionType } from 'types/cubeMeta';
-import { FilterType, IDimensionQuery, ISumDefinition, IDivisionByConstantDefinition } from 'types/query';
+import { FilterType, IDimensionQuery, ISumDefinition, ISubtractionByConstantDefinition, IMultiplicationByConstantDefinition, IDivisionByConstantDefinition } from 'types/query';
 
 const mockDimension: IDimension = {
     code: 'Vuosi',
@@ -396,5 +396,51 @@ describe('ComputedValuesDialog — save', () => {
             })
         );
         expect(screen.getByRole('button', { name: 'computedValues.close' })).toBeInTheDocument();
+    });
+});
+
+describe('ComputedValuesDialog — operator symbol in list', () => {
+    it('shows + for a sum definition with a constant', () => {
+        const def: ISumDefinition = {
+            type: 'sum',
+            code: 'virtual_1',
+            operandCodes: ['2018', '2019'],
+            constant: 10,
+        };
+        renderDialog({ ...baseDimensionQuery, virtualValueDefinitions: [def] });
+        expect(screen.getByText('2018, 2019 + 10')).toBeInTheDocument();
+    });
+
+    it('shows - for a subtraction-by-constant definition', () => {
+        const def: ISubtractionByConstantDefinition = {
+            type: 'subtractionByConstant',
+            code: 'virtual_1',
+            operand: '2018',
+            constant: 5,
+        };
+        renderDialog({ ...baseDimensionQuery, virtualValueDefinitions: [def] });
+        expect(screen.getByText('2018 - 5')).toBeInTheDocument();
+    });
+
+    it('shows × for a multiplication-by-constant definition', () => {
+        const def: IMultiplicationByConstantDefinition = {
+            type: 'multiplicationByConstant',
+            code: 'virtual_1',
+            operand: '2018',
+            constant: 3,
+        };
+        renderDialog({ ...baseDimensionQuery, virtualValueDefinitions: [def] });
+        expect(screen.getByText('2018 × 3')).toBeInTheDocument();
+    });
+
+    it('shows ÷ for a division-by-constant definition', () => {
+        const def: IDivisionByConstantDefinition = {
+            type: 'divisionByConstant',
+            code: 'virtual_1',
+            operand: '2018',
+            constant: 50,
+        };
+        renderDialog({ ...baseDimensionQuery, virtualValueDefinitions: [def] });
+        expect(screen.getByText('2018 ÷ 50')).toBeInTheDocument();
     });
 });
