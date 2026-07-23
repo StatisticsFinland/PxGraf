@@ -27,7 +27,7 @@ const createWrapper = () => {
 };
 
 const mockQuery: Query = {
-    dim1: { valueFilter: { type: FilterType.All }, selectable: false, virtualValueDefinitions: null }
+    dim1: { valueFilter: { type: FilterType.All }, selectable: false, virtualValueDefinitions: [] }
 };
 const mockCubeQuery: ICubeQuery = { variableQueries: {} };
 const mockIdStack = ['db', 'table.px'];

@@ -118,7 +118,7 @@ const mockQuery: Query = {
             query: 2
         },
         selectable: false,
-        virtualValueDefinitions: null
+        virtualValueDefinitions: []
     },
     foobar2: {
         valueFilter: {
@@ -126,7 +126,7 @@ const mockQuery: Query = {
             query: 2
         },
         selectable: false,
-        virtualValueDefinitions: null
+        virtualValueDefinitions: []
     },
     foobar3: {
         valueFilter: {
@@ -134,7 +134,7 @@ const mockQuery: Query = {
             query: 2
         },
         selectable: false,
-        virtualValueDefinitions: null
+        virtualValueDefinitions: []
     },
     foobar4: {
         valueFilter: {
@@ -142,7 +142,7 @@ const mockQuery: Query = {
             query: 2
         },
         selectable: false,
-        virtualValueDefinitions: null
+        virtualValueDefinitions: []
     },
     foobar5: {
         valueFilter: {
@@ -150,7 +150,7 @@ const mockQuery: Query = {
             query: 1
         },
         selectable: false,
-        virtualValueDefinitions: null
+        virtualValueDefinitions: []
     }
 };
 

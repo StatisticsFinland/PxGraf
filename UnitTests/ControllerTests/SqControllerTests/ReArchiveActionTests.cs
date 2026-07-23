@@ -73,7 +73,9 @@ namespace UnitTests.ControllerTests.SqControllerTests
             _mockSqFileInterface.Setup(s => s.ReadSavedQueryFromFile(It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(Task.Run(() => TestDataCubeBuilder.BuildTestSavedQuery(cubeParams, false, new LineChartVisualizationSettings(null, false, null))));
 
-            return new SqController(_mockCachedDatasource.Object, _mockSqFileInterface.Object, _mockLogger.Object, _mockAuditLogService.Object, _mockWebhookService.Object);
+            Mock<IVirtualValueValidationService> mockVirtualValueValidationService = new();
+            Mock<IVirtualValueComputationService> mockVirtualValueComputationService = new();
+            return new SqController(_mockCachedDatasource.Object, _mockSqFileInterface.Object, _mockLogger.Object, _mockAuditLogService.Object, _mockWebhookService.Object, mockVirtualValueValidationService.Object, mockVirtualValueComputationService.Object);
         }
 
         [Test]

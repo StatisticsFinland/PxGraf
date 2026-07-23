@@ -160,7 +160,7 @@ const mockQuery: Query = {
             query: 4
         },
         selectable: false,
-        virtualValueDefinitions: null
+        virtualValueDefinitions: []
     },
     'bar': {
         valueFilter: {
@@ -170,7 +170,7 @@ const mockQuery: Query = {
             ]
         },
         selectable: false,
-        virtualValueDefinitions: null
+        virtualValueDefinitions: []
     }
 };
 

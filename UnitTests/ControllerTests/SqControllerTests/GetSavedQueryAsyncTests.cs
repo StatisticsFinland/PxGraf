@@ -79,7 +79,9 @@ namespace UnitTests.ControllerTests.SqControllerTests
             mockSqFileInterface.Setup(x => x.ReadSavedQueryFromFile(It.Is<string>(s => s == testQueryId), It.IsAny<string>()))
                 .Returns(Task.Run(() => TestDataCubeBuilder.BuildTestSavedQuery(cubeParams, false, new LineChartVisualizationSettings(null, false, null))));
 
-            SqController metaController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, mockLogger.Object, mockAuditLogService.Object, mockWebhookService.Object);
+            Mock<IVirtualValueValidationService> mockVirtualValueValidationService = new();
+            Mock<IVirtualValueComputationService> mockVirtualValueComputationService = new();
+            SqController metaController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, mockLogger.Object, mockAuditLogService.Object, mockWebhookService.Object, mockVirtualValueValidationService.Object, mockVirtualValueComputationService.Object);
 
             // Act
             ActionResult<SaveQueryParams> result = await metaController.GetSavedQueryAsync(testQueryId);
@@ -125,7 +127,7 @@ namespace UnitTests.ControllerTests.SqControllerTests
 
             mockCachedDatasource.Setup(x => x.GetMatrixMetadataCachedAsync(It.IsAny<PxTableReference>()))
                 .Returns(Task.Run(() => (IReadOnlyMatrixMetadata)TestDataCubeBuilder.BuildTestMeta(metaParams)));
-            mockCachedDatasource.Setup(x => x.GetMatrixAsync(It.IsAny<PxTableReference>(), It.IsAny<IReadOnlyMatrixMetadata>()))
+            mockCachedDatasource.Setup(x => x.GetMatrixCachedAsync(It.IsAny<PxTableReference>(), It.IsAny<IReadOnlyMatrixMetadata>()))
                 .Returns(Task.Run(() => TestDataCubeBuilder.BuildTestMatrix(cubeParams)));
 
             mockSqFileInterface.Setup(x => x.SavedQueryExists(It.Is<string>(s => s == testQueryId), It.IsAny<string>()))
@@ -133,7 +135,9 @@ namespace UnitTests.ControllerTests.SqControllerTests
             mockSqFileInterface.Setup(x => x.ReadSavedQueryFromFile(It.Is<string>(s => s == testQueryId), It.IsAny<string>()))
                 .Returns(Task.Run(() => TestDataCubeBuilder.BuildTestSavedQuery(cubeParams, false, new HorizontalBarChartVisualizationSettings(null))));
 
-            SqController metaController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, mockLogger.Object, mockAuditLogService.Object, mockWebhookService.Object);
+            Mock<IVirtualValueValidationService> mockVirtualValueValidationService = new();
+            Mock<IVirtualValueComputationService> mockVirtualValueComputationService = new();
+            SqController metaController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, mockLogger.Object, mockAuditLogService.Object, mockWebhookService.Object, mockVirtualValueValidationService.Object, mockVirtualValueComputationService.Object);
             
             // Act
             ActionResult<SaveQueryParams> actionResult = await metaController.GetSavedQueryAsync(testQueryId);
@@ -164,7 +168,9 @@ namespace UnitTests.ControllerTests.SqControllerTests
             mockSqFileInterface.Setup(x => x.SavedQueryExists(It.Is<string>(s => s == testQueryId), It.IsAny<string>()))
                 .ReturnsAsync(false);
 
-            SqController metaController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, mockLogger.Object, mockAuditLogService.Object, mockWebhookService.Object);
+            Mock<IVirtualValueValidationService> mockVirtualValueValidationService = new();
+            Mock<IVirtualValueComputationService> mockVirtualValueComputationService = new();
+            SqController metaController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, mockLogger.Object, mockAuditLogService.Object, mockWebhookService.Object, mockVirtualValueValidationService.Object, mockVirtualValueComputationService.Object);
             
             // Act
             ActionResult<SaveQueryParams> actionResult = await metaController.GetSavedQueryAsync(testQueryId);
@@ -210,7 +216,9 @@ namespace UnitTests.ControllerTests.SqControllerTests
             mockSqFileInterface.Setup(x => x.ReadSavedQueryFromFile(It.Is<string>(s => s == testQueryId), It.IsAny<string>()))
                 .Returns(Task.Run(() => TestDataCubeBuilder.BuildTestSavedQuery(metaParams, false, new HorizontalBarChartVisualizationSettings(null))));
 
-            SqController metaController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, mockLogger.Object, mockAuditLogService.Object, mockWebhookService.Object);
+            Mock<IVirtualValueValidationService> mockVirtualValueValidationService = new();
+            Mock<IVirtualValueComputationService> mockVirtualValueComputationService = new();
+            SqController metaController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, mockLogger.Object, mockAuditLogService.Object, mockWebhookService.Object, mockVirtualValueValidationService.Object, mockVirtualValueComputationService.Object);
             
             // Act
             ActionResult<SaveQueryParams> actionResult = await metaController.GetSavedQueryAsync(testQueryId);

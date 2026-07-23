@@ -7,9 +7,9 @@ using Px.Utils.Models.Metadata.MetaProperties;
 using Px.Utils.Models.Metadata;
 using PxGraf.Models.Queries;
 using PxGraf.Utility;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System;
 
 namespace PxGraf.Models.Metadata
 {
@@ -17,6 +17,9 @@ namespace PxGraf.Models.Metadata
     {
         /// <summary>
         /// Filters the dimension values of the given cube metadata based on the given query.
+        /// Virtual values are treated as if they appear at the end of the dimension value list
+        /// when computing the filter window, so that filters like TopFilter count real and virtual
+        /// values together. Only real value codes are retained in the output metadata.
         /// </summary>
         /// <param name="input"><see cref="IReadOnlyMatrixMetadata"/> object to be used.</param>
         /// <param name="query">Query object to be used for filtering the dimension values.</param>
@@ -26,11 +29,73 @@ namespace PxGraf.Models.Metadata
             List<IDimensionMap> dimensionMaps = [];
             foreach (IReadOnlyDimension dimension in input.Dimensions)
             {
-                IValueFilter filter = query.DimensionQueries[dimension.Code].ValueFilter;
-                List<string> valueCodes = [.. filter.Filter(dimension.Values).Select(v => v.Code)];
+                DimensionQuery dimQuery = query.DimensionQueries[dimension.Code];
+                IValueFilter filter = dimQuery.ValueFilter;
+                IReadOnlyList<string> codesToFilter = dimension.ValueCodes;
+                if (dimQuery.VirtualValueDefinitions?.Count > 0)
+                {
+                    codesToFilter = [.. dimension.ValueCodes, .. dimQuery.VirtualValueDefinitions.Select(v => v.Code)];
+                }
+                HashSet<string> realCodes = [.. dimension.ValueCodes];
+                List<string> valueCodes = [.. filter.Filter(codesToFilter).Where(realCodes.Contains)];
                 dimensionMaps.Add(new DimensionMap(dimension.Code, valueCodes));
             }
             return input.GetTransform(new MatrixMap(dimensionMaps));
+        }
+
+        /// <summary>
+        /// Builds both the database-fetch metadata and the output map in a single pass over
+        /// each dimension in <paramref name="completeMeta"/>.
+        /// <para>
+        /// <c>fetchMeta</c>: metadata containing the real value codes needed to read data from the
+        /// database (user-selected values plus any additional operand codes for virtual value computation).
+        /// </para>
+        /// <para>
+        /// <c>outputMap</c>: a <see cref="MatrixMap"/> of codes that should appear in the final result
+        /// (user-selected real codes plus any virtual value codes that fall within the filter window).
+        /// Check for empty dimensions with <c>outputMap.DimensionMaps.Any(dm => dm.ValueCodes.Count == 0)</c>.
+        /// </para>
+        /// </summary>
+        /// <param name="completeMeta">The complete unfiltered table metadata.</param>
+        /// <param name="query">The query containing filters and virtual value definitions.</param>
+        /// <returns>A tuple of (fetchMeta, outputMap).</returns>
+        public static (IReadOnlyMatrixMetadata fetchMeta, MatrixMap outputMap) BuildVirtualValueMaps(
+            this IReadOnlyMatrixMetadata completeMeta, MatrixQuery query)
+        {
+            List<IDimensionMap> fetchDimensionMaps = [];
+            List<IDimensionMap> outputDimensionMaps = [];
+
+            foreach (IReadOnlyDimension dimension in completeMeta.Dimensions)
+            {
+                DimensionQuery dimQuery = query.DimensionQueries[dimension.Code];
+                HashSet<string> filteredValueCodes = dimQuery.ValueFilter.Filter(dimension.ValueCodes).ToHashSet();
+
+                if (dimQuery.VirtualValueDefinitions?.Count > 0)
+                {
+                    List<string> virtualCodeSet = [.. dimQuery.VirtualValueDefinitions.Select(d => d.Code)];
+                    HashSet<string> realOperandCodes = dimQuery.VirtualValueDefinitions.SelectMany(
+                        def => def.GetOperandCodes().Where(codes => !virtualCodeSet.Contains(codes))
+                    ).ToHashSet();
+
+                    List<string> orderedFetchCodes = [];
+                    int maxItems = filteredValueCodes.Count + realOperandCodes.Count;
+                    foreach (string code in dimension.ValueCodes)
+                    {
+                        if (filteredValueCodes.Contains(code) || realOperandCodes.Contains(code)) orderedFetchCodes.Add(code);
+                        if (orderedFetchCodes.Count >= maxItems) break;
+                    }
+                    fetchDimensionMaps.Add(new DimensionMap(dimension.Code, orderedFetchCodes));
+                    List<string> allCodes = [.. dimension.ValueCodes, .. virtualCodeSet];
+                    outputDimensionMaps.Add(new DimensionMap(dimension.Code, [.. dimQuery.ValueFilter.Filter(allCodes)]));
+                }
+                else
+                {
+                    List<string> filteredCodes = [.. dimQuery.ValueFilter.Filter(dimension.ValueCodes)];
+                    fetchDimensionMaps.Add(new DimensionMap(dimension.Code, filteredCodes));
+                    outputDimensionMaps.Add(new DimensionMap(dimension.Code, filteredCodes));
+                }
+            }
+            return (completeMeta.GetTransform(new MatrixMap(fetchDimensionMaps)), new MatrixMap(outputDimensionMaps));
         }
 
         /// <summary>

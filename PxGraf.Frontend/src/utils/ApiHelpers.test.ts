@@ -26,7 +26,7 @@ const mockQuery: Query = {
         valueFilter: {
             type: FilterType.All
         },
-        virtualValueDefinitions: ['foo', 'bar', 'baz']
+        virtualValueDefinitions: []
     }
 }
 

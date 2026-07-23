@@ -17,7 +17,7 @@ const TestComponent = () => {
             />
             <button
                 data-testid="setQuery"
-                onClick={() => setQuery({ dim1: { valueFilter: { type: FilterType.Item, query: ['val1'] }, selectable: false, virtualValueDefinitions: null } })}
+                onClick={() => setQuery({ dim1: { valueFilter: { type: FilterType.Item, query: ['val1'] }, selectable: false, virtualValueDefinitions: [] } })}
             />
         </>
     );

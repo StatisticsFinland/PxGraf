@@ -286,7 +286,7 @@ const mockQuery: Query = {
             query: ["eka", "toka"]
         },
         selectable: false,
-        virtualValueDefinitions: null
+        virtualValueDefinitions: []
     },
     Vuosi: {
         valueFilter: {
@@ -294,7 +294,7 @@ const mockQuery: Query = {
             query: 4
         },
         selectable: false,
-        virtualValueDefinitions: null
+        virtualValueDefinitions: []
     },
     FoobarFrom: {
         valueFilter: {
@@ -302,14 +302,14 @@ const mockQuery: Query = {
             query: "bbb"
         },
         selectable: false,
-        virtualValueDefinitions: null
+        virtualValueDefinitions: []
     },
     FoobarAll: {
         valueFilter: {
             type: FilterType.All
         },
         selectable: false,
-        virtualValueDefinitions: null
+        virtualValueDefinitions: []
     },
     FoobarContent: {
         valueFilter: {
@@ -317,7 +317,7 @@ const mockQuery: Query = {
             query: ["eka"]
         },
         selectable: false,
-        virtualValueDefinitions: null
+        virtualValueDefinitions: []
     },
     FoobarElimination: {
         valueFilter: {
@@ -325,7 +325,7 @@ const mockQuery: Query = {
             query: ["sum"]
         },
         selectable: false,
-        virtualValueDefinitions: null
+        virtualValueDefinitions: []
     },
     FoobarSingle: {
         valueFilter: {
@@ -333,7 +333,7 @@ const mockQuery: Query = {
             query: ["single"]
         },
         selectable: false,
-        virtualValueDefinitions: null
+        virtualValueDefinitions: []
     },
     FoobarMissingValueName: {
         valueFilter: {
@@ -341,7 +341,7 @@ const mockQuery: Query = {
             query: ["missingName"]
         },
         selectable: false,
-        virtualValueDefinitions: null
+        virtualValueDefinitions: []
     }
 };
 

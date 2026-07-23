@@ -146,7 +146,7 @@ const mockQuery: Query = {
             query: 4
         },
         selectable: false,
-        virtualValueDefinitions: null
+        virtualValueDefinitions: []
     },
     Tiedot: {
         valueFilter: {
@@ -156,7 +156,7 @@ const mockQuery: Query = {
             ]
         },
         selectable: false,
-        virtualValueDefinitions: null
+        virtualValueDefinitions: []
     }
 };
 

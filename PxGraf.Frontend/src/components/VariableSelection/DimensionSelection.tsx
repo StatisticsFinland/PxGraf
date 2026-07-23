@@ -16,10 +16,11 @@ import AllDimensionSelection from './FilterComponents/AllDimensionSelection';
 import StartingFromDimensionSelection from './FilterComponents/StartingFromDimensionSelection';
 import TopNDimensionSelection from './FilterComponents/TopNDimensionSelection';
 import styled from 'styled-components';
-import { IDimension } from 'types/cubeMeta';
+import { IDimension, IDimensionValue } from 'types/cubeMeta';
 import { FilterType, IDimensionQuery, Query } from 'types/query';
 import DefaultSelectableDimensionSelection from './DefaultSelectableDimensionSelection';
 import { QueryContext } from '../../contexts/queryContext';
+import ComputedValuesButton from './ComputedValues/ComputedValuesButton';
 
 interface IDimensionSelectionProps {
     dimension: IDimension
@@ -89,7 +90,9 @@ export const DimensionSelection: React.FC<IDimensionSelectionProps> = ({ dimensi
         case FilterType.Item:
             if (dimensionQuery?.valueFilter?.query && dimension?.values) {
                 const stringArray = dimensionQuery.valueFilter.query as string[];
-                selectedValues = stringArray.map(code => dimension.values.find(o => o.code === code));
+                selectedValues = stringArray
+                    .map(code => dimension.values.find(o => o.code === code))
+                    .filter((value): value is IDimensionValue => value !== undefined);
             }
             filterComponent =
                 <ManualPickDimensionSelection
@@ -133,6 +136,8 @@ export const DimensionSelection: React.FC<IDimensionSelectionProps> = ({ dimensi
                     <ResultList dimensionValues={dimension.values} resolvedDimensionValueCodes={resolvedDimensionValueCodes} />
                 )
             }
+
+            <ComputedValuesButton dimension={dimension} dimensionQuery={dimensionQuery} onQueryChanged={onQueryChanged} />
 
             <SelectabilitySwitch onChange={value => onChangeMUIWrapper({ ...dimensionQuery, selectable: value })} selected={dimensionQuery.selectable} />
             {

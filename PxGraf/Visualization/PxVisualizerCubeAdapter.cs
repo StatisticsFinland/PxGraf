@@ -1,4 +1,5 @@
-﻿using Px.Utils.Language;
+﻿#nullable enable
+using Px.Utils.Language;
 using Px.Utils.Models;
 using Px.Utils.Models.Data.DataValue;
 using Px.Utils.Models.Metadata;
@@ -39,14 +40,14 @@ namespace PxGraf.Visualization
         /// <summary>
         /// Builds a visualization response for a saved query.
         /// </summary>
-        /// <param name="matrix">Matrix to visualize.</param>
+        /// <param name="matrix">Matrix to visualize. Virtual values must already be applied before calling this method.</param>
         /// <param name="savedQuery">Saved query containing the visualization settings.</param>
         /// <returns>Visualization response for the matrix based on the given saved query.</returns>
         public static VisualizationResponse BuildVisualizationResponse(Matrix<DecimalDataValue> matrix, SavedQuery savedQuery)
         {
             if (savedQuery.Settings.Layout is null)
             {
-                bool legacyPivotRequested = savedQuery.LegacyProperties.TryGetValue("PivotRequested", out object obj) && (bool)obj;
+                bool legacyPivotRequested = savedQuery.LegacyProperties.TryGetValue("PivotRequested", out object? obj) && obj is true;
 
                 savedQuery.Settings.Layout =
                     LayoutRules.GetPivotBasedLayout(savedQuery.Settings.VisualizationType, matrix.Metadata, savedQuery.Query, legacyPivotRequested);
@@ -58,7 +59,7 @@ namespace PxGraf.Visualization
         /// <summary>
         /// Builds a visualization response for a matrix and a query.
         /// </summary>
-        /// <param name="matrix">Matrix to visualize.</param>
+        /// <param name="matrix">Matrix to visualize. Virtual values must already be applied before calling this method.</param>
         /// <param name="query">Query containing information about the table and selected values for dimensions.</param>
         /// <param name="settings">Visualization settings.</param>
         /// <returns>Visualization response for the matrix based on the given query and settings.</returns>
@@ -110,7 +111,7 @@ namespace PxGraf.Visualization
             return [.. meta.Dimensions.Select(dimension =>
             {
                 MultilanguageString name = dimension.Name;
-                if (dimensionQueries.TryGetValue(dimension.Code, out DimensionQuery query) &&
+                if (dimensionQueries.TryGetValue(dimension.Code, out DimensionQuery? query) &&
                     query.NameEdit != null)
                 {
                     name = query.NameEdit;

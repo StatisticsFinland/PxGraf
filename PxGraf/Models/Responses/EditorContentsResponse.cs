@@ -1,7 +1,10 @@
 #nullable enable
 using Px.Utils.Language;
 using PxGraf.Enums;
+using PxGraf.Settings;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace PxGraf.Models.Responses
 {
@@ -10,7 +13,7 @@ namespace PxGraf.Models.Responses
         /// <summary>
         /// Current size of the query.
         /// </summary>
-        public required int Size { get; set; }
+        public required long Size { get; set; }
 
         /// <summary>
         /// The limit when the end user should be warned that the size of the query is getting larger than is practical.
@@ -47,6 +50,18 @@ namespace PxGraf.Models.Responses
         /// When false, queries should be saved as published (non-draft) by default since there's no webhook to trigger.
         /// </summary>
         public required bool PublicationWebhookEnabled { get; set; }
+
+        public static EditorContentsResponse Empty => new()
+        {
+            Size = 0,
+            MaximumSupportedSize = Configuration.Current.QueryOptions.MaxQuerySize,
+            SizeWarningLimit = Convert.ToInt32(Configuration.Current.QueryOptions.MaxQuerySize * Configuration.Current.QueryOptions.QuerySizeWarningRatio),
+            HeaderText = new MultilanguageString(Configuration.Current.LanguageOptions.Available.Select(lang => new KeyValuePair<string, string>(lang, string.Empty))),
+            MaximumHeaderLength = Configuration.Current.QueryOptions.MaxHeaderLength,
+            VisualizationOptions = [],
+            VisualizationRejectionReasons = [],
+            PublicationWebhookEnabled = Configuration.Current.PublicationWebhookConfig.IsEnabled
+        };
     }
 
     public class VisualizationOption

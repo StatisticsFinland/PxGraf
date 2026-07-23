@@ -67,7 +67,12 @@
       "TitleVariable": "muuttujana",
       "TitleVariablePlural": "muuttujina",
       "Source": "Lähde",
-      "Unit": "Yksikkö"
+      "Unit": "Yksikkö",
+      "ComputedValuePlaceholder": "Laskettu",
+      "SumPlaceholder": "Summa",
+      "SubtractionPlaceholder": "Vähennyslasku",
+      "MultiplicationPlaceholder": "Kertolasku",
+      "DivisionPlaceholder": "Jakolasku"
     },
     "en": {
       "ChartTypes": {
@@ -135,7 +140,12 @@
       "TitleVariable": "by",
       "TitleVariablePlural": "by",
       "Source": "Source",
-      "Unit": "Unit"
+      "Unit": "Unit",
+      "ComputedValuePlaceholder": "Computed",
+      "SumPlaceholder": "Sum",
+      "SubtractionPlaceholder": "Subtraction",
+      "MultiplicationPlaceholder": "Multiplication",
+      "DivisionPlaceholder": "Division"
     },
     "sv": {
       "ChartTypes": {
@@ -203,7 +213,12 @@
       "TitleVariable": "efter",
       "TitleVariablePlural": "efter",
       "Source": "Källa",
-      "Unit": "Enhet"
+      "Unit": "Enhet",
+      "ComputedValuePlaceholder": "Beräknat",
+      "SumPlaceholder": "Summa",
+      "SubtractionPlaceholder": "Subtraktion",
+      "MultiplicationPlaceholder": "Multiplikation",
+      "DivisionPlaceholder": "Division"
     }
   }
 }
