@@ -14,6 +14,7 @@ interface IStartingFromDimensionSelectionProps {
 const StyledAutocomplete = styled(Autocomplete)`
     flex-basis: 0;
     flex-grow: 1;
+    width: 100%;
     background-color: var(--surface-white);
 `;
 
@@ -32,8 +33,12 @@ export const StartingFromDimensionSelection: React.FC<IStartingFromDimensionSele
             isOptionEqualToValue={(option: IDimensionValue, value: IDimensionValue) => option.code === value.code}
             value={options.find((o: IDimensionValue) => o.code === startingCode)}
             onChange={handleChange}
+            openText={t("selectable.open")}
+            closeText={t("selectable.close")}
+            clearText={t("selectable.clear")}
+            noOptionsText={t("selectable.noSelections")}
             renderInput={(params) => (
-                <TextField {...params} label={t("variableSelect.fromFilter")} />
+                <TextField {...params} label={t("variableSelect.startingValueLabel")} />
             )}
         />
     );

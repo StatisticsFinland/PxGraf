@@ -3,7 +3,7 @@
 exports[`Rendering test renders correctly 1`] = `
 <DocumentFragment>
   <div
-    class="MuiAutocomplete-root MuiAutocomplete-hasClearIcon MuiAutocomplete-hasPopupIcon sc-bdvvNz jwbkeP css-1tlcqt-MuiAutocomplete-root"
+    class="MuiAutocomplete-root MuiAutocomplete-hasClearIcon MuiAutocomplete-hasPopupIcon sc-bdvvNz la-dXYi css-1tlcqt-MuiAutocomplete-root"
   >
     <div
       class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-cmpglg-MuiFormControl-root-MuiTextField-root"
@@ -14,7 +14,7 @@ exports[`Rendering test renders correctly 1`] = `
         for="_r_0_"
         id="_r_0_-label"
       >
-        variableSelect.fromFilter
+        variableSelect.startingValueLabel
       </label>
       <div
         class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-adornedEnd MuiAutocomplete-inputRoot css-1n04w30-MuiInputBase-root-MuiOutlinedInput-root"
@@ -36,10 +36,10 @@ exports[`Rendering test renders correctly 1`] = `
           class="MuiAutocomplete-endAdornment css-1uhhrmm-MuiAutocomplete-endAdornment"
         >
           <button
-            aria-label="Clear"
+            aria-label="selectable.clear"
             class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium MuiAutocomplete-clearIndicator css-1x7n7v0-MuiButtonBase-root-MuiIconButton-root-MuiAutocomplete-clearIndicator"
             tabindex="-1"
-            title="Clear"
+            title="selectable.clear"
             type="button"
           >
             <svg
@@ -55,10 +55,10 @@ exports[`Rendering test renders correctly 1`] = `
             </svg>
           </button>
           <button
-            aria-label="Open"
+            aria-label="selectable.open"
             class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium MuiAutocomplete-popupIndicator css-2y136s-MuiButtonBase-root-MuiIconButton-root-MuiAutocomplete-popupIndicator"
             tabindex="-1"
-            title="Open"
+            title="selectable.open"
             type="button"
           >
             <svg
@@ -82,7 +82,7 @@ exports[`Rendering test renders correctly 1`] = `
             class="css-ex8a5f-MuiNotchedOutlined-root"
           >
             <span>
-              variableSelect.fromFilter
+              variableSelect.startingValueLabel
             </span>
           </legend>
         </fieldset>

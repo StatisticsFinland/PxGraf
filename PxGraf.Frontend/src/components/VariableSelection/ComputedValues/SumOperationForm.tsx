@@ -73,6 +73,7 @@ export const SumOperationForm: React.FC<SumOperationFormProps> = ({
                 color="primary"
                 value={useConstant ? 'constant' : 'value'}
                 onChange={handleToggleConstant}
+                aria-label={t('computedValues.operandType')}
                 sx={{ mt: 1 }}
             >
                 <ToggleButton value="value">{t('computedValues.useValue')}</ToggleButton>

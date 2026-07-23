@@ -1,5 +1,6 @@
 import React from 'react';
-import { Badge, Button } from '@mui/material';
+import { Badge, IconButton, Tooltip } from '@mui/material';
+import FunctionsIcon from '@mui/icons-material/Functions';
 import { useTranslation } from 'react-i18next';
 import { IDimension } from 'types/cubeMeta';
 import { IDimensionQuery } from 'types/query';
@@ -32,18 +33,28 @@ export const ComputedValuesButton: React.FC<ComputedValuesButtonProps> = ({
     };
 
     const definitionCount = dimensionQuery.virtualValueDefinitions.length;
+    const buttonLabel = definitionCount > 0
+        ? t('computedValues.buttonWithCount', { count: definitionCount })
+        : t('computedValues.button');
 
     return (
         <>
-            <Badge badgeContent={definitionCount > 0 ? definitionCount : undefined} color="primary">
-                <Button
-                    variant="outlined"
-                    size="small"
-                    onClick={() => setDialogOpen(true)}
+            <Tooltip title={buttonLabel}>
+                <Badge
+                    badgeContent={definitionCount > 0 ? definitionCount : undefined}
+                    color="primary"
+                    sx={{ '& .MuiBadge-badge': { fontSize: 11, height: 16, minWidth: 16, padding: '0 3px', transform: 'scale(1) translate(35%, -35%)' } }}
                 >
-                    {t('computedValues.button')}
-                </Button>
-            </Badge>
+                    <IconButton
+                        aria-label={buttonLabel}
+                        color={definitionCount > 0 ? 'primary' : 'default'}
+                        size="small"
+                        onClick={() => setDialogOpen(true)}
+                    >
+                        <FunctionsIcon />
+                    </IconButton>
+                </Badge>
+            </Tooltip>
             <ComputedValuesDialog
                 open={dialogOpen}
                 dimension={dimension}

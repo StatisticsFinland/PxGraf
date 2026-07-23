@@ -59,6 +59,39 @@ describe('useResolveDimensionFiltersQuery', () => {
         expect(result.current.data).toEqual(mockData);
     });
 
+    it('keeps the previous resolved codes while a changed query is loading', async () => {
+        const initialQuery: Query = {
+            dim1: { valueFilter: { type: FilterType.Item, query: ['a'] }, selectable: false, virtualValueDefinitions: [] }
+        };
+        const changedQuery: Query = {
+            dim1: { valueFilter: { type: FilterType.Item, query: ['b'] }, selectable: false, virtualValueDefinitions: [] }
+        };
+        const initialData = { dim1: ['a'] };
+        let resolveChangedRequest: (value: { dim1: string[] }) => void;
+        const changedRequest = new Promise<{ dim1: string[] }>((resolve) => {
+            resolveChangedRequest = resolve;
+        });
+
+        mockPostAsync
+            .mockResolvedValueOnce(initialData)
+            .mockReturnValueOnce(changedRequest);
+
+        const { result, rerender } = renderHook(
+            ({ query }) => useResolveDimensionFiltersQuery(mockIdStack, query),
+            { initialProps: { query: initialQuery }, wrapper: createWrapper() }
+        );
+
+        await waitFor(() => expect(result.current.data).toEqual(initialData));
+
+        rerender({ query: changedQuery });
+
+        expect(result.current.data).toEqual(initialData);
+        expect(result.current.isLoading).toBe(false);
+
+        resolveChangedRequest({ dim1: ['b'] });
+        await waitFor(() => expect(result.current.data).toEqual({ dim1: ['b'] }));
+    });
+
     it('handles null query gracefully', async () => {
         const mockData = {};
         mockPostAsync.mockResolvedValueOnce(mockData);

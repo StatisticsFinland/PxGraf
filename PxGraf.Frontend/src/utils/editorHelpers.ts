@@ -83,6 +83,14 @@ export const enrichDimensionsWithVirtualValues = (
     });
 };
 
+export const getVirtualValueDefinitionsSignature = (
+    dimensions: IDimension[],
+    query: { [key: string]: IDimensionQuery } | null,
+): string => JSON.stringify(dimensions.map(dimension => ({
+    code: dimension.code,
+    definitions: query?.[dimension.code]?.virtualValueDefinitions ?? [],
+})));
+
 export const getErrorText = (error: EDatabaseTableError, t: (key: string) => string) => {
     switch (error) {
         case EDatabaseTableError.contentDimensionMissing:

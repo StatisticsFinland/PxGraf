@@ -15,7 +15,7 @@ interface IDefaultSelectableDimensionSelection {
 const StyledAutocomplete = styled(Autocomplete)`
     flex-basis: 0;
     flex-grow: 1;
-    width: 90%;
+    width: 100%;
 `;
 
 

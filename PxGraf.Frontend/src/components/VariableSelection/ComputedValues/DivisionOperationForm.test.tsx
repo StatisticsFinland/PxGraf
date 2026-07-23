@@ -68,7 +68,9 @@ describe('DivisionOperationForm', () => {
         await user.click(screen.getByRole('button', { name: 'computedValues.constant' }));
         const constantInput = screen.getByLabelText('computedValues.constant');
         fireEvent.change(constantInput, { target: { value: '0' } });
-        expect(screen.getByText('computedValues.validationDivisionByZero')).toBeInTheDocument();
+        const error = screen.getByText('computedValues.validationDivisionByZero');
+        expect(constantInput).toHaveAttribute('aria-invalid', 'true');
+        expect(constantInput.getAttribute('aria-describedby')).toContain(error.id);
     });
 
     it('calls onChange with constant value when constant is changed', async () => {
@@ -92,6 +94,7 @@ describe('DivisionOperationForm', () => {
 
     it('renders both toggle buttons', () => {
         renderForm();
+        expect(screen.getByRole('group', { name: 'computedValues.operandType' })).toBeInTheDocument();
         expect(screen.getByRole('button', { name: 'computedValues.useValue' })).toBeInTheDocument();
         expect(screen.getByRole('button', { name: 'computedValues.constant' })).toBeInTheDocument();
     });

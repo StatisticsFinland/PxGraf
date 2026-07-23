@@ -6,7 +6,7 @@ import { Box, Divider, Container, CircularProgress, Alert } from '@mui/material'
 import { QueryContext } from 'contexts/queryContext';
 import { VisualizationContext } from 'contexts/visualizationContext';
 import { SaveContext } from 'contexts/saveContext';
-import { getDefaultQueries, getVisualizationOptionsForVisualizationType, resolveDimensions, enrichDimensionsWithVirtualValues } from 'utils/editorHelpers';
+import { getDefaultQueries, getVisualizationOptionsForVisualizationType, resolveDimensions, enrichDimensionsWithVirtualValues, getVirtualValueDefinitionsSignature } from 'utils/editorHelpers';
 import EditorFilterSection from './EditorFilterSection';
 import EditorFooterSection from './EditorFooterSection';
 import EditorPreviewSection from './EditorPreviewSection';
@@ -196,6 +196,8 @@ export const Editor = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional: dimensions is derived from cubeMetaResponse.data which is already a dep
     }, [cubeMetaResponse.data, resolvedDimensionCodes]);
 
+    const virtualValueDefinitionsSignature = getVirtualValueDefinitionsSignature(dimensions, modifiedQuery);
+
     const enrichedDimensions = React.useMemo(() => {
         const availableLanguages = cubeMetaResponse.data?.availableLanguages ?? [];
         const translateForLang = (lang: string, operator: VirtualValueOperator): string => {
@@ -203,8 +205,8 @@ export const Editor = () => {
             return i18n.t(key, { lng: lang });
         };
         return enrichDimensionsWithVirtualValues(dimensions, modifiedQuery, availableLanguages, translateForLang, cubeQuery);
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional: dimensions is derived from cubeMetaResponse.data which is already a dep
-    }, [cubeMetaResponse.data, modifiedQuery, cubeQuery]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional: only virtual value definitions from modifiedQuery affect enrichment
+    }, [cubeMetaResponse.data, virtualValueDefinitionsSignature, cubeQuery]);
 
     const enrichedResolvedDimensions = React.useMemo(() => {
         if (!resolvedDimensions) return null;

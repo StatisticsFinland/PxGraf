@@ -1,6 +1,8 @@
 {
   "general": {
+    "loading": "Laddar",
     "noResults": "Inget resultat",
+    "resultCount": "{{count}} resultat",
     "results": "Resultat",
     "noPossibleVisualizations": "En visualisering kan inte skapas utgående från de värden du valt. Försök att ändra ditt uttag.",
     "uiLanguage": "Språk för användargränssnitt",
@@ -55,10 +57,15 @@
     "fromFilter": "från det valda värdet framåt",
     "topFilter": "n senaste värden",
     "itemFilter": "manuellt val",
-    "selectable": "Valmöjligheter",
-    "title": "Användargränssnittet uppdateras genast enligt dina val.",
-    "openMenu": "Öppna menyn",
-    "closeMenu": "Stäng menyn"
+    "filterMethodLabel": "Filtreringsmetod",
+    "valuesLabel": "Värden",
+    "startingValueLabel": "Startvärde",
+    "latestValuesCountLabel": "Antal senaste värden",
+    "latestValuesCountError": "Ange ett heltal som är större än noll",
+    "selectable": "Tillåt användarval",
+    "selectableSettings": "Inställningar för användarval",
+    "selectableSettingsActive": "Inställningar för användarval, aktiverat",
+    "title": "Användargränssnittet uppdateras genast enligt dina val."
   },
   "editMetadata": {
     "editorTitle": "Metadata",
@@ -152,7 +159,7 @@
   },
   "selectable": {
     "noSelections": "Inga valbara värden",
-    "labelText": "Standardval för den valbara variabeln",
+    "labelText": "Standardvärde",
     "open": "Öppna",
     "close": "Stäng",
     "clear": "Tömma"
@@ -192,6 +199,7 @@
   },
   "computedValues": {
     "button": "Beräknade värden",
+    "buttonWithCount": "Beräknade värden, {{count}} tillagda",
     "dialogTitle": "Beräknade värden",
     "addNew": "Lägg till ny",
     "editTitle": "Redigera beräknat värde",
@@ -203,6 +211,7 @@
     "operatorSubtraction": "Subtraktion",
     "operatorMultiplication": "Multiplikation",
     "operatorDivision": "Division",
+    "operandType": "Operandtyp",
     "selectValues": "Välj värden",
     "baseValue": "Basvärde",
     "subtractValue": "Värde att subtrahera",

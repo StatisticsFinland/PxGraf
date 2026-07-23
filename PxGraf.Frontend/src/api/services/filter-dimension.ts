@@ -49,6 +49,7 @@ export const useResolveDimensionFiltersQuery = (idStack: string[], query: Query)
     return useQuery({
         queryKey: ['filter-dimension', ...idStack, query],
         queryFn: () => fetchResolveDimensionFilter(idStack, dimFilters, virtualValueDefinitions),
+        placeholderData: (previousData) => previousData,
         ...defaultQueryOptions
     });
 }

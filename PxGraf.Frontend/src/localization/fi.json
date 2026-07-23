@@ -1,6 +1,8 @@
 {
   "general": {
+    "loading": "Ladataan",
     "noResults": "Ei tuloksia",
+    "resultCount": "{{count}} tulosta",
     "results": "Tulokset",
     "noPossibleVisualizations": "Valitsemillasi arvoilla ei voida muodostaa visualisointia. Kokeile muuttaa poimintaasi.",
     "uiLanguage": "Käyttöliittymän kielivalinta",
@@ -55,10 +57,15 @@
     "fromFilter": "valitusta arvosta eteenpäin",
     "topFilter": "n viimeisintä arvoa",
     "itemFilter": "manuaalinen valinta",
-    "selectable": "Selattava",
-    "title": "Käyttöliittymä päivittyy heti valintojesi mukaisesti.",
-    "openMenu": "Avaa valikko",
-    "closeMenu": "Sulje valikko"
+    "filterMethodLabel": "Suodatustapa",
+    "valuesLabel": "Arvot",
+    "startingValueLabel": "Alkuarvo",
+    "latestValuesCountLabel": "Viimeisimpien arvojen määrä",
+    "latestValuesCountError": "Syötä nollaa suurempi kokonaisluku",
+    "selectable": "Salli käyttäjän valinta",
+    "selectableSettings": "Käyttäjän valinnan asetukset",
+    "selectableSettingsActive": "Käyttäjän valinnan asetukset, käytössä",
+    "title": "Käyttöliittymä päivittyy heti valintojesi mukaisesti."
   },
   "editMetadata": {
     "editorTitle": "Metatiedot",
@@ -152,7 +159,7 @@
   },
   "selectable": {
     "noSelections": "Ei valittavia arvoja",
-    "labelText": "Selausmuuttujan oletusvalinta",
+    "labelText": "Oletusarvo",
     "open": "Avaa",
     "close": "Sulje",
     "clear": "Tyhjennä"
@@ -192,6 +199,7 @@
   },
   "computedValues": {
     "button": "Lasketut arvot",
+    "buttonWithCount": "Lasketut arvot, lisätty {{count}}",
     "dialogTitle": "Lasketut arvot",
     "addNew": "Lisää uusi",
     "editTitle": "Muokkaa laskettua arvoa",
@@ -203,6 +211,7 @@
     "operatorSubtraction": "Vähennyslasku",
     "operatorMultiplication": "Kertolasku",
     "operatorDivision": "Jakolasku",
+    "operandType": "Operandin tyyppi",
     "selectValues": "Valitse arvot",
     "baseValue": "Perusarvo",
     "subtractValue": "Vähennettävä arvo",

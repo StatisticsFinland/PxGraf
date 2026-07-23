@@ -1,6 +1,8 @@
 {
   "general": {
+    "loading": "Loading",
     "noResults": "No results",
+    "resultCount": "{{count}} results",
     "results": "Results",
     "noPossibleVisualizations": "Visualisation cannot be formed with the selected values. Try changing your selection.",
     "uiLanguage": "User interface language",
@@ -55,10 +57,15 @@
     "fromFilter": "from the selected value forward",
     "topFilter": "n latest values",
     "itemFilter": "manual selection",
-    "selectable": "Selectable",
-    "title": "The user interface is updated immediately according to your selections.",
-    "openMenu": "Open the menu",
-    "closeMenu": "Close the menu"
+    "filterMethodLabel": "Filter method",
+    "valuesLabel": "Values",
+    "startingValueLabel": "Starting value",
+    "latestValuesCountLabel": "Number of latest values",
+    "latestValuesCountError": "Enter a whole number greater than zero",
+    "selectable": "Allow user selection",
+    "selectableSettings": "User selection settings",
+    "selectableSettingsActive": "User selection settings, enabled",
+    "title": "The user interface is updated immediately according to your selections."
   },
   "editMetadata": {
     "editorTitle": "Metadata",
@@ -152,7 +159,7 @@
   },
   "selectable": {
     "noSelections": "No selectable values",
-    "labelText": "Default selection of the selectable variable",
+    "labelText": "Default value",
     "open": "Open",
     "close": "Close",
     "clear": "Clear"
@@ -192,6 +199,7 @@
   },
   "computedValues": {
     "button": "Computed values",
+    "buttonWithCount": "Computed values, {{count}} added",
     "dialogTitle": "Computed values",
     "addNew": "Add new",
     "editTitle": "Edit computed value",
@@ -203,6 +211,7 @@
     "operatorSubtraction": "Subtraction",
     "operatorMultiplication": "Multiplication",
     "operatorDivision": "Division",
+    "operandType": "Operand type",
     "selectValues": "Select values",
     "baseValue": "Base value",
     "subtractValue": "Value to subtract",

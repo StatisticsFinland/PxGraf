@@ -1,5 +1,5 @@
 import { IDimension, EDimensionType, IContentDimensionValue, EMetaPropertyType } from "types/cubeMeta";
-import { getDefaultQueries, getErrorText, getVisualizationOptionsForVisualizationType, resolveDimensions, enrichDimensionsWithVirtualValues } from "./editorHelpers";
+import { getDefaultQueries, getErrorText, getVisualizationOptionsForVisualizationType, resolveDimensions, enrichDimensionsWithVirtualValues, getVirtualValueDefinitionsSignature } from "./editorHelpers";
 import { IVisualizationOptions } from "../types/editorContentsResponse";
 import { VisualizationType } from "../types/visualizationType";
 import { EDatabaseTableError } from "../types/tableListItems";
@@ -334,5 +334,33 @@ describe('enrichDimensionsWithVirtualValues tests', () => {
         const result = enrichDimensionsWithVirtualValues(dimensionsWithNoStubs, query, ['fi'], translateForLang, null, true);
         expect(result[0].values).toHaveLength(1); // only the real value
         expect(result[0].values[0].code).toBe('foo');
+    });
+});
+
+describe('getVirtualValueDefinitionsSignature tests', () => {
+    const virtualValueDefinitions = [{ type: 'sum', code: 'virtual_1', operandCodes: ['foo'] } as ISumDefinition];
+
+    it('stays unchanged when only dimension filters change', () => {
+        const initialQuery: { [key: string]: IDimensionQuery } = {
+            foo: { valueFilter: { type: FilterType.Item, query: ['value_1'] }, selectable: false, virtualValueDefinitions }
+        };
+        const changedQuery: { [key: string]: IDimensionQuery } = {
+            foo: { valueFilter: { type: FilterType.Item, query: ['value_2'] }, selectable: false, virtualValueDefinitions }
+        };
+
+        expect(getVirtualValueDefinitionsSignature(mockDimensions, changedQuery))
+            .toBe(getVirtualValueDefinitionsSignature(mockDimensions, initialQuery));
+    });
+
+    it('changes when virtual value definitions change', () => {
+        const initialQuery: { [key: string]: IDimensionQuery } = {
+            foo: { valueFilter: { type: FilterType.All }, selectable: false, virtualValueDefinitions: [] }
+        };
+        const changedQuery: { [key: string]: IDimensionQuery } = {
+            foo: { valueFilter: { type: FilterType.All }, selectable: false, virtualValueDefinitions }
+        };
+
+        expect(getVirtualValueDefinitionsSignature(mockDimensions, changedQuery))
+            .not.toBe(getVirtualValueDefinitionsSignature(mockDimensions, initialQuery));
     });
 });

@@ -5,10 +5,11 @@ import { FormControlLabel, FormControl, Switch } from '@mui/material';
 
 interface ISelectabilitySwitchProps {
     selected: boolean,
-    onChange: (newValue: boolean) => object
+    onChange: (newValue: boolean) => void,
+    autoFocus?: boolean
 }
 
-export const SelectabilitySwitch: React.FC<ISelectabilitySwitchProps> = ({ selected, onChange }) => {
+export const SelectabilitySwitch: React.FC<ISelectabilitySwitchProps> = ({ selected, onChange, autoFocus = false }) => {
     const { t } = useTranslation();
 
     return (
@@ -16,6 +17,7 @@ export const SelectabilitySwitch: React.FC<ISelectabilitySwitchProps> = ({ selec
             <FormControlLabel
                 control={
                     <Switch
+                        autoFocus={autoFocus}
                         checked={selected ?? false}
                         onChange={(event) => onChange(event.target.checked)}
                     />
