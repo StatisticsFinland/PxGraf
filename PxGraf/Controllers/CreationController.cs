@@ -515,7 +515,7 @@ namespace PxGraf.Controllers
             return matrix.GetTransform(outputMap);
         }
 
-        private static bool TryCreateTableReference(string tablePath, out PxTableReference tableReference)
+        private static bool TryCreateTableReference(string tablePath, out PxTableReference? tableReference)
         {
             try
             {

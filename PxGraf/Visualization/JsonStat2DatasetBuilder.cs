@@ -244,7 +244,7 @@ namespace PxGraf.Visualization
                 {
                     if (TryGetLocalizedMetaProperty(value.AdditionalProperties, PxSyntaxConstants.SOURCE_KEY, language, out string? source))
                     {
-                        return source;
+                        return string.IsNullOrEmpty(source) ? string.Empty : source;
                     }
                 }
             }
@@ -319,16 +319,6 @@ namespace PxGraf.Visualization
             }
 
             return localized;
-        }
-
-        private static string GetRequiredLocalizedMetaProperty(IReadOnlyDictionary<string, MetaProperty> properties, string key, string language, string fieldName)
-        {
-            if (TryGetLocalizedMetaProperty(properties, key, language, out string? value))
-            {
-                return value;
-            }
-
-            throw new InvalidOperationException($"Missing required localized {fieldName} for language '{language}'.");
         }
 
         private static string? TryGetOptionalLocalizedMetaProperty(IReadOnlyDictionary<string, MetaProperty> properties, string key, string language)

@@ -534,7 +534,7 @@ namespace PxGraf.Controllers
             return false;
         }
 
-        private static bool HasValidOptionalSqId(string id)
+        private static bool HasValidOptionalSqId(string? id)
         {
             return string.IsNullOrEmpty(id) || InputValidation.ValidateSqIdString(id);
         }
