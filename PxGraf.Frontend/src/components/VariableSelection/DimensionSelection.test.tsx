@@ -105,6 +105,36 @@ describe('Render stability', () => {
 
         expect(areDimensionSelectionPropsEqual(previousProps, nextProps)).toBe(false);
     });
+
+    it('treats undefined resolved codes (still loading/missing key) as equal to an empty array', () => {
+        // resolvedDimensionValueCodes is typed as a required string[], but DimensionSelectionList can
+        // in practice pass undefined while codes for this dimension are still resolving.
+        const previousProps = {
+            dimension: mockDimension,
+            resolvedDimensionValueCodes: undefined as unknown as string[],
+            query: mockQuery,
+        };
+        const nextProps = {
+            ...previousProps,
+            resolvedDimensionValueCodes: [],
+        };
+
+        expect(areDimensionSelectionPropsEqual(previousProps, nextProps)).toBe(true);
+    });
+
+    it('treats undefined and null resolved codes as equal to each other', () => {
+        const previousProps = {
+            dimension: mockDimension,
+            resolvedDimensionValueCodes: undefined as unknown as string[],
+            query: mockQuery,
+        };
+        const nextProps = {
+            ...previousProps,
+            resolvedDimensionValueCodes: null as unknown as string[],
+        };
+
+        expect(areDimensionSelectionPropsEqual(previousProps, nextProps)).toBe(true);
+    });
 });
 
 const setLanguage = jest.fn();

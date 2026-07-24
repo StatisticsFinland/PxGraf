@@ -103,4 +103,20 @@ describe('Rendering test', () => {
             </UiLanguageContext.Provider>);
         expect(asFragment()).toMatchSnapshot();
     });
+
+    it('does not throw when resolvedDimensionValueCodes is undefined (codes not yet resolved)', () => {
+        // In practice DimensionSelectionList can pass undefined while this dimension's codes are
+        // still resolving, even though the prop is typed as a required string[].
+        expect(() => render(
+            <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
+                <VisualizationContext.Provider value={{ defaultSelectables, setDefaultSelectables, selectedVisualizationUserInput, setSelectedVisualizationUserInput, visualizationSettingsUserInput, setVisualizationSettingsUserInput }}>
+                    <DefaultSelectableDimensionSelection
+                        options={mockDimensionValues}
+                        resolvedDimensionValueCodes={undefined as unknown as string[]}
+                        dimensionCode={'foo'}
+                    />
+                </VisualizationContext.Provider>
+            </UiLanguageContext.Provider>)
+        ).not.toThrow();
+    });
 });

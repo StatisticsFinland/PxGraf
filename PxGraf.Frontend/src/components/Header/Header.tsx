@@ -86,7 +86,7 @@ const Header: React.FC = () => {
     return (
         <HeaderWrapper>
             <MenuRowWrapper direction="row" ref={headerRef}>
-                <Button sx={{ position: 'absolute', left: '-9999px' }} href="#" onClick={(e) => { e.preventDefault(); focusOnContent(); }} ref={ref}>{t('general.contentLink')}</Button>
+                <Button sx={{ position: 'absolute', left: '-9999px' }} href="#" onClick={(e) => { e.preventDefault(); focusOnContent(); }} ref={ref} disableFocusRipple>{t('general.contentLink')}</Button>
                 <a href={indexUrl}><Logo alt={t('navbar.logoAlt')} src={isNarrowScreen ? logo_small : logo} /></a>
                 <BreadcrumbWrapper>
                     {showBreadcrumb && tablePath?.length > 0 && <BreadcrumbNav tablePath={tablePath} />}
