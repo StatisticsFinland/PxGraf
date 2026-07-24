@@ -477,5 +477,22 @@ namespace UnitTests.ControllerTests.SqControllerTests
                     It.Is<string>(resource => resource == LoggerConstants.INVALID_VISUALIZATION)),
                 Times.Once);
         }
+
+        [Test]
+        public async Task ArchiveQueryAsync_WithMalformedExistingId_ReturnsBadRequestBeforeDependencies()
+        {
+            Mock<ICachedDatasource> datasource = new();
+            Mock<ISqFileInterface> sqFileInterface = new();
+            SqController controller = new(datasource.Object, sqFileInterface.Object, new Mock<ILogger<SqController>>().Object,
+                new Mock<IAuditLogService>().Object, new Mock<IPublicationWebhookService>().Object,
+                new Mock<IVirtualValueValidationService>().Object, new Mock<IVirtualValueComputationService>().Object);
+            SaveQueryParams parameters = new() { Id = "invalid/id" };
+
+            ActionResult<SaveQueryResponse> result = await controller.ArchiveQueryAsync(parameters);
+
+            Assert.That(result.Result, Is.InstanceOf<BadRequestResult>());
+            sqFileInterface.Verify(service => service.SavedQueryExists(It.IsAny<string>(), It.IsAny<string>()), Times.Never());
+            datasource.Verify(service => service.GetMatrixMetadataCachedAsync(It.IsAny<PxTableReference>()), Times.Never());
+        }
     }
 }

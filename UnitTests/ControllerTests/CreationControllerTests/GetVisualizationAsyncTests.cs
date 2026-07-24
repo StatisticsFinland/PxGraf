@@ -320,6 +320,68 @@ namespace UnitTests.ControllerTests.CreationControllerTests
         }
 
         [Test]
+        public async Task GetJsonStat2VisualizationTest_WithInvalidVisualizationType_ReturnsBadRequest()
+        {
+            List<DimensionParameters> cubeParams =
+            [
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 1),
+                new DimensionParameters(DimensionType.Other, 10),
+                new DimensionParameters(DimensionType.Other, 5)
+            ];
+            CreationController controller = TestCreationControllerBuilder.BuildController(cubeParams, cubeParams);
+            ChartRequest request = new()
+            {
+                Query = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams),
+                VisualizationSettings = new VisualizationCreationSettings
+                {
+                    SelectedVisualization = PxGraf.Enums.VisualizationType.LineChart,
+                    RowDimensionCodes = ["variable-1"],
+                    ColumnDimensionCodes = [],
+                    MultiselectableDimensionCode = string.Empty,
+                    Sorting = "NO_SORTING",
+                    DefaultSelectableDimensionCodes = []
+                },
+                ActiveSelectableDimensionValues = [],
+                Language = "fi"
+            };
+
+            ActionResult<JsonStat2Dataset> result = await controller.GetJsonStat2VisualizationAsync(request, "fi");
+
+            Assert.That(result.Result, Is.InstanceOf<BadRequestResult>());
+        }
+
+        [Test]
+        public async Task GetJsonStat2VisualizationTest_WithEmptyDimension_ReturnsBadRequest()
+        {
+            List<DimensionParameters> cubeParams =
+            [
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 0)
+            ];
+            CreationController controller = TestCreationControllerBuilder.BuildController(cubeParams, cubeParams);
+            ChartRequest request = new()
+            {
+                Query = TestDataCubeBuilder.BuildTestCubeQuery(cubeParams),
+                VisualizationSettings = new VisualizationCreationSettings
+                {
+                    SelectedVisualization = PxGraf.Enums.VisualizationType.LineChart,
+                    RowDimensionCodes = ["variable-1"],
+                    ColumnDimensionCodes = [],
+                    MultiselectableDimensionCode = string.Empty,
+                    Sorting = "NO_SORTING",
+                    DefaultSelectableDimensionCodes = []
+                },
+                ActiveSelectableDimensionValues = [],
+                Language = "fi"
+            };
+
+            ActionResult<JsonStat2Dataset> result = await controller.GetJsonStat2VisualizationAsync(request, "fi");
+
+            Assert.That(result.Result, Is.InstanceOf<BadRequestResult>());
+        }
+
+        [Test]
         public async Task GetVisualizationTest_WithAcceptHeader_ReturnsVisualizationResponse()
         {
             List<DimensionParameters> cubeParams =

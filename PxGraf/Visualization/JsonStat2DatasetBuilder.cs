@@ -22,11 +22,6 @@ namespace PxGraf.Visualization
     {
         public static JsonStat2Dataset Build(Matrix<DecimalDataValue> matrix, string? requestedLanguage, VisualizationResponse.PxVisualizerSettings? visualizationSettings = null)
         {
-            if (matrix is null)
-            {
-                throw new ArgumentNullException(nameof(matrix));
-            }
-
             IReadOnlyMatrixMetadata metadata = matrix.Metadata;
             string language = ResolveLanguage(metadata, requestedLanguage);
 

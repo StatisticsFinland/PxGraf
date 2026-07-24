@@ -167,7 +167,7 @@ namespace PxGraf.Controllers
             };
             using (_logger.BeginScope(logScope))
             {
-                if (!string.IsNullOrEmpty(parameters.Id) && !InputValidation.ValidateSqIdString(parameters.Id))
+                if (!HasValidOptionalSqId(parameters.Id))
                 {
                     return BadRequest();
                 }
@@ -272,7 +272,7 @@ namespace PxGraf.Controllers
             };
             using (_logger.BeginScope(logScope))
             {
-                if (!string.IsNullOrEmpty(parameters.Id) && !InputValidation.ValidateSqIdString(parameters.Id))
+                if (!HasValidOptionalSqId(parameters.Id))
                 {
                     return BadRequest();
                 }
@@ -532,6 +532,11 @@ namespace PxGraf.Controllers
             }
 
             return false;
+        }
+
+        private static bool HasValidOptionalSqId(string id)
+        {
+            return string.IsNullOrEmpty(id) || InputValidation.ValidateSqIdString(id);
         }
     }
 }

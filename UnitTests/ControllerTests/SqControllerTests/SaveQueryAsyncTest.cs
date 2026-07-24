@@ -113,6 +113,28 @@ namespace UnitTests.ControllerTests.SqControllerTests
         }
 
         [Test]
+        public async Task SaveQueryAsync_WithMalformedExistingId_ReturnsBadRequestBeforeDependencies()
+        {
+            Mock<ICachedDatasource> datasource = new();
+            Mock<ISqFileInterface> sqFileInterface = new();
+            SqController controller = new(
+                datasource.Object,
+                sqFileInterface.Object,
+                new Mock<ILogger<SqController>>().Object,
+                new Mock<IAuditLogService>().Object,
+                new Mock<IPublicationWebhookService>().Object,
+                new Mock<IVirtualValueValidationService>().Object,
+                new Mock<IVirtualValueComputationService>().Object);
+            SaveQueryParams parameters = new() { Id = "invalid/id" };
+
+            ActionResult<SaveQueryResponse> result = await controller.SaveQueryAsync(parameters);
+
+            Assert.That(result.Result, Is.InstanceOf<BadRequestResult>());
+            sqFileInterface.Verify(service => service.SavedQueryExists(It.IsAny<string>(), It.IsAny<string>()), Times.Never());
+            datasource.Verify(service => service.GetMatrixMetadataCachedAsync(It.IsAny<PxTableReference>()), Times.Never());
+        }
+
+        [Test]
         public async Task SaveQueryAsync_NonDraftQuery_CallsWebhookService()
         {
             // Arrange

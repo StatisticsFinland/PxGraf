@@ -451,6 +451,55 @@ namespace UnitTests.ControllerTests.VisualizationControllerTests
         }
 
         [Test]
+        public async Task GetJsonStat2VisualizationTest_WithInvalidSavedQueryId_ReturnsBadRequestBeforeFileLookup()
+        {
+            VisualizationController controller = BuildController(
+                [],
+                [],
+                "valid-id",
+                MultiStateMemoryTaskCache.CacheEntryState.Null);
+
+            ActionResult<JsonStat2Dataset> result = await controller.GetJsonStat2VisualizationAsync("invalid/id", "fi");
+
+            Assert.That(result.Result, Is.InstanceOf<BadRequestResult>());
+            _mockSqFileInterface.Verify(x => x.SavedQueryExists(It.IsAny<string>(), It.IsAny<string>()), Times.Never());
+        }
+
+        [Test]
+        public async Task GetJsonStat2VisualizationTest_WithMissingSavedQuery_ReturnsNotFound()
+        {
+            VisualizationController controller = BuildController(
+                [],
+                [],
+                "valid-id",
+                MultiStateMemoryTaskCache.CacheEntryState.Null,
+                savedQueryFound: false);
+
+            ActionResult<JsonStat2Dataset> result = await controller.GetJsonStat2VisualizationAsync("valid-id", "fi");
+
+            Assert.That(result.Result, Is.InstanceOf<NotFoundResult>());
+        }
+
+        [Test]
+        public async Task GetJsonStat2VisualizationTest_WithEmptyDimension_ReturnsBadRequest()
+        {
+            List<DimensionParameters> dimensions =
+            [
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 0)
+            ];
+            VisualizationController controller = BuildController(
+                dimensions,
+                dimensions,
+                "valid-id",
+                MultiStateMemoryTaskCache.CacheEntryState.Null);
+
+            ActionResult<JsonStat2Dataset> result = await controller.GetJsonStat2VisualizationAsync("valid-id", "fi");
+
+            Assert.That(result.Result, Is.InstanceOf<BadRequestResult>());
+        }
+
+        [Test]
         public async Task GetVisualization_WithInvalidSavedQueryId_ReturnsBadRequestBeforeCacheLookup()
         {
             VisualizationController controller = BuildController(

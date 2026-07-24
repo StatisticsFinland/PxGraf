@@ -1,18 +1,21 @@
 using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
 using Px.Utils.Models;
-using Px.Utils.Models.Data;
 using Px.Utils.Models.Data.DataValue;
+using Px.Utils.Models.Metadata;
 using Px.Utils.Models.Metadata.Enums;
+using PxGraf.Data.MetaData;
 using PxGraf.Language;
 using PxGraf.Enums;
-using PxGraf.Models.Queries;
 using PxGraf.Models.Responses;
 using PxGraf.Settings;
 using PxGraf.Visualization;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using UnitTests.Fixtures;
+using Px.Utils.Models.Metadata.Dimensions;
 
 namespace UnitTests.Visualization
 {
@@ -78,6 +81,73 @@ namespace UnitTests.Visualization
 
             Assert.That(result.Status, Is.Null);
             Assert.That(result.Value, Is.EqualTo(new decimal?[] { 0.123m, 1.123m }));
+        }
+
+        [Test]
+        public void Build_MapsEverySupportedMissingValueType()
+        {
+            List<DimensionParameters> dimensions =
+            [
+                new DimensionParameters(DimensionType.Time, 21),
+                new DimensionParameters(DimensionType.Content, 1)
+            ];
+
+            Matrix<DecimalDataValue> matrix = TestDataCubeBuilder.BuildTestMatrix(dimensions, missingData: true);
+
+            JsonStat2Dataset result = JsonStat2DatasetBuilder.Build(matrix, "fi");
+
+            Assert.That(result.Status.Values.Distinct(), Is.EquivalentTo(["1", "2", "3", "4", "5", "6", "7"]));
+        }
+
+        [Test]
+        public void Build_UsesEmptyOptionalMetadata_WhenNotesAndSourcesAreMissing()
+        {
+            List<DimensionParameters> dimensions =
+            [
+                new DimensionParameters(DimensionType.Time, 2),
+                new DimensionParameters(DimensionType.Content, 1)
+            ];
+            Matrix<DecimalDataValue> sourceMatrix = TestDataCubeBuilder.BuildTestMatrix(dimensions, missingData: false);
+            Matrix<DecimalDataValue> matrix = new(
+                new MatrixMetadata("fi", ["fi", "en"], [.. sourceMatrix.Metadata.Dimensions.Cast<Dimension>()], []),
+                sourceMatrix.Data); // Create a new matrix with the same data but without notes and sources
+
+            JsonStat2Dataset result = JsonStat2DatasetBuilder.Build(matrix, "fi");
+
+            Assert.That(result.Note, Is.Null);
+            Assert.That(result.Dimension.Values.All(dimension => dimension.Note is null && dimension.Category.Note is null), Is.True);
+        }
+
+        [Test]
+        public void Build_ThrowsWhenMatrixHasNoDimensions()
+        {
+            Matrix<DecimalDataValue> matrix = TestDataCubeBuilder.BuildTestMatrix([], missingData: false);
+
+            Assert.That(() => JsonStat2DatasetBuilder.Build(matrix, "fi"), Throws.TypeOf<InvalidOperationException>());
+        }
+
+        [Test]
+        public void Build_ThrowsWhenMatrixDoesNotContainAMetricDimension()
+        {
+            Matrix<DecimalDataValue> matrix = TestDataCubeBuilder.BuildTestMatrix(
+                [new DimensionParameters(DimensionType.Time, 2)],
+                missingData: false);
+
+            Assert.That(() => JsonStat2DatasetBuilder.Build(matrix, "fi"), Throws.TypeOf<InvalidOperationException>());
+        }
+
+        [Test]
+        public void Build_ThrowsWhenMatrixValueCountDoesNotMatchDimensionSizes()
+        {
+            Matrix<DecimalDataValue> validMatrix = TestDataCubeBuilder.BuildTestMatrix(
+                [
+                    new DimensionParameters(DimensionType.Time, 2),
+                    new DimensionParameters(DimensionType.Content, 1)
+                ],
+                missingData: false);
+            Matrix<DecimalDataValue> matrix = new(validMatrix.Metadata, []);
+
+            Assert.That(() => JsonStat2DatasetBuilder.Build(matrix, "fi"), Throws.TypeOf<InvalidOperationException>());
         }
 
         [Test]
