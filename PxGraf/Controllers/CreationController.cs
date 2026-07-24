@@ -382,27 +382,16 @@ namespace PxGraf.Controllers
                 );
 
                 _logger.LogDebug("Requesting visualization. POST: api/creation/visualization");
-                IReadOnlyMatrixMetadata completeMeta = await _datasource.GetMatrixMetadataCachedAsync(request.Query.TableReference);
-
-                (IReadOnlyMatrixMetadata fetchMeta, MatrixMap outputMap) = completeMeta.BuildVirtualValueMaps(request.Query);
-                if (outputMap.DimensionMaps.Any(dm => dm.ValueCodes.Count == 0))
+                Matrix<DecimalDataValue> matrix;
+                try
                 {
-                    _logger.LogDebug("One or more dimensions have no selected output values.");
+                    matrix = await BuildVisualizationMatrixAsync(request);
+                }
+                catch (InvalidOperationException ex)
+                {
+                    _logger.LogDebug(ex, "Unable to build visualization matrix from request.");
                     return BadRequest();
                 }
-
-                // The resulting cube would have volume 0 (e.g. filter produced empty after expansion)
-                if (fetchMeta.Dimensions.Any(d => d.Values.Count == 0))
-                {
-                    _logger.LogDebug("One or more dimensions have no included values.");
-                    return BadRequest();
-                }
-
-                Matrix<DecimalDataValue> matrix = await _datasource.GetMatrixCachedAsync(request.Query.TableReference, fetchMeta);
-
-                if (request.Query.DimensionQueries.Values.Any(dq => dq.VirtualValueDefinitions?.Count > 0))
-                    matrix = _virtualValueComputationService.ApplyVirtualValues(matrix, request.Query);
-                matrix = matrix.GetTransform(outputMap);
 
                 IChartTypeSelector selector = ChartTypeSelector.Selector;
                 if (selector.GetValidChartTypes(request.Query, matrix).Contains(request.VisualizationSettings.SelectedVisualization))
@@ -421,7 +410,82 @@ namespace PxGraf.Controllers
             }
         }
 
+        /// <summary>
+        /// Returns a single-language JSON-stat 2.0 dataset matching the request.
+        /// </summary>
+        /// <param name="request"><see cref="ChartRequest"/> containing the query and visualization settings.</param>
+        /// <param name="lang">Optional language for localized JSON-stat fields. When omitted, defaults to the table's default language. An explicit unsupported language returns 400.</param>
+        /// <returns>A JSON-stat 2.0 dataset.</returns>
+        [HttpPost("visualization/jsonstat2")]
+        [ProducesResponseType<JsonStat2Dataset>(StatusCodes.Status200OK, "application/vnd.jsonstat2+json")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<JsonStat2Dataset>> GetJsonStat2VisualizationAsync([FromBody] ChartRequest request, [FromQuery] string lang)
+        {
+            using (_logger.BeginScope(new Dictionary<string, object>
+            {
+                [LoggerConstants.CONTROLLER] = nameof(CreationController),
+                [LoggerConstants.ACTION] = "api/creation/visualization/jsonstat2",
+                [LoggerConstants.DB_PATH] = request.Query.TableReference.ToPath()
+            }))
+            {
+                _auditLogService.LogAuditEvent(
+                    action: "api/creation/visualization/jsonstat2",
+                    resource: request.Query.TableReference.ToPath()
+                );
+
+                _logger.LogDebug("Requesting JSON-stat visualization. POST: api/creation/visualization/jsonstat2");
+                try
+                {
+                    Matrix<DecimalDataValue> matrix = await BuildVisualizationMatrixAsync(request);
+                    if (!ChartTypeSelector.Selector.GetValidChartTypes(request.Query, matrix).Contains(request.VisualizationSettings.SelectedVisualization))
+                    {
+                        _logger.LogWarning("Selected visualization type is not valid for this query.");
+                        return BadRequest();
+                    }
+
+                    VisualizationSettings visualizationSettings = request.VisualizationSettings.ToVisualizationSettings(matrix.Metadata, request.Query);
+                    JsonStat2Dataset dataset = JsonStat2DatasetBuilder.Build(
+                        matrix,
+                        lang,
+                        PxVisualizerCubeAdapter.BuildVisualizationSettings(matrix, visualizationSettings));
+                    _logger.LogDebug("Returning JSON-stat visualization result.");
+                    return new JsonResult(dataset)
+                    {
+                        ContentType = "application/vnd.jsonstat2+json"
+                    };
+                }
+                catch (ArgumentException ex)
+                {
+                    _logger.LogDebug(ex, "Invalid language in JSON-stat request.");
+                    return BadRequest();
+                }
+                catch (InvalidOperationException ex)
+                {
+                    _logger.LogDebug(ex, "Unable to build JSON-stat output from request.");
+                    return BadRequest();
+                }
+            }
+        }
+
 #nullable enable
+        private async Task<Matrix<DecimalDataValue>> BuildVisualizationMatrixAsync(ChartRequest request)
+        {
+            IReadOnlyMatrixMetadata completeMeta = await _datasource.GetMatrixMetadataCachedAsync(request.Query.TableReference);
+            (IReadOnlyMatrixMetadata fetchMeta, MatrixMap outputMap) = completeMeta.BuildVirtualValueMaps(request.Query);
+            if (outputMap.DimensionMaps.Any(dm => dm.ValueCodes.Count == 0) || fetchMeta.Dimensions.Any(d => d.Values.Count == 0))
+            {
+                throw new InvalidOperationException("One or more dimensions have no included values.");
+            }
+
+            Matrix<DecimalDataValue> matrix = await _datasource.GetMatrixCachedAsync(request.Query.TableReference, fetchMeta);
+            if (request.Query.DimensionQueries.Values.Any(dq => dq.VirtualValueDefinitions?.Count > 0))
+            {
+                matrix = _virtualValueComputationService.ApplyVirtualValues(matrix, request.Query);
+            }
+
+            return matrix.GetTransform(outputMap);
+        }
+
         private static VisualizationOption GetVisualizationOption(VisualizationType type, IReadOnlyMatrixMetadata meta, MatrixQuery query)
         {
             bool manualPivotability = ManualPivotRules.GetManualPivotability(type, meta, query);

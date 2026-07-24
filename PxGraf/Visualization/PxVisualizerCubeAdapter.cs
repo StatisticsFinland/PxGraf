@@ -1,4 +1,4 @@
-﻿#nullable enable
+#nullable enable
 using Px.Utils.Language;
 using Px.Utils.Models;
 using Px.Utils.Models.Data.DataValue;
@@ -77,7 +77,6 @@ namespace PxGraf.Visualization
 
             Matrix<DecimalDataValue> resultMatrix = matrix.GetTransform(finalMap);
             MatrixExtensions.DataAndNotesCollection dataAndNotes = resultMatrix.ExtractDataAndNotes();
-            IReadOnlyList<string> timeDimensionCodes = matrix.Metadata.GetTimeDimension().Values.Codes;
 
             return new VisualizationResponse()
             {
@@ -90,19 +89,25 @@ namespace PxGraf.Visualization
                 RowDimensionCodes = layout.RowDimensionCodes,
                 ColumnDimensionCodes = layout.ColumnDimensionCodes,
                 Header = HeaderBuildingUtilities.GetHeader(matrix.Metadata, query),
-                VisualizationSettings = new()
-                {
-                    VisualizationType = settings.VisualizationType,
-                    DefaultSelectableDimensionCodes = settings.DefaultSelectableDimensionCodes,
-                    MultiselectableDimensionCode = settings.MultiselectableDimensionCode,
-                    TimeDimensionIntervals = TimeDimensionIntervalParser.DetermineIntervalFromCodes(timeDimensionCodes),
-                    TimeSeriesStartingPoint = TimeDimensionIntervalParser.DetermineTimeDimStartingPointFromCode(timeDimensionCodes[0]),
-                    CutValueAxis = settings.CutYAxis,
-                    ShowLastLabel = settings.MatchXLabelsToEnd,
-                    MarkerSize = settings.MarkerSize,
-                    Sorting = settings.Sorting,
-                    ShowDataPoints = settings.ShowDataPoints
-                }
+                VisualizationSettings = BuildVisualizationSettings(matrix, settings)
+            };
+        }
+
+        public static VisualizationResponse.PxVisualizerSettings BuildVisualizationSettings(Matrix<DecimalDataValue> matrix, VisualizationSettings settings)
+        {
+            IReadOnlyList<string> timeDimensionCodes = matrix.Metadata.GetTimeDimension().Values.Codes;
+            return new()
+            {
+                VisualizationType = settings.VisualizationType,
+                DefaultSelectableDimensionCodes = settings.DefaultSelectableDimensionCodes,
+                MultiselectableDimensionCode = settings.MultiselectableDimensionCode,
+                TimeDimensionIntervals = TimeDimensionIntervalParser.DetermineIntervalFromCodes(timeDimensionCodes),
+                TimeSeriesStartingPoint = TimeDimensionIntervalParser.DetermineTimeDimStartingPointFromCode(timeDimensionCodes[0]),
+                CutValueAxis = settings.CutYAxis,
+                ShowLastLabel = settings.MatchXLabelsToEnd,
+                MarkerSize = settings.MarkerSize,
+                Sorting = settings.Sorting,
+                ShowDataPoints = settings.ShowDataPoints
             };
         }
         

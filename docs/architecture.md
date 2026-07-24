@@ -33,9 +33,9 @@ All controller routes are under `/api/`. The `CreationAPI` feature flag gates th
 
 | Controller | Route Prefix | Feature-Gated | Key Endpoints |
 |---|---|---|---|
-| `CreationController` | `api/creation` | ✅ CreationAPI | `GET data-bases/{*dbPath}` — browse database hierarchy; `GET cube-meta/{*tablePath}` — table metadata; `GET validate-table-metadata/{*tablePath}` — metadata validation; `POST filter-dimension` — resolve dimension filters; `POST editor-contents` — editor setup data (sizes, valid chart types, headers); `POST visualization` — render preview visualization |
+| `CreationController` | `api/creation` | ✅ CreationAPI | `GET data-bases/{*dbPath}` — browse database hierarchy; `GET cube-meta/{*tablePath}` — table metadata; `GET validate-table-metadata/{*tablePath}` — metadata validation; `POST filter-dimension` — resolve dimension filters; `POST editor-contents` — editor setup data (sizes, valid chart types, headers); `POST visualization` — render multilingual preview visualization; `POST visualization/jsonstat2?lang={language}` — render a single-language JSON-stat 2.0 preview using the table default when language is omitted and validating explicit languages |
 | `SqController` | `api/sq` | ✅ CreationAPI | `GET {savedQueryId}` — load saved query; `POST save` — save/draft query; `POST archive` — archive query with data snapshot; `POST re-archive` — refresh archived query |
-| `VisualizationController` | `api/sq/visualization` | ❌ | `GET {sqId}` — serve visualization for a saved query (cached with multi-state memory cache) |
+| `VisualizationController` | `api/sq/visualization` | ❌ | `GET {sqId}` — serve the multilingual visualization response for a saved query (cached with multi-state memory cache); `GET jsonstat2/{sqId}?lang={language}` — serve a single-language JSON-stat 2.0 dataset using the table default when language is omitted and validating explicit languages |
 | `QueryMetaController` | `api/sq/meta` | ❌ | `GET {savedQueryId}` — return saved query metadata (header, archived status, visualization type) |
 | `InfoController` | `api/info` | ❌ | Application info endpoint |
 | `HealthController` | `api/health` | ❌ | Health check endpoint — probes all configured dependencies (database, storage, webhook) and returns 200/503 |
@@ -92,7 +92,7 @@ Supported chart types (enum `VisualizationType`): VerticalBarChart, GroupVertica
 |---|---|---|
 | `Models/Queries/` | `MatrixQuery`, `DimensionQuery`, `ValueFilters`, `PxTableReference`, `FilterRequest`, `VisualizationSettings`, `Layout` | Query structure and dimension filtering |
 | `Models/Requests/` | `ChartRequest`, `SaveQueryParams`, `ReArchiveRequest`, `VisualizationCreationSettings` | API request DTOs |
-| `Models/Responses/` | `EditorContentsResponse`, `VisualizationResponse`, `QueryMetaResponse`, `SaveQueryResponse`, `ReArchiveResponse`, `TableMetaValidationResult`, `DatabaseGroupContents`, `DatabaseGroupHeader`, `DatabaseTable`, `HealthResponse`, `DatabaseHealthStatus`, `ServiceHealthStatus` | API response DTOs |
+| `Models/Responses/` | `EditorContentsResponse`, `VisualizationResponse`, `JsonStat2Dataset`, `QueryMetaResponse`, `SaveQueryResponse`, `ReArchiveResponse`, `TableMetaValidationResult`, `DatabaseGroupContents`, `DatabaseGroupHeader`, `DatabaseTable`, `HealthResponse`, `DatabaseHealthStatus`, `ServiceHealthStatus` | API response DTOs |
 | `Models/SavedQueries/` | `SavedQuery`, `ArchiveCube`, versioned types (`V1_0`, `V1_1`, `V1_2`, `V10`, `V11`) | Persisted query + archive formats with version migration |
 | `Models/Metadata/` | `HeaderBuildingUtilities`, `MatrixMetadataExtensions`, `DimensionExtensions`, `DimensionValueExtensions` | Metadata processing and header generation |
 | `Data/MetaData/` | `CubeMeta`, `Variable`, `VariableValue`, `ContentComponent` | Legacy metadata model types |
@@ -116,7 +116,7 @@ Key config sections: `DatabaseConfig`, `QueryStorageConfig`, `CacheOptions`, `Co
 
 | Folder | Purpose |
 |---|---|
-| `Visualization/` | `PxVisualizerCubeAdapter` — transforms matrix data into `VisualizationResponse` for the PxVisualizer library |
+| `Visualization/` | `PxVisualizerCubeAdapter` — transforms matrix data into `VisualizationResponse` for the PxVisualizer library and builds the common JSON-stat visualization settings extension; `JsonStat2DatasetBuilder` — transforms matrix data into JSON-stat 2.0 dataset output |
 | `Language/` | `Localization`, `Translation`, per-concern translation classes (rejection reasons, sorting options, chart types, etc.) loaded from `Pars/translations.json` |
 | `Utility/` | `SqFileInterface`, `InputValidation`, `LoggerConstants`, `PxSyntaxConstants`, JSON converters (`CustomJsonConverters/`) |
 | `Enums/` | `VisualizationType` (ChartTypesEnum), `ChartTypeRejectionEnum`, `TimeDimensionIntervals` |

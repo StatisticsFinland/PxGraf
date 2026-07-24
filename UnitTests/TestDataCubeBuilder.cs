@@ -136,13 +136,16 @@ namespace UnitTests
             languages ??= ["fi", "en"];
             List<Dimension> variables = BuildTestDimensions(varParams, languages);
             Dictionary<string, string> noteTranslation = [];
+            Dictionary<string, string> descriptionTranslation = [];
             for (int j = 0; j < languages.Length; j++)
             {
                 noteTranslation[languages[j]] = $"{GetTextForLanguage("Test note", languages, j)}";
+                descriptionTranslation[languages[j]] = $"{GetTextForLanguage("Test dataset description", languages, j)}";
             }
             Dictionary<string, MetaProperty> additionalProperties = new()
             {
-                { PxSyntaxConstants.NOTE_KEY, new MultilanguageStringProperty(new MultilanguageString(noteTranslation)) }
+                { PxSyntaxConstants.NOTE_KEY, new MultilanguageStringProperty(new MultilanguageString(noteTranslation)) },
+                { PxSyntaxConstants.DESCRIPTION_KEY, new MultilanguageStringProperty(new MultilanguageString(descriptionTranslation)) }
             };
             return new MatrixMetadata(languages[0], languages, variables, additionalProperties);
         }

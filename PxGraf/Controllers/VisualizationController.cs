@@ -148,6 +148,74 @@ namespace PxGraf.Controllers
             }
         }
 
+        /// <summary>
+        /// Gets a JSON-stat 2.0 visualization dataset for a saved query in the requested language.
+        /// </summary>
+        /// <param name="sqId">The id of the saved query.</param>
+        /// <param name="lang">Optional language for localized JSON-stat fields. When omitted, defaults to the table's default language. An explicit unsupported language returns 400.</param>
+        /// <returns>A single-language JSON-stat 2.0 dataset.</returns>
+        [HttpGet("jsonstat2/{sqId}")]
+        [ProducesResponseType<JsonStat2Dataset>(StatusCodes.Status200OK, "application/vnd.jsonstat2+json")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<JsonStat2Dataset>> GetJsonStat2VisualizationAsync([FromRoute] string sqId, [FromQuery] string lang)
+        {
+            Dictionary<string, object> logScope = new()
+            {
+                [LoggerConstants.CONTROLLER] = nameof(VisualizationController),
+                [LoggerConstants.ACTION] = $"{CONTROLLER_PATH}/jsonstat2"
+            };
+            using (_logger.BeginScope(logScope))
+            {
+                if (!await _sqFileInterface.SavedQueryExists(sqId, Configuration.Current.SavedQueryDirectory))
+                {
+                    _auditLogService.LogAuditEvent(
+                        action: $"{CONTROLLER_PATH}/jsonstat2",
+                        resource: LoggerConstants.INVALID_OR_MISSING_SQID
+                        );
+
+                    _logger.LogWarning("Could not find a saved query file with the provided id.");
+                    return NotFound();
+                }
+
+                _auditLogService.LogAuditEvent(
+                    action: $"{CONTROLLER_PATH}/jsonstat2",
+                    resource: sqId
+                    );
+
+                SavedQuery sq = await _sqFileInterface.ReadSavedQueryFromFile(sqId, Configuration.Current.SavedQueryDirectory);
+                try
+                {
+                    Matrix<DecimalDataValue> matrix = await BuildVisualizationMatrixAsync(sqId, sq);
+                    JsonStat2Dataset dataset = JsonStat2DatasetBuilder.Build(
+                        matrix,
+                        lang,
+                        PxVisualizerCubeAdapter.BuildVisualizationSettings(matrix, sq.Settings));
+                    Response.Headers.CacheControl = $"max-age={Configuration.Current.CacheOptions.CacheFreshnessCheckIntervalSeconds}";
+                    _logger.LogDebug("Returning JSON-stat visualization result.");
+                    return new JsonResult(dataset)
+                    {
+                        ContentType = "application/vnd.jsonstat2+json"
+                    };
+                }
+                catch (EmptyDimensionException ex)
+                {
+                    _logger.LogDebug(ex, "Saved query {SqId} produced an empty dimension; returning 400.", sqId);
+                    return BadRequest();
+                }
+                catch (ArgumentException ex)
+                {
+                    _logger.LogDebug(ex, "Invalid JSON-stat request for saved query {SqId}; returning 400.", sqId);
+                    return BadRequest();
+                }
+                catch (InvalidOperationException ex)
+                {
+                    _logger.LogDebug(ex, "Unable to build JSON-stat output for saved query {SqId}; returning 400.", sqId);
+                    return BadRequest();
+                }
+            }
+        }
+
         #endregion
 
         #region UTILITY
@@ -178,10 +246,16 @@ namespace PxGraf.Controllers
 
         private async Task<VisualizationResponse> BuildNewResponseAsync(string sqId, SavedQuery sq)
         {
+            Matrix<DecimalDataValue> matrix = await BuildVisualizationMatrixAsync(sqId, sq);
+            return PxVisualizerCubeAdapter.BuildVisualizationResponse(matrix, sq);
+        }
+
+        private async Task<Matrix<DecimalDataValue>> BuildVisualizationMatrixAsync(string sqId, SavedQuery sq)
+        {
             if (sq.Archived)
             {
                 ArchiveCube ac = await _sqFileInterface.ReadArchiveCubeFromFile(sqId, Configuration.Current.ArchiveFileDirectory);
-                return PxVisualizerCubeAdapter.BuildVisualizationResponse(ac.ToMatrix(), sq);
+                return ac.ToMatrix();
             }
             else
             {
@@ -202,7 +276,7 @@ namespace PxGraf.Controllers
                     matrix = _virtualValueComputationService.ApplyVirtualValues(matrix, sq.Query);
                 matrix = matrix.GetTransform(outputMap);
 
-                return PxVisualizerCubeAdapter.BuildVisualizationResponse(matrix, sq);
+                return matrix;
             }
         }
 

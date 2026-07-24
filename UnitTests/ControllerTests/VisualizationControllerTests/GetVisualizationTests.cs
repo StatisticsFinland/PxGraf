@@ -42,6 +42,8 @@ namespace UnitTests.ControllerTests.VisualizationControllerTests
                 {"pxgrafUrl", "http://pxgraftesturl:8443/PxGraf"},
                 {"savedQueryDirectory", "goesNowhere"},
                 {"archiveFileDirectory", "goesNowhere"},
+                {"QueryOptions:MaxHeaderLength", "120"},
+                {"QueryOptions:MaxQuerySize", "100000"},
                 {"CacheOptions:Visualization:SlidingExpirationMinutes", "15" },
                 {"CacheOptions:Visualization:AbsoluteExpirationMinutes", "720" },
                 {"CacheOptions:Visualization:ItemAmountLimit", "1000" }
@@ -395,6 +397,81 @@ namespace UnitTests.ControllerTests.VisualizationControllerTests
                     It.Is<string>(action => action == "api/sq/visualization"),
                     It.Is<string>(resource => resource == testQueryId)),
                 Times.Once);
+        }
+
+        [Test]
+        public async Task GetJsonStat2VisualizationTest_ReturnsJsonStatDataset()
+        {
+            string testQueryId = "aaa-bbb-111-222-333";
+
+            List<DimensionParameters> cubeParams =
+            [
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 3),
+                new DimensionParameters(DimensionType.Geographical, 2)
+            ];
+
+            VisualizationController controller = BuildController(
+                cubeParams,
+                cubeParams,
+                testQueryId,
+                MultiStateMemoryTaskCache.CacheEntryState.Fresh);
+
+            ActionResult<JsonStat2Dataset> result = await controller.GetJsonStat2VisualizationAsync(testQueryId, null);
+
+            Assert.That(result.Result, Is.InstanceOf<JsonResult>());
+            JsonResult jsonResult = result.Result as JsonResult;
+            Assert.That(jsonResult.ContentType, Is.EqualTo("application/vnd.jsonstat2+json"));
+            Assert.That(jsonResult.Value, Is.InstanceOf<JsonStat2Dataset>());
+            JsonStat2Dataset dataset = (JsonStat2Dataset)jsonResult.Value;
+            Assert.That(dataset.Extension.VisualizationSettings, Is.InstanceOf<VisualizationResponse.PxVisualizerSettings>());
+            Assert.That(dataset.Extension.VisualizationSettings.VisualizationType, Is.EqualTo(PxGraf.Enums.VisualizationType.LineChart));
+        }
+
+        [Test]
+        public async Task GetJsonStat2VisualizationTest_WithUnsupportedLanguage_ReturnsBadRequest()
+        {
+            string testQueryId = "aaa-bbb-111-222-333";
+            List<DimensionParameters> cubeParams =
+            [
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 3),
+                new DimensionParameters(DimensionType.Geographical, 2)
+            ];
+
+            VisualizationController controller = BuildController(
+                cubeParams,
+                cubeParams,
+                testQueryId,
+                MultiStateMemoryTaskCache.CacheEntryState.Fresh);
+
+            ActionResult<JsonStat2Dataset> result = await controller.GetJsonStat2VisualizationAsync(testQueryId, "de");
+
+            Assert.That(result.Result, Is.InstanceOf<BadRequestResult>());
+        }
+
+        [Test]
+        public async Task GetVisualizationTest_WithAcceptHeader_ReturnsVisualizationResponse()
+        {
+            string testQueryId = "aaa-bbb-111-222-333";
+            List<DimensionParameters> cubeParams =
+            [
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 2),
+                new DimensionParameters(DimensionType.Other, 2)
+            ];
+
+            VisualizationController controller = BuildController(
+                cubeParams,
+                cubeParams,
+                testQueryId,
+                MultiStateMemoryTaskCache.CacheEntryState.Null);
+
+            controller.ControllerContext.HttpContext.Request.Headers.Accept = "application/xml";
+
+            ActionResult<VisualizationResponse> result = await controller.GetVisualization(testQueryId);
+
+            Assert.That(result.Value, Is.InstanceOf<VisualizationResponse>());
         }
     }
 }
