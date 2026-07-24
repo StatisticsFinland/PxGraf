@@ -81,7 +81,7 @@ describe('Functionality test', () => {
                     onQueryChanged={mockOnQueryChanged} />
             </UiLanguageContext.Provider>
         );
-        const selectableMenu = getByLabelText('variableSelect.itemFilter');
+        const selectableMenu = getByLabelText('variableSelect.valuesLabel');
         await user.click(selectableMenu);
         const valueSelect = await findByRole('option', { name: '2020' });
         await user.click(valueSelect);

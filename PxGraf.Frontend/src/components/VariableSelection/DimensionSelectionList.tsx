@@ -21,15 +21,40 @@ const TitleWrapper = styled.div`
     padding-top: 16px;
     padding-left: 16px;
     padding-right: 16px;
+    padding-bottom: 16px;
     align-items: center;
 `;
 
 const StyledAccordionDetails = styled(AccordionDetails)`
-    background-color: var(--surface-light);
+    background-color: var(--surface-white);
 `;
 
 const StyledAccordion = styled(Accordion)`
-    border-top: 1px solid var(--border-light);
+    border: 1px solid var(--border-light);
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12) !important;
+    margin: 0 8px 8px;
+
+    &:before {
+        display: none;
+    }
+
+    &.Mui-expanded {
+        margin: 0 8px 8px;
+    }
+`;
+
+const StyledAccordionSummary = styled(AccordionSummary)`
+    min-height: 48px;
+
+    &.Mui-expanded {
+        min-height: 48px;
+    }
+
+    & .MuiAccordionSummary-content,
+    & .MuiAccordionSummary-content.Mui-expanded {
+        margin: 12px 0;
+    }
 `;
 
 /**
@@ -54,14 +79,17 @@ export const DimensionSelectionList: React.FC<DimensionSelectionListProps> = ({ 
                 <Typography variant="body2" sx={{ color: theme.palette.text.secondary }}>{t('variableSelect.title')}</Typography>
             </TitleWrapper>
             {sortedDimensions(dimensions).map(dimension => {
+                const summaryId = `dimension-${dimension.code}-header`;
+                const contentId = `dimension-${dimension.code}-content`;
                 return (
-                    <StyledAccordion key={dimension.code} defaultExpanded={true}>
-                        <AccordionSummary
+                    <StyledAccordion key={dimension.code} defaultExpanded={true} disableGutters elevation={0} square>
+                        <StyledAccordionSummary
                             expandIcon={<ExpandMoreIcon />}
-                            aria-controls="panel1a-content"
+                            aria-controls={contentId}
+                            id={summaryId}
                         >
                             <Typography variant="h2"><b>{dimension.name[uiContentLanguage] ?? dimension.code} {selectedValues(dimension.code)}/{dimension.values.length}</b></Typography>
-                        </AccordionSummary>
+                        </StyledAccordionSummary>
                         <StyledAccordionDetails>
                             <DimensionSelection
                                 dimension={dimension}

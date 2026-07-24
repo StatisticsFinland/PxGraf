@@ -34,8 +34,14 @@ jest.mock('./BreadcrumbNav', () => ({
 const mockUseNavigationContext = useNavigationContext as jest.Mock;
 
 describe('Header component', () => {
-    it('should render correctly', () => {
+    it('should render correctly', async () => {
         const { asFragment } = render(<Header />);
+        // Flush the pending focus-ripple state update from the "skip to content"
+        // link's mount-time ref.current.focus() call before asserting, otherwise it
+        // resolves after the test body ends and triggers an act() warning.
+        await waitFor(() => {
+            expect(screen.getByAltText('navbar.logoAlt')).toBeInTheDocument();
+        });
         expect(asFragment()).toMatchSnapshot();
     })
 });

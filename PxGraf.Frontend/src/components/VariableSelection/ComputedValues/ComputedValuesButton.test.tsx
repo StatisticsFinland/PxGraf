@@ -47,7 +47,9 @@ const renderButton = (dimensionQuery = baseDimensionQuery, onQueryChanged = jest
 describe('ComputedValuesButton', () => {
     it('renders button with label', () => {
         renderButton();
-        expect(screen.getByRole('button', { name: 'computedValues.button' })).toBeInTheDocument();
+        const button = screen.getByRole('button', { name: 'computedValues.button' });
+        expect(button).toBeInTheDocument();
+        expect(button).not.toHaveClass('MuiIconButton-colorPrimary');
     });
 
     it('shows badge count when definitions are present', () => {
@@ -60,6 +62,7 @@ describe('ComputedValuesButton', () => {
         };
         renderButton(queryWithDefs);
         expect(screen.getByText('2')).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: 'computedValues.buttonWithCount' })).toHaveClass('MuiIconButton-colorPrimary');
     });
 
     it('opens dialog on button click', async () => {
@@ -85,8 +88,8 @@ describe('ComputedValuesButton', () => {
             ],
         };
         renderButton(queryWithVirtualSelected, mockOnQueryChanged);
-        await user.click(screen.getByRole('button', { name: 'computedValues.button' }));
-        await user.click(screen.getByRole('button', { name: 'computedValues.delete' }));
+        await user.click(screen.getByRole('button', { name: 'computedValues.buttonWithCount' }));
+        await user.click(screen.getByRole('button', { name: /^computedValues\.delete/ }));
         expect(mockOnQueryChanged).toHaveBeenCalledTimes(1);
         const calledWith: IDimensionQuery = mockOnQueryChanged.mock.calls[0][0];
         expect(calledWith.virtualValueDefinitions).toEqual([]);

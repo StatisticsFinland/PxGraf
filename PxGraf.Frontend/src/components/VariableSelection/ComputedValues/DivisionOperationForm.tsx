@@ -1,7 +1,6 @@
 import React from 'react';
 import {
     FormControl,
-    FormHelperText,
     InputLabel,
     MenuItem,
     Select,
@@ -91,6 +90,7 @@ export const DivisionOperationForm: React.FC<DivisionOperationFormProps> = ({
                 color="primary"
                 value={useConstant ? 'constant' : 'value'}
                 onChange={handleToggleConstant}
+                aria-label={t('computedValues.operandType')}
                 sx={{ mt: 1 }}
             >
                 <ToggleButton value="value">{t('computedValues.useValue')}</ToggleButton>
@@ -104,11 +104,9 @@ export const DivisionOperationForm: React.FC<DivisionOperationFormProps> = ({
                         value={localConstant}
                         onChange={handleConstantChange}
                         error={divisionByZero}
+                        helperText={divisionByZero ? t('computedValues.validationDivisionByZero') : undefined}
                         fullWidth
                     />
-                    {divisionByZero && (
-                        <FormHelperText>{t('computedValues.validationDivisionByZero')}</FormHelperText>
-                    )}
                 </FormControl>
             ) : (
                 <FormControl fullWidth sx={{ mt: 1 }}>

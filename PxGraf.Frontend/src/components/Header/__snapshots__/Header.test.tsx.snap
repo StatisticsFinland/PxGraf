@@ -14,9 +14,6 @@ exports[`Header component should render correctly 1`] = `
         tabindex="0"
       >
         general.contentLink
-        <span
-          class="MuiTouchRipple-root css-r3djoj-MuiTouchRipple-root"
-        />
       </a>
       <a
         href="/"

@@ -7,11 +7,20 @@ exports[`Rendering test renders correctly 1`] = `
   >
     <p
       class="MuiTypography-root MuiTypography-body1 css-rizt0-MuiTypography-root"
+      id="_r_0_"
     >
       general.results:
     </p>
+    <p
+      class="MuiTypography-root MuiTypography-body1 css-4y2e37-MuiTypography-root"
+      role="status"
+    >
+      general.resultCount
+    </p>
     <ul
-      class="MuiList-root MuiList-padding MuiList-dense sc-bdvvNz kmsnlU css-st2ob2-MuiList-root"
+      aria-labelledby="_r_0_"
+      class="MuiList-root MuiList-padding MuiList-dense sc-bdvvNz kmsnlU css-1nzcp2y-MuiList-root"
+      tabindex="0"
     >
       <li
         class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding sc-gsDLFA gTnRse css-qyw6ft-MuiListItem-root"

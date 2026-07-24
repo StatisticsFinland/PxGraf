@@ -14,7 +14,7 @@ interface ManualPickDimensionSelectionProps {
 const StyledAutocomplete = styled(Autocomplete)`
     flex-basis: 0;
     flex-grow: 1;
-    width: 90%;
+    width: 100%;
     background-color: var(--surface-white);
 `;
 
@@ -56,7 +56,7 @@ export const ManualPickDimensionSelection: React.FC<ManualPickDimensionSelection
                 );
             }}
             renderInput={(params) => (
-                <TextField {...params} label={t("variableSelect.itemFilter")} />
+                <TextField {...params} label={t("variableSelect.valuesLabel")} />
             )}
         />
     );

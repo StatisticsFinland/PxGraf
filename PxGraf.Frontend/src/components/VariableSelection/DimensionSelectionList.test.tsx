@@ -1,5 +1,6 @@
 import React from 'react';
 import { render } from "@testing-library/react";
+import '@testing-library/jest-dom';
 import { EMetaPropertyType, IDimension, EDimensionType } from "types/cubeMeta";
 import { FilterType, Query } from "types/query";
 import DimensionSelectionList from "./DimensionSelectionList";
@@ -357,7 +358,7 @@ const setUiContentLanguage = jest.fn();
 
 describe('Rendering test', () => {
     it('renders correctly', () => {
-        const { asFragment } = render(
+        const { asFragment, container } = render(
             <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
                 <DimensionSelectionList
                     dimensions={mockDimensions}
@@ -375,6 +376,16 @@ describe('Rendering test', () => {
                 ></DimensionSelectionList>
             </UiLanguageContext.Provider>
         );
+
+        const summaries = Array.from(container.querySelectorAll<HTMLElement>('[id^="dimension-"][id$="-header"]'));
+        expect(summaries).toHaveLength(mockDimensions.length);
+        expect(new Set(summaries.map(summary => summary.id)).size).toBe(mockDimensions.length);
+        summaries.forEach(summary => {
+            const contentId = summary.getAttribute('aria-controls');
+            const region = contentId ? document.getElementById(contentId) : null;
+            expect(region).toHaveAttribute('role', 'region');
+            expect(region).toHaveAttribute('aria-labelledby', summary.id);
+        });
         expect(asFragment()).toMatchSnapshot();
     });
 });

@@ -98,6 +98,7 @@ const DefinitionListView: React.FC<DefinitionListViewProps> = ({
         ) : (
             <List disablePadding>
                 {definitions.map(def => {
+                    const definitionName = resolveValueName(def.code, dimension, uiContentLanguage);
                     const operandNames = getOperandCodes(def)
                         .map(code => resolveValueName(code, dimension, uiContentLanguage))
                         .join(', ');
@@ -110,22 +111,25 @@ const DefinitionListView: React.FC<DefinitionListViewProps> = ({
                             sx={{ py: 0.5, alignItems: 'flex-start' }}
                         >
                             <ListItemText
-                                primary={`${resolveValueName(def.code, dimension, uiContentLanguage)} — ${operatorLabel(getOperatorType(def), t)}`}
+                                primary={`${definitionName} — ${operatorLabel(getOperatorType(def), t)}`}
                                 secondary={`${operandNames}${constantPart}`}
                                 sx={{ flex: 1, minWidth: 0 }}
                             />
                             <Stack direction="row" spacing={0.5} alignItems="center" sx={{ flexShrink: 0, ml: 1 }}>
                                     {dependedOnCodes.has(def.code) && (
                                         <Tooltip title={t('computedValues.hasDependents')}>
-                                            <span style={{ display: 'inline-flex', alignItems: 'center' }}>
+                                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
                                                 <LinkIcon fontSize="small" color="action" data-testid="dependency-indicator" />
+                                                <Typography component="span" variant="caption" color="text.secondary">
+                                                    {t('computedValues.hasDependents')}
+                                                </Typography>
                                             </span>
                                         </Tooltip>
                                     )}
                                     <span style={{ display: 'inline-flex' }}>
                                         <IconButton
                                             edge="end"
-                                            aria-label={t('computedValues.edit')}
+                                            aria-label={`${t('computedValues.edit')}: ${definitionName}`}
                                             onClick={() => onEdit(def)}
                                             size="small"
                                             disabled={dependedOnCodes.has(def.code)}
@@ -136,7 +140,7 @@ const DefinitionListView: React.FC<DefinitionListViewProps> = ({
                                     <span style={{ display: 'inline-flex' }}>
                                         <IconButton
                                             edge="end"
-                                            aria-label={t('computedValues.delete')}
+                                            aria-label={`${t('computedValues.delete')}: ${definitionName}`}
                                             onClick={() => onDelete(def.code)}
                                             size="small"
                                             disabled={dependedOnCodes.has(def.code)}
@@ -177,8 +181,9 @@ const OperatorFormView: React.FC<OperatorFormViewProps> = ({
     validationError, onOperatorChange, onFormChange, t,
 }) => {
     const OperatorForm = operatorFormComponents[formOperator];
+    const validationErrorId = 'computed-values-validation-error';
     return (
-        <Stack spacing={2}>
+        <Stack spacing={2} role="group" aria-describedby={validationError !== '' ? validationErrorId : undefined}>
             <FormControl>
                 <FormLabel>{t('computedValues.operator')}</FormLabel>
                 <ToggleButtonGroup
@@ -204,7 +209,7 @@ const OperatorFormView: React.FC<OperatorFormViewProps> = ({
                 onChange={onFormChange}
             />
             {validationError !== '' && (
-                <Typography variant="body2" color="error">
+                <Typography id={validationErrorId} role="alert" variant="body2" color="error">
                     {validationError}
                 </Typography>
             )}
@@ -228,6 +233,13 @@ export const ComputedValuesDialog: React.FC<ComputedValuesDialogProps> = ({
     const [formOperandCodes, setFormOperandCodes] = React.useState<string[]>([]);
     const [formConstant, setFormConstant] = React.useState<number | undefined>(undefined);
     const [validationError, setValidationError] = React.useState<string>('');
+    const dialogTitleRef = React.useRef<HTMLHeadingElement>(null);
+
+    React.useEffect(() => {
+        if (open) {
+            dialogTitleRef.current?.focus();
+        }
+    }, [open, view]);
 
     const handleAddNew = () => {
         setEditingDefinition(undefined);
@@ -362,7 +374,7 @@ export const ComputedValuesDialog: React.FC<ComputedValuesDialogProps> = ({
             aria-labelledby="computed-values-dialog-title"
             slotProps={{ transition: { onExited: handleCancel } }}
         >
-            <DialogTitle id="computed-values-dialog-title">
+            <DialogTitle id="computed-values-dialog-title" ref={dialogTitleRef} tabIndex={-1}>
                 {getDialogTitle()}
             </DialogTitle>
             <DialogContent dividers>

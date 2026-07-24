@@ -77,6 +77,7 @@ describe('ComputedValuesDialog — form view', () => {
         renderDialog();
         await user.click(screen.getByRole('button', { name: 'computedValues.addNew' }));
         expect(screen.getByRole('button', { name: 'computedValues.operatorSum' })).toBeInTheDocument();
+        expect(screen.getByRole('group', { name: 'computedValues.operandType' })).toBeInTheDocument();
     });
 
     it('returns to list view when Cancel is clicked from form view', async () => {
@@ -115,7 +116,7 @@ describe('ComputedValuesDialog — form view', () => {
             virtualValueDefinitions: [definition],
         };
         renderDialog(queryWithDef);
-        await user.click(screen.getByRole('button', { name: 'computedValues.edit' }));
+        await user.click(screen.getByRole('button', { name: /^computedValues\.edit/ }));
         expect(screen.getByRole('button', { name: 'computedValues.operatorSum' })).toHaveAttribute('aria-pressed', 'true');
     });
 
@@ -183,7 +184,7 @@ describe('ComputedValuesDialog — form view', () => {
                 />
             </UiLanguageContext.Provider>
         );
-        await user.click(screen.getByRole('button', { name: 'computedValues.edit' }));
+        await user.click(screen.getByRole('button', { name: /^computedValues\.edit/ }));
         // Click on the Autocomplete to open the dropdown
         const autocompleteInput = screen.getByRole('combobox', { name: /computedValues\.selectValues/ });
         await user.click(autocompleteInput);
@@ -204,7 +205,7 @@ describe('ComputedValuesDialog — delete', () => {
             ],
         };
         renderDialog(queryWithDef, mockOnQueryChanged);
-        await user.click(screen.getByRole('button', { name: 'computedValues.delete' }));
+        await user.click(screen.getByRole('button', { name: /^computedValues\.delete/ }));
         expect(mockOnQueryChanged).toHaveBeenCalledWith(
             expect.objectContaining({ virtualValueDefinitions: [] }),
         );
@@ -222,8 +223,8 @@ describe('ComputedValuesDialog — dependency safeguard', () => {
         };
         renderDialog(queryWithDeps);
         // virtual_1 is a dependency of virtual_2, so its buttons should be disabled
-        const editButtons = screen.getAllByRole('button', { name: 'computedValues.edit' });
-        const deleteButtons = screen.getAllByRole('button', { name: 'computedValues.delete' });
+        const editButtons = screen.getAllByRole('button', { name: /^computedValues\.edit/ });
+        const deleteButtons = screen.getAllByRole('button', { name: /^computedValues\.delete/ });
         // First item is virtual_1 (depended on), second is virtual_2 (not depended on)
         expect(editButtons[0]).toBeDisabled();
         expect(deleteButtons[0]).toBeDisabled();
@@ -244,6 +245,7 @@ describe('ComputedValuesDialog — dependency safeguard', () => {
         // Verify it renders by checking there is exactly one such tooltip target
         const indicator = screen.getByTestId('dependency-indicator');
         expect(indicator).toBeInTheDocument();
+        expect(screen.getByText('computedValues.hasDependents')).toBeVisible();
     });
 
     it('does not disable Edit and Delete buttons for a value with no virtual dependents', () => {
@@ -254,8 +256,8 @@ describe('ComputedValuesDialog — dependency safeguard', () => {
             ],
         };
         renderDialog(queryWithDef);
-        const editButton = screen.getByRole('button', { name: 'computedValues.edit' });
-        const deleteButton = screen.getByRole('button', { name: 'computedValues.delete' });
+        const editButton = screen.getByRole('button', { name: /^computedValues\.edit/ });
+        const deleteButton = screen.getByRole('button', { name: /^computedValues\.delete/ });
         expect(editButton).not.toBeDisabled();
         expect(deleteButton).not.toBeDisabled();
     });
@@ -283,8 +285,8 @@ describe('ComputedValuesDialog — dialog title', () => {
             ],
         };
         renderDialog(queryWithDef);
-        await user.click(screen.getByRole('button', { name: 'computedValues.edit' }));
-        expect(screen.getByRole('heading', { name: 'computedValues.editTitle' })).toBeInTheDocument();
+        await user.click(screen.getByRole('button', { name: /^computedValues\.edit/ }));
+        expect(screen.getByRole('heading', { name: 'computedValues.editTitle' })).toHaveFocus();
     });
 });
 
@@ -324,7 +326,9 @@ describe('ComputedValuesDialog — validation', () => {
         renderDialog();
         await user.click(screen.getByRole('button', { name: 'computedValues.addNew' }));
         await user.click(screen.getByRole('button', { name: 'computedValues.save' }));
-        expect(screen.getByText('computedValues.validationMinOperands')).toBeInTheDocument();
+        const alert = screen.getByRole('alert');
+        expect(alert).toHaveTextContent('computedValues.validationMinOperands');
+        expect(alert.closest('[role="group"]')).toHaveAttribute('aria-describedby', alert.id);
     });
 
     it('shows validationSelectValue error when saving a subtraction with no operand selected', async () => {
@@ -333,7 +337,7 @@ describe('ComputedValuesDialog — validation', () => {
         await user.click(screen.getByRole('button', { name: 'computedValues.addNew' }));
         await user.click(screen.getByRole('button', { name: 'computedValues.operatorSubtraction' }));
         await user.click(screen.getByRole('button', { name: 'computedValues.save' }));
-        expect(screen.getByText('computedValues.validationSelectValue')).toBeInTheDocument();
+        expect(screen.getByRole('alert')).toHaveTextContent('computedValues.validationSelectValue');
     });
 
     it('shows validationDivisionByZero error when editing a division with a constant of zero', async () => {
@@ -349,7 +353,7 @@ describe('ComputedValuesDialog — validation', () => {
             virtualValueDefinitions: [divByZeroDef],
         };
         renderDialog(queryWithDef);
-        await user.click(screen.getByRole('button', { name: 'computedValues.edit' }));
+        await user.click(screen.getByRole('button', { name: /^computedValues\.edit/ }));
         await user.click(screen.getByRole('button', { name: 'computedValues.save' }));
         expect(screen.getAllByText('computedValues.validationDivisionByZero').length).toBeGreaterThan(0);
     });
@@ -369,7 +373,7 @@ describe('ComputedValuesDialog — save', () => {
             virtualValueDefinitions: [definition],
         };
         renderDialog(queryWithDef, mockOnQueryChanged);
-        await user.click(screen.getByRole('button', { name: 'computedValues.edit' }));
+        await user.click(screen.getByRole('button', { name: /^computedValues\.edit/ }));
         await user.click(screen.getByRole('button', { name: 'computedValues.save' }));
         expect(mockOnQueryChanged).toHaveBeenCalledWith(
             expect.objectContaining({

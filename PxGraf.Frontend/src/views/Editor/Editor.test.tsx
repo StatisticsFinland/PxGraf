@@ -677,7 +677,7 @@ describe('Virtual value enrichment tests', () => {
             </QueryClientProvider>
         );
 
-        const filterInput = screen.getByLabelText('variableSelect.itemFilter');
+        const filterInput = screen.getByLabelText('variableSelect.valuesLabel');
         await user.click(filterInput);
 
         const virtualOption = await screen.findByRole('option', { name: 'Laskettu arvo' });
