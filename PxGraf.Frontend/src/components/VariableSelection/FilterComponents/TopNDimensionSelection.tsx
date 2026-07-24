@@ -17,6 +17,8 @@ export const TopNDimensionSelection: React.FC<ITopNDimensionSelectionProps> = ({
     const [inputValue, setInputValue] = React.useState(numberOfItems?.toString() ?? '');
     const [previousNumberOfItems, setPreviousNumberOfItems] = React.useState(numberOfItems);
 
+    // Intentionally setting state during render (React's "adjusting state when a prop changes" pattern).
+    // The guard below ensures this only runs once per actual prop change, avoiding render loops.
     if (numberOfItems !== previousNumberOfItems) {
         setPreviousNumberOfItems(numberOfItems);
         setInputValue(numberOfItems?.toString() ?? '');
