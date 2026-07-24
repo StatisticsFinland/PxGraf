@@ -9,6 +9,7 @@ using Px.Utils.Models.Metadata.Enums;
 using Px.Utils.Models.Metadata.MetaProperties;
 using PxGraf.Language;
 using PxGraf.Models.Responses;
+using PxGraf.Datasource.ApiDatasource.SerializationModels;
 using PxGraf.Settings;
 using PxGraf.Utility;
 using System;
@@ -20,7 +21,7 @@ namespace PxGraf.Visualization
 {
     public static class JsonStat2DatasetBuilder
     {
-        public static JsonStat2Dataset Build(Matrix<DecimalDataValue> matrix, string? requestedLanguage, VisualizationResponse.PxVisualizerSettings? visualizationSettings = null)
+        public static JsonStat2 Build(Matrix<DecimalDataValue> matrix, string? requestedLanguage, VisualizationResponse.PxVisualizerSettings? visualizationSettings = null)
         {
             IReadOnlyMatrixMetadata metadata = matrix.Metadata;
             string language = ResolveLanguage(metadata, requestedLanguage);
@@ -55,7 +56,7 @@ namespace PxGraf.Visualization
                 throw new InvalidOperationException($"JSON-stat output size {cellCount} exceeds maximum {maxJsonStatSize}.");
             }
 
-            Dictionary<string, JsonStat2Dimension> dimensionMap = [];
+            Dictionary<string, JsonStat2.DimensionObj> dimensionMap = [];
             List<string> timeRoles = [];
             List<string> metricRoles = [];
             List<string> geoRoles = [];
@@ -63,7 +64,7 @@ namespace PxGraf.Visualization
             foreach (IReadOnlyDimension dimension in dimensions)
             {
                 string dimCode = dimension.Code;
-                JsonStat2Dimension dimOutput = BuildDimension(dimension, language);
+                JsonStat2.DimensionObj dimOutput = BuildDimension(dimension, language);
                 dimensionMap[dimCode] = dimOutput;
 
                 if (dimension.Type == DimensionType.Time)
@@ -86,32 +87,32 @@ namespace PxGraf.Visualization
             }
 
             (List<decimal?> values, Dictionary<string, string> statusMap) = BuildValues(matrix);
-            JsonStat2Role role = new()
+            JsonStat2.RoleObj role = new()
             {
-                Time = timeRoles,
-                Metric = metricRoles,
-                Geo = geoRoles.Count > 0 ? geoRoles : null
+                Time = [.. timeRoles],
+                Metric = [.. metricRoles],
+                Geo = geoRoles.Count > 0 ? [.. geoRoles] : null
             };
 
             string label = TryGetOptionalLocalizedMetaProperty(metadata.AdditionalProperties, PxSyntaxConstants.DESCRIPTION_KEY, language) ?? string.Empty;
             string source = ResolveSource(metadata, language);
-            IReadOnlyList<string>? note = TryGetOptionalLocalizedMetaProperty(metadata.AdditionalProperties, PxSyntaxConstants.NOTE_KEY, language) is string datasetNote
+            List<string>? note = TryGetOptionalLocalizedMetaProperty(metadata.AdditionalProperties, PxSyntaxConstants.NOTE_KEY, language) is string datasetNote
                 ? [datasetNote]
                 : null;
             string updated = ResolveUpdatedTimestamp(dimensions);
 
-            JsonStat2Dataset result = new()
+            JsonStat2 result = new()
             {
                 Version = "2.0",
                 Class = "dataset",
-                Id = id,
-                Size = size,
+                Id = [.. id],
+                Size = [.. size],
                 Label = label,
                 Source = source,
                 Updated = updated,
                 Note = note,
-                Dimension = dimensionMap,
-                Value = values,
+                Dimensions = dimensionMap,
+                Value = [.. values],
                 Status = statusMap.Count > 0 ? statusMap : null,
                 Role = role,
                 Extension = new JsonStat2Extension()
@@ -124,17 +125,18 @@ namespace PxGraf.Visualization
             return result;
         }
 
-        private static JsonStat2Dimension BuildDimension(IReadOnlyDimension dimension, string language)
+        private static JsonStat2.DimensionObj BuildDimension(IReadOnlyDimension dimension, string language)
         {
             Dictionary<string, string> labels = [];
-            Dictionary<string, IReadOnlyList<string>> notes = [];
-            Dictionary<string, JsonStat2CategoryUnit> units = [];
-            List<string> index = [];
+            Dictionary<string, List<string>> notes = [];
+            Dictionary<string, JsonStat2.DimensionObj.CategoryObj.UnitObj> units = [];
+            Dictionary<string, int> index = [];
 
-            foreach (IReadOnlyDimensionValue value in dimension.Values)
+            for (int valueIndex = 0; valueIndex < dimension.Values.Count; valueIndex++)
             {
+                IReadOnlyDimensionValue value = dimension.Values[valueIndex];
                 string code = value.Code;
-                index.Add(code);
+                index[code] = valueIndex;
                 labels[code] = GetRequiredLocalizedText(value.Name, language, $"category label for '{code}'");
 
                 if (TryGetLocalizedMetaProperty(value.AdditionalProperties, PxSyntaxConstants.VALUENOTE_KEY, language, out string? note))
@@ -154,7 +156,7 @@ namespace PxGraf.Visualization
                         throw new InvalidOperationException($"Negative precision for metric category '{code}'.");
                     }
 
-                    units[code] = new JsonStat2CategoryUnit
+                    units[code] = new JsonStat2.DimensionObj.CategoryObj.UnitObj
                     {
                         Label = GetRequiredLocalizedText(contentValue.Unit, language, $"unit for metric category '{code}'"),
                         Decimals = contentValue.Precision
@@ -162,7 +164,7 @@ namespace PxGraf.Visualization
                 }
             }
 
-            JsonStat2Category category = new()
+            JsonStat2.DimensionObj.CategoryObj category = new()
             {
                 Index = index,
                 Label = labels,
@@ -170,7 +172,7 @@ namespace PxGraf.Visualization
                 Unit = units.Count > 0 ? units : null
             };
 
-            return new JsonStat2Dimension
+            return new JsonStat2.DimensionObj
             {
                 Label = GetRequiredLocalizedText(dimension.Name, language, $"dimension label for '{dimension.Code}'"),
                 Note = TryGetLocalizedMetaProperty(dimension.AdditionalProperties, PxSyntaxConstants.NOTE_KEY, language, out string? dimNote)

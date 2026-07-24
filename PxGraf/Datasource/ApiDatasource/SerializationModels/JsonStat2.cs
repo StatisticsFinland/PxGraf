@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
+using PxGraf.Models.Responses;
 
 namespace PxGraf.Datasource.ApiDatasource.SerializationModels
 {
@@ -16,6 +17,10 @@ namespace PxGraf.Datasource.ApiDatasource.SerializationModels
 
         [JsonPropertyName("updated")]
         public string Updated { get; set; }
+
+        [JsonPropertyName("note")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<string> Note { get; set; }
 
         [JsonPropertyName("id")]
         public string[] Id { get; set; }
@@ -39,12 +44,16 @@ namespace PxGraf.Datasource.ApiDatasource.SerializationModels
         public string Version { get; set; }
 
         [JsonPropertyName("extension")]
-        public dynamic Extension { get; set; }
+        public JsonStat2Extension Extension { get; set; }
 
         public class DimensionObj
         {
             [JsonPropertyName("label")]
             public string Label { get; set; }
+
+            [JsonPropertyName("note")]
+            [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+            public List<string> Note { get; set; }
 
             [JsonPropertyName("category")]
             public CategoryObj Category { get; set; }
@@ -60,6 +69,10 @@ namespace PxGraf.Datasource.ApiDatasource.SerializationModels
                 [JsonPropertyName("label")]
                 public Dictionary<string, string> Label { get; set; }
 
+                [JsonPropertyName("note")]
+                [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+                public Dictionary<string, List<string>> Note { get; set; }
+
                 /// <summary>
                 /// From value code to UnitObj
                 /// </summary>
@@ -69,7 +82,12 @@ namespace PxGraf.Datasource.ApiDatasource.SerializationModels
                 public class UnitObj
                 {
                     [JsonPropertyName("base")]
+                    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
                     public string Base { get; set; }
+
+                    [JsonPropertyName("label")]
+                    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+                    public string Label { get; set; }
 
                     [JsonPropertyName("decimals")]
                     public int Decimals { get; set; }

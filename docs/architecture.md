@@ -92,7 +92,7 @@ Supported chart types (enum `VisualizationType`): VerticalBarChart, GroupVertica
 |---|---|---|
 | `Models/Queries/` | `MatrixQuery`, `DimensionQuery`, `ValueFilters`, `PxTableReference`, `FilterRequest`, `VisualizationSettings`, `Layout` | Query structure and dimension filtering |
 | `Models/Requests/` | `ChartRequest`, `SaveQueryParams`, `ReArchiveRequest`, `VisualizationCreationSettings` | API request DTOs |
-| `Models/Responses/` | `EditorContentsResponse`, `VisualizationResponse`, `JsonStat2Dataset`, `QueryMetaResponse`, `SaveQueryResponse`, `ReArchiveResponse`, `TableMetaValidationResult`, `DatabaseGroupContents`, `DatabaseGroupHeader`, `DatabaseTable`, `HealthResponse`, `DatabaseHealthStatus`, `ServiceHealthStatus` | API response DTOs |
+| `Models/Responses/` | `EditorContentsResponse`, `VisualizationResponse`, `JsonStat2Extension`, `QueryMetaResponse`, `SaveQueryResponse`, `ReArchiveResponse`, `TableMetaValidationResult`, `DatabaseGroupContents`, `DatabaseGroupHeader`, `DatabaseTable`, `HealthResponse`, `DatabaseHealthStatus`, `ServiceHealthStatus` | API response DTOs |
 | `Models/SavedQueries/` | `SavedQuery`, `ArchiveCube`, versioned types (`V1_0`, `V1_1`, `V1_2`, `V10`, `V11`) | Persisted query + archive formats with version migration |
 | `Models/Metadata/` | `HeaderBuildingUtilities`, `MatrixMetadataExtensions`, `DimensionExtensions`, `DimensionValueExtensions` | Metadata processing and header generation |
 | `Data/MetaData/` | `CubeMeta`, `Variable`, `VariableValue`, `ContentComponent` | Legacy metadata model types |
@@ -116,7 +116,7 @@ Key config sections: `DatabaseConfig`, `QueryStorageConfig`, `CacheOptions`, `Co
 
 | Folder | Purpose |
 |---|---|
-| `Visualization/` | `PxVisualizerCubeAdapter` — transforms matrix data into `VisualizationResponse` for the PxVisualizer library and builds the common JSON-stat visualization settings extension; `JsonStat2DatasetBuilder` — transforms matrix data into JSON-stat 2.0 dataset output |
+| `Visualization/` | `PxVisualizerCubeAdapter` — transforms matrix data into `VisualizationResponse` for the PxVisualizer library and builds the common JSON-stat visualization settings extension; `JsonStat2DatasetBuilder` — transforms matrix data into the shared `Datasource/ApiDatasource/SerializationModels/JsonStat2` JSON-stat 2.0 DTO |
 | `Language/` | `Localization`, `Translation`, per-concern translation classes (rejection reasons, sorting options, chart types, etc.) loaded from `Pars/translations.json` |
 | `Utility/` | `SqFileInterface`, `InputValidation`, `LoggerConstants`, `PxSyntaxConstants`, JSON converters (`CustomJsonConverters/`) |
 | `Enums/` | `VisualizationType` (ChartTypesEnum), `ChartTypeRejectionEnum`, `TimeDimensionIntervals` |

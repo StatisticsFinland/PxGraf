@@ -5,6 +5,7 @@ using Px.Utils.Models.Data.DataValue;
 using Px.Utils.Models.Metadata;
 using Px.Utils.Models.Metadata.Enums;
 using PxGraf.Data.MetaData;
+using PxGraf.Datasource.ApiDatasource.SerializationModels;
 using PxGraf.Language;
 using PxGraf.Enums;
 using PxGraf.Models.Responses;
@@ -48,7 +49,7 @@ namespace UnitTests.Visualization
                 VisualizationType = VisualizationType.LineChart
             };
 
-            JsonStat2Dataset result = JsonStat2DatasetBuilder.Build(matrix, "fi", visualizationSettings);
+            JsonStat2 result = JsonStat2DatasetBuilder.Build(matrix, "fi", visualizationSettings);
 
             Assert.That(result.Version, Is.EqualTo("2.0"));
             Assert.That(result.Class, Is.EqualTo("dataset"));
@@ -61,7 +62,10 @@ namespace UnitTests.Visualization
             Assert.That(result.Role.Time, Is.EqualTo(new[] { "variable-0" }));
             Assert.That(result.Role.Geo, Is.EqualTo(new[] { "variable-1" }));
             Assert.That(result.Role.Metric, Is.EqualTo(new[] { "variable-2" }));
-            Assert.That(result.Dimension["variable-2"].Category.Unit["value-0"].Decimals, Is.EqualTo(0));
+            Assert.That(result.Dimensions["variable-2"].Category.Unit["value-0"].Decimals, Is.EqualTo(0));
+            Assert.That(result.Dimensions["variable-0"].Category.Index["2000"], Is.EqualTo(0));
+            Assert.That(result.Dimensions["variable-0"].Category.Index["2001"], Is.EqualTo(1));
+            Assert.That(result.Dimensions["variable-0"].Category.Index["2002"], Is.EqualTo(2));
             Assert.That(result.Extension.MissingValueDescriptions["3"], Is.Not.Empty);
             Assert.That(result.Extension.VisualizationSettings, Is.Not.Null);
         }
@@ -77,7 +81,7 @@ namespace UnitTests.Visualization
 
             Matrix<DecimalDataValue> matrix = TestDataCubeBuilder.BuildTestMatrix(dimensions, missingData: false);
 
-            JsonStat2Dataset result = JsonStat2DatasetBuilder.Build(matrix, "fi");
+            JsonStat2 result = JsonStat2DatasetBuilder.Build(matrix, "fi");
 
             Assert.That(result.Status, Is.Null);
             Assert.That(result.Value, Is.EqualTo(new decimal?[] { 0.123m, 1.123m }));
@@ -94,7 +98,7 @@ namespace UnitTests.Visualization
 
             Matrix<DecimalDataValue> matrix = TestDataCubeBuilder.BuildTestMatrix(dimensions, missingData: true);
 
-            JsonStat2Dataset result = JsonStat2DatasetBuilder.Build(matrix, "fi");
+            JsonStat2 result = JsonStat2DatasetBuilder.Build(matrix, "fi");
 
             Assert.That(result.Status.Values.Distinct(), Is.EquivalentTo(["1", "2", "3", "4", "5", "6", "7"]));
         }
@@ -112,10 +116,10 @@ namespace UnitTests.Visualization
                 new MatrixMetadata("fi", ["fi", "en"], [.. sourceMatrix.Metadata.Dimensions.Cast<Dimension>()], []),
                 sourceMatrix.Data); // Create a new matrix with the same data but without notes and sources
 
-            JsonStat2Dataset result = JsonStat2DatasetBuilder.Build(matrix, "fi");
+            JsonStat2 result = JsonStat2DatasetBuilder.Build(matrix, "fi");
 
             Assert.That(result.Note, Is.Null);
-            Assert.That(result.Dimension.Values.All(dimension => dimension.Note is null && dimension.Category.Note is null), Is.True);
+            Assert.That(result.Dimensions.Values.All(dimension => dimension.Note is null && dimension.Category.Note is null), Is.True);
         }
 
         [Test]
@@ -175,7 +179,7 @@ namespace UnitTests.Visualization
 
             Matrix<DecimalDataValue> matrix = TestDataCubeBuilder.BuildTestMatrix(dimensions, missingData: false, languages: ["en", "fi"]);
 
-            JsonStat2Dataset result = JsonStat2DatasetBuilder.Build(matrix, null);
+            JsonStat2 result = JsonStat2DatasetBuilder.Build(matrix, null);
 
             Assert.That(result.Label, Is.EqualTo("Test dataset description"));
         }
@@ -191,7 +195,7 @@ namespace UnitTests.Visualization
 
             Matrix<DecimalDataValue> matrix = TestDataCubeBuilder.BuildTestMatrix(dimensions, missingData: true, languages: ["de"]);
 
-            JsonStat2Dataset result = JsonStat2DatasetBuilder.Build(matrix, "de");
+            JsonStat2 result = JsonStat2DatasetBuilder.Build(matrix, "de");
 
             Assert.That(result.Extension.MissingValueDescriptions["1"], Is.EqualTo(TranslationFixture.Translations["fi"].MissingData.Missing));
         }
@@ -206,7 +210,7 @@ namespace UnitTests.Visualization
             ];
 
             Matrix<DecimalDataValue> matrix = TestDataCubeBuilder.BuildTestMatrix(dimensions, missingData: false);
-            JsonStat2Dataset result = JsonStat2DatasetBuilder.Build(matrix, "fi", new VisualizationResponse.PxVisualizerSettings
+            JsonStat2 result = JsonStat2DatasetBuilder.Build(matrix, "fi", new VisualizationResponse.PxVisualizerSettings
             {
                 VisualizationType = VisualizationType.LineChart
             });

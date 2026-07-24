@@ -7,10 +7,10 @@ using Px.Utils.Models.Metadata.ExtensionMethods;
 using Px.Utils.Models.Metadata;
 using Px.Utils.Models;
 using PxGraf.Datasource.Cache;
+using PxGraf.Datasource.ApiDatasource.SerializationModels;
 using PxGraf.Datasource;
 using PxGraf.Exceptions;
 using PxGraf.Models.Metadata;
-using PxGraf.Models.Queries;
 using PxGraf.Models.Responses;
 using PxGraf.Models.SavedQueries;
 using PxGraf.Services;
@@ -165,10 +165,10 @@ namespace PxGraf.Controllers
         /// <param name="lang">Optional language for localized JSON-stat fields. When omitted, defaults to the table's default language. An explicit unsupported language returns 400.</param>
         /// <returns>A single-language JSON-stat 2.0 dataset.</returns>
         [HttpGet("jsonstat2/{sqId}")]
-        [ProducesResponseType<JsonStat2Dataset>(StatusCodes.Status200OK, "application/vnd.jsonstat2+json")]
+        [ProducesResponseType<JsonStat2>(StatusCodes.Status200OK, "application/vnd.jsonstat2+json")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<JsonStat2Dataset>> GetJsonStat2VisualizationAsync([FromRoute] string sqId, [FromQuery] string lang)
+        public async Task<ActionResult<JsonStat2>> GetJsonStat2VisualizationAsync([FromRoute] string sqId, [FromQuery] string lang)
         {
             Dictionary<string, object> logScope = new()
             {
@@ -207,7 +207,7 @@ namespace PxGraf.Controllers
                 try
                 {
                     Matrix<DecimalDataValue> matrix = await BuildVisualizationMatrixAsync(sqId, sq);
-                    JsonStat2Dataset dataset = JsonStat2DatasetBuilder.Build(
+                    JsonStat2 dataset = JsonStat2DatasetBuilder.Build(
                         matrix,
                         lang,
                         PxVisualizerCubeAdapter.BuildVisualizationSettings(matrix, sq.Settings));

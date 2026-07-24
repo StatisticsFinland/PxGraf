@@ -10,6 +10,7 @@ using Px.Utils.Models.Metadata;
 using Px.Utils.Models;
 using PxGraf.ChartTypeSelection;
 using PxGraf.Data;
+using PxGraf.Datasource.ApiDatasource.SerializationModels;
 using PxGraf.Datasource.FileDatasource;
 using PxGraf.Datasource;
 using PxGraf.Enums;
@@ -440,9 +441,9 @@ namespace PxGraf.Controllers
         /// <param name="lang">Optional language for localized JSON-stat fields. When omitted, defaults to the table's default language. An explicit unsupported language returns 400.</param>
         /// <returns>A JSON-stat 2.0 dataset.</returns>
         [HttpPost("visualization/jsonstat2")]
-        [ProducesResponseType<JsonStat2Dataset>(StatusCodes.Status200OK, "application/vnd.jsonstat2+json")]
+        [ProducesResponseType<JsonStat2>(StatusCodes.Status200OK, "application/vnd.jsonstat2+json")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<JsonStat2Dataset>> GetJsonStat2VisualizationAsync([FromBody] ChartRequest request, [FromQuery] string lang)
+        public async Task<ActionResult<JsonStat2>> GetJsonStat2VisualizationAsync([FromBody] ChartRequest request, [FromQuery] string lang)
         {
             if (!TryCreateTableReference(request.Query.TableReference.ToPath(), out PxTableReference tableReference))
             {
@@ -472,7 +473,7 @@ namespace PxGraf.Controllers
                     }
 
                     VisualizationSettings visualizationSettings = request.VisualizationSettings.ToVisualizationSettings(matrix.Metadata, request.Query);
-                    JsonStat2Dataset dataset = JsonStat2DatasetBuilder.Build(
+                    JsonStat2 dataset = JsonStat2DatasetBuilder.Build(
                         matrix,
                         lang,
                         PxVisualizerCubeAdapter.BuildVisualizationSettings(matrix, visualizationSettings));

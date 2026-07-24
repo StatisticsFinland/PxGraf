@@ -9,6 +9,7 @@ using Px.Utils.Models.Metadata.Enums;
 using Px.Utils.Models.Metadata;
 using PxGraf.Controllers;
 using PxGraf.Datasource.Cache;
+using PxGraf.Datasource.ApiDatasource.SerializationModels;
 using PxGraf.Datasource;
 using PxGraf.Language;
 using PxGraf.Models.Queries;
@@ -417,13 +418,13 @@ namespace UnitTests.ControllerTests.VisualizationControllerTests
                 testQueryId,
                 MultiStateMemoryTaskCache.CacheEntryState.Fresh);
 
-            ActionResult<JsonStat2Dataset> result = await controller.GetJsonStat2VisualizationAsync(testQueryId, null);
+            ActionResult<JsonStat2> result = await controller.GetJsonStat2VisualizationAsync(testQueryId, null);
 
             Assert.That(result.Result, Is.InstanceOf<JsonResult>());
             JsonResult jsonResult = (JsonResult)result.Result!;
             Assert.That(jsonResult.ContentType, Is.EqualTo("application/vnd.jsonstat2+json"));
-            Assert.That(jsonResult.Value, Is.InstanceOf<JsonStat2Dataset>());
-            JsonStat2Dataset dataset = (JsonStat2Dataset)jsonResult.Value;
+            Assert.That(jsonResult.Value, Is.InstanceOf<JsonStat2>());
+            JsonStat2 dataset = (JsonStat2)jsonResult.Value;
             Assert.That(dataset.Extension.VisualizationSettings, Is.InstanceOf<VisualizationResponse.PxVisualizerSettings>());
             Assert.That(dataset.Extension.VisualizationSettings.VisualizationType, Is.EqualTo(PxGraf.Enums.VisualizationType.LineChart));
         }
@@ -445,7 +446,7 @@ namespace UnitTests.ControllerTests.VisualizationControllerTests
                 testQueryId,
                 MultiStateMemoryTaskCache.CacheEntryState.Fresh);
 
-            ActionResult<JsonStat2Dataset> result = await controller.GetJsonStat2VisualizationAsync(testQueryId, "de");
+            ActionResult<JsonStat2> result = await controller.GetJsonStat2VisualizationAsync(testQueryId, "de");
 
             Assert.That(result.Result, Is.InstanceOf<BadRequestResult>());
         }
@@ -459,7 +460,7 @@ namespace UnitTests.ControllerTests.VisualizationControllerTests
                 "valid-id",
                 MultiStateMemoryTaskCache.CacheEntryState.Null);
 
-            ActionResult<JsonStat2Dataset> result = await controller.GetJsonStat2VisualizationAsync("invalid/id", "fi");
+            ActionResult<JsonStat2> result = await controller.GetJsonStat2VisualizationAsync("invalid/id", "fi");
 
             Assert.That(result.Result, Is.InstanceOf<BadRequestResult>());
             _mockSqFileInterface.Verify(x => x.SavedQueryExists(It.IsAny<string>(), It.IsAny<string>()), Times.Never());
@@ -475,7 +476,7 @@ namespace UnitTests.ControllerTests.VisualizationControllerTests
                 MultiStateMemoryTaskCache.CacheEntryState.Null,
                 savedQueryFound: false);
 
-            ActionResult<JsonStat2Dataset> result = await controller.GetJsonStat2VisualizationAsync("valid-id", "fi");
+            ActionResult<JsonStat2> result = await controller.GetJsonStat2VisualizationAsync("valid-id", "fi");
 
             Assert.That(result.Result, Is.InstanceOf<NotFoundResult>());
         }
@@ -494,7 +495,7 @@ namespace UnitTests.ControllerTests.VisualizationControllerTests
                 "valid-id",
                 MultiStateMemoryTaskCache.CacheEntryState.Null);
 
-            ActionResult<JsonStat2Dataset> result = await controller.GetJsonStat2VisualizationAsync("valid-id", "fi");
+            ActionResult<JsonStat2> result = await controller.GetJsonStat2VisualizationAsync("valid-id", "fi");
 
             Assert.That(result.Result, Is.InstanceOf<BadRequestResult>());
         }
