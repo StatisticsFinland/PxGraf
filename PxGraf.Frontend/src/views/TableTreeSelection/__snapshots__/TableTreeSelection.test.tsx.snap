@@ -3,34 +3,34 @@
 exports[`Rendering test renders correctly 1`] = `
 <DocumentFragment>
   <div
-    class="MuiContainer-root MuiContainer-maxWidthMd sc-jRQzZg iOHzMF css-u4uvlt-MuiContainer-root"
+    class="MuiContainer-root MuiContainer-maxWidthMd sc-jRQzZg iOHzMF"
   >
     <nav
       aria-labelledby="nested-list-subheader"
-      class="MuiList-root MuiList-padding MuiList-subheader css-h1es49-MuiList-root"
+      class="MuiList-root MuiList-padding MuiList-subheader"
     >
       <div
-        class="MuiListSubheader-root MuiListSubheader-gutters MuiListSubheader-sticky css-l328gy-MuiListSubheader-root"
+        class="MuiListSubheader-root MuiListSubheader-gutters MuiListSubheader-sticky"
         id="nested-list-subheader"
       >
         tableSelect.title
       </div>
       <li
-        class="MuiListItem-root MuiListItem-gutters MuiListItem-padding sc-bdvvNz dSeQbs css-cfd5wn-MuiListItem-root"
+        class="MuiListItem-root MuiListItem-gutters MuiListItem-padding sc-bdvvNz dSeQbs"
         id="id1.px"
       >
         <a
-          class="MuiButtonBase-root MuiListItemButton-root MuiListItemButton-gutters css-hpudaa-MuiButtonBase-root-MuiListItemButton-root"
+          class="MuiButtonBase-root MuiListItemButton-root MuiListItemButton-gutters"
           data-discover="true"
           href="/editor/id1.px/"
           tabindex="0"
         >
           <div
-            class="MuiListItemIcon-root css-sx7q2d-MuiListItemIcon-root"
+            class="MuiListItemIcon-root"
           >
             <svg
               aria-hidden="true"
-              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1umw9bq-MuiSvgIcon-root"
+              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium"
               data-testid="InsertDriveFileOutlinedIcon"
               focusable="false"
               viewBox="0 0 24 24"
@@ -41,15 +41,15 @@ exports[`Rendering test renders correctly 1`] = `
             </svg>
           </div>
           <div
-            class="MuiListItemText-root MuiListItemText-multiline css-14ln1j6-MuiListItemText-root"
+            class="MuiListItemText-root MuiListItemText-multiline"
           >
             <span
-              class="MuiTypography-root MuiTypography-body1 MuiListItemText-primary css-rizt0-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 MuiListItemText-primary"
             >
               foo1 (FI, EN, SV)
             </span>
             <p
-              class="MuiTypography-root MuiTypography-body2 MuiListItemText-secondary css-1a1whku-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body2 MuiListItemText-secondary"
             >
               tableSelect.updated: 1.1.2000 klo 0.00.00
             </p>
@@ -57,24 +57,24 @@ exports[`Rendering test renders correctly 1`] = `
         </a>
       </li>
       <hr
-        class="MuiDivider-root MuiDivider-fullWidth css-1jpc804-MuiDivider-root"
+        class="MuiDivider-root MuiDivider-fullWidth"
       />
       <li
-        class="MuiListItem-root MuiListItem-gutters MuiListItem-padding sc-bdvvNz dSeQbs css-cfd5wn-MuiListItem-root"
+        class="MuiListItem-root MuiListItem-gutters MuiListItem-padding sc-bdvvNz dSeQbs"
         id="id2.px"
       >
         <a
-          class="MuiButtonBase-root MuiListItemButton-root MuiListItemButton-gutters css-hpudaa-MuiButtonBase-root-MuiListItemButton-root"
+          class="MuiButtonBase-root MuiListItemButton-root MuiListItemButton-gutters"
           data-discover="true"
           href="/editor/id2.px/"
           tabindex="0"
         >
           <div
-            class="MuiListItemIcon-root css-sx7q2d-MuiListItemIcon-root"
+            class="MuiListItemIcon-root"
           >
             <svg
               aria-hidden="true"
-              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1umw9bq-MuiSvgIcon-root"
+              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium"
               data-testid="InsertDriveFileOutlinedIcon"
               focusable="false"
               viewBox="0 0 24 24"
@@ -85,15 +85,15 @@ exports[`Rendering test renders correctly 1`] = `
             </svg>
           </div>
           <div
-            class="MuiListItemText-root MuiListItemText-multiline css-14ln1j6-MuiListItemText-root"
+            class="MuiListItemText-root MuiListItemText-multiline"
           >
             <span
-              class="MuiTypography-root MuiTypography-body1 MuiListItemText-primary css-rizt0-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1 MuiListItemText-primary"
             >
               foo2 (FI, EN)
             </span>
             <p
-              class="MuiTypography-root MuiTypography-body2 MuiListItemText-secondary css-1a1whku-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body2 MuiListItemText-secondary"
             >
               tableSelect.updated: 1.1.2000 klo 0.00.00
             </p>
@@ -101,7 +101,7 @@ exports[`Rendering test renders correctly 1`] = `
         </a>
       </li>
       <hr
-        class="MuiDivider-root MuiDivider-fullWidth css-1jpc804-MuiDivider-root"
+        class="MuiDivider-root MuiDivider-fullWidth"
       />
     </nav>
   </div>

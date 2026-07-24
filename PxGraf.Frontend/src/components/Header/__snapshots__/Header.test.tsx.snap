@@ -3,13 +3,13 @@
 exports[`Header component should render correctly 1`] = `
 <DocumentFragment>
   <div
-    class="sc-iCfMpq kYnZcJ MuiBox-root css-0"
+    class="sc-iCfMpq kYnZcJ MuiBox-root"
   >
     <div
-      class="MuiStack-root sc-pVTZz pMhsB css-m69qwo-MuiStack-root"
+      class="MuiStack-root sc-pVTZz pMhsB"
     >
       <a
-        class="MuiButtonBase-root Mui-focusVisible MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-65lmr2-MuiButtonBase-root-MuiButton-root"
+        class="MuiButtonBase-root Mui-focusVisible MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary"
         href="#"
         tabindex="0"
       >
@@ -31,7 +31,7 @@ exports[`Header component should render correctly 1`] = `
         class="sc-jrQAHW gpjsns"
       >
         <button
-          class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorPrimary css-1blvszr-MuiButtonBase-root-MuiButton-root"
+          class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorPrimary"
           tabindex="0"
           type="button"
         >
@@ -39,10 +39,10 @@ exports[`Header component should render correctly 1`] = `
         </button>
       </div>
       <div
-        class="MuiStack-root sc-furwwf kSGVog css-1os650h-MuiStack-root"
+        class="MuiStack-root sc-furwwf kSGVog"
       >
         <div
-          class="MuiStack-root sc-hKwAaq gmSVhW css-7a4jik-MuiStack-root"
+          class="MuiStack-root sc-hKwAaq gmSVhW"
         >
           <button
             aria-label="tooltip.open: general.uiLanguage"
@@ -50,7 +50,7 @@ exports[`Header component should render correctly 1`] = `
           >
             <svg
               aria-hidden="true"
-              class="MuiSvgIcon-root MuiSvgIcon-colorInfo MuiSvgIcon-fontSizeMedium css-ocq0ss-MuiSvgIcon-root"
+              class="MuiSvgIcon-root MuiSvgIcon-colorInfo MuiSvgIcon-fontSizeMedium"
               data-testid="InfoIcon"
               focusable="false"
               viewBox="0 0 24 24"

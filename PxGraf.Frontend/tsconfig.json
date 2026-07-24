@@ -1,5 +1,5 @@
 {
-  "include": [ "vite.config.ts", "src/**/*" ],
+  "include": [ "jest.config.ts", "jest.setup.ts", "vite.config.mts", "src/**/*" ],
   "exclude": [ "node_modules", "build/**/*" ],
   "compilerOptions": {
     "jsx": "react",
