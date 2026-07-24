@@ -74,6 +74,16 @@ namespace PxGraf.Controllers
             };
             using (_logger.BeginScope(logScope))
             {
+                if (!InputValidation.ValidateSqIdString(sqId))
+                {
+                    _auditLogService.LogAuditEvent(
+                        action: CONTROLLER_PATH,
+                        resource: LoggerConstants.INVALID_OR_MISSING_SQID
+                        );
+
+                    return BadRequest();
+                }
+
                 _logger.LogDebug("Requested visualization.");
                 MultiStateMemoryTaskCache.CacheEntryState itemCacheState = _taskCache.TryGet(sqId, out Task<VisualizationResponse> cachedRespTask);
                 string maxAge = $"max-age={Configuration.Current.CacheOptions.CacheFreshnessCheckIntervalSeconds}";
@@ -167,6 +177,16 @@ namespace PxGraf.Controllers
             };
             using (_logger.BeginScope(logScope))
             {
+                if (!InputValidation.ValidateSqIdString(sqId))
+                {
+                    _auditLogService.LogAuditEvent(
+                        action: $"{CONTROLLER_PATH}/jsonstat2",
+                        resource: LoggerConstants.INVALID_OR_MISSING_SQID
+                        );
+
+                    return BadRequest();
+                }
+
                 if (!await _sqFileInterface.SavedQueryExists(sqId, Configuration.Current.SavedQueryDirectory))
                 {
                     _auditLogService.LogAuditEvent(

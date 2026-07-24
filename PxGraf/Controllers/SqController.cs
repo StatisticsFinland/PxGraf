@@ -76,6 +76,16 @@ namespace PxGraf.Controllers
             };
             using (_logger.BeginScope(logScope))
             {
+                if (!InputValidation.ValidateSqIdString(savedQueryId))
+                {
+                    _auditLogService.LogAuditEvent(
+                        action: CONTROLLER_PATH,
+                        resource: LoggerConstants.INVALID_OR_MISSING_SQID
+                    );
+
+                    return BadRequest();
+                }
+
                 _logger.LogDebug("Saved query requested.");
                 if (await _sqFileInterface.SavedQueryExists(savedQueryId, Configuration.Current.SavedQueryDirectory))
                 {
@@ -157,6 +167,11 @@ namespace PxGraf.Controllers
             };
             using (_logger.BeginScope(logScope))
             {
+                if (!string.IsNullOrEmpty(parameters.Id) && !InputValidation.ValidateSqIdString(parameters.Id))
+                {
+                    return BadRequest();
+                }
+
                 _logger.LogDebug("Save request received.");
                 string guid = await GetIsDraftAsync(parameters.Id) ? parameters.Id : Guid.NewGuid().ToString();
                 string fileName = $"{guid}.sq";
@@ -257,6 +272,11 @@ namespace PxGraf.Controllers
             };
             using (_logger.BeginScope(logScope))
             {
+                if (!string.IsNullOrEmpty(parameters.Id) && !InputValidation.ValidateSqIdString(parameters.Id))
+                {
+                    return BadRequest();
+                }
+
                 _logger.LogDebug("Archiving request received.");
                 string guid = await GetIsDraftAsync(parameters.Id) ? parameters.Id : Guid.NewGuid().ToString();
                 string queryFileName = $"{guid}.sq";
@@ -371,6 +391,16 @@ namespace PxGraf.Controllers
             };
             using (_logger.BeginScope(logScope))
             {
+                if (!InputValidation.ValidateSqIdString(request.SqId))
+                {
+                    _auditLogService.LogAuditEvent(
+                        action: actionPath,
+                        resource: LoggerConstants.INVALID_OR_MISSING_SQID
+                    );
+
+                    return BadRequest();
+                }
+
                 _logger.LogDebug("Re-archiving query.");
                 if (await _sqFileInterface.SavedQueryExists(request.SqId, Configuration.Current.SavedQueryDirectory))
                 {
@@ -490,7 +520,7 @@ namespace PxGraf.Controllers
         /// <returns>True if the query exists and is in draft state. Otherwise false</returns>
         private async Task<bool> GetIsDraftAsync(string id)
         {
-            if (string.IsNullOrEmpty(id))
+            if (!InputValidation.ValidateSqIdString(id))
             {
                 return false;
             }

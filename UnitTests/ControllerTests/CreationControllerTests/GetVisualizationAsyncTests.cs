@@ -275,7 +275,7 @@ namespace UnitTests.ControllerTests.CreationControllerTests
             ActionResult<JsonStat2Dataset> result = await testController.GetJsonStat2VisualizationAsync(chartRequest, null);
 
             Assert.That(result.Result, Is.InstanceOf<JsonResult>());
-            JsonResult jsonResult = result.Result as JsonResult;
+            JsonResult jsonResult = (JsonResult)result.Result!; 
             Assert.That(jsonResult.ContentType, Is.EqualTo("application/vnd.jsonstat2+json"));
             Assert.That(jsonResult.Value, Is.InstanceOf<JsonStat2Dataset>());
             JsonStat2Dataset dataset = (JsonStat2Dataset)jsonResult.Value;

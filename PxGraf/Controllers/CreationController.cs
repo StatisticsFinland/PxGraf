@@ -116,6 +116,11 @@ namespace PxGraf.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<IReadOnlyMatrixMetadata>> GetCubeMetaAsync([FromRoute] string tablePath)
         {
+            if (!TryCreateTableReference(tablePath, out PxTableReference tableReference))
+            {
+                return BadRequest();
+            }
+
             using(_logger.BeginScope(new Dictionary<string, object> {
                 [LoggerConstants.CONTROLLER] = nameof(CreationController),
                 [LoggerConstants.ACTION] = "api/creation/cube-meta",
@@ -123,7 +128,6 @@ namespace PxGraf.Controllers
             {
                 _logger.LogDebug("Cube meta requested. GET: api/creation/cube-meta");
 
-                PxTableReference tableReference = new(tablePath, '/');
                 using (_logger.BeginScope(new Dictionary<string, object> { [LoggerConstants.DB_PATH] = tableReference.ToPath()}))
                 {
                     if (!PathUtils.IsDatabaseWhitelisted(tableReference.Hierarchy, databaseWhitelist))
@@ -163,6 +167,11 @@ namespace PxGraf.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<TableMetaValidationResult>> ValidateTableMetaData([FromRoute] string tablePath)
         {
+            if (!TryCreateTableReference(tablePath, out PxTableReference tableReference))
+            {
+                return BadRequest();
+            }
+
             using (_logger.BeginScope(new Dictionary<string, object>
             {
                 [LoggerConstants.CONTROLLER] = nameof(CreationController),
@@ -171,7 +180,6 @@ namespace PxGraf.Controllers
             {
                 _logger.LogDebug("Table metadata validation requested. GET: api/creation/validate-table-metadata");
 
-                PxTableReference tableReference = new(tablePath, '/');
                 using (_logger.BeginScope(new Dictionary<string, object> { [LoggerConstants.DB_PATH] = tableReference.ToPath() }))
                 {
                     _auditLogService.LogAuditEvent(
@@ -210,21 +218,26 @@ namespace PxGraf.Controllers
         [ProducesResponseType<Dictionary<string, List<string>>>(StatusCodes.Status200OK)]
         public async Task<ActionResult<Dictionary<string, List<string>>>> GetDimensionFilterResultAsync([FromBody] FilterRequest filterRequest)
         {
+            if (!TryCreateTableReference(filterRequest.TableReference.ToPath(), out PxTableReference tableReference))
+            {
+                return BadRequest();
+            }
+
             using (_logger.BeginScope(new Dictionary<string, object>
             {
                 [LoggerConstants.CONTROLLER] = nameof(CreationController),
                 [LoggerConstants.ACTION] = "api/creation/filter-dimension",
-                [LoggerConstants.DB_PATH] = filterRequest.TableReference.ToPath()
+                [LoggerConstants.DB_PATH] = tableReference.ToPath()
             }))
             {
                 _logger.LogDebug("Dimension filtering requested. POST: api/creation/filter-dimension");
 
                 _auditLogService.LogAuditEvent(
                     action: "api/creation/filter-dimension",
-                    resource: filterRequest.TableReference.ToPath()
+                    resource: tableReference.ToPath()
                 );
 
-                IReadOnlyMatrixMetadata tableMeta = await _datasource.GetMatrixMetadataCachedAsync(filterRequest.TableReference);
+                IReadOnlyMatrixMetadata tableMeta = await _datasource.GetMatrixMetadataCachedAsync(tableReference);
 
                 Dictionary<string, List<string>> result = filterRequest.Filters.ToDictionary(
                     filter => filter.Key,
@@ -262,18 +275,23 @@ namespace PxGraf.Controllers
         [ProducesResponseType<EditorContentsResponse>(StatusCodes.Status200OK)]
         public async Task<ActionResult<EditorContentsResponse>> GetEditorContents([FromBody] MatrixQuery query)
         {
+            if (!TryCreateTableReference(query.TableReference.ToPath(), out PxTableReference tableReference))
+            {
+                return BadRequest();
+            }
+
             using (_logger.BeginScope(new Dictionary<string, object>
             {
                 [LoggerConstants.CONTROLLER] = nameof(CreationController),
                 [LoggerConstants.ACTION] = "api/creation/editor-contents",
-                [LoggerConstants.DB_PATH] = query.TableReference.ToPath()
+                [LoggerConstants.DB_PATH] = tableReference.ToPath()
             }))
             {
                 _logger.LogDebug("Editor contents requested. POST: api/creation/editor-contents");
 
                 _auditLogService.LogAuditEvent(
                     action: "api/creation/editor-contents",
-                    resource: query.TableReference.ToPath()
+                    resource: tableReference.ToPath()
                 );
 
                 int maxQuerySize = Configuration.Current.QueryOptions.MaxQuerySize;
@@ -284,7 +302,7 @@ namespace PxGraf.Controllers
                     return EditorContentsResponse.Empty;
                 }
 
-                IReadOnlyMatrixMetadata tableMeta = await _datasource.GetMatrixMetadataCachedAsync(query.TableReference);
+                IReadOnlyMatrixMetadata tableMeta = await _datasource.GetMatrixMetadataCachedAsync(tableReference);
 
                 (IReadOnlyMatrixMetadata fetchMeta, MatrixMap outputMap) = tableMeta.BuildVirtualValueMaps(query);
                 long outputMapSize = outputMap.GetSize();
@@ -369,16 +387,21 @@ namespace PxGraf.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<VisualizationResponse>> GetVisualizationAsync([FromBody] ChartRequest request)
         {
+            if (!TryCreateTableReference(request.Query.TableReference.ToPath(), out PxTableReference tableReference))
+            {
+                return BadRequest();
+            }
+
             using (_logger.BeginScope(new Dictionary<string, object>
             {
                 [LoggerConstants.CONTROLLER] = nameof(CreationController),
                 [LoggerConstants.ACTION] = "api/creation/visualization",
-                [LoggerConstants.DB_PATH] = request.Query.TableReference.ToPath()
+                [LoggerConstants.DB_PATH] = tableReference.ToPath()
             }))
             {
                 _auditLogService.LogAuditEvent(
                     action: "api/creation/visualization",
-                    resource: request.Query.TableReference.ToPath()
+                    resource: tableReference.ToPath()
                 );
 
                 _logger.LogDebug("Requesting visualization. POST: api/creation/visualization");
@@ -421,16 +444,21 @@ namespace PxGraf.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<JsonStat2Dataset>> GetJsonStat2VisualizationAsync([FromBody] ChartRequest request, [FromQuery] string lang)
         {
+            if (!TryCreateTableReference(request.Query.TableReference.ToPath(), out PxTableReference tableReference))
+            {
+                return BadRequest();
+            }
+
             using (_logger.BeginScope(new Dictionary<string, object>
             {
                 [LoggerConstants.CONTROLLER] = nameof(CreationController),
                 [LoggerConstants.ACTION] = "api/creation/visualization/jsonstat2",
-                [LoggerConstants.DB_PATH] = request.Query.TableReference.ToPath()
+                [LoggerConstants.DB_PATH] = tableReference.ToPath()
             }))
             {
                 _auditLogService.LogAuditEvent(
                     action: "api/creation/visualization/jsonstat2",
-                    resource: request.Query.TableReference.ToPath()
+                    resource: tableReference.ToPath()
                 );
 
                 _logger.LogDebug("Requesting JSON-stat visualization. POST: api/creation/visualization/jsonstat2");
@@ -484,6 +512,20 @@ namespace PxGraf.Controllers
             }
 
             return matrix.GetTransform(outputMap);
+        }
+
+        private static bool TryCreateTableReference(string tablePath, out PxTableReference tableReference)
+        {
+            try
+            {
+                tableReference = new PxTableReference(tablePath, '/');
+                return true;
+            }
+            catch (ArgumentException)
+            {
+                tableReference = null;
+                return false;
+            }
         }
 
         private static VisualizationOption GetVisualizationOption(VisualizationType type, IReadOnlyMatrixMetadata meta, MatrixQuery query)

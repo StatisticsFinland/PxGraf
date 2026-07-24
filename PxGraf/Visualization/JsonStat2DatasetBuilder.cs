@@ -98,7 +98,7 @@ namespace PxGraf.Visualization
                 Geo = geoRoles.Count > 0 ? geoRoles : null
             };
 
-            string label = GetRequiredLocalizedMetaProperty(metadata.AdditionalProperties, PxSyntaxConstants.DESCRIPTION_KEY, language, "dataset description");
+            string label = TryGetOptionalLocalizedMetaProperty(metadata.AdditionalProperties, PxSyntaxConstants.DESCRIPTION_KEY, language) ?? string.Empty;
             string source = ResolveSource(metadata, language);
             IReadOnlyList<string>? note = TryGetOptionalLocalizedMetaProperty(metadata.AdditionalProperties, PxSyntaxConstants.NOTE_KEY, language) is string datasetNote
                 ? [datasetNote]

@@ -187,6 +187,30 @@ namespace UnitTests.ControllerTests.SqControllerTests
         }
 
         [Test]
+        public async Task GetSavedQueryAsyncTest_MalformedQueryId_ReturnsBadRequestBeforeCacheLookup()
+        {
+            // Arrange
+            Mock<ICachedDatasource> mockCachedDatasource = new();
+            Mock<ISqFileInterface> mockSqFileInterface = new();
+            Mock<ILogger<SqController>> mockLogger = new();
+            Mock<IAuditLogService> mockAuditLogService = new();
+            Mock<IPublicationWebhookService> mockWebhookService = new();
+
+            Mock<IVirtualValueValidationService> mockVirtualValueValidationService = new();
+            Mock<IVirtualValueComputationService> mockVirtualValueComputationService = new();
+            SqController metaController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, mockLogger.Object, mockAuditLogService.Object, mockWebhookService.Object, mockVirtualValueValidationService.Object, mockVirtualValueComputationService.Object);
+
+            // Act
+            ActionResult<SaveQueryParams> actionResult = await metaController.GetSavedQueryAsync("invalid/id");
+
+            // Assert
+            Assert.That(actionResult.Result, Is.InstanceOf<BadRequestResult>());
+            mockCachedDatasource.Verify(x => x.GetMatrixMetadataCachedAsync(It.IsAny<PxTableReference>()), Times.Never());
+            mockCachedDatasource.Verify(x => x.GetMatrixCachedAsync(It.IsAny<PxTableReference>(), It.IsAny<IReadOnlyMatrixMetadata>()), Times.Never());
+            mockSqFileInterface.Verify(x => x.SavedQueryExists(It.IsAny<string>(), It.IsAny<string>()), Times.Never());
+        }
+
+        [Test]
         public async Task GetSavedQueryAsyncTest_CalledWithZeroSizedDimension_ThrowsBadRequest()
         {
             // Arrange

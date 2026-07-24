@@ -420,7 +420,7 @@ namespace UnitTests.ControllerTests.VisualizationControllerTests
             ActionResult<JsonStat2Dataset> result = await controller.GetJsonStat2VisualizationAsync(testQueryId, null);
 
             Assert.That(result.Result, Is.InstanceOf<JsonResult>());
-            JsonResult jsonResult = result.Result as JsonResult;
+            JsonResult jsonResult = (JsonResult)result.Result!;
             Assert.That(jsonResult.ContentType, Is.EqualTo("application/vnd.jsonstat2+json"));
             Assert.That(jsonResult.Value, Is.InstanceOf<JsonStat2Dataset>());
             JsonStat2Dataset dataset = (JsonStat2Dataset)jsonResult.Value;
@@ -448,6 +448,23 @@ namespace UnitTests.ControllerTests.VisualizationControllerTests
             ActionResult<JsonStat2Dataset> result = await controller.GetJsonStat2VisualizationAsync(testQueryId, "de");
 
             Assert.That(result.Result, Is.InstanceOf<BadRequestResult>());
+        }
+
+        [Test]
+        public async Task GetVisualization_WithInvalidSavedQueryId_ReturnsBadRequestBeforeCacheLookup()
+        {
+            VisualizationController controller = BuildController(
+                [],
+                [],
+                "valid-id",
+                MultiStateMemoryTaskCache.CacheEntryState.Null);
+
+            ActionResult<VisualizationResponse> result = await controller.GetVisualization("invalid/id");
+
+            Assert.That(result.Result, Is.InstanceOf<BadRequestResult>());
+            _mockTaskCache.Verify(x => x.TryGet(It.IsAny<string>(), out It.Ref<Task<VisualizationResponse>>.IsAny), Times.Never());
+            _mockCachedDatasource.Verify(x => x.GetMatrixMetadataCachedAsync(It.IsAny<PxTableReference>()), Times.Never());
+            _mockSqFileInterface.Verify(x => x.SavedQueryExists(It.IsAny<string>(), It.IsAny<string>()), Times.Never());
         }
 
         [Test]
