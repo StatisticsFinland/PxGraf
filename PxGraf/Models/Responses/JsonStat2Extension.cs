@@ -9,7 +9,6 @@ namespace PxGraf.Models.Responses
         public IReadOnlyDictionary<string, string> MissingValueDescriptions { get; set; }
 
         [JsonPropertyName("visualizationSettings")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public VisualizationResponse.PxVisualizerSettings VisualizationSettings { get; set; }
     }
 }
