@@ -86,11 +86,11 @@ namespace PxGraf.Datasource.ApiDatasource.SerializationModels
                 {
                     [JsonPropertyName("base")]
                     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-                    public string Base { get; set; }
+                    public string? Base { get; set; }
 
                     [JsonPropertyName("label")]
                     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-                    public string Label { get; set; }
+                    public string? Label { get; set; }
 
                     [JsonPropertyName("decimals")]
                     public int Decimals { get; set; }

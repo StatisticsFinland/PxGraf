@@ -139,7 +139,7 @@ namespace PxGraf.Visualization
                 index[code] = valueIndex;
                 labels[code] = GetRequiredLocalizedText(value.Name, language, $"category label for '{code}'");
 
-                if (TryGetLocalizedMetaProperty(value.AdditionalProperties, PxSyntaxConstants.VALUENOTE_KEY, language, out string? note))
+                if (TryGetLocalizedMetaProperty(value.AdditionalProperties, PxSyntaxConstants.VALUENOTE_KEY, language, out string note))
                 {
                     notes[code] = [note];
                 }
@@ -312,7 +312,7 @@ namespace PxGraf.Visualization
 
         private static string GetRequiredLocalizedText(MultilanguageString value, string language, string fieldName)
         {
-            string? localized = TryGetLocalizedText(value, language);
+            string localized = TryGetLocalizedText(value, language);
             if (string.IsNullOrWhiteSpace(localized))
             {
                 throw new InvalidOperationException($"Missing required localized {fieldName} for language '{language}'.");
@@ -326,9 +326,9 @@ namespace PxGraf.Visualization
             return TryGetLocalizedMetaProperty(properties, key, language, out string? value) ? value : null;
         }
 
-        private static bool TryGetLocalizedMetaProperty(IReadOnlyDictionary<string, MetaProperty> properties, string key, string language, out string? value)
+        private static bool TryGetLocalizedMetaProperty(IReadOnlyDictionary<string, MetaProperty> properties, string key, string language, out string value)
         {
-            value = null;
+            value = string.Empty;
             if (!properties.TryGetValue(key, out MetaProperty? property))
             {
                 return false;
@@ -345,11 +345,11 @@ namespace PxGraf.Visualization
             return !string.IsNullOrWhiteSpace(value);
         }
 
-        private static string? TryGetLocalizedText(MultilanguageString? value, string language)
+        private static string TryGetLocalizedText(MultilanguageString? value, string language)
         {
             if (value is null || !value.Languages.Contains(language))
             {
-                return null;
+                return string.Empty;
             }
 
             return value[language];
