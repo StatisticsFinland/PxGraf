@@ -38,7 +38,7 @@ namespace PxGraf.Controllers
     /// Default constructor.
     /// </remarks>
     [ApiController]
-    [Route("api/sq/visualization")]
+    [Route("api/sq")]
     public class VisualizationController(ISqFileInterface sqFileInterface, IMultiStateMemoryTaskCache taskCache, ICachedDatasource cachedDatasource, ILogger<VisualizationController> logger, IAuditLogService auditLogService, IVirtualValueComputationService virtualValueComputationService) : ControllerBase
     {
         private readonly ICachedDatasource _cachedDatasource = cachedDatasource;
@@ -52,7 +52,8 @@ namespace PxGraf.Controllers
         private static readonly TimeSpan AbsoluteExpiration = TimeSpan.FromMinutes(CacheValues.AbsoluteExpirationMinutes);
         private static readonly TimeSpan SlidingExpiration = TimeSpan.FromMinutes(CacheValues.SlidingExpirationMinutes);
 
-        private const string CONTROLLER_PATH = "api/sq/visualization";
+        private const string VISUALIZATION_ENDPOINT_PATH = "api/sq/visualization";
+        private const string JSONSTAT_VISUALIZATION_ENDPOINT_PATH = "api/sq/jsonstat/visualization";
 
         #region ACTIONS
 
@@ -61,7 +62,7 @@ namespace PxGraf.Controllers
         /// </summary>
         /// <param name="sqId">The id of the saved query</param>
         /// <returns><see cref="VisualizationResponse"/> object containing the properties of the visualization</returns>
-        [HttpGet("{sqId}")]
+        [HttpGet("visualization/{sqId}")]
         [ProducesResponseType<VisualizationResponse>(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -70,14 +71,14 @@ namespace PxGraf.Controllers
             Dictionary<string, object> logScope = new()
             {
                 [LoggerConstants.CONTROLLER] = nameof(VisualizationController),
-                [LoggerConstants.ACTION] = CONTROLLER_PATH
+                [LoggerConstants.ACTION] = VISUALIZATION_ENDPOINT_PATH
             };
             using (_logger.BeginScope(logScope))
             {
                 if (!InputValidation.ValidateSqIdString(sqId))
                 {
                     _auditLogService.LogAuditEvent(
-                        action: CONTROLLER_PATH,
+                        action: VISUALIZATION_ENDPOINT_PATH,
                         resource: LoggerConstants.INVALID_OR_MISSING_SQID
                         );
 
@@ -91,7 +92,7 @@ namespace PxGraf.Controllers
                 if(itemCacheState != MultiStateMemoryTaskCache.CacheEntryState.Null)
                 {
                     _auditLogService.LogAuditEvent(
-                        action: CONTROLLER_PATH,
+                        action: VISUALIZATION_ENDPOINT_PATH,
                         resource: sqId
                         );
                 }
@@ -124,7 +125,7 @@ namespace PxGraf.Controllers
                 if (await _sqFileInterface.SavedQueryExists(sqId, Configuration.Current.SavedQueryDirectory))
                 {
                     _auditLogService.LogAuditEvent(
-                        action: CONTROLLER_PATH,
+                        action: VISUALIZATION_ENDPOINT_PATH,
                         resource: sqId
                         );
 
@@ -148,7 +149,7 @@ namespace PxGraf.Controllers
                 else
                 {
                     _auditLogService.LogAuditEvent(
-                        action: CONTROLLER_PATH,
+                        action: VISUALIZATION_ENDPOINT_PATH,
                         resource: LoggerConstants.INVALID_OR_MISSING_SQID
                         );
 
@@ -164,7 +165,7 @@ namespace PxGraf.Controllers
         /// <param name="sqId">The id of the saved query.</param>
         /// <param name="lang">Optional language for localized JSON-stat fields. When omitted, defaults to the table's default language. An explicit unsupported language returns 400.</param>
         /// <returns>A single-language JSON-stat 2.0 dataset.</returns>
-        [HttpGet("jsonstat2/{sqId}")]
+        [HttpGet("jsonstat/visualization/{sqId}")]
         [ProducesResponseType<JsonStat2>(StatusCodes.Status200OK, "application/vnd.jsonstat2+json")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -173,14 +174,14 @@ namespace PxGraf.Controllers
             Dictionary<string, object> logScope = new()
             {
                 [LoggerConstants.CONTROLLER] = nameof(VisualizationController),
-                [LoggerConstants.ACTION] = $"{CONTROLLER_PATH}/jsonstat2"
+                [LoggerConstants.ACTION] = JSONSTAT_VISUALIZATION_ENDPOINT_PATH
             };
             using (_logger.BeginScope(logScope))
             {
                 if (!InputValidation.ValidateSqIdString(sqId))
                 {
                     _auditLogService.LogAuditEvent(
-                        action: $"{CONTROLLER_PATH}/jsonstat2",
+                        action: JSONSTAT_VISUALIZATION_ENDPOINT_PATH,
                         resource: LoggerConstants.INVALID_OR_MISSING_SQID
                         );
 
@@ -190,7 +191,7 @@ namespace PxGraf.Controllers
                 if (!await _sqFileInterface.SavedQueryExists(sqId, Configuration.Current.SavedQueryDirectory))
                 {
                     _auditLogService.LogAuditEvent(
-                        action: $"{CONTROLLER_PATH}/jsonstat2",
+                        action: JSONSTAT_VISUALIZATION_ENDPOINT_PATH,
                         resource: LoggerConstants.INVALID_OR_MISSING_SQID
                         );
 
@@ -199,7 +200,7 @@ namespace PxGraf.Controllers
                 }
 
                 _auditLogService.LogAuditEvent(
-                    action: $"{CONTROLLER_PATH}/jsonstat2",
+                    action: JSONSTAT_VISUALIZATION_ENDPOINT_PATH,
                     resource: sqId
                     );
 

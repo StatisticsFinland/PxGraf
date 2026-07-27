@@ -13,6 +13,7 @@ using PxGraf.Models.Responses;
 using PxGraf.Settings;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using UnitTests.Fixtures;
 
@@ -237,6 +238,16 @@ namespace UnitTests.ControllerTests.CreationControllerTests
 
             // Assert
             Assert.That(result.Result, Is.TypeOf<BadRequestResult>());
+        }
+
+        [Test]
+        public void GetJsonStat2VisualizationAsync_UsesJsonStatVisualizationRoute()
+        {
+            HttpPostAttribute route = typeof(CreationController)
+                .GetMethod(nameof(CreationController.GetJsonStat2VisualizationAsync))!
+                .GetCustomAttribute<HttpPostAttribute>()!;
+
+            Assert.That(route.Template, Is.EqualTo("jsonstat/visualization"));
         }
 
         [Test]

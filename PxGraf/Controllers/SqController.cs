@@ -186,18 +186,10 @@ namespace PxGraf.Controllers
                     IReadOnlyMatrixMetadata tableMeta = await _cachedDatasource.GetMatrixMetadataCachedAsync(parameters.Query.TableReference);
 
                     // Validate virtual value definitions before saving
-                    foreach (KeyValuePair<string, DimensionQuery> dimEntry in parameters.Query.DimensionQueries)
+                    if (!TryValidateVirtualValueDefinitions(tableMeta, parameters.Query, out string dimensionCode, out string? validationError))
                     {
-                        if (dimEntry.Value.VirtualValueDefinitions?.Count > 0)
-                        {
-                            IReadOnlyDimension dimension = tableMeta.Dimensions.First(d => d.Code == dimEntry.Key);
-                            List<string> realValueCodes = [.. dimension.Values.Select(v => v.Code)];
-                            if (!_virtualValueValidationService.Validate(dimEntry.Value.VirtualValueDefinitions, realValueCodes, out string? validationError))
-                            {
-                                _logger.LogWarning("Virtual value validation failed for dimension {DimCode}.", dimEntry.Key);
-                                return BadRequest(new { error = validationError });
-                            }
-                        }
+                        _logger.LogWarning("Virtual value validation failed for dimension {DimCode}.", dimensionCode);
+                        return BadRequest(new { error = validationError });
                     }
 
                     (IReadOnlyMatrixMetadata fetchMeta, MatrixMap outputMap) = tableMeta.BuildVirtualValueMaps(parameters.Query);
@@ -290,18 +282,10 @@ namespace PxGraf.Controllers
                     IReadOnlyMatrixMetadata meta = await _cachedDatasource.GetMatrixMetadataCachedAsync(parameters.Query.TableReference);
 
                     // Validate virtual value definitions BEFORE writing any files
-                    foreach (KeyValuePair<string, DimensionQuery> dimEntry in parameters.Query.DimensionQueries)
+                    if (!TryValidateVirtualValueDefinitions(meta, parameters.Query, out string dimensionCode, out string? error))
                     {
-                        if (dimEntry.Value.VirtualValueDefinitions?.Count > 0)
-                        {
-                            IReadOnlyDimension dimension = meta.Dimensions.First(d => d.Code == dimEntry.Key);
-                            List<string> realValueCodes = [.. dimension.Values.Select(v => v.Code)];
-                            if (!_virtualValueValidationService.Validate(dimEntry.Value.VirtualValueDefinitions, realValueCodes, out string? error))
-                            {
-                                _logger.LogWarning("Virtual value validation failed for dimension {DimCode}.", dimEntry.Key);
-                                return BadRequest(new { error });
-                            }
-                        }
+                        _logger.LogWarning("Virtual value validation failed for dimension {DimCode}.", dimensionCode);
+                        return BadRequest(new { error });
                     }
 
                     var (fetchMeta, outputMap) = meta.BuildVirtualValueMaps(parameters.Query);
@@ -510,6 +494,27 @@ namespace PxGraf.Controllers
                 return false;
             }
 
+            return true;
+        }
+
+        private bool TryValidateVirtualValueDefinitions(IReadOnlyMatrixMetadata meta, MatrixQuery query, out string dimensionCode, out string? validationError)
+        {
+            foreach (KeyValuePair<string, DimensionQuery> dimEntry in query.DimensionQueries)
+            {
+                if (dimEntry.Value.VirtualValueDefinitions?.Count > 0)
+                {
+                    IReadOnlyDimension dimension = meta.Dimensions.First(d => d.Code == dimEntry.Key);
+                    List<string> realValueCodes = [.. dimension.Values.Select(v => v.Code)];
+                    if (!_virtualValueValidationService.Validate(dimEntry.Value.VirtualValueDefinitions, realValueCodes, out validationError))
+                    {
+                        dimensionCode = dimEntry.Key;
+                        return false;
+                    }
+                }
+            }
+
+            dimensionCode = string.Empty;
+            validationError = null;
             return true;
         }
 

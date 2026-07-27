@@ -18,6 +18,7 @@ using PxGraf.Services;
 using PxGraf.Settings;
 using PxGraf.Utility;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Threading.Tasks;
 using UnitTests.Fixtures;
 
@@ -119,6 +120,26 @@ namespace UnitTests.ControllerTests.VisualizationControllerTests
             };
 
             return controller;
+        }
+
+        [Test]
+        public void VisualizationController_UsesCollisionFreeRoutes()
+        {
+            RouteAttribute controllerRoute = typeof(VisualizationController)
+                .GetCustomAttribute<RouteAttribute>()!;
+            HttpGetAttribute visualizationRoute = typeof(VisualizationController)
+                .GetMethod(nameof(VisualizationController.GetVisualization))!
+                .GetCustomAttribute<HttpGetAttribute>()!;
+            HttpGetAttribute jsonStatRoute = typeof(VisualizationController)
+                .GetMethod(nameof(VisualizationController.GetJsonStat2VisualizationAsync))!
+                .GetCustomAttribute<HttpGetAttribute>()!;
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(controllerRoute.Template, Is.EqualTo("api/sq"));
+                Assert.That(visualizationRoute.Template, Is.EqualTo("visualization/{sqId}"));
+                Assert.That(jsonStatRoute.Template, Is.EqualTo("jsonstat/visualization/{sqId}"));
+            });
         }
 
         [Test]

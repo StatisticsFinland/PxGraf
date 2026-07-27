@@ -276,7 +276,7 @@ namespace PxGraf.Controllers
         [ProducesResponseType<EditorContentsResponse>(StatusCodes.Status200OK)]
         public async Task<ActionResult<EditorContentsResponse>> GetEditorContents([FromBody] MatrixQuery query)
         {
-            if (!TryCreateTableReference(query.TableReference.ToPath(), out PxTableReference tableReference))
+            if (!TryCreateTableReference(query.TableReference.ToPath(), out PxTableReference? tableReference))
             {
                 return BadRequest();
             }
@@ -285,7 +285,7 @@ namespace PxGraf.Controllers
             {
                 [LoggerConstants.CONTROLLER] = nameof(CreationController),
                 [LoggerConstants.ACTION] = "api/creation/editor-contents",
-                [LoggerConstants.DB_PATH] = tableReference.ToPath()
+                [LoggerConstants.DB_PATH] = tableReference!.ToPath()
             }))
             {
                 _logger.LogDebug("Editor contents requested. POST: api/creation/editor-contents");
@@ -440,7 +440,7 @@ namespace PxGraf.Controllers
         /// <param name="request"><see cref="ChartRequest"/> containing the query and visualization settings.</param>
         /// <param name="lang">Optional language for localized JSON-stat fields. When omitted, defaults to the table's default language. An explicit unsupported language returns 400.</param>
         /// <returns>A JSON-stat 2.0 dataset.</returns>
-        [HttpPost("visualization/jsonstat2")]
+        [HttpPost("jsonstat/visualization")]
         [ProducesResponseType<JsonStat2>(StatusCodes.Status200OK, "application/vnd.jsonstat2+json")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<JsonStat2>> GetJsonStat2VisualizationAsync([FromBody] ChartRequest request, [FromQuery] string lang)
@@ -453,16 +453,16 @@ namespace PxGraf.Controllers
             using (_logger.BeginScope(new Dictionary<string, object>
             {
                 [LoggerConstants.CONTROLLER] = nameof(CreationController),
-                [LoggerConstants.ACTION] = "api/creation/visualization/jsonstat2",
+                [LoggerConstants.ACTION] = "api/creation/jsonstat/visualization",
                 [LoggerConstants.DB_PATH] = tableReference.ToPath()
             }))
             {
                 _auditLogService.LogAuditEvent(
-                    action: "api/creation/visualization/jsonstat2",
+                    action: "api/creation/jsonstat/visualization",
                     resource: tableReference.ToPath()
                 );
 
-                _logger.LogDebug("Requesting JSON-stat visualization. POST: api/creation/visualization/jsonstat2");
+                _logger.LogDebug("Requesting JSON-stat visualization. POST: api/creation/jsonstat/visualization");
                 try
                 {
                     Matrix<DecimalDataValue> matrix = await BuildVisualizationMatrixAsync(request);
