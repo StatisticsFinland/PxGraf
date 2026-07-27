@@ -3,68 +3,68 @@
 exports[`Rendering test renders correctly 1`] = `
 <DocumentFragment>
   <div
-    class="MuiContainer-root MuiContainer-maxWidthMd sc-hKwAaq eGrxqC css-u4uvlt-MuiContainer-root"
+    class="MuiContainer-root MuiContainer-maxWidthMd sc-hKwAaq eGrxqC"
   >
     <ul
-      class="MuiList-root MuiList-padding css-nqrrgh-MuiList-root"
+      class="MuiList-root MuiList-padding"
     >
       <a
-        class="MuiButtonBase-root MuiListItemButton-root MuiListItemButton-gutters css-4bx69l-MuiButtonBase-root-MuiListItemButton-root"
+        class="MuiButtonBase-root MuiListItemButton-root MuiListItemButton-gutters"
         data-discover="true"
         href="/table-list/foo/bar/id1/"
         tabindex="0"
       >
         <div
-          class="MuiListItemText-root css-cfq8qh-MuiListItemText-root"
+          class="MuiListItemText-root"
         >
           <p
-            class="MuiTypography-root MuiTypography-body1 css-5arffz-MuiTypography-root"
+            class="MuiTypography-root MuiTypography-body1"
           >
             foo1-fi
           </p>
         </div>
       </a>
       <hr
-        class="MuiDivider-root MuiDivider-fullWidth css-1jpc804-MuiDivider-root"
+        class="MuiDivider-root MuiDivider-fullWidth"
       />
       <a
-        class="MuiButtonBase-root MuiListItemButton-root MuiListItemButton-gutters css-4bx69l-MuiButtonBase-root-MuiListItemButton-root"
+        class="MuiButtonBase-root MuiListItemButton-root MuiListItemButton-gutters"
         data-discover="true"
         href="/table-list/foo/bar/id2/"
         tabindex="0"
       >
         <div
-          class="MuiListItemText-root css-cfq8qh-MuiListItemText-root"
+          class="MuiListItemText-root"
         >
           <p
-            class="MuiTypography-root MuiTypography-body1 css-5arffz-MuiTypography-root"
+            class="MuiTypography-root MuiTypography-body1"
           >
             foo2-fi
           </p>
         </div>
       </a>
       <hr
-        class="MuiDivider-root MuiDivider-fullWidth css-1jpc804-MuiDivider-root"
+        class="MuiDivider-root MuiDivider-fullWidth"
       />
       <a
-        class="MuiButtonBase-root MuiListItemButton-root MuiListItemButton-gutters css-4bx69l-MuiButtonBase-root-MuiListItemButton-root"
+        class="MuiButtonBase-root MuiListItemButton-root MuiListItemButton-gutters"
         data-discover="true"
         href="/editor/foo/bar/id2.px/"
         tabindex="0"
       >
         <div
-          class="MuiListItemText-root css-cfq8qh-MuiListItemText-root"
+          class="MuiListItemText-root"
         >
           <span
-            class="MuiTypography-root MuiTypography-body1 MuiListItemText-primary css-rizt0-MuiTypography-root"
+            class="MuiTypography-root MuiTypography-body1 MuiListItemText-primary"
           >
             <p
-              class="MuiTypography-root MuiTypography-body1 css-5arffz-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body1"
             >
               foo3-fi
             </p>
             <p
-              class="MuiTypography-root MuiTypography-body2 css-9f49mr-MuiTypography-root"
+              class="MuiTypography-root MuiTypography-body2"
             >
               tableSelect.updated: 1.1.2000 klo 0.00.00
             </p>
@@ -72,7 +72,7 @@ exports[`Rendering test renders correctly 1`] = `
         </div>
       </a>
       <hr
-        class="MuiDivider-root MuiDivider-fullWidth css-1jpc804-MuiDivider-root"
+        class="MuiDivider-root MuiDivider-fullWidth"
       />
     </ul>
   </div>

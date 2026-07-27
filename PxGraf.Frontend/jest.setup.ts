@@ -1,7 +1,13 @@
+/// <reference types="node" />
+/// <reference types="jest" />
+
 import { TextEncoder, TextDecoder } from 'node:util';
 import { ReadableStream, TransformStream, WritableStream } from 'node:stream/web';
 import { MessageChannel, MessagePort } from 'node:worker_threads';
 import { serialize, deserialize } from 'node:v8';
+import muiSnapshotSerializer from './src/testUtils/muiSnapshotSerializer';
+
+expect.addSnapshotSerializer(muiSnapshotSerializer);
 
 globalThis.TextEncoder = TextEncoder;
 globalThis.TextDecoder = TextDecoder;

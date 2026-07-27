@@ -11,19 +11,19 @@ exports[`Rendering test renders children when no error occurs 1`] = `
 exports[`Rendering test renders error fallback when child throws 1`] = `
 <DocumentFragment>
   <div
-    class="MuiBox-root css-2vmi3c"
+    class="MuiBox-root"
   >
     <div
-      class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation0 MuiAlert-root MuiAlert-colorError MuiAlert-standardError MuiAlert-standard css-pwyt4n-MuiPaper-root-MuiAlert-root"
+      class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation0 MuiAlert-root MuiAlert-colorError MuiAlert-standardError MuiAlert-standard"
       role="alert"
       style="--Paper-shadow: none;"
     >
       <div
-        class="MuiAlert-icon css-vab54s-MuiAlert-icon"
+        class="MuiAlert-icon"
       >
         <svg
           aria-hidden="true"
-          class="MuiSvgIcon-root MuiSvgIcon-fontSizeInherit css-1ckov0h-MuiSvgIcon-root"
+          class="MuiSvgIcon-root MuiSvgIcon-fontSizeInherit"
           data-testid="ErrorOutlineIcon"
           focusable="false"
           viewBox="0 0 24 24"
@@ -34,19 +34,19 @@ exports[`Rendering test renders error fallback when child throws 1`] = `
         </svg>
       </div>
       <div
-        class="MuiAlert-message css-zioonp-MuiAlert-message"
+        class="MuiAlert-message"
       >
         <div
-          class="MuiTypography-root MuiTypography-body1 MuiTypography-gutterBottom MuiAlertTitle-root css-5ick94-MuiTypography-root-MuiAlertTitle-root"
+          class="MuiTypography-root MuiTypography-body1 MuiTypography-gutterBottom MuiAlertTitle-root"
         >
           error.boundaryTitle
         </div>
         error.boundaryMessage
         <div
-          class="MuiBox-root css-1yuhvjn"
+          class="MuiBox-root"
         >
           <button
-            class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary css-74d805-MuiButtonBase-root-MuiButton-root"
+            class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary"
             tabindex="0"
             type="button"
           >

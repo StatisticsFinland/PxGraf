@@ -3,10 +3,10 @@
 exports[`Rendering test renders correctly 1`] = `
 <DocumentFragment>
   <div
-  class="sc-dkPvMp dkVbSp MuiBox-root css-0"
+  class="sc-dkPvMp dkVbSp MuiBox-root"
 >
   <div
-    class="MuiStack-root css-pl8gqh-MuiStack-root"
+    class="MuiStack-root"
   />
   <div
     class="sc-gsDLFA jiUUCE tk-table"

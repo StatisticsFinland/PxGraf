@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`muiSnapshotSerializer removes Emotion hashes while preserving meaningful classes 1`] = `
+<DocumentFragment>
+  <div
+    class="app-wrapper"
+  >
+    <button
+      class="MuiButtonBase-root MuiButton-root Mui-disabled MuiButton-root"
+    >
+      Save
+    </button>
+    <span>
+      Label
+    </span>
+  </div>
+</DocumentFragment>
+`;

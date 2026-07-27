@@ -3,21 +3,21 @@
 exports[`Rendering test renders correctly 1`] = `
 <DocumentFragment>
   <li
-    class="MuiListItem-root MuiListItem-gutters MuiListItem-padding sc-bdvvNz dSeQbs css-cfd5wn-MuiListItem-root"
+    class="MuiListItem-root MuiListItem-gutters MuiListItem-padding sc-bdvvNz dSeQbs"
     id="foo-bar-baz"
   >
     <a
-      class="MuiButtonBase-root MuiListItemButton-root MuiListItemButton-gutters css-1j5cvue-MuiButtonBase-root-MuiListItemButton-root"
+      class="MuiButtonBase-root MuiListItemButton-root MuiListItemButton-gutters"
       data-discover="true"
       href="/editor/foo/bar/baz/"
       tabindex="0"
     >
       <div
-        class="MuiListItemIcon-root css-sx7q2d-MuiListItemIcon-root"
+        class="MuiListItemIcon-root"
       >
         <svg
           aria-hidden="true"
-          class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1umw9bq-MuiSvgIcon-root"
+          class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium"
           data-testid="InsertDriveFileOutlinedIcon"
           focusable="false"
           viewBox="0 0 24 24"
@@ -28,15 +28,15 @@ exports[`Rendering test renders correctly 1`] = `
         </svg>
       </div>
       <div
-        class="MuiListItemText-root MuiListItemText-multiline css-14ln1j6-MuiListItemText-root"
+        class="MuiListItemText-root MuiListItemText-multiline"
       >
         <span
-          class="MuiTypography-root MuiTypography-body1 MuiListItemText-primary css-rizt0-MuiTypography-root"
+          class="MuiTypography-root MuiTypography-body1 MuiListItemText-primary"
         >
           seppo (FI, SV)
         </span>
         <p
-          class="MuiTypography-root MuiTypography-body2 MuiListItemText-secondary css-1a1whku-MuiTypography-root"
+          class="MuiTypography-root MuiTypography-body2 MuiListItemText-secondary"
         >
           tableSelect.updated: 13.10.2021 klo 14.53.06
         </p>
@@ -44,7 +44,7 @@ exports[`Rendering test renders correctly 1`] = `
     </a>
   </li>
   <hr
-    class="MuiDivider-root MuiDivider-fullWidth css-1jpc804-MuiDivider-root"
+    class="MuiDivider-root MuiDivider-fullWidth"
   />
 </DocumentFragment>
 `;
