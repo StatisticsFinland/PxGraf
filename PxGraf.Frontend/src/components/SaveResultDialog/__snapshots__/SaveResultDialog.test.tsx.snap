@@ -2,7 +2,6 @@
 
 exports[`Failed publication status rendering test renders correctly when publication status is Failed 1`] = `
 <body
-  class=""
   style="padding-right: 1024px; overflow: hidden;"
 >
   <div
@@ -157,7 +156,6 @@ exports[`Rendering test renders correctly when closed 1`] = `
 
 exports[`Rendering test renders correctly when open (draft) 1`] = `
 <body
-  class=""
   style="padding-right: 1024px; overflow: hidden;"
 >
   <div
@@ -280,7 +278,6 @@ exports[`Rendering test renders correctly when open (draft) 1`] = `
 
 exports[`Rendering test renders correctly when open 1`] = `
 <body
-  class=""
   style="padding-right: 1024px; overflow: hidden;"
 >
   <div
@@ -429,7 +426,6 @@ exports[`Rendering test renders correctly when open 1`] = `
 
 exports[`Rendering test renders correctly when open with publication disabled 1`] = `
 <body
-  class=""
   style="padding-right: 1024px; overflow: hidden;"
 >
   <div
@@ -578,7 +574,6 @@ exports[`Rendering test renders correctly when open with publication disabled 1`
 
 exports[`Request error rendering test renders correctly when request isError is true 1`] = `
 <body
-  class=""
   style="padding-right: 1024px; overflow: hidden;"
 >
   <div

@@ -8,7 +8,6 @@ exports[`Rendering test renders correctly when closed 1`] = `
 
 exports[`Rendering test renders correctly when open 1`] = `
 <body
-  class=""
   style="padding-right: 1024px; overflow: hidden;"
 >
   <div
@@ -230,7 +229,6 @@ exports[`Rendering test renders correctly when open 1`] = `
 
 exports[`Rendering test renders correctly when open and publication webhook is disabled 1`] = `
 <body
-  class=""
   style="padding-right: 1024px; overflow: hidden;"
 >
   <div

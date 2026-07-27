@@ -29,7 +29,6 @@ exports[`Rendering test renders correctly 1`] = `
       >
         <span
           aria-label="editMetadata.discardChanges"
-          class=""
           data-mui-internal-clone-element="true"
         >
           <button
@@ -99,7 +98,6 @@ exports[`Rendering test renders correctly if limit close 1`] = `
       >
         <span
           aria-label="editMetadata.discardChanges"
-          class=""
           data-mui-internal-clone-element="true"
         >
           <button
@@ -196,7 +194,6 @@ exports[`Rendering test renders correctly if limit reached 1`] = `
       >
         <span
           aria-label="editMetadata.discardChanges"
-          class=""
           data-mui-internal-clone-element="true"
         >
           <button
@@ -293,7 +290,6 @@ exports[`Rendering test renders correctly if limit specified but values are shor
       >
         <span
           aria-label="editMetadata.discardChanges"
-          class=""
           data-mui-internal-clone-element="true"
         >
           <button

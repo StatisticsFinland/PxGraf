@@ -65,9 +65,7 @@ exports[`Rendering test renders correctly when closed 1`] = `
 `;
 
 exports[`Rendering test renders correctly when open (draft) 1`] = `
-<body
-  class=""
->
+<body>
   <div>
     <div
       class="MuiDialogContent-root MuiDialogContent-dividers"
@@ -133,9 +131,7 @@ exports[`Rendering test renders correctly when open (draft) 1`] = `
 `;
 
 exports[`Rendering test renders correctly with webhook success message 1`] = `
-<body
-  class=""
->
+<body>
   <div>
     <div
       class="MuiDialogContent-root MuiDialogContent-dividers"
@@ -227,9 +223,7 @@ exports[`Rendering test renders correctly with webhook success message 1`] = `
 `;
 
 exports[`Rendering test renders correctly without webhook message (failed) 1`] = `
-<body
-  class=""
->
+<body>
   <div>
     <div
       class="MuiDialogContent-root MuiDialogContent-dividers"
@@ -321,9 +315,7 @@ exports[`Rendering test renders correctly without webhook message (failed) 1`] =
 `;
 
 exports[`Rendering test renders correctly without webhook message (success) 1`] = `
-<body
-  class=""
->
+<body>
   <div>
     <div
       class="MuiDialogContent-root MuiDialogContent-dividers"

@@ -5,16 +5,18 @@ const isDomContainer = (value: unknown): value is Element | DocumentFragment =>
 
 const hasEmotionClass = (element: Element): boolean =>
     (element.getAttribute('class') ?? '').split(/\s+/)
+        .filter(Boolean)
         .some(className => emotionClassPattern.test(className));
 
 const getElements = (container: Element | DocumentFragment): Element[] => {
     const descendants = Array.from(container.querySelectorAll('[class]'));
-    return container instanceof Element ? [container, ...descendants] : descendants;
+    return container instanceof Element && container.hasAttribute('class') ? [container, ...descendants] : descendants;
 };
 
 const removeEmotionClasses = (container: Element | DocumentFragment): void => {
     getElements(container).forEach(element => {
         const stableClasses = (element.getAttribute('class') ?? '').split(/\s+/)
+            .filter(Boolean)
             .filter(className => !emotionClassPattern.test(className));
 
         if (stableClasses.length === 0) {

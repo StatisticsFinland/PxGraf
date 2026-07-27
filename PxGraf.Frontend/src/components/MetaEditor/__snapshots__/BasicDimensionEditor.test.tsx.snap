@@ -39,7 +39,6 @@ exports[`Rendering test renders correctly 1`] = `
             >
               <span
                 aria-label="editMetadata.discardChanges"
-                class=""
                 data-mui-internal-clone-element="true"
               >
                 <button
