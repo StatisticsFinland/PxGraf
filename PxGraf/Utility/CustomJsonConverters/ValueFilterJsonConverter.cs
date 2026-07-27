@@ -16,6 +16,8 @@ namespace PxGraf.Utility.CustomJsonConverters
             All,
             From,
             Top,
+            InverseItem,
+            Regex,
         }
 
         public class ValueFilterJsonModel
@@ -49,6 +51,19 @@ namespace PxGraf.Utility.CustomJsonConverters
             if (value is TopFilter topFilter)
             {
                 JsonSerializer.Serialize(writer, new { type = "top", query = topFilter.Count });
+                return;
+            }
+
+            if (value is InverseItemFilter inverseItemFilter)
+            {
+                JsonSerializer.Serialize(writer, new { type = "inverseItem", query = inverseItemFilter.Codes });
+                return;
+            }
+
+            if (value is RegexFilter regexFilter)
+            {
+                JsonSerializer.Serialize(writer, new { type = "regex", query = regexFilter.Pattern });
+                return;
             }
         }
 
@@ -76,6 +91,16 @@ namespace PxGraf.Utility.CustomJsonConverters
                     {
                         int topCount = filterWrapper.Query.Deserialize<int>(options);
                         return new TopFilter(topCount);
+                    }
+                case FilterType.InverseItem:
+                    {
+                        List<string> codesList = filterWrapper.Query.Deserialize<List<string>>(options);
+                        return new InverseItemFilter(codesList);
+                    }
+                case FilterType.Regex:
+                    {
+                        string regexPattern = filterWrapper.Query.Deserialize<string>(options);
+                        return new RegexFilter(regexPattern);
                     }
                 default: throw new UnknownFilterTypeException("Unknown filter type: " + filterWrapper.Type);
             }

@@ -15,7 +15,9 @@ export enum FilterType {
     Item = 'item',
     All = 'all',
     Top = 'top',
-    From = 'from'
+    From = 'from',
+    InverseItem = 'inverseItem',
+    Regex = 'regex'
 }
 
 export type VirtualValueOperator = 'sum' | 'subtraction' | 'multiplication' | 'division';

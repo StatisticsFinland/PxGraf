@@ -2,11 +2,14 @@ import React from 'react';
 import { TextField } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
+import useDebouncedCallback from 'hooks/useDebouncedCallback';
 
 interface ITopNDimensionSelectionProps {
     numberOfItems: number,
     onNumberChanged: (newValue: number) => void
 }
+
+const DEBOUNCE_MS = 500;
 
 const StyledTextField = styled(TextField)`
     background-color: var(--surface-white);
@@ -16,6 +19,7 @@ export const TopNDimensionSelection: React.FC<ITopNDimensionSelectionProps> = ({
     const { t } = useTranslation();
     const [inputValue, setInputValue] = React.useState(numberOfItems?.toString() ?? '');
     const [previousNumberOfItems, setPreviousNumberOfItems] = React.useState(numberOfItems);
+    const debouncedOnNumberChanged = useDebouncedCallback(onNumberChanged, DEBOUNCE_MS);
 
     // Intentionally setting state during render (React's "adjusting state when a prop changes" pattern).
     // The guard below ensures this only runs once per actual prop change, avoiding render loops.
@@ -31,7 +35,7 @@ export const TopNDimensionSelection: React.FC<ITopNDimensionSelectionProps> = ({
         setInputValue(newValue);
 
         if (/^\d+$/.test(newValue) && Number.parseInt(newValue, 10) >= 1) {
-            onNumberChanged(Number.parseInt(newValue, 10));
+            debouncedOnNumberChanged(Number.parseInt(newValue, 10));
         }
     }
 

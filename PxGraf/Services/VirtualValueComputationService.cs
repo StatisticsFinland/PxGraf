@@ -269,7 +269,7 @@ namespace PxGraf.Services
             {
                 foreach (string operand in def.GetOperandCodes())
                 {
-                    if (virtualCodes.Contains(operand) && dependencies.TryGetValue(def.Code, out HashSet<string>? defDependencies))
+                    if (virtualCodes.Contains(operand) && dependencies.TryGetValue(def.Code, out HashSet<string> defDependencies))
                     {
                         if (defDependencies.Add(operand))
                         {

@@ -8,7 +8,8 @@ import { UiLanguageContext } from 'contexts/uiLanguageContext';
 interface ManualPickDimensionSelectionProps {
     options: IDimensionValue[],
     selectedValues: IDimensionValue[],
-    onQueryChanged: (selectedValues: string[]) => void
+    onQueryChanged: (selectedValues: string[]) => void,
+    label?: string
 }
 
 const StyledAutocomplete = styled(Autocomplete)`
@@ -18,7 +19,7 @@ const StyledAutocomplete = styled(Autocomplete)`
     background-color: var(--surface-white);
 `;
 
-export const ManualPickDimensionSelection: React.FC<ManualPickDimensionSelectionProps> = ({ options, selectedValues, onQueryChanged }) => {
+export const ManualPickDimensionSelection: React.FC<ManualPickDimensionSelectionProps> = ({ options, selectedValues, onQueryChanged, label }) => {
     const { t } = useTranslation();
     const { uiContentLanguage } = React.useContext(UiLanguageContext);
 
@@ -56,7 +57,7 @@ export const ManualPickDimensionSelection: React.FC<ManualPickDimensionSelection
                 );
             }}
             renderInput={(params) => (
-                <TextField {...params} label={t("variableSelect.valuesLabel")} />
+                <TextField {...params} label={t(label ?? "variableSelect.valuesLabel")} />
             )}
         />
     );
