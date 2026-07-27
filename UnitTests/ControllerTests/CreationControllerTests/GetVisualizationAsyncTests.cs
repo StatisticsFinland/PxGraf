@@ -247,7 +247,7 @@ namespace UnitTests.ControllerTests.CreationControllerTests
                 .GetMethod(nameof(CreationController.GetJsonStat2VisualizationAsync))!
                 .GetCustomAttribute<HttpPostAttribute>()!;
 
-            Assert.That(route.Template, Is.EqualTo("jsonstat/visualization"));
+            Assert.That(route.Template, Is.EqualTo("jsonstat"));
         }
 
         [Test]

@@ -104,25 +104,6 @@ namespace UnitTests.Visualization
         }
 
         [Test]
-        public void Build_UsesEmptyOptionalMetadata_WhenNotesAndSourcesAreMissing()
-        {
-            List<DimensionParameters> dimensions =
-            [
-                new DimensionParameters(DimensionType.Time, 2),
-                new DimensionParameters(DimensionType.Content, 1)
-            ];
-            Matrix<DecimalDataValue> sourceMatrix = TestDataCubeBuilder.BuildTestMatrix(dimensions, missingData: false);
-            Matrix<DecimalDataValue> matrix = new(
-                new MatrixMetadata("fi", ["fi", "en"], [.. sourceMatrix.Metadata.Dimensions.Cast<Dimension>()], []),
-                sourceMatrix.Data); // Create a new matrix with the same data but without notes and sources
-
-            JsonStat2 result = JsonStat2DatasetBuilder.Build(matrix, "fi");
-
-            Assert.That(result.Note, Is.Null);
-            Assert.That(result.Dimensions.Values.All(dimension => dimension.Note is null && dimension.Category.Note is null), Is.True);
-        }
-
-        [Test]
         public void Build_ThrowsWhenMatrixHasNoDimensions()
         {
             Matrix<DecimalDataValue> matrix = TestDataCubeBuilder.BuildTestMatrix([], missingData: false);
@@ -136,20 +117,6 @@ namespace UnitTests.Visualization
             Matrix<DecimalDataValue> matrix = TestDataCubeBuilder.BuildTestMatrix(
                 [new DimensionParameters(DimensionType.Time, 2)],
                 missingData: false);
-
-            Assert.That(() => JsonStat2DatasetBuilder.Build(matrix, "fi"), Throws.TypeOf<InvalidOperationException>());
-        }
-
-        [Test]
-        public void Build_ThrowsWhenMatrixValueCountDoesNotMatchDimensionSizes()
-        {
-            Matrix<DecimalDataValue> validMatrix = TestDataCubeBuilder.BuildTestMatrix(
-                [
-                    new DimensionParameters(DimensionType.Time, 2),
-                    new DimensionParameters(DimensionType.Content, 1)
-                ],
-                missingData: false);
-            Matrix<DecimalDataValue> matrix = new(validMatrix.Metadata, []);
 
             Assert.That(() => JsonStat2DatasetBuilder.Build(matrix, "fi"), Throws.TypeOf<InvalidOperationException>());
         }

@@ -53,7 +53,8 @@ namespace PxGraf.Controllers
         private static readonly TimeSpan SlidingExpiration = TimeSpan.FromMinutes(CacheValues.SlidingExpirationMinutes);
 
         private const string VISUALIZATION_ENDPOINT_PATH = "api/sq/visualization";
-        private const string JSONSTAT_VISUALIZATION_ENDPOINT_PATH = "api/sq/jsonstat/visualization";
+        private const string JSONSTAT_VISUALIZATION_ENDPOINT_PATH = "api/sq/jsonstat";
+        private const string JSONSTAT_CACHE_KEY_PREFIX = "jsonstat:";
 
         #region ACTIONS
 
@@ -165,7 +166,7 @@ namespace PxGraf.Controllers
         /// <param name="sqId">The id of the saved query.</param>
         /// <param name="lang">Optional language for localized JSON-stat fields. When omitted, defaults to the table's default language. An explicit unsupported language returns 400.</param>
         /// <returns>A single-language JSON-stat 2.0 dataset.</returns>
-        [HttpGet("jsonstat/visualization/{sqId}")]
+        [HttpGet("jsonstat/{sqId}")]
         [ProducesResponseType<JsonStat2>(StatusCodes.Status200OK, "application/vnd.jsonstat2+json")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -188,6 +189,33 @@ namespace PxGraf.Controllers
                     return BadRequest();
                 }
 
+                string cacheKey = GetJsonStatCacheKey(sqId, lang);
+                string maxAge = $"max-age={Configuration.Current.CacheOptions.CacheFreshnessCheckIntervalSeconds}";
+                MultiStateMemoryTaskCache.CacheEntryState itemCacheState = _taskCache.TryGet(cacheKey, out Task<JsonStat2> cachedDatasetTask);
+
+                if (itemCacheState == MultiStateMemoryTaskCache.CacheEntryState.Fresh)
+                {
+                    _logger.LogDebug("Fresh JSON-stat cache hit for {SqId}", sqId);
+                    JsonStat2 cachedDataset = await cachedDatasetTask;
+                    Response.Headers.CacheControl = maxAge;
+                    return CreateJsonStatResult(cachedDataset);
+                }
+
+                if (itemCacheState == MultiStateMemoryTaskCache.CacheEntryState.Stale)
+                {
+                    _logger.LogDebug("Stale JSON-stat cache hit for {SqId}", sqId);
+                    JsonStat2 cachedDataset = await cachedDatasetTask;
+                    _ = RefreshJsonStatCacheAsync(cacheKey, sqId, lang, cachedDataset);
+                    Response.Headers.CacheControl = "max-age=0";
+                    return CreateJsonStatResult(cachedDataset);
+                }
+
+                if (itemCacheState == MultiStateMemoryTaskCache.CacheEntryState.Error)
+                {
+                    _logger.LogWarning("JSON-stat cache error for {SqId}", sqId);
+                    return BadRequest();
+                }
+
                 if (!await _sqFileInterface.SavedQueryExists(sqId, Configuration.Current.SavedQueryDirectory))
                 {
                     _auditLogService.LogAuditEvent(
@@ -207,17 +235,12 @@ namespace PxGraf.Controllers
                 SavedQuery sq = await _sqFileInterface.ReadSavedQueryFromFile(sqId, Configuration.Current.SavedQueryDirectory);
                 try
                 {
-                    Matrix<DecimalDataValue> matrix = await BuildVisualizationMatrixAsync(sqId, sq);
-                    JsonStat2 dataset = JsonStat2DatasetBuilder.Build(
-                        matrix,
-                        lang,
-                        PxVisualizerCubeAdapter.BuildVisualizationSettings(matrix, sq.Settings));
-                    Response.Headers.CacheControl = $"max-age={Configuration.Current.CacheOptions.CacheFreshnessCheckIntervalSeconds}";
+                    Task<JsonStat2> newDatasetTask = BuildJsonStatDatasetAsync(sqId, sq, lang);
+                    _taskCache.Set(cacheKey, newDatasetTask, SlidingExpiration, AbsoluteExpiration);
+                    JsonStat2 dataset = await newDatasetTask;
+                    Response.Headers.CacheControl = maxAge;
                     _logger.LogDebug("Returning JSON-stat visualization result.");
-                    return new JsonResult(dataset)
-                    {
-                        ContentType = "application/vnd.jsonstat2+json"
-                    };
+                    return CreateJsonStatResult(dataset);
                 }
                 catch (EmptyDimensionException ex)
                 {
@@ -240,6 +263,37 @@ namespace PxGraf.Controllers
         #endregion
 
         #region UTILITY
+
+        private async Task RefreshJsonStatCacheAsync(string cacheKey, string sqId, string lang, JsonStat2 cachedDataset)
+        {
+            _taskCache.Set(cacheKey, Task.FromResult(cachedDataset), SlidingExpiration, AbsoluteExpiration);
+
+            SavedQuery savedQuery = await _sqFileInterface.ReadSavedQueryFromFile(sqId, Configuration.Current.SavedQueryDirectory);
+            Task<JsonStat2> refreshedDatasetTask = BuildJsonStatDatasetAsync(sqId, savedQuery, lang);
+            _ = refreshedDatasetTask.ContinueWith(task => _taskCache.Set(cacheKey, task, SlidingExpiration, AbsoluteExpiration));
+        }
+
+        private async Task<JsonStat2> BuildJsonStatDatasetAsync(string sqId, SavedQuery sq, string lang)
+        {
+            Matrix<DecimalDataValue> matrix = await BuildVisualizationMatrixAsync(sqId, sq);
+            return JsonStat2DatasetBuilder.Build(
+                matrix,
+                lang,
+                PxVisualizerCubeAdapter.BuildVisualizationSettings(matrix, sq.Settings));
+        }
+
+        private static JsonResult CreateJsonStatResult(JsonStat2 dataset)
+        {
+            return new JsonResult(dataset)
+            {
+                ContentType = "application/vnd.jsonstat2+json"
+            };
+        }
+
+        private static string GetJsonStatCacheKey(string sqId, string lang)
+        {
+            return $"{JSONSTAT_CACHE_KEY_PREFIX}{sqId}:{lang}";
+        }
         
         private async Task HandleStaleCacheResponseAsync(string sqId, VisualizationResponse cachedResp)
         {

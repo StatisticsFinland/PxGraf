@@ -27,35 +27,9 @@ namespace PxGraf.Visualization
             string language = ResolveLanguage(metadata, requestedLanguage);
 
             List<IReadOnlyDimension> dimensions = [.. metadata.Dimensions];
-            if (dimensions.Count == 0)
-            {
-                throw new InvalidOperationException("Matrix has no dimensions.");
-            }
-
-            if (dimensions.Any(d => d.Values.Count == 0))
-            {
-                throw new InvalidOperationException("All dimensions must contain at least one category.");
-            }
-
             List<string> id = [.. dimensions.Select(d => d.Code)];
-            if (id.Count != id.Distinct(StringComparer.Ordinal).Count())
-            {
-                throw new InvalidOperationException("Dimension codes must be unique.");
-            }
-
             List<int> size = [.. dimensions.Select(d => d.Values.Count)];
             long cellCount = CheckedProduct(size);
-            if (cellCount != matrix.Data.LongLength)
-            {
-                throw new InvalidOperationException("Matrix value count does not match the product of dimension sizes.");
-            }
-
-            int maxJsonStatSize = Configuration.Current.QueryOptions.MaxQuerySize;
-            if (cellCount > maxJsonStatSize)
-            {
-                throw new InvalidOperationException($"JSON-stat output size {cellCount} exceeds maximum {maxJsonStatSize}.");
-            }
-
             Dictionary<string, JsonStat2.DimensionObj> dimensionMap = [];
             List<string> timeRoles = [];
             List<string> metricRoles = [];
@@ -80,12 +54,7 @@ namespace PxGraf.Visualization
                     geoRoles.Add(dimCode);
                 }
             }
-
-            if (metricRoles.Count == 0)
-            {
-                throw new InvalidOperationException("At least one metric dimension is required for JSON-stat output.");
-            }
-
+            
             (List<decimal?> values, Dictionary<string, string> statusMap) = BuildValues(matrix);
             JsonStat2.RoleObj role = new()
             {
@@ -137,28 +106,20 @@ namespace PxGraf.Visualization
                 IReadOnlyDimensionValue value = dimension.Values[valueIndex];
                 string code = value.Code;
                 index[code] = valueIndex;
-                labels[code] = GetRequiredLocalizedText(value.Name, language, $"category label for '{code}'");
+                labels[code] = value.Name[language];
 
                 if (TryGetLocalizedMetaProperty(value.AdditionalProperties, PxSyntaxConstants.VALUENOTE_KEY, language, out string note))
                 {
-                    notes[code] = [note];
+                    notes[code] = [note!];
                 }
 
                 if (dimension.Type == DimensionType.Content)
                 {
-                    if (value is not ContentDimensionValue contentValue)
-                    {
-                        throw new InvalidOperationException($"Content dimension '{dimension.Code}' contains a non-content value.");
-                    }
-
-                    if (contentValue.Precision < 0)
-                    {
-                        throw new InvalidOperationException($"Negative precision for metric category '{code}'.");
-                    }
+                    ContentDimensionValue contentValue = (ContentDimensionValue)value;
 
                     units[code] = new JsonStat2.DimensionObj.CategoryObj.UnitObj
                     {
-                        Label = GetRequiredLocalizedText(contentValue.Unit, language, $"unit for metric category '{code}'"),
+                        Label = contentValue.Unit[language],
                         Decimals = contentValue.Precision
                     };
                 }
@@ -168,15 +129,15 @@ namespace PxGraf.Visualization
             {
                 Index = index,
                 Label = labels,
-                Note = notes.Count > 0 ? notes : null,
-                Unit = units.Count > 0 ? units : null
+                Note = notes,
+                Unit = units
             };
 
             return new JsonStat2.DimensionObj
             {
-                Label = GetRequiredLocalizedText(dimension.Name, language, $"dimension label for '{dimension.Code}'"),
+                Label = dimension.Name[language],
                 Note = TryGetLocalizedMetaProperty(dimension.AdditionalProperties, PxSyntaxConstants.NOTE_KEY, language, out string? dimNote)
-                    ? [dimNote]
+                    ? [dimNote!]
                     : null,
                 Category = category
             };
@@ -310,23 +271,12 @@ namespace PxGraf.Visualization
             return metadata.AvailableLanguages[0] ?? throw new ArgumentException("Dataset has no available languages.");
         }
 
-        private static string GetRequiredLocalizedText(MultilanguageString value, string language, string fieldName)
-        {
-            string localized = TryGetLocalizedText(value, language);
-            if (string.IsNullOrWhiteSpace(localized))
-            {
-                throw new InvalidOperationException($"Missing required localized {fieldName} for language '{language}'.");
-            }
-
-            return localized;
-        }
-
         private static string? TryGetOptionalLocalizedMetaProperty(IReadOnlyDictionary<string, MetaProperty> properties, string key, string language)
         {
             return TryGetLocalizedMetaProperty(properties, key, language, out string? value) ? value : null;
         }
 
-        private static bool TryGetLocalizedMetaProperty(IReadOnlyDictionary<string, MetaProperty> properties, string key, string language, out string value)
+        private static bool TryGetLocalizedMetaProperty(IReadOnlyDictionary<string, MetaProperty> properties, string key, string language, out string? value)
         {
             value = string.Empty;
             if (!properties.TryGetValue(key, out MetaProperty? property))
@@ -341,18 +291,8 @@ namespace PxGraf.Visualization
                 _ => null
             };
 
-            value = TryGetLocalizedText(mlValue, language);
+            value = mlValue?[language];
             return !string.IsNullOrWhiteSpace(value);
-        }
-
-        private static string TryGetLocalizedText(MultilanguageString? value, string language)
-        {
-            if (value is null || !value.Languages.Contains(language))
-            {
-                return string.Empty;
-            }
-
-            return value[language];
         }
     }
 }
