@@ -499,17 +499,14 @@ namespace PxGraf.Controllers
 
         private bool TryValidateVirtualValueDefinitions(IReadOnlyMatrixMetadata meta, MatrixQuery query, out string dimensionCode, out string? validationError)
         {
-            foreach (KeyValuePair<string, DimensionQuery> dimEntry in query.DimensionQueries)
+            foreach (KeyValuePair<string, DimensionQuery> dimEntry in query.DimensionQueries.Where(dimEntry => dimEntry.Value.VirtualValueDefinitions?.Count > 0))
             {
-                if (dimEntry.Value.VirtualValueDefinitions?.Count > 0)
+                IReadOnlyDimension dimension = meta.Dimensions.First(d => d.Code == dimEntry.Key);
+                List<string> realValueCodes = [.. dimension.Values.Select(v => v.Code)];
+                if (!_virtualValueValidationService.Validate(dimEntry.Value.VirtualValueDefinitions, realValueCodes, out validationError))
                 {
-                    IReadOnlyDimension dimension = meta.Dimensions.First(d => d.Code == dimEntry.Key);
-                    List<string> realValueCodes = [.. dimension.Values.Select(v => v.Code)];
-                    if (!_virtualValueValidationService.Validate(dimEntry.Value.VirtualValueDefinitions, realValueCodes, out validationError))
-                    {
-                        dimensionCode = dimEntry.Key;
-                        return false;
-                    }
+                    dimensionCode = dimEntry.Key;
+                    return false;
                 }
             }
 
