@@ -139,16 +139,15 @@ namespace PxGraf.Datasource.FileDatasource
             PxTableReference tableReference,
             IReadOnlyMatrixMetadata meta,
             IMatrixMap completeTableMap,
-            CancellationToken? cancellationToken = null
+            CancellationToken cancellationToken = default
         )
         {
             string path = storageProvider.BuildPath(rootPath, tableReference.ToPath());
             DataIndexer indexer = new(completeTableMap, meta);
             Matrix<DecimalDataValue> output = new(meta, new DecimalDataValue[indexer.DataLength]);
-            using Stream fileStream = await storageProvider.OpenReadAsync(path);
+            using Stream fileStream = await storageProvider.OpenReadAsync(path, cancellationToken);
             PxFileStreamDataReader dataReader = new(fileStream);
-            if (cancellationToken is null) await dataReader.ReadDecimalDataValuesAsync(output.Data, 0, meta, completeTableMap);
-            else await dataReader.ReadDecimalDataValuesAsync(output.Data, 0, meta, completeTableMap, cancellationToken.Value);
+            await dataReader.ReadDecimalDataValuesAsync(output.Data, 0, meta, completeTableMap, cancellationToken);
             return output;
         }
 

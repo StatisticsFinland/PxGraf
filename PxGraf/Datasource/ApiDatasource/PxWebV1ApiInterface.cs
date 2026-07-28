@@ -181,7 +181,7 @@ namespace PxGraf.Datasource.ApiDatasource
             throw new NotSupportedException($"Only async methods are supported. Use {nameof(GetMatrixAsync)} instead.");
         }
 
-        public async Task<Matrix<DecimalDataValue>> GetMatrixAsync(PxTableReference tableReference, IReadOnlyMatrixMetadata meta, CancellationToken? cancellationToken = null)
+        public async Task<Matrix<DecimalDataValue>> GetMatrixAsync(PxTableReference tableReference, IReadOnlyMatrixMetadata meta, CancellationToken cancellationToken = default)
         {
             string language = meta.DefaultLanguage;
             IEnumerable<PxWebDataQueryPostParams.DimensionQuery> queries = meta.Dimensions.Select(v => BuildDimensionQuery(v.Code, [.. v.ValueCodes]));
