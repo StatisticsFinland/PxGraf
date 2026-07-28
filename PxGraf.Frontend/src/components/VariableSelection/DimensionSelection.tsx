@@ -13,6 +13,7 @@ import ResultList from './ResultList';
 import ManualPickDimensionSelection from './FilterComponents/ManualPickDimensionSelection';
 import StartingFromDimensionSelection from './FilterComponents/StartingFromDimensionSelection';
 import TopNDimensionSelection from './FilterComponents/TopNDimensionSelection';
+import RegexDimensionSelection from './FilterComponents/RegexDimensionSelection';
 import styled from 'styled-components';
 import { IDimensionValue } from 'types/cubeMeta';
 import { FilterType, IDimensionQuery } from 'types/query';
@@ -82,6 +83,8 @@ export const DimensionSelection: React.FC<IDimensionSelectionProps> = ({ dimensi
 
     switch (dimensionQuery.valueFilter.type) {
         case FilterType.Item:
+            // NOTE: this selectedValues resolution block is duplicated in the FilterType.InverseItem
+            // case below - keep both in sync (or extract to a helper) if this logic changes.
             if (dimensionQuery?.valueFilter?.query && dimension?.values) {
                 const stringArray = dimensionQuery.valueFilter.query as string[];
                 selectedValues = stringArray
@@ -112,6 +115,28 @@ export const DimensionSelection: React.FC<IDimensionSelectionProps> = ({ dimensi
                 <TopNDimensionSelection
                     numberOfItems={dimensionQuery.valueFilter.query as number}
                     onNumberChanged={handleFilterValueChanged}
+                />
+            break;
+        case FilterType.InverseItem:
+            if (dimensionQuery?.valueFilter?.query && dimension?.values) {
+                const stringArray = dimensionQuery.valueFilter.query as string[];
+                selectedValues = stringArray
+                    .map(code => dimension.values.find(o => o.code === code))
+                    .filter((value): value is IDimensionValue => value !== undefined);
+            }
+            filterComponent =
+                <ManualPickDimensionSelection
+                    options={dimension.values}
+                    selectedValues={selectedValues}
+                    onQueryChanged={handleFilterValueChanged}
+                    label="variableSelect.excludedValuesLabel"
+                />
+            break;
+        case FilterType.Regex:
+            filterComponent =
+                <RegexDimensionSelection
+                    pattern={dimensionQuery.valueFilter.query as string}
+                    onQueryChanged={handleFilterValueChanged}
                 />
             break;
     }

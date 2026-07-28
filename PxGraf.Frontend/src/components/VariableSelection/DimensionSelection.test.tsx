@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, within } from "@testing-library/react";
+import { act, fireEvent, render, screen, within } from "@testing-library/react";
 import '@testing-library/jest-dom';
 import userEvent from '@testing-library/user-event';
 import { IDimension, EDimensionType } from "types/cubeMeta";
@@ -201,6 +201,144 @@ describe('Stale virtual code regression', () => {
     });
 });
 
+describe('Inverse manual selection filter', () => {
+    const inverseQuery: Query = {
+        Vuosi: {
+            valueFilter: {
+                type: FilterType.InverseItem,
+                query: ['2019'],
+            },
+            selectable: false,
+            virtualValueDefinitions: [],
+        },
+    };
+
+    it('renders the exclude-values field and the resolved result list', () => {
+        render(
+            <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
+                <DimensionSelection
+                    dimension={mockDimension}
+                    resolvedDimensionValueCodes={["2018", "2020", "2021*"]}
+                    query={inverseQuery}
+                />
+            </UiLanguageContext.Provider>
+        );
+
+        expect(screen.getByLabelText('variableSelect.excludedValuesLabel')).toBeInTheDocument();
+        expect(screen.getByText('2019')).toBeInTheDocument();
+    });
+
+    it('does not crash and omits stale codes when the query references a missing value code', () => {
+        const dimensionWithOnlyReal: IDimension = {
+            ...mockDimension,
+            values: [
+                {
+                    code: '2018',
+                    name: { fi: '2018', sv: '2018', en: '2018' },
+                    isVirtual: false,
+                },
+            ],
+        };
+        const queryWithStaleCode: Query = {
+            Vuosi: {
+                valueFilter: {
+                    type: FilterType.InverseItem,
+                    query: ['2018', 'stale_virtual_code'],
+                },
+                selectable: false,
+                virtualValueDefinitions: [],
+            },
+        };
+
+        expect(() =>
+            render(
+                <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
+                    <DimensionSelection
+                        dimension={dimensionWithOnlyReal}
+                        resolvedDimensionValueCodes={[]}
+                        query={queryWithStaleCode}
+                    />
+                </UiLanguageContext.Provider>
+            )
+        ).not.toThrow();
+
+        expect(screen.getByText('2018')).toBeInTheDocument();
+        expect(screen.queryByText('stale_virtual_code')).not.toBeInTheDocument();
+    });
+});
+
+describe('Regular expression filter', () => {
+    it('renders the pattern field and the resolved result list', () => {
+        const regexQuery: Query = {
+            Vuosi: {
+                valueFilter: {
+                    type: FilterType.Regex,
+                    query: '^202',
+                },
+                selectable: false,
+                virtualValueDefinitions: [],
+            },
+        };
+
+        render(
+            <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
+                <DimensionSelection
+                    dimension={mockDimension}
+                    resolvedDimensionValueCodes={["2020", "2021*"]}
+                    query={regexQuery}
+                />
+            </UiLanguageContext.Provider>
+        );
+
+        expect(screen.getByLabelText('variableSelect.regexPatternLabel')).toHaveValue('^202');
+        expect(screen.getByText('2020')).toBeInTheDocument();
+    });
+
+    it('updates the query with the raw pattern, even when invalid', async () => {
+        jest.useFakeTimers();
+        const setQuery = jest.fn();
+        const regexQuery: Query = {
+            Vuosi: {
+                valueFilter: {
+                    type: FilterType.Regex,
+                    query: '',
+                },
+                selectable: false,
+                virtualValueDefinitions: [],
+            },
+        };
+
+        render(
+            <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
+                <QueryContext.Provider value={{ cubeQuery: { variableQueries: {} }, setCubeQuery: jest.fn(), query: regexQuery, setQuery }}>
+                    <DimensionSelection
+                        dimension={mockDimension}
+                        resolvedDimensionValueCodes={[]}
+                        query={regexQuery}
+                    />
+                </QueryContext.Provider>
+            </UiLanguageContext.Provider>
+        );
+
+        fireEvent.change(screen.getByLabelText('variableSelect.regexPatternLabel'), { target: { value: '[invalid' } });
+        expect(screen.getByText('variableSelect.regexPatternError')).toBeInTheDocument();
+
+        act(() => {
+            jest.advanceTimersByTime(500);
+        });
+
+        const updateQuery = setQuery.mock.calls[setQuery.mock.calls.length - 1][0];
+        expect(updateQuery(regexQuery)).toEqual({
+            Vuosi: {
+                valueFilter: { type: FilterType.Regex, query: '[invalid' },
+                selectable: false,
+                virtualValueDefinitions: []
+            }
+        });
+        jest.useRealTimers();
+    });
+});
+
 describe('Filter method selector', () => {
     it('renders the current filter method and updates the query when a new method is chosen', async () => {
         const user = userEvent.setup();
@@ -233,6 +371,26 @@ describe('Filter method selector', () => {
                 virtualValueDefinitions: []
             }
         });
+    });
+
+    it('lists inverse manual selection and regular expression as available filter methods', async () => {
+        const user = userEvent.setup();
+
+        render(
+            <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
+                <DimensionSelection
+                    dimension={mockDimension}
+                    resolvedDimensionValueCodes={["2018", "2019", "2020", "2021*"]}
+                    query={mockQuery}
+                />
+            </UiLanguageContext.Provider>
+        );
+
+        const filterMethodSelect = screen.getByRole('combobox', { name: 'variableSelect.filterMethodLabel' });
+        await user.click(filterMethodSelect);
+
+        expect(await screen.findByRole('option', { name: 'variableSelect.inverseItemFilter' })).toBeInTheDocument();
+        expect(screen.getByRole('option', { name: 'variableSelect.regexFilter' })).toBeInTheDocument();
     });
 });
 

@@ -3,13 +3,13 @@
 exports[`Rendering test renders correctly 1`] = `
 <DocumentFragment>
   <div
-    class="MuiStack-root sc-pVTZz bNLOsv"
+    class="MuiStack-root sc-jrQAHW dcwdYG"
   >
     <div
-      class="MuiStack-root sc-jrQAHW jFtBzN"
+      class="MuiStack-root sc-kDTkih fHYUpH"
     >
       <div
-        class="MuiFormControl-root sc-kDTkih llAXxs"
+        class="MuiFormControl-root sc-iqshrI KssF"
       >
         <label
           class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined"

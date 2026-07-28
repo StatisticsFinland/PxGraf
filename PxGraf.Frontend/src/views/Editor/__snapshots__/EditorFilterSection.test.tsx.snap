@@ -3,10 +3,10 @@
 exports[`Rendering test renders correctly 1`] = `
 <DocumentFragment>
   <div
-    class="sc-hBUSFb ixjzjw MuiBox-root"
+    class="sc-fotPOC xLQKd MuiBox-root"
   >
     <div
-      class="sc-crHjuH dxviCc"
+      class="sc-eggEi hqaXkD"
     >
       <p
         class="MuiTypography-root MuiTypography-body2"
@@ -15,7 +15,7 @@ exports[`Rendering test renders correctly 1`] = `
       </p>
     </div>
     <div
-      class="MuiPaper-root MuiPaper-elevation MuiPaper-elevation0 MuiAccordion-root Mui-expanded sc-bqiQet cEIism"
+      class="MuiPaper-root MuiPaper-elevation MuiPaper-elevation0 MuiAccordion-root Mui-expanded sc-ksdwMQ dEWgej"
       style="--Paper-shadow: none;"
     >
       <h3
@@ -24,7 +24,7 @@ exports[`Rendering test renders correctly 1`] = `
         <button
           aria-controls="dimension-foo-content"
           aria-expanded="true"
-          class="MuiButtonBase-root MuiAccordionSummary-root Mui-expanded sc-ksdwMQ fwOAYs"
+          class="MuiButtonBase-root MuiAccordionSummary-root Mui-expanded sc-hBUSFb ijaPzb"
           id="dimension-foo-header"
           tabindex="0"
           type="button"
@@ -74,16 +74,16 @@ exports[`Rendering test renders correctly 1`] = `
               role="region"
             >
               <div
-                class="MuiAccordionDetails-root sc-eggEi losrLW"
+                class="MuiAccordionDetails-root sc-bqiQet eyibFB"
               >
                 <div
-                  class="MuiStack-root sc-pVTZz bNLOsv"
+                  class="MuiStack-root sc-jrQAHW dcwdYG"
                 >
                   <div
-                    class="MuiStack-root sc-jrQAHW jFtBzN"
+                    class="MuiStack-root sc-kDTkih fHYUpH"
                   >
                     <div
-                      class="MuiFormControl-root sc-kDTkih llAXxs"
+                      class="MuiFormControl-root sc-iqshrI KssF"
                     >
                       <label
                         class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined"
