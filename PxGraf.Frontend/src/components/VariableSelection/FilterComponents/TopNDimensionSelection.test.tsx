@@ -93,4 +93,21 @@ describe('Assertion test', () => {
 
         expect(mockChangeFunction).not.toHaveBeenCalled();
     });
+
+    it('cancels a pending debounced update when the input becomes invalid before it fires', () => {
+        render(<TopNDimensionSelection
+            numberOfItems={2}
+            onNumberChanged={mockChangeFunction}
+        ></TopNDimensionSelection>);
+        const input = screen.getByLabelText('variableSelect.latestValuesCountLabel');
+
+        fireEvent.change(input, { target: { value: '5' } });
+        fireEvent.change(input, { target: { value: 'eivoikaantaa' } });
+
+        act(() => {
+            jest.advanceTimersByTime(500);
+        });
+
+        expect(mockChangeFunction).not.toHaveBeenCalled();
+    });
 });

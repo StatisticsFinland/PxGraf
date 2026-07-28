@@ -36,6 +36,8 @@ export const TopNDimensionSelection: React.FC<ITopNDimensionSelectionProps> = ({
 
         if (/^\d+$/.test(newValue) && Number.parseInt(newValue, 10) >= 1) {
             debouncedOnNumberChanged(Number.parseInt(newValue, 10));
+        } else {
+            debouncedOnNumberChanged.cancel();
         }
     }
 

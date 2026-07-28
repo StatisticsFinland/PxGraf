@@ -65,6 +65,8 @@ namespace PxGraf.Utility.CustomJsonConverters
                 JsonSerializer.Serialize(writer, new { type = "regex", query = regexFilter.Pattern });
                 return;
             }
+
+            throw new UnknownFilterTypeException("Unknown filter type: " + value.GetType().Name);
         }
 
         public override IValueFilter Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)

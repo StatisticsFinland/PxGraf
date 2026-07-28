@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef } from 'react';
-import { debounce } from 'lodash';
+import { debounce, DebouncedFunc } from 'lodash';
 
 /**
  * Returns a debounced wrapper around `callback`. The debounce timer has a stable
@@ -11,7 +11,7 @@ import { debounce } from 'lodash';
 const useDebouncedCallback = <Args extends unknown[]>(
     callback: (...args: Args) => void,
     delayMs: number
-): (...args: Args) => void => {
+): DebouncedFunc<(...args: Args) => void> => {
     const callbackRef = useRef(callback);
 
     useEffect(() => {

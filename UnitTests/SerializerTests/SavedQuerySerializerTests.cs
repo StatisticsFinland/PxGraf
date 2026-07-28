@@ -122,12 +122,14 @@ namespace UnitTests.SerializerTests
         public void SavedQueryDeserializationTest_InverseItemAndRegexFilters_Success()
         {
             SavedQuery query = JsonSerializer.Deserialize<SavedQuery>(testSavedQueryWithInverseItemAndRegexFilters, GlobalJsonConverterOptions.Default);
-            InverseItemFilter inverseItemFilter = query.Query.DimensionQueries["Vuosi"].ValueFilter as InverseItemFilter;
-            RegexFilter regexFilter = query.Query.DimensionQueries["Tiedot"].ValueFilter as RegexFilter;
 
-            Assert.That(inverseItemFilter, Is.Not.Null);
+            Assert.That(query.Query.DimensionQueries["Vuosi"].ValueFilter, Is.TypeOf<InverseItemFilter>());
+            Assert.That(query.Query.DimensionQueries["Tiedot"].ValueFilter, Is.TypeOf<RegexFilter>());
+
+            InverseItemFilter inverseItemFilter = (InverseItemFilter)query.Query.DimensionQueries["Vuosi"].ValueFilter;
+            RegexFilter regexFilter = (RegexFilter)query.Query.DimensionQueries["Tiedot"].ValueFilter;
+
             Assert.That(inverseItemFilter.Codes, Is.EqualTo(new[] { "2020" }));
-            Assert.That(regexFilter, Is.Not.Null);
             Assert.That(regexFilter.Pattern, Is.EqualTo("^kulutus_"));
         }
 
