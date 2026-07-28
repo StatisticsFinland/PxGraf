@@ -34,12 +34,130 @@ describe('getDefaultQueries tests', () => {
     it('Should return the correct object', () => {
         const expected = {
             foo: {
-                valueFilter: { type: 'item', query: [] },
+                valueFilter: { type: 'item', query: ['foo'] },
                 selectable: false,
                 virtualValueDefinitions: []
             }
         }
         const result = getDefaultQueries(mockDimensions);
+        expect(result).toEqual(expected);
+    });
+
+    it('Should default a time dimension to "all"', () => {
+        const timeDimension: IDimension[] = [
+            {
+                code: "time",
+                name: { fi: 'aika' },
+                type: EDimensionType.Time,
+                values: [
+                    { code: '2020', name: { fi: '2020' }, isVirtual: false },
+                    { code: '2021', name: { fi: '2021' }, isVirtual: false }
+                ]
+            }
+        ];
+        const expected = {
+            time: {
+                valueFilter: { type: 'all' },
+                selectable: false,
+                virtualValueDefinitions: []
+            }
+        };
+        const result = getDefaultQueries(timeDimension);
+        expect(result).toEqual(expected);
+    });
+
+    it('Should default a non-time dimension to its elimination value when one is defined', () => {
+        const dimensionsWithElimination: IDimension[] = [
+            {
+                code: "region",
+                name: { fi: 'alue' },
+                type: EDimensionType.Geographical,
+                additionalProperties: {
+                    ELIMINATION: { type: EMetaPropertyType.Text, value: 'sss' }
+                },
+                values: [
+                    { code: 'sss', name: { fi: 'Koko maa' }, isVirtual: false },
+                    { code: '001', name: { fi: 'Alue 1' }, isVirtual: false }
+                ]
+            }
+        ];
+        const expected = {
+            region: {
+                valueFilter: { type: 'item', query: ['sss'] },
+                selectable: false,
+                virtualValueDefinitions: []
+            }
+        };
+        const result = getDefaultQueries(dimensionsWithElimination);
+        expect(result).toEqual(expected);
+    });
+
+    it('Should default a non-time dimension without elimination to its first value', () => {
+        const dimensionsWithoutElimination: IDimension[] = [
+            {
+                code: "region",
+                name: { fi: 'alue' },
+                type: EDimensionType.Geographical,
+                values: [
+                    { code: '001', name: { fi: 'Alue 1' }, isVirtual: false },
+                    { code: '002', name: { fi: 'Alue 2' }, isVirtual: false }
+                ]
+            }
+        ];
+        const expected = {
+            region: {
+                valueFilter: { type: 'item', query: ['001'] },
+                selectable: false,
+                virtualValueDefinitions: []
+            }
+        };
+        const result = getDefaultQueries(dimensionsWithoutElimination);
+        expect(result).toEqual(expected);
+    });
+
+    it('Should fall back to the first value when the elimination code does not match any value', () => {
+        const dimensionsWithInvalidElimination: IDimension[] = [
+            {
+                code: "region",
+                name: { fi: 'alue' },
+                type: EDimensionType.Geographical,
+                additionalProperties: {
+                    ELIMINATION: { type: EMetaPropertyType.Text, value: 'does-not-exist' }
+                },
+                values: [
+                    { code: '001', name: { fi: 'Alue 1' }, isVirtual: false },
+                    { code: '002', name: { fi: 'Alue 2' }, isVirtual: false }
+                ]
+            }
+        ];
+        const expected = {
+            region: {
+                valueFilter: { type: 'item', query: ['001'] },
+                selectable: false,
+                virtualValueDefinitions: []
+            }
+        };
+        const result = getDefaultQueries(dimensionsWithInvalidElimination);
+        expect(result).toEqual(expected);
+    });
+
+    it('Should default a non-time dimension without values to an empty item filter', () => {
+        const emptyDimension: IDimension[] = [
+            {
+                code: "region",
+                name: { fi: 'alue' },
+                type: EDimensionType.Geographical,
+                values: []
+            }
+        ];
+        const expected = {
+            region: {
+                valueFilter: { type: 'item', query: [] },
+                selectable: false,
+                virtualValueDefinitions: []
+            }
+        };
+        const result = getDefaultQueries(emptyDimension);
         expect(result).toEqual(expected);
     });
 });

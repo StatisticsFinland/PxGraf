@@ -1,17 +1,40 @@
 import { EDimensionType, EMetaPropertyType, IContentDimensionValue, IDimension, IDimensionValue } from 'types/cubeMeta';
-import { FilterType, ICubeQuery, IDimensionQuery, VirtualValueOperator } from 'types/query';
+import { FilterType, ICubeQuery, IDimensionQuery, IValueFilter, VirtualValueOperator } from 'types/query';
 import { getDefaultFilter } from './dimensionSelectionHelpers';
 import { EDatabaseTableError } from '../types/tableListItems';
 import { IVisualizationOptions } from '../types/editorContentsResponse';
 import { VisualizationType } from '../types/visualizationType';
-import { sourceKey } from './keywordConstants';
+import { sourceKey, eliminationKey } from './keywordConstants';
+import { getAdditionalPropertyValue } from './metadataUtils';
 import { generatePlaceholderContentEdits, generatePlaceholderNames, getOperatorType } from './virtualValueHelpers';
+
+/**
+ * Determines the default value filter for a dimension when a table is opened without a saved query.
+ * Time dimensions default to "all". Other dimensions default to their elimination value if one is
+ * defined and valid, otherwise the first available value. Dimensions without values default to an
+ * empty item filter.
+ */
+const getDefaultValueFilter = (variable: IDimension): IValueFilter => {
+    if (variable.type === EDimensionType.Time) {
+        return getDefaultFilter(FilterType.All);
+    }
+    const values = variable.values ?? [];
+    if (values.length === 0) {
+        return getDefaultFilter(FilterType.Item);
+    }
+    const eliminationCode = getAdditionalPropertyValue(eliminationKey, variable.additionalProperties);
+    const validEliminationCode = typeof eliminationCode === 'string' && values.some(v => v.code === eliminationCode)
+        ? eliminationCode
+        : null;
+    const defaultCode = validEliminationCode ?? values[0].code;
+    return { type: FilterType.Item, query: [defaultCode] };
+}
 
 export const getDefaultQueries = (variables: IDimension[]) => {
     const queries: { [key: string]: IDimensionQuery } = {};
     for (const variable of variables) {
       queries[variable.code] = {
-        valueFilter: getDefaultFilter(FilterType.Item),
+        valueFilter: getDefaultValueFilter(variable),
         selectable: false,
         virtualValueDefinitions: []
       }
