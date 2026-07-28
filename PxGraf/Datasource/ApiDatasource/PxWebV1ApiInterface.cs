@@ -132,26 +132,38 @@ namespace PxGraf.Datasource.ApiDatasource
             {
                 IDimensionMap dimensionMap = map.DimensionMaps[dimIndx];
                 List<DimensionValue> values = [];
+                int? sumValueIndx = null;
                 for (int valIndx = 0; valIndx < dimensionMap.ValueCodes.Count; valIndx++)
                 {
                     MultilanguageString valueName = new(langToResponse.ToDictionary(
                          kvp => kvp.Key,
                          kvp => kvp.Value.Dimensions[dimIndx].ValueTexts[valIndx]));
                     values.Add(new(dimensionMap.ValueCodes[valIndx], valueName));
+
+                    if (sumValueIndx is null && map.Dimensions[dimIndx].IsSumValue(valIndx))
+                    {
+                        sumValueIndx = valIndx;
+                    }
                 }
 
                 MultilanguageString dimensionName = new(langToResponse.ToDictionary(
                     kvp => kvp.Key,
                     kvp => kvp.Value.Dimensions[dimIndx].Text));
 
+                Dictionary<string, MetaProperty> dimensionProperties = [];
+                if (map.Dimensions[dimIndx].Elimination && sumValueIndx is int foundIndx)
+                {
+                    dimensionProperties[PxSyntaxConstants.ELIMINATION_KEY] = new StringProperty(values[foundIndx].Code);
+                }
+
                 if (dimensionTypes[dimensionMap.Code] == DimensionType.Time)
                 {
                     TimeDimensionInterval interval = Data.TimeDimensionIntervalParser.DetermineIntervalFromCodes(dimensionMap.ValueCodes);
-                    dimensions.Add(new TimeDimension(dimensionMap.Code, dimensionName, [], values, interval));
+                    dimensions.Add(new TimeDimension(dimensionMap.Code, dimensionName, dimensionProperties, values, interval));
                     continue;
                 }
 
-                Dimension dimension = new(dimensionMap.Code, dimensionName, [], values, dimensionTypes[dimensionMap.Code]);
+                Dimension dimension = new(dimensionMap.Code, dimensionName, dimensionProperties, values, dimensionTypes[dimensionMap.Code]);
 
                 if (dimensionTypes[dimensionMap.Code] == DimensionType.Content)
                 {

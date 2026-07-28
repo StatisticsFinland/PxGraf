@@ -7,11 +7,13 @@ using Px.Utils.Language;
 using Px.Utils.Models.Data.DataValue;
 using Px.Utils.Models.Metadata.Dimensions;
 using Px.Utils.Models.Metadata.Enums;
+using Px.Utils.Models.Metadata.MetaProperties;
 using Px.Utils.Models.Metadata;
 using Px.Utils.Models;
 using PxGraf.Models.Queries;
 using PxGraf.Models.Responses.DatabaseItems;
 using PxGraf.Settings;
+using PxGraf.Utility;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -253,11 +255,14 @@ namespace UnitTests.DatasourceTests
             Assert.That(matrixMetadata.Dimensions[0].Values[1].Code, Is.EqualTo("value-1"));
             Assert.That(matrixMetadata.Dimensions[0].Values[0].Name["en"], Is.EqualTo("value-0-text.en"));
             Assert.That(matrixMetadata.Dimensions[0].Values[1].Name["en"], Is.EqualTo("value-1-text.en"));
-            Assert.That(matrixMetadata.Dimensions[0].Values[0].Name["fi"], Is.EqualTo("value-0-text"));
+            Assert.That(matrixMetadata.Dimensions[0].Values[0].Name["fi"], Is.EqualTo("Yhteensä"));
             Assert.That(matrixMetadata.Dimensions[0].Values[1].Name["fi"], Is.EqualTo("value-1-text"));
             Assert.That(matrixMetadata.Dimensions[0].Values[0].Name["sv"], Is.EqualTo("value-0-text.sv"));
             Assert.That(matrixMetadata.Dimensions[0].Values[1].Name["sv"], Is.EqualTo("value-1-text.sv"));
             Assert.That(cdv1.Unit.Equals(expectedUnitName));
+            Assert.That(matrixMetadata.Dimensions[0].AdditionalProperties.TryGetValue(PxSyntaxConstants.ELIMINATION_KEY, out MetaProperty? eliminationProperty), Is.True);
+            Assert.That(((StringProperty)eliminationProperty!).Value, Is.EqualTo("value-0"));
+            Assert.That(matrixMetadata.Dimensions[1].AdditionalProperties.ContainsKey(PxSyntaxConstants.ELIMINATION_KEY), Is.False);
             Assert.That(matrixMetadata.Dimensions[1].Name["en"], Is.EqualTo("variable-1-text.en"));
             Assert.That(matrixMetadata.Dimensions[1].Name["fi"], Is.EqualTo("variable-1-text"));
             Assert.That(matrixMetadata.Dimensions[1].Name["sv"], Is.EqualTo("variable-1-text.sv"));
@@ -271,6 +276,58 @@ namespace UnitTests.DatasourceTests
             Assert.That(matrixMetadata.Dimensions[1].Values[1].Name["fi"], Is.EqualTo("2001"));
             Assert.That(matrixMetadata.Dimensions[1].Values[0].Name["sv"], Is.EqualTo("2000"));
             Assert.That(matrixMetadata.Dimensions[1].Values[1].Name["sv"], Is.EqualTo("2001"));
+        }
+
+        [Test]
+        public async Task GetMatrixMetadataAsyncTest_EliminationFlagWithoutDetectableSumValue_DoesNotSetEliminationKey()
+        {
+            // Arrange
+            Mock<IPxWebConnection> mockConnection = new();
+            PxWebV1ApiInterface objectUnderTest = CreateInterface(mockConnection);
+            PxTableReference tableReference = new("mock/table/reference/FooBar", '/');
+
+            HttpResponseMessage mockEnResponse = new(HttpStatusCode.OK)
+            {
+                Content = new StringContent(PxWebV1ApiInterfaceFixtures.MockEnContent)
+            };
+            HttpResponseMessage mockFiResponse = new(HttpStatusCode.OK)
+            {
+                Content = new StringContent(PxWebV1ApiInterfaceFixtures.MockFiContentEliminationNoDetectableSumValue)
+            };
+            HttpResponseMessage mockSvResponse = new(HttpStatusCode.OK)
+            {
+                Content = new StringContent(PxWebV1ApiInterfaceFixtures.MockSvContent)
+            };
+
+            mockConnection.Setup(mc => mc.GetAsync("api/v1/en/mock/table/reference/FooBar", "")).ReturnsAsync(mockEnResponse);
+            mockConnection.Setup(mc => mc.GetAsync("api/v1/fi/mock/table/reference/FooBar", "")).ReturnsAsync(mockFiResponse);
+            mockConnection.Setup(mc => mc.GetAsync("api/v1/sv/mock/table/reference/FooBar", "")).ReturnsAsync(mockSvResponse);
+
+            HttpResponseMessage mockJsonStatResponseEn = new(HttpStatusCode.OK)
+            {
+                Content = new StringContent(PxWebV1ApiInterfaceFixtures.MockEnJsonStat2)
+            };
+            mockConnection.Setup(mc => mc.PostAsync("api/v1/en/mock/table/reference/FooBar", It.IsAny<string>())).ReturnsAsync(mockJsonStatResponseEn);
+
+            HttpResponseMessage mockJsonStatResponseFi = new(HttpStatusCode.OK)
+            {
+                Content = new StringContent(PxWebV1ApiInterfaceFixtures.MockFiJsonStat2)
+            };
+            mockConnection.Setup(mc => mc.PostAsync("api/v1/fi/mock/table/reference/FooBar", It.IsAny<string>())).ReturnsAsync(mockJsonStatResponseFi);
+
+            HttpResponseMessage mockJsonStatResponseSv = new(HttpStatusCode.OK)
+            {
+                Content = new StringContent(PxWebV1ApiInterfaceFixtures.MockSvJsonStat2)
+            };
+            mockConnection.Setup(mc => mc.PostAsync("api/v1/sv/mock/table/reference/FooBar", It.IsAny<string>())).ReturnsAsync(mockJsonStatResponseSv);
+
+            // Act
+            IReadOnlyMatrixMetadata matrixMetadata = await objectUnderTest.GetMatrixMetadataAsync(tableReference);
+
+            // Assert
+            // variable-0 has elimination:true, but neither of its values can be identified as the sum value
+            // (code "sss" or Finnish text "yhteensä"), so no elimination value can be reliably deduced.
+            Assert.That(matrixMetadata.Dimensions[0].AdditionalProperties.ContainsKey(PxSyntaxConstants.ELIMINATION_KEY), Is.False);
         }
 
         [Test]
