@@ -29,7 +29,6 @@ namespace PxGraf.Visualization
             List<IReadOnlyDimension> dimensions = [.. metadata.Dimensions];
             List<string> id = [.. dimensions.Select(d => d.Code)];
             List<int> size = [.. dimensions.Select(d => d.Values.Count)];
-            long cellCount = CheckedProduct(size);
             Dictionary<string, JsonStat2.DimensionObj> dimensionMap = [];
             List<string> timeRoles = [];
             List<string> metricRoles = [];
@@ -108,7 +107,7 @@ namespace PxGraf.Visualization
                 index[code] = valueIndex;
                 labels[code] = value.Name[language];
 
-                if (TryGetLocalizedMetaProperty(value.AdditionalProperties, PxSyntaxConstants.VALUENOTE_KEY, language, out string note))
+                if (TryGetLocalizedMetaProperty(value.AdditionalProperties, PxSyntaxConstants.VALUENOTE_KEY, language, out string? note))
                 {
                     notes[code] = [note!];
                 }
@@ -235,20 +234,6 @@ namespace PxGraf.Visualization
             }
 
             return PxSyntaxConstants.FormatPxDateTime(timestamps.Max());
-        }
-
-        private static long CheckedProduct(IEnumerable<int> sizes)
-        {
-            long product = 1;
-            checked
-            {
-                foreach (int size in sizes)
-                {
-                    product *= size;
-                }
-            }
-
-            return product;
         }
 
         private static string ResolveLanguage(IReadOnlyMatrixMetadata metadata, string? requestedLanguage)
