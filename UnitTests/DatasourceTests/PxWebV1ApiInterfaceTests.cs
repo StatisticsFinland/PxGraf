@@ -48,19 +48,19 @@ namespace UnitTests.DatasourceTests
             Mock<IPxWebConnection> mockConnection = new();
             PxWebV1ApiInterface objectUnderTest = CreateInterface(mockConnection);
 
-            HttpResponseMessage mockEnResponse = new(HttpStatusCode.OK)
+            using HttpResponseMessage mockEnResponse = new(HttpStatusCode.OK)
             {
                 Content = new StringContent("[{ \"dbid\":\"FooBar\", \"text\":\"FooBarEn\" }]")
             };
             mockConnection.Setup(mc => mc.GetAsync("api/v1/en/", "")).ReturnsAsync(mockEnResponse);
 
-            HttpResponseMessage mockFiResponse = new(HttpStatusCode.OK)
+            using HttpResponseMessage mockFiResponse = new(HttpStatusCode.OK)
             {
                 Content = new StringContent("[{ \"dbid\":\"FooBar\", \"text\":\"FooBarFi\" }]")
             };
             mockConnection.Setup(mc => mc.GetAsync("api/v1/fi/", "")).ReturnsAsync(mockFiResponse);
 
-            HttpResponseMessage mockSvResponse = new(HttpStatusCode.OK)
+            using HttpResponseMessage mockSvResponse = new(HttpStatusCode.OK)
             {
                 Content = new StringContent("[{ \"dbid\":\"FooBar\", \"text\":\"FooBarSv\" }]")
             };
@@ -81,19 +81,19 @@ namespace UnitTests.DatasourceTests
             Mock<IPxWebConnection> mockConnection = new();
             PxWebV1ApiInterface objectUnderTest = CreateInterface(mockConnection);
 
-            HttpResponseMessage mockEnResponse = new(HttpStatusCode.OK)
+            using HttpResponseMessage mockEnResponse = new(HttpStatusCode.OK)
             {
                 Content = new StringContent("[{ \"id\":\"FooBar\", \"text\":\"FooBarEn\", \"type\":\"t\", \"updated\":\"2024-08-24T13:15:00.000\" }]")
             };
             mockConnection.Setup(mc => mc.GetAsync("api/v1/en/database/subgroup/folder/", "")).ReturnsAsync(mockEnResponse);
 
-            HttpResponseMessage mockFiResponse = new(HttpStatusCode.OK)
+            using HttpResponseMessage mockFiResponse = new(HttpStatusCode.OK)
             {
                 Content = new StringContent("[{ \"id\":\"FooBar\", \"text\":\"FooBarFi\", \"type\":\"t\", \"updated\":\"2024-08-24T13:15:00.000\" }]")
             };
             mockConnection.Setup(mc => mc.GetAsync("api/v1/fi/database/subgroup/folder/", "")).ReturnsAsync(mockFiResponse);
 
-            HttpResponseMessage mockSvResponse = new(HttpStatusCode.OK)
+            using HttpResponseMessage mockSvResponse = new(HttpStatusCode.OK)
             {
                 Content = new StringContent("[{ \"id\":\"FooBar\", \"text\":\"FooBarSv\", \"type\":\"t\", \"updated\":\"2024-08-24T13:15:00.000\" }]")
             };
@@ -115,19 +115,19 @@ namespace UnitTests.DatasourceTests
             Mock<IPxWebConnection> mockConnection = new();
             PxWebV1ApiInterface objectUnderTest = CreateInterface(mockConnection);
 
-            HttpResponseMessage mockEnResponse = new(HttpStatusCode.OK)
+            using HttpResponseMessage mockEnResponse = new(HttpStatusCode.OK)
             {
                 Content = new StringContent("[{ \"dbid\":\"FooBar\", \"text\":\"FooBarEn\", \"type\":\"l\" }]")
             };
             mockConnection.Setup(mc => mc.GetAsync("api/v1/en/database/", "")).ReturnsAsync(mockEnResponse);
 
-            HttpResponseMessage mockFiResponse = new(HttpStatusCode.OK)
+            using HttpResponseMessage mockFiResponse = new(HttpStatusCode.OK)
             {
                 Content = new StringContent("[{ \"dbid\":\"FooBar\", \"text\":\"FooBarFi\", \"type\":\"l\" }]")
             };
             mockConnection.Setup(mc => mc.GetAsync("api/v1/fi/database/", "")).ReturnsAsync(mockFiResponse);
 
-            HttpResponseMessage mockSvResponse = new(HttpStatusCode.OK)
+            using HttpResponseMessage mockSvResponse = new(HttpStatusCode.OK)
             {
                 Content = new StringContent("[{ \"dbid\":\"FooBar\", \"text\":\"FooBarSv\", \"type\":\"l\" }]")
             };
@@ -159,7 +159,7 @@ namespace UnitTests.DatasourceTests
             Mock<IPxWebConnection> mockConnection = new();
             PxWebV1ApiInterface objectUnderTest = CreateInterface(mockConnection);
             PxTableReference tableReference = new("mock/table/reference/FooBar", '/');
-            HttpResponseMessage mockFiResponse = new(HttpStatusCode.OK)
+            using HttpResponseMessage mockFiResponse = new(HttpStatusCode.OK)
             {
                 Content = new StringContent("[{ \"id\":\"FooBar\", \"text\":\"FooBarFi\", \"type\":\"t\", \"updated\":\"2024-08-24T13:15:00.000\" }]")
             };
@@ -192,15 +192,15 @@ namespace UnitTests.DatasourceTests
             PxWebV1ApiInterface objectUnderTest = CreateInterface(mockConnection);
             PxTableReference tableReference = new("mock/table/reference/FooBar", '/');
 
-            HttpResponseMessage mockEnResponse = new(HttpStatusCode.OK)
+            using HttpResponseMessage mockEnResponse = new(HttpStatusCode.OK)
             {
                 Content = new StringContent(PxWebV1ApiInterfaceFixtures.MockEnContent)
             };
-            HttpResponseMessage mockFiResponse = new(HttpStatusCode.OK)
+            using HttpResponseMessage mockFiResponse = new(HttpStatusCode.OK)
             {
                 Content = new StringContent(PxWebV1ApiInterfaceFixtures.MockFiContent)
             };
-            HttpResponseMessage mockSvResponse = new(HttpStatusCode.OK)
+            using HttpResponseMessage mockSvResponse = new(HttpStatusCode.OK)
             {
                 Content = new StringContent(PxWebV1ApiInterfaceFixtures.MockSvContent)
             };
@@ -209,19 +209,19 @@ namespace UnitTests.DatasourceTests
             mockConnection.Setup(mc => mc.GetAsync("api/v1/fi/mock/table/reference/FooBar", "")).ReturnsAsync(mockFiResponse);
             mockConnection.Setup(mc => mc.GetAsync("api/v1/sv/mock/table/reference/FooBar", "")).ReturnsAsync(mockSvResponse);
 
-            HttpResponseMessage mockJsonStatResponseEn = new(HttpStatusCode.OK)
+            using HttpResponseMessage mockJsonStatResponseEn = new(HttpStatusCode.OK)
             {
                 Content = new StringContent(PxWebV1ApiInterfaceFixtures.MockEnJsonStat2)
             };
             mockConnection.Setup(mc => mc.PostAsync("api/v1/en/mock/table/reference/FooBar", It.IsAny<string>())).ReturnsAsync(mockJsonStatResponseEn);
 
-            HttpResponseMessage mockJsonStatResponseFi = new(HttpStatusCode.OK)
+            using HttpResponseMessage mockJsonStatResponseFi = new(HttpStatusCode.OK)
             {
                 Content = new StringContent(PxWebV1ApiInterfaceFixtures.MockFiJsonStat2)
             };
             mockConnection.Setup(mc => mc.PostAsync("api/v1/fi/mock/table/reference/FooBar", It.IsAny<string>())).ReturnsAsync(mockJsonStatResponseFi);
 
-            HttpResponseMessage mockJsonStatResponseSv = new(HttpStatusCode.OK)
+            using HttpResponseMessage mockJsonStatResponseSv = new(HttpStatusCode.OK)
             {
                 Content = new StringContent(PxWebV1ApiInterfaceFixtures.MockSvJsonStat2)
             };
@@ -286,15 +286,15 @@ namespace UnitTests.DatasourceTests
             PxWebV1ApiInterface objectUnderTest = CreateInterface(mockConnection);
             PxTableReference tableReference = new("mock/table/reference/FooBar", '/');
 
-            HttpResponseMessage mockEnResponse = new(HttpStatusCode.OK)
+            using HttpResponseMessage mockEnResponse = new(HttpStatusCode.OK)
             {
                 Content = new StringContent(PxWebV1ApiInterfaceFixtures.MockEnContent)
             };
-            HttpResponseMessage mockFiResponse = new(HttpStatusCode.OK)
+            using HttpResponseMessage mockFiResponse = new(HttpStatusCode.OK)
             {
                 Content = new StringContent(PxWebV1ApiInterfaceFixtures.MockFiContentEliminationNoDetectableSumValue)
             };
-            HttpResponseMessage mockSvResponse = new(HttpStatusCode.OK)
+            using HttpResponseMessage mockSvResponse = new(HttpStatusCode.OK)
             {
                 Content = new StringContent(PxWebV1ApiInterfaceFixtures.MockSvContent)
             };
@@ -303,19 +303,19 @@ namespace UnitTests.DatasourceTests
             mockConnection.Setup(mc => mc.GetAsync("api/v1/fi/mock/table/reference/FooBar", "")).ReturnsAsync(mockFiResponse);
             mockConnection.Setup(mc => mc.GetAsync("api/v1/sv/mock/table/reference/FooBar", "")).ReturnsAsync(mockSvResponse);
 
-            HttpResponseMessage mockJsonStatResponseEn = new(HttpStatusCode.OK)
+            using HttpResponseMessage mockJsonStatResponseEn = new(HttpStatusCode.OK)
             {
                 Content = new StringContent(PxWebV1ApiInterfaceFixtures.MockEnJsonStat2)
             };
             mockConnection.Setup(mc => mc.PostAsync("api/v1/en/mock/table/reference/FooBar", It.IsAny<string>())).ReturnsAsync(mockJsonStatResponseEn);
 
-            HttpResponseMessage mockJsonStatResponseFi = new(HttpStatusCode.OK)
+            using HttpResponseMessage mockJsonStatResponseFi = new(HttpStatusCode.OK)
             {
                 Content = new StringContent(PxWebV1ApiInterfaceFixtures.MockFiJsonStat2)
             };
             mockConnection.Setup(mc => mc.PostAsync("api/v1/fi/mock/table/reference/FooBar", It.IsAny<string>())).ReturnsAsync(mockJsonStatResponseFi);
 
-            HttpResponseMessage mockJsonStatResponseSv = new(HttpStatusCode.OK)
+            using HttpResponseMessage mockJsonStatResponseSv = new(HttpStatusCode.OK)
             {
                 Content = new StringContent(PxWebV1ApiInterfaceFixtures.MockSvJsonStat2)
             };
@@ -363,15 +363,15 @@ namespace UnitTests.DatasourceTests
             PxWebV1ApiInterface objectUnderTest = CreateInterface(mockConnection);
             PxTableReference tableReference = new("mock/table/reference/FooBar", '/');
 
-            HttpResponseMessage mockEnResponse = new(HttpStatusCode.OK)
+            using HttpResponseMessage mockEnResponse = new(HttpStatusCode.OK)
             {
                 Content = new StringContent(PxWebV1ApiInterfaceFixtures.MockEnContent)
             };
-            HttpResponseMessage mockFiResponse = new(HttpStatusCode.OK)
+            using HttpResponseMessage mockFiResponse = new(HttpStatusCode.OK)
             {
                 Content = new StringContent(PxWebV1ApiInterfaceFixtures.MockFiContent)
             };
-            HttpResponseMessage mockSvResponse = new(HttpStatusCode.OK)
+            using HttpResponseMessage mockSvResponse = new(HttpStatusCode.OK)
             {
                 Content = new StringContent(PxWebV1ApiInterfaceFixtures.MockSvContent)
             };
@@ -380,19 +380,19 @@ namespace UnitTests.DatasourceTests
             mockConnection.Setup(mc => mc.GetAsync("api/v1/fi/mock/table/reference/FooBar", "")).ReturnsAsync(mockFiResponse);
             mockConnection.Setup(mc => mc.GetAsync("api/v1/sv/mock/table/reference/FooBar", "")).ReturnsAsync(mockSvResponse);
 
-            HttpResponseMessage mockJsonStatResponseEn = new(HttpStatusCode.OK)
+            using HttpResponseMessage mockJsonStatResponseEn = new(HttpStatusCode.OK)
             {
                 Content = new StringContent(PxWebV1ApiInterfaceFixtures.MockEnJsonStat2)
             };
             mockConnection.Setup(mc => mc.PostAsync("api/v1/en/mock/table/reference/FooBar", It.IsAny<string>())).ReturnsAsync(mockJsonStatResponseEn);
 
-            HttpResponseMessage mockJsonStatResponseFi = new(HttpStatusCode.OK)
+            using HttpResponseMessage mockJsonStatResponseFi = new(HttpStatusCode.OK)
             {
                 Content = new StringContent(PxWebV1ApiInterfaceFixtures.MockFiJsonStat2)
             };
             mockConnection.Setup(mc => mc.PostAsync("api/v1/fi/mock/table/reference/FooBar", It.IsAny<string>())).ReturnsAsync(mockJsonStatResponseFi);
 
-            HttpResponseMessage mockJsonStatResponseSv = new(HttpStatusCode.OK)
+            using HttpResponseMessage mockJsonStatResponseSv = new(HttpStatusCode.OK)
             {
                 Content = new StringContent(PxWebV1ApiInterfaceFixtures.MockSvJsonStat2)
             };
