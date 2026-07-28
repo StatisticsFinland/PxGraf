@@ -368,8 +368,8 @@ namespace UnitTests.DatasourceTests
 
             mockSource.Setup(d => d.GetMatrixMetadataAsync(It.IsAny<PxTableReference>()))
                 .Returns((PxTableReference reference) => Task.FromResult(table1Meta));
-            mockSource.Setup(d => d.GetMatrixAsync(It.IsAny<PxTableReference>(), It.IsAny<IReadOnlyMatrixMetadata>(), It.IsAny<IMatrixMap>(), It.IsAny<CancellationToken?>()))
-                .ReturnsAsync((PxTableReference _, IReadOnlyMatrixMetadata metadata, IMatrixMap _, CancellationToken? _) => new Matrix<DecimalDataValue>(metadata, []));
+            mockSource.Setup(d => d.GetMatrixAsync(It.IsAny<PxTableReference>(), It.IsAny<IReadOnlyMatrixMetadata>(), It.IsAny<IMatrixMap>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync((PxTableReference _, IReadOnlyMatrixMetadata metadata, IMatrixMap _, CancellationToken _) => new Matrix<DecimalDataValue>(metadata, []));
 
             MultiStateMemoryTaskCache taskCache = new(10, TimeSpan.FromMinutes(10));
             CachedFileDatasource datasource = new(mockSource.Object, taskCache, logger.Object);
@@ -380,7 +380,7 @@ namespace UnitTests.DatasourceTests
 
             // Assert
             Assert.That(call1.Metadata, Is.EqualTo(call2.Metadata));
-            mockSource.Verify(d => d.GetMatrixAsync(It.IsAny<PxTableReference>(), It.IsAny<IReadOnlyMatrixMetadata>(), It.IsAny<IMatrixMap>(), It.IsAny<CancellationToken?>()), Times.Once);
+            mockSource.Verify(d => d.GetMatrixAsync(It.IsAny<PxTableReference>(), It.IsAny<IReadOnlyMatrixMetadata>(), It.IsAny<IMatrixMap>(), It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Test]
@@ -395,8 +395,8 @@ namespace UnitTests.DatasourceTests
             mockSource.Setup(d => d.GetMatrixMetadataAsync(It.IsAny<PxTableReference>()))
                 .Returns((PxTableReference reference) => Task.FromResult(table1Meta));
             mockSource.Setup(d => d.GetLastWriteTimeAsync(It.IsAny<PxTableReference>())).ReturnsAsync(new DateTime(2020, 10, 10, 8, 00, 00, DateTimeKind.Utc));
-            mockSource.Setup(d => d.GetMatrixAsync(It.IsAny<PxTableReference>(), It.IsAny<IReadOnlyMatrixMetadata>(), It.IsAny<IMatrixMap>(), It.IsAny<CancellationToken?>()))
-                .ReturnsAsync((PxTableReference _, IReadOnlyMatrixMetadata metadata, IMatrixMap _, CancellationToken? _) => new Matrix<DecimalDataValue>(metadata, []));
+            mockSource.Setup(d => d.GetMatrixAsync(It.IsAny<PxTableReference>(), It.IsAny<IReadOnlyMatrixMetadata>(), It.IsAny<IMatrixMap>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync((PxTableReference _, IReadOnlyMatrixMetadata metadata, IMatrixMap _, CancellationToken _) => new Matrix<DecimalDataValue>(metadata, []));
 
             MultiStateMemoryTaskCache taskCache = new(10, TimeSpan.FromMilliseconds(1));
             CachedFileDatasource datasource = new(mockSource.Object, taskCache, logger.Object);
@@ -407,7 +407,7 @@ namespace UnitTests.DatasourceTests
 
             // Assert
             mockSource.Verify(d => d.GetMatrixMetadataAsync(It.IsAny<PxTableReference>()), Times.Once);
-            mockSource.Verify(d => d.GetMatrixAsync(It.IsAny<PxTableReference>(), It.IsAny<IReadOnlyMatrixMetadata>(), It.IsAny<IMatrixMap>(), It.IsAny<CancellationToken?>()), Times.Once);
+            mockSource.Verify(d => d.GetMatrixAsync(It.IsAny<PxTableReference>(), It.IsAny<IReadOnlyMatrixMetadata>(), It.IsAny<IMatrixMap>(), It.IsAny<CancellationToken>()), Times.Once);
             mockSource.Verify(d => d.GetLastWriteTimeAsync(It.IsAny<PxTableReference>()), Times.Exactly(2)); // Once for meta, once for data
         }
 
@@ -422,7 +422,7 @@ namespace UnitTests.DatasourceTests
 
             mockSource.Setup(d => d.GetMatrixMetadataAsync(It.IsAny<PxTableReference>()))
                 .Returns((PxTableReference reference) => Task.FromResult(table1Meta));
-            mockSource.Setup(d => d.GetMatrixAsync(It.IsAny<PxTableReference>(), It.IsAny<IReadOnlyMatrixMetadata>(), It.IsAny<IMatrixMap>(), It.IsAny<CancellationToken?>()))
+            mockSource.Setup(d => d.GetMatrixAsync(It.IsAny<PxTableReference>(), It.IsAny<IReadOnlyMatrixMetadata>(), It.IsAny<IMatrixMap>(), It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new Exception("test exception"));
 
             using MultiStateMemoryTaskCache taskCache = new(10, TimeSpan.FromMinutes(10));
@@ -432,7 +432,7 @@ namespace UnitTests.DatasourceTests
             Assert.ThrowsAsync<Exception>(async () => await datasource.GetMatrixCachedAsync(_fileReferences[0], table1Meta));
             Assert.ThrowsAsync<Exception>(async () => await datasource.GetMatrixCachedAsync(_fileReferences[0], table1Meta));
 
-            mockSource.Verify(d => d.GetMatrixAsync(It.IsAny<PxTableReference>(), It.IsAny<IReadOnlyMatrixMetadata>(), It.IsAny<IMatrixMap>(), It.IsAny<CancellationToken?>()), Times.Exactly(2));
+            mockSource.Verify(d => d.GetMatrixAsync(It.IsAny<PxTableReference>(), It.IsAny<IReadOnlyMatrixMetadata>(), It.IsAny<IMatrixMap>(), It.IsAny<CancellationToken>()), Times.Exactly(2));
         }
 
         private static CachedFileDatasource BuildDatasource(
@@ -448,8 +448,8 @@ namespace UnitTests.DatasourceTests
             datasource.Setup(d => d.GetTablesAsync(It.IsAny<IReadOnlyList<string>>())).ReturnsAsync(fileReferences);
             datasource.Setup(d => d.GetMatrixMetadataAsync(It.IsAny<PxTableReference>()))
                 .Returns((PxTableReference reference) => Task.FromResult(metadataResponses[reference]));
-            datasource.Setup(d => d.GetMatrixAsync(It.IsAny<PxTableReference>(), It.IsAny<IReadOnlyMatrixMetadata>(), It.IsAny<IMatrixMap>(), It.IsAny<CancellationToken?>()))
-                .Returns((PxTableReference reference, IReadOnlyMatrixMetadata meta, IMatrixMap map, CancellationToken? cancellationToken) =>
+            datasource.Setup(d => d.GetMatrixAsync(It.IsAny<PxTableReference>(), It.IsAny<IReadOnlyMatrixMetadata>(), It.IsAny<IMatrixMap>(), It.IsAny<CancellationToken>()))
+                .Returns((PxTableReference reference, IReadOnlyMatrixMetadata meta, IMatrixMap map, CancellationToken cancellationToken) =>
                 {
                     return Task.FromResult(expectedData);
                 });

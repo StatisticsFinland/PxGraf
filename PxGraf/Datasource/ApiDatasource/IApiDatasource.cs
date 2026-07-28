@@ -44,7 +44,7 @@ namespace PxGraf.Datasource.ApiDatasource
         /// <param name="meta">Gets the data defined by this metadata object and uses this to build the result <see cref="Matrix{T}"/>.</param>
         /// <param name="cancellationToken">Optional cancellation token.</param>
         /// <returns>A <see cref="Matrix{T}"/> build from the privided metadata and the related data.</returns>
-        public Task<Matrix<DecimalDataValue>> GetMatrixAsync(PxTableReference tableReference, IReadOnlyMatrixMetadata meta, CancellationToken? cancellationToken = null);
+        public Task<Matrix<DecimalDataValue>> GetMatrixAsync(PxTableReference tableReference, IReadOnlyMatrixMetadata meta, CancellationToken cancellationToken = default);
     }
 }
 #nullable disable
