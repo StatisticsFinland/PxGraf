@@ -54,7 +54,7 @@ namespace PxGraf.Visualization
                 }
             }
             
-            (List<decimal?> values, Dictionary<string, string> statusMap) = BuildValues(matrix);
+            (decimal?[] values, Dictionary<string, string> statusMap) = BuildValues(matrix);
             JsonStat2.RoleObj role = new()
             {
                 Time = [.. timeRoles],
@@ -80,7 +80,7 @@ namespace PxGraf.Visualization
                 Updated = updated,
                 Note = note,
                 Dimensions = dimensionMap,
-                Value = [.. values],
+                Value = values,
                 Status = statusMap.Count > 0 ? statusMap : null,
                 Role = role,
                 Extension = new JsonStat2Extension()
@@ -142,9 +142,9 @@ namespace PxGraf.Visualization
             };
         }
 
-        private static (List<decimal?> values, Dictionary<string, string> statusMap) BuildValues(Matrix<DecimalDataValue> matrix)
+        private static (decimal?[] values, Dictionary<string, string> statusMap) BuildValues(Matrix<DecimalDataValue> matrix)
         {
-            List<decimal?> values = new(matrix.Data.Length);
+            decimal?[] values = new decimal?[matrix.Data.Length];
             Dictionary<string, string> statusMap = [];
 
             for (int i = 0; i < matrix.Data.Length; i++)
@@ -152,11 +152,10 @@ namespace PxGraf.Visualization
                 DecimalDataValue cell = matrix.Data[i];
                 if (cell.Type == DataValueType.Exists)
                 {
-                    values.Add(cell.UnsafeValue);
+                    values[i] = cell.UnsafeValue;
                     continue;
                 }
 
-                values.Add(null);
                 statusMap[i.ToString(CultureInfo.InvariantCulture)] = MapMissingType(cell.Type);
             }
 
