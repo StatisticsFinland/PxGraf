@@ -76,6 +76,16 @@ namespace PxGraf.Controllers
             };
             using (_logger.BeginScope(logScope))
             {
+                if (!InputValidation.ValidateSqIdString(savedQueryId))
+                {
+                    _auditLogService.LogAuditEvent(
+                        action: CONTROLLER_PATH,
+                        resource: LoggerConstants.INVALID_OR_MISSING_SQID
+                    );
+
+                    return BadRequest();
+                }
+
                 _logger.LogDebug("Saved query requested.");
                 if (await _sqFileInterface.SavedQueryExists(savedQueryId, Configuration.Current.SavedQueryDirectory))
                 {
@@ -157,6 +167,11 @@ namespace PxGraf.Controllers
             };
             using (_logger.BeginScope(logScope))
             {
+                if (!HasValidOptionalSqId(parameters.Id))
+                {
+                    return BadRequest();
+                }
+
                 _logger.LogDebug("Save request received.");
                 string guid = await GetIsDraftAsync(parameters.Id) ? parameters.Id : Guid.NewGuid().ToString();
                 string fileName = $"{guid}.sq";
@@ -171,18 +186,10 @@ namespace PxGraf.Controllers
                     IReadOnlyMatrixMetadata tableMeta = await _cachedDatasource.GetMatrixMetadataCachedAsync(parameters.Query.TableReference);
 
                     // Validate virtual value definitions before saving
-                    foreach (KeyValuePair<string, DimensionQuery> dimEntry in parameters.Query.DimensionQueries)
+                    if (!TryValidateVirtualValueDefinitions(tableMeta, parameters.Query, out string dimensionCode, out string? validationError))
                     {
-                        if (dimEntry.Value.VirtualValueDefinitions?.Count > 0)
-                        {
-                            IReadOnlyDimension dimension = tableMeta.Dimensions.First(d => d.Code == dimEntry.Key);
-                            List<string> realValueCodes = [.. dimension.Values.Select(v => v.Code)];
-                            if (!_virtualValueValidationService.Validate(dimEntry.Value.VirtualValueDefinitions, realValueCodes, out string? validationError))
-                            {
-                                _logger.LogWarning("Virtual value validation failed for dimension {DimCode}.", dimEntry.Key);
-                                return BadRequest(new { error = validationError });
-                            }
-                        }
+                        _logger.LogWarning("Virtual value validation failed for dimension {DimCode}.", dimensionCode);
+                        return BadRequest(new { error = validationError });
                     }
 
                     (IReadOnlyMatrixMetadata fetchMeta, MatrixMap outputMap) = tableMeta.BuildVirtualValueMaps(parameters.Query);
@@ -257,6 +264,11 @@ namespace PxGraf.Controllers
             };
             using (_logger.BeginScope(logScope))
             {
+                if (!HasValidOptionalSqId(parameters.Id))
+                {
+                    return BadRequest();
+                }
+
                 _logger.LogDebug("Archiving request received.");
                 string guid = await GetIsDraftAsync(parameters.Id) ? parameters.Id : Guid.NewGuid().ToString();
                 string queryFileName = $"{guid}.sq";
@@ -270,18 +282,10 @@ namespace PxGraf.Controllers
                     IReadOnlyMatrixMetadata meta = await _cachedDatasource.GetMatrixMetadataCachedAsync(parameters.Query.TableReference);
 
                     // Validate virtual value definitions BEFORE writing any files
-                    foreach (KeyValuePair<string, DimensionQuery> dimEntry in parameters.Query.DimensionQueries)
+                    if (!TryValidateVirtualValueDefinitions(meta, parameters.Query, out string dimensionCode, out string? error))
                     {
-                        if (dimEntry.Value.VirtualValueDefinitions?.Count > 0)
-                        {
-                            IReadOnlyDimension dimension = meta.Dimensions.First(d => d.Code == dimEntry.Key);
-                            List<string> realValueCodes = [.. dimension.Values.Select(v => v.Code)];
-                            if (!_virtualValueValidationService.Validate(dimEntry.Value.VirtualValueDefinitions, realValueCodes, out string? error))
-                            {
-                                _logger.LogWarning("Virtual value validation failed for dimension {DimCode}.", dimEntry.Key);
-                                return BadRequest(new { error });
-                            }
-                        }
+                        _logger.LogWarning("Virtual value validation failed for dimension {DimCode}.", dimensionCode);
+                        return BadRequest(new { error });
                     }
 
                     var (fetchMeta, outputMap) = meta.BuildVirtualValueMaps(parameters.Query);
@@ -371,6 +375,16 @@ namespace PxGraf.Controllers
             };
             using (_logger.BeginScope(logScope))
             {
+                if (!InputValidation.ValidateSqIdString(request.SqId))
+                {
+                    _auditLogService.LogAuditEvent(
+                        action: actionPath,
+                        resource: LoggerConstants.INVALID_OR_MISSING_SQID
+                    );
+
+                    return BadRequest();
+                }
+
                 _logger.LogDebug("Re-archiving query.");
                 if (await _sqFileInterface.SavedQueryExists(request.SqId, Configuration.Current.SavedQueryDirectory))
                 {
@@ -483,6 +497,24 @@ namespace PxGraf.Controllers
             return true;
         }
 
+        private bool TryValidateVirtualValueDefinitions(IReadOnlyMatrixMetadata meta, MatrixQuery query, out string dimensionCode, out string? validationError)
+        {
+            foreach (KeyValuePair<string, DimensionQuery> dimEntry in query.DimensionQueries.Where(dimEntry => dimEntry.Value.VirtualValueDefinitions?.Count > 0))
+            {
+                IReadOnlyDimension dimension = meta.Dimensions.First(d => d.Code == dimEntry.Key);
+                List<string> realValueCodes = [.. dimension.Values.Select(v => v.Code)];
+                if (!_virtualValueValidationService.Validate(dimEntry.Value.VirtualValueDefinitions, realValueCodes, out validationError))
+                {
+                    dimensionCode = dimEntry.Key;
+                    return false;
+                }
+            }
+
+            dimensionCode = string.Empty;
+            validationError = null;
+            return true;
+        }
+
         /// <summary>
         /// Checks for draft state of a query based on given id
         /// </summary>
@@ -490,7 +522,7 @@ namespace PxGraf.Controllers
         /// <returns>True if the query exists and is in draft state. Otherwise false</returns>
         private async Task<bool> GetIsDraftAsync(string id)
         {
-            if (string.IsNullOrEmpty(id))
+            if (!InputValidation.ValidateSqIdString(id))
             {
                 return false;
             }
@@ -502,6 +534,11 @@ namespace PxGraf.Controllers
             }
 
             return false;
+        }
+
+        private static bool HasValidOptionalSqId(string? id)
+        {
+            return string.IsNullOrEmpty(id) || InputValidation.ValidateSqIdString(id);
         }
     }
 }

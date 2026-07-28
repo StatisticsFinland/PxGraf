@@ -9,6 +9,7 @@ using Px.Utils.Models.Metadata.Enums;
 using Px.Utils.Models.Metadata;
 using PxGraf.Controllers;
 using PxGraf.Datasource.Cache;
+using PxGraf.Datasource.ApiDatasource.SerializationModels;
 using PxGraf.Datasource;
 using PxGraf.Language;
 using PxGraf.Models.Queries;
@@ -16,7 +17,9 @@ using PxGraf.Models.Responses;
 using PxGraf.Services;
 using PxGraf.Settings;
 using PxGraf.Utility;
+using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Threading.Tasks;
 using UnitTests.Fixtures;
 
@@ -42,6 +45,8 @@ namespace UnitTests.ControllerTests.VisualizationControllerTests
                 {"pxgrafUrl", "http://pxgraftesturl:8443/PxGraf"},
                 {"savedQueryDirectory", "goesNowhere"},
                 {"archiveFileDirectory", "goesNowhere"},
+                {"QueryOptions:MaxHeaderLength", "120"},
+                {"QueryOptions:MaxQuerySize", "100000"},
                 {"CacheOptions:Visualization:SlidingExpirationMinutes", "15" },
                 {"CacheOptions:Visualization:AbsoluteExpirationMinutes", "720" },
                 {"CacheOptions:Visualization:ItemAmountLimit", "1000" }
@@ -87,6 +92,13 @@ namespace UnitTests.ControllerTests.VisualizationControllerTests
                     return entryState;
                 });
 
+            _mockTaskCache.Setup(x => x.TryGet(It.IsAny<string>(), out It.Ref<Task<JsonStat2>>.IsAny))
+                .Returns((string key, out Task<JsonStat2> value) =>
+                {
+                    value = null!;
+                    return MultiStateMemoryTaskCache.CacheEntryState.Null;
+                });
+
             _mockSqFileInterface.Setup(x => x.SavedQueryExists(It.Is<string>(id => id == testQueryId), It.IsAny<string>()))
                 .ReturnsAsync(savedQueryFound);
 
@@ -116,6 +128,26 @@ namespace UnitTests.ControllerTests.VisualizationControllerTests
             };
 
             return controller;
+        }
+
+        [Test]
+        public void VisualizationController_UsesCollisionFreeRoutes()
+        {
+            RouteAttribute controllerRoute = typeof(VisualizationController)
+                .GetCustomAttribute<RouteAttribute>()!;
+            HttpGetAttribute visualizationRoute = typeof(VisualizationController)
+                .GetMethod(nameof(VisualizationController.GetVisualization))!
+                .GetCustomAttribute<HttpGetAttribute>()!;
+            HttpGetAttribute jsonStatRoute = typeof(VisualizationController)
+                .GetMethod(nameof(VisualizationController.GetJsonStat2VisualizationAsync))!
+                .GetCustomAttribute<HttpGetAttribute>()!;
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(controllerRoute.Template, Is.EqualTo("api/sq"));
+                Assert.That(visualizationRoute.Template, Is.EqualTo("visualization/{sqId}"));
+                Assert.That(jsonStatRoute.Template, Is.EqualTo("jsonstat/{sqId}"));
+            });
         }
 
         [Test]
@@ -395,6 +427,226 @@ namespace UnitTests.ControllerTests.VisualizationControllerTests
                     It.Is<string>(action => action == "api/sq/visualization"),
                     It.Is<string>(resource => resource == testQueryId)),
                 Times.Once);
+        }
+
+        [Test]
+        public async Task GetJsonStat2VisualizationTest_ReturnsJsonStatDataset()
+        {
+            string testQueryId = "aaa-bbb-111-222-333";
+
+            List<DimensionParameters> cubeParams =
+            [
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 3),
+                new DimensionParameters(DimensionType.Geographical, 2)
+            ];
+
+            VisualizationController controller = BuildController(
+                cubeParams,
+                cubeParams,
+                testQueryId,
+                MultiStateMemoryTaskCache.CacheEntryState.Fresh);
+
+            ActionResult<JsonStat2> result = await controller.GetJsonStat2VisualizationAsync(testQueryId, null);
+
+            Assert.That(result.Result, Is.InstanceOf<JsonResult>());
+            JsonResult jsonResult = (JsonResult)result.Result!;
+            Assert.That(jsonResult.ContentType, Is.EqualTo("application/vnd.jsonstat2+json"));
+            Assert.That(jsonResult.Value, Is.InstanceOf<JsonStat2>());
+            JsonStat2 dataset = (JsonStat2)jsonResult.Value;
+            Assert.That(dataset.Extension.VisualizationSettings, Is.InstanceOf<VisualizationResponse.PxVisualizerSettings>());
+            Assert.That(dataset.Extension.VisualizationSettings.VisualizationType, Is.EqualTo(PxGraf.Enums.VisualizationType.LineChart));
+        }
+
+        [Test]
+        public async Task GetJsonStat2VisualizationTest_CacheMiss_CachesDatasetUsingLanguageSpecificKey()
+        {
+            string testQueryId = "aaa-bbb-111-222-333";
+            List<DimensionParameters> cubeParams =
+            [
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 3),
+                new DimensionParameters(DimensionType.Geographical, 2)
+            ];
+            VisualizationController controller = BuildController(
+                cubeParams,
+                cubeParams,
+                testQueryId,
+                MultiStateMemoryTaskCache.CacheEntryState.Null);
+
+            ActionResult<JsonStat2> result = await controller.GetJsonStat2VisualizationAsync(testQueryId, "fi");
+
+            Assert.That(result.Result, Is.InstanceOf<JsonResult>());
+            Assert.That(controller.Response.Headers.CacheControl.ToString(), Is.EqualTo($"max-age={Configuration.Current.CacheOptions.CacheFreshnessCheckIntervalSeconds}"));
+            _mockTaskCache.Verify(x => x.Set(
+                "jsonstat:aaa-bbb-111-222-333:fi",
+                It.IsAny<Task<JsonStat2>>(),
+                It.IsAny<TimeSpan>(),
+                It.IsAny<TimeSpan>()),
+                Times.Once);
+        }
+
+        [Test]
+        public async Task GetJsonStat2VisualizationTest_FreshCache_ReturnsCachedDataset()
+        {
+            const string testQueryId = "aaa-bbb-111-222-333";
+            JsonStat2 cachedDataset = new();
+            VisualizationController controller = BuildController(
+                [],
+                [],
+                testQueryId,
+                MultiStateMemoryTaskCache.CacheEntryState.Null);
+            _mockTaskCache.Setup(x => x.TryGet(
+                    "jsonstat:aaa-bbb-111-222-333:fi",
+                    out It.Ref<Task<JsonStat2>>.IsAny))
+                .Returns((string key, out Task<JsonStat2> value) =>
+                {
+                    value = Task.FromResult(cachedDataset);
+                    return MultiStateMemoryTaskCache.CacheEntryState.Fresh;
+                });
+
+            ActionResult<JsonStat2> result = await controller.GetJsonStat2VisualizationAsync(testQueryId, "fi");
+
+            Assert.That(((JsonResult)result.Result!).Value, Is.SameAs(cachedDataset));
+            Assert.That(controller.Response.Headers.CacheControl.ToString(), Is.EqualTo($"max-age={Configuration.Current.CacheOptions.CacheFreshnessCheckIntervalSeconds}"));
+            _mockSqFileInterface.Verify(x => x.SavedQueryExists(It.IsAny<string>(), It.IsAny<string>()), Times.Never());
+        }
+
+        [Test]
+        public async Task GetJsonStat2VisualizationTest_StaleCache_ReturnsCachedDatasetWithNoMaxAge()
+        {
+            const string testQueryId = "aaa-bbb-111-222-333";
+            JsonStat2 cachedDataset = new();
+            VisualizationController controller = BuildController(
+                [],
+                [],
+                testQueryId,
+                MultiStateMemoryTaskCache.CacheEntryState.Null);
+            _mockTaskCache.Setup(x => x.TryGet(
+                    "jsonstat:aaa-bbb-111-222-333:fi",
+                    out It.Ref<Task<JsonStat2>>.IsAny))
+                .Returns((string key, out Task<JsonStat2> value) =>
+                {
+                    value = Task.FromResult(cachedDataset);
+                    return MultiStateMemoryTaskCache.CacheEntryState.Stale;
+                });
+
+            ActionResult<JsonStat2> result = await controller.GetJsonStat2VisualizationAsync(testQueryId, "fi");
+
+            Assert.That(((JsonResult)result.Result!).Value, Is.SameAs(cachedDataset));
+            Assert.That(controller.Response.Headers.CacheControl.ToString(), Is.EqualTo("max-age=0"));
+        }
+
+        [Test]
+        public async Task GetJsonStat2VisualizationTest_WithUnsupportedLanguage_ReturnsBadRequest()
+        {
+            string testQueryId = "aaa-bbb-111-222-333";
+            List<DimensionParameters> cubeParams =
+            [
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 3),
+                new DimensionParameters(DimensionType.Geographical, 2)
+            ];
+
+            VisualizationController controller = BuildController(
+                cubeParams,
+                cubeParams,
+                testQueryId,
+                MultiStateMemoryTaskCache.CacheEntryState.Fresh);
+
+            ActionResult<JsonStat2> result = await controller.GetJsonStat2VisualizationAsync(testQueryId, "de");
+
+            Assert.That(result.Result, Is.InstanceOf<BadRequestResult>());
+        }
+
+        [Test]
+        public async Task GetJsonStat2VisualizationTest_WithInvalidSavedQueryId_ReturnsBadRequestBeforeFileLookup()
+        {
+            VisualizationController controller = BuildController(
+                [],
+                [],
+                "valid-id",
+                MultiStateMemoryTaskCache.CacheEntryState.Null);
+
+            ActionResult<JsonStat2> result = await controller.GetJsonStat2VisualizationAsync("invalid/id", "fi");
+
+            Assert.That(result.Result, Is.InstanceOf<BadRequestResult>());
+            _mockSqFileInterface.Verify(x => x.SavedQueryExists(It.IsAny<string>(), It.IsAny<string>()), Times.Never());
+        }
+
+        [Test]
+        public async Task GetJsonStat2VisualizationTest_WithMissingSavedQuery_ReturnsNotFound()
+        {
+            VisualizationController controller = BuildController(
+                [],
+                [],
+                "valid-id",
+                MultiStateMemoryTaskCache.CacheEntryState.Null,
+                savedQueryFound: false);
+
+            ActionResult<JsonStat2> result = await controller.GetJsonStat2VisualizationAsync("valid-id", "fi");
+
+            Assert.That(result.Result, Is.InstanceOf<NotFoundResult>());
+        }
+
+        [Test]
+        public async Task GetJsonStat2VisualizationTest_WithEmptyDimension_ReturnsBadRequest()
+        {
+            List<DimensionParameters> dimensions =
+            [
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 0)
+            ];
+            VisualizationController controller = BuildController(
+                dimensions,
+                dimensions,
+                "valid-id",
+                MultiStateMemoryTaskCache.CacheEntryState.Null);
+
+            ActionResult<JsonStat2> result = await controller.GetJsonStat2VisualizationAsync("valid-id", "fi");
+
+            Assert.That(result.Result, Is.InstanceOf<BadRequestResult>());
+        }
+
+        [Test]
+        public async Task GetVisualization_WithInvalidSavedQueryId_ReturnsBadRequestBeforeCacheLookup()
+        {
+            VisualizationController controller = BuildController(
+                [],
+                [],
+                "valid-id",
+                MultiStateMemoryTaskCache.CacheEntryState.Null);
+
+            ActionResult<VisualizationResponse> result = await controller.GetVisualization("invalid/id");
+
+            Assert.That(result.Result, Is.InstanceOf<BadRequestResult>());
+            _mockTaskCache.Verify(x => x.TryGet(It.IsAny<string>(), out It.Ref<Task<VisualizationResponse>>.IsAny), Times.Never());
+            _mockCachedDatasource.Verify(x => x.GetMatrixMetadataCachedAsync(It.IsAny<PxTableReference>()), Times.Never());
+            _mockSqFileInterface.Verify(x => x.SavedQueryExists(It.IsAny<string>(), It.IsAny<string>()), Times.Never());
+        }
+
+        [Test]
+        public async Task GetVisualizationTest_WithAcceptHeader_ReturnsVisualizationResponse()
+        {
+            string testQueryId = "aaa-bbb-111-222-333";
+            List<DimensionParameters> cubeParams =
+            [
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 2),
+                new DimensionParameters(DimensionType.Other, 2)
+            ];
+
+            VisualizationController controller = BuildController(
+                cubeParams,
+                cubeParams,
+                testQueryId,
+                MultiStateMemoryTaskCache.CacheEntryState.Null);
+
+            controller.ControllerContext.HttpContext.Request.Headers.Accept = "application/xml";
+
+            ActionResult<VisualizationResponse> result = await controller.GetVisualization(testQueryId);
+
+            Assert.That(result.Value, Is.InstanceOf<VisualizationResponse>());
         }
     }
 }

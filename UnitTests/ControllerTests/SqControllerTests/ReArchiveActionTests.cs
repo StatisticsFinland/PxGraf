@@ -103,6 +103,17 @@ namespace UnitTests.ControllerTests.SqControllerTests
         }
 
         [Test]
+        public async Task ReArchiveExistingQueryAsync_WithMalformedId_ReturnsBadRequestBeforeFileLookup()
+        {
+            SqController controller = BuildController([], []);
+
+            ActionResult<ReArchiveResponse> result = await controller.ReArchiveExistingQueryAsync(new ReArchiveRequest { SqId = "invalid/id" });
+
+            Assert.That(result.Result, Is.InstanceOf<BadRequestResult>());
+            _mockSqFileInterface.Verify(service => service.SavedQueryExists(It.IsAny<string>(), It.IsAny<string>()), Times.Never());
+        }
+
+        [Test]
         public async Task ReArchiveExistingQueryAsync_WrongChartType()
         {
             // Arrange

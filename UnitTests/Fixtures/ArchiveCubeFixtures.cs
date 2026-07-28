@@ -1,4 +1,4 @@
-﻿namespace UnitTests.Fixtures
+namespace UnitTests.Fixtures
 {
     internal static class ArchiveCubeFixtures
     {
@@ -126,6 +126,13 @@
                         ""value"": {
                             ""fi"": ""Test note"",
                             ""en"": ""Test note.en""
+                        }
+                    },
+                    ""DESCRIPTION"": {
+                        ""type"": ""MultilanguageText"",
+                        ""value"": {
+                            ""fi"": ""Test dataset description"",
+                            ""en"": ""Test dataset description.en""
                         }
                     }
                 }
@@ -262,6 +269,13 @@
                         ""Value"": {
                             ""fi"": ""Test note"",
                             ""en"": ""Test note.en""
+                        }
+                    },
+                    ""DESCRIPTION"": {
+                        ""Type"": ""MultilanguageText"",
+                        ""Value"": {
+                            ""fi"": ""Test dataset description"",
+                            ""en"": ""Test dataset description.en""
                         }
                     }
                 }

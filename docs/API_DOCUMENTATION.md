@@ -11,7 +11,8 @@ Creation API provides endpoints for getting information about the databases and 
 | GetDimensionFilterResultAsync | POST: filter-dimension | filterRequest: FilterRequest object that contains the table path and selected value filters for each dimension. | A dictionary of dimension codes and their value codes that are available based on the filter request. |
 | GetEditorContents | POST: editor-contents | request: MatrixQuery object that contains the table path and selected value filters for each dimension. | EditorContentsResponse object that contains all the information the visualization editor needs to allow the user to create a visualization including default header, information about the query size and size limits, options and rules for available visualization types and rejection reasons for the unavailable visualization types. |
 | GetVisualizationRulesAsync | POST: visualization-rules | rulesQuery: VisualizationSettingsRequest object that contains visualization settings including the selected visualization type and the CubeQuery object representing the data for the visualization. | VisualizationRules object that defines which settings are available for tweaking the visualization in the front end user interface such as sorting options, pivoting options, displaying data labels etc. |
-| GetVisualizationAsync | POST: visualization | request: ChartRequest object that contains the CubeQuery, selected language, active selectable dimensions and VisualizationCreationSettings object that contains the visualization type, dimension codes for rows and columns, and settings for the given visualization type. | VisualizationResponse object that contains the data that PxVisualizer needs to render the visualization in the front end user interface including the data, settings and metadata. |
+| GetVisualizationAsync | POST: visualization | request: ChartRequest object that contains the CubeQuery, selected language, active selectable dimensions and VisualizationCreationSettings object that contains the visualization type, dimension codes for rows and columns, and settings for the given visualization type. | Multilingual VisualizationResponse containing data required by the visualization renderer. |
+| GetJsonStat2VisualizationAsync | POST: jsonstat?lang={language} | request: ChartRequest object that contains the CubeQuery, active selectable dimensions and VisualizationCreationSettings. `lang` is optional; when omitted, the table's default language is used. | Single-language JSON-stat 2.0 dataset (`application/vnd.jsonstat2+json`). `extension.visualizationSettings` uses the same PxVisualizer settings schema as saved-query output. Returns 400 when an explicit `lang` is unavailable from the table, metadata is incomplete, or the query/visualization is invalid. |
 
 # Info API (/api/info)
 Info API provides information about the application through its one GET endpoint. It returns an object that contains the name and version of the application and the environment that it's running in.
@@ -38,14 +39,15 @@ SQ api provides endpoints for retrieving, saving, archiving and re-archiving que
 | RearchiveQueryAsync | POST: re-archive | request: ReArchiveRequest object that contains the id of the archived query that is to be re-archived. | ReArchiveResponse object that contains the id of the new archived query. |
 
 
-# Visualization API (api/sq/visualization/)
+# Visualization API (api/sq/)
 Visualization API provides an endpoint for retrieving data required for rendering a saved visualization.
 
 ## Endpoints
 
 | Function Name | API Route | Parameters | Returns |
 |---------------|-----------|------------|---------|
-| GetVisualization | GET: {*sqId*} | sqId: The id of the saved query provided in the url. | VisualizationResponse object that contains the data that PxVisualizer needs to render the visualization in the front end user interface including the data, settings and metadata. |
+| GetVisualization | GET: visualization/{*sqId*} | sqId: The id of the saved query provided in the URL. | Multilingual VisualizationResponse containing data required by the visualization renderer. |
+| GetJsonStat2VisualizationAsync | GET: jsonstat/{*sqId*}?lang={language} | sqId: The id of the saved query provided in the URL. `lang` is optional; when omitted, the table's default language is used. | Single-language JSON-stat 2.0 dataset (`application/vnd.jsonstat2+json`). `extension.visualizationSettings` uses the same PxVisualizer settings schema as preview output. Returns 400 for an explicit `lang` unavailable from the table or invalid data, and 404 when the saved query is not found. |
 
 # Health API (/api/health)
 Health API provides an endpoint for checking the health of all configured dependencies. It probes the database connection, saved query storage, archive file storage, and optionally the publication webhook service (when configured with a health check endpoint). Returns HTTP 200 with a HealthResponse when all probes are healthy, or HTTP 503 when any probe is unhealthy.
