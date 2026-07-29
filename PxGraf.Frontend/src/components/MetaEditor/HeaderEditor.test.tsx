@@ -44,7 +44,16 @@ describe('Rendering test', () => {
 });
 
 describe('Assertion tests', () => {
-    it('Change event should fire when value has changed', () => {
+    beforeEach(() => {
+        jest.useFakeTimers();
+        mockFunction.mockClear();
+    });
+
+    afterEach(() => {
+        jest.useRealTimers();
+    });
+
+    it('debounces changes before updating the query', () => {
         render(
             <QueryContext.Provider value={{
                 cubeQuery: mockCubeQuery,
@@ -56,6 +65,28 @@ describe('Assertion tests', () => {
             </QueryContext.Provider>
         );
         fireEvent.change(screen.getByDisplayValue(mockCubeQuery.chartHeaderEdit['fi']), { target: { value: 'editValue2' } });
+
+        expect(mockFunction).not.toHaveBeenCalled();
+        jest.advanceTimersByTime(1000);
+
+        expect(mockFunction).toHaveBeenCalledTimes(1);
+    });
+
+    it('flushes a pending change when unmounted', () => {
+        const { unmount } = render(
+            <QueryContext.Provider value={{
+                cubeQuery: mockCubeQuery,
+                setCubeQuery: mockFunction,
+                query: {},
+                setQuery: jest.fn(),
+            }}>
+                <HeaderEditor editorContentResponse={mockDefaultResponse} language={mockLang} style={{}} />
+            </QueryContext.Provider>
+        );
+        fireEvent.change(screen.getByDisplayValue(mockCubeQuery.chartHeaderEdit['fi']), { target: { value: 'editValue2' } });
+
+        unmount();
+
         expect(mockFunction).toHaveBeenCalledTimes(1);
     });
 });

@@ -10,8 +10,6 @@ import { QueryContext } from '../../contexts/queryContext';
 const EditorFieldWrapper = styled.div`
   padding-top: 0.5rem;
   padding-right: 1rem;
-  max-height: 50vh;
-  overflow-y: auto;
 `;
 
 interface IBasicDimensionEditor {
@@ -26,26 +24,27 @@ export const BasicDimensionEditor: React.FC<IBasicDimensionEditor> = ({ dimensio
     const dimensionEdits = cubeQuery?.variableQueries[dimension.code];
 
     const handleChange = (newValue: string, valueCode: string) => {
-        const newDimensionEdit = {
-            ...dimensionEdits,
-            valueEdits: {
-                ...dimensionEdits?.valueEdits,
-                [valueCode]: {
-                    ...dimensionEdits?.valueEdits?.[valueCode],
-                    nameEdit: {
-                        ...dimensionEdits?.valueEdits?.[valueCode]?.nameEdit,
-                        [language]: newValue
+        setCubeQuery(currentCubeQuery => {
+            const currentDimensionEdits = currentCubeQuery.variableQueries[dimension.code];
+            return {
+                ...currentCubeQuery,
+                variableQueries: {
+                    ...currentCubeQuery.variableQueries,
+                    [dimension.code]: {
+                        ...currentDimensionEdits,
+                        valueEdits: {
+                            ...currentDimensionEdits?.valueEdits,
+                            [valueCode]: {
+                                ...currentDimensionEdits?.valueEdits?.[valueCode],
+                                nameEdit: {
+                                    ...currentDimensionEdits?.valueEdits?.[valueCode]?.nameEdit,
+                                    [language]: newValue
+                                }
+                            }
+                        }
                     }
                 }
-            }
-        };
-
-        setCubeQuery({
-            ...cubeQuery,
-            variableQueries: {
-                ...cubeQuery?.variableQueries,
-                [dimension.code]: newDimensionEdit
-            }
+            };
         });
     };
 

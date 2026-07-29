@@ -1,7 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { EMetaPropertyType, IDimension, EDimensionType } from 'types/cubeMeta';
 import { ICubeQuery } from 'types/query';
 import MetaEditor from './MetaEditor';
 import UiLanguageContext from 'contexts/uiLanguageContext';
@@ -17,85 +16,7 @@ const availableUiLanguages = ['fi', 'en', 'sv'];
 const uiContentLanguage = 'fi';
 const setUiContentLanguage = jest.fn();
 
-const mockDimensions: IDimension[] = [{
-    code: 'foo',
-    name: {
-        'fi': 'asd',
-        'sv': 'asd',
-        'en': 'asd'
-    },
-    type: EDimensionType.Content,
-    values: [
-        {
-            code: 'bar',
-            name: {
-                'fi': 'fgfgfg',
-                'sv': 'fgfgfg',
-                'en': 'fgfgfg'
-            },
-            isVirtual: false,
-            unit: {
-                'fi': 'yksikko',
-                'sv': 'enhet',
-                'en': 'unit'
-            },
-            precision: 0,
-            lastUpdated: '2021-01-01',
-            additionalProperties: {
-                SOURCE: {
-                    type: EMetaPropertyType.MultilanguageText,
-                    value: {
-                        'fi': 'lahde',
-                        'sv': 'kalla',
-                        'en': 'source'
-                    }
-                }
-            }
-        }
-    ]
-},
-    {
-        code: 'foo2',
-        name: {
-            'fi': null,
-            'sv': null,
-            'en': null
-        },
-        type: EDimensionType.Content,
-        values: [
-            {
-                code: 'bar2',
-                name: {
-                    'fi': null,
-                    'sv': null,
-                    'en': null,
-                },
-                isVirtual: false,
-                unit: {
-                    'fi': 'yksikko',
-                    'sv': 'enhet',
-                    'en': 'unit'
-                },
-                precision: 0,
-                lastUpdated: '2021-01-01',
-                additionalProperties: {
-                    SOURCE: {
-                        type: EMetaPropertyType.MultilanguageText,
-                        value: {
-                            'fi': 'lahde',
-                            'sv': 'kalla',
-                            'en': 'source'
-                        }
-                    }
-                }
-            }
-        ]
-    }
-]
 const mockLang = 'fi';
-const mockFunction = jest.fn();
-
-const isMetaAccordionOpenMock = true;
 
 const data: IEditorContentsResponse = {
     headerText: {
@@ -149,11 +70,8 @@ describe('Rendering test', () => {
             <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
                 <QueryContext.Provider value={{ cubeQuery: mockCubeQuery, setCubeQuery, query, setQuery }}>
                     <MetaEditor
-                        resolvedDimensions={mockDimensions}
                         editorContentsResponse={defaultHeaderResponseMock}
-                        isMetaAccordionOpen={isMetaAccordionOpenMock}
                         language={mockLang}
-                        onMetaAccordionOpenChange={mockFunction}
                     />
                 </QueryContext.Provider>
             </UiLanguageContext.Provider>

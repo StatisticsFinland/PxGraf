@@ -106,6 +106,11 @@ const renderEditor = (
         </UiLanguageContext.Provider>
     );
 
+const resolveCubeQueryUpdate = (setCubeQuery: jest.Mock, currentCubeQuery: ICubeQuery) => {
+    const update = setCubeQuery.mock.calls[0][0] as React.SetStateAction<ICubeQuery>;
+    return typeof update === 'function' ? update(currentCubeQuery) : update;
+};
+
 describe('Layout tests', () => {
     it('renders an editor field for the dimension value', () => {
         renderEditor();
@@ -142,7 +147,7 @@ describe('Functionality tests', () => {
         const setCubeQuery = jest.fn();
         renderEditor(mockDimension, mockDimEdits, setCubeQuery);
         fireEvent.change(screen.getByDisplayValue('bar'), { target: { value: 'editedValue' } });
-        expect(setCubeQuery).toHaveBeenCalledWith({
+        expect(resolveCubeQueryUpdate(setCubeQuery, mockDimEdits)).toEqual({
             chartHeaderEdit: {},
             variableQueries: {
                 foo: {
@@ -161,7 +166,7 @@ describe('Functionality tests', () => {
         const emptyQuery: ICubeQuery = { chartHeaderEdit: {}, variableQueries: {} };
         renderEditor(mockDimension, emptyQuery, setCubeQuery);
         fireEvent.change(screen.getByDisplayValue('fgfgfg'), { target: { value: 'newName' } });
-        expect(setCubeQuery).toHaveBeenCalledWith({
+        expect(resolveCubeQueryUpdate(setCubeQuery, emptyQuery)).toEqual({
             chartHeaderEdit: {},
             variableQueries: {
                 foo: {

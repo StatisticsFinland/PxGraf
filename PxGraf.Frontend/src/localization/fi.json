@@ -74,6 +74,11 @@
   },
   "editMetadata": {
     "editorTitle": "Metatiedot",
+    "dialogTitle": "Muokkaa valittujen arvojen metatietoja",
+    "dimensions": "Valittujen arvojen muuttujat",
+    "apply": "Käytä",
+    "cancel": "Peruuta",
+    "close": "Sulje metatietojen muokkaus",
     "header": "Visualisoinnin julkaistava otsikko",
     "valueName": "Arvo",
     "unit": "Yksikkö",

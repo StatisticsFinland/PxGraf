@@ -19,7 +19,7 @@ exports[`Rendering test renders correctly 1`] = `
     </p>
     <ul
       aria-labelledby="_r_0_"
-      class="MuiList-root MuiList-padding MuiList-dense sc-bdvvNz kmsnlU"
+      class="MuiList-root MuiList-padding MuiList-dense sc-bdvvNz cLVKKV"
       tabindex="0"
     >
       <li

@@ -1,4 +1,5 @@
 import React from 'react';
+import { debounce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { EditorField } from './Editorfield';
 import InfoBubble from 'components/InfoBubble/InfoBubble';
@@ -27,7 +28,11 @@ export const HeaderEditor: React.FC<IHeaderEditorProps> = ({ editorContentRespon
 
     const { cubeQuery, setCubeQuery } = React.useContext(QueryContext);
     const editValue = cubeQuery?.chartHeaderEdit;
-    const editHeader = (title: MultiLanguageString) => setCubeQuery({ ...cubeQuery, chartHeaderEdit: title })
+    const editHeader = React.useMemo(() => debounce((title: MultiLanguageString) => {
+        setCubeQuery(currentCubeQuery => ({ ...currentCubeQuery, chartHeaderEdit: title }));
+    }, 1000), [setCubeQuery]);
+
+    React.useEffect(() => () => editHeader.flush(), [editHeader]);
 
     return (
         <GridFixer>

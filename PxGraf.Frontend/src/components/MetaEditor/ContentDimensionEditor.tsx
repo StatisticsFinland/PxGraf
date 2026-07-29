@@ -1,7 +1,7 @@
 import { Grid } from '@mui/material';
 import React from 'react';
 import { IContentDimensionValue, IDimension } from 'types/cubeMeta';
-import { IDimensionValueEditions } from 'types/query';
+import { ICubeQuery, IDimensionValueEditions } from 'types/query';
 import { ContentDimensionValueEditor } from './ContentDimensionValueEditor';
 import { QueryContext } from '../../contexts/queryContext';
 
@@ -14,21 +14,24 @@ export const ContentDimensionEditor: React.FC<IContentDimensionEditorProps> = ({
     const { cubeQuery, setCubeQuery } = React.useContext(QueryContext);
     const dimensionEdits = cubeQuery?.variableQueries[dimension.code];
 
-    const handleChange = (newValueEdits: IDimensionValueEditions, code: string) => {
-        const newDimensionEdit = {
-            ...dimensionEdits,
-            valueEdits: {
-                ...dimensionEdits?.valueEdits,
-                [code]: newValueEdits
-            }
-        };
-
-        setCubeQuery({
-            ...cubeQuery,
-            variableQueries: {
-                ...cubeQuery?.variableQueries,
-                [dimension.code]: newDimensionEdit
-            }
+    const handleChange = (update: React.SetStateAction<IDimensionValueEditions>, code: string) => {
+        setCubeQuery((currentCubeQuery: ICubeQuery) => {
+            const currentDimensionEdits = currentCubeQuery.variableQueries[dimension.code];
+            const currentValueEdits = currentDimensionEdits?.valueEdits?.[code] ?? {};
+            const nextValueEdits = typeof update === 'function' ? update(currentValueEdits) : update;
+            return {
+                ...currentCubeQuery,
+                variableQueries: {
+                    ...currentCubeQuery.variableQueries,
+                    [dimension.code]: {
+                        ...currentDimensionEdits,
+                        valueEdits: {
+                            ...currentDimensionEdits?.valueEdits,
+                            [code]: nextValueEdits
+                        }
+                    }
+                }
+            };
         });
     };
 
