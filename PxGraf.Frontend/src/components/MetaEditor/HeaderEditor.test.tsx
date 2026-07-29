@@ -10,7 +10,8 @@ import { IEditorContentsResponse } from '../../types/editorContentsResponse';
 const data: IEditorContentsResponse = {
     headerText:
     {
-        'fi': 'foo'
+        'fi': 'foo',
+        'sv': 'baz'
     }
 } as unknown as IEditorContentsResponse;
 
@@ -88,5 +89,39 @@ describe('Assertion tests', () => {
         unmount();
 
         expect(mockFunction).toHaveBeenCalledTimes(1);
+    });
+
+    it('accumulates pending changes across languages', () => {
+        const { rerender } = render(
+            <QueryContext.Provider value={{
+                cubeQuery: mockCubeQuery,
+                setCubeQuery: mockFunction,
+                query: {},
+                setQuery: jest.fn(),
+            }}>
+                <HeaderEditor editorContentResponse={mockDefaultResponse} language="fi" style={{}} />
+            </QueryContext.Provider>
+        );
+        fireEvent.change(screen.getByDisplayValue('bar'), { target: { value: 'Finnish edit' } });
+
+        rerender(
+            <QueryContext.Provider value={{
+                cubeQuery: mockCubeQuery,
+                setCubeQuery: mockFunction,
+                query: {},
+                setQuery: jest.fn(),
+            }}>
+                <HeaderEditor editorContentResponse={mockDefaultResponse} language="sv" style={{}} />
+            </QueryContext.Provider>
+        );
+        fireEvent.change(screen.getByDisplayValue('baz'), { target: { value: 'Swedish edit' } });
+        jest.advanceTimersByTime(1000);
+
+        expect(mockFunction).toHaveBeenCalledTimes(1);
+        const updateCubeQuery = mockFunction.mock.calls[0][0];
+        expect(updateCubeQuery(mockCubeQuery).chartHeaderEdit).toEqual({
+            fi: 'Finnish edit',
+            sv: 'Swedish edit',
+        });
     });
 });
