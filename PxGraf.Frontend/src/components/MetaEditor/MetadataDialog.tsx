@@ -13,7 +13,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
-import { QueryContext } from 'contexts/queryContext';
+import { QueryContext } from '../../contexts/queryContext';
 import { UiLanguageContext } from 'contexts/uiLanguageContext';
 import TabPanel from 'components/TabPanel/TabPanel';
 import { IDimension } from 'types/cubeMeta';
