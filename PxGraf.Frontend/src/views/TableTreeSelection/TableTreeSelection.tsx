@@ -3,13 +3,22 @@ import { useTranslation } from 'react-i18next';
 
 import { List, ListSubheader, Container } from '@mui/material';
 import { NestedList } from 'components/NestedList/NestedList';
-import styled from 'styled-components';
+import { styled } from '@mui/material/styles';
 import useHierarchyParams from 'hooks/useHierarchyParams';
 import { useNavigationContext } from 'contexts/navigationContext';
 
-const TableTreeSelectionWrapper = styled(Container)`
-  padding: 8px;
-`;
+const TableTreeSelectionWrapper = styled(Container)({ padding: 8 });
+
+const TableSelectionList = styled(List)(({ theme }) => ({
+  '& .MuiListItem-root': {
+    backgroundColor: theme.palette.background.paper,
+  },
+})) as typeof List;
+
+const TableSelectionHeader = styled(ListSubheader)(({ theme }) => ({
+  backgroundColor: theme.palette.background.default,
+  borderBottom: `1px solid ${theme.palette.divider}`,
+})) as typeof ListSubheader;
 
 /**
  * Table tree selection view. This is the default view of the program where the user can browse available databases and tables and selects a table for visualization.
@@ -38,17 +47,17 @@ export const TableTreeSelection: React.FC = () => {
 
   return (
     <TableTreeSelectionWrapper maxWidth="md">
-      <List
+      <TableSelectionList
         component="nav"
         aria-labelledby="nested-list-subheader"
         subheader={
-            <ListSubheader component="div" id="nested-list-subheader">
+            <TableSelectionHeader component="div" id="nested-list-subheader">
                 {t("tableSelect.title")}
-          </ListSubheader>
+          </TableSelectionHeader>
         }
       >
         <NestedList path={[]} depth={0}/>
-      </List>
+      </TableSelectionList>
     </TableTreeSelectionWrapper>
   );
 }
