@@ -55,7 +55,7 @@ export const BasicDimensionEditor: React.FC<IBasicDimensionEditor> = ({ dimensio
                     return (
                         <Grid
                             key={value.code}
-                            size={{ xs: 12, md: dimension.values.length > 5 ? 6 : 12 }}
+                            size={{ xs: 12, md: dimension.values.length >= 4 ? 6 : 12 }}
                         >
                             <EditorField
                                 label={t("editMetadata.valueName") + ": " + (value.name[uiContentLanguage] ?? dimensionEdits?.valueEdits?.[value.code]?.nameEdit?.[uiContentLanguage] ?? value.code)}

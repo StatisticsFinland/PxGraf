@@ -1,18 +1,18 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Stack } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import { ContentDimensionEditor } from './ContentDimensionEditor';
 import { BasicDimensionEditor } from './BasicDimensionEditor';
-import styled from 'styled-components';
 import { IDimension, EDimensionType } from 'types/cubeMeta';
 
-const ContentWrapper = styled(Stack)`
-  padding: 0;
-`;
+const ContentWrapper = styled(Stack)({
+        padding: 0,
+});
 
-const StyledEm = styled.em`
-  color: var(--text-muted);
-`;
+const StyledEm = styled('em')(({ theme }) => ({
+        color: theme.palette.text.secondary,
+}));
 
 interface IDimensionEditorProps {
     dimension: IDimension;

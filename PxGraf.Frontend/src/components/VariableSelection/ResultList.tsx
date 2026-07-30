@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Stack, List, ListItem, ListItemText, Typography, Skeleton } from '@mui/material';
-import styled from 'styled-components';
+import { styled } from '@mui/material/styles';
 import { IDimensionValue } from 'types/cubeMeta';
 import { UiLanguageContext } from 'contexts/uiLanguageContext';
 
@@ -25,9 +25,7 @@ const NoPaddingListItem = styled(ListItem)`
     padding-bottom: 0;
 `;
 
-const StyledEm = styled.em`
-    color: var(--text-muted);
-`;
+const StyledEm = styled('em')(({ theme }) => ({ color: theme.palette.text.secondary }));
 
 const StyledSkeleton = styled(Skeleton)`
     width: 50%;

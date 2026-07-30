@@ -3,16 +3,16 @@ import FileIcon from '@mui/icons-material/InsertDriveFileOutlined';
 import React from 'react';
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import styled from "styled-components";
+import { styled } from '@mui/material/styles';
 import { urls } from 'routes/urls';
 import { UiLanguageContext } from "contexts/uiLanguageContext";
 import { parseLanguageString } from 'utils/ApiHelpers';
 import { IDatabaseTable } from 'types/tableListItems';
 import { getErrorText } from "../../utils/editorHelpers";
 
-const StyledListItem = styled(ListItem)`
-  background-color: var(--surface-light);
-`;
+const StyledListItem = styled(ListItem)(({ theme }) => ({
+    backgroundColor: theme.palette.background.default,
+}));
 
 const ErrorAlert = styled(Alert)`
   width: 100%;

@@ -3,47 +3,49 @@
 exports[`Rendering test renders correctly 1`] = `
 <DocumentFragment>
   <div
-    class="MuiStack-root sc-hKwAaq gmSVhW"
+    class="MuiStack-root"
   >
     <button
       aria-label="general.uiLanguage: lang.self.fi"
-      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeSmall MuiButton-textSizeSmall MuiButton-colorPrimary sc-eCIkhf dfYNxe"
+      aria-pressed="true"
+      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeSmall MuiButton-textSizeSmall MuiButton-colorPrimary"
       tabindex="0"
       type="button"
     >
-      <p
-        class="MuiTypography-root MuiTypography-body1"
+      <span
+        class="MuiTypography-root MuiTypography-inherit"
       >
         lang.self.fi
-      </p>
+      </span>
     </button>
     <button
       aria-label="general.uiLanguage: lang.self.en"
-      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeSmall MuiButton-textSizeSmall MuiButton-colorPrimary sc-eCIkhf jdARkQ"
+      aria-pressed="false"
+      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeSmall MuiButton-textSizeSmall MuiButton-colorPrimary"
       tabindex="0"
       type="button"
     >
-      <p
-        class="MuiTypography-root MuiTypography-body1"
+      <span
+        class="MuiTypography-root MuiTypography-inherit"
       >
         lang.self.en
-      </p>
+      </span>
     </button>
     <button
       aria-label="general.uiLanguage: lang.self.sv"
-      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeSmall MuiButton-textSizeSmall MuiButton-colorPrimary sc-eCIkhf jdARkQ"
+      aria-pressed="false"
+      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeSmall MuiButton-textSizeSmall MuiButton-colorPrimary"
       tabindex="0"
       type="button"
     >
-      <p
-        class="MuiTypography-root MuiTypography-body1"
+      <span
+        class="MuiTypography-root MuiTypography-inherit"
       >
         lang.self.sv
-      </p>
+      </span>
     </button>
     <button
       aria-label="tooltip.open: general.uiLanguage"
-      class="sc-bdvvNz jJdzgx"
     >
       <svg
         aria-hidden="true"

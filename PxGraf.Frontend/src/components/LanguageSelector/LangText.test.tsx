@@ -8,12 +8,12 @@ describe('LangText', () => {
         render(<LangText text="English" />);
         const element = screen.getByText('English');
         expect(element).toBeInTheDocument();
-        expect(element.tagName).toBe('P');
+        expect(element.tagName).toBe('SPAN');
     });
 
     it('renders empty string text', () => {
         const { container } = render(<LangText text="" />);
-        expect(container.querySelector('p')).toBeInTheDocument();
-        expect(container.querySelector('p').textContent).toBe('');
+        expect(container.querySelector('span')).toBeInTheDocument();
+        expect(container.querySelector('span').textContent).toBe('');
     });
 });

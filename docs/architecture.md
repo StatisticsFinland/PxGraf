@@ -256,7 +256,9 @@ The editor state was decomposed from a single monolithic `EditorContext` into th
 
 ### Styling
 
-MUI 7 theme (`src/styles/materialTheme`), styled-components for custom layout, `App.css` for global styles.
+The MUI 7 theme (`src/styles/materialTheme.ts`) is the authoritative source for application UI colors, typography, surfaces, borders, shape, shadows, and interaction states. Application components should consume semantic theme roles through MUI `styled` or `sx`; reusable UI colors should not be defined directly in components. Styled-components remains available for layout-only styles that do not need theme tokens.
+
+Visualization output is a separate styling boundary. Do not apply the application theme to HTML tables or graphs rendered by `@statisticsfinland/pxvisualizer`. The `.tk-table` rules in `src/index.css`, the public `pxgraf-styles/pxgraf-table.css` stylesheet, and pxvisualizer chart styles control visualization and export appearance independently and must be reviewed separately from application UI changes.
 
 ### Frontend Tests
 

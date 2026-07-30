@@ -1,6 +1,6 @@
 import React from 'react';
 import { Autocomplete, Chip, TextField } from '@mui/material';
-import styled from 'styled-components';
+import { styled } from '@mui/material/styles';
 import { useTranslation } from 'react-i18next';
 import { IDimensionValue } from 'types/cubeMeta';
 import { UiLanguageContext } from 'contexts/uiLanguageContext';
@@ -12,12 +12,12 @@ interface ManualPickDimensionSelectionProps {
     label?: string
 }
 
-const StyledAutocomplete = styled(Autocomplete)`
-    flex-basis: 0;
-    flex-grow: 1;
-    width: 100%;
-    background-color: var(--surface-white);
-`;
+const StyledAutocomplete = styled(Autocomplete)(({ theme }) => ({
+    flexBasis: 0,
+    flexGrow: 1,
+    width: '100%',
+    backgroundColor: theme.palette.background.paper,
+}));
 
 export const ManualPickDimensionSelection: React.FC<ManualPickDimensionSelectionProps> = ({ options, selectedValues, onQueryChanged, label }) => {
     const { t } = useTranslation();

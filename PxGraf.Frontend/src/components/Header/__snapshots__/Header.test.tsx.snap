@@ -3,10 +3,10 @@
 exports[`Header component should render correctly 1`] = `
 <DocumentFragment>
   <div
-    class="sc-iCfMpq kYnZcJ MuiBox-root"
+    class="MuiBox-root"
   >
     <div
-      class="MuiStack-root sc-pVTZz pMhsB"
+      class="MuiStack-root"
     >
       <a
         class="MuiButtonBase-root Mui-focusVisible MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary"
@@ -20,33 +20,42 @@ exports[`Header component should render correctly 1`] = `
       >
         <img
           alt="navbar.logoAlt"
-          class="sc-gKckfV hVRIFN"
           src="test-file-stub"
         />
       </a>
-      <div
-        class="sc-kDTkih gokhIK"
-      />
-      <div
-        class="sc-jrQAHW gpjsns"
-      >
+      <div>
         <button
           class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorPrimary"
           tabindex="0"
           type="button"
         >
+          <span
+            class="MuiButton-icon MuiButton-startIcon MuiButton-iconSizeMedium"
+          >
+            <svg
+              aria-hidden="true"
+              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium"
+              data-testid="FolderOpenIcon"
+              focusable="false"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2m0 12H4V8h16z"
+              />
+            </svg>
+          </span>
           savedQuery.dialogButtonTxt
         </button>
       </div>
+      <div />
       <div
-        class="MuiStack-root sc-furwwf kSGVog"
+        class="MuiStack-root"
       >
         <div
-          class="MuiStack-root sc-hKwAaq gmSVhW"
+          class="MuiStack-root"
         >
           <button
             aria-label="tooltip.open: general.uiLanguage"
-            class="sc-bdvvNz jJdzgx"
           >
             <svg
               aria-hidden="true"

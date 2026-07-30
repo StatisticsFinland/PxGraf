@@ -1,5 +1,5 @@
 import { EDimensionType, EMetaPropertyType, IContentDimensionValue, IDimension, IDimensionValue } from 'types/cubeMeta';
-import { FilterType, ICubeQuery, IDimensionQuery, IValueFilter, VirtualValueOperator } from 'types/query';
+import { FilterType, ICubeQuery, IDimensionQuery, IValueFilter, Query, VirtualValueOperator } from 'types/query';
 import { getDefaultFilter } from './dimensionSelectionHelpers';
 import { EDatabaseTableError } from '../types/tableListItems';
 import { IVisualizationOptions } from '../types/editorContentsResponse';
@@ -7,6 +7,7 @@ import { VisualizationType } from '../types/visualizationType';
 import { sourceKey, eliminationKey } from './keywordConstants';
 import { getAdditionalPropertyValue } from './metadataUtils';
 import { generatePlaceholderContentEdits, generatePlaceholderNames, getOperatorType } from './virtualValueHelpers';
+import { IVisualizationSettings } from '../types/visualizationSettings';
 
 /**
  * Determines the default value filter for a dimension when a table is opened without a saved query.
@@ -128,3 +129,50 @@ export const getErrorText = (error: EDatabaseTableError, t: (key: string) => str
 export const getVisualizationOptionsForVisualizationType = (options: IVisualizationOptions[], type: VisualizationType): IVisualizationOptions | undefined => {
     return options?.find(option => option.type === type);
 }
+
+interface IVisualizationSettingVisibility {
+    sortingOptions: IVisualizationOptions['sortingOptions']['default'];
+    selectableDimensionsExcludingContent: IDimension[];
+    showTableSettings: boolean;
+    showSortingOptions: boolean;
+    showMarkerScaler: boolean;
+    showMultiselectableSelector: boolean;
+    showYAxisCutting: boolean;
+    showPivot: boolean;
+    showDataPoints: boolean;
+    hasVisibleSettings: boolean;
+}
+
+export const getVisualizationSettingVisibility = (
+    selectedVisualization: VisualizationType,
+    dimensions: IDimension[],
+    dimensionQuery: Query,
+    visualizationOptions: IVisualizationOptions,
+    visualizationSettings: IVisualizationSettings,
+): IVisualizationSettingVisibility => {
+    const sortingOptions = visualizationOptions?.allowManualPivot && visualizationSettings.pivotRequested
+        ? visualizationOptions?.sortingOptions.pivoted
+        : visualizationOptions?.sortingOptions.default;
+    const selectableDimensions = dimensions.filter(dimension => dimensionQuery[dimension.code].selectable);
+    const selectableDimensionsExcludingContent = selectableDimensions.filter(dimension => dimension.type !== EDimensionType.Content);
+    const showTableSettings = selectedVisualization === VisualizationType.Table;
+    const showSortingOptions = sortingOptions?.length > 0;
+    const showMarkerScaler = visualizationOptions?.allowSetMarkerScale;
+    const showMultiselectableSelector = visualizationOptions?.allowMultiselect && selectableDimensionsExcludingContent.length > 0;
+    const showYAxisCutting = visualizationOptions?.allowCuttingYAxis;
+    const showPivot = visualizationOptions?.allowManualPivot;
+    const showDataPoints = visualizationOptions?.allowShowingDataPoints;
+
+    return {
+        sortingOptions,
+        selectableDimensionsExcludingContent,
+        showTableSettings,
+        showSortingOptions,
+        showMarkerScaler,
+        showMultiselectableSelector,
+        showYAxisCutting,
+        showPivot,
+        showDataPoints,
+        hasVisibleSettings: showTableSettings || showSortingOptions || showMarkerScaler || showMultiselectableSelector || showYAxisCutting || showPivot || showDataPoints,
+    };
+};

@@ -1,7 +1,7 @@
 import React, { useId } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FormControl, InputLabel, OutlinedInput, InputAdornment, Alert } from '@mui/material';
-import styled from 'styled-components';
+import { styled } from '@mui/material/styles';
 import RevertButton from './RevertButton';
 
 interface IEditorFieldProps {
@@ -13,13 +13,22 @@ interface IEditorFieldProps {
     maxLength?: number;
 }
 
-const StyledOutlinedInput = styled(OutlinedInput)<{ $isEdited: boolean }>(({ $isEdited }) => ({
-    backgroundColor: $isEdited ? 'var(--editorfield-background-edited)' : 'var(--editorfield-background)',
+const StyledOutlinedInput = styled(OutlinedInput, {
+    shouldForwardProp: prop => prop !== 'isEdited',
+})<{ isEdited: boolean }>(({ isEdited, theme }) => ({
+    backgroundColor: isEdited ? theme.palette.warning.light : theme.palette.background.paper,
+    transition: 'background-color 120ms ease, box-shadow 120ms ease',
     '& .MuiOutlinedInput-notchedOutline': {
-        borderColor: $isEdited ? 'var(--editorfield-outline-edited)' : 'var(--editorfield-outline)',
+        borderColor: isEdited ? theme.palette.warning.dark : theme.palette.text.disabled,
+    },
+    '&:hover .MuiOutlinedInput-notchedOutline': {
+        borderColor: isEdited ? theme.palette.warning.dark : theme.palette.text.secondary,
+    },
+    '&.Mui-focused': {
+        boxShadow: isEdited ? `0 0 0 1px ${theme.palette.warning.dark}` : 'none',
     },
     '& input': {
-        fontWeight: $isEdited ? 'bold' : 'normal',
+        fontWeight: isEdited ? theme.typography.fontWeightBold : theme.typography.fontWeightRegular,
     }
 }));
 
@@ -64,7 +73,7 @@ export const EditorField: React.FC<IEditorFieldProps> = ({ label, defaultValue, 
                     )
                 }
                 label={label}
-                $isEdited={isEdited}
+                isEdited={isEdited}
             />
             <div aria-live='polite'>
             {

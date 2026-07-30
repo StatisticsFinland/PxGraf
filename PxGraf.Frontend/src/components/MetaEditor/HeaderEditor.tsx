@@ -17,10 +17,14 @@ interface IHeaderEditorProps {
 
 const Wrapper = styled.div`
   display: flex;
-`;
+    align-items: flex-start;
+    gap: 4px;
+    width: 100%;
 
-const GridFixer = styled.div`
-  grid-column: span 12;
+    & > .MuiFormControl-root {
+        flex: 1;
+        min-width: 0;
+    }
 `;
 
 export const HeaderEditor: React.FC<IHeaderEditorProps> = ({ editorContentResponse, language, maxLength, style = {} }) => {
@@ -40,22 +44,20 @@ export const HeaderEditor: React.FC<IHeaderEditorProps> = ({ editorContentRespon
     React.useEffect(() => () => editHeader.flush(), [editHeader]);
 
     return (
-        <GridFixer>
-            <Wrapper>
-                <InfoBubble info={t('infoText.titleEdition')} ariaLabel={t("editMetadata.header")} />
-                <EditorField
-                    label={t("editMetadata.header")}
-                    style={style}
-                    defaultValue={editorContentResponse.data?.headerText[language] ?? ""}
-                    editValue={editValue ? editValue[language] : null}
-                    onChange={newValue => {
-                        draftEditValue.current = { ...draftEditValue.current, [language]: newValue };
-                        editHeader(draftEditValue.current);
-                    }}
-                    maxLength={maxLength}
-                />
-            </Wrapper>
-        </GridFixer>
+        <Wrapper>
+            <InfoBubble info={t('infoText.titleEdition')} ariaLabel={t("editMetadata.header")} />
+            <EditorField
+                label={t("editMetadata.header")}
+                style={style}
+                defaultValue={editorContentResponse.data?.headerText[language] ?? ""}
+                editValue={editValue ? editValue[language] : null}
+                onChange={newValue => {
+                    draftEditValue.current = { ...draftEditValue.current, [language]: newValue };
+                    editHeader(draftEditValue.current);
+                }}
+                maxLength={maxLength}
+            />
+        </Wrapper>
     );
 }
 

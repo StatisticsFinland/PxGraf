@@ -3,17 +3,15 @@
 exports[`Rendering test renders correctly 1`] = `
 <DocumentFragment>
   <div
-  class="sc-fWCIrV ecavpD MuiBox-root"
+  class="sc-fotPOC ibRoaN MuiBox-root"
 >
   <div
-    class="sc-fotPOC iLnMkL MuiBox-root"
+    class="MuiBox-root"
   >
     <div
-      class="sc-fFejRA lkbrAL MuiBox-root"
+      class="MuiBox-root"
     >
-      <div
-        class="sc-eggEi hqaXkD"
-      >
+      <div>
         <p
           class="MuiTypography-root MuiTypography-body2"
         >
@@ -21,7 +19,7 @@ exports[`Rendering test renders correctly 1`] = `
         </p>
       </div>
       <div
-        class="MuiPaper-root MuiPaper-elevation MuiPaper-elevation0 MuiAccordion-root Mui-expanded sc-ksdwMQ dEWgej"
+        class="MuiPaper-root MuiPaper-elevation MuiPaper-elevation0 MuiAccordion-root Mui-expanded"
         style="--Paper-shadow: none;"
       >
         <h3
@@ -30,7 +28,7 @@ exports[`Rendering test renders correctly 1`] = `
           <button
             aria-controls="dimension-code-content"
             aria-expanded="true"
-            class="MuiButtonBase-root MuiAccordionSummary-root Mui-expanded sc-hBUSFb ijaPzb"
+            class="MuiButtonBase-root MuiAccordionSummary-root Mui-expanded"
             id="dimension-code-header"
             tabindex="0"
             type="button"
@@ -41,9 +39,12 @@ exports[`Rendering test renders correctly 1`] = `
               <h2
                 class="MuiTypography-root MuiTypography-h2"
               >
-                <b>
-                  variableName 0/1
-                </b>
+                <span>
+                  variableName
+                </span>
+                <span>
+                  0/1
+                </span>
               </h2>
             </span>
             <span
@@ -80,16 +81,16 @@ exports[`Rendering test renders correctly 1`] = `
                 role="region"
               >
                 <div
-                  class="MuiAccordionDetails-root sc-bqiQet eyibFB"
+                  class="MuiAccordionDetails-root"
                 >
                   <div
-                    class="MuiStack-root sc-jrQAHW dcwdYG"
+                    class="MuiStack-root sc-gsDLFA bQoKba"
                   >
                     <div
-                      class="MuiStack-root sc-kDTkih fHYUpH"
+                      class="MuiStack-root sc-dkPvMp izxoca"
                     >
                       <div
-                        class="MuiFormControl-root sc-iqshrI KssF"
+                        class="MuiFormControl-root sc-hKwAaq jyutZo"
                       >
                         <label
                           class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined"
@@ -172,7 +173,8 @@ exports[`Rendering test renders correctly 1`] = `
                         aria-expanded="false"
                         aria-haspopup="dialog"
                         aria-label="variableSelect.selectableSettings"
-                        class="MuiButtonBase-root MuiIconButton-root MuiI...
+                        class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall"
+                        data-m...
 </DocumentFragment>
 `;
 

@@ -3,7 +3,7 @@
 exports[`Rendering test renders correctly 1`] = `
 <DocumentFragment>
   <div
-    class="MuiContainer-root MuiContainer-maxWidthMd sc-jRQzZg iOHzMF"
+    class="MuiContainer-root MuiContainer-maxWidthMd"
   >
     <nav
       aria-labelledby="nested-list-subheader"
@@ -16,7 +16,7 @@ exports[`Rendering test renders correctly 1`] = `
         tableSelect.title
       </div>
       <li
-        class="MuiListItem-root MuiListItem-gutters MuiListItem-padding sc-bdvvNz dSeQbs"
+        class="MuiListItem-root MuiListItem-gutters MuiListItem-padding"
         id="id1.px"
       >
         <a
@@ -60,7 +60,7 @@ exports[`Rendering test renders correctly 1`] = `
         class="MuiDivider-root MuiDivider-fullWidth"
       />
       <li
-        class="MuiListItem-root MuiListItem-gutters MuiListItem-padding sc-bdvvNz dSeQbs"
+        class="MuiListItem-root MuiListItem-gutters MuiListItem-padding"
         id="id2.px"
       >
         <a

@@ -129,7 +129,7 @@ exports[`Rendering test renders correctly 1`] = `
     class="MuiDivider-root MuiDivider-fullWidth"
   />
   <li
-    class="MuiListItem-root MuiListItem-gutters MuiListItem-padding sc-bdvvNz dSeQbs"
+    class="MuiListItem-root MuiListItem-gutters MuiListItem-padding"
     id="foo-bar-baz-asd2.px"
   >
     <a
@@ -181,7 +181,7 @@ exports[`Rendering test renders correctly when table query  1`] = `
     class="MuiListItem-root MuiListItem-gutters MuiListItem-padding"
   >
     <div
-      class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation0 MuiAlert-root MuiAlert-colorError MuiAlert-standardError MuiAlert-standard sc-eCIkhf bcSpMO"
+      class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation0 MuiAlert-root MuiAlert-colorError MuiAlert-standardError MuiAlert-standard sc-dkPvMp knndjQ"
       role="alert"
       style="--Paper-shadow: none;"
     >
@@ -222,11 +222,11 @@ exports[`Rendering test renders correctly while loading data 1`] = `
       class="MuiListItemIcon-root"
     >
       <span
-        class="MuiSkeleton-root MuiSkeleton-circular MuiSkeleton-pulse sc-dkPvMp ettlbk"
+        class="MuiSkeleton-root MuiSkeleton-circular MuiSkeleton-pulse sc-bdvvNz iXoFDu"
       />
     </div>
     <div
-      class="MuiListItemText-root sc-hKwAaq xSgkp"
+      class="MuiListItemText-root sc-gsDLFA bqpWln"
     >
       <span
         class="MuiTypography-root MuiTypography-body1 MuiListItemText-primary"

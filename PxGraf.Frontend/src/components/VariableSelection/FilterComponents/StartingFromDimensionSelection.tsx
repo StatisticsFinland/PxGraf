@@ -1,6 +1,6 @@
 import React from 'react';
 import { Autocomplete, TextField } from '@mui/material';
-import styled from 'styled-components';
+import { styled } from '@mui/material/styles';
 import { IDimensionValue } from 'types/cubeMeta';
 import { useTranslation } from 'react-i18next';
 import { UiLanguageContext } from 'contexts/uiLanguageContext';
@@ -11,12 +11,12 @@ interface IStartingFromDimensionSelectionProps {
     onQueryChanged: (newCode: string) => void
 }
 
-const StyledAutocomplete = styled(Autocomplete)`
-    flex-basis: 0;
-    flex-grow: 1;
-    width: 100%;
-    background-color: var(--surface-white);
-`;
+const StyledAutocomplete = styled(Autocomplete)(({ theme }) => ({
+    flexBasis: 0,
+    flexGrow: 1,
+    width: '100%',
+    backgroundColor: theme.palette.background.paper,
+}));
 
 export const StartingFromDimensionSelection: React.FC<IStartingFromDimensionSelectionProps> = ({ options, startingCode, onQueryChanged }) => {
     const { t } = useTranslation();

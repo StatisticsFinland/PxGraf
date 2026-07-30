@@ -3,28 +3,25 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { UiLanguageContext } from "contexts/uiLanguageContext";
 import { LangText } from './LangText';
-import styled from 'styled-components';
+import { styled } from '@mui/material/styles';
 import InfoBubble from 'components/InfoBubble/InfoBubble';
 
-const SelectorWrapper = styled(Stack)`
-    padding: 8px;
-`;
+const SelectorWrapper = styled(Stack)({ padding: 4, gap: 2 });
 
-const StyledLangButton = styled(Button)<{ $selected?: boolean }>`
-    && {
-        padding: 4px 10px;
-        min-width: 0;
-        text-transform: none;
-        color: black;
-        background-color: white;
-        font-weight: ${({ $selected }) => $selected ? 700 : 400};
-        border: ${({ $selected }) => $selected ? '1px solid black' : '1px solid transparent'};
-        border-radius: 20px;
-        &:hover {
-            background-color: rgba(0, 0, 0, 0.06);
-        }
-    }
-`;
+const StyledLangButton = styled(Button, {
+    shouldForwardProp: prop => prop !== 'selected',
+})<{ selected?: boolean }>(({ selected, theme }) => ({
+    padding: '4px 10px',
+    minWidth: 0,
+    color: selected ? theme.palette.primary.main : theme.palette.text.secondary,
+    backgroundColor: 'transparent',
+    fontWeight: selected ? theme.typography.fontWeightBold : theme.typography.fontWeightMedium,
+    border: `1px solid ${selected ? theme.palette.primary.main : 'transparent'}`,
+    borderRadius: theme.shape.borderRadius,
+    '&:hover': {
+        backgroundColor: theme.palette.primary.light,
+    },
+}));
 
 export const LanguageSelector: React.FC = () => {
     const { t, i18n } = useTranslation();
@@ -33,7 +30,7 @@ export const LanguageSelector: React.FC = () => {
     return (
         <SelectorWrapper direction="row" alignItems="center" flexWrap='wrap'>
             {availableUiLanguages.map(lang => (
-                <StyledLangButton size="small" $selected={language === lang} aria-label={`${t('general.uiLanguage')}: ${i18n.getFixedT(lang)('lang.self')}`} key={lang} onClick={() => setLanguage(lang)}>
+                <StyledLangButton size="small" selected={language === lang} aria-pressed={language === lang} aria-label={`${t('general.uiLanguage')}: ${i18n.getFixedT(lang)('lang.self')}`} key={lang} onClick={() => setLanguage(lang)}>
                     <LangText text={i18n.getFixedT(lang)('lang.self')} />
                 </StyledLangButton>
             ))}
