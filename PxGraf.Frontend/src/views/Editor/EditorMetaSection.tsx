@@ -117,7 +117,7 @@ export const EditorMetaSection: React.FC<IEditorMetaSectionProps> = ({ editorCon
 
     const { t } = useTranslation();
     const visualizationOptions = getVisualizationOptionsForVisualizationType(editorContentsResponse.data?.visualizationOptions, selectedVisualization);
-    const hasVisibleVisualizationSettings = selectedVisualization != null && getVisualizationSettingVisibility(
+    const hasVisibleVisualizationSettings = selectedVisualization != null && visualizationOptions != null && getVisualizationSettingVisibility(
         selectedVisualization,
         resolvedDimensions,
         dimensionQuery,
@@ -200,7 +200,7 @@ export const EditorMetaSection: React.FC<IEditorMetaSectionProps> = ({ editorCon
                         </PreviewSizeControlWrapper>
                     </ChartTypeSelectorWrapper>
                 </GridFixer>
-                {hasVisibleVisualizationSettings && <VisualizationSettingsRow data-testid="visualization-settings-row"><VisualizationSettingControl
+                {hasVisibleVisualizationSettings && visualizationOptions != null && <VisualizationSettingsRow data-testid="visualization-settings-row"><VisualizationSettingControl
                     selectedVisualization={selectedVisualization}
                     dimensions={resolvedDimensions}
                     dimensionQuery={dimensionQuery}

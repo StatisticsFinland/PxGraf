@@ -283,4 +283,23 @@ describe('Rendering test', () => {
 
             expect(screen.queryByTestId('visualization-settings-row')).toBeNull();
         });
+
+        it('omits the settings row when the selected visualization has no options', () => {
+            render(
+                <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
+                    <EditorMetaSection
+                        editorContentsResponse={editorContentsResult}
+                        resolvedDimensions={mockDimensions}
+                        selectedVisualization={VisualizationType.LineChart}
+                        dimensionQuery={mockQuery}
+                        contentLanguages={["fi", "sv", "en"]}
+                        visualizationSettings={mockVisualizationSettings}
+                        previewSize={EPreviewSize.Desktop}
+                        onPreviewSizeChange={() => {}}
+                    />
+                </UiLanguageContext.Provider>
+            );
+
+            expect(screen.queryByTestId('visualization-settings-row')).toBeNull();
+        });
 });

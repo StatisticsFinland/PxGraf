@@ -11,14 +11,14 @@ interface EditorFilterSectionProps {
     dimensions: IDimension[],
     resolvedDimensionCodes: { [key: string]: string[] }
     queries: Query
-    width?: number
-    maxWidthPercentage?: number
+    width: number
+    maxWidthPercentage: number
     onEditMetadata: () => void
 }
 
 const SelectorWrapper = styled(Box, {
     shouldForwardProp: prop => prop !== 'width' && prop !== 'maxWidthPercentage',
-})<{ width?: number, maxWidthPercentage?: number }>(({ width, maxWidthPercentage, theme }) => ({
+})<{ width: number, maxWidthPercentage: number }>(({ width, maxWidthPercentage, theme }) => ({
     maxWidth: `${maxWidthPercentage}%`,
     flex: `0 0 ${width}px`,
     width,

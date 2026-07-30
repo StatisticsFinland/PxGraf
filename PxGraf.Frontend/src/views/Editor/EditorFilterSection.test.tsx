@@ -54,6 +54,8 @@ describe('Rendering test', () => {
                     queries={mockQuery}
                     resolvedDimensionCodes={{ 'foo': ['foo', 'bar', 'baz'] }}
                     dimensions={mockDimensions}
+                    width={320}
+                    maxWidthPercentage={33}
                     onEditMetadata={onEditMetadata}
                     />
             </UiLanguageContext.Provider>
@@ -70,6 +72,8 @@ describe('Rendering test', () => {
                     queries={mockQuery}
                     resolvedDimensionCodes={{ 'foo': [] }}
                     dimensions={mockDimensions}
+                    width={320}
+                    maxWidthPercentage={33}
                     onEditMetadata={jest.fn()}
                 />
             </UiLanguageContext.Provider>
