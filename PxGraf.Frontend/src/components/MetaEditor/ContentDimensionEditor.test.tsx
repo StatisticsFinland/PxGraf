@@ -103,6 +103,11 @@ const renderEditor = (
         </UiLanguageContext.Provider>
     );
 
+const resolveCubeQueryUpdate = (setCubeQuery: jest.Mock, currentCubeQuery: ICubeQuery) => {
+    const update = setCubeQuery.mock.calls[0][0] as React.SetStateAction<ICubeQuery>;
+    return typeof update === 'function' ? update(currentCubeQuery) : update;
+};
+
 describe('Layout tests', () => {
     it('renders name, unit and source editor fields for each dimension value', () => {
         renderEditor();
@@ -156,7 +161,7 @@ describe('Assertion tests', () => {
         const setCubeQuery = jest.fn();
         renderEditor(mockDimension, mockCubeQuery, setCubeQuery);
         fireEvent.change(screen.getByDisplayValue('bar'), { target: { value: 'newName' } });
-        expect(setCubeQuery).toHaveBeenCalledWith({
+        expect(resolveCubeQueryUpdate(setCubeQuery, mockCubeQuery)).toEqual({
             chartHeaderEdit: {},
             variableQueries: {
                 foo: {
@@ -174,7 +179,7 @@ describe('Assertion tests', () => {
         const setCubeQuery = jest.fn();
         renderEditor(mockDimension, mockCubeQuery, setCubeQuery);
         fireEvent.change(screen.getByDisplayValue('yksikko'), { target: { value: 'newUnit' } });
-        expect(setCubeQuery).toHaveBeenCalledWith({
+        expect(resolveCubeQueryUpdate(setCubeQuery, mockCubeQuery)).toEqual({
             chartHeaderEdit: {},
             variableQueries: {
                 foo: {
@@ -193,7 +198,7 @@ describe('Assertion tests', () => {
         const setCubeQuery = jest.fn();
         renderEditor(mockDimension, mockCubeQuery, setCubeQuery);
         fireEvent.change(screen.getByDisplayValue('lahde'), { target: { value: 'newSource' } });
-        expect(setCubeQuery).toHaveBeenCalledWith({
+        expect(resolveCubeQueryUpdate(setCubeQuery, mockCubeQuery)).toEqual({
             chartHeaderEdit: {},
             variableQueries: {
                 foo: {
@@ -213,7 +218,7 @@ describe('Assertion tests', () => {
         const emptyQuery: ICubeQuery = { chartHeaderEdit: {}, variableQueries: {} };
         renderEditor(mockDimension, emptyQuery, setCubeQuery);
         fireEvent.change(screen.getByDisplayValue('fgfgfg'), { target: { value: 'newName' } });
-        expect(setCubeQuery).toHaveBeenCalledWith({
+        expect(resolveCubeQueryUpdate(setCubeQuery, emptyQuery)).toEqual({
             chartHeaderEdit: {},
             variableQueries: {
                 foo: {

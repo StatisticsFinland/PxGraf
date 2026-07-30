@@ -571,7 +571,7 @@ describe('Assertion tests', () => {
                 </NavigationProvider>
             </QueryClientProvider>
         );
-        expect(screen.getByText('variableName')).toBeInTheDocument();
+        expect(screen.getByRole('heading', { level: 2, name: /variableName/ })).toBeInTheDocument();
     });
 
     it('renders the chart type selector with available visualization type', () => {

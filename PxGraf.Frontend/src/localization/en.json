@@ -74,6 +74,11 @@
   },
   "editMetadata": {
     "editorTitle": "Metadata",
+    "dialogTitle": "Edit selected value metadata",
+    "dimensions": "Selected value dimensions",
+    "apply": "Apply",
+    "cancel": "Cancel",
+    "close": "Close metadata editor",
     "header": "Visualisation heading to be published",
     "valueName": "Value",
     "unit": "Unit",

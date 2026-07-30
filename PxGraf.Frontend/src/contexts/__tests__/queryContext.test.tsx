@@ -1,6 +1,6 @@
 import React from 'react';
 import { QueryContext, QueryProvider } from 'contexts/queryContext';
-import { act, render, waitFor } from '@testing-library/react';
+import { act, render } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { FilterType, ICubeQuery } from 'types/query';
 
@@ -24,14 +24,6 @@ const TestComponent = () => {
 };
 
 describe('QueryContext', () => {
-    beforeEach(() => {
-        jest.useFakeTimers();
-    });
-
-    afterEach(() => {
-        jest.useRealTimers();
-    });
-
     it('should have default values initially', () => {
         const { getByTestId } = render(
             <QueryProvider><TestComponent /></QueryProvider>
@@ -53,7 +45,7 @@ describe('QueryContext', () => {
         expect(getByTestId('query')).toHaveTextContent('"item"');
     });
 
-    it('should debounce cubeQuery updates', async () => {
+    it('should update cubeQuery immediately', () => {
         const { getByTestId } = render(
             <QueryProvider><TestComponent /></QueryProvider>
         );
@@ -62,21 +54,11 @@ describe('QueryContext', () => {
             getByTestId('setCubeQuery').click();
         });
 
-        // Should still show the initial value before debounce fires
-        expect(getByTestId('cubeQuery')).toHaveTextContent('{"variableQueries":{}}');
-
-        // Advance timers past the 1000ms debounce
-        act(() => {
-            jest.advanceTimersByTime(1000);
-        });
-
-        await waitFor(() => {
-            expect(getByTestId('cubeQuery')).toHaveTextContent('"dim1"');
-            expect(getByTestId('cubeQuery')).toHaveTextContent('"Testi"');
-        });
+        expect(getByTestId('cubeQuery')).toHaveTextContent('"dim1"');
+        expect(getByTestId('cubeQuery')).toHaveTextContent('"Testi"');
     });
 
-    it('should only apply the last cubeQuery when called rapidly', async () => {
+    it('should apply each cubeQuery update synchronously', () => {
         let setCubeQueryRef: (q: ICubeQuery) => void;
 
         const CapturingComponent = () => {
@@ -95,21 +77,19 @@ describe('QueryContext', () => {
         act(() => {
             setCubeQueryRef({ variableQueries: { first: { valueEdits: {} } } });
         });
+        expect(getByTestId('cubeQuery')).toHaveTextContent('"first"');
+
         act(() => {
             setCubeQueryRef({ variableQueries: { second: { valueEdits: {} } } });
         });
+        expect(getByTestId('cubeQuery')).toHaveTextContent('"second"');
+
         act(() => {
             setCubeQueryRef({ variableQueries: { third: { valueEdits: {} } } });
         });
 
-        act(() => {
-            jest.advanceTimersByTime(1000);
-        });
-
-        await waitFor(() => {
-            expect(getByTestId('cubeQuery')).toHaveTextContent('"third"');
-            expect(getByTestId('cubeQuery')).not.toHaveTextContent('"first"');
-            expect(getByTestId('cubeQuery')).not.toHaveTextContent('"second"');
-        });
+        expect(getByTestId('cubeQuery')).toHaveTextContent('"third"');
+        expect(getByTestId('cubeQuery')).not.toHaveTextContent('"first"');
+        expect(getByTestId('cubeQuery')).not.toHaveTextContent('"second"');
     });
 });

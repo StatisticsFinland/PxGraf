@@ -18,7 +18,7 @@ interface IContentDimensionValueEditorProps {
     dimensionValue: IContentDimensionValue;
     language: string;
     valueEdits: IDimensionValueEditions;
-    onChange: (newEdit: IDimensionValueEditions) => void;
+    onChange: React.Dispatch<React.SetStateAction<IDimensionValueEditions>>;
 }
 
 export const ContentDimensionValueEditor: React.FC<IContentDimensionValueEditorProps> = ({ dimensionValue, language, valueEdits, onChange }) => {
@@ -33,14 +33,13 @@ export const ContentDimensionValueEditor: React.FC<IContentDimensionValueEditorP
                     defaultValue={dimensionValue.name[language]}
                     editValue={valueEdits?.nameEdit?.[language]}
                     onChange={newValue => {
-                        const newValueEdit: IDimensionValueEditions = {
-                            ...valueEdits,
+                        onChange(currentValueEdits => ({
+                            ...currentValueEdits,
                             nameEdit: {
-                                ...valueEdits?.nameEdit,
+                                ...currentValueEdits?.nameEdit,
                                 [language]: newValue
                             }
-                        };
-                        onChange(newValueEdit);
+                        }));
                     }}
                 />
                 <EditorField
@@ -48,17 +47,16 @@ export const ContentDimensionValueEditor: React.FC<IContentDimensionValueEditorP
                     defaultValue={dimensionValue?.unit?.[language] ?? ''}
                     editValue={valueEdits?.contentComponent?.unitEdit?.[language]}
                     onChange={newValue => {
-                        const newValueEdit: IDimensionValueEditions = {
-                            ...valueEdits,
+                        onChange(currentValueEdits => ({
+                            ...currentValueEdits,
                             contentComponent: {
-                                ...valueEdits?.contentComponent,
+                                ...currentValueEdits?.contentComponent,
                                 unitEdit: {
-                                    ...valueEdits?.contentComponent?.unitEdit,
+                                    ...currentValueEdits?.contentComponent?.unitEdit,
                                     [language]: newValue
                                 }
                             }
-                        };
-                        onChange(newValueEdit);
+                        }));
                     }}
                 />
                 <EditorField
@@ -66,17 +64,16 @@ export const ContentDimensionValueEditor: React.FC<IContentDimensionValueEditorP
                     defaultValue={(getAdditionalPropertyValue(sourceKey, dimensionValue?.additionalProperties) as MultiLanguageString)?.[language] ?? ''}
                     editValue={valueEdits?.contentComponent?.sourceEdit?.[language]}
                     onChange={newValue => {
-                        const newValueEdit: IDimensionValueEditions = {
-                            ...valueEdits,
+                        onChange(currentValueEdits => ({
+                            ...currentValueEdits,
                             contentComponent: {
-                                ...valueEdits?.contentComponent,
+                                ...currentValueEdits?.contentComponent,
                                 sourceEdit: {
-                                    ...valueEdits?.contentComponent?.sourceEdit,
+                                    ...currentValueEdits?.contentComponent?.sourceEdit,
                                     [language]: newValue
                                 }
                             }
-                        };
-                        onChange(newValueEdit);
+                        }));
                     }}
                 />
             </EditorFieldWrapper>

@@ -252,6 +252,7 @@ export const Editor = () => {
     const saveQueryMutation = useSaveMutation(path, modifiedQuery, cubeQuery, selectedVisualization, visualizationSettings, saveId);
 
     const [previewSize, setPreviewSize] = React.useState<EPreviewSize>(EPreviewSize.Desktop);
+    const [metadataDialogOpen, setMetadataDialogOpen] = React.useState(false);
 
     const errorContainer = (errorMessage: string) => {
         return (
@@ -294,6 +295,7 @@ export const Editor = () => {
                 queries={modifiedQuery}
                 width={dimensionSelectionWidth}
                 maxWidthPercentage={dimensionSelectionMaxWidthPercentage}
+                onEditMetadata={() => setMetadataDialogOpen(true)}
             />
             <Divider orientation="vertical" />
             <MetaPreviewSectionWrapper>
@@ -322,7 +324,19 @@ export const Editor = () => {
                     maximumSize={editorContentsResponse.data?.maximumSupportedSize}
                     warningLimit={editorContentsResponse.data?.sizeWarningLimit}
                 />
-                <EditorDialogs saveQueryMutation={saveQueryMutation} />
+                <EditorDialogs
+                    saveQueryMutation={saveQueryMutation}
+                    metadataDialogOpen={metadataDialogOpen}
+                    metadataDimensions={enrichedResolvedDimensions}
+                    contentLanguages={contentLanguages}
+                    metadataLanguage={languageTab}
+                    cubeQuery={cubeQuery}
+                    onMetadataApply={variableQueries => setCubeQuery(currentCubeQuery => ({
+                        ...currentCubeQuery,
+                        variableQueries,
+                    }))}
+                    onMetadataClose={() => setMetadataDialogOpen(false)}
+                />
             </MetaPreviewSectionWrapper>
         </EditorLayout>
     );

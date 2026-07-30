@@ -117,7 +117,6 @@ const TitleWrapper = styled.div`
  */
 export const EditorMetaSection: React.FC<IEditorMetaSectionProps> = ({ editorContentsResponse, selectedVisualization, resolvedDimensions, dimensionQuery, contentLanguages, visualizationSettings, previewSize, onPreviewSizeChange }) => {
     const { language, languageTab, setLanguageTab } = React.useContext(UiLanguageContext);
-    const [isMetaAccordionOpen, setIsMetaAccordionOpen] = React.useState(false);
 
     // If the UI language is changed, content language is updated if applicable
     useEffect(() => {
@@ -128,10 +127,6 @@ export const EditorMetaSection: React.FC<IEditorMetaSectionProps> = ({ editorCon
     }, [language]);
 
     const { t } = useTranslation();
-
-    const handleMetaAccordionOpenChange = () => {
-        setIsMetaAccordionOpen(!isMetaAccordionOpen);
-    }
 
     const buttonInfo =(
         <>
@@ -166,10 +161,7 @@ export const EditorMetaSection: React.FC<IEditorMetaSectionProps> = ({ editorCon
                     <TabPanel value={editLanguage} selectedValue={languageTab} key={editLanguage}>
                         <MetaEditor
                             language={editLanguage}
-                            resolvedDimensions={resolvedDimensions}
                             editorContentsResponse={editorContentsResponse}
-                            isMetaAccordionOpen={isMetaAccordionOpen}
-                            onMetaAccordionOpenChange={handleMetaAccordionOpenChange}
                             titleMaxLength={editorContentsResponse.data ? editorContentsResponse.data.maximumHeaderLength : undefined}
                         />
                     </TabPanel>

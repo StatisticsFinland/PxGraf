@@ -17,7 +17,7 @@ const DenseList = styled(List)`
     border-radius: 4px;
     position: relative;
     overflow: auto;
-    max-height: 200px;
+    max-height: 160px;
 `;
 
 const NoPaddingListItem = styled(ListItem)`

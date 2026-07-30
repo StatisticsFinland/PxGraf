@@ -1,4 +1,5 @@
 import React from 'react';
+import { debounce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { EditorField } from './Editorfield';
 import InfoBubble from 'components/InfoBubble/InfoBubble';
@@ -27,7 +28,16 @@ export const HeaderEditor: React.FC<IHeaderEditorProps> = ({ editorContentRespon
 
     const { cubeQuery, setCubeQuery } = React.useContext(QueryContext);
     const editValue = cubeQuery?.chartHeaderEdit;
-    const editHeader = (title: MultiLanguageString) => setCubeQuery({ ...cubeQuery, chartHeaderEdit: title })
+    const draftEditValue = React.useRef(editValue);
+    const editHeader = React.useMemo(() => debounce((title: MultiLanguageString) => {
+        setCubeQuery(currentCubeQuery => ({ ...currentCubeQuery, chartHeaderEdit: title }));
+    }, 1000), [setCubeQuery]);
+
+    React.useEffect(() => {
+        draftEditValue.current = editValue;
+    }, [editValue]);
+
+    React.useEffect(() => () => editHeader.flush(), [editHeader]);
 
     return (
         <GridFixer>
@@ -39,8 +49,8 @@ export const HeaderEditor: React.FC<IHeaderEditorProps> = ({ editorContentRespon
                     defaultValue={editorContentResponse.data?.headerText[language] ?? ""}
                     editValue={editValue ? editValue[language] : null}
                     onChange={newValue => {
-                        const newEdit = { ...editValue, [language]: newValue };
-                        editHeader(newEdit);
+                        draftEditValue.current = { ...draftEditValue.current, [language]: newValue };
+                        editHeader(draftEditValue.current);
                     }}
                     maxLength={maxLength}
                 />

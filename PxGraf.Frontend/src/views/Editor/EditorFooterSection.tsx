@@ -9,10 +9,33 @@ import CellCount from 'components/CellCount/CellCount';
 
 const FooterBtnWrapper = styled(Box)`
     grid-area: footer;
+    height: 56px;
+    box-sizing: border-box;
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    padding: 16px;
+    padding: 8px 16px;
+`;
+
+const CellCountWrapper = styled(Box)`
+    height: 30px;
+    display: flex;
+    align-items: center;
+    margin-right: auto;
+
+    & .MuiAlert-root {
+        min-height: 30px;
+        box-sizing: border-box;
+        align-items: center;
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+
+    & .MuiAlert-icon,
+    & .MuiAlert-message {
+        padding-top: 4px;
+        padding-bottom: 4px;
+    }
 `;
 
 
@@ -30,9 +53,9 @@ export const EditorFooterSection: React.FC<IEditorFooterSectionProps> = ({ size,
     
     return(
         <FooterBtnWrapper>
-            {(size != null && maximumSize != null && warningLimit != null) ? <Box sx={{ marginRight: 'auto' }}><CellCount size={size} maximumSize={maximumSize} warningLimit={warningLimit} /></Box> : <></>}
+            {(size != null && maximumSize != null && warningLimit != null) ? <CellCountWrapper><CellCount size={size} maximumSize={maximumSize} warningLimit={warningLimit} /></CellCountWrapper> : <></>}
             <InfoBubble info={t('infoText.save')} ariaLabel={t("editor.save")} />
-            <Button variant="contained" size="small" startIcon={<SaveIcon />} onClick={() => setSaveDialogOpen(true)}>
+            <Button variant="contained" size="small" startIcon={<SaveIcon />} sx={{ minWidth: 104 }} onClick={() => setSaveDialogOpen(true)}>
                 {t("editor.save")}
             </Button>
         </FooterBtnWrapper>

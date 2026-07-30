@@ -74,6 +74,11 @@
   },
   "editMetadata": {
     "editorTitle": "Metadata",
+    "dialogTitle": "Redigera metadata för valda värden",
+    "dimensions": "Variabler för valda värden",
+    "apply": "Tillämpa",
+    "cancel": "Avbryt",
+    "close": "Stäng metadataredigeringen",
     "header": "Visualiseringens rubrik som publiceras",
     "valueName": "Värde",
     "unit": "Enhet",

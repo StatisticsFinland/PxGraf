@@ -28,13 +28,14 @@ export const EditorField: React.FC<IEditorFieldProps> = ({ label, defaultValue, 
     const inputId = useId();
     const ALERT_THRESHOLD = 0.556;
     const [localValue, setLocalValue] = React.useState(editValue ?? defaultValue);
-    const isEdited: boolean = editValue != null;
+    const [isEdited, setIsEdited] = React.useState(editValue != null);
     const showAlert = maxLength && (localValue.length / maxLength) > ALERT_THRESHOLD;
 
     React.useEffect(() => {
         const value = editValue ?? defaultValue;
         // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional: syncs local state when props change
         setLocalValue(value);
+        setIsEdited(editValue != null);
     }, [defaultValue, editValue]);
 
     return (
@@ -48,6 +49,7 @@ export const EditorField: React.FC<IEditorFieldProps> = ({ label, defaultValue, 
                 onChange={evt => {
                     const parsedValue = evt.target.value.substring(0, maxLength || evt.target.value.length);
                     setLocalValue(parsedValue);
+                    setIsEdited(true);
                     onChange(parsedValue);
                 }}
                 endAdornment={
@@ -55,6 +57,7 @@ export const EditorField: React.FC<IEditorFieldProps> = ({ label, defaultValue, 
                         <InputAdornment position="end">
                             <RevertButton onClick={() => {
                                 setLocalValue(defaultValue);
+                                setIsEdited(false);
                                 onChange();
                             }}/>
                         </InputAdornment>

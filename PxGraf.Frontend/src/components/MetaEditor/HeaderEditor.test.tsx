@@ -10,7 +10,8 @@ import { IEditorContentsResponse } from '../../types/editorContentsResponse';
 const data: IEditorContentsResponse = {
     headerText:
     {
-        'fi': 'foo'
+        'fi': 'foo',
+        'sv': 'baz'
     }
 } as unknown as IEditorContentsResponse;
 
@@ -44,7 +45,16 @@ describe('Rendering test', () => {
 });
 
 describe('Assertion tests', () => {
-    it('Change event should fire when value has changed', () => {
+    beforeEach(() => {
+        jest.useFakeTimers();
+        mockFunction.mockClear();
+    });
+
+    afterEach(() => {
+        jest.useRealTimers();
+    });
+
+    it('debounces changes before updating the query', () => {
         render(
             <QueryContext.Provider value={{
                 cubeQuery: mockCubeQuery,
@@ -56,6 +66,62 @@ describe('Assertion tests', () => {
             </QueryContext.Provider>
         );
         fireEvent.change(screen.getByDisplayValue(mockCubeQuery.chartHeaderEdit['fi']), { target: { value: 'editValue2' } });
+
+        expect(mockFunction).not.toHaveBeenCalled();
+        jest.advanceTimersByTime(1000);
+
         expect(mockFunction).toHaveBeenCalledTimes(1);
+    });
+
+    it('flushes a pending change when unmounted', () => {
+        const { unmount } = render(
+            <QueryContext.Provider value={{
+                cubeQuery: mockCubeQuery,
+                setCubeQuery: mockFunction,
+                query: {},
+                setQuery: jest.fn(),
+            }}>
+                <HeaderEditor editorContentResponse={mockDefaultResponse} language={mockLang} style={{}} />
+            </QueryContext.Provider>
+        );
+        fireEvent.change(screen.getByDisplayValue(mockCubeQuery.chartHeaderEdit['fi']), { target: { value: 'editValue2' } });
+
+        unmount();
+
+        expect(mockFunction).toHaveBeenCalledTimes(1);
+    });
+
+    it('accumulates pending changes across languages', () => {
+        const { rerender } = render(
+            <QueryContext.Provider value={{
+                cubeQuery: mockCubeQuery,
+                setCubeQuery: mockFunction,
+                query: {},
+                setQuery: jest.fn(),
+            }}>
+                <HeaderEditor editorContentResponse={mockDefaultResponse} language="fi" style={{}} />
+            </QueryContext.Provider>
+        );
+        fireEvent.change(screen.getByDisplayValue('bar'), { target: { value: 'Finnish edit' } });
+
+        rerender(
+            <QueryContext.Provider value={{
+                cubeQuery: mockCubeQuery,
+                setCubeQuery: mockFunction,
+                query: {},
+                setQuery: jest.fn(),
+            }}>
+                <HeaderEditor editorContentResponse={mockDefaultResponse} language="sv" style={{}} />
+            </QueryContext.Provider>
+        );
+        fireEvent.change(screen.getByDisplayValue('baz'), { target: { value: 'Swedish edit' } });
+        jest.advanceTimersByTime(1000);
+
+        expect(mockFunction).toHaveBeenCalledTimes(1);
+        const updateCubeQuery = mockFunction.mock.calls[0][0];
+        expect(updateCubeQuery(mockCubeQuery).chartHeaderEdit).toEqual({
+            fi: 'Finnish edit',
+            sv: 'Swedish edit',
+        });
     });
 });
