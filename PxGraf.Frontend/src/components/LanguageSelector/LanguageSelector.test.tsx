@@ -33,6 +33,17 @@ describe('Rendering test', () => {
 });
 
 describe('Assertion tests', () => {
+    it('marks the current language as selected', () => {
+        render(
+            <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
+                <LanguageSelector />
+            </UiLanguageContext.Provider>
+        );
+
+        expect(screen.getByRole('button', { name: 'general.uiLanguage: lang.self.fi' })).toHaveAttribute('aria-pressed', 'true');
+        expect(screen.getByRole('button', { name: 'general.uiLanguage: lang.self.en' })).toHaveAttribute('aria-pressed', 'false');
+    });
+
     it('should invoke setLanguage if clicked', () => {
         render(
             <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>

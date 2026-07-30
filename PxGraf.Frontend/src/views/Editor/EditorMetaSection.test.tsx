@@ -1,6 +1,6 @@
 import React from 'react';
 import EditorMetaSection from "./EditorMetaSection";
-import { render } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { EMetaPropertyType, IDimension, EDimensionType } from "types/cubeMeta";
 import { FilterType, Query } from "types/query";
 import { IVisualizationSettings } from "types/visualizationSettings";
@@ -245,6 +245,42 @@ describe('Rendering test', () => {
                 />
                 </UiLanguageContext.Provider>
             );
+            expect(screen.getByTestId('visualization-settings-row')).not.toBeNull();
         expect(asFragment()).toMatchSnapshot();
     });
+
+        it('omits the settings row when the visualization has no visible settings', () => {
+            const noSettingsOptions: IVisualizationOptions = {
+                ...visualizationOptions,
+                type: VisualizationType.LineChart,
+                allowShowingDataPoints: false,
+                allowCuttingYAxis: false,
+                allowMatchXLabelsToEnd: false,
+                allowSetMarkerScale: false,
+                allowManualPivot: false,
+                allowMultiselect: false,
+                sortingOptions: { default: [], pivoted: [] },
+            };
+            const noSettingsResult: IEditorContentsResult = {
+                ...editorContentsResult,
+                data: { ...editorContents, visualizationOptions: [noSettingsOptions] },
+            };
+
+            render(
+                <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
+                    <EditorMetaSection
+                        editorContentsResponse={noSettingsResult}
+                        resolvedDimensions={mockDimensions}
+                        selectedVisualization={VisualizationType.LineChart}
+                        dimensionQuery={mockQuery}
+                        contentLanguages={["fi", "sv", "en"]}
+                        visualizationSettings={mockVisualizationSettings}
+                        previewSize={EPreviewSize.Desktop}
+                        onPreviewSizeChange={() => {}}
+                    />
+                </UiLanguageContext.Provider>
+            );
+
+            expect(screen.queryByTestId('visualization-settings-row')).toBeNull();
+        });
 });

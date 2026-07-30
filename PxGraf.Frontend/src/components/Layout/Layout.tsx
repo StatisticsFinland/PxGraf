@@ -1,32 +1,26 @@
 import React, { ReactNode } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Divider } from '@mui/material';
-import styled from 'styled-components';
+import { styled } from '@mui/material/styles';
 import Header from 'components/Header/Header';
 import { EditorProvider } from 'contexts/editorContext';
 import Editor from 'views/Editor/Editor';
 
-const LayoutWrapper = styled.div`
-    display: grid;
-    grid-template-rows: auto 1fr;
-    height: 100%;
-    overflow: hidden;
-`;
+const LayoutWrapper = styled('div')({
+    display: 'grid',
+    gridTemplateRows: 'auto 1fr',
+    height: '100%',
+    overflow: 'hidden',
+});
 
-const HeaderArea = styled.div`
-    z-index: 10;
-    background-color: white;
-`;
+const HeaderArea = styled('div')(({ theme }) => ({
+    zIndex: 10,
+    backgroundColor: theme.palette.background.paper,
+}));
 
-const ContentArea = styled.main`
-    overflow-y: auto;
-    min-height: 0;
-`;
+const ContentArea = styled('main')({ overflowY: 'auto', minHeight: 0 });
 
-const EditorContentArea = styled.main`
-    overflow: hidden;
-    min-height: 0;
-`;
+const EditorContentArea = styled('main')({ overflow: 'hidden', minHeight: 0 });
 
 export const PageLayout: React.FC<{ element: ReactNode }> = ({ element }) => (
     <LayoutWrapper>

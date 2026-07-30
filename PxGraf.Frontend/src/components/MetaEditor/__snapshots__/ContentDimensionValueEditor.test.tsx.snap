@@ -6,7 +6,7 @@ exports[`Rendering test renders correctly 1`] = `
     class="MuiPaper-root MuiPaper-outlined MuiPaper-rounded"
   >
     <div
-      class="MuiStack-root sc-gsDLFA ckmnPj"
+      class="MuiStack-root sc-bdvvNz coFUgm"
     >
       <div
         class="MuiFormControl-root"
@@ -19,7 +19,7 @@ exports[`Rendering test renders correctly 1`] = `
           editMetadata.valueName: asd
         </label>
         <div
-          class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall sc-bdvvNz cMOIuc"
+          class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall"
         >
           <input
             aria-invalid="false"
@@ -54,7 +54,7 @@ exports[`Rendering test renders correctly 1`] = `
           editMetadata.unit
         </label>
         <div
-          class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall sc-bdvvNz cMOIuc"
+          class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall"
         >
           <input
             aria-invalid="false"
@@ -89,7 +89,7 @@ exports[`Rendering test renders correctly 1`] = `
           editMetadata.source
         </label>
         <div
-          class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall sc-bdvvNz cMOIuc"
+          class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall"
         >
           <input
             aria-invalid="false"

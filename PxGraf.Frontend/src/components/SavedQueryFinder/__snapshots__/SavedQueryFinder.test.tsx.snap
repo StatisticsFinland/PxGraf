@@ -8,6 +8,21 @@ exports[`Rendering test renders correctly with closed dialog 1`] = `
       tabindex="0"
       type="button"
     >
+      <span
+        class="MuiButton-icon MuiButton-startIcon MuiButton-iconSizeMedium"
+      >
+        <svg
+          aria-hidden="true"
+          class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium"
+          data-testid="FolderOpenIcon"
+          focusable="false"
+          viewBox="0 0 24 24"
+        >
+          <path
+            d="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2m0 12H4V8h16z"
+          />
+        </svg>
+      </span>
       savedQuery.dialogButtonTxt
     </button>
   </div>
@@ -26,6 +41,21 @@ exports[`Rendering test renders correctly with open dialog 1`] = `
       tabindex="0"
       type="button"
     >
+      <span
+        class="MuiButton-icon MuiButton-startIcon MuiButton-iconSizeMedium"
+      >
+        <svg
+          aria-hidden="true"
+          class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium"
+          data-testid="FolderOpenIcon"
+          focusable="false"
+          viewBox="0 0 24 24"
+        >
+          <path
+            d="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2m0 12H4V8h16z"
+          />
+        </svg>
+      </span>
       savedQuery.dialogButtonTxt
     </button>
   </div>

@@ -3,19 +3,21 @@ import { Box, Button } from '@mui/material';
 import SaveIcon from '@mui/icons-material/Save';
 import { SaveContext } from 'contexts/saveContext';
 import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
+import { styled } from '@mui/material/styles';
 import InfoBubble from 'components/InfoBubble/InfoBubble';
 import CellCount from 'components/CellCount/CellCount';
 
-const FooterBtnWrapper = styled(Box)`
-    grid-area: footer;
-    height: 56px;
-    box-sizing: border-box;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    padding: 8px 16px;
-`;
+const FooterBtnWrapper = styled(Box)(({ theme }) => ({
+    gridArea: 'footer',
+    height: 56,
+    boxSizing: 'border-box',
+    display: 'flex',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    padding: '8px 16px',
+    borderTop: `1px solid ${theme.palette.divider}`,
+    backgroundColor: theme.palette.background.paper,
+}));
 
 const CellCountWrapper = styled(Box)`
     height: 30px;

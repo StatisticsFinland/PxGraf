@@ -17,6 +17,14 @@ interface IHeaderEditorProps {
 
 const Wrapper = styled.div`
   display: flex;
+    align-items: flex-start;
+    gap: 4px;
+    width: 100%;
+
+    & > .MuiFormControl-root {
+        flex: 1;
+        min-width: 0;
+    }
 `;
 
 const GridFixer = styled.div`

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box } from '@mui/material';
-import styled from 'styled-components';
+import { styled } from '@mui/material/styles';
 import Preview from 'components/Preview/Preview';
 import { EPreviewSize } from 'types/previewSize';
 import { Query } from 'types/query';
@@ -9,20 +9,32 @@ import { IVisualizationSettings } from 'types/visualizationSettings';
 import { useTranslation } from 'react-i18next';
 import { IEditorContentsResult } from '../../api/services/editor-contents';
 
-const PreviewWrapper = styled(Box)`
-    grid-area: preview;
-    display: block;
-    position: relative;
-    padding: 8px;
-    overflow-y: auto;
-    min-height: 0;
-`;
+const PreviewWrapper = styled(Box)(({ theme }) => ({
+    gridArea: 'preview',
+    display: 'block',
+    position: 'relative',
+    padding: '12px 24px',
+    boxSizing: 'border-box',
+    overflowY: 'auto',
+    minHeight: 0,
+    backgroundColor: theme.palette.background.default,
+}));
 
-const GuideTextWrapper = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-`;
+const PreviewCenterer = styled('div')({
+    display: 'flex',
+    alignItems: 'center',
+    width: '100%',
+    minHeight: '100%',
+    '& > *': {
+        flexShrink: 0,
+    },
+});
+
+const GuideTextWrapper = styled('div')({
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+});
 
 interface IEditorPreviewSectionProps {
     path: string[];
@@ -63,13 +75,15 @@ export const EditorPreviewSection: React.FC<IEditorPreviewSectionProps> = ({ pat
     }
     return (
         <PreviewWrapper>
-            <Preview
-                path={path}
-                query={query}
-                selectedVisualization={selectedVisualization}
-                visualizationSettings={visualizationSettings}
-                previewSize={previewSize}
-            />
+            <PreviewCenterer>
+                <Preview
+                    path={path}
+                    query={query}
+                    selectedVisualization={selectedVisualization}
+                    visualizationSettings={visualizationSettings}
+                    previewSize={previewSize}
+                />
+            </PreviewCenterer>
         </PreviewWrapper>
     );
 }

@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { CircularProgress, Alert } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import { ISelectableSelections, SelectableDimensionMenus } from 'components/SelectableVariableMenus/SelectableDimensionMenus';
-import styled from 'styled-components';
 import React from 'react';
 import { Query } from 'types/query';
 import { IVisualizationSettings } from 'types/visualizationSettings';
@@ -28,23 +28,27 @@ interface IPreviewProps {
     previewSize: EPreviewSize;
 }
 
-const ResponseWrapper = styled.div`
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
+const ResponseWrapper = styled('div')({
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+});
 
-interface IChartWrapperProps {
-    $previewSize: EPreviewSize;
-}
-
-const ChartWrapper = styled.div<IChartWrapperProps>`
-    width: ${p => p.$previewSize};
-    margin: auto;
-`;
+const PreviewCanvas = styled('div', {
+    shouldForwardProp: prop => prop !== 'previewSize',
+})<{ previewSize: EPreviewSize }>(({ previewSize, theme }) => ({
+    width: previewSize,
+    margin: 'auto',
+    padding: '20px 24px 12px',
+    boxSizing: 'border-box',
+    backgroundColor: theme.palette.background.paper,
+    border: `1px solid ${theme.palette.divider}`,
+    borderRadius: theme.shape.borderRadius,
+    boxShadow: theme.shadows[1],
+}));
 
 export const getSelectables = (visualizationResponse: IQueryVisualizationResponse, visualizationSettings?: IVisualizationSettings): ISelectabilityInfo[] => {
     if (!visualizationResponse) return [];
@@ -109,7 +113,7 @@ export const Preview: React.FC<IPreviewProps> = ({ path, query, selectedVisualiz
     }
 
     return (
-        <>
+        <PreviewCanvas previewSize={previewSize}>
             <SelectableDimensionMenus
                 setSelections={setSelections}
                 selections={resolvedSelections}
@@ -117,7 +121,7 @@ export const Preview: React.FC<IPreviewProps> = ({ path, query, selectedVisualiz
                 multiselectableDimensionCode={visualizationSettings?.multiselectableVariableCode}
             />
             {showVisualization &&
-                <ChartWrapper className='tk-table' $previewSize={previewSize}>
+                <div className='tk-table'>
                     <Chart
                         locale={languageTab}
                         pxGraphData={data}
@@ -126,8 +130,8 @@ export const Preview: React.FC<IPreviewProps> = ({ path, query, selectedVisualiz
                         showLastUpdated={true}
                         showTableUnits={true}
                     />
-                </ChartWrapper>}
-        </>
+                </div>}
+        </PreviewCanvas>
     );
 }
 

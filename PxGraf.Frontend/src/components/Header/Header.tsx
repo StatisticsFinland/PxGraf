@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { useMediaQuery, Button, Box, Stack } from '@mui/material';
-import styled from 'styled-components';
+import { styled } from '@mui/material/styles';
 import LanguageSelector from 'components/LanguageSelector/LanguageSelector';
 import SavedQueryFinder from 'components/SavedQueryFinder/SavedQueryFinder';
 import { useNavigationContext } from 'contexts/navigationContext';
@@ -11,43 +11,42 @@ import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import { BasePath } from '../../envVars';
 
-const Logo = styled.img`
-  height: 40px;
-  padding-right: 24px;
+const Logo = styled('img')({
+    display: 'block',
+    height: 40,
+});
 
-  @media (max-width: 800px) {
-    padding-right: 24px;
-  }
-`;
+const LogoLink = styled('a')({
+    display: 'flex',
+    alignItems: 'center',
+    flexShrink: 0,
+});
 
-const HeaderWrapper = styled(Box)`
-  min-height: 56px;
-`;
+const HeaderWrapper = styled(Box)(({ theme }) => ({
+  minHeight: 56,
+  borderBottom: `1px solid ${theme.palette.divider}`,
+  backgroundColor: theme.palette.background.paper,
+}));
 
-const LangSelectorWrapper = styled(Stack)`
-  width: 20%;
-`;
+const LangSelectorWrapper = styled(Stack)({ width: '20%' });
 
-const MenuRowWrapper = styled(Stack)`
-  padding: 4px;
-  width: 100%;
-  align-items: center;
-  justify-content: flex-start;
-`;
+const MenuRowWrapper = styled(Stack)({
+  padding: '8px 16px',
+  boxSizing: 'border-box',
+  width: '100%',
+  alignItems: 'center',
+  justifyContent: 'flex-start',
+    gap: 16,
+});
 
-const LinkWrapper = styled.div`
-  padding-left: 30px;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 5px;
-`;
+const LinkWrapper = styled('div')({
+  display: 'flex',
+  flexDirection: 'row',
+  justifyContent: 'flex-start',
+  alignItems: 'center',
+});
 
-const BreadcrumbWrapper = styled.div`
-  padding-left: 16px;
-  flex: 1;
-`;
+const BreadcrumbWrapper = styled('div')({ flex: 1, minWidth: 0 });
 
 /**
  * Header component displayed on top of the page in all views.
@@ -87,13 +86,13 @@ const Header: React.FC = () => {
         <HeaderWrapper>
             <MenuRowWrapper direction="row" ref={headerRef}>
                 <Button sx={{ position: 'absolute', left: '-9999px' }} href="#" onClick={(e) => { e.preventDefault(); focusOnContent(); }} ref={ref} disableFocusRipple>{t('general.contentLink')}</Button>
-                <a href={indexUrl}><Logo alt={t('navbar.logoAlt')} src={isNarrowScreen ? logo_small : logo} /></a>
+                <LogoLink href={indexUrl}><Logo alt={t('navbar.logoAlt')} src={isNarrowScreen ? logo_small : logo} /></LogoLink>
+                <LinkWrapper>
+                    <SavedQueryFinder oldQueryId={queryId} compact={isNarrowScreen} />
+                </LinkWrapper>
                 <BreadcrumbWrapper>
                     {showBreadcrumb && tablePath?.length > 0 && <BreadcrumbNav tablePath={tablePath} />}
                 </BreadcrumbWrapper>
-                <LinkWrapper>
-                    <SavedQueryFinder oldQueryId={queryId} />
-                </LinkWrapper>
                 <LangSelectorWrapper direction="row-reverse" marginLeft="auto">
                     <LanguageSelector />
                 </LangSelectorWrapper>

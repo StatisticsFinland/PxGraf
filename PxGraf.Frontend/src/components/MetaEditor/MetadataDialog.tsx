@@ -9,10 +9,10 @@ import {
     Tab,
     Tabs,
 } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
 import { QueryContext } from '../../contexts/queryContext';
 import { UiLanguageContext } from 'contexts/uiLanguageContext';
 import TabPanel from 'components/TabPanel/TabPanel';
@@ -30,29 +30,30 @@ interface IMetadataDialogProps {
     onClose: () => void;
 }
 
-const StyledDialogTitle = styled(DialogTitle)`
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-`;
+const StyledDialogTitle = styled(DialogTitle)({
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+});
 
-const TabsWrapper = styled.div`
-    border-bottom: 1px solid var(--border-light);
-    flex: 0 0 auto;
-`;
+const TabsWrapper = styled('div')(({ theme }) => ({
+    borderBottom: `1px solid ${theme.palette.divider}`,
+    flex: '0 0 auto',
+}));
 
-const StyledDialogContent = styled(DialogContent)`
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-    overflow: hidden;
-`;
+const StyledDialogContent = styled(DialogContent)({
+    display: 'flex',
+    flexDirection: 'column',
+    minHeight: 0,
+    overflow: 'hidden',
+});
 
-const ValuesScroller = styled.div`
-    flex: 1;
-    min-height: 0;
-    overflow-y: auto;
-`;
+const ValuesScroller = styled('div')(({ theme }) => ({
+    flex: 1,
+    minHeight: 0,
+    overflowY: 'auto',
+    backgroundColor: theme.palette.background.default,
+}));
 
 export const MetadataDialog: React.FC<IMetadataDialogProps> = ({
     open,

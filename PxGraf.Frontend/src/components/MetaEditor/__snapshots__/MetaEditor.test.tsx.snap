@@ -3,17 +3,16 @@
 exports[`Rendering test renders correctly 1`] = `
 <DocumentFragment>
   <div
-    class="sc-gKckfV fKGfJp MuiBox-root"
+    class="sc-dkPvMp hKlvhF MuiBox-root"
   >
     <div
-      class="sc-jRQzZg cPjgI"
+      class="sc-gsDLFA frkOOF"
     >
       <div
-        class="sc-eCIkhf lmXeSF"
+        class="sc-bdvvNz egnXXA"
       >
         <button
           aria-label="tooltip.open: editMetadata.header"
-          class="sc-gsDLFA kMCBew"
         >
           <svg
             aria-hidden="true"
@@ -41,7 +40,7 @@ exports[`Rendering test renders correctly 1`] = `
             </b>
           </label>
           <div
-            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall MuiInputBase-adornedEnd sc-bdvvNz bsNdpO"
+            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall MuiInputBase-adornedEnd"
           >
             <input
               aria-invalid="false"

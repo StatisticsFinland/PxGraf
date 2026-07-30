@@ -2,16 +2,15 @@ import TablePivotSettings from "./TypeSpecificControls/TablePivotSettings";
 import { MarkerScaler } from "./UtilityComponents/MarkerScaler";
 import { IVisualizationSettings } from "types/visualizationSettings";
 import { VisualizationType } from "types/visualizationType";
-import { IDimension, EDimensionType } from "types/cubeMeta";
+import { IDimension } from "types/cubeMeta";
 import { Query } from "types/query";
-import InfoBubble from "components/InfoBubble/InfoBubble";
-import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 import { VisualizationSettingsSwitch } from "./UtilityComponents/VisualizationSettingsSwitch";
 import SortingSelector from './UtilityComponents/SortingSelector';
 import React from 'react';
 import { MultiselectableSelector } from "./TypeSpecificControls/MultiselectableSelector";
 import { IVisualizationOptions } from "../../types/editorContentsResponse";
+import { getVisualizationSettingVisibility } from '../../utils/editorHelpers';
 
 export interface IVisualizationSettingControlProps {
     selectedVisualization: VisualizationType,
@@ -28,15 +27,16 @@ export interface IVisualizationSettingsProps {
 
 const SettingsRow = styled.div`
     display: flex;
-    flex-direction: row;
     align-items: center;
-    padding-left: 8px;
+    width: 100%;
 `;
 
 const ControlsWrapper = styled.div`
     display: flex;
     align-items: center;
-    gap: 16px;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+    width: 100%;
 `;
 
 export const VisualizationSettingControl: React.FC<IVisualizationSettingControlProps> = ({
@@ -46,23 +46,21 @@ export const VisualizationSettingControl: React.FC<IVisualizationSettingControlP
     visualizationOptions,
     visualizationSettings,
 }) => {
-    const sortingOptions = visualizationOptions?.allowManualPivot && visualizationSettings.pivotRequested ? visualizationOptions?.sortingOptions.pivoted : visualizationOptions?.sortingOptions.default;
-    const showTableSettings: boolean = selectedVisualization === VisualizationType.Table;
-    const showSortingOptions: boolean = (sortingOptions?.length > 0);
-    const showMarkerScaler: boolean = visualizationOptions?.allowSetMarkerScale;
-    const showYAxisCutting: boolean = visualizationOptions?.allowCuttingYAxis;
-    const showMatchXLabelsToEnd: boolean = visualizationOptions?.allowMatchXLabelsToEnd;
-    const showPivot: boolean = visualizationOptions?.allowManualPivot;
-    const showDataPoints: boolean = visualizationOptions?.allowShowingDataPoints;
-
-    const { t } = useTranslation();
-    const selectableDimensions: IDimension[] = dimensions.filter(v => dimensionQuery[v.code].selectable);
-    const selectableDimensionsExcludingContent: IDimension[] = selectableDimensions?.filter(fv => fv.type !== EDimensionType.Content);
-    const showMultiselectableSelector: boolean = visualizationOptions?.allowMultiselect && selectableDimensionsExcludingContent.length > 0;
+    const selectableDimensions = dimensions.filter(dimension => dimensionQuery[dimension.code].selectable);
+    const {
+        sortingOptions,
+        selectableDimensionsExcludingContent,
+        showTableSettings,
+        showSortingOptions,
+        showMarkerScaler,
+        showMultiselectableSelector,
+        showYAxisCutting,
+        showPivot,
+        showDataPoints,
+    } = getVisualizationSettingVisibility(selectedVisualization, dimensions, dimensionQuery, visualizationOptions, visualizationSettings);
 
     return (
         <SettingsRow>
-            <InfoBubble info={t('infoText.visualizationConfiguration')} ariaLabel={t('tooltip.visualizationConfig')} />
             <ControlsWrapper>
                 {showTableSettings && (
                     <TablePivotSettings
@@ -97,15 +95,6 @@ export const VisualizationSettingControl: React.FC<IVisualizationSettingControlP
                         selected={visualizationSettings.cutYAxis}
                         label="chartSettings.cutYAxis"
                         changeProperty="cutYAxis"
-                        visualizationSettings={visualizationSettings}
-                    />
-                )}
-                {showMatchXLabelsToEnd && (
-                    <VisualizationSettingsSwitch
-                        selected={visualizationSettings.matchXLabelsToEnd}
-                        label="chartSettings.matchXLabelsToEnd"
-                        changeProperty="matchXLabelsToEnd"
-                        hidden={true}
                         visualizationSettings={visualizationSettings}
                     />
                 )}

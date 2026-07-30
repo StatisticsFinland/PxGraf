@@ -1,7 +1,7 @@
 import React from 'react';
 import { TextField } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
+import { styled } from '@mui/material/styles';
 import useDebouncedCallback from 'hooks/useDebouncedCallback';
 
 interface ITopNDimensionSelectionProps {
@@ -11,9 +11,9 @@ interface ITopNDimensionSelectionProps {
 
 const DEBOUNCE_MS = 500;
 
-const StyledTextField = styled(TextField)`
-    background-color: var(--surface-white);
-`;
+const StyledTextField = styled(TextField)(({ theme }) => ({
+    backgroundColor: theme.palette.background.paper,
+}));
 
 export const TopNDimensionSelection: React.FC<ITopNDimensionSelectionProps> = ({ numberOfItems, onNumberChanged }) => {
     const { t } = useTranslation();

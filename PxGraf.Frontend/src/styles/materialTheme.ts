@@ -1,63 +1,36 @@
 import { createTheme } from "@mui/material";
 
-interface CustomPalette {
-    tableHover: string;
-    textGray: string;
-    textBlack: string;
-    selectedBlue: string;
-    selectedBlueLight: string;
-    selectedBlueDark: string;
-    editorfieldOutline: string;
-    editorfieldBackground: string;
-    editorfieldOutlineEdited: string;
-    editorfieldBackgroundEdited: string;
-    warningOrange: string;
-    surfaceLight: string;
-    surfaceWhite: string;
-    borderLight: string;
-    textMuted: string;
-    infoBlue: string;
-    shadowColor: string;
-}
-
-declare module '@mui/material/styles' {
-    interface Palette {
-        custom: CustomPalette;
-    }
-    interface PaletteOptions {
-        custom?: CustomPalette;
-    }
-}
-
 const palette = {
     primary: {
-        main: '#1A56EC',
-        dark: '#1A3061',
-        light: '#E8EEFD',  
+        main: '#1870C9',
+        dark: '#072840',
+        light: '#EDF4FB',
     },
-    custom: {
-        tableHover: '#d1ddfb',
-        textGray: '#666666',
-        textBlack: '#000000',
-        selectedBlue: '#1870C9',
-        selectedBlueLight: '#EDF4FB',
-        selectedBlueDark: '#072840',
-        editorfieldOutline: '#839583',
-        editorfieldBackground: '#EEFFEE',
-        editorfieldOutlineEdited: '#949400',
-        editorfieldBackgroundEdited: '#FFFFDD',
-        warningOrange: '#E06D10',
-        surfaceLight: '#f8f8f8',
-        surfaceWhite: '#ffffff',
-        borderLight: '#dcdcdc',
-        textMuted: '#cccccc',
-        infoBlue: '#0073b0',
-        shadowColor: '#737373',
-    }
+    info: {
+        main: '#0073b0',
+    },
+    background: {
+        default: '#F5F7FA',
+        paper: '#FFFFFF',
+    },
+    divider: '#dcdcdc',
+    text: {
+        primary: '#000000',
+        secondary: '#666666',
+        disabled: '#A8B2BF',
+    },
+        warning: {
+        main: '#E06D10',
+        dark: '#A66B00',
+            light: '#FFF9E8',
+        },
 }
 
 const theme = createTheme({
     palette: palette,
+    shape: {
+        borderRadius: 4,
+    },
     components: {
         MuiAccordionSummary: {
             styleOverrides: {
@@ -77,7 +50,7 @@ const theme = createTheme({
             styleOverrides: {
                 root: {
                     '& .MuiChip-deleteIcon': {
-                        color: `${palette.custom.textGray} !important`
+                        color: `${palette.text.secondary} !important`
                     },
                 }
             }
@@ -87,17 +60,17 @@ const theme = createTheme({
                 {
                     props: { variant: 'contained' },
                     style:{
-                        color: palette.custom.surfaceWhite,
-                        backgroundColor: palette.custom.selectedBlue,
+                        color: palette.background.paper,
+                        backgroundColor: palette.primary.main,
                         '&:hover': {
-                            backgroundColor: palette.custom.selectedBlueDark,
+                            backgroundColor: palette.primary.dark,
                         },
                         '&:focus-visible': {
-                            outline: `2px solid ${palette.custom.textBlack}`,
-                            backgroundColor: palette.custom.selectedBlueDark,
+                            outline: `2px solid ${palette.text.primary}`,
+                            backgroundColor: palette.primary.dark,
                         },
                         '&:active': {
-                            backgroundColor: palette.custom.selectedBlue,
+                            backgroundColor: palette.primary.main,
                         }
                     }
                 }
@@ -108,18 +81,22 @@ const theme = createTheme({
             },
             styleOverrides: {
                 root: {
-                    color: palette.custom.selectedBlue,
+                    color: palette.primary.main,
+                    minHeight: '36px',
+                    fontWeight: 600,
+                    letterSpacing: 0,
+                    textTransform: 'none',
                     outlineColor: 'inherit',
                     '&:hover': {
-                        backgroundColor: palette.custom.selectedBlueLight,
+                        backgroundColor: palette.primary.light,
                     },
                     '&:focus-visible': {
                         outline: `2px solid ${palette.primary.dark}`,
-                        backgroundColor: palette.custom.selectedBlueLight,
+                        backgroundColor: palette.primary.light,
                     },
                     '&:active': {
-                        color: palette.custom.surfaceWhite,
-                        backgroundColor: palette.custom.selectedBlue,
+                        color: palette.background.paper,
+                        backgroundColor: palette.primary.main,
                     }
                 }
             }
@@ -165,16 +142,20 @@ const theme = createTheme({
             styleOverrides: {
                 root: {
                     '& .MuiToggleButton-root': {
-                        color: palette.custom.textGray,
+                        color: palette.text.primary,
                         border: '1px solid',
-                        borderColor: 'inherit',
+                        borderColor: palette.text.disabled,
                         outline: 'unset',
                     },
                     '& .Mui-selected': {
-                        color: `${palette.custom.selectedBlue} !important`,
-                        backgroundColor: `${palette.custom.selectedBlueLight} !important`,
-                        outline: '2px solid',
-                        margin: '2px',
+                        color: `${palette.primary.main} !important`,
+                        backgroundColor: `${palette.primary.light} !important`,
+                        borderColor: `${palette.primary.main} !important`,
+                        boxShadow: `inset 0 0 0 2px ${palette.primary.main}`,
+                        fontWeight: 600,
+                        '& b': {
+                            fontWeight: 'inherit',
+                        },
                     },
 
                 }
@@ -187,6 +168,12 @@ const theme = createTheme({
             },
             styleOverrides: {
                 root: {
+                    minHeight: '36px',
+                    padding: '6px 12px',
+                    fontWeight: 500,
+                    letterSpacing: 0,
+                    lineHeight: 1.25,
+                    textTransform: 'none',
                     '&:focus-visible': {
                         outline: `2px solid ${palette.primary.dark} !important`,
                         outlineOffset: '2px',
@@ -198,11 +185,11 @@ const theme = createTheme({
             styleOverrides: {
                 root: {
                     '& .MuiSwitch-switchBase': {
-                        color: palette.custom.textGray,
+                        color: palette.text.secondary,
                         outlineWidth: '2px',
                         outlineColor: 'inherit',
                         '&.Mui-checked': {
-                            color: palette.custom.selectedBlue,
+                            color: palette.primary.main,
                         }
                     }
                 }
@@ -212,18 +199,61 @@ const theme = createTheme({
             styleOverrides: {
                 standardWarning: {
                     '& .MuiAlert-icon': {
-                        color: palette.custom.warningOrange
+                        color: palette.warning.main
                     }
                 }
             }
+        },
+        MuiCssBaseline: {
+            styleOverrides: {
+                body: {
+                    fontFamily: [
+                        '-apple-system',
+                        'BlinkMacSystemFont',
+                        '"Segoe UI"',
+                        'Roboto',
+                        'Oxygen',
+                        'Ubuntu',
+                        'Cantarell',
+                        '"Fira Sans"',
+                        '"Droid Sans"',
+                        '"Helvetica Neue"',
+                        'sans-serif',
+                    ].join(', '),
+                },
+                '*:focus-visible': {
+                    outline: `2px solid ${palette.primary.dark}`,
+                },
+                code: {
+                    fontFamily: 'source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace',
+                },
+            },
         }
     },
     typography: {
+        fontFamily: [
+            '-apple-system',
+            'BlinkMacSystemFont',
+            '"Segoe UI"',
+            'Roboto',
+            'Oxygen',
+            'Ubuntu',
+            'Cantarell',
+            '"Fira Sans"',
+            '"Droid Sans"',
+            '"Helvetica Neue"',
+            'sans-serif',
+        ].join(', '),
+        fontWeightRegular: 400,
+        fontWeightMedium: 500,
+        fontWeightBold: 600,
         h1: {
             fontSize: '1.5rem',
+            fontWeight: 600,
         },
         h2: {
-            fontSize: '1rem'
+            fontSize: '1rem',
+            fontWeight: 600,
         }
     }
 });

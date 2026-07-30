@@ -10,8 +10,7 @@ const HiddenFormControl = styled(FormControl)`
 `;
 
 const LabelTypography = styled(Typography)`
-  min-width: 125px;
-  max-width: 200px;
+    white-space: nowrap;
 `;
 
 interface IVisualizationSettingsSwitchProps {

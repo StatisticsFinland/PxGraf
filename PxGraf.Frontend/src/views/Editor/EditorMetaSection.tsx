@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { a11yProps } from 'utils/componentHelpers';
 import TabPanel from 'components/TabPanel/TabPanel';
 import VisualizationSettingControl from 'components/VisualizationSettingsControls/VisualizationSettingsControl';
-import styled from 'styled-components';
+import { styled } from '@mui/material/styles';
 import { IDimension } from 'types/cubeMeta';
 import { VisualizationType } from 'types/visualizationType';
 import { Query } from 'types/query';
@@ -15,77 +15,69 @@ import InfoBubble from 'components/InfoBubble/InfoBubble';
 import UiLanguageContext from 'contexts/uiLanguageContext';
 import { EPreviewSize } from 'types/previewSize';
 import { IEditorContentsResult } from '../../api/services/editor-contents';
-import { getVisualizationOptionsForVisualizationType } from '../../utils/editorHelpers';
+import { getVisualizationOptionsForVisualizationType, getVisualizationSettingVisibility } from '../../utils/editorHelpers';
 import { IVisualizationSettings } from '../../types/visualizationSettings';
 
-const MetaWrapper = styled(Box)`
-  grid-area: parameters;
-  display: grid;
-  gap: 8px;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-  padding: 8px 16px 16px 16px;
-`;
+const MetaWrapper = styled(Box)(({ theme }) => ({
+  gridArea: 'parameters',
+  display: 'grid',
+  rowGap: 8,
+  gridTemplateColumns: 'repeat(12, 1fr)',
+  padding: '8px 16px 12px',
+  backgroundColor: theme.palette.background.paper,
+  borderBottom: `1px solid ${theme.palette.divider}`,
+}));
 
-const TabWrapper = styled(Box)`
-  border-bottom: 8px;
-  grid-column: span 12;
-`;
+const TabWrapper = styled(Box)(({ theme }) => ({
+  gridColumn: 'span 12',
+  borderBottom: `1px solid ${theme.palette.divider}`,
+}));
 
-const StyledTab = styled(Tab)`
-  padding-top: 0;
-  padding-bottom: 0;
-`;
+const StyledTabs = styled(Tabs)({ minHeight: 40 });
 
-const MetaEditorWrapper = styled(Box)`
-  grid-column: span 12;
-`;
+const StyledTab = styled(Tab)({ minHeight: 40, paddingTop: 0, paddingBottom: 0 });
 
-const GridFixer = styled.div`
-    display: grid;
-    grid-column: span 12;
-    padding-left: 16px;
-    padding-right: 16px;
-    padding-top: 4px;
-    padding-bottom: 4px;
-`;
+const MetaEditorWrapper = styled(Box)({ gridColumn: 'span 12' });
 
-const VisualizationSettingsRow = styled.div`
-    display: flex;
-    align-items: center;
-    grid-column: span 12;
-    padding-left: 16px;
-    padding-right: 16px;
-    padding-top: 4px;
-    padding-bottom: 4px;
-`;
+const GridFixer = styled('div')({ display: 'grid' });
 
-const PreviewSizeControlWrapper = styled.div`
-    display: flex;
-    align-items: center;
-    margin-left: auto;
-`;
+const VisualizationControlsPanel = styled('div')(({ theme }) => ({
+    gridColumn: 'span 12',
+    border: `1px solid ${theme.palette.divider}`,
+    borderRadius: theme.shape.borderRadius,
+    backgroundColor: theme.palette.background.default,
+    overflow: 'hidden',
+}));
 
-const ChartTypeSelectorWrapper = styled.div`
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: left;
-    justify-content: space-between;
-    width: 100%;
-`;
+const VisualizationSettingsRow = styled('div')(({ theme }) => ({
+    display: 'flex',
+    alignItems: 'center',
+    minHeight: 48,
+    padding: '8px 12px 8px 24px',
+    boxSizing: 'border-box',
+    borderTop: `1px solid ${theme.palette.divider}`,
+    backgroundColor: theme.palette.background.paper,
+}));
 
-const ButtonGroupWrapper = styled.div`
-    padding-right: 8px;
-    display: inline-block;
-`;
+const PreviewSizeControlWrapper = styled('div')({
+    display: 'flex', alignItems: 'center', gap: 4, marginLeft: 'auto',
+});
 
-const FlexContentWrapper = styled.div`
-    display: flex;
-    align-items: center;
-    padding-bottom: 8px;
-    padding-left: 8px;
-    padding-right: 8px;
-`;
+const ChartTypeSelectorWrapper = styled('div')({
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: '12px 24px',
+    width: '100%',
+    padding: 12,
+    boxSizing: 'border-box',
+});
+
+const ButtonGroupWrapper = styled('div')({ display: 'inline-block' });
+
+const FlexContentWrapper = styled('div')({ display: 'flex', alignItems: 'center', gap: 4 });
 
 interface IEditorMetaSectionProps {
     editorContentsResponse: IEditorContentsResult;
@@ -98,10 +90,7 @@ interface IEditorMetaSectionProps {
     onPreviewSizeChange: (size: EPreviewSize) => void;
 }
 
-const TitleWrapper = styled.div`
-    display: flex;
-    align-items: center;
-`;
+const TitleWrapper = styled('div')({ display: 'flex', alignItems: 'center' });
 
 /**
  * Component for editing meta data information for the visualization. Used in @see {@link Editor} view.
@@ -127,6 +116,14 @@ export const EditorMetaSection: React.FC<IEditorMetaSectionProps> = ({ editorCon
     }, [language]);
 
     const { t } = useTranslation();
+    const visualizationOptions = getVisualizationOptionsForVisualizationType(editorContentsResponse.data?.visualizationOptions, selectedVisualization);
+    const hasVisibleVisualizationSettings = selectedVisualization != null && getVisualizationSettingVisibility(
+        selectedVisualization,
+        resolvedDimensions,
+        dimensionQuery,
+        visualizationOptions,
+        visualizationSettings,
+    ).hasVisibleSettings;
 
     const buttonInfo =(
         <>
@@ -141,7 +138,7 @@ export const EditorMetaSection: React.FC<IEditorMetaSectionProps> = ({ editorCon
         <MetaWrapper>
             <TabWrapper sx={{ borderColor: 'divider' }}>
                 <TitleWrapper>
-                    <Tabs value={languageTab} onChange={(evt, newLanguageTab) => setLanguageTab(newLanguageTab)} aria-label={t("editor.contentLanguage")}>
+                    <StyledTabs value={languageTab} onChange={(evt, newLanguageTab) => setLanguageTab(newLanguageTab)} aria-label={t("editor.contentLanguage")}>
                         {contentLanguages.map(editLanguage =>
                             <StyledTab
                                 sx={{minWidth: 'auto'}}
@@ -152,13 +149,13 @@ export const EditorMetaSection: React.FC<IEditorMetaSectionProps> = ({ editorCon
                                 {...a11yProps(editLanguage)}
                             />
                         )}
-                    </Tabs>
+                    </StyledTabs>
                     <InfoBubble info={t("infoText.langTab")} ariaLabel={t("editor.contentLanguage")} />
                 </TitleWrapper>
             </TabWrapper>
             <MetaEditorWrapper>
                 {contentLanguages.map(editLanguage =>
-                    <TabPanel value={editLanguage} selectedValue={languageTab} key={editLanguage}>
+                    <TabPanel value={editLanguage} selectedValue={languageTab} contentPadding="12px 12px 8px" key={editLanguage}>
                         <MetaEditor
                             language={editLanguage}
                             editorContentsResponse={editorContentsResponse}
@@ -167,47 +164,49 @@ export const EditorMetaSection: React.FC<IEditorMetaSectionProps> = ({ editorCon
                     </TabPanel>
                 )}
             </MetaEditorWrapper>
-            <GridFixer>
-                <ChartTypeSelectorWrapper>
-                    <FlexContentWrapper>
-                        <InfoBubble info={buttonInfo} ariaLabel={t('tooltip.visualizationType')} />
-                        <ButtonGroupWrapper>
-                            <ChartTypeSelector
-                                possibleTypes={editorContentsResponse.data?.visualizationOptions.map(options => options.type.toString())}
-                                selectedType={selectedVisualization}
-                            />
-                        </ButtonGroupWrapper>
-                        {(editorContentsResponse.data?.visualizationRejectionReasons && Object.keys(editorContentsResponse.data?.visualizationRejectionReasons).length > 0) ? <ChartTypeRejectionReasons rejectionReasons={editorContentsResponse.data?.visualizationRejectionReasons} /> : <></>}
-                    </FlexContentWrapper>
-                    <PreviewSizeControlWrapper>
-                        <InfoBubble info={t("infoText.rescaleButtons")} ariaLabel={t('tooltip.visualizationSize')} />
-                        <ToggleButtonGroup
-                            size="small"
-                            color="primary"
-                            exclusive
-                            value={previewSize}
-                            aria-label={t('tooltip.visualizationSize')}
-                            onChange={(_, val) => val != null && onPreviewSizeChange(val)}
-                        >
-                            {Object.entries(EPreviewSize).map(([label, value]) => (
-                                <ToggleButton
-                                    key={value}
-                                    value={value}
-                                >
-                                    {t(`previewSize.${label.toLowerCase()}`)}
-                                </ToggleButton>
-                            ))}
-                        </ToggleButtonGroup>
-                    </PreviewSizeControlWrapper>
-                </ChartTypeSelectorWrapper>
-            </GridFixer>
-                {selectedVisualization != null && <VisualizationSettingsRow><VisualizationSettingControl
+            <VisualizationControlsPanel>
+                <GridFixer>
+                    <ChartTypeSelectorWrapper>
+                        <FlexContentWrapper>
+                            <InfoBubble info={buttonInfo} ariaLabel={t('tooltip.visualizationType')} />
+                            <ButtonGroupWrapper>
+                                <ChartTypeSelector
+                                    possibleTypes={editorContentsResponse.data?.visualizationOptions.map(options => options.type.toString())}
+                                    selectedType={selectedVisualization}
+                                />
+                            </ButtonGroupWrapper>
+                            {(editorContentsResponse.data?.visualizationRejectionReasons && Object.keys(editorContentsResponse.data?.visualizationRejectionReasons).length > 0) ? <ChartTypeRejectionReasons rejectionReasons={editorContentsResponse.data?.visualizationRejectionReasons} /> : <></>}
+                        </FlexContentWrapper>
+                        <PreviewSizeControlWrapper>
+                            <InfoBubble info={t("infoText.rescaleButtons")} ariaLabel={t('tooltip.visualizationSize')} />
+                            <ToggleButtonGroup
+                                size="small"
+                                color="primary"
+                                exclusive
+                                value={previewSize}
+                                aria-label={t('tooltip.visualizationSize')}
+                                onChange={(_, val) => val != null && onPreviewSizeChange(val)}
+                            >
+                                {Object.entries(EPreviewSize).map(([label, value]) => (
+                                    <ToggleButton
+                                        key={value}
+                                        value={value}
+                                    >
+                                        {t(`previewSize.${label.toLowerCase()}`)}
+                                    </ToggleButton>
+                                ))}
+                            </ToggleButtonGroup>
+                        </PreviewSizeControlWrapper>
+                    </ChartTypeSelectorWrapper>
+                </GridFixer>
+                {hasVisibleVisualizationSettings && <VisualizationSettingsRow data-testid="visualization-settings-row"><VisualizationSettingControl
                     selectedVisualization={selectedVisualization}
                     dimensions={resolvedDimensions}
                     dimensionQuery={dimensionQuery}
-                    visualizationOptions={getVisualizationOptionsForVisualizationType(editorContentsResponse.data.visualizationOptions, selectedVisualization)}
+                    visualizationOptions={visualizationOptions}
                     visualizationSettings={visualizationSettings}
                 /></VisualizationSettingsRow>}
+            </VisualizationControlsPanel>
         </MetaWrapper>
     );
 }

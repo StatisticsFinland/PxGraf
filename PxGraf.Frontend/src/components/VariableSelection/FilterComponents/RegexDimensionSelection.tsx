@@ -1,7 +1,7 @@
 import React from 'react';
 import { TextField } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
+import { styled } from '@mui/material/styles';
 import useDebouncedCallback from 'hooks/useDebouncedCallback';
 
 interface IRegexDimensionSelectionProps {
@@ -11,9 +11,9 @@ interface IRegexDimensionSelectionProps {
 
 const DEBOUNCE_MS = 500;
 
-const StyledTextField = styled(TextField)`
-    background-color: var(--surface-white);
-`;
+const StyledTextField = styled(TextField)(({ theme }) => ({
+    backgroundColor: theme.palette.background.paper,
+}));
 
 // NOTE: this validates using JS RegExp syntax for immediate UI feedback, while the backend matches using
 // .NET Regex. The two engines aren't fully identical, so a pattern accepted here could in rare cases be

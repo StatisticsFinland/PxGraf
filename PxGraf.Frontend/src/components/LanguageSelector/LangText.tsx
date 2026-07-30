@@ -6,7 +6,7 @@ interface ILangTextProps {
 }
 
 export const LangText: React.FC<ILangTextProps> = ({ text }) => {
-    return <Typography>{text}</Typography>;
+    return <Typography component="span" variant="inherit">{text}</Typography>;
 }
 
 export default LangText;

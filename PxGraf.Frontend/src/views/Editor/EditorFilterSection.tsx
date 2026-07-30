@@ -3,7 +3,7 @@ import React from 'react';
 import { Box, Button } from '@mui/material';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
+import { styled } from '@mui/material/styles';
 import { IDimension } from 'types/cubeMeta';
 import { Query } from 'types/query';
 
@@ -16,34 +16,32 @@ interface EditorFilterSectionProps {
     onEditMetadata: () => void
 }
 
-const SelectorWrapper = styled(Box)<{width: number, $maxWidthPercentage: number}>`
-  max-width: ${props => props.$maxWidthPercentage}%;
-  flex: 0 0 ${props => props.width}px;
-  width: ${props => props.width}px;
-  height: 100%;
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-  background-color: white;
-  border-right: thin solid rgba(0, 0, 0, 0.12);
-`;
+const SelectorWrapper = styled(Box, {
+    shouldForwardProp: prop => prop !== 'width' && prop !== 'maxWidthPercentage',
+})<{ width?: number, maxWidthPercentage?: number }>(({ width, maxWidthPercentage, theme }) => ({
+    maxWidth: `${maxWidthPercentage}%`,
+    flex: `0 0 ${width}px`,
+    width,
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    minHeight: 0,
+    backgroundColor: theme.palette.background.paper,
+    borderRight: `1px solid ${theme.palette.divider}`,
+}));
 
-const SelectionScroller = styled(Box)`
-    flex: 1;
-    min-height: 0;
-    overflow-y: auto;
-`;
+const SelectionScroller = styled(Box)({ flex: 1, minHeight: 0, overflowY: 'auto' });
 
-const ActionFooter = styled(Box)`
-    flex: 0 0 auto;
-    height: 57px;
-    box-sizing: border-box;
-    display: flex;
-    align-items: center;
-    padding: 8px 16px;
-    border-top: 1px solid var(--border-light);
-    background-color: var(--surface-white);
-`;
+const ActionFooter = styled(Box)(({ theme }) => ({
+        flex: '0 0 auto',
+        height: 57,
+        boxSizing: 'border-box',
+        display: 'flex',
+        alignItems: 'center',
+        padding: '8px 16px',
+        borderTop: `1px solid ${theme.palette.divider}`,
+        backgroundColor: theme.palette.background.paper,
+}));
 
 /**
  * Component for the filter section in the editor. Contains @see {@link DimensionSelectionList} for each dimension for filtering values and defining selectable dimensionss.
@@ -58,7 +56,7 @@ export const EditorFilterSection: React.FC<EditorFilterSectionProps> = ({ dimens
     const hasSelectedValues = Object.values(resolvedDimensionCodes ?? {}).some(valueCodes => valueCodes.length > 0);
 
     return (
-        <SelectorWrapper width={width} $maxWidthPercentage={maxWidthPercentage}>
+        <SelectorWrapper width={width} maxWidthPercentage={maxWidthPercentage}>
             <SelectionScroller>
                 <DimensionSelectionList
                     dimensions={dimensions}

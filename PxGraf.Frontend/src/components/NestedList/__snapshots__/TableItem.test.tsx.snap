@@ -3,7 +3,7 @@
 exports[`Rendering test renders correctly 1`] = `
 <DocumentFragment>
   <li
-    class="MuiListItem-root MuiListItem-gutters MuiListItem-padding sc-bdvvNz dSeQbs"
+    class="MuiListItem-root MuiListItem-gutters MuiListItem-padding"
     id="foo-bar-baz"
   >
     <a
