@@ -27,10 +27,6 @@ const Wrapper = styled.div`
     }
 `;
 
-const GridFixer = styled.div`
-  grid-column: span 12;
-`;
-
 export const HeaderEditor: React.FC<IHeaderEditorProps> = ({ editorContentResponse, language, maxLength, style = {} }) => {
     const { t } = useTranslation();
 
@@ -48,22 +44,20 @@ export const HeaderEditor: React.FC<IHeaderEditorProps> = ({ editorContentRespon
     React.useEffect(() => () => editHeader.flush(), [editHeader]);
 
     return (
-        <GridFixer>
-            <Wrapper>
-                <InfoBubble info={t('infoText.titleEdition')} ariaLabel={t("editMetadata.header")} />
-                <EditorField
-                    label={t("editMetadata.header")}
-                    style={style}
-                    defaultValue={editorContentResponse.data?.headerText[language] ?? ""}
-                    editValue={editValue ? editValue[language] : null}
-                    onChange={newValue => {
-                        draftEditValue.current = { ...draftEditValue.current, [language]: newValue };
-                        editHeader(draftEditValue.current);
-                    }}
-                    maxLength={maxLength}
-                />
-            </Wrapper>
-        </GridFixer>
+        <Wrapper>
+            <InfoBubble info={t('infoText.titleEdition')} ariaLabel={t("editMetadata.header")} />
+            <EditorField
+                label={t("editMetadata.header")}
+                style={style}
+                defaultValue={editorContentResponse.data?.headerText[language] ?? ""}
+                editValue={editValue ? editValue[language] : null}
+                onChange={newValue => {
+                    draftEditValue.current = { ...draftEditValue.current, [language]: newValue };
+                    editHeader(draftEditValue.current);
+                }}
+                maxLength={maxLength}
+            />
+        </Wrapper>
     );
 }
 

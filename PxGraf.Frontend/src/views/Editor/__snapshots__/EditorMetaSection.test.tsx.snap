@@ -90,69 +90,61 @@ exports[`Rendering test renders correctly 1`] = `
         role="tabpanel"
       >
         <div
-          class="sc-hKwAaq faXEam MuiBox-root"
+          class="sc-gsDLFA hIsVqI MuiBox-root"
         >
           <div
-            class="sc-dkPvMp hKlvhF MuiBox-root"
+            class="sc-bdvvNz egnXXA"
           >
-            <div
-              class="sc-gsDLFA frkOOF"
+            <button
+              aria-label="tooltip.open: editMetadata.header"
             >
-              <div
-                class="sc-bdvvNz egnXXA"
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-colorInfo MuiSvgIcon-fontSizeMedium"
+                data-testid="InfoIcon"
+                focusable="false"
+                viewBox="0 0 24 24"
               >
-                <button
-                  aria-label="tooltip.open: editMetadata.header"
+                <path
+                  d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m1 15h-2v-6h2zm0-8h-2V7h2z"
+                />
+              </svg>
+            </button>
+            <div
+              class="MuiFormControl-root"
+              style="width: 100%;"
+            >
+              <label
+                class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined"
+                data-shrink="true"
+                for="_r_0_"
+              >
+                editMetadata.header
+              </label>
+              <div
+                class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall"
+              >
+                <input
+                  aria-invalid="false"
+                  class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall"
+                  id="_r_0_"
+                  type="text"
+                  value="foo"
+                />
+                <fieldset
+                  aria-hidden="true"
+                  class="MuiOutlinedInput-notchedOutline"
                 >
-                  <svg
-                    aria-hidden="true"
-                    class="MuiSvgIcon-root MuiSvgIcon-colorInfo MuiSvgIcon-fontSizeMedium"
-                    data-testid="InfoIcon"
-                    focusable="false"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m1 15h-2v-6h2zm0-8h-2V7h2z"
-                    />
-                  </svg>
-                </button>
-                <div
-                  class="MuiFormControl-root"
-                  style="width: 100%;"
-                >
-                  <label
-                    class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined"
-                    data-shrink="true"
-                    for="_r_0_"
-                  >
-                    editMetadata.header
-                  </label>
-                  <div
-                    class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall"
-                  >
-                    <input
-                      aria-invalid="false"
-                      class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall"
-                      id="_r_0_"
-                      type="text"
-                      value="foo"
-                    />
-                    <fieldset
-                      aria-hidden="true"
-                      class="MuiOutlinedInput-notchedOutline"
-                    >
-                      <legend>
-                        <span>
-                          editMetadata.header
-                        </span>
-                      </legend>
-                    </fieldset>
-                  </div>
-                  <div
-                    aria-live="polite"
-                  />
-                </div>
+                  <legend>
+                    <span>
+                      editMetadata.header
+                    </span>
+                  </legend>
+                </fieldset>
               </div>
+              <div
+                aria-live="polite"
+              />
             </div>
           </div>
         </div>
@@ -298,10 +290,10 @@ exports[`Rendering test renders correctly 1`] = `
         data-testid="visualization-settings-row"
       >
         <div
-          class="sc-furwwf cnRhAf"
+          class="sc-gKckfV bUwLyE"
         >
           <div
-            class="sc-pVTZz fbBjII"
+            class="sc-iCfMpq eOgqBS"
           >
             <div
               class="MuiFormControl-root"
@@ -358,7 +350,7 @@ exports[`Rendering test renders correctly 1`] = `
               </div>
             </div>
             <div
-              class="MuiStack-root sc-eCIkhf bYPxRY"
+              class="MuiStack-root sc-dkPvMp ihyxAO"
             >
               <div
                 class="MuiBox-root"
@@ -370,7 +362,7 @@ exports[`Rendering test renders correctly 1`] = `
                   chartSettings.markerScale
                 </p>
                 <span
-                  class="MuiSlider-root MuiSlider-marked MuiSlider-colorPrimary MuiSlider-sizeMedium sc-jRQzZg cktPum"
+                  class="MuiSlider-root MuiSlider-marked MuiSlider-colorPrimary MuiSlider-sizeMedium sc-hKwAaq fZfqah"
                 >
                   <span
                     class="MuiSlider-rail"
@@ -484,7 +476,7 @@ exports[`Rendering test renders correctly 1`] = `
                   class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label"
                 >
                   <p
-                    class="MuiTypography-root MuiTypography-body1 sc-iCfMpq loQeTV"
+                    class="MuiTypography-root MuiTypography-body1 sc-jRQzZg gDcclH"
                   >
                     chartSettings.cutYAxis
                   </p>
@@ -520,7 +512,7 @@ exports[`Rendering test renders correctly 1`] = `
                   class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label"
                 >
                   <p
-                    class="MuiTypography-root MuiTypography-body1 sc-iCfMpq loQeTV"
+                    class="MuiTypography-root MuiTypography-body1 sc-jRQzZg gDcclH"
                   >
                     visualizationSettings.showDataPoints
                   </p>

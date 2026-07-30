@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Box, Tabs, Tab, ToggleButton, ToggleButtonGroup } from '@mui/material';
-import MetaEditor from 'components/MetaEditor/MetaEditor';
+import HeaderEditor from 'components/MetaEditor/HeaderEditor';
 import ChartTypeSelector from 'components/ChartTypeSelector/ChartTypeSelector';
 import { useTranslation } from 'react-i18next';
 import { a11yProps } from 'utils/componentHelpers';
@@ -37,7 +37,7 @@ const StyledTabs = styled(Tabs)({ minHeight: 40 });
 
 const StyledTab = styled(Tab)({ minHeight: 40, paddingTop: 0, paddingBottom: 0 });
 
-const MetaEditorWrapper = styled(Box)({ gridColumn: 'span 12' });
+const HeaderEditorWrapper = styled(Box)({ gridColumn: 'span 12' });
 
 const GridFixer = styled('div')({ display: 'grid' });
 
@@ -153,17 +153,18 @@ export const EditorMetaSection: React.FC<IEditorMetaSectionProps> = ({ editorCon
                     <InfoBubble info={t("infoText.langTab")} ariaLabel={t("editor.contentLanguage")} />
                 </TitleWrapper>
             </TabWrapper>
-            <MetaEditorWrapper>
+            <HeaderEditorWrapper>
                 {contentLanguages.map(editLanguage =>
                     <TabPanel value={editLanguage} selectedValue={languageTab} contentPadding="12px 12px 8px" key={editLanguage}>
-                        <MetaEditor
+                        <HeaderEditor
                             language={editLanguage}
-                            editorContentsResponse={editorContentsResponse}
-                            titleMaxLength={editorContentsResponse.data ? editorContentsResponse.data.maximumHeaderLength : undefined}
+                            editorContentResponse={editorContentsResponse}
+                            maxLength={editorContentsResponse.data?.maximumHeaderLength}
+                            style={{ width: '100%' }}
                         />
                     </TabPanel>
                 )}
-            </MetaEditorWrapper>
+            </HeaderEditorWrapper>
             <VisualizationControlsPanel>
                 <GridFixer>
                     <ChartTypeSelectorWrapper>
