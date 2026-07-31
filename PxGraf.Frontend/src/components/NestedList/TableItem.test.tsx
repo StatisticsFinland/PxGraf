@@ -58,6 +58,22 @@ describe('Assertion tests', () => {
         expect(screen.getByText('tableSelect.updated: 13.10.2021 klo 14.53.06')).toBeInTheDocument();
     });
 
+    it('falls back to the first declared language when the UI language name is missing', () => {
+        const itemWithMissingName: IDatabaseTable = {
+            ...mockItem,
+            name: { fi: 'first-language-name' },
+            languages: ['fi', 'en'],
+        };
+        render(
+            <MemoryRouter>
+                <UiLanguageContext.Provider value={{ language: 'en', setLanguage, languageTab: 'en', setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
+                    <TableItem currentPath={mockPath} item={itemWithMissingName} depth={mockDepth} />
+                </UiLanguageContext.Provider>
+            </MemoryRouter>);
+
+        expect(screen.getByText('first-language-name')).toBeInTheDocument();
+    });
+
     it('renders MUI alert when error property is contentDimensionMissing', async () => {
         const mockErrorItem: IDatabaseTable = {
             fileName: 'error',

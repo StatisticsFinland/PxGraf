@@ -94,7 +94,7 @@ export const TableListItem: React.FC<ITableListItemProps> = ({ currentPath, item
     const [isOpen, setIsOpen] = React.useState(initialOpenState ?? false);
     const { language } = React.useContext(UiLanguageContext);
     const displayLanguage = item.languages.includes(language) ? language : item.languages[0];
-    const displayName = item.name[displayLanguage] ?? Object.values(item.name)[0] ?? item.code;
+    const displayName = item.name[displayLanguage] ?? item.name[item.languages[0]] ?? item.code;
 
     const handleToggle = () => {
         const newIsOpen = !isOpen;

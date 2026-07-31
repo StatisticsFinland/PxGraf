@@ -80,6 +80,21 @@ describe('Assertion tests', () => {
         expect(screen.getByText('(FI, EN)')).toBeInTheDocument();
     });
 
+    it('falls back to the first declared language when the UI language name is missing', () => {
+        const itemWithMissingName = {
+            ...mockItem,
+            name: { fi: 'first-language-name' },
+        };
+        render(
+            <MemoryRouter>
+                <UiLanguageContext.Provider value={{ language: 'en', setLanguage, languageTab: 'en', setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
+                    <TableListItem currentPath={[]} item={itemWithMissingName} depth={0} />
+                </UiLanguageContext.Provider>
+            </MemoryRouter>);
+
+        expect(screen.getByText('first-language-name')).toBeInTheDocument();
+    });
+
     it('expands and collapses from the full row while reporting only opened paths', async () => {
         const onPathOpen = jest.fn();
         render(

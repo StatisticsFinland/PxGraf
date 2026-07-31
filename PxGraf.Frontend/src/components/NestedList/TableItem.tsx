@@ -38,7 +38,7 @@ const TableMetadata = styled('span')(({ theme }) => ({
     fontSize: theme.typography.caption.fontSize,
     lineHeight: 1.35,
     '& > span + span::before': {
-        content: '"\\2022"',
+        content: String.raw`"\2022"`,
         marginRight: theme.spacing(1.5),
         color: theme.palette.divider,
     },
@@ -66,7 +66,7 @@ export const TableItem: React.FC<ITableItemProps> = ({ currentPath, item, depth 
     const { t } = useTranslation();
     const { language } = React.useContext(UiLanguageContext);
     const displayLanguage = item.languages.includes(language) ? language : item.languages[0];
-    const displayName = item.name[displayLanguage] ?? Object.values(item.name)[0] ?? item.fileName;
+    const displayName = item.name[displayLanguage] ?? item.name[item.languages[0]] ?? item.fileName;
 
     return <React.Fragment key={`${item.fileName}-key`}>
         <StyledListItem id={currentPath.join('-')}>

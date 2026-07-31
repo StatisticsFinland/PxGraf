@@ -6,7 +6,7 @@ import { NestedList } from 'components/NestedList/NestedList';
 import { styled } from '@mui/material/styles';
 import useHierarchyParams from 'hooks/useHierarchyParams';
 import { useNavigationContext } from 'contexts/navigationContext';
-import { BasePath } from '../../envVars';
+import { BasePath } from 'envVars';
 
 const TableTreeSelectionWrapper = styled(Container)(({ theme }) => ({
   padding: theme.spacing(2),
