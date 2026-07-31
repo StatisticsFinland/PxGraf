@@ -147,7 +147,7 @@ exports[`Rendering test renders correctly 1`] = `
         <span
           class="MuiTypography-root MuiTypography-body1 MuiListItemText-primary"
         >
-          foo2-fi
+          asd2.px
         </span>
         <p
           class="MuiTypography-root MuiTypography-body2 MuiListItemText-secondary"
