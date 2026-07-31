@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { ICubeMetaResult } from "api/services/cube-meta";
 import { IFilterDimensionResult } from "api/services/filter-dimension";
@@ -290,10 +290,12 @@ const errorTableValidationResult: IValidateTableMetaDataResult = {
 }
 
 const mockLocation = {
+    key: 'initial-location',
     state: {
         result: {
             id: 'test-query-id',
             draft: true,
+            recoveredWithChanges: false,
             settings: {
                 selectedVisualization: EVisualizationType.HorizontalBarChart,
                 defaultSelectableVariableCodes: { foobar1: ['barfoo1', 'barfoo2'] }
@@ -342,6 +344,8 @@ jest.mock('api/services/validate-table-metadata', () => ({
 beforeEach(() => {
     mockCubeMetaResult = structuredClone(initialMockCubeMetaResult);
     mockResult = mockTableValidationResult;
+    mockLocation.key = 'initial-location';
+    mockLocation.state.result.recoveredWithChanges = false;
 });
 
 describe('Rendering test', () => {
@@ -384,6 +388,43 @@ describe('Rendering test', () => {
 });
 
 describe('Assertion tests', () => {
+    it('shows the recovery warning again when another saved query is opened', async () => {
+        mockLocation.state.result.recoveredWithChanges = true;
+
+        const user = userEvent.setup();
+        const { rerender } = render(
+            <QueryClientProvider client={queryClient}>
+                <NavigationProvider>
+                    <HashRouter>
+                        <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
+                            <Editor />
+                        </UiLanguageContext.Provider>
+                    </HashRouter>
+                </NavigationProvider>
+            </QueryClientProvider>
+        );
+
+        const alert = screen.getByText('warning.savedQueryPartiallyRecovered').closest('[role="alert"]') as HTMLElement;
+        expect(alert).toHaveClass('MuiAlert-outlinedWarning');
+        await user.click(within(alert).getByRole('button'));
+        expect(alert).not.toBeVisible();
+
+        mockLocation.key = 'next-location';
+        rerender(
+            <QueryClientProvider client={queryClient}>
+                <NavigationProvider>
+                    <HashRouter>
+                        <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
+                            <Editor />
+                        </UiLanguageContext.Provider>
+                    </HashRouter>
+                </NavigationProvider>
+            </QueryClientProvider>
+        );
+
+        expect(screen.getByText('warning.savedQueryPartiallyRecovered')).toBeVisible();
+    });
+
     it('renders errorContainer with correct message when tableValidityResponse is invalid', () => {
         mockResult = mockInvalidTableValidationResult;
         mockCubeMetaResult.isError = true;

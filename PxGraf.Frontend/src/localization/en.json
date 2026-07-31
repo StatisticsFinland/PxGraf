@@ -138,6 +138,9 @@
     "boundaryMessage": "An unexpected error occurred. Please try again.",
     "boundaryRetry": "Try again"
   },
+  "warning": {
+    "savedQueryPartiallyRecovered": "Not all metadata from the saved visualisation could be loaded. Selections and metadata for changed variables were reset to their defaults."
+  },
   "rejectionDialog": {
     "buttonText": "Other chart types",
     "titleText": "Other chart types",
