@@ -31,20 +31,24 @@ const ErrorAlert = styled(Alert)`
 interface INestedListProps {
     path: string[];
     depth?: number;
+    onPathOpen?: (path: string[]) => void;
 }
+
+const isPathPrefix = (prefix: string[], path: string[]): boolean =>
+    prefix.every((segment, index) => path[index] === segment);
 
 /**
  * Nested list component for displaying the database and table hierarchies.
  * @see TableListItem component is used for displaying databases and subfolders while @see {@link TableItem} component is used for displaying individual tables.
  */
-export const NestedList: React.FC<INestedListProps> = ({ path, depth }) => {
+export const NestedList: React.FC<INestedListProps> = ({ path, depth, onPathOpen }) => {
     const { language } = React.useContext(UiLanguageContext);
     const { isLoading, isError, data } = useTableQuery(path);
     const { t } = useTranslation();
     
     const tablePath = useHierarchyParams();
     const activeId: string = tablePath.length && tablePath.join('-');
-    const shouldScroll: boolean = activeId && data && path.length === tablePath.length - 1 && tablePath.join(',').startsWith(path.join(','));
+    const shouldScroll: boolean = activeId && data && path.length === tablePath.length - 1 && isPathPrefix(path, tablePath);
     useScrollToElement(shouldScroll && activeId);
 
     const sortedGroups: IDatabaseGroupHeader[] = React.useMemo(() => {
@@ -80,15 +84,18 @@ export const NestedList: React.FC<INestedListProps> = ({ path, depth }) => {
     return (
         <>
             {
-                sortedGroups ? sortedGroups.map((item) => (
-                    <TableListItem
-                        key={`${item.code}-list-key`}
-                        currentPath={[...path, item.code]}
+                sortedGroups ? sortedGroups.map((item) => {
+                    const currentPath = [...path, item.code];
+                    const shouldOpen = sortedGroups.length < 2 || isPathPrefix(currentPath, tablePath);
+                    return <TableListItem
+                        key={`${item.code}-${shouldOpen}`}
+                        currentPath={currentPath}
                         item={item}
-                        initialOpenState={sortedGroups.length < 2 || tablePath.join(',').startsWith([...path, item.code].join(','))}
+                        initialOpenState={shouldOpen}
                         depth={depth ?? 0}
-                    />
-                )) : <ErrorAlert sx={{ pl: depth * 4 }} severity="error">{t("error.contentLoad")}</ErrorAlert>
+                        onPathOpen={onPathOpen}
+                    />;
+                }) : <ErrorAlert sx={{ pl: depth * 4 }} severity="error">{t("error.contentLoad")}</ErrorAlert>
             }
             {
                 sortedTables ? sortedTables.map((item) => (

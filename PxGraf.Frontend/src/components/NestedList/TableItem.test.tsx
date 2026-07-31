@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import UiLanguageContext from 'contexts/uiLanguageContext';
 import '@testing-library/jest-dom';
 import { MemoryRouter } from 'react-router-dom';
@@ -45,18 +45,17 @@ describe('Rendering test', () => {
 });
 
 describe('Assertion tests', () => {
-    it('shows available languages and last updated with table level item names', async () => {
-        const { findByText } = render(
+    it('shows languages separately from the table name and last update', () => {
+        render(
             <MemoryRouter>
                 <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
                     <TableItem currentPath={mockPath} item={mockItem} depth={mockDepth}  />
                 </UiLanguageContext.Provider>
             </MemoryRouter>);
 
-        const name = await findByText("seppo (FI, SV)");
-        const lastUpdate = await findByText("tableSelect.updated: 13.10.2021 klo 14.53.06");
-        expect(name).toBeInTheDocument();
-        expect(lastUpdate).toBeInTheDocument();
+        expect(screen.getByText('seppo')).toBeInTheDocument();
+        expect(screen.getByText('(FI, SV)')).toBeInTheDocument();
+        expect(screen.getByText('tableSelect.updated: 13.10.2021 klo 14.53.06')).toBeInTheDocument();
     });
 
     it('renders MUI alert when error property is contentDimensionMissing', async () => {

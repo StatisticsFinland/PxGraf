@@ -25,7 +25,6 @@
   "pages": {
     "tableTreeSelection": "Database table selection",
     "editor": "Variable selection",
-    "tableList": "List view",
     "sqid": "Selection identifier"
   },
   "chartTypes": {
@@ -46,7 +45,6 @@
   },
   "tableSelect": {
     "title": "Select the database table from the directory tree that is the source for the visualisation data.",
-    "listView": "List view",
     "showChildren": "Show children",
     "hideChildren": "Hide children",
     "openTable": "Open database table",

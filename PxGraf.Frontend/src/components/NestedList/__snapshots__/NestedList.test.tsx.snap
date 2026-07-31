@@ -18,48 +18,42 @@ exports[`Rendering test renders correctly 1`] = `
         <svg
           aria-hidden="true"
           class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium"
-          data-testid="ExpandMoreIcon"
+          data-testid="ChevronRightIcon"
           focusable="false"
           viewBox="0 0 24 24"
         >
           <path
-            d="M16.59 8.59 12 13.17 7.41 8.59 6 10l6 6 6-6z"
+            d="M10 6 8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"
+          />
+        </svg>
+        <svg
+          aria-hidden="true"
+          class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium"
+          data-testid="FolderOutlinedIcon"
+          focusable="false"
+          viewBox="0 0 24 24"
+        >
+          <path
+            d="m9.17 6 2 2H20v10H4V6zM10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8z"
           />
         </svg>
       </div>
       <div
-        class="MuiListItemText-root"
+        class="MuiListItemText-root MuiListItemText-multiline"
       >
         <span
           class="MuiTypography-root MuiTypography-body1 MuiListItemText-primary"
         >
-          foo-fi (FI, EN, SV)
+          foo-fi
         </span>
-      </div>
-    </div>
-    <div
-      class="MuiListItemSecondaryAction-root MuiListItem-secondaryAction"
-    >
-      <a
-        aria-label="tableSelect.listView: foo-fi"
-        class="MuiButtonBase-root MuiIconButton-root MuiIconButton-edgeEnd MuiIconButton-sizeMedium"
-        data-discover="true"
-        data-mui-internal-clone-element="true"
-        href="/table-list/foo/bar/baz/asd/"
-        tabindex="0"
-      >
-        <svg
-          aria-hidden="true"
-          class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium"
-          data-testid="ListAltOutlinedIcon"
-          focusable="false"
-          viewBox="0 0 24 24"
+        <p
+          class="MuiTypography-root MuiTypography-body2 MuiListItemText-secondary"
         >
-          <path
-            d="M11 7h6v2h-6zm0 4h6v2h-6zm0 4h6v2h-6zM7 7h2v2H7zm0 4h2v2H7zm0 4h2v2H7zM20.1 3H3.9c-.5 0-.9.4-.9.9v16.2c0 .4.4.9.9.9h16.2c.4 0 .9-.5.9-.9V3.9c0-.5-.5-.9-.9-.9M19 19H5V5h14z"
-          />
-        </svg>
-      </a>
+          <span>
+            (FI, EN, SV)
+          </span>
+        </p>
+      </div>
     </div>
   </li>
   <hr
@@ -81,48 +75,42 @@ exports[`Rendering test renders correctly 1`] = `
         <svg
           aria-hidden="true"
           class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium"
-          data-testid="ExpandMoreIcon"
+          data-testid="ChevronRightIcon"
           focusable="false"
           viewBox="0 0 24 24"
         >
           <path
-            d="M16.59 8.59 12 13.17 7.41 8.59 6 10l6 6 6-6z"
+            d="M10 6 8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"
+          />
+        </svg>
+        <svg
+          aria-hidden="true"
+          class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium"
+          data-testid="FolderOutlinedIcon"
+          focusable="false"
+          viewBox="0 0 24 24"
+        >
+          <path
+            d="m9.17 6 2 2H20v10H4V6zM10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8z"
           />
         </svg>
       </div>
       <div
-        class="MuiListItemText-root"
+        class="MuiListItemText-root MuiListItemText-multiline"
       >
         <span
           class="MuiTypography-root MuiTypography-body1 MuiListItemText-primary"
         >
-          foo3-fi (FI, EN)
+          foo3-fi
         </span>
-      </div>
-    </div>
-    <div
-      class="MuiListItemSecondaryAction-root MuiListItem-secondaryAction"
-    >
-      <a
-        aria-label="tableSelect.listView: foo3-fi"
-        class="MuiButtonBase-root MuiIconButton-root MuiIconButton-edgeEnd MuiIconButton-sizeMedium"
-        data-discover="true"
-        data-mui-internal-clone-element="true"
-        href="/table-list/foo/bar/baz/id/"
-        tabindex="0"
-      >
-        <svg
-          aria-hidden="true"
-          class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium"
-          data-testid="ListAltOutlinedIcon"
-          focusable="false"
-          viewBox="0 0 24 24"
+        <p
+          class="MuiTypography-root MuiTypography-body2 MuiListItemText-secondary"
         >
-          <path
-            d="M11 7h6v2h-6zm0 4h6v2h-6zm0 4h6v2h-6zM7 7h2v2H7zm0 4h2v2H7zm0 4h2v2H7zM20.1 3H3.9c-.5 0-.9.4-.9.9v16.2c0 .4.4.9.9.9h16.2c.4 0 .9-.5.9-.9V3.9c0-.5-.5-.9-.9-.9M19 19H5V5h14z"
-          />
-        </svg>
-      </a>
+          <span>
+            (FI, EN)
+          </span>
+        </p>
+      </div>
     </div>
   </li>
   <hr
@@ -159,12 +147,19 @@ exports[`Rendering test renders correctly 1`] = `
         <span
           class="MuiTypography-root MuiTypography-body1 MuiListItemText-primary"
         >
-          undefined (EN, SV)
+          foo2-fi
         </span>
         <p
           class="MuiTypography-root MuiTypography-body2 MuiListItemText-secondary"
         >
-          tableSelect.updated: 13.11.2021 klo 14.53.06
+          <span>
+            <span>
+              (EN, SV)
+            </span>
+            <span>
+              tableSelect.updated: 13.11.2021 klo 14.53.06
+            </span>
+          </span>
         </p>
       </div>
     </a>
