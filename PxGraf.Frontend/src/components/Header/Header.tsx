@@ -61,8 +61,7 @@ const Header: React.FC = () => {
     const headerRef = useRef(null);
 
     const showBreadcrumb = location.pathname === '/' ||
-        location.pathname.startsWith('/editor/') ||
-        location.pathname.startsWith('/table-list/');
+        location.pathname.startsWith('/editor/');
 
     let indexUrl: string = BasePath || '/';
     if (tablePath?.length) {

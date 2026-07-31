@@ -25,7 +25,6 @@
   "pages": {
     "tableTreeSelection": "Val av databastabell",
     "editor": "Val av variabel",
-    "tableList": "Listvy",
     "sqid": "Uttagets identifierare"
   },
   "chartTypes": {
@@ -46,7 +45,6 @@
   },
   "tableSelect": {
     "title": "Välj från katalogträdet en databastabell som fungerar som källa för de data som visualiseras.",
-    "listView": "Lista",
     "showChildren": "Visa barnen",
     "hideChildren": "Göm barnen",
     "openTable": "Öppna databastabell",

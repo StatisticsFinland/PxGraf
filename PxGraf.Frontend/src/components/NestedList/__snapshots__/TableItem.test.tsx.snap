@@ -33,12 +33,19 @@ exports[`Rendering test renders correctly 1`] = `
         <span
           class="MuiTypography-root MuiTypography-body1 MuiListItemText-primary"
         >
-          seppo (FI, SV)
+          seppo
         </span>
         <p
           class="MuiTypography-root MuiTypography-body2 MuiListItemText-secondary"
         >
-          tableSelect.updated: 13.10.2021 klo 14.53.06
+          <span>
+            <span>
+              (FI, SV)
+            </span>
+            <span>
+              tableSelect.updated: 13.10.2021 klo 14.53.06
+            </span>
+          </span>
         </p>
       </div>
     </a>

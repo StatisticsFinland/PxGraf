@@ -8,7 +8,4 @@ export const urls = {
         return `/editor/${path.join("/")}/`;
     },
     tableTree: `/`,
-    tableList: (path: string[]) => {
-        return `/table-list/${path.join("/")}/`;
-    }
 };

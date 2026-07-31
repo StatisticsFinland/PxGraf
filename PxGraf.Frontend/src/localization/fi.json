@@ -25,7 +25,6 @@
   "pages": {
     "tableTreeSelection": "Valitse taulu",
     "editor": "Muuttujavalinta",
-    "tableList": "Valitse taulu, listanäkymä",
     "sqid": "Poiminnan tunniste"
   },
   "chartTypes": {
@@ -46,7 +45,6 @@
   },
   "tableSelect": {
     "title": "Valitse hakemistopuusta tietokantataulukko, joka toimii visualisoinnin datan lähteenä.",
-    "listView": "Listanäkymä",
     "showChildren": "Näytä lapset",
     "hideChildren": "Piilota lapset",
     "openTable": "Avaa tietokantataulukko",

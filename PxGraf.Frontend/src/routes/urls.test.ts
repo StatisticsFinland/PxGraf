@@ -16,14 +16,4 @@ describe('urls', () => {
             expect(urls.tableTree).toBe('/');
         });
     });
-
-    describe('tableList', () => {
-        it('builds the table-list path from a single-segment path', () => {
-            expect(urls.tableList(['dir'])).toBe('/table-list/dir/');
-        });
-
-        it('builds the table-list path from a multi-segment path', () => {
-            expect(urls.tableList(['a', 'b'])).toBe('/table-list/a/b/');
-        });
-    });
 });

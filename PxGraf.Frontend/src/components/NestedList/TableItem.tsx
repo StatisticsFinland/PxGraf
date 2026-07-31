@@ -10,8 +10,38 @@ import { parseLanguageString } from 'utils/ApiHelpers';
 import { IDatabaseTable } from 'types/tableListItems';
 import { getErrorText } from "../../utils/editorHelpers";
 
-const StyledListItem = styled(ListItem)(({ theme }) => ({
-    backgroundColor: theme.palette.background.default,
+const StyledListItem = styled(ListItem)({
+    padding: 0,
+});
+
+const TableButton = styled(ListItemButton)<{ component?: React.ElementType; to?: string }>(({ theme }) => ({
+    minHeight: 56,
+    paddingTop: theme.spacing(0.75),
+    paddingBottom: theme.spacing(0.75),
+    paddingRight: theme.spacing(2),
+    backgroundColor: theme.palette.background.paper,
+    borderLeft: '3px solid transparent',
+    '&:hover': {
+        backgroundColor: theme.palette.action.hover,
+    },
+    '&.Mui-focusVisible': {
+        outline: `2px solid ${theme.palette.primary.main}`,
+        outlineOffset: -2,
+    },
+}));
+
+const TableMetadata = styled('span')(({ theme }) => ({
+    display: 'flex',
+    flexWrap: 'wrap',
+    columnGap: theme.spacing(1.5),
+    color: theme.palette.text.secondary,
+    fontSize: theme.typography.caption.fontSize,
+    lineHeight: 1.35,
+    '& > span + span::before': {
+        content: String.raw`"\2022"`,
+        marginRight: theme.spacing(1.5),
+        color: theme.palette.divider,
+    },
 }));
 
 const ErrorAlert = styled(Alert)`
@@ -36,13 +66,14 @@ export const TableItem: React.FC<ITableItemProps> = ({ currentPath, item, depth 
     const { t } = useTranslation();
     const { language } = React.useContext(UiLanguageContext);
     const displayLanguage = item.languages.includes(language) ? language : item.languages[0];
+    const displayName = item.name[displayLanguage] ?? item.name[item.languages[0]] ?? item.fileName;
 
     return <React.Fragment key={`${item.fileName}-key`}>
         <StyledListItem id={currentPath.join('-')}>
-            <ListItemButton sx={{ mr: 3, pl: depth * 4 }} component={Link} to={urls.editor(currentPath)}>
+            <TableButton sx={{ pl: 2.5 + depth * 2.5 }} component={Link} to={urls.editor(currentPath)}>
                 {item.error ?
-                    <ErrorAlert sx={{ pl: depth * 4 }} severity="warning">
-                        <AlertTitle>{`${item.name[displayLanguage] ?? item.fileName}`}</AlertTitle>
+                    <ErrorAlert severity="warning">
+                        <AlertTitle>{displayName}</AlertTitle>
                         {getErrorText(item.error, t)}
                     </ErrorAlert>
                     :
@@ -50,10 +81,19 @@ export const TableItem: React.FC<ITableItemProps> = ({ currentPath, item, depth 
                         <ListItemIcon sx={{ minWidth: '32px' }}>
                             <FileIcon />
                         </ListItemIcon>
-                        <ListItemText primary={`${item.name[displayLanguage]} ${parseLanguageString(item.languages)}`} secondary={t("tableSelect.updated") + ": " + new Date(item.lastUpdated).toLocaleString(language)} />
+                        <ListItemText
+                            primary={displayName}
+                            secondary={
+                                <TableMetadata>
+                                    <span>{parseLanguageString(item.languages)}</span>
+                                    <span>{t("tableSelect.updated") + ": " + new Date(item.lastUpdated).toLocaleString(language)}</span>
+                                </TableMetadata>
+                            }
+                            slotProps={{ primary: { sx: { overflowWrap: 'anywhere' } } }}
+                        />
                     </React.Fragment>
                 }
-            </ListItemButton>
+            </TableButton>
         </StyledListItem>
         <Divider />
     </React.Fragment>

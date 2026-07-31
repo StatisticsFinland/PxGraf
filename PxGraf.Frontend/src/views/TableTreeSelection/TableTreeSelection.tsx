@@ -6,18 +6,32 @@ import { NestedList } from 'components/NestedList/NestedList';
 import { styled } from '@mui/material/styles';
 import useHierarchyParams from 'hooks/useHierarchyParams';
 import { useNavigationContext } from 'contexts/navigationContext';
+import { BasePath } from 'envVars';
 
-const TableTreeSelectionWrapper = styled(Container)({ padding: 8 });
+const TableTreeSelectionWrapper = styled(Container)(({ theme }) => ({
+  padding: theme.spacing(2),
+  [theme.breakpoints.down('sm')]: {
+    padding: theme.spacing(1),
+  },
+}));
 
 const TableSelectionList = styled(List)(({ theme }) => ({
+  overflow: 'hidden',
+  border: `1px solid ${theme.palette.divider}`,
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: theme.palette.background.paper,
   '& .MuiListItem-root': {
     backgroundColor: theme.palette.background.paper,
   },
 })) as typeof List;
 
 const TableSelectionHeader = styled(ListSubheader)(({ theme }) => ({
-  backgroundColor: theme.palette.background.default,
+  backgroundColor: theme.palette.background.paper,
   borderBottom: `1px solid ${theme.palette.divider}`,
+  color: theme.palette.text.primary,
+  fontWeight: 600,
+  lineHeight: '48px',
+  zIndex: 2,
 })) as typeof ListSubheader;
 
 /**
@@ -45,6 +59,12 @@ export const TableTreeSelection: React.FC = () => {
       document.title = `${t("pages.tableTreeSelection")} | PxGraf`;
   }, [t]);
 
+    const handlePathOpen = React.useCallback((path: string[]) => {
+      setTablePath(path);
+      const url = `${BasePath}/?tablePath=${path.join(',')}`;
+      globalThis.history.replaceState(globalThis.history.state, '', url);
+    }, [setTablePath]);
+
   return (
     <TableTreeSelectionWrapper maxWidth="md">
       <TableSelectionList
@@ -56,7 +76,7 @@ export const TableTreeSelection: React.FC = () => {
           </TableSelectionHeader>
         }
       >
-        <NestedList path={[]} depth={0}/>
+        <NestedList path={[]} depth={0} onPathOpen={handlePathOpen}/>
       </TableSelectionList>
     </TableTreeSelectionWrapper>
   );
