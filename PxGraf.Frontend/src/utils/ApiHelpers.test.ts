@@ -33,6 +33,7 @@ const mockQuery: Query = {
 const mockBackendOldQueryRespons: IFetchSavedQueryResponse = {
     id: 'mock-id',
     draft: false,
+    recoveredWithChanges: false,
     query: merge(
         { tableReference: buildTableReference(mockIdStack) },
         { variableQueries: mockQuery },

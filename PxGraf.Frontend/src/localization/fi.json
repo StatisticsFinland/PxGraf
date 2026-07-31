@@ -138,6 +138,9 @@
     "boundaryMessage": "Tapahtui odottamaton virhe. Yritä uudelleen.",
     "boundaryRetry": "Yritä uudelleen"
   },
+  "warning": {
+    "savedQueryPartiallyRecovered": "Kaikkia tallennetun visualisoinnin metatietoja ei voitu ladata. Muuttuneiden muuttujien valinnat ja metatiedot palautettiin oletusarvoihin."
+  },
   "rejectionDialog":{
     "buttonText": "Muut kuviotyypit",
     "titleText": "Muut kuviotyypit",

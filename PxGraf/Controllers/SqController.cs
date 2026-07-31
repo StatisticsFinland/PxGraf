@@ -99,7 +99,23 @@ namespace PxGraf.Controllers
                         SavedQuery savedQuery = await _sqFileInterface.ReadSavedQueryFromFile(savedQueryId, Configuration.Current.SavedQueryDirectory);
                         IReadOnlyMatrixMetadata meta = await _cachedDatasource.GetMatrixMetadataCachedAsync(savedQuery.Query.TableReference);
 
-                        (IReadOnlyMatrixMetadata fetchMeta, MatrixMap outputMap) = meta.BuildVirtualValueMaps(savedQuery.Query);
+                        MatrixQuery reconciledQuery = ReconcileSavedQuery(
+                            meta,
+                            savedQuery.Query,
+                            out HashSet<string> resetDimensionCodes,
+                            out bool recoveredWithChanges);
+                        SavedQuery reconciledSavedQuery = new(
+                            reconciledQuery,
+                            savedQuery.Archived,
+                            savedQuery.Settings,
+                            savedQuery.CreationTime,
+                            savedQuery.Draft);
+                        foreach (KeyValuePair<string, object> legacyProperty in savedQuery.LegacyProperties)
+                        {
+                            reconciledSavedQuery.LegacyProperties[legacyProperty.Key] = legacyProperty.Value;
+                        }
+
+                        (IReadOnlyMatrixMetadata fetchMeta, MatrixMap outputMap) = meta.BuildVirtualValueMaps(reconciledQuery);
                         if (outputMap.DimensionMaps.Any(dm => dm.ValueCodes.Count == 0))
                         {
                             _logger.LogWarning("Saved query metadata contains dimensions with no selected output values.");
@@ -113,24 +129,46 @@ namespace PxGraf.Controllers
                             return BadRequest();
                         }
 
-                        if (savedQuery.Query.DimensionQueries.Values.Any(dq => dq.VirtualValueDefinitions?.Count > 0))
-                            matrix = _virtualValueComputationService.ApplyVirtualValues(matrix, savedQuery.Query);
+                        if (reconciledQuery.DimensionQueries.Values.Any(dq => dq.VirtualValueDefinitions?.Count > 0))
+                            matrix = _virtualValueComputationService.ApplyVirtualValues(matrix, reconciledQuery);
                         matrix = matrix.GetTransform(outputMap);
 
-                        IReadOnlyList<VisualizationType> validTypes = ChartTypeSelector.Selector.GetValidChartTypes(savedQuery.Query, matrix);
-
-                        if (!validTypes.Contains(savedQuery.Settings.VisualizationType))
+                        IReadOnlyList<VisualizationType> validTypes = ChartTypeSelector.Selector.GetValidChartTypes(reconciledQuery, matrix);
+                        if (validTypes.Count == 0)
                         {
-                            _logger.LogWarning("The saved visualization type is not valid for the saved query.");
+                            _logger.LogWarning("No visualization type is valid for the reconciled saved query.");
                             return BadRequest();
                         }
 
+                        if (!validTypes.Contains(savedQuery.Settings.VisualizationType))
+                        {
+                            VisualizationCreationSettings fallbackCreationSettings = new()
+                            {
+                                SelectedVisualization = validTypes[0]
+                            };
+                            reconciledSavedQuery.Settings = fallbackCreationSettings.ToVisualizationSettings(matrix.Metadata, reconciledQuery);
+                            _logger.LogInformation(
+                                "Saved visualization type was no longer valid. Using {VisualizationType} instead.",
+                                validTypes[0]);
+                            recoveredWithChanges = true;
+                        }
+
+                        VisualizationCreationSettings creationSettings = VisualizationCreationSettings.FromVisualizationSettings(
+                            reconciledSavedQuery,
+                            matrix.Metadata);
+                        recoveredWithChanges |= NormalizeVisualizationCreationSettings(
+                            creationSettings,
+                            matrix.Metadata,
+                            reconciledQuery,
+                            resetDimensionCodes);
+
                         SaveQueryParams saveQueryParams = new()
                         {
-                            Query = savedQuery.Query,
-                            Settings = VisualizationCreationSettings.FromVisualizationSettings(savedQuery, matrix.Metadata),
+                            Query = reconciledQuery,
+                            Settings = creationSettings,
                             Draft = savedQuery.Draft,
-                            Id = savedQueryId
+                            Id = savedQueryId,
+                            RecoveredWithChanges = recoveredWithChanges
                         };
 
                         _logger.LogDebug("Returning saved query result.");
@@ -501,7 +539,13 @@ namespace PxGraf.Controllers
         {
             foreach (KeyValuePair<string, DimensionQuery> dimEntry in query.DimensionQueries.Where(dimEntry => dimEntry.Value.VirtualValueDefinitions?.Count > 0))
             {
-                IReadOnlyDimension dimension = meta.Dimensions.First(d => d.Code == dimEntry.Key);
+                IReadOnlyDimension? dimension = meta.Dimensions.FirstOrDefault(d => d.Code == dimEntry.Key);
+                if (dimension is null)
+                {
+                    dimensionCode = dimEntry.Key;
+                    validationError = $"Dimension '{dimEntry.Key}' does not exist in the current table metadata.";
+                    return false;
+                }
                 List<string> realValueCodes = [.. dimension.Values.Select(v => v.Code)];
                 if (!_virtualValueValidationService.Validate(dimEntry.Value.VirtualValueDefinitions, realValueCodes, out validationError))
                 {
@@ -513,6 +557,186 @@ namespace PxGraf.Controllers
             dimensionCode = string.Empty;
             validationError = null;
             return true;
+        }
+
+        private MatrixQuery ReconcileSavedQuery(
+            IReadOnlyMatrixMetadata meta,
+            MatrixQuery savedQuery,
+            out HashSet<string> resetDimensionCodes,
+            out bool recoveredWithChanges)
+        {
+            Dictionary<string, DimensionQuery> reconciledDimensionQueries = [];
+            resetDimensionCodes = [];
+            HashSet<string> currentDimensionCodes = [.. meta.Dimensions.Select(dimension => dimension.Code)];
+            recoveredWithChanges = !savedQuery.DimensionQueries.Keys.ToHashSet().SetEquals(currentDimensionCodes);
+
+            foreach (IReadOnlyDimension dimension in meta.Dimensions)
+            {
+                if (savedQuery.DimensionQueries.TryGetValue(dimension.Code, out DimensionQuery? dimensionQuery) &&
+                    TryReconcileDimensionQuery(
+                        dimension,
+                        dimensionQuery,
+                        out DimensionQuery reconciledDimensionQuery,
+                        out bool dimensionChanged))
+                {
+                    reconciledDimensionQueries[dimension.Code] = reconciledDimensionQuery;
+                    recoveredWithChanges |= dimensionChanged;
+                }
+                else
+                {
+                    reconciledDimensionQueries[dimension.Code] = GetDefaultDimensionQuery(dimension);
+                    resetDimensionCodes.Add(dimension.Code);
+                    recoveredWithChanges = true;
+                }
+            }
+
+            return new MatrixQuery
+            {
+                TableReference = savedQuery.TableReference,
+                ChartHeaderEdit = savedQuery.ChartHeaderEdit,
+                DimensionQueries = reconciledDimensionQueries
+            };
+        }
+
+        private bool TryReconcileDimensionQuery(
+            IReadOnlyDimension dimension,
+            DimensionQuery dimensionQuery,
+            out DimensionQuery reconciledDimensionQuery,
+            out bool changed)
+        {
+            changed = false;
+            HashSet<string> realValueCodes = [.. dimension.ValueCodes];
+            List<VirtualValueDefinition> virtualValueDefinitions = dimensionQuery.VirtualValueDefinitions ?? [];
+            if (virtualValueDefinitions.Count > 0 &&
+                !_virtualValueValidationService.Validate(virtualValueDefinitions, realValueCodes, out _))
+            {
+                reconciledDimensionQuery = null!;
+                return false;
+            }
+
+            List<string> availableValueCodes = [.. dimension.ValueCodes, .. virtualValueDefinitions.Select(definition => definition.Code)];
+            HashSet<string> availableValueCodeSet = [.. availableValueCodes];
+            IValueFilter valueFilter = dimensionQuery.ValueFilter;
+
+            if ((valueFilter is ItemFilter itemFilter && itemFilter.Codes.Any(code => !availableValueCodeSet.Contains(code))) ||
+                (valueFilter is FromFilter fromFilter && !availableValueCodeSet.Contains(fromFilter.Code)))
+            {
+                reconciledDimensionQuery = null!;
+                return false;
+            }
+
+            if (valueFilter is InverseItemFilter inverseItemFilter)
+            {
+                List<string> retainedCodes = [.. inverseItemFilter.Codes.Where(availableValueCodeSet.Contains)];
+                changed = retainedCodes.Count != inverseItemFilter.Codes.Count;
+                valueFilter = new InverseItemFilter(retainedCodes);
+            }
+
+            if (!valueFilter.Filter(availableValueCodes).Any())
+            {
+                reconciledDimensionQuery = null!;
+                return false;
+            }
+
+            Dictionary<string, DimensionQuery.DimensionValueEdition> retainedValueEdits = dimensionQuery.ValueEdits
+                .Where(entry => availableValueCodeSet.Contains(entry.Key))
+                .ToDictionary();
+            changed |= retainedValueEdits.Count != dimensionQuery.ValueEdits.Count;
+
+            reconciledDimensionQuery = new DimensionQuery
+            {
+                NameEdit = dimensionQuery.NameEdit,
+                ValueEdits = retainedValueEdits,
+                ValueFilter = valueFilter,
+                VirtualValueDefinitions = virtualValueDefinitions,
+                Selectable = dimensionQuery.Selectable
+            };
+            return true;
+        }
+
+        private static DimensionQuery GetDefaultDimensionQuery(IReadOnlyDimension dimension)
+        {
+            IValueFilter valueFilter;
+            if (dimension.Type == DimensionType.Time)
+            {
+                valueFilter = new AllFilter();
+            }
+            else
+            {
+                string? eliminationCode = dimension.GetEliminationValueCode();
+                string? defaultCode = eliminationCode is not null && dimension.ValueCodes.Contains(eliminationCode)
+                    ? eliminationCode
+                    : dimension.ValueCodes.FirstOrDefault();
+                valueFilter = new ItemFilter(defaultCode is null ? [] : [defaultCode]);
+            }
+
+            return new DimensionQuery
+            {
+                ValueFilter = valueFilter,
+                Selectable = false
+            };
+        }
+
+        private static bool NormalizeVisualizationCreationSettings(
+            VisualizationCreationSettings settings,
+            IReadOnlyMatrixMetadata meta,
+            MatrixQuery query,
+            HashSet<string> resetDimensionCodes)
+        {
+            Dictionary<string, IReadOnlyDimension> dimensionsByCode = meta.Dimensions.ToDictionary(dimension => dimension.Code);
+            bool changed = false;
+
+            if (settings.DefaultSelectableDimensionCodes is not null)
+            {
+                Dictionary<string, List<string>> normalizedDefaults = settings.DefaultSelectableDimensionCodes
+                    .Where(entry => !resetDimensionCodes.Contains(entry.Key) && dimensionsByCode.ContainsKey(entry.Key))
+                    .Select(entry => new KeyValuePair<string, List<string>>(
+                        entry.Key,
+                        [.. entry.Value.Where(dimensionsByCode[entry.Key].ValueCodes.Contains)]))
+                    .Where(entry => entry.Value.Count > 0)
+                    .ToDictionary();
+                changed = normalizedDefaults.Count != settings.DefaultSelectableDimensionCodes.Count ||
+                    normalizedDefaults.Any(entry =>
+                        !settings.DefaultSelectableDimensionCodes.TryGetValue(entry.Key, out List<string>? originalCodes) ||
+                        !entry.Value.SequenceEqual(originalCodes));
+                settings.DefaultSelectableDimensionCodes = normalizedDefaults;
+            }
+
+            if (settings.MultiselectableDimensionCode is not null &&
+                (resetDimensionCodes.Contains(settings.MultiselectableDimensionCode) ||
+                 !dimensionsByCode.ContainsKey(settings.MultiselectableDimensionCode)))
+            {
+                settings.MultiselectableDimensionCode = null;
+                changed = true;
+            }
+
+            if (settings.SelectedVisualization == VisualizationType.Table)
+            {
+                List<string> multivalueDimensionCodes = [.. meta.Dimensions
+                    .Where(dimension => dimension.Values.Count > 1 && !query.DimensionQueries[dimension.Code].Selectable)
+                    .OrderBy(dimension => dimension.Values.Count)
+                    .Select(dimension => dimension.Code)];
+                List<string> rowDimensionCodes = [.. (settings.RowDimensionCodes ?? [])
+                    .Where(multivalueDimensionCodes.Contains)
+                    .Distinct()];
+                List<string> columnDimensionCodes = [.. (settings.ColumnDimensionCodes ?? [])
+                    .Where(code => multivalueDimensionCodes.Contains(code) && !rowDimensionCodes.Contains(code))
+                    .Distinct()];
+                List<string> unassignedCodes = [.. multivalueDimensionCodes
+                    .Where(code => !rowDimensionCodes.Contains(code) && !columnDimensionCodes.Contains(code))];
+                int newColumnCount = unassignedCodes.Count / 2;
+                columnDimensionCodes.AddRange(unassignedCodes.Take(newColumnCount));
+                rowDimensionCodes.AddRange(unassignedCodes.Skip(newColumnCount));
+                rowDimensionCodes.AddRange(meta.Dimensions
+                    .Select(dimension => dimension.Code)
+                    .Where(code => !multivalueDimensionCodes.Contains(code)));
+                changed |= !(settings.RowDimensionCodes ?? []).SequenceEqual(rowDimensionCodes) ||
+                    !(settings.ColumnDimensionCodes ?? []).SequenceEqual(columnDimensionCodes);
+                settings.RowDimensionCodes = rowDimensionCodes;
+                settings.ColumnDimensionCodes = columnDimensionCodes;
+            }
+
+            return changed;
         }
 
         /// <summary>

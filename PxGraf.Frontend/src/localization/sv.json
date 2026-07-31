@@ -138,6 +138,9 @@
     "boundaryMessage": "Ett oväntat fel uppstod. Försök igen.",
     "boundaryRetry": "Försök igen"
   },
+  "warning": {
+    "savedQueryPartiallyRecovered": "Alla metadata från den sparade visualiseringen kunde inte läsas in. Val och metadata för ändrade variabler återställdes till standardvärden."
+  },
   "rejectionDialog": {
     "buttonText": "Övriga diagramtyper",
     "titleText": "Övriga diagramtyper",

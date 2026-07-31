@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useParams, useLocation } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
 import i18n from 'i18next';
-import { Box, Divider, Container, CircularProgress, Alert } from '@mui/material';
+import { Box, Divider, Container, CircularProgress, Alert, Snackbar } from '@mui/material';
 import { QueryContext } from 'contexts/queryContext';
 import { VisualizationContext } from 'contexts/visualizationContext';
 import { SaveContext } from 'contexts/saveContext';
@@ -69,6 +69,8 @@ export const Editor = () => {
 
     const location = useLocation();
     const { result }: { result: IFetchSavedQueryResponse } = location?.state ? location.state : { result: null };
+    const [dismissedRecoveryLocationKey, setDismissedRecoveryLocationKey] = React.useState<string | null>(null);
+    const recoveryAlertOpen = Boolean(result?.recoveredWithChanges && dismissedRecoveryLocationKey !== location.key);
 
     // hooks and support functions
     const { t } = useTranslation();
@@ -288,6 +290,39 @@ export const Editor = () => {
 
     // return the actual component
     return (
+        <>
+        <Snackbar
+            open={recoveryAlertOpen}
+            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        >
+            <Alert
+                severity="warning"
+                variant="outlined"
+                onClose={() => setDismissedRecoveryLocationKey(location.key)}
+                sx={{
+                    backgroundColor: 'background.paper',
+                    borderWidth: 2,
+                    boxShadow: 6,
+                    '& .MuiAlert-message': {
+                        fontSize: '1rem',
+                    },
+                    '& .MuiAlert-icon': {
+                        alignSelf: 'center',
+                        fontSize: 28,
+                        paddingBlock: 0,
+                    },
+                    '& .MuiAlert-action': {
+                        alignSelf: 'center',
+                        paddingBlock: 0,
+                    },
+                    '& .MuiAlert-action .MuiSvgIcon-root': {
+                        fontSize: 24,
+                    },
+                }}
+            >
+                {t('warning.savedQueryPartiallyRecovered')}
+            </Alert>
+        </Snackbar>
         <EditorLayout>
             <EditorFilterSection
                 dimensions={enrichedDimensions}
@@ -339,6 +374,7 @@ export const Editor = () => {
                 />
             </MetaPreviewSectionWrapper>
         </EditorLayout>
+        </>
     );
 }
 
