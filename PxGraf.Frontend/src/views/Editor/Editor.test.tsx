@@ -407,7 +407,7 @@ describe('Assertion tests', () => {
         const alert = screen.getByText('warning.savedQueryPartiallyRecovered').closest('[role="alert"]') as HTMLElement;
         expect(alert).toHaveClass('MuiAlert-outlinedWarning');
         await user.click(within(alert).getByRole('button'));
-        expect(screen.queryByText('warning.savedQueryPartiallyRecovered')).not.toBeVisible();
+        expect(alert).not.toBeVisible();
 
         mockLocation.key = 'next-location';
         rerender(
