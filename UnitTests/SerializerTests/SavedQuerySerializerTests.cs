@@ -145,6 +145,26 @@ namespace UnitTests.SerializerTests
         }
 
         [Test]
+        public void ValueFilterSerializationTest_RegexWithJsonSensitiveCharacters_RoundTrips()
+        {
+            const string pattern = "^\\d+\t\"quoted\"\r?\n\\\\path\u00e5$";
+            IValueFilter filter = new RegexFilter(pattern);
+
+            string serializedString = JsonSerializer.Serialize(filter, GlobalJsonConverterOptions.Default);
+
+            using JsonDocument document = JsonDocument.Parse(serializedString);
+            Assert.That(document.RootElement.GetProperty("query").GetString(), Is.EqualTo(pattern));
+            Assert.That(serializedString, Does.Contain(@"\\d+"));
+            Assert.That(serializedString, Does.Contain(@"\""quoted\"""));
+            Assert.That(serializedString, Does.Contain(@"\t"));
+            Assert.That(serializedString, Does.Contain(@"\n"));
+
+            IValueFilter deserializedFilter = JsonSerializer.Deserialize<IValueFilter>(serializedString, GlobalJsonConverterOptions.Default);
+            Assert.That(deserializedFilter, Is.TypeOf<RegexFilter>());
+            Assert.That(((RegexFilter)deserializedFilter).Pattern, Is.EqualTo(pattern));
+        }
+
+        [Test]
         public void DeserializeSavedQuery__V1_0__ReturnsV1_0DeserializedSavedQuery()
         {
             string testJson = @"{
