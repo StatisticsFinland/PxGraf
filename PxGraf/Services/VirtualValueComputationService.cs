@@ -1,15 +1,12 @@
 using Microsoft.Extensions.Logging;
-using Px.Utils.Language;
 using Px.Utils.Models;
 using Px.Utils.Models.Data;
 using Px.Utils.Models.Data.DataValue;
 using Px.Utils.Models.Metadata;
 using Px.Utils.Models.Metadata.Dimensions;
-using Px.Utils.Models.Metadata.MetaProperties;
 using Px.Utils.Operations;
-using PxGraf.Language;
+using PxGraf.Models.Metadata;
 using PxGraf.Models.Queries;
-using PxGraf.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +26,7 @@ namespace PxGraf.Services
         Matrix<DecimalDataValue> ApplyVirtualValues(
             Matrix<DecimalDataValue> matrix,
             MatrixQuery query);
+
     }
 
     /// <summary>
@@ -44,11 +42,11 @@ namespace PxGraf.Services
             {
                 if (dimEntry.Value.VirtualValueDefinitions?.Count > 0)
                 {
-                    List<VirtualValueDefinition> ordered = TopologicalSort(dimEntry.Value.VirtualValueDefinitions);
+                    List<VirtualValueDefinition> ordered = VirtualValueMetadataBuilder.OrderDefinitions(dimEntry.Value.VirtualValueDefinitions);
                     Dictionary<string, int> typeCounters = [];
                     foreach (VirtualValueDefinition def in ordered)
                     {
-                        string opType = GetOperationType(def);
+                        string opType = VirtualValueMetadataBuilder.GetOperationType(def);
                         typeCounters[opType] = typeCounters.GetValueOrDefault(opType, 0) + 1;
                         matrix = ApplySingleDefinition(matrix, dimEntry.Key, def, dimEntry.Value, typeCounters[opType]);
                     }
@@ -57,24 +55,6 @@ namespace PxGraf.Services
             return matrix;
         }
 
-        private static string GetOperationType(VirtualValueDefinition def) => def switch
-        {
-            SumDefinition => "sum",
-            SubtractionOfTwoDefinition or SubtractionByConstantDefinition => "subtraction",
-            MultiplicationOfTwoDefinition or MultiplicationByConstantDefinition => "multiplication",
-            DivisionOfTwoDefinition or DivisionByConstantDefinition => "division",
-            _ => "computed"
-        };
-
-        private static string GetOperationPlaceholder(Translation translation, VirtualValueDefinition def) => def switch
-        {
-            SumDefinition => translation.SumPlaceholder,
-            SubtractionOfTwoDefinition or SubtractionByConstantDefinition => translation.SubtractionPlaceholder,
-            MultiplicationOfTwoDefinition or MultiplicationByConstantDefinition => translation.MultiplicationPlaceholder,
-            DivisionOfTwoDefinition or DivisionByConstantDefinition => translation.DivisionPlaceholder,
-            _ => translation.ComputedValuePlaceholder
-        };
-
         private Matrix<DecimalDataValue> ApplySingleDefinition(
             Matrix<DecimalDataValue> matrix,
             string dimensionCode,
@@ -82,30 +62,14 @@ namespace PxGraf.Services
             DimensionQuery dimensionQuery,
             int sequenceNumber)
         {
-            IReadOnlyDimension dimension = matrix.Metadata.Dimensions
-                .First(d => d.Code == dimensionCode);
+            DimensionValue newValue = VirtualValueMetadataBuilder.CreateValue(
+                matrix.Metadata,
+                dimensionCode,
+                def,
+                dimensionQuery,
+                sequenceNumber);
+            IReadOnlyDimension dimension = matrix.Metadata.Dimensions.First(d => d.Code == dimensionCode);
             int valueIndex = dimension.Values.Count;
-
-            IReadOnlyList<string> languages = matrix.Metadata.AvailableLanguages;
-            MultilanguageString resolvedName;
-
-            MultilanguageString defaultName = new(languages.ToDictionary(l => l, l =>
-            {
-                string placeholder = GetOperationPlaceholder(Localization.FromLanguage(l).Translation, def);
-                return $"{placeholder} {sequenceNumber}";
-            }));
-
-            if (dimensionQuery.ValueEdits.TryGetValue(def.Code, out DimensionQuery.DimensionValueEdition edition) && edition.NameEdit is not null)
-            {
-                resolvedName = new MultilanguageString(languages.ToDictionary(l => l, l =>
-                    edition.NameEdit.Languages.Contains(l) ? edition.NameEdit[l] : defaultName[l]));
-            }
-            else
-            {
-                resolvedName = defaultName;
-            }
-
-            DimensionValue newValue = CreateVirtualDimensionValue(dimension, def, resolvedName, languages);
 
             switch (def)
             {
@@ -209,105 +173,5 @@ namespace PxGraf.Services
             return new MatrixMap(dimensionMaps);
         }
 
-        private static DimensionValue CreateVirtualDimensionValue(
-            IReadOnlyDimension dimension,
-            VirtualValueDefinition def,
-            MultilanguageString resolvedName,
-            IReadOnlyList<string> languages)
-        {
-            if (dimension is not ContentDimension contentDimension)
-            {
-                return new DimensionValue(def.Code, resolvedName);
-            }
-
-            IReadOnlyList<string> operandCodes = def.GetOperandCodes();
-            if (operandCodes.Count == 0)
-            {
-                throw new InvalidOperationException($"Virtual value '{def.Code}': definition contains no operand codes.");
-            }
-
-            ContentDimensionValue firstOperand = (ContentDimensionValue)contentDimension.Values
-                .First(v => v.Code == operandCodes[0]);
-
-            int precision = operandCodes
-                .Select(code => contentDimension.Values.First(v => v.Code == code))
-                .OfType<ContentDimensionValue>()
-                .Min(cdv => cdv.Precision);
-
-            MultilanguageString placeholder = new(languages.ToDictionary(l => l,
-                l => Localization.FromLanguage(l).Translation.ComputedValuePlaceholder));
-
-            return new ContentDimensionValue(
-                def.Code,
-                resolvedName,
-                placeholder,
-                firstOperand.LastUpdated,
-                precision,
-                false,
-                new Dictionary<string, MetaProperty>
-                {
-                    [PxSyntaxConstants.SOURCE_KEY] = new MultilanguageStringProperty(placeholder)
-                });
-        }
-
-        private static List<VirtualValueDefinition> TopologicalSort(List<VirtualValueDefinition> definitions)
-        {
-            HashSet<string> virtualCodes = [.. definitions .Select(d => d.Code)];
-
-            Dictionary<string, HashSet<string>> dependencies = [];
-            Dictionary<string, int> inDegree = [];
-            Dictionary<string, VirtualValueDefinition> byCode = [];
-
-            foreach (VirtualValueDefinition def in definitions)
-            {
-                dependencies[def.Code] = [];
-                inDegree[def.Code] = 0;
-                byCode[def.Code] = def;
-            }
-
-            foreach (VirtualValueDefinition def in definitions)
-            {
-                foreach (string operand in def.GetOperandCodes())
-                {
-                    if (virtualCodes.Contains(operand) && dependencies.TryGetValue(def.Code, out HashSet<string> defDependencies))
-                    {
-                        if (defDependencies.Add(operand))
-                        {
-                            inDegree[def.Code]++;
-                        }
-                    }
-                }
-            }
-
-            Queue<string> queue = new(definitions
-                .Where(d => inDegree.TryGetValue(d.Code, out int deg) && deg == 0)
-                .Select(d => d.Code));
-            List<VirtualValueDefinition> sorted = [];
-
-            while (queue.Count > 0)
-            {
-                string node = queue.Dequeue();
-                sorted.Add(byCode[node]);
-
-                foreach (VirtualValueDefinition def in definitions)
-                {
-                     if (!dependencies.TryGetValue(def.Code, out HashSet<string> defDependencies)) continue;
-                     if (!defDependencies.Contains(node)) continue;
-
-                    inDegree[def.Code]--;
-                    if (inDegree[def.Code] == 0)
-                    {
-                        queue.Enqueue(def.Code);
-                    }
-                }
-            }
-
-            if (sorted.Count < definitions.Count)
-            {
-                throw new InvalidOperationException("Circular dependency detected in virtual value definitions.");
-            }
-
-            return sorted;
-        }
     }
 }

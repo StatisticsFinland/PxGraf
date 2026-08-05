@@ -23,7 +23,30 @@ namespace PxGraf.Visualization
     {
         public static JsonStat2 Build(Matrix<DecimalDataValue> matrix, string? requestedLanguage, VisualizationResponse.PxVisualizerSettings? visualizationSettings = null)
         {
-            IReadOnlyMatrixMetadata metadata = matrix.Metadata;
+            (decimal?[] values, Dictionary<string, string> statusMap) = BuildValues(matrix);
+            return Build(
+                matrix.Metadata,
+                requestedLanguage,
+                visualizationSettings,
+                values,
+                statusMap.Count > 0 ? statusMap : null);
+        }
+
+        public static JsonStat2 BuildMetadata(
+            IReadOnlyMatrixMetadata metadata,
+            string? requestedLanguage,
+            VisualizationResponse.PxVisualizerSettings? visualizationSettings = null)
+        {
+            return Build(metadata, requestedLanguage, visualizationSettings, [], null);
+        }
+
+        private static JsonStat2 Build(
+            IReadOnlyMatrixMetadata metadata,
+            string? requestedLanguage,
+            VisualizationResponse.PxVisualizerSettings? visualizationSettings,
+            decimal?[] values,
+            Dictionary<string, string>? statusMap)
+        {
             string language = ResolveLanguage(metadata, requestedLanguage);
 
             List<IReadOnlyDimension> dimensions = [.. metadata.Dimensions];
@@ -54,7 +77,6 @@ namespace PxGraf.Visualization
                 }
             }
             
-            (decimal?[] values, Dictionary<string, string> statusMap) = BuildValues(matrix);
             JsonStat2.RoleObj role = new()
             {
                 Time = [.. timeRoles],
@@ -81,7 +103,7 @@ namespace PxGraf.Visualization
                 Note = note,
                 Dimensions = dimensionMap,
                 Value = values,
-                Status = statusMap.Count > 0 ? statusMap : null,
+                Status = statusMap,
                 Role = role,
                 Extension = new JsonStat2Extension()
                 {
