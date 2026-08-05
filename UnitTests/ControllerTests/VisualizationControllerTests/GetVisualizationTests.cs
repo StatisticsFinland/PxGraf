@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using UnitTests.Fixtures;
 
@@ -282,6 +283,113 @@ namespace UnitTests.ControllerTests.VisualizationControllerTests
                 async () => await controller.GetJsonStat2MetadataAsync(testQueryId, "fi"));
         }
 
+        [TestCase(false)]
+        [TestCase(true)]
+        public async Task GetMetadata_WithInvalidSavedQueryId_ReturnsBadRequestBeforeFileLookup(bool jsonStat)
+        {
+            VisualizationController controller = BuildController(
+                [],
+                [],
+                "valid-id",
+                MultiStateMemoryTaskCache.CacheEntryState.Null);
+
+            IActionResult result = jsonStat
+                ? (await controller.GetJsonStat2MetadataAsync("invalid/id", "fi")).Result!
+                : (await controller.GetVisualizationMetadataAsync("invalid/id")).Result!;
+
+            Assert.That(result, Is.InstanceOf<BadRequestResult>());
+            _mockSqFileInterface.Verify(
+                files => files.SavedQueryExists(It.IsAny<string>(), It.IsAny<string>()),
+                Times.Never());
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public async Task GetMetadata_WithMissingSavedQuery_ReturnsNotFound(bool jsonStat)
+        {
+            const string testQueryId = "valid-id";
+            VisualizationController controller = BuildController(
+                [],
+                [],
+                testQueryId,
+                MultiStateMemoryTaskCache.CacheEntryState.Null,
+                savedQueryFound: false);
+
+            IActionResult result = jsonStat
+                ? (await controller.GetJsonStat2MetadataAsync(testQueryId, "fi")).Result!
+                : (await controller.GetVisualizationMetadataAsync(testQueryId)).Result!;
+
+            Assert.That(result, Is.InstanceOf<NotFoundResult>());
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public async Task GetMetadata_WithEmptyDimension_ReturnsBadRequest(bool jsonStat)
+        {
+            const string testQueryId = "valid-id";
+            List<DimensionParameters> dimensions =
+            [
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 0)
+            ];
+            VisualizationController controller = BuildController(
+                dimensions,
+                dimensions,
+                testQueryId,
+                MultiStateMemoryTaskCache.CacheEntryState.Null);
+
+            IActionResult result = jsonStat
+                ? (await controller.GetJsonStat2MetadataAsync(testQueryId, "fi")).Result!
+                : (await controller.GetVisualizationMetadataAsync(testQueryId)).Result!;
+
+            Assert.That(result, Is.InstanceOf<BadRequestResult>());
+        }
+
+        [Test]
+        public async Task GetJsonStat2Metadata_WithUnsupportedLanguage_ReturnsBadRequest()
+        {
+            const string testQueryId = "valid-id";
+            List<DimensionParameters> dimensions =
+            [
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 3)
+            ];
+            VisualizationController controller = BuildController(
+                dimensions,
+                dimensions,
+                testQueryId,
+                MultiStateMemoryTaskCache.CacheEntryState.Null);
+
+            ActionResult<JsonStat2> result = await controller.GetJsonStat2MetadataAsync(testQueryId, "de");
+
+            Assert.That(result.Result, Is.InstanceOf<BadRequestResult>());
+        }
+
+        [Test]
+        public async Task GetJsonStat2Metadata_WithoutLanguage_UsesDefaultLanguage()
+        {
+            const string testQueryId = "valid-id";
+            List<DimensionParameters> dimensions =
+            [
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 3)
+            ];
+            VisualizationController controller = BuildController(
+                dimensions,
+                dimensions,
+                testQueryId,
+                MultiStateMemoryTaskCache.CacheEntryState.Null);
+
+            JsonStat2 defaultLanguageDataset = (JsonStat2)((JsonResult)
+                (await controller.GetJsonStat2MetadataAsync(testQueryId, null)).Result!).Value!;
+            JsonStat2 explicitLanguageDataset = (JsonStat2)((JsonResult)
+                (await controller.GetJsonStat2MetadataAsync(testQueryId, "fi")).Result!).Value!;
+
+            Assert.That(
+                JsonSerializer.Serialize(defaultLanguageDataset, GlobalJsonConverterOptions.Default),
+                Is.EqualTo(JsonSerializer.Serialize(explicitLanguageDataset, GlobalJsonConverterOptions.Default)));
+        }
+
         [Test]
         public async Task GetVisualizationMetadata_ArchivedCacheMiss_ReadsAndCachesArchiveMetadata()
         {
@@ -395,6 +503,187 @@ namespace UnitTests.ControllerTests.VisualizationControllerTests
                     It.IsAny<TimeSpan>(),
                     It.IsAny<TimeSpan>()),
                 Times.Once());
+        }
+
+        [Test]
+        public async Task GetVisualizationMetadata_ArchivedCacheError_RemovesAndReloadsMetadata()
+        {
+            const string testQueryId = "aaa-bbb-111-222-333";
+            List<DimensionParameters> dimensions =
+            [
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 3)
+            ];
+            VisualizationController controller = BuildController(
+                dimensions,
+                dimensions,
+                testQueryId,
+                MultiStateMemoryTaskCache.CacheEntryState.Null,
+                archived: true);
+            _mockTaskCache.Setup(cache => cache.TryGet(
+                    $"archived-metadata:{testQueryId}",
+                    out It.Ref<Task<IReadOnlyMatrixMetadata>>.IsAny))
+                .Returns((string key, out Task<IReadOnlyMatrixMetadata> value) =>
+                {
+                    value = Task.FromException<IReadOnlyMatrixMetadata>(new InvalidOperationException());
+                    return MultiStateMemoryTaskCache.CacheEntryState.Error;
+                });
+
+            ActionResult<VisualizationMetadataResponse> result = await controller.GetVisualizationMetadataAsync(testQueryId);
+
+            Assert.That(result.Value, Is.Not.Null);
+            _mockTaskCache.Verify(cache => cache.TryRemove($"archived-metadata:{testQueryId}"), Times.Once());
+            _mockSqFileInterface.Verify(
+                files => files.ReadArchiveCubeFromFile(testQueryId, It.IsAny<string>()),
+                Times.Once());
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public async Task GetVisualizationMetadata_MatchesFullResponseWithoutData(bool archived)
+        {
+            const string testQueryId = "aaa-bbb-111-222-333";
+            List<DimensionParameters> dimensions =
+            [
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 3),
+                new DimensionParameters(DimensionType.Other, 3) { Selectable = true }
+            ];
+            VisualizationController controller = BuildController(
+                dimensions,
+                dimensions,
+                testQueryId,
+                MultiStateMemoryTaskCache.CacheEntryState.Null,
+                archived: archived);
+
+            VisualizationResponse fullResponse = (await controller.GetVisualization(testQueryId)).Value!;
+            VisualizationMetadataResponse metadataResponse = (await controller.GetVisualizationMetadataAsync(testQueryId)).Value!;
+            JsonObject expected = SerializeToObject(fullResponse);
+            expected.Remove("data");
+            expected.Remove("dataNotes");
+            expected.Remove("missingDataInfo");
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(JsonNode.DeepEquals(expected, SerializeToObject(metadataResponse)), Is.True);
+                Assert.That(metadataResponse.SelectableDimensionCodes, Is.EqualTo(new[] { "variable-2" }));
+            });
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public async Task GetJsonStat2Metadata_MatchesFullResponseWithEmptyValuesAndNoStatus(bool archived)
+        {
+            const string testQueryId = "aaa-bbb-111-222-333";
+            List<DimensionParameters> dimensions =
+            [
+                new DimensionParameters(DimensionType.Content, 1),
+                new DimensionParameters(DimensionType.Time, 3),
+                new DimensionParameters(DimensionType.Other, 3) { Selectable = true }
+            ];
+            VisualizationController controller = BuildController(
+                dimensions,
+                dimensions,
+                testQueryId,
+                MultiStateMemoryTaskCache.CacheEntryState.Null,
+                archived: archived);
+
+            JsonStat2 fullResponse = (JsonStat2)((JsonResult)
+                (await controller.GetJsonStat2VisualizationAsync(testQueryId, "fi")).Result!).Value!;
+            JsonStat2 metadataResponse = (JsonStat2)((JsonResult)
+                (await controller.GetJsonStat2MetadataAsync(testQueryId, "fi")).Result!).Value!;
+            JsonObject expected = SerializeToObject(fullResponse);
+            expected["value"] = new JsonArray();
+            expected.Remove("status");
+
+            Assert.That(JsonNode.DeepEquals(expected, SerializeToObject(metadataResponse)), Is.True);
+        }
+
+        [Test]
+        public async Task GetVisualizationMetadata_WithVirtualValue_ReturnsComputedMetadataWithoutFetchingData()
+        {
+            const string testQueryId = "aaa-bbb-111-222-333";
+            List<DimensionParameters> dimensions =
+            [
+                new DimensionParameters(DimensionType.Content, 2),
+                new DimensionParameters(DimensionType.Time, 2)
+            ];
+            VisualizationController controller = BuildController(
+                dimensions,
+                dimensions,
+                testQueryId,
+                MultiStateMemoryTaskCache.CacheEntryState.Null);
+            PxGraf.Models.SavedQueries.SavedQuery savedQuery = TestDataCubeBuilder.BuildTestSavedQuery(
+                dimensions,
+                false,
+                new LineChartVisualizationSettings(null, false, null));
+            DimensionQuery contentQuery = savedQuery.Query.DimensionQueries["variable-0"];
+            contentQuery.ValueFilter = new ItemFilter(["value-0", "virtual-sum"]);
+            contentQuery.VirtualValueDefinitions =
+            [
+                new SumDefinition
+                {
+                    Code = "virtual-sum",
+                    OperandCodes = ["value-0", "value-1"]
+                }
+            ];
+            _mockSqFileInterface.Setup(files => files.ReadSavedQueryFromFile(testQueryId, It.IsAny<string>()))
+                .ReturnsAsync(savedQuery);
+
+            VisualizationMetadataResponse response = (await controller.GetVisualizationMetadataAsync(testQueryId)).Value!;
+
+            Assert.That(
+                response.MetaData.Single(variable => variable.Code == "variable-0").Values.Select(value => value.Code),
+                Is.EqualTo(new[] { "value-0", "virtual-sum" }));
+            _mockCachedDatasource.Verify(
+                datasource => datasource.GetMatrixAsync(It.IsAny<PxTableReference>(), It.IsAny<IReadOnlyMatrixMetadata>()),
+                Times.Never());
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void GetMetadata_WithCircularVirtualValues_PropagatesInvalidOperationException(bool jsonStat)
+        {
+            const string testQueryId = "aaa-bbb-111-222-333";
+            List<DimensionParameters> dimensions =
+            [
+                new DimensionParameters(DimensionType.Content, 2),
+                new DimensionParameters(DimensionType.Time, 2)
+            ];
+            VisualizationController controller = BuildController(
+                dimensions,
+                dimensions,
+                testQueryId,
+                MultiStateMemoryTaskCache.CacheEntryState.Null);
+            PxGraf.Models.SavedQueries.SavedQuery savedQuery = TestDataCubeBuilder.BuildTestSavedQuery(
+                dimensions,
+                false,
+                new LineChartVisualizationSettings(null, false, null));
+            DimensionQuery contentQuery = savedQuery.Query.DimensionQueries["variable-0"];
+            contentQuery.VirtualValueDefinitions =
+            [
+                new SumDefinition { Code = "virtual-1", OperandCodes = ["virtual-2", "value-0"] },
+                new SumDefinition { Code = "virtual-2", OperandCodes = ["virtual-1", "value-1"] }
+            ];
+            _mockSqFileInterface.Setup(files => files.ReadSavedQueryFromFile(testQueryId, It.IsAny<string>()))
+                .ReturnsAsync(savedQuery);
+
+            Assert.ThrowsAsync<InvalidOperationException>(async () =>
+            {
+                if (jsonStat)
+                {
+                    await controller.GetJsonStat2MetadataAsync(testQueryId, "fi");
+                }
+                else
+                {
+                    await controller.GetVisualizationMetadataAsync(testQueryId);
+                }
+            });
+        }
+
+        private static JsonObject SerializeToObject(object value)
+        {
+            return JsonSerializer.SerializeToNode(value, GlobalJsonConverterOptions.Default)!.AsObject();
         }
 
         [Test]
