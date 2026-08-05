@@ -156,7 +156,7 @@
   "infoText": {
     "treeSelection": "Valitse hakemistopuusta visualisoinnin datalähteenä käytettävä PX-taulukko.",
     "langSelector": "Valitse käyttöliittymän kieli.",
-    "langTab": "Muokkaa tarvittavat kieliversiot, vähintään otsikot.",
+    "langTab": "Muokkaa tarvittavat kieliversiot, vähintään otsikot. Metatietoja pääset muokkaamaan Muokkaa valittujen arvojen metatietoja -painikkeesta.",
     "varSelection": "Valitse jokaisesta muuttujasta vähintään yksi arvo.",
     "selectableButton": "Salli käyttäjän valinta, jotta käyttäjä voi vaihtaa muuttujan arvoa visualisoinnissa.",
     "selectableInput": "Valitse muuttujan oletusarvo, joka näkyy ennen käyttäjän omaa valintaa.",
@@ -216,6 +216,7 @@
     "editTitle": "Muokkaa laskettua arvoa",
     "edit": "Muokkaa",
     "delete": "Poista",
+    "nameEditingInfo": "Muokkaa laskettujen arvojen nimiä metatietoeditorissa.",
     "noValues": "Ei laskettuja arvoja määritelty.",
     "operator": "Operaatio",
     "operatorSum": "Summa",

@@ -3,7 +3,7 @@ import React from 'react';
 import { Box, Button } from '@mui/material';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import { useTranslation } from 'react-i18next';
-import { styled } from '@mui/material/styles';
+import { alpha, styled } from '@mui/material/styles';
 import { IDimension } from 'types/cubeMeta';
 import { Query } from 'types/query';
 
@@ -69,6 +69,10 @@ export const EditorFilterSection: React.FC<EditorFilterSectionProps> = ({ dimens
                     fullWidth
                     variant="outlined"
                     size="small"
+                    sx={theme => ({
+                        backgroundColor: theme.palette.primary.light,
+                        '&:hover': { backgroundColor: alpha(theme.palette.primary.main, 0.16) },
+                    })}
                     startIcon={<EditNoteIcon />}
                     disabled={!hasSelectedValues}
                     onClick={onEditMetadata}
