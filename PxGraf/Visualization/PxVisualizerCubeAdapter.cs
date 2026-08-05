@@ -66,14 +66,7 @@ namespace PxGraf.Visualization
         public static VisualizationResponse BuildVisualizationResponse(Matrix<DecimalDataValue> matrix, MatrixQuery query, VisualizationSettings settings)
         {
             DimensionLayout layout = GetDimensionLayout(matrix.Metadata, query, settings);
-
-            MatrixMap finalMap = new(
-                [.. layout.SingleValueDimensions
-                    .Concat(layout.SelectableDimensionCodes)
-                    .Concat(layout.RowDimensionCodes)
-                    .Concat(layout.ColumnDimensionCodes)
-                    .Select(vc => matrix.Metadata.DimensionMaps.First(vm => vm.Code == vc))]
-                );
+            MatrixMap finalMap = BuildFinalMap(matrix.Metadata, layout);
 
             Matrix<DecimalDataValue> resultMatrix = matrix.GetTransform(finalMap);
             MatrixExtensions.DataAndNotesCollection dataAndNotes = resultMatrix.ExtractDataAndNotes();
@@ -93,9 +86,46 @@ namespace PxGraf.Visualization
             };
         }
 
+        /// <summary>
+        /// Builds the non-data portion of a visualization response for a saved query.
+        /// </summary>
+        public static VisualizationMetadataResponse BuildVisualizationMetadataResponse(
+            IReadOnlyMatrixMetadata metadata,
+            SavedQuery savedQuery)
+        {
+            if (savedQuery.Settings.Layout is null)
+            {
+                bool legacyPivotRequested = savedQuery.LegacyProperties.TryGetValue("PivotRequested", out object? obj) && obj is true;
+                savedQuery.Settings.Layout = LayoutRules.GetPivotBasedLayout(
+                    savedQuery.Settings.VisualizationType,
+                    metadata,
+                    savedQuery.Query,
+                    legacyPivotRequested);
+            }
+
+            DimensionLayout layout = GetDimensionLayout(metadata, savedQuery.Query, savedQuery.Settings);
+            IReadOnlyMatrixMetadata resultMetadata = metadata.GetTransform(BuildFinalMap(metadata, layout));
+
+            return new VisualizationMetadataResponse
+            {
+                TableReference = savedQuery.Query.TableReference,
+                MetaData = BuildVariableList(savedQuery.Query.DimensionQueries, resultMetadata),
+                SelectableDimensionCodes = layout.SelectableDimensionCodes,
+                RowDimensionCodes = layout.RowDimensionCodes,
+                ColumnDimensionCodes = layout.ColumnDimensionCodes,
+                Header = HeaderBuildingUtilities.GetHeader(metadata, savedQuery.Query),
+                VisualizationSettings = BuildVisualizationSettings(metadata, savedQuery.Settings)
+            };
+        }
+
         public static VisualizationResponse.PxVisualizerSettings BuildVisualizationSettings(Matrix<DecimalDataValue> matrix, VisualizationSettings settings)
         {
-            IReadOnlyList<string> timeDimensionCodes = matrix.Metadata.GetTimeDimension().Values.Codes;
+            return BuildVisualizationSettings(matrix.Metadata, settings);
+        }
+
+        public static VisualizationResponse.PxVisualizerSettings BuildVisualizationSettings(IReadOnlyMatrixMetadata metadata, VisualizationSettings settings)
+        {
+            IReadOnlyList<string> timeDimensionCodes = metadata.GetTimeDimension().Values.Codes;
             return new()
             {
                 VisualizationType = settings.VisualizationType,
@@ -109,6 +139,16 @@ namespace PxGraf.Visualization
                 Sorting = settings.Sorting,
                 ShowDataPoints = settings.ShowDataPoints
             };
+        }
+
+        private static MatrixMap BuildFinalMap(IReadOnlyMatrixMetadata metadata, DimensionLayout layout)
+        {
+            return new MatrixMap(
+                [.. layout.SingleValueDimensions
+                    .Concat(layout.SelectableDimensionCodes)
+                    .Concat(layout.RowDimensionCodes)
+                    .Concat(layout.ColumnDimensionCodes)
+                    .Select(code => metadata.DimensionMaps.First(map => map.Code == code))]);
         }
         
         private static List<Variable> BuildVariableList(Dictionary<string, DimensionQuery> dimensionQueries, IReadOnlyMatrixMetadata meta)

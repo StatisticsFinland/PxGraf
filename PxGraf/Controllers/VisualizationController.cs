@@ -53,8 +53,11 @@ namespace PxGraf.Controllers
         private static readonly TimeSpan SlidingExpiration = TimeSpan.FromMinutes(CacheValues.SlidingExpirationMinutes);
 
         private const string VISUALIZATION_ENDPOINT_PATH = "api/sq/visualization";
+        private const string VISUALIZATION_METADATA_ENDPOINT_PATH = "api/sq/visualization/metadata";
         private const string JSONSTAT_VISUALIZATION_ENDPOINT_PATH = "api/sq/jsonstat";
+        private const string JSONSTAT_METADATA_ENDPOINT_PATH = "api/sq/jsonstat/metadata";
         private const string JSONSTAT_CACHE_KEY_PREFIX = "jsonstat:";
+        private const string ARCHIVED_METADATA_CACHE_KEY_PREFIX = "archived-metadata:";
 
         #region ACTIONS
 
@@ -161,6 +164,50 @@ namespace PxGraf.Controllers
         }
 
         /// <summary>
+        /// Gets the metadata required to configure a visualization without fetching its data points.
+        /// </summary>
+        /// <param name="sqId">The id of the saved query.</param>
+        /// <returns>The non-data portion of the visualization response.</returns>
+        [HttpGet("visualization/{sqId}/metadata")]
+        [ProducesResponseType<VisualizationMetadataResponse>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<VisualizationMetadataResponse>> GetVisualizationMetadataAsync([FromRoute] string sqId)
+        {
+            using (_logger.BeginScope(new Dictionary<string, object>
+            {
+                [LoggerConstants.CONTROLLER] = nameof(VisualizationController),
+                [LoggerConstants.ACTION] = VISUALIZATION_METADATA_ENDPOINT_PATH
+            }))
+            {
+                if (!InputValidation.ValidateSqIdString(sqId))
+                {
+                    _auditLogService.LogAuditEvent(VISUALIZATION_METADATA_ENDPOINT_PATH, LoggerConstants.INVALID_OR_MISSING_SQID);
+                    return BadRequest();
+                }
+
+                if (!await _sqFileInterface.SavedQueryExists(sqId, Configuration.Current.SavedQueryDirectory))
+                {
+                    _auditLogService.LogAuditEvent(VISUALIZATION_METADATA_ENDPOINT_PATH, LoggerConstants.INVALID_OR_MISSING_SQID);
+                    return NotFound();
+                }
+
+                _auditLogService.LogAuditEvent(VISUALIZATION_METADATA_ENDPOINT_PATH, sqId);
+                SavedQuery savedQuery = await _sqFileInterface.ReadSavedQueryFromFile(sqId, Configuration.Current.SavedQueryDirectory);
+                try
+                {
+                    IReadOnlyMatrixMetadata metadata = await BuildVisualizationMetadataAsync(sqId, savedQuery);
+                    return PxVisualizerCubeAdapter.BuildVisualizationMetadataResponse(metadata, savedQuery);
+                }
+                catch (EmptyDimensionException ex)
+                {
+                    _logger.LogDebug(ex, "Saved query {SqId} produced empty visualization metadata; returning 400.", sqId);
+                    return BadRequest();
+                }
+            }
+        }
+
+        /// <summary>
         /// Gets a JSON-stat 2.0 visualization dataset for a saved query in the requested language.
         /// </summary>
         /// <param name="sqId">The id of the saved query.</param>
@@ -260,6 +307,60 @@ namespace PxGraf.Controllers
             }
         }
 
+        /// <summary>
+        /// Gets a JSON-stat 2.0 metadata-only dataset for a saved query in the requested language.
+        /// </summary>
+        /// <param name="sqId">The id of the saved query.</param>
+        /// <param name="lang">Optional language for localized JSON-stat fields.</param>
+        /// <returns>A JSON-stat 2.0 dataset with an empty value array and no status data.</returns>
+        [HttpGet("jsonstat/{sqId}/metadata")]
+        [ProducesResponseType<JsonStat2>(StatusCodes.Status200OK, "application/vnd.jsonstat2+json")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<JsonStat2>> GetJsonStat2MetadataAsync([FromRoute] string sqId, [FromQuery] string lang)
+        {
+            using (_logger.BeginScope(new Dictionary<string, object>
+            {
+                [LoggerConstants.CONTROLLER] = nameof(VisualizationController),
+                [LoggerConstants.ACTION] = JSONSTAT_METADATA_ENDPOINT_PATH
+            }))
+            {
+                if (!InputValidation.ValidateSqIdString(sqId))
+                {
+                    _auditLogService.LogAuditEvent(JSONSTAT_METADATA_ENDPOINT_PATH, LoggerConstants.INVALID_OR_MISSING_SQID);
+                    return BadRequest();
+                }
+
+                if (!await _sqFileInterface.SavedQueryExists(sqId, Configuration.Current.SavedQueryDirectory))
+                {
+                    _auditLogService.LogAuditEvent(JSONSTAT_METADATA_ENDPOINT_PATH, LoggerConstants.INVALID_OR_MISSING_SQID);
+                    return NotFound();
+                }
+
+                _auditLogService.LogAuditEvent(JSONSTAT_METADATA_ENDPOINT_PATH, sqId);
+                SavedQuery savedQuery = await _sqFileInterface.ReadSavedQueryFromFile(sqId, Configuration.Current.SavedQueryDirectory);
+                try
+                {
+                    IReadOnlyMatrixMetadata metadata = await BuildVisualizationMetadataAsync(sqId, savedQuery);
+                    JsonStat2 dataset = JsonStat2DatasetBuilder.BuildMetadata(
+                        metadata,
+                        lang,
+                        PxVisualizerCubeAdapter.BuildVisualizationSettings(metadata, savedQuery.Settings));
+                    return CreateJsonStatResult(dataset);
+                }
+                catch (EmptyDimensionException ex)
+                {
+                    _logger.LogDebug(ex, "Saved query {SqId} produced empty JSON-stat metadata; returning 400.", sqId);
+                    return BadRequest();
+                }
+                catch (ArgumentException ex)
+                {
+                    _logger.LogDebug(ex, "Invalid JSON-stat metadata request for saved query {SqId}; returning 400.", sqId);
+                    return BadRequest();
+                }
+            }
+        }
+
         #endregion
 
         #region UTILITY
@@ -323,6 +424,60 @@ namespace PxGraf.Controllers
         {
             Matrix<DecimalDataValue> matrix = await BuildVisualizationMatrixAsync(sqId, sq);
             return PxVisualizerCubeAdapter.BuildVisualizationResponse(matrix, sq);
+        }
+
+        private async Task<IReadOnlyMatrixMetadata> BuildVisualizationMetadataAsync(string sqId, SavedQuery savedQuery)
+        {
+            if (savedQuery.Archived)
+            {
+                return await GetArchivedMetadataAsync(sqId);
+            }
+
+            IReadOnlyMatrixMetadata completeMetadata = await _cachedDatasource.GetMatrixMetadataCachedAsync(
+                savedQuery.Query.TableReference);
+            (IReadOnlyMatrixMetadata fetchMetadata, MatrixMap outputMap) = completeMetadata.BuildVirtualValueMaps(savedQuery.Query);
+
+            if (fetchMetadata.GetSize() == 0 || outputMap.GetSize() == 0)
+            {
+                throw new EmptyDimensionException($"Saved query '{sqId}' produced metadata with one or more empty dimensions.");
+            }
+
+            IReadOnlyMatrixMetadata metadata = savedQuery.Query.DimensionQueries.Values.Any(
+                dimensionQuery => dimensionQuery.VirtualValueDefinitions?.Count > 0)
+                ? VirtualValueMetadataBuilder.Build(fetchMetadata, savedQuery.Query)
+                : fetchMetadata;
+
+            return metadata.GetTransform(outputMap);
+        }
+
+        private async Task<IReadOnlyMatrixMetadata> GetArchivedMetadataAsync(string sqId)
+        {
+            string cacheKey = $"{ARCHIVED_METADATA_CACHE_KEY_PREFIX}{sqId}";
+            MultiStateMemoryTaskCache.CacheEntryState cacheState = _taskCache.TryGet(
+                cacheKey,
+                out Task<IReadOnlyMatrixMetadata> cachedMetadataTask);
+
+            if (cacheState == MultiStateMemoryTaskCache.CacheEntryState.Fresh)
+            {
+                return await cachedMetadataTask;
+            }
+
+            if (cacheState == MultiStateMemoryTaskCache.CacheEntryState.Error)
+            {
+                _taskCache.TryRemove(cacheKey);
+            }
+
+            Task<IReadOnlyMatrixMetadata> metadataTask = ReadArchivedMetadataAsync(sqId);
+            _taskCache.Set(cacheKey, metadataTask, SlidingExpiration, AbsoluteExpiration);
+            return await metadataTask;
+        }
+
+        private async Task<IReadOnlyMatrixMetadata> ReadArchivedMetadataAsync(string sqId)
+        {
+            ArchiveCube archiveCube = await _sqFileInterface.ReadArchiveCubeFromFile(
+                sqId,
+                Configuration.Current.ArchiveFileDirectory);
+            return archiveCube.Meta;
         }
 
         private async Task<Matrix<DecimalDataValue>> BuildVisualizationMatrixAsync(string sqId, SavedQuery sq)
