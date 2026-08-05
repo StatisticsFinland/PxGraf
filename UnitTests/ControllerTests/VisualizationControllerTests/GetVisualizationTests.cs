@@ -148,15 +148,18 @@ namespace UnitTests.ControllerTests.VisualizationControllerTests
             HttpGetAttribute visualizationRoute = typeof(VisualizationController)
                 .GetMethod(nameof(VisualizationController.GetVisualization))!
                 .GetCustomAttribute<HttpGetAttribute>()!;
-            HttpGetAttribute jsonStatRoute = typeof(VisualizationController)
-                .GetMethod(nameof(VisualizationController.GetJsonStat2VisualizationAsync))!
-                .GetCustomAttribute<HttpGetAttribute>()!;
+            MethodInfo jsonStatMethod = typeof(VisualizationController)
+                .GetMethod(nameof(VisualizationController.GetJsonStat2VisualizationAsync))!;
+            HttpGetAttribute jsonStatRoute = jsonStatMethod.GetCustomAttribute<HttpGetAttribute>()!;
             HttpGetAttribute visualizationMetadataRoute = typeof(VisualizationController)
                 .GetMethod(nameof(VisualizationController.GetVisualizationMetadataAsync))!
                 .GetCustomAttribute<HttpGetAttribute>()!;
-            HttpGetAttribute jsonStatMetadataRoute = typeof(VisualizationController)
-                .GetMethod(nameof(VisualizationController.GetJsonStat2MetadataAsync))!
-                .GetCustomAttribute<HttpGetAttribute>()!;
+            MethodInfo jsonStatMetadataMethod = typeof(VisualizationController)
+                .GetMethod(nameof(VisualizationController.GetJsonStat2MetadataAsync))!;
+            HttpGetAttribute jsonStatMetadataRoute = jsonStatMetadataMethod.GetCustomAttribute<HttpGetAttribute>()!;
+            NullabilityInfoContext nullabilityContext = new();
+            ParameterInfo jsonStatLanguage = jsonStatMethod.GetParameters().Single(parameter => parameter.Name == "lang");
+            ParameterInfo jsonStatMetadataLanguage = jsonStatMetadataMethod.GetParameters().Single(parameter => parameter.Name == "lang");
 
             Assert.Multiple(() =>
             {
@@ -165,6 +168,12 @@ namespace UnitTests.ControllerTests.VisualizationControllerTests
                 Assert.That(jsonStatRoute.Template, Is.EqualTo("jsonstat/{sqId}"));
                 Assert.That(visualizationMetadataRoute.Template, Is.EqualTo("visualization/{sqId}/metadata"));
                 Assert.That(jsonStatMetadataRoute.Template, Is.EqualTo("jsonstat/{sqId}/metadata"));
+                Assert.That(nullabilityContext.Create(jsonStatLanguage).ReadState, Is.EqualTo(NullabilityState.Nullable));
+                Assert.That(jsonStatLanguage.HasDefaultValue, Is.True);
+                Assert.That(jsonStatLanguage.DefaultValue, Is.Null);
+                Assert.That(nullabilityContext.Create(jsonStatMetadataLanguage).ReadState, Is.EqualTo(NullabilityState.Nullable));
+                Assert.That(jsonStatMetadataLanguage.HasDefaultValue, Is.True);
+                Assert.That(jsonStatMetadataLanguage.DefaultValue, Is.Null);
             });
         }
 

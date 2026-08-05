@@ -176,7 +176,7 @@ namespace PxGraf.Models.Metadata
             _ => translation.ComputedValuePlaceholder
         };
 
-        private static IReadOnlyMatrixMetadata AppendDimensionValue(
+        private static MatrixMetadata AppendDimensionValue(
             IReadOnlyMatrixMetadata metadata,
             string dimensionCode,
             DimensionValue newValue)

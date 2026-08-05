@@ -1,3 +1,4 @@
+#nullable enable annotations
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -217,7 +218,7 @@ namespace PxGraf.Controllers
         [ProducesResponseType<JsonStat2>(StatusCodes.Status200OK, "application/vnd.jsonstat2+json")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<JsonStat2>> GetJsonStat2VisualizationAsync([FromRoute] string sqId, [FromQuery] string lang)
+        public async Task<ActionResult<JsonStat2>> GetJsonStat2VisualizationAsync([FromRoute] string sqId, [FromQuery] string? lang = null)
         {
             Dictionary<string, object> logScope = new()
             {
@@ -317,7 +318,7 @@ namespace PxGraf.Controllers
         [ProducesResponseType<JsonStat2>(StatusCodes.Status200OK, "application/vnd.jsonstat2+json")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<JsonStat2>> GetJsonStat2MetadataAsync([FromRoute] string sqId, [FromQuery] string lang)
+        public async Task<ActionResult<JsonStat2>> GetJsonStat2MetadataAsync([FromRoute] string sqId, [FromQuery] string? lang = null)
         {
             using (_logger.BeginScope(new Dictionary<string, object>
             {
