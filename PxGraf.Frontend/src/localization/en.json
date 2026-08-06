@@ -156,7 +156,7 @@
   "infoText": {
     "treeSelection": "Select a PX table from the directory tree as the visualisation's data source.",
     "langSelector": "Select the user interface language.",
-    "langTab": "Edit each required language version, including at least the headings.",
+    "langTab": "Edit each required language version, including at least the headings. You can edit metadata using the Edit selected value metadata button.",
     "varSelection": "Select at least one value for each variable.",
     "selectableButton": "Allow user selection to let users change this variable's value in the visualisation.",
     "selectableInput": "Select the variable value shown by default before the user makes a selection.",
@@ -216,6 +216,7 @@
     "editTitle": "Edit computed value",
     "edit": "Edit",
     "delete": "Delete",
+    "nameEditingInfo": "Edit computed value names in the metadata editor.",
     "noValues": "No computed values defined.",
     "operator": "Operation",
     "operatorSum": "Sum",

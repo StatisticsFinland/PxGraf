@@ -156,7 +156,7 @@
   "infoText": {
     "treeSelection": "Välj en PX-tabell i katalogträdet som visualiseringens datakälla.",
     "langSelector": "Välj språk för användargränssnittet.",
-    "langTab": "Redigera de språkversioner som behövs, åtminstone rubrikerna.",
+    "langTab": "Redigera de språkversioner som behövs, åtminstone rubrikerna. Du kan redigera metadata med knappen Redigera metadata för valda värden.",
     "varSelection": "Välj minst ett värde för varje variabel.",
     "selectableButton": "Tillåt användarval så att användaren kan byta variabelvärde i visualiseringen.",
     "selectableInput": "Välj det variabelvärde som visas innan användaren gör ett eget val.",
@@ -216,6 +216,7 @@
     "editTitle": "Redigera beräknat värde",
     "edit": "Redigera",
     "delete": "Ta bort",
+    "nameEditingInfo": "Redigera namn på beräknade värden i metadataredigeraren.",
     "noValues": "Inga beräknade värden definierade.",
     "operator": "Operation",
     "operatorSum": "Summa",

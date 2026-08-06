@@ -53,6 +53,11 @@ const renderDialog = (
     );
 
 describe('ComputedValuesDialog — list view', () => {
+    it('does not show name editing info when definitions list is empty', () => {
+        renderDialog();
+        expect(screen.queryByText('computedValues.nameEditingInfo')).not.toBeInTheDocument();
+    });
+
     it('shows no-values text when definitions list is empty', () => {
         renderDialog();
         expect(screen.getByText('computedValues.noValues')).toBeInTheDocument();
@@ -66,6 +71,7 @@ describe('ComputedValuesDialog — list view', () => {
             ],
         };
         renderDialog(queryWithDef);
+        expect(screen.getByText('computedValues.nameEditingInfo')).toBeInTheDocument();
         expect(screen.getByText(/Computed value 1/)).toBeInTheDocument();
         expect(screen.getByText(/computedValues\.operatorSum/)).toBeInTheDocument();
     });

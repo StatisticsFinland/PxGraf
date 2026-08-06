@@ -96,8 +96,12 @@ const DefinitionListView: React.FC<DefinitionListViewProps> = ({
                 {t('computedValues.noValues')}
             </Typography>
         ) : (
-            <List disablePadding>
-                {definitions.map(def => {
+            <>
+                <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                    {t('computedValues.nameEditingInfo')}
+                </Typography>
+                <List disablePadding>
+                    {definitions.map(def => {
                     const definitionName = resolveValueName(def.code, dimension, uiContentLanguage);
                     const operandNames = getOperandCodes(def)
                         .map(code => resolveValueName(code, dimension, uiContentLanguage))
@@ -151,8 +155,9 @@ const DefinitionListView: React.FC<DefinitionListViewProps> = ({
                                 </Stack>
                         </ListItem>
                     );
-                })}
-            </List>
+                    })}
+                </List>
+            </>
         )}
         <Button
             variant="outlined"
