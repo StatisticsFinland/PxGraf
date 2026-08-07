@@ -3,180 +3,197 @@
 exports[`Rendering test renders correctly 1`] = `
 <DocumentFragment>
   <div
-  class="MuiStack-root css-m69qwo-MuiStack-root"
+  class="sc-fotPOC ibRoaN MuiBox-root"
 >
   <div
-    class="sc-folSZX isdgta MuiBox-root css-ve9ogo"
+    class="MuiBox-root"
   >
     <div
-      class="sc-bqqMSY caqzcx"
+      class="MuiBox-root"
     >
-      <p
-        class="MuiTypography-root MuiTypography-body2 css-1wle3ir-MuiTypography-root"
-      >
-        variableSelect.title
-      </p>
-      <button
-        aria-label="tooltip.open: variableSelect.title"
-        class="sc-iqkkDd dZtsC"
-        id="mainContent"
-      >
-        <svg
-          aria-hidden="true"
-          class="MuiSvgIcon-root MuiSvgIcon-colorInfo MuiSvgIcon-fontSizeMedium css-ocq0ss-MuiSvgIcon-root"
-          data-testid="InfoIcon"
-          focusable="false"
-          viewBox="0 0 24 24"
+      <div>
+        <p
+          class="MuiTypography-root MuiTypography-body2"
         >
-          <path
-            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m1 15h-2v-6h2zm0-8h-2V7h2z"
-          />
-        </svg>
-      </button>
-    </div>
-    <div
-      class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiAccordion-root MuiAccordion-rounded Mui-expanded MuiAccordion-gutters sc-hCcPtG gjYMFl css-1808mag-MuiPaper-root-MuiAccordion-root"
-      style="--Paper-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12);"
-    >
-      <h3
-        class="MuiAccordion-heading css-cy7rkm-MuiAccordion-heading"
-      >
-        <button
-          aria-controls="panel1a-content"
-          aria-expanded="true"
-          class="MuiButtonBase-root MuiAccordionSummary-root Mui-expanded MuiAccordionSummary-gutters css-1f1pi2l-MuiButtonBase-root-MuiAccordionSummary-root"
-          tabindex="0"
-          type="button"
-        >
-          <span
-            class="MuiAccordionSummary-content Mui-expanded MuiAccordionSummary-contentGutters css-yfrx4k-MuiAccordionSummary-content"
-          >
-            <h2
-              class="MuiTypography-root MuiTypography-h2 css-o2za6n-MuiTypography-root"
-            >
-              <b>
-                variableName 0/1
-              </b>
-            </h2>
-          </span>
-          <span
-            class="MuiAccordionSummary-expandIconWrapper Mui-expanded css-1wqf3nl-MuiAccordionSummary-expandIconWrapper"
-          >
-            <svg
-              aria-hidden="true"
-              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1umw9bq-MuiSvgIcon-root"
-              data-testid="ExpandMoreIcon"
-              focusable="false"
-              viewBox="0 0 24 24"
-            >
-              <path
-                d="M16.59 8.59 12 13.17 7.41 8.59 6 10l6 6 6-6z"
-              />
-            </svg>
-          </span>
-        </button>
-      </h3>
+          variableSelect.title
+        </p>
+      </div>
       <div
-        class="MuiCollapse-root MuiCollapse-vertical MuiCollapse-entered css-qr6njo-MuiCollapse-root"
-        style="min-height: 0px;"
+        class="MuiPaper-root MuiPaper-elevation MuiPaper-elevation0 MuiAccordion-root Mui-expanded"
+        style="--Paper-shadow: none;"
       >
+        <h3
+          class="MuiAccordion-heading"
+        >
+          <button
+            aria-controls="dimension-code-content"
+            aria-expanded="true"
+            class="MuiButtonBase-root MuiAccordionSummary-root Mui-expanded"
+            id="dimension-code-header"
+            tabindex="0"
+            type="button"
+          >
+            <span
+              class="MuiAccordionSummary-content Mui-expanded"
+            >
+              <h2
+                class="MuiTypography-root MuiTypography-h2"
+              >
+                <span>
+                  variableName
+                </span>
+                <span>
+                  0/1
+                </span>
+              </h2>
+            </span>
+            <span
+              class="MuiAccordionSummary-expandIconWrapper Mui-expanded"
+            >
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium"
+                data-testid="ExpandMoreIcon"
+                focusable="false"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M16.59 8.59 12 13.17 7.41 8.59 6 10l6 6 6-6z"
+                />
+              </svg>
+            </span>
+          </button>
+        </h3>
         <div
-          class="MuiCollapse-wrapper MuiCollapse-vertical css-1x6hinx-MuiCollapse-wrapper"
+          class="MuiCollapse-root MuiCollapse-vertical MuiCollapse-entered"
+          style="min-height: 0px;"
         >
           <div
-            class="MuiCollapse-wrapperInner MuiCollapse-vertical css-1i4ywhz-MuiCollapse-wrapperInner"
+            class="MuiCollapse-wrapper MuiCollapse-vertical"
           >
             <div
-              class="MuiAccordion-region css-at4ued-MuiAccordion-region"
-              id="panel1a-content"
-              role="region"
+              class="MuiCollapse-wrapperInner MuiCollapse-vertical"
             >
               <div
-                class="MuiAccordionDetails-root sc-krVzYl jEIFev css-1lj39kh-MuiAccordionDetails-root"
+                aria-labelledby="dimension-code-header"
+                class="MuiAccordion-region"
+                id="dimension-code-content"
+                role="region"
               >
                 <div
-                  class="MuiStack-root sc-kEbgWM cjPnPc css-1sazv7p-MuiStack-root"
+                  class="MuiAccordionDetails-root"
                 >
                   <div
-                    class="MuiStack-root sc-jrIDTr eeuQxt css-m69qwo-MuiStack-root"
+                    class="MuiStack-root sc-gsDLFA bQoKba"
                   >
-                    <span
-                      aria-label="variableSelect.openMenu"
-                      class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-53g0n7-MuiButtonBase-root-MuiIconButton-root"
-                      role="button"
-                      style="padding-left: 0px; margin-right: 12px;"
-                      tabindex="0"
-                    >
-                      <svg
-                        aria-hidden="true"
-                        class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1umw9bq-MuiSvgIcon-root"
-                        data-testid="MenuIcon"
-                        focusable="false"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          d="M3 18h18v-2H3zm0-5h18v-2H3zm0-7v2h18V6z"
-                        />
-                      </svg>
-                    </span>
                     <div
-                      class="MuiAutocomplete-root MuiAutocomplete-hasPopupIcon sc-jSppWd iJXiSX css-o5oj2-MuiAutocomplete-root"
+                      class="MuiStack-root sc-dkPvMp izxoca"
                     >
                       <div
-                        class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-cmpglg-MuiFormControl-root-MuiTextField-root"
+                        class="MuiFormControl-root sc-hKwAaq jyutZo"
                       >
                         <label
-                          class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined css-19qnlrw-MuiFormLabel-root-MuiInputLabel-root"
-                          data-shrink="false"
-                          for="_r_1_"
-                          id="_r_1_-label"
+                          class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined"
+                          data-shrink="true"
+                          id="filter-method-label-code"
                         >
-                          variableSelect.itemFilter
+                          variableSelect.filterMethodLabel
                         </label>
                         <div
-                          class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-adornedEnd MuiAutocomplete-inputRoot css-1n04w30-MuiInputBase-root-MuiOutlinedInput-root"
+                          class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall MuiSelect-root"
                         >
-                          <input
-                            aria-autocomplete="list"
-                            aria-expanded="false"
-                            aria-invalid="false"
-                            autocapitalize="none"
-                            autocomplete="off"
-                            class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputAdornedEnd MuiAutocomplete-input MuiAutocomplete-inputFocused css-1dune0f-MuiInputBase-input-MuiOutlinedInput-input"
-                            id="_r_1_"
-                            role="combobox"
-                            spellcheck="false"
-                            type="text"
-                            value=""
-                          />
                           <div
-                            class="MuiAutocomplete-endAdornment css-1uhhrmm-MuiAutocomplete-endAdornment"
+                            aria-expanded="false"
+                            aria-haspopup="listbox"
+                            aria-labelledby="filter-method-label-code"
+                            class="MuiSelect-select MuiSelect-outlined MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall"
+                            role="combobox"
+                            tabindex="0"
                           >
-                            <button
-                              aria-label="selectable.open"
-                              class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium MuiAutocomplete-popupIndicator css-2y136s-MuiButtonBase-root-MuiIconButton-root-MuiAutocomplete-popupIndicator"
-                              tabindex="-1"
-                              title="selectable.o...
+                            variableSelect.itemFilter
+                          </div>
+                          <input
+                            aria-hidden="true"
+                            aria-invalid="false"
+                            class="MuiSelect-nativeInput"
+                            tabindex="-1"
+                            value="item"
+                          />
+                          <svg
+                            aria-hidden="true"
+                            class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconOutlined"
+                            data-testid="ArrowDropDownIcon"
+                            focusable="false"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              d="M7 10l5 5 5-5z"
+                            />
+                          </svg>
+                          <fieldset
+                            aria-hidden="true"
+                            class="MuiOutlinedInput-notchedOutline"
+                          >
+                            <legend>
+                              <span>
+                                variableSelect.filterMethodLabel
+                              </span>
+                            </legend>
+                          </fieldset>
+                        </div>
+                      </div>
+                      <span
+                        aria-label="computedValues.button"
+                        class="MuiBadge-root"
+                        data-mui-internal-clone-element="true"
+                      >
+                        <button
+                          aria-label="computedValues.button"
+                          class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall"
+                          tabindex="0"
+                          type="button"
+                        >
+                          <svg
+                            aria-hidden="true"
+                            class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium"
+                            data-testid="FunctionsIcon"
+                            focusable="false"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              d="M18 4H6v2l6.5 6L6 18v2h12v-3h-7l5-5-5-5h7z"
+                            />
+                          </svg>
+                        </button>
+                        <span
+                          class="MuiBadge-badge MuiBadge-standard MuiBadge-invisible MuiBadge-anchorOriginTopRight MuiBadge-anchorOriginTopRightRectangular MuiBadge-overlapRectangular MuiBadge-colorPrimary"
+                        />
+                      </span>
+                      <button
+                        aria-expanded="false"
+                        aria-haspopup="dialog"
+                        aria-label="variableSelect.selectableSettings"
+                        class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeSmall"
+                        data-m...
 </DocumentFragment>
 `;
 
 exports[`Rendering test renders correctly when cubeMetaResponse is loading 1`] = `
 <DocumentFragment>
   <div
-  class="MuiContainer-root MuiContainer-maxWidthLg css-g5qkdk-MuiContainer-root"
+  class="MuiContainer-root MuiContainer-maxWidthLg"
 >
   <span
-    class="MuiCircularProgress-root MuiCircularProgress-indeterminate MuiCircularProgress-colorPrimary css-1wxecgq-MuiCircularProgress-root"
-    id="mainContent"
+    class="MuiCircularProgress-root MuiCircularProgress-indeterminate MuiCircularProgress-colorPrimary"
     role="progressbar"
     style="width: 40px; height: 40px;"
   >
     <svg
-      class="MuiCircularProgress-svg css-54pwck-MuiCircularProgress-svg"
+      class="MuiCircularProgress-svg"
       viewBox="22 22 44 44"
     >
       <circle
-        class="MuiCircularProgress-circle MuiCircularProgress-circleIndeterminate css-19t5dcl-MuiCircularProgress-circle"
+        class="MuiCircularProgress-circle MuiCircularProgress-circleIndeterminate"
         cx="44"
         cy="44"
         fill="none"

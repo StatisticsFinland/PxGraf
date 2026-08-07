@@ -1,4 +1,5 @@
-﻿using Px.Utils.Language;
+#nullable enable
+using Px.Utils.Language;
 using Px.Utils.Models;
 using Px.Utils.Models.Data.DataValue;
 using Px.Utils.Models.Metadata;
@@ -39,14 +40,14 @@ namespace PxGraf.Visualization
         /// <summary>
         /// Builds a visualization response for a saved query.
         /// </summary>
-        /// <param name="matrix">Matrix to visualize.</param>
+        /// <param name="matrix">Matrix to visualize. Virtual values must already be applied before calling this method.</param>
         /// <param name="savedQuery">Saved query containing the visualization settings.</param>
         /// <returns>Visualization response for the matrix based on the given saved query.</returns>
         public static VisualizationResponse BuildVisualizationResponse(Matrix<DecimalDataValue> matrix, SavedQuery savedQuery)
         {
             if (savedQuery.Settings.Layout is null)
             {
-                bool legacyPivotRequested = savedQuery.LegacyProperties.TryGetValue("PivotRequested", out object obj) && (bool)obj;
+                bool legacyPivotRequested = savedQuery.LegacyProperties.TryGetValue("PivotRequested", out object? obj) && obj is true;
 
                 savedQuery.Settings.Layout =
                     LayoutRules.GetPivotBasedLayout(savedQuery.Settings.VisualizationType, matrix.Metadata, savedQuery.Query, legacyPivotRequested);
@@ -58,25 +59,17 @@ namespace PxGraf.Visualization
         /// <summary>
         /// Builds a visualization response for a matrix and a query.
         /// </summary>
-        /// <param name="matrix">Matrix to visualize.</param>
+        /// <param name="matrix">Matrix to visualize. Virtual values must already be applied before calling this method.</param>
         /// <param name="query">Query containing information about the table and selected values for dimensions.</param>
         /// <param name="settings">Visualization settings.</param>
         /// <returns>Visualization response for the matrix based on the given query and settings.</returns>
         public static VisualizationResponse BuildVisualizationResponse(Matrix<DecimalDataValue> matrix, MatrixQuery query, VisualizationSettings settings)
         {
             DimensionLayout layout = GetDimensionLayout(matrix.Metadata, query, settings);
-
-            MatrixMap finalMap = new(
-                [.. layout.SingleValueDimensions
-                    .Concat(layout.SelectableDimensionCodes)
-                    .Concat(layout.RowDimensionCodes)
-                    .Concat(layout.ColumnDimensionCodes)
-                    .Select(vc => matrix.Metadata.DimensionMaps.First(vm => vm.Code == vc))]
-                );
+            MatrixMap finalMap = BuildFinalMap(matrix.Metadata, layout);
 
             Matrix<DecimalDataValue> resultMatrix = matrix.GetTransform(finalMap);
             MatrixExtensions.DataAndNotesCollection dataAndNotes = resultMatrix.ExtractDataAndNotes();
-            IReadOnlyList<string> timeDimensionCodes = matrix.Metadata.GetTimeDimension().Values.Codes;
 
             return new VisualizationResponse()
             {
@@ -89,20 +82,73 @@ namespace PxGraf.Visualization
                 RowDimensionCodes = layout.RowDimensionCodes,
                 ColumnDimensionCodes = layout.ColumnDimensionCodes,
                 Header = HeaderBuildingUtilities.GetHeader(matrix.Metadata, query),
-                VisualizationSettings = new()
-                {
-                    VisualizationType = settings.VisualizationType,
-                    DefaultSelectableDimensionCodes = settings.DefaultSelectableDimensionCodes,
-                    MultiselectableDimensionCode = settings.MultiselectableDimensionCode,
-                    TimeDimensionIntervals = TimeDimensionIntervalParser.DetermineIntervalFromCodes(timeDimensionCodes),
-                    TimeSeriesStartingPoint = TimeDimensionIntervalParser.DetermineTimeDimStartingPointFromCode(timeDimensionCodes[0]),
-                    CutValueAxis = settings.CutYAxis,
-                    ShowLastLabel = settings.MatchXLabelsToEnd,
-                    MarkerSize = settings.MarkerSize,
-                    Sorting = settings.Sorting,
-                    ShowDataPoints = settings.ShowDataPoints
-                }
+                VisualizationSettings = BuildVisualizationSettings(matrix, settings)
             };
+        }
+
+        /// <summary>
+        /// Builds the non-data portion of a visualization response for a saved query.
+        /// </summary>
+        public static VisualizationMetadataResponse BuildVisualizationMetadataResponse(
+            IReadOnlyMatrixMetadata metadata,
+            SavedQuery savedQuery)
+        {
+            if (savedQuery.Settings.Layout is null)
+            {
+                bool legacyPivotRequested = savedQuery.LegacyProperties.TryGetValue("PivotRequested", out object? obj) && obj is true;
+                savedQuery.Settings.Layout = LayoutRules.GetPivotBasedLayout(
+                    savedQuery.Settings.VisualizationType,
+                    metadata,
+                    savedQuery.Query,
+                    legacyPivotRequested);
+            }
+
+            DimensionLayout layout = GetDimensionLayout(metadata, savedQuery.Query, savedQuery.Settings);
+            IReadOnlyMatrixMetadata resultMetadata = metadata.GetTransform(BuildFinalMap(metadata, layout));
+
+            return new VisualizationMetadataResponse
+            {
+                TableReference = savedQuery.Query.TableReference,
+                MetaData = BuildVariableList(savedQuery.Query.DimensionQueries, resultMetadata),
+                SelectableDimensionCodes = layout.SelectableDimensionCodes,
+                RowDimensionCodes = layout.RowDimensionCodes,
+                ColumnDimensionCodes = layout.ColumnDimensionCodes,
+                Header = HeaderBuildingUtilities.GetHeader(metadata, savedQuery.Query),
+                VisualizationSettings = BuildVisualizationSettings(metadata, savedQuery.Settings)
+            };
+        }
+
+        public static VisualizationResponse.PxVisualizerSettings BuildVisualizationSettings(Matrix<DecimalDataValue> matrix, VisualizationSettings settings)
+        {
+            return BuildVisualizationSettings(matrix.Metadata, settings);
+        }
+
+        public static VisualizationResponse.PxVisualizerSettings BuildVisualizationSettings(IReadOnlyMatrixMetadata metadata, VisualizationSettings settings)
+        {
+            IReadOnlyList<string> timeDimensionCodes = metadata.GetTimeDimension().Values.Codes;
+            return new()
+            {
+                VisualizationType = settings.VisualizationType,
+                DefaultSelectableDimensionCodes = settings.DefaultSelectableDimensionCodes,
+                MultiselectableDimensionCode = settings.MultiselectableDimensionCode,
+                TimeDimensionIntervals = TimeDimensionIntervalParser.DetermineIntervalFromCodes(timeDimensionCodes),
+                TimeSeriesStartingPoint = TimeDimensionIntervalParser.DetermineTimeDimStartingPointFromCode(timeDimensionCodes[0]),
+                CutValueAxis = settings.CutYAxis,
+                ShowLastLabel = settings.MatchXLabelsToEnd,
+                MarkerSize = settings.MarkerSize,
+                Sorting = settings.Sorting,
+                ShowDataPoints = settings.ShowDataPoints
+            };
+        }
+
+        private static MatrixMap BuildFinalMap(IReadOnlyMatrixMetadata metadata, DimensionLayout layout)
+        {
+            return new MatrixMap(
+                [.. layout.SingleValueDimensions
+                    .Concat(layout.SelectableDimensionCodes)
+                    .Concat(layout.RowDimensionCodes)
+                    .Concat(layout.ColumnDimensionCodes)
+                    .Select(code => metadata.DimensionMaps.First(map => map.Code == code))]);
         }
         
         private static List<Variable> BuildVariableList(Dictionary<string, DimensionQuery> dimensionQueries, IReadOnlyMatrixMetadata meta)
@@ -110,7 +156,7 @@ namespace PxGraf.Visualization
             return [.. meta.Dimensions.Select(dimension =>
             {
                 MultilanguageString name = dimension.Name;
-                if (dimensionQueries.TryGetValue(dimension.Code, out DimensionQuery query) &&
+                if (dimensionQueries.TryGetValue(dimension.Code, out DimensionQuery? query) &&
                     query.NameEdit != null)
                 {
                     name = query.NameEdit;

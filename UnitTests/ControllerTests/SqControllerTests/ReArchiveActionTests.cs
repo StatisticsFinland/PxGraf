@@ -73,7 +73,9 @@ namespace UnitTests.ControllerTests.SqControllerTests
             _mockSqFileInterface.Setup(s => s.ReadSavedQueryFromFile(It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(Task.Run(() => TestDataCubeBuilder.BuildTestSavedQuery(cubeParams, false, new LineChartVisualizationSettings(null, false, null))));
 
-            return new SqController(_mockCachedDatasource.Object, _mockSqFileInterface.Object, _mockLogger.Object, _mockAuditLogService.Object, _mockWebhookService.Object);
+            Mock<IVirtualValueValidationService> mockVirtualValueValidationService = new();
+            Mock<IVirtualValueComputationService> mockVirtualValueComputationService = new();
+            return new SqController(_mockCachedDatasource.Object, _mockSqFileInterface.Object, _mockLogger.Object, _mockAuditLogService.Object, _mockWebhookService.Object, mockVirtualValueValidationService.Object, mockVirtualValueComputationService.Object);
         }
 
         [Test]
@@ -98,6 +100,17 @@ namespace UnitTests.ControllerTests.SqControllerTests
                     It.Is<string>(action => action == "api/sq/re-archive"),
                     It.Is<string>(resource => resource == LoggerConstants.INVALID_OR_MISSING_SQID)),
                 Times.Once);
+        }
+
+        [Test]
+        public async Task ReArchiveExistingQueryAsync_WithMalformedId_ReturnsBadRequestBeforeFileLookup()
+        {
+            SqController controller = BuildController([], []);
+
+            ActionResult<ReArchiveResponse> result = await controller.ReArchiveExistingQueryAsync(new ReArchiveRequest { SqId = "invalid/id" });
+
+            Assert.That(result.Result, Is.InstanceOf<BadRequestResult>());
+            _mockSqFileInterface.Verify(service => service.SavedQueryExists(It.IsAny<string>(), It.IsAny<string>()), Times.Never());
         }
 
         [Test]

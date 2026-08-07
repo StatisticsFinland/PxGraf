@@ -15,7 +15,7 @@ interface IDefaultSelectableDimensionSelection {
 const StyledAutocomplete = styled(Autocomplete)`
     flex-basis: 0;
     flex-grow: 1;
-    width: 90%;
+    width: 100%;
 `;
 
 
@@ -23,6 +23,10 @@ export const DefaultSelectableDimensionSelection: React.FC<IDefaultSelectableDim
     const { language } = React.useContext(UiLanguageContext);
     const { defaultSelectables, setDefaultSelectables } = React.useContext(VisualizationContext);
     const { t } = useTranslation();
+
+    // resolvedDimensionValueCodes can be undefined while the parent's resolved codes for this
+    // dimension haven't loaded yet, even though callers within this component always want a real array.
+    const codes = resolvedDimensionValueCodes ?? [];
 
     // Note: array filtering to support selecting multiple values in the future
     const value: IDimensionValue = React.useMemo(() => {
@@ -33,13 +37,14 @@ export const DefaultSelectableDimensionSelection: React.FC<IDefaultSelectableDim
     }, [defaultSelectables, dimensionCode, options]);
 
     React.useEffect(() => {
-        if (value && resolvedDimensionValueCodes.length > 0) {
-            if (!resolvedDimensionValueCodes.includes(value.code)) {
+        if (value && codes.length > 0) {
+            if (!codes.includes(value.code)) {
                 const defaultSelectablesCopy = { ...defaultSelectables };
                 delete defaultSelectablesCopy[dimensionCode];
                 setDefaultSelectables(defaultSelectablesCopy);
             }
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional: only react to resolvedDimensionValueCodes changes to avoid infinite loops
     }, [resolvedDimensionValueCodes]);
 
     const handleChange = (_evt, value: IDimensionValue) => {
@@ -56,7 +61,7 @@ export const DefaultSelectableDimensionSelection: React.FC<IDefaultSelectableDim
     };
 
     return (<StyledAutocomplete
-        options={options.filter(option => resolvedDimensionValueCodes.indexOf(option.code) > -1)}
+        options={options.filter(option => codes.includes(option.code))}
         getOptionLabel={(option: IDimensionValue) => option?.name[language] ?? option.code}
         isOptionEqualToValue={(option: IDimensionValue, value: IDimensionValue) => value?.code === option.code}
         value={value}

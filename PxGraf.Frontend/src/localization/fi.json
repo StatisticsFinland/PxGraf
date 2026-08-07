@@ -1,10 +1,11 @@
 {
   "general": {
+    "loading": "Ladataan",
     "noResults": "Ei tuloksia",
+    "resultCount": "{{count}} tulosta",
     "results": "Tulokset",
     "noPossibleVisualizations": "Valitsemillasi arvoilla ei voida muodostaa visualisointia. Kokeile muuttaa poimintaasi.",
     "uiLanguage": "Käyttöliittymän kielivalinta",
-    "databaseSelectorLink": "Tietokantataulukon valinta",
     "search": "Haku",
     "selectDatabaseTitle": "Valitse tietokantataulukko",
     "editorTitle": "Muuttujien valinta ja visualisoinnin teko",
@@ -14,9 +15,7 @@
     "logoAlt": "Siirry etusivulle"
   },
   "lang": {
-    "fi": "suomi",
-    "sv": "svenska",
-    "en": "English",
+    "self": "Suomeksi",
     "local": {
       "fi": "suomi",
       "sv": "ruotsi",
@@ -26,7 +25,6 @@
   "pages": {
     "tableTreeSelection": "Valitse taulu",
     "editor": "Muuttujavalinta",
-    "tableList": "Valitse taulu, listanäkymä",
     "sqid": "Poiminnan tunniste"
   },
   "chartTypes": {
@@ -47,7 +45,6 @@
   },
   "tableSelect": {
     "title": "Valitse hakemistopuusta tietokantataulukko, joka toimii visualisoinnin datan lähteenä.",
-    "listView": "Listanäkymä",
     "showChildren": "Näytä lapset",
     "hideChildren": "Piilota lapset",
     "openTable": "Avaa tietokantataulukko",
@@ -55,16 +52,31 @@
   },
   "variableSelect": {
     "allFilter": "Kaikki",
-    "fromFilter": "valitusta arvosta eteenpäin",
-    "topFilter": "n viimeisintä arvoa",
-    "itemFilter": "manuaalinen valinta",
-    "selectable": "Siirrä täppä oikealle, jos haluat että muuttuja on selattava",
-    "title": "Valitse muuttujista arvoja manuaalisesti tai hyödynnä menun dynaamisia vaihtoehtoja. Käyttöliittymä päivittyy heti valintojesi mukaisesti.",
-    "openMenu": "Avaa valikko",
-    "closeMenu": "Sulje valikko"
+    "fromFilter": "Valitusta arvosta eteenpäin",
+    "topFilter": "N viimeisintä arvoa",
+    "itemFilter": "Manuaalinen valinta",
+    "inverseItemFilter": "Käänteinen manuaalinen valinta",
+    "regexFilter": "Säännöllinen lauseke",
+    "filterMethodLabel": "Suodatustapa",
+    "valuesLabel": "Arvot",
+    "excludedValuesLabel": "Pois jätettävät arvot",
+    "startingValueLabel": "Alkuarvo",
+    "latestValuesCountLabel": "Viimeisimpien arvojen määrä",
+    "latestValuesCountError": "Syötä nollaa suurempi kokonaisluku",
+    "regexPatternLabel": "Säännöllinen lauseke",
+    "regexPatternError": "Syötä kelvollinen säännöllinen lauseke",
+    "selectable": "Salli käyttäjän valinta",
+    "selectableSettings": "Käyttäjän valinnan asetukset",
+    "selectableSettingsActive": "Käyttäjän valinnan asetukset, käytössä",
+    "title": "Käyttöliittymä päivittyy heti valintojesi mukaisesti."
   },
   "editMetadata": {
     "editorTitle": "Metatiedot",
+    "dialogTitle": "Muokkaa valittujen arvojen metatietoja",
+    "dimensions": "Valittujen arvojen muuttujat",
+    "apply": "Käytä",
+    "cancel": "Peruuta",
+    "close": "Sulje metatietojen muokkaus",
     "header": "Visualisoinnin julkaistava otsikko",
     "valueName": "Arvo",
     "unit": "Yksikkö",
@@ -124,6 +136,9 @@
     "boundaryMessage": "Tapahtui odottamaton virhe. Yritä uudelleen.",
     "boundaryRetry": "Yritä uudelleen"
   },
+  "warning": {
+    "savedQueryPartiallyRecovered": "Kaikkia tallennetun visualisoinnin metatietoja ei voitu ladata. Muuttuneiden muuttujien valinnat ja metatiedot palautettiin oletusarvoihin."
+  },
   "rejectionDialog":{
     "buttonText": "Muut kuviotyypit",
     "titleText": "Muut kuviotyypit",
@@ -139,32 +154,32 @@
     "impossibleToVisualize": "Saat mahdolliset visualisointityypit näkyville, kun olet valinnut jokaisesta muuttujasta vähintään yhden arvon."
   },
   "infoText": {
-    "treeSelection": "Valitse hakemistopuusta px-taulukko, joka toimii visualisoinnin datan lähteenä.",
-    "langSelector": "Valitse käyttöliittymän valikoissa näytettävä kieli",
-    "langTab": "Muokkaa tarvittavat tiedot eri kieliversioissa. Korjaa vähintään otsikot.",
-    "varSelection": "",
-    "selectableButton": "Jos haluat visualisoinnin olevan tämän muuttujan osalta selattava, valitse \"Selattava\". Tällöin käyttäjä pystyy vaihtamaan visualisoinnissa muuttujan arvoa.",
-    "selectableInput": "Voit valita visualisoinnissa näkyvän muuttujan oletusarvon, jonka käyttäjä näkee ennen omien valintojensa tekoa.",
-    "titleEdition": "Muokkaa visualisoinnin otsikko mahdollisimman selkeäksi. Jätä ainakin päivittyviin visualisointeihin FIRST/ LAST, jotta otsikon aikamuuttujat päivittyvät automaattisesti.",
-    "metaEdition": "Muokkaa tarvittaessa visualisoinnin metatietojen kirjoitusasua.",
-    "visualizationSelection": "Valitse haluamasi visualisointityyppi. Jos haluamasi kuviotyyppi ei ole mahdollinen, katso lisätietoja painikkeesta \"Muut kuviotyypit\".",
-    "otherVisualizations": "\"muut kuviotyypit\" -painikkeella voi tutkia puuttuvien kuviotyyppien hylkäämisen syitä. PxGraf mahdollistaa tilastografiikan suositusten mukaiset kuviotyypit.",
-    "visualizationConfiguration": "Muokkaa visualisointia. Eri visualisoinneilla on erilaiset muokkausvaihtoehdot.",
-    "save": "Tallenna valmis kuvio/taulukko ja ota tunniste talteen. Valitse tiedotteelle jäädytetty staattinen vaihtoehto ja tilaston sivulle dynaaminen päivittyvä vaihtoehto \\Tallenna\\-painikkeesta avautuvalla dialogilla.",
-    "rescaleButtons": "Visualisointi osaa mukautua automaattisesti eri kokoisille näytöille. Testaa miltä visualisointi näyttää eri kokoisena."
+    "treeSelection": "Valitse hakemistopuusta visualisoinnin datalähteenä käytettävä PX-taulukko.",
+    "langSelector": "Valitse käyttöliittymän kieli.",
+    "langTab": "Muokkaa tarvittavat kieliversiot, vähintään otsikot. Metatietoja pääset muokkaamaan Muokkaa valittujen arvojen metatietoja -painikkeesta.",
+    "varSelection": "Valitse jokaisesta muuttujasta vähintään yksi arvo.",
+    "selectableButton": "Salli käyttäjän valinta, jotta käyttäjä voi vaihtaa muuttujan arvoa visualisoinnissa.",
+    "selectableInput": "Valitse muuttujan oletusarvo, joka näkyy ennen käyttäjän omaa valintaa.",
+    "titleEdition": "Tee otsikosta selkeä. Säilytä päivittyvissä visualisoinneissa FIRST/LAST, jotta otsikon aika-arvot päivittyvät automaattisesti.",
+    "metaEdition": "Korjaa tarvittaessa visualisoinnin metatiedot.",
+    "visualizationSelection": "Valitse visualisointityyppi. Katso estettyjen tyyppien tiedot kohdasta \"Muut kuviotyypit\".",
+    "otherVisualizations": "\"Muut kuviotyypit\" kertoo, miksi tyyppejä ei voi valita. PxGraf tarjoaa tilastografiikan suositusten mukaiset tyypit.",
+    "visualizationConfiguration": "Muokkaa visualisointia sen tyypille sopivilla asetuksilla.",
+    "save": "Tallenna valmis kuvio tai taulukko ja ota tunniste talteen. Valitse tiedotteeseen staattinen tai päivittyvälle tilastosivulle dynaaminen tallennus.",
+    "rescaleButtons": "Visualisointi mukautuu eri näytöille. Esikatsele se eri kokoisena."
   },
   "selectable": {
     "noSelections": "Ei valittavia arvoja",
-    "labelText": "Visualisoinnissa näkyvä muuttujan oletusarvo",
+    "labelText": "Oletusarvo",
     "open": "Avaa",
     "close": "Sulje",
     "clear": "Tyhjennä"
   },
   "savedQuery": {
     "errorMsg": "Tarkista visualisoinnin tunniste ja yritä uudelleen",
-    "dialogButtonTxt": "hae vanha visualisointi",
-    "dialogTitleTxt": "hae vanha visualisointi",
-    "inputLabel": "visualisoinnin tunniste",
+    "dialogButtonTxt": "Avaa visualisointi",
+    "dialogTitleTxt": "Avaa visualisointi",
+    "inputLabel": "Visualisoinnin tunniste",
     "closeButton": "Peruuta",
     "searchTxt": "Hae",
     "searchingTxt": "Haetaan..."
@@ -181,7 +196,51 @@
     "visualizationConfig": "Kuviotyyppikohtaiset valinnat",
     "visualizationSize": "Kuvion kokovalinta esikatselua varten"
   },
+  "previewSize": {
+    "full": "100%",
+    "desktop": "Työpöytä",
+    "tablet": "Tabletti",
+    "mobile": "Mobiili"
+  },
   "visualizationSettings": {
     "showDataPoints": "Näytä kuviossa data-arvot"
+  },
+  "header": {
+    "tableBreadcrumb": "Taulukon polku"
+  },
+  "computedValues": {
+    "button": "Lasketut arvot",
+    "buttonWithCount": "Lasketut arvot, lisätty {{count}}",
+    "dialogTitle": "Lasketut arvot",
+    "addNew": "Lisää uusi",
+    "editTitle": "Muokkaa laskettua arvoa",
+    "edit": "Muokkaa",
+    "delete": "Poista",
+    "nameEditingInfo": "Muokkaa laskettujen arvojen nimiä metatietoeditorissa.",
+    "noValues": "Ei laskettuja arvoja määritelty.",
+    "operator": "Operaatio",
+    "operatorSum": "Summa",
+    "operatorSubtraction": "Vähennyslasku",
+    "operatorMultiplication": "Kertolasku",
+    "operatorDivision": "Jakolasku",
+    "operandType": "Operandin tyyppi",
+    "selectValues": "Valitse arvot",
+    "baseValue": "Perusarvo",
+    "subtractValue": "Vähennettävä arvo",
+    "multiplyByValue": "Kerrottava arvo",
+    "dividendValue": "Jaettava",
+    "divisorValue": "Jakaja",
+    "constant": "Vakio",
+    "useConstant": "Käytä vakiota",
+    "useValue": "Käytä arvoa",
+    "save": "Tallenna",
+    "cancel": "Peruuta",
+    "close": "Sulje",
+    "placeholderName": "Laskettu",
+    "validationMinOperands": "Valitse vähintään 2 arvoa",
+    "validationSelectValue": "Valitse arvo",
+    "validationEnterConstant": "Syötä vakio",
+    "validationDivisionByZero": "Vakio ei voi olla nolla",
+    "hasDependents": "Muut lasketut arvot ovat riippuvaisia tästä arvosta"
   }
 }

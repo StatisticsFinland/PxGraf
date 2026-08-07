@@ -1,10 +1,11 @@
 import React from 'react';
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { ICubeMetaResult } from "api/services/cube-meta";
 import { IFilterDimensionResult } from "api/services/filter-dimension";
 import { ISaveQueryResult } from "api/services/queries";
 import { EDimensionType } from "types/cubeMeta";
+import { FilterType, ISumDefinition } from 'types/query';
 import Editor from "./Editor";
 import { HashRouter } from "react-router-dom";
 import { IVisualizationResult } from "api/services/visualization";
@@ -84,7 +85,7 @@ jest.mock('@statisticsfinland/pxvisualizer', () => {
     const lib = jest.requireActual("@statisticsfinland/pxvisualizer");
     return {
         ...lib,
-        Chart: (...args: any[]) => {
+        Chart: (...args: unknown[]) => {
             return (
                 <pre data-testid={'Chart'}>
                     args={JSON.stringify(args)}
@@ -289,10 +290,12 @@ const errorTableValidationResult: IValidateTableMetaDataResult = {
 }
 
 const mockLocation = {
+    key: 'initial-location',
     state: {
         result: {
             id: 'test-query-id',
             draft: true,
+            recoveredWithChanges: false,
             settings: {
                 selectedVisualization: EVisualizationType.HorizontalBarChart,
                 defaultSelectableVariableCodes: { foobar1: ['barfoo1', 'barfoo2'] }
@@ -341,6 +344,8 @@ jest.mock('api/services/validate-table-metadata', () => ({
 beforeEach(() => {
     mockCubeMetaResult = structuredClone(initialMockCubeMetaResult);
     mockResult = mockTableValidationResult;
+    mockLocation.key = 'initial-location';
+    mockLocation.state.result.recoveredWithChanges = false;
 });
 
 describe('Rendering test', () => {
@@ -383,6 +388,43 @@ describe('Rendering test', () => {
 });
 
 describe('Assertion tests', () => {
+    it('shows the recovery warning again when another saved query is opened', async () => {
+        mockLocation.state.result.recoveredWithChanges = true;
+
+        const user = userEvent.setup();
+        const { rerender } = render(
+            <QueryClientProvider client={queryClient}>
+                <NavigationProvider>
+                    <HashRouter>
+                        <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
+                            <Editor />
+                        </UiLanguageContext.Provider>
+                    </HashRouter>
+                </NavigationProvider>
+            </QueryClientProvider>
+        );
+
+        const alert = screen.getByText('warning.savedQueryPartiallyRecovered').closest('[role="alert"]') as HTMLElement;
+        expect(alert).toHaveClass('MuiAlert-outlinedWarning');
+        await user.click(within(alert).getByRole('button'));
+        expect(alert).not.toBeVisible();
+
+        mockLocation.key = 'next-location';
+        rerender(
+            <QueryClientProvider client={queryClient}>
+                <NavigationProvider>
+                    <HashRouter>
+                        <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
+                            <Editor />
+                        </UiLanguageContext.Provider>
+                    </HashRouter>
+                </NavigationProvider>
+            </QueryClientProvider>
+        );
+
+        expect(screen.getByText('warning.savedQueryPartiallyRecovered')).toBeVisible();
+    });
+
     it('renders errorContainer with correct message when tableValidityResponse is invalid', () => {
         mockResult = mockInvalidTableValidationResult;
         mockCubeMetaResult.isError = true;
@@ -570,7 +612,7 @@ describe('Assertion tests', () => {
                 </NavigationProvider>
             </QueryClientProvider>
         );
-        expect(screen.getByText('variableName')).toBeInTheDocument();
+        expect(screen.getByRole('heading', { level: 2, name: /variableName/ })).toBeInTheDocument();
     });
 
     it('renders the chart type selector with available visualization type', () => {
@@ -590,6 +632,7 @@ describe('Assertion tests', () => {
     });
 
     it('shows chart rejection reason for unsupported chart type after opening dialog', async () => {
+
         render(
             <QueryClientProvider client={queryClient}>
                 <NavigationProvider>
@@ -607,5 +650,78 @@ describe('Assertion tests', () => {
         await user.click(rejectionButton);
         // The mock has a rejection reason for pieChart: { fi: 'huono kaavio' }
         expect(screen.getByText('huono kaavio')).toBeInTheDocument();
+    });
+});
+
+describe('Virtual value enrichment tests', () => {
+    it('shows virtual value in manual filter select when filter type is Item', async () => {
+        const user = userEvent.setup();
+
+        const mockQueryContext = {
+            cubeQuery: {
+                variableQueries: {
+                    'code': {
+                        valueEdits: {
+                            'virtual_1': {
+                                nameEdit: { fi: 'Laskettu arvo' }
+                            }
+                        }
+                    }
+                }
+            },
+            setCubeQuery: jest.fn(),
+            query: {
+                'code': {
+                    valueFilter: { type: FilterType.Item, query: [] },
+                    selectable: false,
+                    virtualValueDefinitions: [
+                        { type: 'sum', code: 'virtual_1', operandCodes: ['variableValueCode'] } as ISumDefinition
+                    ]
+                }
+            },
+            setQuery: jest.fn(),
+        };
+
+        const mockVisualizationContext = {
+            selectedVisualizationUserInput: null,
+            setSelectedVisualizationUserInput: jest.fn(),
+            visualizationSettingsUserInput: null,
+            setVisualizationSettingsUserInput: jest.fn(),
+            defaultSelectables: null,
+            setDefaultSelectables: jest.fn(),
+        };
+
+        const mockSaveContext = {
+            saveDialogOpen: false,
+            setSaveDialogOpen: jest.fn(),
+            loadedQueryId: '',
+            setLoadedQueryId: jest.fn(),
+            loadedQueryIsDraft: false,
+            setLoadedQueryIsDraft: jest.fn(),
+            publicationWebhookEnabled: true,
+            setPublicationWebhookEnabled: jest.fn(),
+        };
+
+        render(
+            <QueryClientProvider client={queryClient}>
+                <NavigationProvider>
+                    <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
+                        <QueryContext.Provider value={mockQueryContext}>
+                            <VisualizationContext.Provider value={mockVisualizationContext}>
+                                <SaveContext.Provider value={mockSaveContext}>
+                                    <Editor />
+                                </SaveContext.Provider>
+                            </VisualizationContext.Provider>
+                        </QueryContext.Provider>
+                    </UiLanguageContext.Provider>
+                </NavigationProvider>
+            </QueryClientProvider>
+        );
+
+        const filterInput = screen.getByLabelText('variableSelect.valuesLabel');
+        await user.click(filterInput);
+
+        const virtualOption = await screen.findByRole('option', { name: 'Laskettu arvo' });
+        expect(virtualOption).toBeInTheDocument();
     });
 });

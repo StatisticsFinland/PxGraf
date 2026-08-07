@@ -1,5 +1,6 @@
 import React from 'react';
-import { render } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
+import '@testing-library/jest-dom';
 import { IDimensionValue } from "../../types/cubeMeta";
 import ResultList from "./ResultList";
 
@@ -48,6 +49,17 @@ describe('Rendering test', () => {
             dimensionValues={mockDimensionValues}
             resolvedDimensionValueCodes={["2019", "2020"]}
         ></ResultList>);
+
+        expect(screen.getByRole('list', { name: 'general.results:' })).toHaveAttribute('tabindex', '0');
+        expect(screen.getByRole('status')).toHaveTextContent('general.resultCount');
         expect(asFragment()).toMatchSnapshot();
+    });
+
+    it('announces loading and empty result states', () => {
+        const { rerender } = render(<ResultList dimensionValues={mockDimensionValues} resolvedDimensionValueCodes={null} />);
+        expect(screen.getByRole('status')).toHaveTextContent('general.loading');
+
+        rerender(<ResultList dimensionValues={mockDimensionValues} resolvedDimensionValueCodes={[]} />);
+        expect(screen.getByRole('status')).toHaveTextContent('general.noResults');
     });
 });

@@ -25,6 +25,7 @@ export interface ISaveQueryResponse {
  * @property {IVisualizationSettings} settings - The visualization settings for the query.
  * @property {string} id - The id of the retreived query.
  * @property {boolean} draft - Indicates if the query is a draft and can be overwritten.
+ * @property {boolean} recoveredWithChanges - Indicates that stale saved-query data was discarded or replaced while loading.
  */
 export interface IFetchSavedQueryResponse {
     query: {
@@ -37,6 +38,7 @@ export interface IFetchSavedQueryResponse {
     settings: IVisualizationSettings;
     id: string;
     draft: boolean;
+    recoveredWithChanges: boolean;
 }
 
 /**

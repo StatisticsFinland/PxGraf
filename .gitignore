@@ -349,3 +349,4 @@ healthchecksdb
 /PxGraf/web.config
 /PxGraf/wwwroot/*
 PxGraf.Frontend/dist/
+.vscode/settings.json

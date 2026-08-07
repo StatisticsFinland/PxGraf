@@ -1,10 +1,11 @@
 {
   "general": {
+    "loading": "Laddar",
     "noResults": "Inget resultat",
+    "resultCount": "{{count}} resultat",
     "results": "Resultat",
     "noPossibleVisualizations": "En visualisering kan inte skapas utgående från de värden du valt. Försök att ändra ditt uttag.",
     "uiLanguage": "Språk för användargränssnitt",
-    "databaseSelectorLink": "Databasval",
     "search": "Sök",
     "selectDatabaseTitle": "Välj databastabellen",
     "editorTitle": "Val av variabler och visualisering",
@@ -14,9 +15,7 @@
     "logoAlt": "Till förstasidan"
   },
   "lang": {
-    "fi": "suomi",
-    "sv": "svenska",
-    "en": "English",
+    "self": "På svenska",
     "local": {
       "fi": "suomi",
       "sv": "ruotsi",
@@ -26,7 +25,6 @@
   "pages": {
     "tableTreeSelection": "Val av databastabell",
     "editor": "Val av variabel",
-    "tableList": "Listvy",
     "sqid": "Uttagets identifierare"
   },
   "chartTypes": {
@@ -47,7 +45,6 @@
   },
   "tableSelect": {
     "title": "Välj från katalogträdet en databastabell som fungerar som källa för de data som visualiseras.",
-    "listView": "Lista",
     "showChildren": "Visa barnen",
     "hideChildren": "Göm barnen",
     "openTable": "Öppna databastabell",
@@ -55,16 +52,31 @@
   },
   "variableSelect": {
     "allFilter": "Alla",
-    "fromFilter": "från det valda värdet framåt",
-    "topFilter": "n senaste värden",
-    "itemFilter": "manuellt val",
-    "selectable": "Flytta spaken till höger om du vill att variabeln ska ha valmöjligheter",
-    "title": "Välj manuellt värden bland variablerna eller använd de dynamiska alternativen i menyn. Användargränssnittet uppdateras genast enligt dina val.",
-    "openMenu": "Öppna menyn",
-    "closeMenu": "Stäng menyn"
+    "fromFilter": "Från det valda värdet framåt",
+    "topFilter": "N senaste värden",
+    "itemFilter": "Manuellt val",
+    "inverseItemFilter": "Omvänt manuellt val",
+    "regexFilter": "Reguljärt uttryck",
+    "filterMethodLabel": "Filtreringsmetod",
+    "valuesLabel": "Värden",
+    "excludedValuesLabel": "Värden att exkludera",
+    "startingValueLabel": "Startvärde",
+    "latestValuesCountLabel": "Antal senaste värden",
+    "latestValuesCountError": "Ange ett heltal som är större än noll",
+    "regexPatternLabel": "Reguljärt uttryck",
+    "regexPatternError": "Ange ett giltigt reguljärt uttryck",
+    "selectable": "Tillåt användarval",
+    "selectableSettings": "Inställningar för användarval",
+    "selectableSettingsActive": "Inställningar för användarval, aktiverat",
+    "title": "Användargränssnittet uppdateras genast enligt dina val."
   },
   "editMetadata": {
     "editorTitle": "Metadata",
+    "dialogTitle": "Redigera metadata för valda värden",
+    "dimensions": "Variabler för valda värden",
+    "apply": "Tillämpa",
+    "cancel": "Avbryt",
+    "close": "Stäng metadataredigeringen",
     "header": "Visualiseringens rubrik som publiceras",
     "valueName": "Värde",
     "unit": "Enhet",
@@ -124,6 +136,9 @@
     "boundaryMessage": "Ett oväntat fel uppstod. Försök igen.",
     "boundaryRetry": "Försök igen"
   },
+  "warning": {
+    "savedQueryPartiallyRecovered": "Alla metadata från den sparade visualiseringen kunde inte läsas in. Val och metadata för ändrade variabler återställdes till standardvärden."
+  },
   "rejectionDialog": {
     "buttonText": "Övriga diagramtyper",
     "titleText": "Övriga diagramtyper",
@@ -139,32 +154,32 @@
     "impossibleToVisualize": "Eventuella visualiseringstyper visas när du har valt minst ett värde för varje variabel."
   },
   "infoText": {
-    "treeSelection": "Välj från katalogträdet en px-tabell som fungerar som källa för de data som visualiseras.",
-    "langSelector": "Välj språket för gränssnittets menyer",
-    "langTab": "Redigera nödvändig information i de olika språkversionerna. Korrigera åtminstone rubrikerna.",
-    "varSelection": "",
-    "selectableButton": "Om du vill att visualiseringen ska ha valmöjligheter i fråga om den här variabeln, välj ”valmöjligheter”. Då kan användaren byta variabelvärde i visualiseringen.",
-    "selectableInput": "Du kan välja standardvärdet för den variabel som visas i visualiseringen och som användaren ser innan han eller hon gör sina egna val.",
-    "titleEdition": "Redigera visualiseringens rubrik så att den blir så tydlig som möjligt. Lämna FIRST/LAST åtminstone i de visualiseringar som uppdateras, för att rubrikens tidsvariabler ska uppdateras automatiskt.",
-    "metaEdition": "Redigera vid behov stavningen av metadata för visualiseringen.",
-    "visualizationSelection": "Välj önskad visualiseringstyp. Om den diagramtyp du önskar inte är möjlig, läs mera genom att klicka på \"Övriga diagramtyper\".",
-    "otherVisualizations": "Med knappen \"Övriga diagramtyper\" kan man undersöka orsakerna till att man förkastat de diagramtyper som saknas. PxGraf möjliggör de diagramtyper som följer rekommendationerna för statistisk grafik.",
-    "visualizationConfiguration": "Redigera visualiseringen. Olika visualiseringar har olika bearbetningsalternativ.",
-    "save": "Spara det färdiga diagrammet/den färdiga tabellen samt identifieraren. Välj ett fryst statiskt alternativ för meddelandet och ett dynamiskt alternativ som uppdateras för statistikgrenens webbsida genom dialogen som öppnas då du klickar på knappen \"Spara\".",
-    "rescaleButtons": "Visualiseringen kan anpassa sig automatiskt till skärmar av olika storlek. Testa hur visualiseringen ser ut i olika storlekar."
+    "treeSelection": "Välj en PX-tabell i katalogträdet som visualiseringens datakälla.",
+    "langSelector": "Välj språk för användargränssnittet.",
+    "langTab": "Redigera de språkversioner som behövs, åtminstone rubrikerna. Du kan redigera metadata med knappen Redigera metadata för valda värden.",
+    "varSelection": "Välj minst ett värde för varje variabel.",
+    "selectableButton": "Tillåt användarval så att användaren kan byta variabelvärde i visualiseringen.",
+    "selectableInput": "Välj det variabelvärde som visas innan användaren gör ett eget val.",
+    "titleEdition": "Gör rubriken tydlig. Behåll FIRST/LAST i visualiseringar som uppdateras, så att rubrikens tidsvärden uppdateras automatiskt.",
+    "metaEdition": "Korrigera visualiseringens metadata vid behov.",
+    "visualizationSelection": "Välj visualiseringstyp. Se \"Övriga diagramtyper\" för typer som inte kan väljas.",
+    "otherVisualizations": "\"Övriga diagramtyper\" förklarar varför typer inte kan väljas. PxGraf erbjuder typer som följer rekommendationerna för statistisk grafik.",
+    "visualizationConfiguration": "Redigera visualiseringen med inställningarna för dess typ.",
+    "save": "Spara det färdiga diagrammet eller tabellen och ta vara på identifieraren. Välj statisk lagring för ett meddelande eller dynamisk för en statistikwebbsida som uppdateras.",
+    "rescaleButtons": "Visualiseringen anpassas till olika skärmar. Förhandsgranska den i olika storlekar."
   },
   "selectable": {
     "noSelections": "Inga valbara värden",
-    "labelText": "Variabelns standardvärde som visas i visualiseringen",
+    "labelText": "Standardvärde",
     "open": "Öppna",
     "close": "Stäng",
     "clear": "Tömma"
   },
   "savedQuery": {
     "errorMsg": "Kontrollera visualiseringens identifierare och försök igen",
-    "dialogButtonTxt": "sök den gamla visualiseringen",
-    "dialogTitleTxt": "hämta den gamla visualiseringen",
-    "inputLabel": "visualiseringens identifierare",
+    "dialogButtonTxt": "Öppna visualisering",
+    "dialogTitleTxt": "Öppna visualisering",
+    "inputLabel": "Visualiseringens identifierare",
     "closeButton": "Ångra",
     "searchTxt": "Sök",
     "searchingTxt": "Söker..."
@@ -181,7 +196,51 @@
     "visualizationConfig": "Diagramtypsspecifika val",
     "visualizationSize": "Val av diagramstorlek för förhandsvisning"
   },
+  "previewSize": {
+    "full": "100%",
+    "desktop": "Skrivbord",
+    "tablet": "Surfplatta",
+    "mobile": "Mobil"
+  },
   "visualizationSettings": {
     "showDataPoints": "Visa datavärden i diagrammet"
+  },
+  "header": {
+    "tableBreadcrumb": "Tabellsökväg"
+  },
+  "computedValues": {
+    "button": "Beräknade värden",
+    "buttonWithCount": "Beräknade värden, {{count}} tillagda",
+    "dialogTitle": "Beräknade värden",
+    "addNew": "Lägg till ny",
+    "editTitle": "Redigera beräknat värde",
+    "edit": "Redigera",
+    "delete": "Ta bort",
+    "nameEditingInfo": "Redigera namn på beräknade värden i metadataredigeraren.",
+    "noValues": "Inga beräknade värden definierade.",
+    "operator": "Operation",
+    "operatorSum": "Summa",
+    "operatorSubtraction": "Subtraktion",
+    "operatorMultiplication": "Multiplikation",
+    "operatorDivision": "Division",
+    "operandType": "Operandtyp",
+    "selectValues": "Välj värden",
+    "baseValue": "Basvärde",
+    "subtractValue": "Värde att subtrahera",
+    "multiplyByValue": "Multiplicera med värde",
+    "dividendValue": "Täljare",
+    "divisorValue": "Nämnare",
+    "constant": "Konstant",
+    "useConstant": "Använd konstant",
+    "useValue": "Använd värde",
+    "save": "Spara",
+    "cancel": "Avbryt",
+    "close": "Stäng",
+    "placeholderName": "Beräknat",
+    "validationMinOperands": "Välj minst 2 värden",
+    "validationSelectValue": "Välj ett värde",
+    "validationEnterConstant": "Ange en konstant",
+    "validationDivisionByZero": "Konstanten kan inte vara noll",
+    "hasDependents": "Andra beräknade värden är beroende av detta värde"
   }
 }

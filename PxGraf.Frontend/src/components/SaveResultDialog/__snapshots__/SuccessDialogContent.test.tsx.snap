@@ -3,41 +3,41 @@
 exports[`Rendering test renders correctly when closed 1`] = `
 <DocumentFragment>
   <div
-    class="MuiDialogContent-root MuiDialogContent-dividers css-10bxh4q-MuiDialogContent-root"
+    class="MuiDialogContent-root MuiDialogContent-dividers"
   >
     <div
-      class="MuiFormControl-root sc-gtcBCx hoLdIB css-1iw3t7y-MuiFormControl-root"
+      class="MuiFormControl-root sc-gsDLFA hONVyW"
     >
       <label
-        class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined css-113d811-MuiFormLabel-root-MuiInputLabel-root"
+        class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined"
         data-shrink="true"
         for="display-saved-query-id-input-label"
       >
         Selection identifier
       </label>
       <div
-        class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd sc-bdDsCe emeDgd css-jupps9-MuiInputBase-root-MuiOutlinedInput-root"
+        class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd sc-bdvvNz iIQdZ"
       >
         <input
           aria-invalid="false"
-          class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputAdornedEnd css-1dune0f-MuiInputBase-input-MuiOutlinedInput-input"
+          class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputAdornedEnd"
           id="display-saved-query-id-input"
           readonly=""
           type="text"
           value="asd123"
         />
         <div
-          class="MuiInputAdornment-root MuiInputAdornment-positionEnd MuiInputAdornment-outlined MuiInputAdornment-sizeMedium css-elo8k2-MuiInputAdornment-root"
+          class="MuiInputAdornment-root MuiInputAdornment-positionEnd MuiInputAdornment-outlined MuiInputAdornment-sizeMedium"
         >
           <button
             aria-label="Copy to clipboard"
-            class="MuiButtonBase-root MuiIconButton-root MuiIconButton-edgeEnd MuiIconButton-sizeMedium css-1ysp02-MuiButtonBase-root-MuiIconButton-root"
+            class="MuiButtonBase-root MuiIconButton-root MuiIconButton-edgeEnd MuiIconButton-sizeMedium"
             tabindex="0"
             type="button"
           >
             <svg
               aria-hidden="true"
-              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1umw9bq-MuiSvgIcon-root"
+              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium"
               data-testid="ContentPasteIcon"
               focusable="false"
               viewBox="0 0 24 24"
@@ -50,11 +50,9 @@ exports[`Rendering test renders correctly when closed 1`] = `
         </div>
         <fieldset
           aria-hidden="true"
-          class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
+          class="MuiOutlinedInput-notchedOutline"
         >
-          <legend
-            class="css-ex8a5f-MuiNotchedOutlined-root"
-          >
+          <legend>
             <span>
               Selection identifier
             </span>
@@ -70,41 +68,41 @@ exports[`Rendering test renders correctly when open (draft) 1`] = `
 <body>
   <div>
     <div
-      class="MuiDialogContent-root MuiDialogContent-dividers css-10bxh4q-MuiDialogContent-root"
+      class="MuiDialogContent-root MuiDialogContent-dividers"
     >
       <div
-        class="MuiFormControl-root sc-gtcBCx hoLdIB css-1iw3t7y-MuiFormControl-root"
+        class="MuiFormControl-root sc-gsDLFA hONVyW"
       >
         <label
-          class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined css-113d811-MuiFormLabel-root-MuiInputLabel-root"
+          class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined"
           data-shrink="true"
           for="display-saved-query-id-input-label"
         >
           Selection identifier
         </label>
         <div
-          class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd sc-bdDsCe emeDgd css-jupps9-MuiInputBase-root-MuiOutlinedInput-root"
+          class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd sc-bdvvNz iIQdZ"
         >
           <input
             aria-invalid="false"
-            class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputAdornedEnd css-1dune0f-MuiInputBase-input-MuiOutlinedInput-input"
+            class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputAdornedEnd"
             id="display-saved-query-id-input"
             readonly=""
             type="text"
             value="Unknown"
           />
           <div
-            class="MuiInputAdornment-root MuiInputAdornment-positionEnd MuiInputAdornment-outlined MuiInputAdornment-sizeMedium css-elo8k2-MuiInputAdornment-root"
+            class="MuiInputAdornment-root MuiInputAdornment-positionEnd MuiInputAdornment-outlined MuiInputAdornment-sizeMedium"
           >
             <button
               aria-label="Copy to clipboard"
-              class="MuiButtonBase-root MuiIconButton-root MuiIconButton-edgeEnd MuiIconButton-sizeMedium css-1ysp02-MuiButtonBase-root-MuiIconButton-root"
+              class="MuiButtonBase-root MuiIconButton-root MuiIconButton-edgeEnd MuiIconButton-sizeMedium"
               tabindex="0"
               type="button"
             >
               <svg
                 aria-hidden="true"
-                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1umw9bq-MuiSvgIcon-root"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium"
                 data-testid="ContentPasteIcon"
                 focusable="false"
                 viewBox="0 0 24 24"
@@ -117,11 +115,9 @@ exports[`Rendering test renders correctly when open (draft) 1`] = `
           </div>
           <fieldset
             aria-hidden="true"
-            class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
+            class="MuiOutlinedInput-notchedOutline"
           >
-            <legend
-              class="css-ex8a5f-MuiNotchedOutlined-root"
-            >
+            <legend>
               <span>
                 Selection identifier
               </span>
@@ -138,41 +134,41 @@ exports[`Rendering test renders correctly with webhook success message 1`] = `
 <body>
   <div>
     <div
-      class="MuiDialogContent-root MuiDialogContent-dividers css-10bxh4q-MuiDialogContent-root"
+      class="MuiDialogContent-root MuiDialogContent-dividers"
     >
       <div
-        class="MuiFormControl-root sc-gtcBCx hoLdIB css-1iw3t7y-MuiFormControl-root"
+        class="MuiFormControl-root sc-gsDLFA hONVyW"
       >
         <label
-          class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined css-113d811-MuiFormLabel-root-MuiInputLabel-root"
+          class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined"
           data-shrink="true"
           for="display-saved-query-id-input-label"
         >
           Selection identifier
         </label>
         <div
-          class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd sc-bdDsCe emeDgd css-jupps9-MuiInputBase-root-MuiOutlinedInput-root"
+          class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd sc-bdvvNz iIQdZ"
         >
           <input
             aria-invalid="false"
-            class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputAdornedEnd css-1dune0f-MuiInputBase-input-MuiOutlinedInput-input"
+            class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputAdornedEnd"
             id="display-saved-query-id-input"
             readonly=""
             type="text"
             value="Unknown"
           />
           <div
-            class="MuiInputAdornment-root MuiInputAdornment-positionEnd MuiInputAdornment-outlined MuiInputAdornment-sizeMedium css-elo8k2-MuiInputAdornment-root"
+            class="MuiInputAdornment-root MuiInputAdornment-positionEnd MuiInputAdornment-outlined MuiInputAdornment-sizeMedium"
           >
             <button
               aria-label="Copy to clipboard"
-              class="MuiButtonBase-root MuiIconButton-root MuiIconButton-edgeEnd MuiIconButton-sizeMedium css-1ysp02-MuiButtonBase-root-MuiIconButton-root"
+              class="MuiButtonBase-root MuiIconButton-root MuiIconButton-edgeEnd MuiIconButton-sizeMedium"
               tabindex="0"
               type="button"
             >
               <svg
                 aria-hidden="true"
-                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1umw9bq-MuiSvgIcon-root"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium"
                 data-testid="ContentPasteIcon"
                 focusable="false"
                 viewBox="0 0 24 24"
@@ -185,11 +181,9 @@ exports[`Rendering test renders correctly with webhook success message 1`] = `
           </div>
           <fieldset
             aria-hidden="true"
-            class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
+            class="MuiOutlinedInput-notchedOutline"
           >
-            <legend
-              class="css-ex8a5f-MuiNotchedOutlined-root"
-            >
+            <legend>
               <span>
                 Selection identifier
               </span>
@@ -198,16 +192,16 @@ exports[`Rendering test renders correctly with webhook success message 1`] = `
         </div>
       </div>
       <div
-        class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation0 MuiAlert-root MuiAlert-colorSuccess MuiAlert-standardSuccess MuiAlert-standard css-7y9k7a-MuiPaper-root-MuiAlert-root"
+        class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation0 MuiAlert-root MuiAlert-colorSuccess MuiAlert-standardSuccess MuiAlert-standard"
         role="alert"
         style="--Paper-shadow: none;"
       >
         <div
-          class="MuiAlert-icon css-vab54s-MuiAlert-icon"
+          class="MuiAlert-icon"
         >
           <svg
             aria-hidden="true"
-            class="MuiSvgIcon-root MuiSvgIcon-fontSizeInherit css-1ckov0h-MuiSvgIcon-root"
+            class="MuiSvgIcon-root MuiSvgIcon-fontSizeInherit"
             data-testid="SuccessOutlinedIcon"
             focusable="false"
             viewBox="0 0 24 24"
@@ -218,7 +212,7 @@ exports[`Rendering test renders correctly with webhook success message 1`] = `
           </svg>
         </div>
         <div
-          class="MuiAlert-message css-zioonp-MuiAlert-message"
+          class="MuiAlert-message"
         >
           Publication was successful
         </div>
@@ -232,41 +226,41 @@ exports[`Rendering test renders correctly without webhook message (failed) 1`] =
 <body>
   <div>
     <div
-      class="MuiDialogContent-root MuiDialogContent-dividers css-10bxh4q-MuiDialogContent-root"
+      class="MuiDialogContent-root MuiDialogContent-dividers"
     >
       <div
-        class="MuiFormControl-root sc-gtcBCx hoLdIB css-1iw3t7y-MuiFormControl-root"
+        class="MuiFormControl-root sc-gsDLFA hONVyW"
       >
         <label
-          class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined css-113d811-MuiFormLabel-root-MuiInputLabel-root"
+          class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined"
           data-shrink="true"
           for="display-saved-query-id-input-label"
         >
           Selection identifier
         </label>
         <div
-          class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd sc-bdDsCe emeDgd css-jupps9-MuiInputBase-root-MuiOutlinedInput-root"
+          class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd sc-bdvvNz iIQdZ"
         >
           <input
             aria-invalid="false"
-            class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputAdornedEnd css-1dune0f-MuiInputBase-input-MuiOutlinedInput-input"
+            class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputAdornedEnd"
             id="display-saved-query-id-input"
             readonly=""
             type="text"
             value="Unknown"
           />
           <div
-            class="MuiInputAdornment-root MuiInputAdornment-positionEnd MuiInputAdornment-outlined MuiInputAdornment-sizeMedium css-elo8k2-MuiInputAdornment-root"
+            class="MuiInputAdornment-root MuiInputAdornment-positionEnd MuiInputAdornment-outlined MuiInputAdornment-sizeMedium"
           >
             <button
               aria-label="Copy to clipboard"
-              class="MuiButtonBase-root MuiIconButton-root MuiIconButton-edgeEnd MuiIconButton-sizeMedium css-1ysp02-MuiButtonBase-root-MuiIconButton-root"
+              class="MuiButtonBase-root MuiIconButton-root MuiIconButton-edgeEnd MuiIconButton-sizeMedium"
               tabindex="0"
               type="button"
             >
               <svg
                 aria-hidden="true"
-                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1umw9bq-MuiSvgIcon-root"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium"
                 data-testid="ContentPasteIcon"
                 focusable="false"
                 viewBox="0 0 24 24"
@@ -279,11 +273,9 @@ exports[`Rendering test renders correctly without webhook message (failed) 1`] =
           </div>
           <fieldset
             aria-hidden="true"
-            class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
+            class="MuiOutlinedInput-notchedOutline"
           >
-            <legend
-              class="css-ex8a5f-MuiNotchedOutlined-root"
-            >
+            <legend>
               <span>
                 Selection identifier
               </span>
@@ -292,16 +284,16 @@ exports[`Rendering test renders correctly without webhook message (failed) 1`] =
         </div>
       </div>
       <div
-        class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation0 MuiAlert-root MuiAlert-colorError MuiAlert-standardError MuiAlert-standard css-3lhuho-MuiPaper-root-MuiAlert-root"
+        class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation0 MuiAlert-root MuiAlert-colorError MuiAlert-standardError MuiAlert-standard"
         role="alert"
         style="--Paper-shadow: none;"
       >
         <div
-          class="MuiAlert-icon css-vab54s-MuiAlert-icon"
+          class="MuiAlert-icon"
         >
           <svg
             aria-hidden="true"
-            class="MuiSvgIcon-root MuiSvgIcon-fontSizeInherit css-1ckov0h-MuiSvgIcon-root"
+            class="MuiSvgIcon-root MuiSvgIcon-fontSizeInherit"
             data-testid="ErrorOutlineIcon"
             focusable="false"
             viewBox="0 0 24 24"
@@ -312,7 +304,7 @@ exports[`Rendering test renders correctly without webhook message (failed) 1`] =
           </svg>
         </div>
         <div
-          class="MuiAlert-message css-zioonp-MuiAlert-message"
+          class="MuiAlert-message"
         >
           Webhook response error
         </div>
@@ -326,41 +318,41 @@ exports[`Rendering test renders correctly without webhook message (success) 1`] 
 <body>
   <div>
     <div
-      class="MuiDialogContent-root MuiDialogContent-dividers css-10bxh4q-MuiDialogContent-root"
+      class="MuiDialogContent-root MuiDialogContent-dividers"
     >
       <div
-        class="MuiFormControl-root sc-gtcBCx hoLdIB css-1iw3t7y-MuiFormControl-root"
+        class="MuiFormControl-root sc-gsDLFA hONVyW"
       >
         <label
-          class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined css-113d811-MuiFormLabel-root-MuiInputLabel-root"
+          class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined"
           data-shrink="true"
           for="display-saved-query-id-input-label"
         >
           Selection identifier
         </label>
         <div
-          class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd sc-bdDsCe emeDgd css-jupps9-MuiInputBase-root-MuiOutlinedInput-root"
+          class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd sc-bdvvNz iIQdZ"
         >
           <input
             aria-invalid="false"
-            class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputAdornedEnd css-1dune0f-MuiInputBase-input-MuiOutlinedInput-input"
+            class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputAdornedEnd"
             id="display-saved-query-id-input"
             readonly=""
             type="text"
             value="Unknown"
           />
           <div
-            class="MuiInputAdornment-root MuiInputAdornment-positionEnd MuiInputAdornment-outlined MuiInputAdornment-sizeMedium css-elo8k2-MuiInputAdornment-root"
+            class="MuiInputAdornment-root MuiInputAdornment-positionEnd MuiInputAdornment-outlined MuiInputAdornment-sizeMedium"
           >
             <button
               aria-label="Copy to clipboard"
-              class="MuiButtonBase-root MuiIconButton-root MuiIconButton-edgeEnd MuiIconButton-sizeMedium css-1ysp02-MuiButtonBase-root-MuiIconButton-root"
+              class="MuiButtonBase-root MuiIconButton-root MuiIconButton-edgeEnd MuiIconButton-sizeMedium"
               tabindex="0"
               type="button"
             >
               <svg
                 aria-hidden="true"
-                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1umw9bq-MuiSvgIcon-root"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium"
                 data-testid="ContentPasteIcon"
                 focusable="false"
                 viewBox="0 0 24 24"
@@ -373,11 +365,9 @@ exports[`Rendering test renders correctly without webhook message (success) 1`] 
           </div>
           <fieldset
             aria-hidden="true"
-            class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
+            class="MuiOutlinedInput-notchedOutline"
           >
-            <legend
-              class="css-ex8a5f-MuiNotchedOutlined-root"
-            >
+            <legend>
               <span>
                 Selection identifier
               </span>
@@ -386,16 +376,16 @@ exports[`Rendering test renders correctly without webhook message (success) 1`] 
         </div>
       </div>
       <div
-        class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation0 MuiAlert-root MuiAlert-colorSuccess MuiAlert-standardSuccess MuiAlert-standard css-7y9k7a-MuiPaper-root-MuiAlert-root"
+        class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation0 MuiAlert-root MuiAlert-colorSuccess MuiAlert-standardSuccess MuiAlert-standard"
         role="alert"
         style="--Paper-shadow: none;"
       >
         <div
-          class="MuiAlert-icon css-vab54s-MuiAlert-icon"
+          class="MuiAlert-icon"
         >
           <svg
             aria-hidden="true"
-            class="MuiSvgIcon-root MuiSvgIcon-fontSizeInherit css-1ckov0h-MuiSvgIcon-root"
+            class="MuiSvgIcon-root MuiSvgIcon-fontSizeInherit"
             data-testid="SuccessOutlinedIcon"
             focusable="false"
             viewBox="0 0 24 24"
@@ -406,7 +396,7 @@ exports[`Rendering test renders correctly without webhook message (success) 1`] 
           </svg>
         </div>
         <div
-          class="MuiAlert-message css-zioonp-MuiAlert-message"
+          class="MuiAlert-message"
         >
           saveResultDialog.webhookResponseSuccess
         </div>

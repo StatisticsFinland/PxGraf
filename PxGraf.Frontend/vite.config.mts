@@ -11,6 +11,7 @@ export default defineConfig(({ mode }) => {
         resolve: {
             alias: {
                 'Router': '/src/Router.tsx',
+                'routes/urls': '/src/routes/urls.ts',
                 'envVars': '/src/envVars.ts',
                 'contexts': '/src/contexts',
                 'types': '/src/types',

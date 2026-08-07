@@ -1,7 +1,8 @@
 import React from 'react';
-import { Button, Dialog, DialogTitle, DialogContent, DialogActions, Alert, TextField } from '@mui/material';
+import { Button, Dialog, DialogTitle, DialogContent, DialogActions, Alert, TextField, IconButton, Tooltip } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import SearchIcon from '@mui/icons-material/Search';
+import FolderOpenIcon from '@mui/icons-material/FolderOpen';
 import { fetchSavedQuery } from 'api/services/queries';
 import { useNavigate } from "react-router-dom";
 import styled from 'styled-components';
@@ -13,9 +14,10 @@ const AlertWrapper = styled.div`
 
 interface ISavedQueryFinderProps {
     oldQueryId?: string;
+    compact?: boolean;
 }
 
-export const SavedQueryFinder: React.FC<ISavedQueryFinderProps> = ({ oldQueryId }) => {
+export const SavedQueryFinder: React.FC<ISavedQueryFinderProps> = ({ oldQueryId, compact = false }) => {
     const [open, setOpen] = React.useState(false);
     const [queryId, setQueryId] = React.useState(oldQueryId || '');
     const [isLoading, setIsLoading] = React.useState(false);
@@ -46,7 +48,18 @@ export const SavedQueryFinder: React.FC<ISavedQueryFinderProps> = ({ oldQueryId 
 
     return (
         <>
-            <Button variant={'outlined'} onClick={() => setOpen(true)}>{t('savedQuery.dialogButtonTxt')}</Button>
+            {compact ?
+                <Tooltip title={t('savedQuery.dialogButtonTxt')}>
+                    <IconButton
+                        aria-label={t('savedQuery.dialogButtonTxt')}
+                        onClick={() => setOpen(true)}
+                        sx={{ width: 40, height: 40, border: 1, borderColor: 'divider', borderRadius: 1 }}
+                    >
+                        <FolderOpenIcon />
+                    </IconButton>
+                </Tooltip> :
+                <Button variant={'outlined'} startIcon={<FolderOpenIcon />} onClick={() => setOpen(true)}>{t('savedQuery.dialogButtonTxt')}</Button>
+            }
             <Dialog
                 open={open}
                 onClose={() => setOpen(false)}

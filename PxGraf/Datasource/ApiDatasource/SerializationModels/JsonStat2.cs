@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+#nullable enable annotations
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace PxGraf.Datasource.ApiDatasource.SerializationModels
@@ -17,6 +18,10 @@ namespace PxGraf.Datasource.ApiDatasource.SerializationModels
         [JsonPropertyName("updated")]
         public string Updated { get; set; }
 
+        [JsonPropertyName("note")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<string>? Note { get; set; }
+
         [JsonPropertyName("id")]
         public string[] Id { get; set; }
 
@@ -30,7 +35,8 @@ namespace PxGraf.Datasource.ApiDatasource.SerializationModels
         public decimal?[] Value { get; set; }
 
         [JsonPropertyName("status")]
-        public Dictionary<string, string> Status { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public Dictionary<string, string>? Status { get; set; }
 
         [JsonPropertyName("role")]
         public RoleObj Role { get; set; }
@@ -46,11 +52,16 @@ namespace PxGraf.Datasource.ApiDatasource.SerializationModels
             [JsonPropertyName("label")]
             public string Label { get; set; }
 
+            [JsonPropertyName("note")]
+            [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+            public List<string>? Note { get; set; }
+
             [JsonPropertyName("category")]
             public CategoryObj Category { get; set; }
 
             [JsonPropertyName("link")]
-            public LinkObj Link { get; set; }
+            [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+            public LinkObj? Link { get; set; }
 
             public class CategoryObj
             {
@@ -60,16 +71,26 @@ namespace PxGraf.Datasource.ApiDatasource.SerializationModels
                 [JsonPropertyName("label")]
                 public Dictionary<string, string> Label { get; set; }
 
+                [JsonPropertyName("note")]
+                [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+                public Dictionary<string, List<string>>? Note { get; set; }
+
                 /// <summary>
                 /// From value code to UnitObj
                 /// </summary>
                 [JsonPropertyName("unit")]
-                public Dictionary<string, UnitObj> Unit { get; set; }
+                [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+                public Dictionary<string, UnitObj>? Unit { get; set; }
 
                 public class UnitObj
                 {
                     [JsonPropertyName("base")]
-                    public string Base { get; set; }
+                    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+                    public string? Base { get; set; }
+
+                    [JsonPropertyName("label")]
+                    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+                    public string? Label { get; set; }
 
                     [JsonPropertyName("decimals")]
                     public int Decimals { get; set; }
@@ -98,7 +119,9 @@ namespace PxGraf.Datasource.ApiDatasource.SerializationModels
             public string[] Metric { get; set; }
 
             [JsonPropertyName("geo")]
-            public string[] Geo { get; set; }
+            [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+            public string[]? Geo { get; set; }
         }
     }
 }
+#nullable restore annotations

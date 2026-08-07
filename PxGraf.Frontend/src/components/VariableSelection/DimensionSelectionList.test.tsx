@@ -1,5 +1,6 @@
 import React from 'react';
 import { render } from "@testing-library/react";
+import '@testing-library/jest-dom';
 import { EMetaPropertyType, IDimension, EDimensionType } from "types/cubeMeta";
 import { FilterType, Query } from "types/query";
 import DimensionSelectionList from "./DimensionSelectionList";
@@ -286,7 +287,7 @@ const mockQuery: Query = {
             query: ["eka", "toka"]
         },
         selectable: false,
-        virtualValueDefinitions: null
+        virtualValueDefinitions: []
     },
     Vuosi: {
         valueFilter: {
@@ -294,7 +295,7 @@ const mockQuery: Query = {
             query: 4
         },
         selectable: false,
-        virtualValueDefinitions: null
+        virtualValueDefinitions: []
     },
     FoobarFrom: {
         valueFilter: {
@@ -302,14 +303,14 @@ const mockQuery: Query = {
             query: "bbb"
         },
         selectable: false,
-        virtualValueDefinitions: null
+        virtualValueDefinitions: []
     },
     FoobarAll: {
         valueFilter: {
             type: FilterType.All
         },
         selectable: false,
-        virtualValueDefinitions: null
+        virtualValueDefinitions: []
     },
     FoobarContent: {
         valueFilter: {
@@ -317,7 +318,7 @@ const mockQuery: Query = {
             query: ["eka"]
         },
         selectable: false,
-        virtualValueDefinitions: null
+        virtualValueDefinitions: []
     },
     FoobarElimination: {
         valueFilter: {
@@ -325,7 +326,7 @@ const mockQuery: Query = {
             query: ["sum"]
         },
         selectable: false,
-        virtualValueDefinitions: null
+        virtualValueDefinitions: []
     },
     FoobarSingle: {
         valueFilter: {
@@ -333,7 +334,7 @@ const mockQuery: Query = {
             query: ["single"]
         },
         selectable: false,
-        virtualValueDefinitions: null
+        virtualValueDefinitions: []
     },
     FoobarMissingValueName: {
         valueFilter: {
@@ -341,7 +342,7 @@ const mockQuery: Query = {
             query: ["missingName"]
         },
         selectable: false,
-        virtualValueDefinitions: null
+        virtualValueDefinitions: []
     }
 };
 
@@ -357,7 +358,7 @@ const setUiContentLanguage = jest.fn();
 
 describe('Rendering test', () => {
     it('renders correctly', () => {
-        const { asFragment } = render(
+        const { asFragment, container } = render(
             <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
                 <DimensionSelectionList
                     dimensions={mockDimensions}
@@ -375,6 +376,16 @@ describe('Rendering test', () => {
                 ></DimensionSelectionList>
             </UiLanguageContext.Provider>
         );
+
+        const summaries = Array.from(container.querySelectorAll<HTMLElement>('[id^="dimension-"][id$="-header"]'));
+        expect(summaries).toHaveLength(mockDimensions.length);
+        expect(new Set(summaries.map(summary => summary.id)).size).toBe(mockDimensions.length);
+        summaries.forEach(summary => {
+            const contentId = summary.getAttribute('aria-controls');
+            const region = contentId ? document.getElementById(contentId) : null;
+            expect(region).toHaveAttribute('role', 'region');
+            expect(region).toHaveAttribute('aria-labelledby', summary.id);
+        });
         expect(asFragment()).toMatchSnapshot();
     });
 });

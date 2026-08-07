@@ -3,11 +3,12 @@ import EditorPreviewSection from "./EditorPreviewSection";
 import { render } from "@testing-library/react";
 import { IVisualizationResult } from "api/services/visualization";
 import { EVisualizationType, EVariableType, ETimeVariableInterval } from "@statisticsfinland/pxvisualizer";
-import { FilterType, ICubeQuery, Query } from "types/query";
+import { FilterType, Query } from "types/query";
 import { IVisualizationSettings } from "types/visualizationSettings";
 import { VisualizationType } from "types/visualizationType";
 import serializer from "../../testUtils/stripHighchartsHashes";
 import { IEditorContentsResult } from '../../api/services/editor-contents';
+import { EPreviewSize } from 'types/previewSize';
 
 jest.mock('envVars', () => ({
     PxGrafUrl: 'pxGrafUrl.fi/',
@@ -145,7 +146,7 @@ const mockQuery: Query = {
             query: 4
         },
         selectable: false,
-        virtualValueDefinitions: null
+        virtualValueDefinitions: []
     },
     Tiedot: {
         valueFilter: {
@@ -155,7 +156,7 @@ const mockQuery: Query = {
             ]
         },
         selectable: false,
-        virtualValueDefinitions: null
+        virtualValueDefinitions: []
     }
 };
 
@@ -241,13 +242,7 @@ const mockEditorContentsEmptyVisualizationsAndRejections: IEditorContentsResult 
 
 jest.mock('api/services/visualization', () => ({
     ...jest.requireActual('api/services/visualization'),
-    useVisualizationQuery: (
-        idStack: string[],
-        query: Query,
-        cubeQuery: ICubeQuery,
-        language: string,
-        selectedVisualization: string,
-        visualizationSettings: IVisualizationSettings) => {
+    useVisualizationQuery: () => {
         return mockVisualizationQueryResult;
     },
 }));
@@ -283,6 +278,7 @@ describe('Rendering test', () => {
                 selectedVisualization={mockSelectedVisualization as VisualizationType}
                 visualizationSettings={mockVisualizationSettings}
                 editorContents={mockEditorContents}
+                previewSize={EPreviewSize.Desktop}
             />);
         expect(asFragment()).toMatchSnapshot();
     });
@@ -294,6 +290,7 @@ describe('Rendering test', () => {
                 selectedVisualization={mockSelectedVisualization as VisualizationType}
                 visualizationSettings={mockVisualizationSettings}
                 editorContents={mockEditorContentsNoValidVisualization}
+                previewSize={EPreviewSize.Desktop}
             />);
         expect(asFragment()).toMatchSnapshot();
     });
@@ -305,6 +302,7 @@ describe('Rendering test', () => {
                 selectedVisualization={mockSelectedVisualization as VisualizationType}
                 visualizationSettings={mockVisualizationSettings}
                 editorContents={mockEditorContentsEmptyVisualizationsAndRejections}
+                previewSize={EPreviewSize.Desktop}
             />);
         expect(asFragment()).toMatchSnapshot();
     });

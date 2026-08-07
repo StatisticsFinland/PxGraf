@@ -106,7 +106,9 @@ namespace UnitTests.ControllerTests.SqControllerTests
             mockWebhookService.Setup(w => w.TriggerWebhookAsync(It.IsAny<string>(), It.IsAny<SavedQuery>(), It.IsAny<IReadOnlyDictionary<string, Px.Utils.Models.Metadata.MetaProperties.MetaProperty>>()))
                 .ReturnsAsync(new WebhookPublicationResult { Status = QueryPublicationStatus.Success, Messages = new MultilanguageString([])});
 
-            SqController testController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, mockLogger.Object, mockAuditLogService.Object, mockWebhookService.Object);
+            Mock<IVirtualValueValidationService> mockVirtualValueValidationService = new();
+            Mock<IVirtualValueComputationService> mockVirtualValueComputationService = new();
+            SqController testController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, mockLogger.Object, mockAuditLogService.Object, mockWebhookService.Object, mockVirtualValueValidationService.Object, mockVirtualValueComputationService.Object);
 
             // Act
             ActionResult<SaveQueryResponse> result = await testController.ArchiveQueryAsync(testInput);
@@ -197,7 +199,9 @@ namespace UnitTests.ControllerTests.SqControllerTests
             mockWebhookService.Setup(w => w.TriggerWebhookAsync(It.IsAny<string>(), It.IsAny<SavedQuery>(), It.IsAny<IReadOnlyDictionary<string, Px.Utils.Models.Metadata.MetaProperties.MetaProperty>>()))
                 .ReturnsAsync(new WebhookPublicationResult { Status = QueryPublicationStatus.Success, Messages = new MultilanguageString([])});
 
-            SqController testController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, mockLogger.Object, mockAuditLogService.Object, mockWebhookService.Object);
+            Mock<IVirtualValueValidationService> mockVirtualValueValidationService = new();
+            Mock<IVirtualValueComputationService> mockVirtualValueComputationService = new();
+            SqController testController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, mockLogger.Object, mockAuditLogService.Object, mockWebhookService.Object, mockVirtualValueValidationService.Object, mockVirtualValueComputationService.Object);
 
             // Act
             ActionResult<SaveQueryResponse> result = await testController.ArchiveQueryAsync(testInput);
@@ -267,7 +271,9 @@ namespace UnitTests.ControllerTests.SqControllerTests
             mockSqFileInterface.Setup(s => s.SerializeToArchiveFileAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<ArchiveCube>()))
                 .Returns(Task.CompletedTask);
 
-            SqController testController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, mockLogger.Object, mockAuditLogService.Object, mockWebhookService.Object);
+            Mock<IVirtualValueValidationService> mockVirtualValueValidationService = new();
+            Mock<IVirtualValueComputationService> mockVirtualValueComputationService = new();
+            SqController testController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, mockLogger.Object, mockAuditLogService.Object, mockWebhookService.Object, mockVirtualValueValidationService.Object, mockVirtualValueComputationService.Object);
 
             // Act
             ActionResult<SaveQueryResponse> result = await testController.ArchiveQueryAsync(testInput);
@@ -292,11 +298,13 @@ namespace UnitTests.ControllerTests.SqControllerTests
             Mock<IPublicationWebhookService> mockWebhookService = new();
 
             // Arrange
+            // Content has 2 values with different units; AllFilter keeps both so LineChart is
+            // rejected by ContentUnitSelection="1" (requires unambiguous content unit).
             List<DimensionParameters> cubeParams =
             [
                 new DimensionParameters(DimensionType.Content, 2)
                 {
-                    ValueFilter = new TopFilter(1)
+                    ValueFilter = new AllFilter()
                 },
                 new DimensionParameters(DimensionType.Time, 10)
                 {
@@ -333,7 +341,9 @@ namespace UnitTests.ControllerTests.SqControllerTests
             mockSqFileInterface.Setup(s => s.SerializeToSqFileAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<SavedQuery>()))
                 .Returns(Task.CompletedTask);
 
-            SqController testController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, mockLogger.Object, mockAuditLogService.Object, mockWebhookService.Object);
+            Mock<IVirtualValueValidationService> mockVirtualValueValidationService = new();
+            Mock<IVirtualValueComputationService> mockVirtualValueComputationService = new();
+            SqController testController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, mockLogger.Object, mockAuditLogService.Object, mockWebhookService.Object, mockVirtualValueValidationService.Object, mockVirtualValueComputationService.Object);
 
             // Act
             ActionResult<SaveQueryResponse> result = await testController.ArchiveQueryAsync(testInput);
@@ -389,7 +399,9 @@ namespace UnitTests.ControllerTests.SqControllerTests
             mockSqFileInterface.Setup(s => s.SerializeToSqFileAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<SavedQuery>()))
                 .Returns(Task.CompletedTask);
 
-            SqController testController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, mockLogger.Object, mockAuditLogService.Object, mockWebhookService.Object);
+            Mock<IVirtualValueValidationService> mockVirtualValueValidationService = new();
+            Mock<IVirtualValueComputationService> mockVirtualValueComputationService = new();
+            SqController testController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, mockLogger.Object, mockAuditLogService.Object, mockWebhookService.Object, mockVirtualValueValidationService.Object, mockVirtualValueComputationService.Object);
 
             // Act
             ActionResult<SaveQueryResponse> result = await testController.ArchiveQueryAsync(testInput);
@@ -446,7 +458,9 @@ namespace UnitTests.ControllerTests.SqControllerTests
             mockSqFileInterface.Setup(s => s.SerializeToSqFileAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<SavedQuery>()))
                 .Returns(Task.CompletedTask);
 
-            SqController testController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, mockLogger.Object, mockAuditLogService.Object, mockWebhookService.Object);
+            Mock<IVirtualValueValidationService> mockVirtualValueValidationService = new();
+            Mock<IVirtualValueComputationService> mockVirtualValueComputationService = new();
+            SqController testController = new(mockCachedDatasource.Object, mockSqFileInterface.Object, mockLogger.Object, mockAuditLogService.Object, mockWebhookService.Object, mockVirtualValueValidationService.Object, mockVirtualValueComputationService.Object);
 
             // Act
             ActionResult<SaveQueryResponse> result = await testController.ArchiveQueryAsync(testInput);
@@ -462,6 +476,23 @@ namespace UnitTests.ControllerTests.SqControllerTests
                     It.Is<string>(action => action == "api/sq/archive"),
                     It.Is<string>(resource => resource == LoggerConstants.INVALID_VISUALIZATION)),
                 Times.Once);
+        }
+
+        [Test]
+        public async Task ArchiveQueryAsync_WithMalformedExistingId_ReturnsBadRequestBeforeDependencies()
+        {
+            Mock<ICachedDatasource> datasource = new();
+            Mock<ISqFileInterface> sqFileInterface = new();
+            SqController controller = new(datasource.Object, sqFileInterface.Object, new Mock<ILogger<SqController>>().Object,
+                new Mock<IAuditLogService>().Object, new Mock<IPublicationWebhookService>().Object,
+                new Mock<IVirtualValueValidationService>().Object, new Mock<IVirtualValueComputationService>().Object);
+            SaveQueryParams parameters = new() { Id = "invalid/id" };
+
+            ActionResult<SaveQueryResponse> result = await controller.ArchiveQueryAsync(parameters);
+
+            Assert.That(result.Result, Is.InstanceOf<BadRequestResult>());
+            sqFileInterface.Verify(service => service.SavedQueryExists(It.IsAny<string>(), It.IsAny<string>()), Times.Never());
+            datasource.Verify(service => service.GetMatrixMetadataCachedAsync(It.IsAny<PxTableReference>()), Times.Never());
         }
     }
 }

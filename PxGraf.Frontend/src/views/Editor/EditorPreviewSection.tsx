@@ -1,27 +1,40 @@
 import React from 'react';
 import { Box } from '@mui/material';
-import styled from 'styled-components';
+import { styled } from '@mui/material/styles';
 import Preview from 'components/Preview/Preview';
+import { EPreviewSize } from 'types/previewSize';
 import { Query } from 'types/query';
 import { VisualizationType } from 'types/visualizationType';
 import { IVisualizationSettings } from 'types/visualizationSettings';
 import { useTranslation } from 'react-i18next';
 import { IEditorContentsResult } from '../../api/services/editor-contents';
 
-const PreviewWrapper = styled(Box)`
-    grid-area: 'preview';
-    display: block;
-    position: relative;
-    grid-template-rows: auto 1fr;
-    padding: 16px;
-    gap: 16px;
-`;
+const PreviewWrapper = styled(Box)(({ theme }) => ({
+    gridArea: 'preview',
+    display: 'block',
+    position: 'relative',
+    padding: '12px 24px',
+    boxSizing: 'border-box',
+    overflowY: 'auto',
+    minHeight: 0,
+    backgroundColor: theme.palette.background.default,
+}));
 
-const GuideTextWrapper = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-`;
+const PreviewCenterer = styled('div')({
+    display: 'flex',
+    alignItems: 'center',
+    width: '100%',
+    minHeight: '100%',
+    '& > *': {
+        flexShrink: 0,
+    },
+});
+
+const GuideTextWrapper = styled('div')({
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+});
 
 interface IEditorPreviewSectionProps {
     path: string[];
@@ -29,6 +42,7 @@ interface IEditorPreviewSectionProps {
     selectedVisualization: VisualizationType;
     visualizationSettings: IVisualizationSettings;
     editorContents: IEditorContentsResult;
+    previewSize: EPreviewSize;
 }
 
 /**
@@ -38,8 +52,9 @@ interface IEditorPreviewSectionProps {
  * @param {VisualizationType} visualizationType Selected visualization type.
  * @param {IVisualizationSettings} visualizationSettings Selected visualization settings.
  * @param {IEditorContentsResponse} editorContents Contents of the editor. This includes the visualization options and rejection reasons.
+ * @param {EPreviewSize} previewSize The current preview size for the chart.
  */
-export const EditorPreviewSection: React.FC<IEditorPreviewSectionProps> = ({ path, query, selectedVisualization, visualizationSettings, editorContents }) => {
+export const EditorPreviewSection: React.FC<IEditorPreviewSectionProps> = ({ path, query, selectedVisualization, visualizationSettings, editorContents, previewSize }) => {
     const { t } = useTranslation();
 
     if (!editorContents.data?.visualizationOptions?.length) {
@@ -60,12 +75,15 @@ export const EditorPreviewSection: React.FC<IEditorPreviewSectionProps> = ({ pat
     }
     return (
         <PreviewWrapper>
-            <Preview
-                path={path}
-                query={query}
-                selectedVisualization={selectedVisualization}
-                visualizationSettings={visualizationSettings}
-            />
+            <PreviewCenterer>
+                <Preview
+                    path={path}
+                    query={query}
+                    selectedVisualization={selectedVisualization}
+                    visualizationSettings={visualizationSettings}
+                    previewSize={previewSize}
+                />
+            </PreviewCenterer>
         </PreviewWrapper>
     );
 }

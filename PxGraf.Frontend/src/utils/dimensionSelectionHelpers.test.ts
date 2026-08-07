@@ -21,6 +21,16 @@ describe('getDefaultFilter tests', () => {
         const result = getDefaultFilter(FilterType.Top);
         expect(result).toEqual({ type: FilterType.Top, query: 1 });
     });
+
+    it('Should return the correct object on InverseItem', () => {
+        const result = getDefaultFilter(FilterType.InverseItem);
+        expect(result).toEqual({ type: FilterType.InverseItem, query: [] });
+    });
+
+    it('Should return the correct object on Regex', () => {
+        const result = getDefaultFilter(FilterType.Regex);
+        expect(result).toEqual({ type: FilterType.Regex, query: '' });
+    });
 });
 
 describe('queryTypeLabels tests', () => {
@@ -29,9 +39,11 @@ describe('queryTypeLabels tests', () => {
         expect(queryTypeLabels[FilterType.From]).toBe('variableSelect.fromFilter');
         expect(queryTypeLabels[FilterType.Top]).toBe('variableSelect.topFilter');
         expect(queryTypeLabels[FilterType.Item]).toBe('variableSelect.itemFilter');
+        expect(queryTypeLabels[FilterType.InverseItem]).toBe('variableSelect.inverseItemFilter');
+        expect(queryTypeLabels[FilterType.Regex]).toBe('variableSelect.regexFilter');
     });
 
-    it('Should have exactly four entries', () => {
-        expect(Object.keys(queryTypeLabels)).toHaveLength(4);
+    it('Should have exactly six entries', () => {
+        expect(Object.keys(queryTypeLabels)).toHaveLength(6);
     });
 });

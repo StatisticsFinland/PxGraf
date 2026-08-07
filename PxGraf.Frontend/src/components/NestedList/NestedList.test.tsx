@@ -1,8 +1,8 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import UiLanguageContext from 'contexts/uiLanguageContext';
 import '@testing-library/jest-dom';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter, useNavigate } from 'react-router-dom';
 import NestedList from './NestedList';
 import { IDatabaseGroupContents } from 'types/tableListItems';
 import { ITableResult } from 'api/services/table';
@@ -11,6 +11,11 @@ jest.mock('envVars', () => ({
     PxGrafUrl: 'pxGrafUrl.fi/',
     PublicUrl: 'publicUrl.fi/',
     BasePath: ''
+}));
+
+jest.mock('contexts/navigationContext', () => ({
+    ...jest.requireActual('contexts/navigationContext'),
+    useNavigationContext: () => ({ tablePath: null, setTablePath: jest.fn() })
 }));
 
 const mockDatabaseContents: IDatabaseGroupContents = {
@@ -63,6 +68,14 @@ const availableUiLanguages = ['fi', 'en', 'sv'];
 const uiContentLanguage = "fi";
 const setUiContentLanguage = jest.fn();
 
+const NavigableTree: React.FC = () => {
+    const navigate = useNavigate();
+    return <>
+        <button onClick={() => navigate('/?tablePath=foobar')}>Navigate</button>
+        <NestedList depth={0} path={[]} />
+    </>;
+};
+
 describe('Rendering test', () => {
     it('renders correctly', () => {
         const { asFragment } = render(
@@ -104,6 +117,53 @@ describe('Rendering test', () => {
 });
 
 describe('Assertion tests', () => {
+    it('matches URL hierarchy segments exactly when opening folders', () => {
+        mockTableQueryResult.isLoading = false;
+        mockTableQueryResult.isError = false;
+        mockTableQueryResult.data = {
+            headers: [
+                { code: 'foo', name: { fi: 'Foo' }, languages: ['fi'] },
+                { code: 'foobar', name: { fi: 'Foobar' }, languages: ['fi'] },
+            ],
+            files: [],
+        };
+
+        const { container } = render(
+            <MemoryRouter initialEntries={['/?tablePath=foobar']}>
+                <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
+                    <NestedList depth={0} path={[]} />
+                </UiLanguageContext.Provider>
+            </MemoryRouter>
+        );
+
+        expect(container.querySelector('#foo > [role="button"]')).toHaveAttribute('aria-expanded', 'false');
+        expect(container.querySelector('#foobar > [role="button"]')).toHaveAttribute('aria-expanded', 'true');
+    });
+
+    it('updates open folders when router navigation changes the hierarchy', () => {
+        mockTableQueryResult.isLoading = false;
+        mockTableQueryResult.isError = false;
+        mockTableQueryResult.data = {
+            headers: [
+                { code: 'foo', name: { fi: 'Foo' }, languages: ['fi'] },
+                { code: 'foobar', name: { fi: 'Foobar' }, languages: ['fi'] },
+            ],
+            files: [],
+        };
+
+        const { container } = render(
+            <MemoryRouter>
+                <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
+                    <NavigableTree />
+                </UiLanguageContext.Provider>
+            </MemoryRouter>
+        );
+
+        expect(container.querySelector('#foobar > [role="button"]')).toHaveAttribute('aria-expanded', 'false');
+        fireEvent.click(screen.getByRole('button', { name: 'Navigate' }));
+        expect(container.querySelector('#foobar > [role="button"]')).toHaveAttribute('aria-expanded', 'true');
+    });
+
     it('shows item listed with the first available if given ui language is not supported', () => {
         mockTableQueryResult.isLoading = false;
         mockTableQueryResult.isError = false;

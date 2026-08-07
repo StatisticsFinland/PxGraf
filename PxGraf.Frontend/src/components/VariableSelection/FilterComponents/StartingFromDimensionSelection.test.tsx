@@ -1,5 +1,6 @@
 import React from 'react';
-import { render } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
+import '@testing-library/jest-dom';
 import { IDimensionValue } from "../../../types/cubeMeta";
 import StartingFromDimensionSelection from "./StartingFromDimensionSelection";
 
@@ -47,8 +48,9 @@ describe('Rendering test', () => {
         const { asFragment } = render(<StartingFromDimensionSelection
             options={mockDimensionValues}
             startingCode={"2019"}
-            onQueryChanged={(newCode) => null}
+            onQueryChanged={() => null}
         ></StartingFromDimensionSelection>);
         expect(asFragment()).toMatchSnapshot();
+        expect(screen.getByRole('button', { name: 'selectable.open' })).toBeInTheDocument();
     });
 });

@@ -7,7 +7,7 @@ import UiLanguageContext from 'contexts/uiLanguageContext';
 import { IVariable } from '../../types/visualizationResponse';
 import userEvent from '@testing-library/user-event';
 
-const mockFunction = jest.fn((value: string) => {
+const mockFunction = jest.fn(() => {
     return;
 });
 

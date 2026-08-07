@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿#nullable enable
+using System.Collections.Generic;
 
 namespace PxGraf.Models.Queries
 {
@@ -10,11 +11,17 @@ namespace PxGraf.Models.Queries
         /// <summary>
         /// Reference to the table in Px file system.
         /// </summary>
-        public PxTableReference TableReference { get; set; }
+        public PxTableReference TableReference { get; set; } = null!;
 
         /// <summary>
         /// Dictionary that maps dimension codes and their respective filters.
         /// </summary>
-        public Dictionary<string, IValueFilter> Filters { get; set; }
+        public Dictionary<string, IValueFilter> Filters { get; set; } = null!;
+
+        /// <summary>
+        /// Optional dictionary that maps dimension codes to their virtual value codes.
+        /// When provided, the virtual value codes are appended to the filtered real value codes in the response.
+        /// </summary>
+        public Dictionary<string, List<string>>? VirtualValueDefinitions { get; set; }
     }
 }

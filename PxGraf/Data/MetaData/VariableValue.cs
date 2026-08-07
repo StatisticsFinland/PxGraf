@@ -48,13 +48,6 @@ namespace PxGraf.Data.MetaData
         public ContentComponent? ContentComponent { get; set; }
 
         /// <summary>
-        /// TBA: feature not yet implemented.
-        /// </summary>
-        [JsonIgnore]
-        [AllowNull]
-        public VirtualComponent? VirtualComponent { get; set; }
-
-        /// <summary>
         /// Default constructor
         /// </summary>
         /// <param name="code"></param>

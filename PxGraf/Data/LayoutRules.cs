@@ -5,7 +5,6 @@ using PxGraf.Enums;
 using PxGraf.Models.Metadata;
 using PxGraf.Models.Queries;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System;
 
@@ -15,18 +14,29 @@ namespace PxGraf.Data
     {
         public static Layout GetOneDimensionalLayout(IReadOnlyMatrixMetadata meta, MatrixQuery query)
         {
+            IReadOnlyDimension[] candidates = [.. meta.GetMultivalueDimensions()
+                .Where(v => !query.DimensionQueries[v.Code].Selectable)];
+
+            if (candidates.Length == 0)
+            {
+                throw new InvalidOperationException(
+                    "GetOneDimensionalLayout requires exactly one non-selectable multivalue dimension, but none were found.");
+            }
+
             return new Layout(
                 rowDimensionCodes: [],
-                columnDimensionCodes: [ meta.GetMultivalueDimensions()
-                .Where(v => !query.DimensionQueries[v.Code].Selectable)
-                .ToArray()[0].Code ]);
+                columnDimensionCodes: [candidates[0].Code]);
         }
 
         public static Layout GetTwoDimensionalLayout(bool pivotRequested, VisualizationType visualizationType, IReadOnlyMatrixMetadata meta, MatrixQuery query)
         {
             IReadOnlyDimension[] multiValueDims = [.. meta.GetMultivalueDimensions().Where(v => !query.DimensionQueries[v.Code].Selectable)];
 
-            Debug.Assert(multiValueDims.Length == 2);
+            if (multiValueDims.Length < 2)
+            {
+                throw new InvalidOperationException(
+                    $"GetTwoDimensionalLayout requires exactly 2 non-selectable multivalue dimensions, but found {multiValueDims.Length}.");
+            }
 
             bool autopivot = AutoPivotRules.GetAutoPivot(visualizationType, meta, query);
             bool manualPivotability = ManualPivotRules.GetManualPivotability(visualizationType, meta, query);
@@ -49,6 +59,12 @@ namespace PxGraf.Data
         public static Layout GetLineChartLayout(IReadOnlyMatrixMetadata meta, MatrixQuery query)
         {
             IReadOnlyDimension[] multiValueDims = [.. meta.GetMultivalueDimensions().Where(v => !query.DimensionQueries[v.Code].Selectable)];
+
+            if (multiValueDims.Length == 0)
+            {
+                throw new InvalidOperationException(
+                    "GetLineChartLayout requires at least one non-selectable multivalue dimension, but none were found.");
+            }
 
             // Prefer time dimension over ordinal dimension
             IReadOnlyDimension multiValueTimeDimension = Array.Find(multiValueDims, v => v.Type == DimensionType.Time);

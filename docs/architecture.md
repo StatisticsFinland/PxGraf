@@ -33,9 +33,9 @@ All controller routes are under `/api/`. The `CreationAPI` feature flag gates th
 
 | Controller | Route Prefix | Feature-Gated | Key Endpoints |
 |---|---|---|---|
-| `CreationController` | `api/creation` | ✅ CreationAPI | `GET data-bases/{*dbPath}` — browse database hierarchy; `GET cube-meta/{*tablePath}` — table metadata; `GET validate-table-metadata/{*tablePath}` — metadata validation; `POST filter-dimension` — resolve dimension filters; `POST editor-contents` — editor setup data (sizes, valid chart types, headers); `POST visualization` — render preview visualization |
+| `CreationController` | `api/creation` | ✅ CreationAPI | `GET data-bases/{*dbPath}` — browse database hierarchy; `GET cube-meta/{*tablePath}` — table metadata; `GET validate-table-metadata/{*tablePath}` — metadata validation; `POST filter-dimension` — resolve dimension filters; `POST editor-contents` — editor setup data (sizes, valid chart types, headers); `POST visualization` — render multilingual preview visualization; `POST jsonstat?lang={language}` — render a single-language JSON-stat 2.0 preview using the table default when language is omitted and validating explicit languages |
 | `SqController` | `api/sq` | ✅ CreationAPI | `GET {savedQueryId}` — load saved query; `POST save` — save/draft query; `POST archive` — archive query with data snapshot; `POST re-archive` — refresh archived query |
-| `VisualizationController` | `api/sq/visualization` | ❌ | `GET {sqId}` — serve visualization for a saved query (cached with multi-state memory cache) |
+| `VisualizationController` | `api/sq` | ❌ | `GET visualization/{sqId}` — serve the multilingual visualization response for a saved query (cached with multi-state memory cache); `GET visualization/{sqId}/metadata` — serve metadata without fetching live matrix data; `GET jsonstat/{sqId}?lang={language}` — serve a single-language JSON-stat 2.0 dataset using the table default when language is omitted and validating explicit languages; `GET jsonstat/{sqId}/metadata?lang={language}` — serve equivalent JSON-stat metadata with an empty `value` array and no `status`. Metadata-only responses are not cached, but both formats share cached deserialized metadata for archived queries. |
 | `QueryMetaController` | `api/sq/meta` | ❌ | `GET {savedQueryId}` — return saved query metadata (header, archived status, visualization type) |
 | `InfoController` | `api/info` | ❌ | Application info endpoint |
 | `HealthController` | `api/health` | ❌ | Health check endpoint — probes all configured dependencies (database, storage, webhook) and returns 200/503 |
@@ -92,7 +92,7 @@ Supported chart types (enum `VisualizationType`): VerticalBarChart, GroupVertica
 |---|---|---|
 | `Models/Queries/` | `MatrixQuery`, `DimensionQuery`, `ValueFilters`, `PxTableReference`, `FilterRequest`, `VisualizationSettings`, `Layout` | Query structure and dimension filtering |
 | `Models/Requests/` | `ChartRequest`, `SaveQueryParams`, `ReArchiveRequest`, `VisualizationCreationSettings` | API request DTOs |
-| `Models/Responses/` | `EditorContentsResponse`, `VisualizationResponse`, `QueryMetaResponse`, `SaveQueryResponse`, `ReArchiveResponse`, `TableMetaValidationResult`, `DatabaseGroupContents`, `DatabaseGroupHeader`, `DatabaseTable`, `HealthResponse`, `DatabaseHealthStatus`, `ServiceHealthStatus` | API response DTOs |
+| `Models/Responses/` | `EditorContentsResponse`, `VisualizationResponse`, `JsonStat2Extension`, `QueryMetaResponse`, `SaveQueryResponse`, `ReArchiveResponse`, `TableMetaValidationResult`, `DatabaseGroupContents`, `DatabaseGroupHeader`, `DatabaseTable`, `HealthResponse`, `DatabaseHealthStatus`, `ServiceHealthStatus` | API response DTOs |
 | `Models/SavedQueries/` | `SavedQuery`, `ArchiveCube`, versioned types (`V1_0`, `V1_1`, `V1_2`, `V10`, `V11`) | Persisted query + archive formats with version migration |
 | `Models/Metadata/` | `HeaderBuildingUtilities`, `MatrixMetadataExtensions`, `DimensionExtensions`, `DimensionValueExtensions` | Metadata processing and header generation |
 | `Data/MetaData/` | `CubeMeta`, `Variable`, `VariableValue`, `ContentComponent` | Legacy metadata model types |
@@ -116,7 +116,7 @@ Key config sections: `DatabaseConfig`, `QueryStorageConfig`, `CacheOptions`, `Co
 
 | Folder | Purpose |
 |---|---|
-| `Visualization/` | `PxVisualizerCubeAdapter` — transforms matrix data into `VisualizationResponse` for the PxVisualizer library |
+| `Visualization/` | `PxVisualizerCubeAdapter` — transforms matrix data into `VisualizationResponse` for the PxVisualizer library and builds the common JSON-stat visualization settings extension; `JsonStat2DatasetBuilder` — transforms matrix data into the shared `Datasource/ApiDatasource/SerializationModels/JsonStat2` JSON-stat 2.0 DTO |
 | `Language/` | `Localization`, `Translation`, per-concern translation classes (rejection reasons, sorting options, chart types, etc.) loaded from `Pars/translations.json` |
 | `Utility/` | `SqFileInterface`, `InputValidation`, `LoggerConstants`, `PxSyntaxConstants`, JSON converters (`CustomJsonConverters/`) |
 | `Enums/` | `VisualizationType` (ChartTypesEnum), `ChartTypeRejectionEnum`, `TimeDimensionIntervals` |
@@ -220,7 +220,6 @@ The editor state was decomposed from a single monolithic `EditorContext` into th
 |---|---|
 | `useHierarchyParams` | Extracts path hierarchy from URL params |
 | `useQueryParams` | URL query parameter parsing |
-| `useReplaceQueryParams` | URL query parameter replacement |
 | `useScrollToElement` | Scroll-to-element behavior |
 
 ### Types (`src/types/`)
@@ -257,7 +256,9 @@ The editor state was decomposed from a single monolithic `EditorContext` into th
 
 ### Styling
 
-MUI 7 theme (`src/styles/materialTheme`), styled-components for custom layout, `App.css` for global styles.
+The MUI 7 theme (`src/styles/materialTheme.ts`) is the authoritative source for application UI colors, typography, surfaces, borders, shape, shadows, and interaction states. Application components should consume semantic theme roles through MUI `styled` or `sx`; reusable UI colors should not be defined directly in components. Styled-components remains available for layout-only styles that do not need theme tokens.
+
+Visualization output is a separate styling boundary. Do not apply the application theme to HTML tables or graphs rendered by `@statisticsfinland/pxvisualizer`. The `.tk-table` rules in `src/index.css`, the public `pxgraf-styles/pxgraf-table.css` stylesheet, and pxvisualizer chart styles control visualization and export appearance independently and must be reviewed separately from application UI changes.
 
 ### Frontend Tests
 
@@ -270,7 +271,7 @@ Jest 30 + Testing Library. Tests are co-located with source files using `*.test.
 | Components | Co-located `*.test.tsx` files for each component (e.g., `Preview.test.tsx`, `ChartTypeSelector.test.tsx`, `SaveDialog.test.tsx`, `ErrorBoundary.test.tsx`) |
 | API services | `cube-meta.test.ts`, `editor-contents.test.ts`, `filter-dimension.test.ts`, `queries.test.ts`, `table.test.ts`, `validate-table-metadata.test.ts`, `visualization.test.ts` |
 | Utils | `ApiHelpers.test.ts`, `ChartSettingHelpers.test.ts`, `componentHelpers.test.ts`, `dimensionSelectionHelpers.test.ts`, `editorHelpers.test.ts`, `metadataUtils.test.ts`, `sortingHelpers.test.ts` |
-| Hooks | `useHierarchyParams.test.tsx`, `useQueryParams.test.tsx`, `useReplaceQueryParams.test.tsx`, `useScrollToElement.test.tsx` |
+| Hooks | `useHierarchyParams.test.tsx`, `useQueryParams.test.tsx`, `useScrollToElement.test.tsx` |
 
 ---
 

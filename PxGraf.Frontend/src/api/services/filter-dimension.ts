@@ -17,12 +17,17 @@ export interface IFilterDimensionResult {
     data: {[key: string]: string[]}
 }
 
-const fetchResolveDimensionFilter = async (idStack: string[], dimensionFilters: { [key: string]: IValueFilter }): Promise<{ [key: string]: string[] }> => {
+const fetchResolveDimensionFilter = async (
+    idStack: string[],
+    dimensionFilters: { [key: string]: IValueFilter },
+    virtualValueDefinitions: { [dimensionCode: string]: string[] },
+): Promise<{ [key: string]: string[] }> => {
     const client = new ApiClient();
     const requestBody = JSON.stringify(
         {
             tableReference: buildTableReference(idStack),
             filters: dimensionFilters,
+            virtualValueDefinitions,
         }
     );
 
@@ -32,13 +37,19 @@ const fetchResolveDimensionFilter = async (idStack: string[], dimensionFilters: 
 
 export const useResolveDimensionFiltersQuery = (idStack: string[], query: Query): IFilterDimensionResult => {
     const dimQueries = Object.entries(query ?? {});
-    const dimFilters =  Object.fromEntries(dimQueries.map(([dimensionCode, dimensionQuery]) => {
-        return [dimensionCode, dimensionQuery.valueFilter]
+    const dimFilters = Object.fromEntries(dimQueries.map(([dimensionCode, dimensionQuery]) => {
+        return [dimensionCode, dimensionQuery.valueFilter];
     }));
+    const virtualValueDefinitions = Object.fromEntries(
+        dimQueries
+            .filter(([, dq]) => dq.virtualValueDefinitions?.length > 0)
+            .map(([code, dq]) => [code, dq.virtualValueDefinitions.map(v => v.code)])
+    );
 
     return useQuery({
         queryKey: ['filter-dimension', ...idStack, query],
-        queryFn: () => fetchResolveDimensionFilter(idStack, dimFilters),
+        queryFn: () => fetchResolveDimensionFilter(idStack, dimFilters, virtualValueDefinitions),
+        placeholderData: (previousData) => previousData,
         ...defaultQueryOptions
     });
 }

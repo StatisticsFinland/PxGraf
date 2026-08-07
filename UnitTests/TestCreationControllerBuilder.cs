@@ -13,7 +13,7 @@ namespace UnitTests
 {
     public static class TestCreationControllerBuilder
     {
-        public static CreationController BuildController(List<DimensionParameters> cubeParams, List<DimensionParameters> metaParams, DatabaseGroupContents? mockContents = null)
+        public static CreationController BuildController(List<DimensionParameters> cubeParams, List<DimensionParameters> metaParams, DatabaseGroupContents? mockContents = null, Mock<IVirtualValueComputationService>? virtualValueComputationService = null)
         {
             Mock<ICachedDatasource> dataSource = new();
             Mock<ILogger<CreationController>> logger = new();
@@ -37,7 +37,8 @@ namespace UnitTests
                     return mockContents;
                 });
 
-            return new CreationController(dataSource.Object, logger.Object, auditLogService.Object);
+            Mock<IVirtualValueComputationService> vcsMock = virtualValueComputationService ?? new();
+            return new CreationController(dataSource.Object, logger.Object, auditLogService.Object, vcsMock.Object);
         }
     }
 }

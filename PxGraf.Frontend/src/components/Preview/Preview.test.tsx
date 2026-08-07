@@ -3,6 +3,7 @@ import React from 'react';
 import { FilterType, ICubeQuery, Query } from "types/query";
 import { IVisualizationSettings } from "types/visualizationSettings";
 import Preview, { ISelectabilityInfo, getSelectables, getResolvedSelections } from "./Preview";
+import { EPreviewSize } from 'types/previewSize';
 import { EVariableType, EVisualizationType, ETimeVariableInterval, IQueryVisualizationResponse } from "@statisticsfinland/pxvisualizer";
 import { IVisualizationResult } from "api/services/visualization";
 import serializer from "../../testUtils/stripHighchartsHashes";
@@ -165,7 +166,7 @@ const mockQuery: Query = {
             query: 4
         },
         selectable: false,
-        virtualValueDefinitions: null
+        virtualValueDefinitions: []
     },
     Tiedot: {
         valueFilter: {
@@ -175,7 +176,7 @@ const mockQuery: Query = {
             ]
         },
         selectable: false,
-        virtualValueDefinitions: null
+        virtualValueDefinitions: []
     }
 };
 const mockLanguage = 'fi';
@@ -205,16 +206,10 @@ const setDefaultSelectables = jest.fn();
 const setCubeQuery = jest.fn();
 const query = null;
 const setQuery = jest.fn();
-const saveDialogOpen = false;
-const setSaveDialogOpen = jest.fn();
 const selectedVisualizationUserInput = null;
 const setSelectedVisualizationUserInput = jest.fn();
 const visualizationSettingsUserInput = null;
 const setVisualizationSettingsUserInput = jest.fn();
-const loadedQueryId = '';
-const setLoadedQueryId = jest.fn();
-const loadedQueryIsDraft = false;
-const setLoadedQueryIsDraft = jest.fn();
 
 describe('Rendering test', () => {
     beforeAll(() => {
@@ -251,6 +246,7 @@ describe('Rendering test', () => {
                             query={mockQuery}
                             selectedVisualization={mockSelectedVisualization}
                             visualizationSettings={mockVisualizationSettings}
+                            previewSize={EPreviewSize.Desktop}
                         />
                     </VisualizationContext.Provider>
                 </QueryContext.Provider>
@@ -347,7 +343,7 @@ describe('Assertion tests', () => {
         };
         
         const result = getSelectables(mockVisualizationResponseWithSelectables, mockVisualizationSettingsWithMultiselect);
-        expect(result.length).toBe(2);
+        expect(result).toHaveLength(2);
         expect(result[0].dimension.code).toBe('Tiedot');
         expect(result[1].dimension.code).toBe('Vuosi');
         expect(result[0].multiselectable).toBe(false);
