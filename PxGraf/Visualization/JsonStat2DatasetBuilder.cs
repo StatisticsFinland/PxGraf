@@ -8,6 +8,7 @@ using Px.Utils.Models.Metadata.Dimensions;
 using Px.Utils.Models.Metadata.Enums;
 using Px.Utils.Models.Metadata.MetaProperties;
 using PxGraf.Language;
+using PxGraf.Models.Queries;
 using PxGraf.Models.Responses;
 using PxGraf.Datasource.ApiDatasource.SerializationModels;
 using PxGraf.Settings;
@@ -21,13 +22,14 @@ namespace PxGraf.Visualization
 {
     public static class JsonStat2DatasetBuilder
     {
-        public static JsonStat2 Build(Matrix<DecimalDataValue> matrix, string? requestedLanguage, VisualizationResponse.PxVisualizerSettings? visualizationSettings = null)
+        public static JsonStat2 Build(Matrix<DecimalDataValue> matrix, string? requestedLanguage, VisualizationSettings? visualizationSettings = null, MatrixQuery? query = null)
         {
             (decimal?[] values, Dictionary<string, string> statusMap) = BuildValues(matrix);
             return Build(
                 matrix.Metadata,
                 requestedLanguage,
-                visualizationSettings,
+                BuildExtension(matrix.Metadata, requestedLanguage, visualizationSettings, query),
+                query,
                 values,
                 statusMap.Count > 0 ? statusMap : null);
         }
@@ -35,15 +37,17 @@ namespace PxGraf.Visualization
         public static JsonStat2 BuildMetadata(
             IReadOnlyMatrixMetadata metadata,
             string? requestedLanguage,
-            VisualizationResponse.PxVisualizerSettings? visualizationSettings = null)
+            VisualizationSettings? visualizationSettings = null,
+            MatrixQuery? query = null)
         {
-            return Build(metadata, requestedLanguage, visualizationSettings, [], null);
+            return Build(metadata, requestedLanguage, BuildExtension(metadata, requestedLanguage, visualizationSettings, query), query, [], null);
         }
 
         private static JsonStat2 Build(
             IReadOnlyMatrixMetadata metadata,
             string? requestedLanguage,
-            VisualizationResponse.PxVisualizerSettings? visualizationSettings,
+            JsonStat2Extension extension,
+            MatrixQuery? query,
             decimal?[] values,
             Dictionary<string, string>? statusMap)
         {
@@ -60,7 +64,10 @@ namespace PxGraf.Visualization
             foreach (IReadOnlyDimension dimension in dimensions)
             {
                 string dimCode = dimension.Code;
-                JsonStat2.DimensionObj dimOutput = BuildDimension(dimension, language);
+                DimensionQuery? dimensionQuery = query?.DimensionQueries.TryGetValue(dimCode, out DimensionQuery? resolvedDimensionQuery) == true
+                    ? resolvedDimensionQuery
+                    : null;
+                JsonStat2.DimensionObj dimOutput = BuildDimension(dimension, language, dimensionQuery);
                 dimensionMap[dimCode] = dimOutput;
 
                 if (dimension.Type == DimensionType.Time)
@@ -105,17 +112,139 @@ namespace PxGraf.Visualization
                 Value = values,
                 Status = statusMap,
                 Role = role,
-                Extension = new JsonStat2Extension()
-                {
-                    MissingValueDescriptions = BuildMissingValueDescriptions(language),
-                    VisualizationSettings = visualizationSettings
-                }
+                Extension = extension
             };
+
+            result.Extension.MissingValueDescriptions = BuildMissingValueDescriptions(language);
 
             return result;
         }
 
-        private static JsonStat2.DimensionObj BuildDimension(IReadOnlyDimension dimension, string language)
+        private static JsonStat2Extension BuildExtension(IReadOnlyMatrixMetadata metadata, string? requestedLanguage, VisualizationSettings? settings, MatrixQuery? query)
+        {
+            JsonStat2Extension extension = new()
+            {
+                JsonStatChart = BuildJsonStatChartExtension(metadata, requestedLanguage, query)
+            };
+
+            if (settings is not null)
+            {
+                Dictionary<string, List<string>> selectableSelections = query?.DimensionQueries
+                    .Where(pair => pair.Value.Selectable)
+                    .ToDictionary(
+                        pair => pair.Key,
+                        pair => metadata.Dimensions.First(dimension => dimension.Code == pair.Key).Values.Select(value => value.Code).ToList());
+
+                extension.SelectableConfig = new SelectableConfig
+                {
+                    SelectableSelections = selectableSelections,
+                    DefaultSelectableSelections = settings.DefaultSelectableDimensionCodes,
+                    MultiSelectableDimensionCode = settings.MultiselectableDimensionCode
+                };
+                extension.VisualizationConfig = new JsonStatVisualizationConfig
+                {
+                    ChartType = MapChartType(settings.VisualizationType),
+                    Layout = new JsonStatLayout
+                    {
+                        Rows = settings.Layout.RowDimensionCodes,
+                        Columns = settings.Layout.ColumnDimensionCodes
+                    },
+                    CutValueAxis = settings.CutYAxis,
+                    Sorting = settings.Sorting
+                };
+            }
+
+            return extension;
+        }
+
+        private static JsonStatChartExtension? BuildJsonStatChartExtension(IReadOnlyMatrixMetadata metadata, string? requestedLanguage, MatrixQuery? query)
+        {
+            if (query is null)
+            {
+                return null;
+            }
+
+            string language = ResolveLanguage(metadata, requestedLanguage);
+            Dictionary<string, string> dimensionSources = [];
+            Dictionary<string, Dictionary<string, string>> categorySources = [];
+
+            foreach (IReadOnlyDimension dimension in metadata.Dimensions.Where(dimension => dimension.Type == DimensionType.Content))
+            {
+                if (!query.DimensionQueries.TryGetValue(dimension.Code, out DimensionQuery? dimensionQuery))
+                {
+                    continue;
+                }
+
+                Dictionary<string, string> sourcesForDimension = [];
+                foreach (IReadOnlyDimensionValue value in dimension.Values)
+                {
+                    string? source = ResolveEditedSource(dimensionQuery, value.Code, language);
+                    if (source is null && TryGetLocalizedMetaProperty(value.AdditionalProperties, PxSyntaxConstants.SOURCE_KEY, language, out string? metadataSource))
+                    {
+                        source = metadataSource;
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(source))
+                    {
+                        sourcesForDimension[value.Code] = source;
+                    }
+                }
+
+                if (sourcesForDimension.Count > 0)
+                {
+                    categorySources[dimension.Code] = sourcesForDimension;
+                }
+
+                string? dimensionSource = sourcesForDimension.Values.Distinct().FirstOrDefault();
+                if (dimensionSource is not null && sourcesForDimension.Values.Distinct().Count() == 1)
+                {
+                    dimensionSources[dimension.Code] = dimensionSource;
+                }
+            }
+
+            if (dimensionSources.Count == 0 && categorySources.Count == 0)
+            {
+                return null;
+            }
+
+            return new JsonStatChartExtension
+            {
+                Sources = new JsonStatSourceExtension
+                {
+                    Dimension = dimensionSources.Count > 0 ? dimensionSources : null,
+                    Category = categorySources.Count > 0 ? categorySources : null
+                }
+            };
+        }
+
+        private static string? ResolveEditedSource(DimensionQuery query, string valueCode, string language)
+        {
+            return query.ValueEdits.TryGetValue(valueCode, out DimensionQuery.DimensionValueEdition? valueEdition) &&
+                valueEdition.ContentComponent?.SourceEdit is MultilanguageString sourceEdit &&
+                sourceEdit.Languages.Contains(language)
+                ? sourceEdit[language]
+                : null;
+        }
+
+        private static string MapChartType(Enums.VisualizationType visualizationType) => visualizationType switch
+        {
+            Enums.VisualizationType.VerticalBarChart => "verticalBar",
+            Enums.VisualizationType.GroupVerticalBarChart => "groupedVerticalBar",
+            Enums.VisualizationType.StackedVerticalBarChart => "stackedVerticalBar",
+            Enums.VisualizationType.PercentVerticalBarChart => "percentVerticalBar",
+            Enums.VisualizationType.HorizontalBarChart => "horizontalBar",
+            Enums.VisualizationType.GroupHorizontalBarChart => "groupedHorizontalBar",
+            Enums.VisualizationType.StackedHorizontalBarChart => "stackedHorizontalBar",
+            Enums.VisualizationType.PercentHorizontalBarChart => "percentHorizontalBar",
+            Enums.VisualizationType.PyramidChart => "pyramid",
+            Enums.VisualizationType.PieChart => "pie",
+            Enums.VisualizationType.LineChart => "line",
+            Enums.VisualizationType.ScatterPlot => "scatterPlot",
+            Enums.VisualizationType.Table => "table",
+            _ => throw new ArgumentOutOfRangeException(nameof(visualizationType), visualizationType, null)
+        };
+
+        private static JsonStat2.DimensionObj BuildDimension(IReadOnlyDimension dimension, string language, DimensionQuery? query)
         {
             Dictionary<string, string> labels = [];
             Dictionary<string, List<string>> notes = [];
@@ -127,7 +256,10 @@ namespace PxGraf.Visualization
                 IReadOnlyDimensionValue value = dimension.Values[valueIndex];
                 string code = value.Code;
                 index[code] = valueIndex;
-                labels[code] = value.Name[language];
+                DimensionQuery.DimensionValueEdition? valueEdition = query?.ValueEdits.TryGetValue(code, out DimensionQuery.DimensionValueEdition? resolvedValueEdition) == true
+                    ? resolvedValueEdition
+                    : null;
+                labels[code] = ResolveEditedValue(valueEdition?.NameEdit, value.Name[language], language);
 
                 if (TryGetLocalizedMetaProperty(value.AdditionalProperties, PxSyntaxConstants.VALUENOTE_KEY, language, out string? note))
                 {
@@ -140,7 +272,7 @@ namespace PxGraf.Visualization
 
                     units[code] = new JsonStat2.DimensionObj.CategoryObj.UnitObj
                     {
-                        Label = contentValue.Unit[language],
+                        Label = ResolveEditedValue(valueEdition?.ContentComponent?.UnitEdit, contentValue.Unit[language], language),
                         Decimals = contentValue.Precision
                     };
                 }
@@ -156,7 +288,7 @@ namespace PxGraf.Visualization
 
             return new JsonStat2.DimensionObj
             {
-                Label = dimension.Name[language],
+                Label = ResolveEditedValue(query?.NameEdit, dimension.Name[language], language),
                 Note = TryGetLocalizedMetaProperty(dimension.AdditionalProperties, PxSyntaxConstants.NOTE_KEY, language, out string? dimNote)
                     ? [dimNote!]
                     : null,
@@ -231,6 +363,11 @@ namespace PxGraf.Visualization
             }
 
             return TryGetOptionalLocalizedMetaProperty(metadata.AdditionalProperties, PxSyntaxConstants.SOURCE_KEY, language) ?? string.Empty;
+        }
+
+        private static string ResolveEditedValue(MultilanguageString? edit, string originalValue, string language)
+        {
+            return edit?.Languages.Contains(language) == true ? edit[language] : originalValue;
         }
 
         private static string ResolveUpdatedTimestamp(IReadOnlyList<IReadOnlyDimension> dimensions)

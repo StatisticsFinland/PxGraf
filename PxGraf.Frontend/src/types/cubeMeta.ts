@@ -1,6 +1,7 @@
 /* istanbul ignore file */
-import { TTimeVariableInterval } from "@statisticsfinland/pxvisualizer";
 import { MultiLanguageString } from "./multiLanguageString";
+
+export type TTimeVariableInterval = 'Year' | 'Quarter' | 'Month' | 'Week' | 'Day' | 'Unknown';
 
 /**
  * Interface for cube meta properties. A cube is a multi-dimensional result of Px file data filtered by a query.

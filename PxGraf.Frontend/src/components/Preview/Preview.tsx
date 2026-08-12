@@ -6,19 +6,16 @@ import React from 'react';
 import { Query } from 'types/query';
 import { IVisualizationSettings } from 'types/visualizationSettings';
 import { useVisualizationQuery } from 'api/services/visualization';
-import { Chart, IQueryVisualizationResponse } from '@statisticsfinland/pxvisualizer';
+import { createChart, ChartInstance } from '@statisticsfinland/jsonstat-chart';
 import useSelections from 'components/SelectableVariableMenus/hooks/useSelections';
-import { IVariable } from '../../types/visualizationResponse';
+import { IJsonStatDataset, IJsonStatSelectable, getChartConfig, getSelectables as getJsonStatSelectables } from 'types/jsonStatChart';
+import { VisualizationType } from 'types/visualizationType';
 import { QueryContext } from '../../contexts/queryContext';
 import { VisualizationContext } from '../../contexts/visualizationContext';
 import UiLanguageContext from '../../contexts/uiLanguageContext';
-import { EDimensionType } from '../../types/cubeMeta';
 import { EPreviewSize } from 'types/previewSize';
 
-export interface ISelectabilityInfo {
-    dimension: IVariable;
-    multiselectable: boolean;
-}
+export type ISelectabilityInfo = IJsonStatSelectable;
 
 interface IPreviewProps {
     path: string[];
@@ -50,33 +47,27 @@ const PreviewCanvas = styled('div', {
     boxShadow: theme.shadows[1],
 }));
 
-export const getSelectables = (visualizationResponse: IQueryVisualizationResponse, visualizationSettings?: IVisualizationSettings): ISelectabilityInfo[] => {
-    if (!visualizationResponse) return [];
-    const { selectableVariableCodes, metaData } = visualizationResponse;
+const ChartContainer = styled('div')({});
 
-    return selectableVariableCodes.map((code: string) => {
-        const metaDataItem = metaData.find(item => item.code === code);
-        const dimension = { ...metaDataItem, type: EDimensionType[metaDataItem.type] };
-
-        return {
-            dimension,
-            multiselectable: visualizationSettings?.multiselectableVariableCode === dimension.code,
-        };
-    }) ?? [];
-};
+export const getSelectables = getJsonStatSelectables;
 
 export const getResolvedSelections = (selectables: ISelectabilityInfo[], selections: ISelectableSelections, defaultSelectables: ISelectableSelections, multiselectableVariableCode?: string): ISelectableSelections => {
     const newSelections: ISelectableSelections = {};
     selectables.forEach((selectable) => {
         const { dimension } = selectable;
-        const selection = selections[dimension.code] ?? defaultSelectables?.[dimension.code] ?? [dimension.values[0].code];
+        const availableValues = new Set(dimension.values.map(value => value.code));
+        const configuredSelection = selections[dimension.code] ?? defaultSelectables?.[dimension.code];
+        const validSelection = configuredSelection?.filter(value => availableValues.has(value));
+        const selection = validSelection && validSelection.length > 0
+            ? validSelection
+            : [dimension.values[0].code];
         newSelections[dimension.code] = multiselectableVariableCode === dimension.code ? selection : [selection[0]];
     });
     return newSelections;
 };
 
 /**
- * Preview component for visualizing the chart using the selected visualization type and settings. Visualization is rendered using @see {@link Chart} component from the PxVisualizer library.
+ * Preview component for visualizing the chart using the selected visualization type and settings.
  * Additionally, in this view the user can pick values for the selectable dimensions and choose a size for the visualization.
  * @param {string[]} path Path to the table subject to visualization in the Px file system.
  * @param {Query} query Object that represents the current query.
@@ -89,16 +80,41 @@ export const Preview: React.FC<IPreviewProps> = ({ path, query, selectedVisualiz
     const { languageTab } = React.useContext(UiLanguageContext);
     const { cubeQuery } = React.useContext(QueryContext);
     const { defaultSelectables } = React.useContext(VisualizationContext);
-    const { data, isLoading, isError } = useVisualizationQuery(path, query, cubeQuery, languageTab, selectedVisualization, visualizationSettings);
-    const showVisualization = data && !isLoading && !isError;
+    const { data, isLoading, isFetching, isError } = useVisualizationQuery(path, query, cubeQuery, languageTab, selectedVisualization, visualizationSettings);
+    const showVisualization = data && !isLoading && !isFetching && !isError;
     const { selections, setSelections } = useSelections();
-    const selectables = getSelectables(data, visualizationSettings);
+    const selectables = React.useMemo(
+        () => getSelectables(data, visualizationSettings),
+        [data, visualizationSettings]
+    );
+    const chartContainerRef = React.useRef<HTMLDivElement>(null);
+    const chartRef = React.useRef<ChartInstance>(null);
 
     const resolvedSelections = React.useMemo(() => {
         return getResolvedSelections(selectables, selections, defaultSelectables, visualizationSettings?.multiselectableVariableCode);
-    }, [selectables, selections, defaultSelectables, visualizationSettings]);
+    }, [selectables, selections, defaultSelectables, visualizationSettings?.multiselectableVariableCode]);
 
-    if (isLoading || (!data && !isError)) {
+    React.useEffect(() => {
+        if (!showVisualization || !chartContainerRef.current) {
+            chartRef.current?.destroy();
+            chartRef.current = null;
+            return;
+        }
+
+        const chartConfig = getChartConfig(data as IJsonStatDataset, languageTab, cubeQuery?.chartHeaderEdit?.[languageTab]);
+        if (chartRef.current) {
+            chartRef.current.update(data as IJsonStatDataset, chartConfig, resolvedSelections);
+        } else {
+            chartRef.current = createChart(chartContainerRef.current, data as IJsonStatDataset, chartConfig, resolvedSelections);
+        }
+    }, [cubeQuery?.chartHeaderEdit, data, languageTab, resolvedSelections, showVisualization]);
+
+    React.useEffect(() => () => {
+        chartRef.current?.destroy();
+        chartRef.current = null;
+    }, []);
+
+    if (isLoading || isFetching || (!data && !isError)) {
         return (
             <ResponseWrapper>
                 <CircularProgress />
@@ -121,16 +137,11 @@ export const Preview: React.FC<IPreviewProps> = ({ path, query, selectedVisualiz
                 multiselectableDimensionCode={visualizationSettings?.multiselectableVariableCode}
             />
             {showVisualization &&
-                <div className='tk-table'>
-                    <Chart
-                        locale={languageTab}
-                        pxGraphData={data}
-                        selectedVariableCodes={resolvedSelections}
-                        showTableSources={true}
-                        showLastUpdated={true}
-                        showTableUnits={true}
-                    />
-                </div>}
+                <ChartContainer
+                    className='tk-table'
+                    style={{ height: data.extension?.visualizationConfig?.chartType === 'table' || selectedVisualization === VisualizationType.Table ? 'auto' : '480px' }}
+                    ref={chartContainerRef}
+                />}
         </PreviewCanvas>
     );
 }

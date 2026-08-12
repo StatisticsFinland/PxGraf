@@ -1,12 +1,13 @@
 {
   "name": "pxgraf",
-  "version": "2.8.4",
+  "version": "3.0.0",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@mui/icons-material": "^7.3.11",
     "@mui/material": "^7.3.11",
+    "@statisticsfinland/jsonstat-chart": "file:statisticsfinland-jsonstat-chart-0.2.1.tgz",
     "@statisticsfinland/pxvisualizer": "^1.4.11",
     "@tanstack/react-query": "^5.101.2",
     "@types/lodash": "^4.17.24",

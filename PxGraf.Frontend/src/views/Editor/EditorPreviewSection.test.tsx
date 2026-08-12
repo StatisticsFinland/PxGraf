@@ -2,6 +2,7 @@ import React from 'react';
 import EditorPreviewSection from "./EditorPreviewSection";
 import { render } from "@testing-library/react";
 import { IVisualizationResult } from "api/services/visualization";
+import { IJsonStatDataset } from "types/jsonStatChart";
 import { EVisualizationType, EVariableType, ETimeVariableInterval } from "@statisticsfinland/pxvisualizer";
 import { FilterType, Query } from "types/query";
 import { IVisualizationSettings } from "types/visualizationSettings";
@@ -16,10 +17,15 @@ jest.mock('envVars', () => ({
     BasePath: ''
 }));
 
+jest.mock('@statisticsfinland/jsonstat-chart', () => ({
+    createChart: jest.fn(() => ({ update: jest.fn(), destroy: jest.fn() })),
+}));
+
 const mockVisualizationQueryResult: IVisualizationResult = {
     isLoading: false,
+    isFetching: false,
     isError: false,
-    data: {
+    data: ({
         data: [3107, 2383, 1555, 1839],
         missingDataInfo: {},
         dataNotes: {},
@@ -131,7 +137,7 @@ const mockVisualizationQueryResult: IVisualizationResult = {
             defaultSelectableVariableCodes: null,
         },
         tableReference: { hierarchy: ["foo", "bar"], name:  "table" }
-    }
+    } as unknown as IJsonStatDataset)
 };
 
 const mockPath = [
