@@ -94,7 +94,7 @@ describe('useVisualizationQuery', () => {
 
     it('calls API when all conditions are met for a chart that does not require sorting', async () => {
         const settings: IVisualizationSettings = {};
-        const mockData = { data: [], metaData: [], selectableVariableCodes: [] };
+        const mockData = { id: [], size: [], dimension: {}, value: [] };
         mockPostAsync.mockResolvedValueOnce(mockData);
 
         const { result } = renderHook(
@@ -103,7 +103,7 @@ describe('useVisualizationQuery', () => {
         );
 
         await waitFor(() => expect(result.current.isLoading).toBe(false));
-        expect(mockPostAsync).toHaveBeenCalledWith('creation/visualization', expect.any(String));
+        expect(mockPostAsync).toHaveBeenCalledWith('creation/jsonstat?lang=fi', expect.any(String));
     });
 
     it('sets isError when fetch fails', async () => {

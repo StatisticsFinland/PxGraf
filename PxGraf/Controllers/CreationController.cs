@@ -476,7 +476,8 @@ namespace PxGraf.Controllers
                     JsonStat2 dataset = JsonStat2DatasetBuilder.Build(
                         matrix,
                         lang,
-                        PxVisualizerCubeAdapter.BuildVisualizationSettings(matrix, visualizationSettings));
+                        visualizationSettings,
+                        request.Query);
                     _logger.LogDebug("Returning JSON-stat visualization result.");
                     return new JsonResult(dataset)
                     {

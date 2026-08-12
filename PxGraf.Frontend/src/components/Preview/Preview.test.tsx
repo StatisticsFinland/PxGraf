@@ -4,8 +4,9 @@ import { FilterType, ICubeQuery, Query } from "types/query";
 import { IVisualizationSettings } from "types/visualizationSettings";
 import Preview, { ISelectabilityInfo, getSelectables, getResolvedSelections } from "./Preview";
 import { EPreviewSize } from 'types/previewSize';
-import { EVariableType, EVisualizationType, ETimeVariableInterval, IQueryVisualizationResponse } from "@statisticsfinland/pxvisualizer";
 import { IVisualizationResult } from "api/services/visualization";
+import { IJsonStatDataset } from "types/jsonStatChart";
+import { EVariableType, EVisualizationType, ETimeVariableInterval } from "@statisticsfinland/pxvisualizer";
 import serializer from "../../testUtils/stripHighchartsHashes";
 import UiLanguageContext from "../../contexts/uiLanguageContext";
 import { QueryContext } from "../../contexts/queryContext";
@@ -13,34 +14,31 @@ import { VisualizationContext } from "../../contexts/visualizationContext";
 import { ISelectableSelections } from "../SelectableVariableMenus/SelectableDimensionMenus";
 import { EDimensionType } from "../../types/cubeMeta";
 
-function mockComponentMocker(name) {
-    return function MockComponent(...args) {
-        return (
-            <pre data-testid={name}>
-               args={JSON.stringify(args)}
-            </pre>
-        );
-    };
-}
-
 jest.mock('envVars', () => ({
     PxGrafUrl: 'pxGrafUrl.fi/',
     PublicUrl: 'publicUrl.fi/',
     BasePath: ''
 }));
 
-jest.mock('@statisticsfinland/pxvisualizer', () => {
-    const lib = jest.requireActual("@statisticsfinland/pxvisualizer");
-    return {
-        ...lib,
-        Chart: mockComponentMocker('Chart')
-    }
-});
+jest.mock('@statisticsfinland/jsonstat-chart', () => ({
+    createChart: jest.fn(() => ({ update: jest.fn(), destroy: jest.fn() })),
+}));
 
 const mockVisualizationQueryResult: IVisualizationResult = {
     isLoading: false,
+    isFetching: false,
     isError: false,
-    data: {
+    data: ({
+        version: '2.0',
+        class: 'dataset',
+        id: ['Tiedot', 'Vuosi'],
+        size: [1, 4],
+        dimension: {
+            Tiedot: { label: 'Tiedot', category: { index: { kulutus_t: 0 }, label: { kulutus_t: 'Kulutus' } } },
+            Vuosi: { label: 'Vuosi', category: { index: { '2018': 0, '2019': 1, '2020': 2, '2021': 3 }, label: { '2018': '2018', '2019': '2019', '2020': '2020', '2021': '2021' } } },
+        },
+        value: [3107, 2383, 1555, 1839],
+        extension: { visualizationConfig: { chartType: 'table' }, selectableConfig: { selectableSelections: {} } },
         data: [3107, 2383, 1555, 1839],
         missingDataInfo: {},
         dataNotes: {},
@@ -152,7 +150,7 @@ const mockVisualizationQueryResult: IVisualizationResult = {
             defaultSelectableVariableCodes: null,
         },
         tableReference: { hierarchy: ["foo", "bar"], name:  "table" }
-    }
+    } as unknown as IJsonStatDataset)
 };
 const mockPath = [
     "foo",
@@ -333,10 +331,13 @@ describe('Assertion tests', () => {
     });
 
     it('getSelectables returns correct information about selectable dimensions', () => {
-        const mockVisualizationResponseWithSelectables: IQueryVisualizationResponse = {
+        const mockVisualizationResponseWithSelectables: IJsonStatDataset = {
             ...mockVisualizationQueryResult.data,
-            selectableVariableCodes: ['Tiedot', 'Vuosi']
-        }
+            extension: {
+                ...mockVisualizationQueryResult.data.extension,
+                selectableConfig: { selectableSelections: { Tiedot: ['kulutus_t'], Vuosi: ['2018'] } }
+            }
+        };
         const mockVisualizationSettingsWithMultiselect: IVisualizationSettings = {
             ...mockVisualizationSettings,
             multiselectableVariableCode: 'Vuosi'

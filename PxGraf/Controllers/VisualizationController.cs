@@ -346,7 +346,8 @@ namespace PxGraf.Controllers
                     JsonStat2 dataset = JsonStat2DatasetBuilder.BuildMetadata(
                         metadata,
                         lang,
-                        PxVisualizerCubeAdapter.BuildVisualizationSettings(metadata, savedQuery.Settings));
+                        savedQuery.Settings,
+                        savedQuery.Query);
                     return CreateJsonStatResult(dataset);
                 }
                 catch (EmptyDimensionException ex)
@@ -381,7 +382,8 @@ namespace PxGraf.Controllers
             return JsonStat2DatasetBuilder.Build(
                 matrix,
                 lang,
-                PxVisualizerCubeAdapter.BuildVisualizationSettings(matrix, sq.Settings));
+                sq.Settings,
+                sq.Query);
         }
 
         private static JsonResult CreateJsonStatResult(JsonStat2 dataset)
