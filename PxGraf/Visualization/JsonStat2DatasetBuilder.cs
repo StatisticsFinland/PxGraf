@@ -144,7 +144,9 @@ namespace PxGraf.Visualization
                 extension.VisualizationConfig = new JsonStatVisualizationConfig
                 {
                     ChartType = MapChartType(settings.VisualizationType),
-                    Layout = new JsonStatLayout
+                    Layout = settings.Layout is null
+                        ? null
+                        : new JsonStatLayout
                     {
                         Rows = settings.Layout.RowDimensionCodes,
                         Columns = settings.Layout.ColumnDimensionCodes
@@ -152,6 +154,7 @@ namespace PxGraf.Visualization
                     CutValueAxis = settings.CutYAxis,
                     Sorting = settings.Sorting
                 };
+                extension.VisualizationSettings = PxVisualizerCubeAdapter.BuildVisualizationSettings(metadata, settings);
             }
 
             return extension;

@@ -16,9 +16,13 @@ namespace PxGraf.Models.Responses
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public JsonStatVisualizationConfig VisualizationConfig { get; set; }
 
+        [JsonPropertyName("visualizationSettings")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public VisualizationResponse.PxVisualizerSettings VisualizationSettings { get; set; }
+
         [JsonPropertyName("jsonstatChart")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public JsonStatChartExtension JsonStatChart { get; set; }
+        public JsonStatChartExtension? JsonStatChart { get; set; }
     }
 
     public class SelectableConfig
@@ -43,7 +47,7 @@ namespace PxGraf.Models.Responses
 
         [JsonPropertyName("layout")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public JsonStatLayout Layout { get; set; }
+        public JsonStatLayout? Layout { get; set; }
 
         [JsonPropertyName("cutValueAxis")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -67,17 +71,17 @@ namespace PxGraf.Models.Responses
     {
         [JsonPropertyName("sources")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public JsonStatSourceExtension Sources { get; set; }
+        public JsonStatSourceExtension? Sources { get; set; }
     }
 
     public class JsonStatSourceExtension
     {
         [JsonPropertyName("dimension")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public Dictionary<string, string> Dimension { get; set; }
+        public Dictionary<string, string>? Dimension { get; set; }
 
         [JsonPropertyName("category")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public Dictionary<string, Dictionary<string, string>> Category { get; set; }
+        public Dictionary<string, Dictionary<string, string>>? Category { get; set; }
     }
 }
