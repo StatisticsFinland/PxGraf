@@ -65,10 +65,8 @@ namespace PxGraf.Visualization
         /// <returns>Visualization response for the matrix based on the given query and settings.</returns>
         public static VisualizationResponse BuildVisualizationResponse(Matrix<DecimalDataValue> matrix, MatrixQuery query, VisualizationSettings settings)
         {
+            Matrix<DecimalDataValue> resultMatrix = TransformVisualizationMatrix(matrix, query, settings);
             DimensionLayout layout = GetDimensionLayout(matrix.Metadata, query, settings);
-            MatrixMap finalMap = BuildFinalMap(matrix.Metadata, layout);
-
-            Matrix<DecimalDataValue> resultMatrix = matrix.GetTransform(finalMap);
             MatrixExtensions.DataAndNotesCollection dataAndNotes = resultMatrix.ExtractDataAndNotes();
 
             return new VisualizationResponse()
@@ -84,6 +82,24 @@ namespace PxGraf.Visualization
                 Header = HeaderBuildingUtilities.GetHeader(matrix.Metadata, query),
                 VisualizationSettings = BuildVisualizationSettings(matrix, settings)
             };
+        }
+
+        public static Matrix<DecimalDataValue> TransformVisualizationMatrix(
+            Matrix<DecimalDataValue> matrix,
+            MatrixQuery query,
+            VisualizationSettings settings)
+        {
+            DimensionLayout layout = GetDimensionLayout(matrix.Metadata, query, settings);
+            return matrix.GetTransform(BuildFinalMap(matrix.Metadata, layout));
+        }
+
+        public static IReadOnlyMatrixMetadata TransformVisualizationMetadata(
+            IReadOnlyMatrixMetadata metadata,
+            MatrixQuery query,
+            VisualizationSettings settings)
+        {
+            DimensionLayout layout = GetDimensionLayout(metadata, query, settings);
+            return metadata.GetTransform(BuildFinalMap(metadata, layout));
         }
 
         /// <summary>

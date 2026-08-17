@@ -1,4 +1,4 @@
-﻿using Px.Utils.Language;
+using Px.Utils.Language;
 using PxGraf.Enums;
 using System.Collections.Generic;
 
@@ -25,8 +25,7 @@ namespace PxGraf.Models.Responses
         /// <param name="selectedVisualization">Selected visualization type.</param>
         public class TypeSpecificVisualizationRules(VisualizationType selectedVisualization)
         {
-            public bool AllowShowingDataPoints { get; } =
-                selectedVisualization == VisualizationType.VerticalBarChart;
+            public bool AllowShowingDataPoints { get; } = false;
             public bool AllowCuttingYAxis { get; } = 
                 selectedVisualization == VisualizationType.LineChart ||
                 selectedVisualization == VisualizationType.ScatterPlot;
@@ -35,7 +34,7 @@ namespace PxGraf.Models.Responses
                 selectedVisualization == VisualizationType.GroupVerticalBarChart ||
                 selectedVisualization == VisualizationType.PercentVerticalBarChart ||
                 selectedVisualization == VisualizationType.StackedVerticalBarChart;
-            public bool AllowSetMarkerScale { get; } = selectedVisualization == VisualizationType.ScatterPlot;
+            public bool AllowSetMarkerScale { get; } = false;
         }
 
         /// <summary>

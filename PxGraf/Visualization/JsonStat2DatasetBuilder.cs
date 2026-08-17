@@ -24,6 +24,11 @@ namespace PxGraf.Visualization
     {
         public static JsonStat2 Build(Matrix<DecimalDataValue> matrix, string? requestedLanguage, VisualizationSettings? visualizationSettings = null, MatrixQuery? query = null)
         {
+            if (visualizationSettings is not null && query is not null)
+            {
+                matrix = PxVisualizerCubeAdapter.TransformVisualizationMatrix(matrix, query, visualizationSettings);
+            }
+
             (decimal?[] values, Dictionary<string, string> statusMap) = BuildValues(matrix);
             return Build(
                 matrix.Metadata,
@@ -40,6 +45,11 @@ namespace PxGraf.Visualization
             VisualizationSettings? visualizationSettings = null,
             MatrixQuery? query = null)
         {
+            if (visualizationSettings is not null && query is not null)
+            {
+                metadata = PxVisualizerCubeAdapter.TransformVisualizationMetadata(metadata, query, visualizationSettings);
+            }
+
             return Build(metadata, requestedLanguage, BuildExtension(metadata, requestedLanguage, visualizationSettings, query), query, [], null);
         }
 
