@@ -45,15 +45,22 @@ namespace PxGraf.Visualization
         /// <returns>Visualization response for the matrix based on the given saved query.</returns>
         public static VisualizationResponse BuildVisualizationResponse(Matrix<DecimalDataValue> matrix, SavedQuery savedQuery)
         {
+            EnsureLayout(savedQuery, matrix.Metadata);
+
+            return BuildVisualizationResponse(matrix, savedQuery.Query, savedQuery.Settings);
+        }
+
+        public static void EnsureLayout(SavedQuery savedQuery, IReadOnlyMatrixMetadata metadata)
+        {
             if (savedQuery.Settings.Layout is null)
             {
                 bool legacyPivotRequested = savedQuery.LegacyProperties.TryGetValue("PivotRequested", out object? obj) && obj is true;
-
-                savedQuery.Settings.Layout =
-                    LayoutRules.GetPivotBasedLayout(savedQuery.Settings.VisualizationType, matrix.Metadata, savedQuery.Query, legacyPivotRequested);
+                savedQuery.Settings.Layout = LayoutRules.GetPivotBasedLayout(
+                    savedQuery.Settings.VisualizationType,
+                    metadata,
+                    savedQuery.Query,
+                    legacyPivotRequested);
             }
-
-            return BuildVisualizationResponse(matrix, savedQuery.Query, savedQuery.Settings);
         }
 
         /// <summary>
