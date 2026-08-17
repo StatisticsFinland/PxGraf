@@ -203,6 +203,8 @@ namespace UnitTests.ControllerTests.CreationControllerTests
                 Assert.That(editorContent.Value, Is.Not.Null);
                 Assert.That(editorContent.Value.VisualizationOptions, Is.Not.Empty);
                 Assert.That(editorContent.Value.Size, Is.GreaterThan(0));
+                Assert.That(editorContent.Value.VisualizationOptions, Has.All.Property(nameof(VisualizationOption.AllowShowingDataPoints)).False);
+                Assert.That(editorContent.Value.VisualizationOptions, Has.All.Property(nameof(VisualizationOption.AllowSetMarkerScale)).False);
             }
         }
 

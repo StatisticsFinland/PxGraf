@@ -5,11 +5,11 @@ using Px.Utils.Models;
 using Px.Utils.Models.Data.DataValue;
 using Px.Utils.Models.Metadata;
 using Px.Utils.Models.Metadata.Enums;
-using PxGraf.Data.MetaData;
 using PxGraf.Datasource.ApiDatasource.SerializationModels;
 using PxGraf.Language;
 using PxGraf.Enums;
 using PxGraf.Models.Queries;
+using PxGraf.Models.Requests;
 using PxGraf.Models.Responses;
 using PxGraf.Settings;
 using PxGraf.Visualization;
@@ -183,6 +183,31 @@ namespace UnitTests.Visualization
             using JsonDocument document = JsonDocument.Parse(JsonSerializer.Serialize(result, GlobalJsonConverterOptions.Default));
             JsonElement settings = document.RootElement.GetProperty("extension").GetProperty("visualizationConfig");
             Assert.That(settings.GetProperty("chartType").GetString(), Is.EqualTo("line"));
+        }
+
+        [Test]
+        public void Build_UsesVisualizationResponseDimensionAndValueOrdering()
+        {
+            List<DimensionParameters> dimensions =
+            [
+                new DimensionParameters(DimensionType.Time, 3),
+                new DimensionParameters(DimensionType.Content, 2)
+            ];
+            Matrix<DecimalDataValue> matrix = TestDataCubeBuilder.BuildTestMatrix(dimensions, missingData: false);
+            MatrixQuery query = TestDataCubeBuilder.BuildTestCubeQuery(dimensions);
+            VisualizationSettings settings = new VisualizationCreationSettings
+            {
+                SelectedVisualization = VisualizationType.ScatterPlot
+            }.ToVisualizationSettings(matrix.Metadata, query);
+
+            VisualizationResponse visualizationResponse = PxVisualizerCubeAdapter.BuildVisualizationResponse(matrix, query, settings);
+            JsonStat2 jsonStat = JsonStat2DatasetBuilder.Build(matrix, "fi", settings, query);
+
+            Assert.That(jsonStat.Id, Is.EqualTo(visualizationResponse.MetaData.Select(variable => variable.Code)));
+            Assert.That(jsonStat.Size, Is.EqualTo(visualizationResponse.MetaData.Select(variable => variable.Values.Count)));
+            Assert.That(jsonStat.Value, Is.EqualTo(visualizationResponse.Data));
+            Assert.That(jsonStat.Extension.VisualizationConfig.Layout.Rows, Is.EqualTo(visualizationResponse.RowDimensionCodes));
+            Assert.That(jsonStat.Extension.VisualizationConfig.Layout.Columns, Is.EqualTo(visualizationResponse.ColumnDimensionCodes));
         }
 
         [Test]
