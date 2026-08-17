@@ -343,6 +343,7 @@ namespace PxGraf.Controllers
                 try
                 {
                     IReadOnlyMatrixMetadata metadata = await BuildVisualizationMetadataAsync(sqId, savedQuery);
+                    PxVisualizerCubeAdapter.EnsureLayout(savedQuery, metadata);
                     JsonStat2 dataset = JsonStat2DatasetBuilder.BuildMetadata(
                         metadata,
                         lang,
@@ -379,6 +380,7 @@ namespace PxGraf.Controllers
         private async Task<JsonStat2> BuildJsonStatDatasetAsync(string sqId, SavedQuery sq, string lang)
         {
             Matrix<DecimalDataValue> matrix = await BuildVisualizationMatrixAsync(sqId, sq);
+            PxVisualizerCubeAdapter.EnsureLayout(sq, matrix.Metadata);
             return JsonStat2DatasetBuilder.Build(
                 matrix,
                 lang,
