@@ -69,7 +69,8 @@ namespace UnitTests.ControllerTests.CreationControllerTests
                     return TestDataCubeBuilder.BuildTestMatrix([]);
                 });
 
-            CreationController controller = new(dataSource.Object, logger.Object, auditLogService.Object);
+            Mock<IVirtualValueComputationService> virtualValueComputationService = new();
+            CreationController controller = new(dataSource.Object, logger.Object, auditLogService.Object, virtualValueComputationService.Object);
 
             // Act
             ActionResult<TableMetaValidationResult> actionResult = await controller.ValidateTableMetaData("StatFin/path/table.px");
@@ -89,7 +90,8 @@ namespace UnitTests.ControllerTests.CreationControllerTests
             Mock<IAuditLogService> auditLogService = new();
             dataSource.Setup(ds => ds.GetMatrixMetadataCachedAsync(It.IsAny<PxTableReference>()))
                 .ReturnsAsync((PxTableReference tableReference) => null);
-            CreationController controller = new(dataSource.Object, logger.Object, auditLogService.Object);
+            Mock<IVirtualValueComputationService> virtualValueComputationService = new();
+            CreationController controller = new(dataSource.Object, logger.Object, auditLogService.Object, virtualValueComputationService.Object);
 
             // Act
             ActionResult<TableMetaValidationResult> actionResult = await controller.ValidateTableMetaData("foo/bar/baz.px");

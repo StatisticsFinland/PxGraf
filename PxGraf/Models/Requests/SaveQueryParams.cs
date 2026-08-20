@@ -26,5 +26,10 @@ namespace PxGraf.Models.Requests
         /// Whether the saved query is a draft. If true, the query will be overwritten when it's saved. Defaults to false.
         /// </summary>
         public bool Draft { get; set; } = false;
+
+        /// <summary>
+        /// Whether loading the saved query required discarding or replacing stale query data.
+        /// </summary>
+        public bool RecoveredWithChanges { get; set; } = false;
     }
 }

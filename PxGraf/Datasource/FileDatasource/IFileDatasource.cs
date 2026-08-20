@@ -48,6 +48,6 @@ namespace PxGraf.Datasource.FileDatasource
         /// <param name="completeTableMap">A complete map of the table metadata, file based implementations require this for reading.</param>
         /// <param name="cancellationToken">Optional cancellation token.</param>
         /// <returns>A <see cref="Matrix{T}"/> build from the privided metadata and the related data.</returns>
-        public Task<Matrix<DecimalDataValue>> GetMatrixAsync(PxTableReference tableReference, IReadOnlyMatrixMetadata meta, IMatrixMap completeTableMap, CancellationToken? cancellationToken = null);
+        public Task<Matrix<DecimalDataValue>> GetMatrixAsync(PxTableReference tableReference, IReadOnlyMatrixMetadata meta, IMatrixMap completeTableMap, CancellationToken cancellationToken = default);
    }
 }

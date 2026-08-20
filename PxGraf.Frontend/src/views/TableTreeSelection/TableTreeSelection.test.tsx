@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { ITableResult } from 'api/services/table';
 import UiLanguageContext from 'contexts/uiLanguageContext';
 import '@testing-library/jest-dom';
@@ -73,5 +73,35 @@ describe('Rendering test', () => {
             </MemoryRouter>
         );
         expect(asFragment()).toMatchSnapshot();
+    });
+
+    it('preserves router history state when opening a folder', () => {
+        const previousData = mockTableResult.data;
+        mockTableResult.data = {
+            headers: [
+                { code: 'db1', name: { fi: 'Database One' }, languages: ['fi'] },
+                { code: 'db2', name: { fi: 'Database Two' }, languages: ['fi'] },
+            ],
+            files: [],
+        };
+        const routerState = { idx: 2, key: 'router-key', usr: { source: 'test' } };
+        globalThis.history.replaceState(routerState, '', '/');
+        const replaceState = jest.spyOn(globalThis.history, 'replaceState');
+
+        render(
+            <MemoryRouter>
+                <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
+                    <NavigationProvider>
+                        <TableTreeSelection />
+                    </NavigationProvider>
+                </UiLanguageContext.Provider>
+            </MemoryRouter>
+        );
+
+        fireEvent.click(screen.getByRole('button', { name: /Database One/i }));
+
+        expect(replaceState).toHaveBeenCalledWith(routerState, '', '/?tablePath=db1');
+        replaceState.mockRestore();
+        mockTableResult.data = previousData;
     });
 });

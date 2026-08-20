@@ -55,17 +55,19 @@ export const UiLanguageProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     }
 
     React.useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional: initializes state from i18n on mount
         loadLanguages();
+        // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional: only load languages on mount
     }, []);
 
-    const setUiLang = (lang: string) => {
+    const setUiLang = React.useCallback((lang: string) => {
         i18n.changeLanguage(lang);
         setLanguage(lang);
-    }
+    }, [i18n]);
 
     const contextValue = React.useMemo(() => {
         return { language, setLanguage: setUiLang, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }
-    }, [language, languageTab, availableUiLanguages, uiContentLanguage]);
+    }, [language, setUiLang, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage]);
 
     return (
         <UiLanguageContext.Provider value={contextValue}>

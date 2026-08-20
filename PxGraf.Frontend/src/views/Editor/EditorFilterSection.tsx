@@ -1,7 +1,9 @@
 import DimensionSelectionList from 'components/VariableSelection/DimensionSelectionList';
 import React from 'react';
-import { Box } from '@mui/material';
-import styled from 'styled-components';
+import { Box, Button } from '@mui/material';
+import EditNoteIcon from '@mui/icons-material/EditNote';
+import { useTranslation } from 'react-i18next';
+import { alpha, styled } from '@mui/material/styles';
 import { IDimension } from 'types/cubeMeta';
 import { Query } from 'types/query';
 
@@ -9,28 +11,37 @@ interface EditorFilterSectionProps {
     dimensions: IDimension[],
     resolvedDimensionCodes: { [key: string]: string[] }
     queries: Query
-    width?: number
-    maxWidthPercentage?: number
+    width: number
+    maxWidthPercentage: number
+    onEditMetadata: () => void
 }
 
-const SelectorWrapper = styled(Box)<{width: number, $maxWidthPercentage: number}>`
-  max-width: ${props => props.$maxWidthPercentage}%;
-  flex: 0 1 ${props => props.width}px;
-  position: fixed;
-  top: 0;
-  width: ${props => props.width}px;
-  height: calc(100vh - 100px);
-  margin-top: 98px;
-  overflow: auto;
-  padding-bottom: 50px;
-  background-color: white;
-  z-index: 5;
-  border-top: thin solid rgba(0, 0, 0, 0.12);
+const SelectorWrapper = styled(Box, {
+    shouldForwardProp: prop => prop !== 'width' && prop !== 'maxWidthPercentage',
+})<{ width: number, maxWidthPercentage: number }>(({ width, maxWidthPercentage, theme }) => ({
+    maxWidth: `${maxWidthPercentage}%`,
+    flex: `0 0 ${width}px`,
+    width,
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    minHeight: 0,
+    backgroundColor: theme.palette.background.paper,
+    borderRight: `1px solid ${theme.palette.divider}`,
+}));
 
-  @media (max-width: 980px) {
-    margin-top: 144px;
-  }
-`;
+const SelectionScroller = styled(Box)({ flex: 1, minHeight: 0, overflowY: 'auto' });
+
+const ActionFooter = styled(Box)(({ theme }) => ({
+        flex: '0 0 auto',
+        height: 57,
+        boxSizing: 'border-box',
+        display: 'flex',
+        alignItems: 'center',
+        padding: '8px 16px',
+        borderTop: `1px solid ${theme.palette.divider}`,
+        backgroundColor: theme.palette.background.paper,
+}));
 
 /**
  * Component for the filter section in the editor. Contains @see {@link DimensionSelectionList} for each dimension for filtering values and defining selectable dimensionss.
@@ -40,15 +51,35 @@ const SelectorWrapper = styled(Box)<{width: number, $maxWidthPercentage: number}
  * @param {number} width Width of the dimension filter section
  * @param {number} maxWidthPercentage Maximum width of the dimension filter section on the whole window defined in percentages
  */
-export const EditorFilterSection: React.FC<EditorFilterSectionProps> = ({ dimensions, resolvedDimensionCodes, queries, width, maxWidthPercentage }) => {
-    
+export const EditorFilterSection: React.FC<EditorFilterSectionProps> = ({ dimensions, resolvedDimensionCodes, queries, width, maxWidthPercentage, onEditMetadata }) => {
+    const { t } = useTranslation();
+    const hasSelectedValues = Object.values(resolvedDimensionCodes ?? {}).some(valueCodes => valueCodes.length > 0);
+
     return (
-        <SelectorWrapper width={width} $maxWidthPercentage={maxWidthPercentage}>
-            <DimensionSelectionList
-                dimensions={dimensions}
-                resolvedDimensionCodes={resolvedDimensionCodes}
-                query={queries}
-            />
+        <SelectorWrapper width={width} maxWidthPercentage={maxWidthPercentage}>
+            <SelectionScroller>
+                <DimensionSelectionList
+                    dimensions={dimensions}
+                    resolvedDimensionCodes={resolvedDimensionCodes}
+                    query={queries}
+                />
+            </SelectionScroller>
+            <ActionFooter>
+                <Button
+                    fullWidth
+                    variant="outlined"
+                    size="small"
+                    sx={theme => ({
+                        backgroundColor: theme.palette.primary.light,
+                        '&:hover': { backgroundColor: alpha(theme.palette.primary.main, 0.16) },
+                    })}
+                    startIcon={<EditNoteIcon />}
+                    disabled={!hasSelectedValues}
+                    onClick={onEditMetadata}
+                >
+                    {t('editMetadata.dialogTitle')}
+                </Button>
+            </ActionFooter>
         </SelectorWrapper>
     )
 }

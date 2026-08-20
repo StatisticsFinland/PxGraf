@@ -8,6 +8,7 @@ import { IVisualizationSettings } from '../../types/visualizationSettings';
 import { VisualizationContext } from '../../contexts/visualizationContext';
 import { VisualizationType } from '../../types/visualizationType';
 import { IVisualizationOptions } from '../../types/editorContentsResponse';
+import { getVisualizationSettingVisibility } from '../../utils/editorHelpers';
 
 const mockVisualizationRules: IVisualizationOptions = {
     allowManualPivot: false,
@@ -116,10 +117,7 @@ const mockDimensionQuery: Query = {
             type: FilterType.Item,
             query: 'barfoo1'
         },
-        virtualValueDefinitions: [
-            'asd',
-            '123'
-        ]
+        virtualValueDefinitions: []
     },
     'foobar3': {
         selectable: false,
@@ -127,10 +125,7 @@ const mockDimensionQuery: Query = {
             type: FilterType.Item,
             query: 'barfoo1'
         },
-        virtualValueDefinitions: [
-            'asd',
-            '123'
-        ]
+        virtualValueDefinitions: []
     },
     'foobar2': {
         selectable: false,
@@ -138,10 +133,7 @@ const mockDimensionQuery: Query = {
             type: FilterType.Item,
             query: 'barfoo1'
         },
-        virtualValueDefinitions: [
-            'asd',
-            '123'
-        ]
+        virtualValueDefinitions: []
     },
     'foobar1': {
         selectable: false,
@@ -149,10 +141,7 @@ const mockDimensionQuery: Query = {
             type: FilterType.Item,
             query: 'barfoo1'
         },
-        virtualValueDefinitions: [
-            'asd',
-            '123'
-        ]
+        virtualValueDefinitions: []
     }
 }
 
@@ -280,6 +269,41 @@ describe('Rendering test', () => {
 });
 
 describe('Assertion tests', () => {
+    it('identifies whether a visualization has visible settings', () => {
+        const noVisibleSettings = {
+            ...mockVisualizationRules,
+            allowShowingDataPoints: false,
+            allowCuttingYAxis: false,
+            allowMatchXLabelsToEnd: false,
+            allowSetMarkerScale: false,
+            allowManualPivot: false,
+            allowMultiselect: false,
+            sortingOptions: { default: [], pivoted: [] },
+        };
+
+        expect(getVisualizationSettingVisibility(
+            VisualizationType.LineChart,
+            mockDimensions,
+            mockDimensionQuery,
+            noVisibleSettings,
+            mockVisualizationSettings,
+        ).hasVisibleSettings).toBe(false);
+        expect(getVisualizationSettingVisibility(
+            VisualizationType.Table,
+            mockDimensions,
+            mockDimensionQuery,
+            noVisibleSettings,
+            mockVisualizationSettings,
+        ).hasVisibleSettings).toBe(true);
+        expect(getVisualizationSettingVisibility(
+            VisualizationType.LineChart,
+            mockDimensions,
+            mockDimensionQuery,
+            { ...noVisibleSettings, allowMatchXLabelsToEnd: true },
+            mockVisualizationSettings,
+        ).hasVisibleSettings).toBe(false);
+    });
+
     it('shows the proper components based on visualizationRules', () => {
         const modifiedVisualizationRules = {
             ...mockVisualizationRules,
@@ -297,7 +321,7 @@ describe('Assertion tests', () => {
             />
         );
         expect(getByLabelText('chartSettings.cutYAxis')).toBeInTheDocument();
-        expect(getByLabelText('chartSettings.matchXLabelsToEnd')).toBeInTheDocument();
+        expect(queryByLabelText(document.body, 'chartSettings.matchXLabelsToEnd')).not.toBeInTheDocument();
         expect(queryByLabelText(document.body, 'chartSettings.markerScale')).not.toBeInTheDocument();
         expect(queryByLabelText(document.body, 'visualizationSettings.showDataPoints')).not.toBeInTheDocument();
         expect(queryByLabelText(document.body, 'chartSettings.multiSelectVariable')).not.toBeInTheDocument();

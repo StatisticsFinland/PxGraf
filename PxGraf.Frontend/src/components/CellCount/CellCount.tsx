@@ -23,7 +23,7 @@ export const CellCount: React.FC<ICellCountProps> = ({ size, maximumSize, warnin
 
     return (
         <div aria-live='polite'>
-            <Alert severity={severity}>{`${textContent}: ${size}/${maximumSize}`}</Alert>
+            <Alert severity={severity} icon={severity === "info" ? false : undefined} sx={severity === "info" ? { backgroundColor: 'transparent' } : undefined}>{`${textContent}: ${size}/${maximumSize}`}</Alert>
         </div>
     );
 }

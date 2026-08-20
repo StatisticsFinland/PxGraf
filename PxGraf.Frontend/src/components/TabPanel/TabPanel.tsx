@@ -6,25 +6,27 @@ interface ITabPanelProps {
     value: string | number;
     selectedValue: string | number;
     children: React.ReactNode;
+    idPrefix?: string;
+        contentPadding?: string;
 }
 
-const Wrapper = styled(Box)`
-  padding: 24px;
+const Wrapper = styled(Box)<{ $contentPadding: string }>`
+    padding: ${props => props.$contentPadding};
 `;
 
 export const TabPanel: React.FC<ITabPanelProps> = (props) => {
-    const { children, value, selectedValue, ...other } = props;
+        const { children, value, selectedValue, idPrefix, contentPadding = '24px', ...other } = props;
 
     return (
         <div
             role="tabpanel"
             hidden={selectedValue !== value}
-            id={`simple-tabpanel-${value}`}
-            aria-labelledby={`simple-tab-${value}`}
+            id={idPrefix ? `${idPrefix}-panel-${value}` : `simple-tabpanel-${value}`}
+            aria-labelledby={idPrefix ? `${idPrefix}-${value}` : `simple-tab-${value}`}
             {...other}
         >
             {selectedValue === value && (
-                <Wrapper>
+                <Wrapper $contentPadding={contentPadding}>
                     {children}
                 </Wrapper>
             )}

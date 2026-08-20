@@ -13,12 +13,34 @@ namespace UnitTests.DatasourceTests
                 "\"text\":\"variable-0-text.en\", " +
                 "\"values\":[\"value-0\", \"value-1\"], " +
                 "\"valueTexts\":[\"value-0-text.en\", \"value-1-text.en\"], " +
-                "\"elimination\":false, " +
+                "\"elimination\":true, " +
                 "\"time\":false" +
                 "}," +
                 "{" +
                 "\"code\":\"variable-1\", " +
                 "\"text\":\"variable-1-text.en\", " +
+                "\"values\":[\"2000\", \"2001\"], " +
+                "\"valueTexts\":[\"2000\", \"2001\"], " +
+                "\"elimination\":false, " +
+                "\"time\":true" +
+                "}" +
+                "]" +
+                "}";
+
+        public const string MockFiContentEliminationNoDetectableSumValue = "{ " +
+                "\"title\":\"FooBar\", " +
+                "\"variables\":[" +
+                "{" +
+                "\"code\":\"variable-0\", " +
+                "\"text\":\"variable-0-text\", " +
+                "\"values\":[\"value-0\", \"value-1\"], " +
+                "\"valueTexts\":[\"value-0-text\", \"value-1-text\"], " +
+                "\"elimination\":true, " +
+                "\"time\":false" +
+                "}," +
+                "{" +
+                "\"code\":\"variable-1\", " +
+                "\"text\":\"variable-1-text\", " +
                 "\"values\":[\"2000\", \"2001\"], " +
                 "\"valueTexts\":[\"2000\", \"2001\"], " +
                 "\"elimination\":false, " +
@@ -34,8 +56,8 @@ namespace UnitTests.DatasourceTests
                 "\"code\":\"variable-0\", " +
                 "\"text\":\"variable-0-text\", " +
                 "\"values\":[\"value-0\", \"value-1\"], " +
-                "\"valueTexts\":[\"value-0-text\", \"value-1-text\"], " +
-                "\"elimination\":false, " +
+                "\"valueTexts\":[\"Yhteensä\", \"value-1-text\"], " +
+                "\"elimination\":true, " +
                 "\"time\":false" +
                 "}," +
                 "{" +
@@ -57,7 +79,7 @@ namespace UnitTests.DatasourceTests
                 "\"text\":\"variable-0-text.sv\", " +
                 "\"values\":[\"value-0\", \"value-1\"], " +
                 "\"valueTexts\":[\"value-0-text.sv\", \"value-1-text.sv\"], " +
-                "\"elimination\":false, " +
+                "\"elimination\":true, " +
                 "\"time\":false" +
                 "}," +
                 "{" +

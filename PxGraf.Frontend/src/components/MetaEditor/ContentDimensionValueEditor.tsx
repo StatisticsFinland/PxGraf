@@ -6,6 +6,7 @@ import EditorField from './Editorfield';
 import styled from 'styled-components';
 import { IContentDimensionValue } from 'types/cubeMeta';
 import { IDimensionValueEditions } from 'types/query';
+import { MultiLanguageString } from 'types/multiLanguageString';
 import { getAdditionalPropertyValue } from '../../utils/metadataUtils';
 import { sourceKey } from '../../utils/keywordConstants';
 
@@ -17,7 +18,7 @@ interface IContentDimensionValueEditorProps {
     dimensionValue: IContentDimensionValue;
     language: string;
     valueEdits: IDimensionValueEditions;
-    onChange: (newEdit: IDimensionValueEditions) => void;
+    onChange: React.Dispatch<React.SetStateAction<IDimensionValueEditions>>;
 }
 
 export const ContentDimensionValueEditor: React.FC<IContentDimensionValueEditorProps> = ({ dimensionValue, language, valueEdits, onChange }) => {
@@ -28,54 +29,51 @@ export const ContentDimensionValueEditor: React.FC<IContentDimensionValueEditorP
         <Paper variant="outlined">
             <EditorFieldWrapper spacing={2}>
                 <EditorField
-                    label={t("editMetadata.valueName") + ": " + dimensionValue.name[uiContentLanguage]}
+                    label={t("editMetadata.valueName") + ": " + (dimensionValue.name[uiContentLanguage] ?? valueEdits?.nameEdit?.[uiContentLanguage] ?? dimensionValue.code)}
                     defaultValue={dimensionValue.name[language]}
                     editValue={valueEdits?.nameEdit?.[language]}
                     onChange={newValue => {
-                        const newValueEdit: IDimensionValueEditions = {
-                            ...valueEdits,
+                        onChange(currentValueEdits => ({
+                            ...currentValueEdits,
                             nameEdit: {
-                                ...valueEdits?.nameEdit,
+                                ...currentValueEdits?.nameEdit,
                                 [language]: newValue
                             }
-                        };
-                        onChange(newValueEdit);
+                        }));
                     }}
                 />
                 <EditorField
                     label={t("editMetadata.unit")}
-                    defaultValue={dimensionValue?.unit[language] ?? ''}
+                    defaultValue={dimensionValue?.unit?.[language] ?? ''}
                     editValue={valueEdits?.contentComponent?.unitEdit?.[language]}
                     onChange={newValue => {
-                        const newValueEdit: IDimensionValueEditions = {
-                            ...valueEdits,
+                        onChange(currentValueEdits => ({
+                            ...currentValueEdits,
                             contentComponent: {
-                                ...valueEdits?.contentComponent,
+                                ...currentValueEdits?.contentComponent,
                                 unitEdit: {
-                                    ...valueEdits?.contentComponent?.unitEdit,
+                                    ...currentValueEdits?.contentComponent?.unitEdit,
                                     [language]: newValue
                                 }
                             }
-                        };
-                        onChange(newValueEdit);
+                        }));
                     }}
                 />
                 <EditorField
                     label={t("editMetadata.source")}
-                    defaultValue={getAdditionalPropertyValue(sourceKey, dimensionValue?.additionalProperties)[language] ?? ''}
+                    defaultValue={(getAdditionalPropertyValue(sourceKey, dimensionValue?.additionalProperties) as MultiLanguageString)?.[language] ?? ''}
                     editValue={valueEdits?.contentComponent?.sourceEdit?.[language]}
                     onChange={newValue => {
-                        const newValueEdit: IDimensionValueEditions = {
-                            ...valueEdits,
+                        onChange(currentValueEdits => ({
+                            ...currentValueEdits,
                             contentComponent: {
-                                ...valueEdits?.contentComponent,
+                                ...currentValueEdits?.contentComponent,
                                 sourceEdit: {
-                                    ...valueEdits?.contentComponent?.sourceEdit,
+                                    ...currentValueEdits?.contentComponent?.sourceEdit,
                                     [language]: newValue
                                 }
                             }
-                        };
-                        onChange(newValueEdit);
+                        }));
                     }}
                 />
             </EditorFieldWrapper>

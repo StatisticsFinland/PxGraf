@@ -1,56 +1,56 @@
 import React, { useRef } from 'react';
-import { useMediaQuery, Typography, Button, Box, Stack } from '@mui/material';
-import styled from 'styled-components';
+import { useMediaQuery, Button, Box, Stack } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import LanguageSelector from 'components/LanguageSelector/LanguageSelector';
 import SavedQueryFinder from 'components/SavedQueryFinder/SavedQueryFinder';
 import { useNavigationContext } from 'contexts/navigationContext';
+import BreadcrumbNav from './BreadcrumbNav';
 import logo from 'images/pxgraf-logo.png';
 import logo_small from 'images/pxgraf-logo-small.png';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import { BasePath } from '../../envVars';
 
-const Logo = styled.img`
-  height: 60px;
-  padding-right: 24px;
+const Logo = styled('img')({
+    display: 'block',
+    height: 40,
+});
 
-  @media (max-width: 800px) {
-    padding-right: 24px;
-  }
-`;
+const LogoLink = styled('a')({
+    display: 'flex',
+    alignItems: 'center',
+    flexShrink: 0,
+});
 
-const HeaderWrapper = styled(Box)`
-  min-height: 75px;
-`;
+const HeaderWrapper = styled(Box)(({ theme }) => ({
+  minHeight: 56,
+  borderBottom: `1px solid ${theme.palette.divider}`,
+  backgroundColor: theme.palette.background.paper,
+}));
 
-const LangSelectorWrapper = styled(Stack)`
-  width: 20%;
-`;
+const LangSelectorWrapper = styled(Stack)({ width: '20%' });
 
-const MenuRowWrapper = styled(Stack)`
-  padding: 8px;
-  width: 100%;
-  align-items: center;
-  justify-content: flex-start;
-`;
+const MenuRowWrapper = styled(Stack)({
+  padding: '8px 16px',
+  boxSizing: 'border-box',
+  width: '100%',
+  alignItems: 'center',
+  justifyContent: 'flex-start',
+    gap: 16,
+});
 
-const LinkWrapper = styled.div`
-  padding-left: 30px;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 5px;
-`;
+const LinkWrapper = styled('div')({
+  display: 'flex',
+  flexDirection: 'row',
+  justifyContent: 'flex-start',
+  alignItems: 'center',
+});
 
-const TitleWrapper = styled.div`
-  padding-left: 8px;
-  min-width: 20%;
-`;
+const BreadcrumbWrapper = styled('div')({ flex: 1, minWidth: 0 });
 
 /**
  * Header component displayed on top of the page in all views.
- * Contains the logo, page title, language selector, and database selector link.
+ * Contains the logo, table path breadcrumb, language selector, and saved query finder.
  */
 const Header: React.FC = () => {
     const { t } = useTranslation();
@@ -60,19 +60,19 @@ const Header: React.FC = () => {
     const { tablePath } = useNavigationContext();
     const headerRef = useRef(null);
 
+    const showBreadcrumb = location.pathname === '/' ||
+        location.pathname.startsWith('/editor/');
+
     let indexUrl: string = BasePath || '/';
     if (tablePath?.length) {
         indexUrl = `${BasePath}/?tablePath=${tablePath.join(',')}`;
     }
 
-    // Show different top title for editor and database/table selection
-    const title = location.pathname?.split("/")[1] == "editor" ? t("general.editorTitle") : t("general.selectDatabaseTitle");
-
     const ref = React.useRef<HTMLAnchorElement>(null);
 
     React.useEffect(() => {
       if(ref.current) ref.current.focus();
-    }, [ref?.current, location.pathname])
+    }, [location.pathname]);
 
     const focusOnContent = () => {
         const mainContentElement = document.getElementById("mainContent");
@@ -84,15 +84,14 @@ const Header: React.FC = () => {
     return (
         <HeaderWrapper>
             <MenuRowWrapper direction="row" ref={headerRef}>
-                <Button sx={{ position: 'absolute', left: '-9999px' }} href="#" onClick={(e) => { e.preventDefault(); focusOnContent(); }} ref={ref}>{t('general.contentLink')}</Button>
-                <a href={indexUrl}><Logo alt={t('navbar.logoAlt')} src={isNarrowScreen ? logo_small : logo} /></a>
-                <TitleWrapper>
-                    <Typography variant="h1">{title}</Typography>
-                </TitleWrapper>
+                <Button sx={{ position: 'absolute', left: '-9999px' }} href="#" onClick={(e) => { e.preventDefault(); focusOnContent(); }} ref={ref} disableFocusRipple>{t('general.contentLink')}</Button>
+                <LogoLink href={indexUrl}><Logo alt={t('navbar.logoAlt')} src={isNarrowScreen ? logo_small : logo} /></LogoLink>
                 <LinkWrapper>
-                    <Button href={indexUrl}>{t('general.databaseSelectorLink')}</Button>
-                    <SavedQueryFinder oldQueryId={queryId} />
+                    <SavedQueryFinder oldQueryId={queryId} compact={isNarrowScreen} />
                 </LinkWrapper>
+                <BreadcrumbWrapper>
+                    {showBreadcrumb && tablePath?.length > 0 && <BreadcrumbNav tablePath={tablePath} />}
+                </BreadcrumbWrapper>
                 <LangSelectorWrapper direction="row-reverse" marginLeft="auto">
                     <LanguageSelector />
                 </LangSelectorWrapper>

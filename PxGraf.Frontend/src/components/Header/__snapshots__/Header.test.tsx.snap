@@ -3,91 +3,72 @@
 exports[`Header component should render correctly 1`] = `
 <DocumentFragment>
   <div
-    class="sc-jrIDTr jtSWkG MuiBox-root css-0"
+    class="MuiBox-root"
   >
     <div
-      class="MuiStack-root sc-iqkkDd gqUbQC css-m69qwo-MuiStack-root"
+      class="MuiStack-root"
     >
       <a
-        class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary Mui-focusVisible MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-65lmr2-MuiButtonBase-root-MuiButton-root"
+        class="MuiButtonBase-root Mui-focusVisible MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary"
         href="#"
         tabindex="0"
       >
         general.contentLink
-        <span
-          class="MuiTouchRipple-root css-r3djoj-MuiTouchRipple-root"
-        />
       </a>
       <a
         href="/"
       >
         <img
           alt="navbar.logoAlt"
-          class="sc-qdQOe cIeTM"
           src="test-file-stub"
         />
       </a>
-      <div
-        class="sc-dYjPD iUOpRe"
-      >
-        <h1
-          class="MuiTypography-root MuiTypography-h1 css-10l7o3s-MuiTypography-root"
-        >
-          general.selectDatabaseTitle
-        </h1>
-      </div>
-      <div
-        class="sc-crPgjm hILzSH"
-      >
-        <a
-          class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-colorPrimary css-1uent87-MuiButtonBase-root-MuiButton-root"
-          href="/"
-          tabindex="0"
-        >
-          general.databaseSelectorLink
-        </a>
+      <div>
         <button
-          class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorPrimary css-1blvszr-MuiButtonBase-root-MuiButton-root"
+          class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorPrimary"
           tabindex="0"
           type="button"
         >
+          <span
+            class="MuiButton-icon MuiButton-startIcon MuiButton-iconSizeMedium"
+          >
+            <svg
+              aria-hidden="true"
+              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium"
+              data-testid="FolderOpenIcon"
+              focusable="false"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2m0 12H4V8h16z"
+              />
+            </svg>
+          </span>
           savedQuery.dialogButtonTxt
         </button>
       </div>
+      <div />
       <div
-        class="MuiStack-root sc-kEbgWM hGPUgb css-1os650h-MuiStack-root"
+        class="MuiStack-root"
       >
         <div
-          class="MuiStack-root sc-eCQgVK clVryv css-nen11g-MuiStack-root"
+          class="MuiStack-root"
         >
-          <div
-            class="sc-gKkgUA oaXWM"
+          <button
+            aria-label="tooltip.open: general.uiLanguage"
           >
-            <p
-              class="MuiTypography-root MuiTypography-body2 sc-jSppWd iemUHM css-1wle3ir-MuiTypography-root"
+            <svg
+              aria-hidden="true"
+              class="MuiSvgIcon-root MuiSvgIcon-colorInfo MuiSvgIcon-fontSizeMedium"
+              data-testid="InfoIcon"
+              focusable="false"
+              viewBox="0 0 24 24"
             >
-              general.uiLanguage
-            </p>
-            <button
-              aria-label="tooltip.open: general.uiLanguage"
-              class="sc-gtcBCx gUCgDH"
-            >
-              <svg
-                aria-hidden="true"
-                class="MuiSvgIcon-root MuiSvgIcon-colorInfo MuiSvgIcon-fontSizeMedium css-ocq0ss-MuiSvgIcon-root"
-                data-testid="InfoIcon"
-                focusable="false"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m1 15h-2v-6h2zm0-8h-2V7h2z"
-                />
-              </svg>
-            </button>
-          </div>
-          <div
-            class="MuiStack-root css-1d0f7f9-MuiStack-root"
-          />
+              <path
+                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m1 15h-2v-6h2zm0-8h-2V7h2z"
+              />
+            </svg>
+          </button>
         </div>
       </div>
     </div>

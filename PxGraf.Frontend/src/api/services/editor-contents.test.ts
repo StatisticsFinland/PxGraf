@@ -21,12 +21,13 @@ const createWrapper = () => {
     const queryClient = new QueryClient({
         defaultOptions: { queries: { retry: false } },
     });
-    return ({ children }: { children: React.ReactNode }) =>
-        React.createElement(QueryClientProvider, { client: queryClient }, children);
+    return function TestWrapper({ children }: { children: React.ReactNode }) {
+        return React.createElement(QueryClientProvider, { client: queryClient }, children);
+    };
 };
 
 const mockQuery: Query = {
-    dim1: { valueFilter: { type: FilterType.All }, selectable: false, virtualValueDefinitions: null }
+    dim1: { valueFilter: { type: FilterType.All }, selectable: false, virtualValueDefinitions: [] }
 };
 const mockCubeQuery: ICubeQuery = { variableQueries: {} };
 const mockIdStack = ['db', 'table.px'];

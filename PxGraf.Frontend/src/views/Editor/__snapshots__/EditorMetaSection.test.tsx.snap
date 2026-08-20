@@ -3,26 +3,73 @@
 exports[`Rendering test renders correctly 1`] = `
 <DocumentFragment>
   <div
-    class="sc-fKwzVe gwlFvx MuiBox-root css-0"
+    class="MuiBox-root"
   >
     <div
-      class="sc-bCgoVd jbAaJp MuiBox-root css-1mc6bnb"
+      class="MuiBox-root"
     >
-      <div
-        class="sc-ikBzZv jNwkba"
-      >
-        <p
-          class="MuiTypography-root MuiTypography-body2 sc-ivKqQM crquHl css-1wle3ir-MuiTypography-root"
+      <div>
+        <div
+          class="MuiTabs-root"
         >
-          editor.contentLanguage
-        </p>
+          <div
+            class="MuiTabs-scroller MuiTabs-fixed"
+            style="overflow: hidden; margin-bottom: 0px;"
+          >
+            <div
+              aria-label="editor.contentLanguage"
+              class="MuiTabs-list MuiTabs-flexContainer"
+              role="tablist"
+            >
+              <button
+                aria-controls="simple-tabpanel-fi"
+                aria-label="editor.contentLanguage: lang.local.fi"
+                aria-selected="true"
+                class="MuiButtonBase-root MuiTab-root MuiTab-textColorPrimary Mui-selected"
+                id="simple-tab-fi"
+                role="tab"
+                tabindex="0"
+                type="button"
+              >
+                fi
+              </button>
+              <button
+                aria-controls="simple-tabpanel-sv"
+                aria-label="editor.contentLanguage: lang.local.sv"
+                aria-selected="false"
+                class="MuiButtonBase-root MuiTab-root MuiTab-textColorPrimary"
+                id="simple-tab-sv"
+                role="tab"
+                tabindex="-1"
+                type="button"
+              >
+                sv
+              </button>
+              <button
+                aria-controls="simple-tabpanel-en"
+                aria-label="editor.contentLanguage: lang.local.en"
+                aria-selected="false"
+                class="MuiButtonBase-root MuiTab-root MuiTab-textColorPrimary"
+                id="simple-tab-en"
+                role="tab"
+                tabindex="-1"
+                type="button"
+              >
+                en
+              </button>
+            </div>
+            <span
+              class="MuiTabs-indicator"
+              style="left: 0px; width: 0px;"
+            />
+          </div>
+        </div>
         <button
           aria-label="tooltip.open: editor.contentLanguage"
-          class="sc-gKkgUA iAMuGy"
         >
           <svg
             aria-hidden="true"
-            class="MuiSvgIcon-root MuiSvgIcon-colorInfo MuiSvgIcon-fontSizeMedium css-ocq0ss-MuiSvgIcon-root"
+            class="MuiSvgIcon-root MuiSvgIcon-colorInfo MuiSvgIcon-fontSizeMedium"
             data-testid="InfoIcon"
             focusable="false"
             viewBox="0 0 24 24"
@@ -33,63 +80,9 @@ exports[`Rendering test renders correctly 1`] = `
           </svg>
         </button>
       </div>
-      <div
-        class="MuiTabs-root css-jhczcq-MuiTabs-root"
-      >
-        <div
-          class="MuiTabs-scroller MuiTabs-fixed css-s2t35c-MuiTabs-scroller"
-          style="overflow: hidden; margin-bottom: 0px;"
-        >
-          <div
-            class="MuiTabs-list MuiTabs-flexContainer css-hzcega-MuiTabs-list"
-            role="tablist"
-          >
-            <button
-              aria-controls="simple-tabpanel-fi"
-              aria-label="editor.contentLanguage: lang.local.fi"
-              aria-selected="true"
-              class="MuiButtonBase-root MuiTab-root MuiTab-textColorPrimary Mui-selected sc-cxxQMU efXSxa css-g7p0lk-MuiButtonBase-root-MuiTab-root"
-              id="simple-tab-fi"
-              role="tab"
-              tabindex="0"
-              type="button"
-            >
-              fi
-            </button>
-            <button
-              aria-controls="simple-tabpanel-sv"
-              aria-label="editor.contentLanguage: lang.local.sv"
-              aria-selected="false"
-              class="MuiButtonBase-root MuiTab-root MuiTab-textColorPrimary sc-cxxQMU efXSxa css-g7p0lk-MuiButtonBase-root-MuiTab-root"
-              id="simple-tab-sv"
-              role="tab"
-              tabindex="-1"
-              type="button"
-            >
-              sv
-            </button>
-            <button
-              aria-controls="simple-tabpanel-en"
-              aria-label="editor.contentLanguage: lang.local.en"
-              aria-selected="false"
-              class="MuiButtonBase-root MuiTab-root MuiTab-textColorPrimary sc-cxxQMU efXSxa css-g7p0lk-MuiButtonBase-root-MuiTab-root"
-              id="simple-tab-en"
-              role="tab"
-              tabindex="-1"
-              type="button"
-            >
-              en
-            </button>
-          </div>
-          <span
-            class="MuiTabs-indicator css-1qltlow-MuiTabs-indicator"
-            style="left: 0px; width: 0px;"
-          />
-        </div>
-      </div>
     </div>
     <div
-      class="sc-llQYOh dVfrIY MuiBox-root css-0"
+      class="MuiBox-root"
     >
       <div
         aria-labelledby="simple-tab-fi"
@@ -97,477 +90,61 @@ exports[`Rendering test renders correctly 1`] = `
         role="tabpanel"
       >
         <div
-          class="sc-bdDsCe ewwDVL MuiBox-root css-0"
+          class="sc-gsDLFA hIsVqI MuiBox-root"
         >
           <div
-            class="sc-kEbgWM jqaMqF MuiBox-root css-0"
+            class="sc-bdvvNz egnXXA"
           >
-            <div
-              class="sc-jrIDTr gVSSYU"
+            <button
+              aria-label="tooltip.open: editMetadata.header"
             >
-              <div
-                class="sc-qdQOe jOquNE"
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-colorInfo MuiSvgIcon-fontSizeMedium"
+                data-testid="InfoIcon"
+                focusable="false"
+                viewBox="0 0 24 24"
               >
-                <button
-                  aria-label="tooltip.open: editMetadata.header"
-                  class="sc-gKkgUA iAMuGy"
-                >
-                  <svg
-                    aria-hidden="true"
-                    class="MuiSvgIcon-root MuiSvgIcon-colorInfo MuiSvgIcon-fontSizeMedium css-ocq0ss-MuiSvgIcon-root"
-                    data-testid="InfoIcon"
-                    focusable="false"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m1 15h-2v-6h2zm0-8h-2V7h2z"
-                    />
-                  </svg>
-                </button>
-                <div
-                  class="MuiFormControl-root css-1iw3t7y-MuiFormControl-root"
-                  style="width: 100%;"
-                >
-                  <label
-                    class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined css-113d811-MuiFormLabel-root-MuiInputLabel-root"
-                    data-shrink="true"
-                    for="_r_0_"
-                  >
-                    editMetadata.header
-                  </label>
-                  <div
-                    class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl sc-gtcBCx Dusne css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
-                  >
-                    <input
-                      aria-invalid="false"
-                      class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
-                      id="_r_0_"
-                      type="text"
-                      value="foo"
-                    />
-                    <fieldset
-                      aria-hidden="true"
-                      class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
-                    >
-                      <legend
-                        class="css-ex8a5f-MuiNotchedOutlined-root"
-                      >
-                        <span>
-                          editMetadata.header
-                        </span>
-                      </legend>
-                    </fieldset>
-                  </div>
-                  <div
-                    aria-live="polite"
-                  />
-                </div>
-              </div>
-            </div>
+                <path
+                  d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m1 15h-2v-6h2zm0-8h-2V7h2z"
+                />
+              </svg>
+            </button>
             <div
-              class="sc-krVzYl jzidJz"
+              class="MuiFormControl-root"
+              style="width: 100%;"
             >
-              <div
-                class="sc-bqqMSY itQibn"
+              <label
+                class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-sizeSmall MuiInputLabel-outlined"
+                data-shrink="true"
+                for="_r_0_"
               >
-                <button
-                  aria-label="tooltip.open: editMetadata.editorTitle"
-                  class="sc-gKkgUA iAMuGy"
+                editMetadata.header
+              </label>
+              <div
+                class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-sizeSmall"
+              >
+                <input
+                  aria-invalid="false"
+                  class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall"
+                  id="_r_0_"
+                  type="text"
+                  value="foo"
+                />
+                <fieldset
+                  aria-hidden="true"
+                  class="MuiOutlinedInput-notchedOutline"
                 >
-                  <svg
-                    aria-hidden="true"
-                    class="MuiSvgIcon-root MuiSvgIcon-colorInfo MuiSvgIcon-fontSizeMedium css-ocq0ss-MuiSvgIcon-root"
-                    data-testid="InfoIcon"
-                    focusable="false"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m1 15h-2v-6h2zm0-8h-2V7h2z"
-                    />
-                  </svg>
-                </button>
-                <div
-                  class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiAccordion-root MuiAccordion-rounded MuiAccordion-gutters sc-iqkkDd gMOKrp css-1808mag-MuiPaper-root-MuiAccordion-root"
-                  style="--Paper-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12);"
-                >
-                  <h3
-                    class="MuiAccordion-heading css-cy7rkm-MuiAccordion-heading"
-                  >
-                    <button
-                      aria-controls="panel1a-content"
-                      aria-expanded="false"
-                      class="MuiButtonBase-root MuiAccordionSummary-root MuiAccordionSummary-gutters css-1f1pi2l-MuiButtonBase-root-MuiAccordionSummary-root"
-                      id="panel1a-header"
-                      style="width: 100%;"
-                      tabindex="0"
-                      type="button"
-                    >
-                      <span
-                        class="MuiAccordionSummary-content MuiAccordionSummary-contentGutters css-yfrx4k-MuiAccordionSummary-content"
-                      >
-                        <p
-                          class="MuiTypography-root MuiTypography-body1 css-rizt0-MuiTypography-root"
-                        >
-                          editMetadata.editorTitle
-                        </p>
-                      </span>
-                      <span
-                        class="MuiAccordionSummary-expandIconWrapper css-1wqf3nl-MuiAccordionSummary-expandIconWrapper"
-                      >
-                        <svg
-                          aria-hidden="true"
-                          class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1umw9bq-MuiSvgIcon-root"
-                          data-testid="ExpandMoreIcon"
-                          focusable="false"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            d="M16.59 8.59 12 13.17 7.41 8.59 6 10l6 6 6-6z"
-                          />
-                        </svg>
-                      </span>
-                    </button>
-                  </h3>
-                  <div
-                    class="MuiCollapse-root MuiCollapse-vertical MuiCollapse-hidden css-cwrbtg-MuiCollapse-root"
-                    style="min-height: 0px;"
-                  >
-                    <div
-                      class="MuiCollapse-wrapper MuiCollapse-vertical css-1x6hinx-MuiCollapse-wrapper"
-                    >
-                      <div
-                        class="MuiCollapse-wrapperInner MuiCollapse-vertical css-1i4ywhz-MuiCollapse-wrapperInner"
-                      >
-                        <div
-                          aria-labelledby="panel1a-header"
-                          class="MuiAccordion-region css-at4ued-MuiAccordion-region"
-                          id="panel1a-content"
-                          role="region"
-                        >
-                          <div
-                            class="MuiAccordionDetails-root sc-hCcPtG rnJdY css-1lj39kh-MuiAccordionDetails-root"
-                          >
-                            <div
-                              class="sc-crPgjm bHMEA-D MuiBox-root css-1mc6bnb"
-                            >
-                              <div
-                                class="MuiTabs-root css-jhczcq-MuiTabs-root"
-                              >
-                                <div
-                                  class="MuiTabs-scroller MuiTabs-fixed css-s2t35c-MuiTabs-scroller"
-                                  style="overflow: hidden; margin-bottom: 0px;"
-                                >
-                                  <div
-                                    class="MuiTabs-list MuiTabs-flexContainer css-hzcega-MuiTabs-list"
-                                    role="tablist"
-                                  >
-                                    <button
-                                      aria-controls="simple-tabpanel-0"
-                                      aria-selected="true"
-                                      class="MuiButtonBase-root MuiTab-root MuiTab-textColorPrimary Mui-selected css-1usuzwp-MuiButtonBase-root-MuiTab-root"
-                                      id="simple-tab-0"
-                                      role="tab"
-                                      tabindex="0"
-                                      type="button"
-                                    >
-                                      foofi
-                                    </button>
-                                    <button
-                                      aria-controls="simple-tabpanel-1"
-                                      aria-selected="false"
-                                      class="MuiButtonBase-root MuiTab-root MuiTab-textColorPrimary css-1usuzwp-MuiButtonBase-root-MuiTab-root"
-                                      id="simple-tab-1"
-                                      role="tab"
-                                      tabindex="-1"
-                                      type="button"
-                                    >
-                                      barfi
-                                    </button>
-                                  </div>
-                                  <span
-                                    class="MuiTabs-indicator css-1qltlow-MuiTabs-indicator"
-                                    style="left: 0px; width: 0px;"
-                                  />
-                                </div>
-                              </div>
-                            </div>
-                            <div
-                              class="sc-dYjPD KvxZA MuiBox-root css-0"
-                            >
-                              <div
-                                aria-labelledby="simple-tab-0"
-                                id="simple-tabpanel-0"
-                                role="tabpanel"
-                              >
-                                <div
-                                  class="sc-bdDsCe ewwDVL MuiBox-root css-0"
-                                >
-                                  <div
-                                    class="MuiGrid-root MuiGrid-container MuiGrid-direction-xs-row MuiGrid-spacing-xs-3 css-1u8xl8z-MuiGrid-root"
-                                  >
-                                    <div
-                                      class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-12 MuiGrid-grid-xl-6 css-naonax-MuiGrid-root"
-                                    >
-                                      <div
-                                        class="MuiPaper-root MuiPaper-outlined MuiPaper-rounded css-i9zgug-MuiPaper-root"
-                                      >
-                                        <div
-                                          class="MuiStack-root sc-dkXsAU bZeLrJ css-1sazv7p-MuiStack-root"
-                                        >
-                                          <div
-                                            class="MuiFormControl-root css-1iw3t7y-MuiFormControl-root"
-                                          >
-                                            <label
-                                              class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined css-113d811-MuiFormLabel-root-MuiInputLabel-root"
-                                              data-shrink="true"
-                                              for="_r_1_"
-                                            >
-                                              editMetadata.valueName: fgfgfg1
-                                            </label>
-                                            <div
-                                              class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl sc-gtcBCx Dusne css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
-                                            >
-                                              <input
-                                                aria-invalid="false"
-                                                class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
-                                                id="_r_1_"
-                                                type="text"
-                                                value="fgfgfg1"
-                                              />
-                                              <fieldset
-                                                aria-hidden="true"
-                                                class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
-                                              >
-                                                <legend
-                                                  class="css-ex8a5f-MuiNotchedOutlined-root"
-                                                >
-                                                  <span>
-                                                    editMetadata.valueName: fgfgfg1
-                                                  </span>
-                                                </legend>
-                                              </fieldset>
-                                            </div>
-                                            <div
-                                              aria-live="polite"
-                                            />
-                                          </div>
-                                          <div
-                                            class="MuiFormControl-root css-1iw3t7y-MuiFormControl-root"
-                                          >
-                                            <label
-                                              class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined css-113d811-MuiFormLabel-root-MuiInputLabel-root"
-                                              data-shrink="true"
-                                              for="_r_2_"
-                                            >
-                                              editMetadata.unit
-                                            </label>
-                                            <div
-                                              class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl sc-gtcBCx Dusne css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
-                                            >
-                                              <input
-                                                aria-invalid="false"
-                                                class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
-                                                id="_r_2_"
-                                                type="text"
-                                                value="yksikko"
-                                              />
-                                              <fieldset
-                                                aria-hidden="true"
-                                                class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
-                                              >
-                                                <legend
-                                                  class="css-ex8a5f-MuiNotchedOutlined-root"
-                                                >
-                                                  <span>
-                                                    editMetadata.unit
-                                                  </span>
-                                                </legend>
-                                              </fieldset>
-                                            </div>
-                                            <div
-                                              aria-live="polite"
-                                            />
-                                          </div>
-                                          <div
-                                            class="MuiFormControl-root css-1iw3t7y-MuiFormControl-root"
-                                          >
-                                            <label
-                                              class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined css-113d811-MuiFormLabel-root-MuiInputLabel-root"
-                                              data-shrink="true"
-                                              for="_r_3_"
-                                            >
-                                              editMetadata.source
-                                            </label>
-                                            <div
-                                              class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl sc-gtcBCx Dusne css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
-                                            >
-                                              <input
-                                                aria-invalid="false"
-                                                class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
-                                                id="_r_3_"
-                                                type="text"
-                                                value="lahde"
-                                              />
-                                              <fieldset
-                                                aria-hidden="true"
-                                                class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
-                                              >
-                                                <legend
-                                                  class="css-ex8a5f-MuiNotchedOutlined-root"
-                                                >
-                                                  <span>
-                                                    editMetadata.source
-                                                  </span>
-                                                </legend>
-                                              </fieldset>
-                                            </div>
-                                            <div
-                                              aria-live="polite"
-                                            />
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div
-                                      class="MuiGrid-root MuiGrid-direction-xs-row MuiGrid-grid-xs-12 MuiGrid-grid-xl-6 css-naonax-MuiGrid-root"
-                                    >
-                                      <div
-                                        class="MuiPaper-root MuiPaper-outlined MuiPaper-rounded css-i9zgug-MuiPaper-root"
-                                      >
-                                        <div
-                                          class="MuiStack-root sc-dkXsAU bZeLrJ css-1sazv7p-MuiStack-root"
-                                        >
-                                          <div
-                                            class="MuiFormControl-root css-1iw3t7y-MuiFormControl-root"
-                                          >
-                                            <label
-                                              class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined css-113d811-MuiFormLabel-root-MuiInputLabel-root"
-                                              data-shrink="true"
-                                              for="_r_4_"
-                                            >
-                                              editMetadata.valueName: fgfgfg2
-                                            </label>
-                                            <div
-                                              class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl sc-gtcBCx Dusne css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
-                                            >
-                                              <input
-                                                aria-invalid="false"
-                                                class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
-                                                id="_r_4_"
-                                                type="text"
-                                                value="fgfgfg2"
-                                              />
-                                              <fieldset
-                                                aria-hidden="true"
-                                                class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
-                                              >
-                                                <legend
-                                                  class="css-ex8a5f-MuiNotchedOutlined-root"
-                                                >
-                                                  <span>
-                                                    editMetadata.valueName: fgfgfg2
-                                                  </span>
-                                                </legend>
-                                              </fieldset>
-                                            </div>
-                                            <div
-                                              aria-live="polite"
-                                            />
-                                          </div>
-                                          <div
-                                            class="MuiFormControl-root css-1iw3t7y-MuiFormControl-root"
-                                          >
-                                            <label
-                                              class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined css-113d811-MuiFormLabel-root-MuiInputLabel-root"
-                                              data-shrink="true"
-                                              for="_r_5_"
-                                            >
-                                              editMetadata.unit
-                                            </label>
-                                            <div
-                                              class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl sc-gtcBCx Dusne css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
-                                            >
-                                              <input
-                                                aria-invalid="false"
-                                                class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
-                                                id="_r_5_"
-                                                type="text"
-                                                value="prosenttia"
-                                              />
-                                              <fieldset
-                                                aria-hidden="true"
-                                                class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
-                                              >
-                                                <legend
-                                                  class="css-ex8a5f-MuiNotchedOutlined-root"
-                                                >
-                                                  <span>
-                                                    editMetadata.unit
-                                                  </span>
-                                                </legend>
-                                              </fieldset>
-                                            </div>
-                                            <div
-                                              aria-live="polite"
-                                            />
-                                          </div>
-                                          <div
-                                            class="MuiFormControl-root css-1iw3t7y-MuiFormControl-root"
-                                          >
-                                            <label
-                                              class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined css-113d811-MuiFormLabel-root-MuiInputLabel-root"
-                                              data-shrink="true"
-                                              for="_r_6_"
-                                            >
-                                              editMetadata.source
-                                            </label>
-                                            <div
-                                              class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl sc-gtcBCx Dusne css-quhxjy-MuiInputBase-root-MuiOutlinedInput-root"
-                                            >
-                                              <input
-                                                aria-invalid="false"
-                                                class="MuiInputBase-input MuiOutlinedInput-input css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input"
-                                                id="_r_6_"
-                                                type="text"
-                                                value="lahde"
-                                              />
-                                              <fieldset
-                                                aria-hidden="true"
-                                                class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
-                                              >
-                                                <legend
-                                                  class="css-ex8a5f-MuiNotchedOutlined-root"
-                                                >
-                                                  <span>
-                                                    editMetadata.source
-                                                  </span>
-                                                </legend>
-                                              </fieldset>
-                                            </div>
-                                            <div
-                                              aria-live="polite"
-                                            />
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                              <div
-                                aria-labelledby="simple-tab-1"
-                                hidden=""
-                                id="simple-tabpanel-1"
-                                role="tabpanel"
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                  <legend>
+                    <span>
+                      editMetadata.header
+                    </span>
+                  </legend>
+                </fieldset>
               </div>
+              <div
+                aria-live="polite"
+              />
             </div>
           </div>
         </div>
@@ -585,398 +162,364 @@ exports[`Rendering test renders correctly 1`] = `
         role="tabpanel"
       />
     </div>
-    <div
-      class="sc-giQkEn dufkIK"
-    >
-      <div
-        class="sc-ezjgic dymapY"
-      >
-        <div
-          class="sc-kLEbxe fTMQqS"
-        >
-          <button
-            aria-label="tooltip.open: tooltip.visualizationType"
-            class="sc-gKkgUA iAMuGy"
-          >
-            <svg
-              aria-hidden="true"
-              class="MuiSvgIcon-root MuiSvgIcon-colorInfo MuiSvgIcon-fontSizeMedium css-ocq0ss-MuiSvgIcon-root"
-              data-testid="InfoIcon"
-              focusable="false"
-              viewBox="0 0 24 24"
-            >
-              <path
-                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m1 15h-2v-6h2zm0-8h-2V7h2z"
-              />
-            </svg>
-          </button>
-          <div
-            class="sc-bYgEKt jZRdrB"
-          >
-            <div
-              aria-label="tooltip.visualizationType"
-              class="MuiToggleButtonGroup-root MuiToggleButtonGroup-horizontal css-1qb8o-MuiToggleButtonGroup-root"
-              role="group"
-            >
-              <button
-                aria-pressed="true"
-                class="MuiButtonBase-root MuiToggleButtonGroup-grouped MuiToggleButtonGroup-groupedHorizontal MuiToggleButton-root Mui-selected MuiToggleButton-sizeMedium MuiToggleButton-standard MuiToggleButtonGroup-grouped MuiToggleButtonGroup-groupedHorizontal css-gn0oko-MuiButtonBase-root-MuiToggleButton-root"
-                tabindex="0"
-                type="button"
-                value="HorizontalBarChart"
-              >
-                <b>
-                  chartTypes.HorizontalBarChart
-                </b>
-              </button>
-            </div>
-          </div>
-          <button
-            aria-controls="rejection-dialog"
-            aria-haspopup="true"
-            class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorPrimary css-1blvszr-MuiButtonBase-root-MuiButton-root"
-            tabindex="0"
-            type="button"
-          >
-            <span
-              class="MuiButton-icon MuiButton-startIcon MuiButton-iconSizeMedium css-1sh91j5-MuiButton-startIcon"
+    <div>
+      <div>
+        <div>
+          <div>
+            <button
+              aria-label="tooltip.open: tooltip.visualizationType"
             >
               <svg
                 aria-hidden="true"
-                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1umw9bq-MuiSvgIcon-root"
-                data-testid="QuestionMarkIcon"
+                class="MuiSvgIcon-root MuiSvgIcon-colorInfo MuiSvgIcon-fontSizeMedium"
+                data-testid="InfoIcon"
                 focusable="false"
                 viewBox="0 0 24 24"
               >
                 <path
-                  d="M11.07 12.85c.77-1.39 2.25-2.21 3.11-3.44.91-1.29.4-3.7-2.18-3.7-1.69 0-2.52 1.28-2.87 2.34L6.54 6.96C7.25 4.83 9.18 3 11.99 3c2.35 0 3.96 1.07 4.78 2.41.7 1.15 1.11 3.3.03 4.9-1.2 1.77-2.35 2.31-2.97 3.45-.25.46-.35.76-.35 2.24h-2.89c-.01-.78-.13-2.05.48-3.15M14 20c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2"
+                  d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m1 15h-2v-6h2zm0-8h-2V7h2z"
                 />
               </svg>
-            </span>
-            rejectionDialog.buttonText
-          </button>
-        </div>
-        <div
-          class="sc-kLEbxe fTMQqS"
-        >
-          <div
-            aria-live="polite"
-          >
-            <div
-              class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation0 MuiAlert-root MuiAlert-colorInfo MuiAlert-standardInfo MuiAlert-standard css-k1p3sh-MuiPaper-root-MuiAlert-root"
-              role="alert"
-              style="--Paper-shadow: none;"
-            >
+            </button>
+            <div>
               <div
-                class="MuiAlert-icon css-vab54s-MuiAlert-icon"
+                aria-label="tooltip.visualizationType"
+                class="MuiToggleButtonGroup-root MuiToggleButtonGroup-horizontal"
+                role="group"
+              >
+                <button
+                  aria-pressed="true"
+                  class="MuiButtonBase-root MuiToggleButtonGroup-grouped MuiToggleButtonGroup-groupedHorizontal MuiToggleButton-root Mui-selected MuiToggleButton-sizeSmall MuiToggleButton-standard MuiToggleButtonGroup-grouped MuiToggleButtonGroup-groupedHorizontal"
+                  tabindex="0"
+                  type="button"
+                  value="HorizontalBarChart"
+                >
+                  <b>
+                    chartTypes.HorizontalBarChart
+                  </b>
+                </button>
+              </div>
+            </div>
+            <button
+              aria-controls="rejection-dialog"
+              aria-haspopup="true"
+              class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorPrimary"
+              tabindex="0"
+              type="button"
+            >
+              <span
+                class="MuiButton-icon MuiButton-startIcon MuiButton-iconSizeMedium"
               >
                 <svg
                   aria-hidden="true"
-                  class="MuiSvgIcon-root MuiSvgIcon-fontSizeInherit css-1ckov0h-MuiSvgIcon-root"
-                  data-testid="InfoOutlinedIcon"
+                  class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium"
+                  data-testid="QuestionMarkIcon"
                   focusable="false"
                   viewBox="0 0 24 24"
                 >
                   <path
-                    d="M11,9H13V7H11M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20, 12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10, 10 0 0,0 12,2M11,17H13V11H11V17Z"
+                    d="M11.07 12.85c.77-1.39 2.25-2.21 3.11-3.44.91-1.29.4-3.7-2.18-3.7-1.69 0-2.52 1.28-2.87 2.34L6.54 6.96C7.25 4.83 9.18 3 11.99 3c2.35 0 3.96 1.07 4.78 2.41.7 1.15 1.11 3.3.03 4.9-1.2 1.77-2.35 2.31-2.97 3.45-.25.46-.35.76-.35 2.24h-2.89c-.01-.78-.13-2.05.48-3.15M14 20c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2"
                   />
                 </svg>
-              </div>
-              <div
-                class="MuiAlert-message css-zioonp-MuiAlert-message"
+              </span>
+              rejectionDialog.buttonText
+            </button>
+          </div>
+          <div>
+            <button
+              aria-label="tooltip.open: tooltip.visualizationSize"
+            >
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-colorInfo MuiSvgIcon-fontSizeMedium"
+                data-testid="InfoIcon"
+                focusable="false"
+                viewBox="0 0 24 24"
               >
-                cellCount.infoText: 5/200
-              </div>
+                <path
+                  d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m1 15h-2v-6h2zm0-8h-2V7h2z"
+                />
+              </svg>
+            </button>
+            <div
+              aria-label="tooltip.visualizationSize"
+              class="MuiToggleButtonGroup-root MuiToggleButtonGroup-horizontal"
+              role="group"
+            >
+              <button
+                aria-pressed="false"
+                class="MuiButtonBase-root MuiToggleButtonGroup-grouped MuiToggleButtonGroup-groupedHorizontal MuiToggleButton-root MuiToggleButton-sizeSmall MuiToggleButton-primary MuiToggleButtonGroup-grouped MuiToggleButtonGroup-groupedHorizontal MuiToggleButtonGroup-firstButton"
+                tabindex="0"
+                type="button"
+                value="100%"
+              >
+                previewSize.full
+              </button>
+              <button
+                aria-pressed="true"
+                class="MuiButtonBase-root MuiToggleButtonGroup-grouped MuiToggleButtonGroup-groupedHorizontal MuiToggleButton-root Mui-selected MuiToggleButton-sizeSmall MuiToggleButton-primary MuiToggleButtonGroup-grouped MuiToggleButtonGroup-groupedHorizontal MuiToggleButtonGroup-middleButton"
+                tabindex="0"
+                type="button"
+                value="1080px"
+              >
+                previewSize.desktop
+              </button>
+              <button
+                aria-pressed="false"
+                class="MuiButtonBase-root MuiToggleButtonGroup-grouped MuiToggleButtonGroup-groupedHorizontal MuiToggleButton-root MuiToggleButton-sizeSmall MuiToggleButton-primary MuiToggleButtonGroup-grouped MuiToggleButtonGroup-groupedHorizontal MuiToggleButtonGroup-middleButton"
+                tabindex="0"
+                type="button"
+                value="768px"
+              >
+                previewSize.tablet
+              </button>
+              <button
+                aria-pressed="false"
+                class="MuiButtonBase-root MuiToggleButtonGroup-grouped MuiToggleButtonGroup-groupedHorizontal MuiToggleButton-root MuiToggleButton-sizeSmall MuiToggleButton-primary MuiToggleButtonGroup-grouped MuiToggleButtonGroup-groupedHorizontal MuiToggleButtonGroup-lastButton"
+                tabindex="0"
+                type="button"
+                value="360px"
+              >
+                previewSize.mobile
+              </button>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <div>
-      <button
-        aria-label="tooltip.open: tooltip.visualizationConfig"
-        class="sc-gKkgUA iAMuGy"
-      >
-        <svg
-          aria-hidden="true"
-          class="MuiSvgIcon-root MuiSvgIcon-colorInfo MuiSvgIcon-fontSizeMedium css-ocq0ss-MuiSvgIcon-root"
-          data-testid="InfoIcon"
-          focusable="false"
-          viewBox="0 0 24 24"
-        >
-          <path
-            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m1 15h-2v-6h2zm0-8h-2V7h2z"
-          />
-        </svg>
-      </button>
       <div
-        class="sc-kgohyr jhnUFu"
+        data-testid="visualization-settings-row"
       >
         <div
-          class="MuiFormControl-root css-1iw3t7y-MuiFormControl-root"
+          class="sc-gKckfV bUwLyE"
         >
-          <label
-            class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined css-113d811-MuiFormLabel-root-MuiInputLabel-root"
-            data-shrink="true"
-            id="sorting-selector-label"
-          >
-            chartSettings.sort
-          </label>
           <div
-            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiSelect-root css-j5ihgt-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root"
+            class="sc-iCfMpq eOgqBS"
           >
             <div
-              aria-expanded="false"
-              aria-haspopup="listbox"
-              aria-labelledby="sorting-selector-label sorting-selector"
-              class="MuiSelect-select MuiSelect-outlined MuiInputBase-input MuiOutlinedInput-input css-18jp67o-MuiNativeSelect-root-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input"
-              id="sorting-selector"
-              role="combobox"
-              tabindex="0"
+              class="MuiFormControl-root"
             >
-              aaa
-            </div>
-            <input
-              aria-hidden="true"
-              aria-invalid="false"
-              class="MuiSelect-nativeInput css-j0riat-MuiSelect-nativeInput"
-              tabindex="-1"
-              value="DESCENDING"
-            />
-            <svg
-              aria-hidden="true"
-              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconOutlined css-1rfqz7c-MuiSvgIcon-root-MuiNativeSelect-root-MuiSelect-icon"
-              data-testid="ArrowDropDownIcon"
-              focusable="false"
-              viewBox="0 0 24 24"
-            >
-              <path
-                d="M7 10l5 5 5-5z"
-              />
-            </svg>
-            <fieldset
-              aria-hidden="true"
-              class="MuiOutlinedInput-notchedOutline css-18p5xg2-MuiNotchedOutlined-root-MuiOutlinedInput-notchedOutline"
-            >
-              <legend
-                class="css-ex8a5f-MuiNotchedOutlined-root"
+              <label
+                class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-colorPrimary MuiFormLabel-filled MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined"
+                data-shrink="true"
+                id="sorting-selector-label"
               >
-                <span>
-                  chartSettings.sort
-                </span>
-              </legend>
-            </fieldset>
-          </div>
-        </div>
-        <div
-          class="MuiStack-root sc-ieCSdj cGvxcV css-m69qwo-MuiStack-root"
-        >
-          <div
-            class="MuiBox-root css-0"
-          >
-            <p
-              class="MuiTypography-root MuiTypography-body1 MuiTypography-gutterBottom css-vjrxpc-MuiTypography-root"
-              id="input-slider"
-            >
-              chartSettings.markerScale
-            </p>
-            <span
-              class="MuiSlider-root MuiSlider-marked MuiSlider-colorPrimary MuiSlider-sizeMedium sc-dILkzW gMLFUC css-1e45yg4-MuiSlider-root"
-            >
-              <span
-                class="MuiSlider-rail css-r64h58-MuiSlider-rail"
-              />
-              <span
-                class="MuiSlider-track css-xvk2i-MuiSlider-track"
-                style="left: 0%; width: 0%;"
-              />
-              <span
-                class="MuiSlider-mark MuiSlider-markActive css-16kozi8-MuiSlider-mark"
-                data-index="0"
-                style="left: 0%;"
-              />
-              <span
-                aria-hidden="true"
-                class="MuiSlider-markLabel MuiSlider-markLabel MuiSlider-markLabelActive css-swtyag-MuiSlider-markLabel"
-                data-index="0"
-                style="left: 0%;"
+                chartSettings.sort
+              </label>
+              <div
+                class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiSelect-root"
               >
-                1%
-              </span>
-              <span
-                class="MuiSlider-mark css-lq5hqx-MuiSlider-mark"
-                data-index="1"
-                style="left: 49.74874371859296%;"
-              />
-              <span
-                aria-hidden="true"
-                class="MuiSlider-markLabel MuiSlider-markLabel css-1qb795b-MuiSlider-markLabel"
-                data-index="1"
-                style="left: 49.74874371859296%;"
-              >
-                100%
-              </span>
-              <span
-                class="MuiSlider-mark css-lq5hqx-MuiSlider-mark"
-                data-index="2"
-                style="left: 100%;"
-              />
-              <span
-                aria-hidden="true"
-                class="MuiSlider-markLabel MuiSlider-markLabel css-1qb795b-MuiSlider-markLabel"
-                data-index="2"
-                style="left: 100%;"
-              >
-                200%
-              </span>
-              <span
-                class="MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary css-1xcmt9q-MuiSlider-thumb"
-                data-index="0"
-                style="left: 0%;"
-              >
+                <div
+                  aria-expanded="false"
+                  aria-haspopup="listbox"
+                  aria-labelledby="sorting-selector-label sorting-selector"
+                  class="MuiSelect-select MuiSelect-outlined MuiInputBase-input MuiOutlinedInput-input"
+                  id="sorting-selector"
+                  role="combobox"
+                  tabindex="0"
+                >
+                  aaa
+                </div>
                 <input
-                  aria-label="chartSettings.markerScaleDefaultLabel"
-                  aria-orientation="horizontal"
-                  aria-valuemax="200"
-                  aria-valuemin="1"
-                  aria-valuenow="1"
-                  data-index="0"
-                  max="200"
-                  min="1"
-                  step="1"
-                  style="border: 0px; height: 100%; margin: -1px; overflow: hidden; padding: 0px; position: absolute; white-space: nowrap; width: 100%; direction: ltr;"
-                  type="range"
-                  value="1"
-                />
-                <span
                   aria-hidden="true"
-                  class="MuiSlider-valueLabel css-1asissc-MuiSlider-valueLabel"
+                  aria-invalid="false"
+                  class="MuiSelect-nativeInput"
+                  tabindex="-1"
+                  value="DESCENDING"
+                />
+                <svg
+                  aria-hidden="true"
+                  class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconOutlined"
+                  data-testid="ArrowDropDownIcon"
+                  focusable="false"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M7 10l5 5 5-5z"
+                  />
+                </svg>
+                <fieldset
+                  aria-hidden="true"
+                  class="MuiOutlinedInput-notchedOutline"
+                >
+                  <legend>
+                    <span>
+                      chartSettings.sort
+                    </span>
+                  </legend>
+                </fieldset>
+              </div>
+            </div>
+            <div
+              class="MuiStack-root sc-dkPvMp ihyxAO"
+            >
+              <div
+                class="MuiBox-root"
+              >
+                <p
+                  class="MuiTypography-root MuiTypography-body1 MuiTypography-gutterBottom"
+                  id="input-slider"
+                >
+                  chartSettings.markerScale
+                </p>
+                <span
+                  class="MuiSlider-root MuiSlider-marked MuiSlider-colorPrimary MuiSlider-sizeMedium sc-hKwAaq fZfqah"
                 >
                   <span
-                    class="MuiSlider-valueLabelCircle"
+                    class="MuiSlider-rail"
+                  />
+                  <span
+                    class="MuiSlider-track"
+                    style="left: 0%; width: 0%;"
+                  />
+                  <span
+                    class="MuiSlider-mark MuiSlider-markActive"
+                    data-index="0"
+                    style="left: 0%;"
+                  />
+                  <span
+                    aria-hidden="true"
+                    class="MuiSlider-markLabel MuiSlider-markLabel MuiSlider-markLabelActive"
+                    data-index="0"
+                    style="left: 0%;"
                   >
+                    1%
+                  </span>
+                  <span
+                    class="MuiSlider-mark"
+                    data-index="1"
+                    style="left: 49.74874371859296%;"
+                  />
+                  <span
+                    aria-hidden="true"
+                    class="MuiSlider-markLabel MuiSlider-markLabel"
+                    data-index="1"
+                    style="left: 49.74874371859296%;"
+                  >
+                    100%
+                  </span>
+                  <span
+                    class="MuiSlider-mark"
+                    data-index="2"
+                    style="left: 100%;"
+                  />
+                  <span
+                    aria-hidden="true"
+                    class="MuiSlider-markLabel MuiSlider-markLabel"
+                    data-index="2"
+                    style="left: 100%;"
+                  >
+                    200%
+                  </span>
+                  <span
+                    class="MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary"
+                    data-index="0"
+                    style="left: 0%;"
+                  >
+                    <input
+                      aria-label="chartSettings.markerScaleDefaultLabel"
+                      aria-orientation="horizontal"
+                      aria-valuemax="200"
+                      aria-valuemin="1"
+                      aria-valuenow="1"
+                      data-index="0"
+                      max="200"
+                      min="1"
+                      step="1"
+                      style="border: 0px; height: 100%; margin: -1px; overflow: hidden; padding: 0px; position: absolute; white-space: nowrap; width: 100%; direction: ltr;"
+                      type="range"
+                      value="1"
+                    />
                     <span
-                      class="MuiSlider-valueLabelLabel"
+                      aria-hidden="true"
+                      class="MuiSlider-valueLabel"
                     >
-                      1
+                      <span
+                        class="MuiSlider-valueLabelCircle"
+                      >
+                        <span
+                          class="MuiSlider-valueLabelLabel"
+                        >
+                          1
+                        </span>
+                      </span>
                     </span>
                   </span>
                 </span>
-              </span>
-            </span>
+              </div>
+            </div>
+            <div
+              class="MuiFormControl-root"
+            >
+              <label
+                class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd"
+              >
+                <span
+                  class="MuiSwitch-root MuiSwitch-sizeSmall"
+                >
+                  <span
+                    class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary"
+                  >
+                    <input
+                      class="PrivateSwitchBase-input MuiSwitch-input"
+                      role="switch"
+                      type="checkbox"
+                    />
+                    <span
+                      class="MuiSwitch-thumb"
+                    />
+                  </span>
+                  <span
+                    class="MuiSwitch-track"
+                  />
+                </span>
+                <span
+                  class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label"
+                >
+                  <p
+                    class="MuiTypography-root MuiTypography-body1 sc-jRQzZg gDcclH"
+                  >
+                    chartSettings.cutYAxis
+                  </p>
+                </span>
+              </label>
+            </div>
+            <div
+              class="MuiFormControl-root"
+            >
+              <label
+                class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd"
+              >
+                <span
+                  class="MuiSwitch-root MuiSwitch-sizeSmall"
+                >
+                  <span
+                    class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary"
+                  >
+                    <input
+                      class="PrivateSwitchBase-input MuiSwitch-input"
+                      role="switch"
+                      type="checkbox"
+                    />
+                    <span
+                      class="MuiSwitch-thumb"
+                    />
+                  </span>
+                  <span
+                    class="MuiSwitch-track"
+                  />
+                </span>
+                <span
+                  class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label"
+                >
+                  <p
+                    class="MuiTypography-root MuiTypography-body1 sc-jRQzZg gDcclH"
+                  >
+                    visualizationSettings.showDataPoints
+                  </p>
+                </span>
+              </label>
+            </div>
           </div>
-        </div>
-      </div>
-      <div
-        class="sc-kgohyr jhnUFu"
-      >
-        <div
-          class="MuiFormControl-root MuiFormControl-fullWidth css-ytlejw-MuiFormControl-root"
-        >
-          <label
-            class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-19opgx6-MuiFormControlLabel-root"
-          >
-            <span
-              class="MuiSwitch-root MuiSwitch-sizeMedium css-rehya9-MuiSwitch-root"
-            >
-              <span
-                class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-aqlqb4-MuiButtonBase-root-MuiSwitchBase-root-MuiSwitch-switchBase"
-              >
-                <input
-                  class="PrivateSwitchBase-input MuiSwitch-input css-12xagqm-MuiSwitchBase-root"
-                  role="switch"
-                  type="checkbox"
-                />
-                <span
-                  class="MuiSwitch-thumb css-17jyosd-MuiSwitch-thumb"
-                />
-              </span>
-              <span
-                class="MuiSwitch-track css-tj8d99-MuiSwitch-track"
-              />
-            </span>
-            <span
-              class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-rizt0-MuiTypography-root"
-            >
-              <p
-                class="MuiTypography-root MuiTypography-body1 sc-dlwHGs kWdQMd css-rizt0-MuiTypography-root"
-              >
-                chartSettings.cutYAxis
-              </p>
-            </span>
-          </label>
-        </div>
-        <div
-          class="MuiFormControl-root MuiFormControl-fullWidth sc-hHopjF eriYyn css-ytlejw-MuiFormControl-root"
-        >
-          <label
-            class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-19opgx6-MuiFormControlLabel-root"
-          >
-            <span
-              class="MuiSwitch-root MuiSwitch-sizeMedium css-rehya9-MuiSwitch-root"
-            >
-              <span
-                class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-aqlqb4-MuiButtonBase-root-MuiSwitchBase-root-MuiSwitch-switchBase"
-              >
-                <input
-                  class="PrivateSwitchBase-input MuiSwitch-input css-12xagqm-MuiSwitchBase-root"
-                  role="switch"
-                  type="checkbox"
-                />
-                <span
-                  class="MuiSwitch-thumb css-17jyosd-MuiSwitch-thumb"
-                />
-              </span>
-              <span
-                class="MuiSwitch-track css-tj8d99-MuiSwitch-track"
-              />
-            </span>
-            <span
-              class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-rizt0-MuiTypography-root"
-            >
-              <p
-                class="MuiTypography-root MuiTypography-body1 sc-dlwHGs kWdQMd css-rizt0-MuiTypography-root"
-              >
-                chartSettings.matchXLabelsToEnd
-              </p>
-            </span>
-          </label>
-        </div>
-        <div
-          class="MuiFormControl-root MuiFormControl-fullWidth css-ytlejw-MuiFormControl-root"
-        >
-          <label
-            class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-19opgx6-MuiFormControlLabel-root"
-          >
-            <span
-              class="MuiSwitch-root MuiSwitch-sizeMedium css-rehya9-MuiSwitch-root"
-            >
-              <span
-                class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-aqlqb4-MuiButtonBase-root-MuiSwitchBase-root-MuiSwitch-switchBase"
-              >
-                <input
-                  class="PrivateSwitchBase-input MuiSwitch-input css-12xagqm-MuiSwitchBase-root"
-                  role="switch"
-                  type="checkbox"
-                />
-                <span
-                  class="MuiSwitch-thumb css-17jyosd-MuiSwitch-thumb"
-                />
-              </span>
-              <span
-                class="MuiSwitch-track css-tj8d99-MuiSwitch-track"
-              />
-            </span>
-            <span
-              class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-rizt0-MuiTypography-root"
-            >
-              <p
-                class="MuiTypography-root MuiTypography-body1 sc-dlwHGs kWdQMd css-rizt0-MuiTypography-root"
-              >
-                visualizationSettings.showDataPoints
-              </p>
-            </span>
-          </label>
         </div>
       </div>
     </div>

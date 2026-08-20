@@ -73,6 +73,97 @@ namespace UnitTests.SerializerTests
             Assert.That(serializedString.Contains(ChartTypeEnumConverter.ToJsonString(query.Settings.VisualizationType)));
         }
 
+        private readonly static string testSavedQueryWithInverseItemAndRegexFilters = @"{
+            ""Query"": {
+                ""TableReference"": {
+                    ""Name"": ""table.px"",
+                    ""Hierarchy"": [
+                        ""StatFin"",
+                        ""kivih""
+                    ]
+                },
+                ""ChartHeaderEdit"": null,
+                ""VariableQueries"": {
+                    ""Vuosi"": {
+                        ""NameEdit"": null,
+                        ""ValueEdits"": {},
+                        ""ValueFilter"": {
+                            ""type"": ""inverseItem"",
+                            ""query"": [
+                                ""2020""
+                            ]
+                        },
+                        ""VirtualValueDefinitions"": null,
+                        ""Selectable"": false
+                    },
+                    ""Tiedot"": {
+                        ""NameEdit"": null,
+                        ""ValueEdits"": {},
+                        ""ValueFilter"": {
+                            ""type"": ""regex"",
+                            ""query"": ""^kulutus_""
+                        },
+                        ""VirtualValueDefinitions"": null,
+                        ""Selectable"": false
+                    }
+                }
+            },
+            ""CreationTime"": ""2022-12-16T14:19:11.4380637+02:00"",
+            ""Archived"": false,
+            ""Settings"": {
+                ""CutYAxis"": false,
+                ""MultiselectableVariableCode"": null,
+                ""SelectedVisualization"": ""LineChart"",
+                ""DefaultSelectableVariableCodes"": null
+            }
+        }";
+
+        [Test]
+        public void SavedQueryDeserializationTest_InverseItemAndRegexFilters_Success()
+        {
+            SavedQuery query = JsonSerializer.Deserialize<SavedQuery>(testSavedQueryWithInverseItemAndRegexFilters, GlobalJsonConverterOptions.Default);
+
+            Assert.That(query.Query.DimensionQueries["Vuosi"].ValueFilter, Is.TypeOf<InverseItemFilter>());
+            Assert.That(query.Query.DimensionQueries["Tiedot"].ValueFilter, Is.TypeOf<RegexFilter>());
+
+            InverseItemFilter inverseItemFilter = (InverseItemFilter)query.Query.DimensionQueries["Vuosi"].ValueFilter;
+            RegexFilter regexFilter = (RegexFilter)query.Query.DimensionQueries["Tiedot"].ValueFilter;
+
+            Assert.That(inverseItemFilter.Codes, Is.EqualTo(new[] { "2020" }));
+            Assert.That(regexFilter.Pattern, Is.EqualTo("^kulutus_"));
+        }
+
+        [Test]
+        public void SavedQuerySerializationTest_InverseItemAndRegexFilters_Success()
+        {
+            SavedQuery query = JsonSerializer.Deserialize<SavedQuery>(testSavedQueryWithInverseItemAndRegexFilters, GlobalJsonConverterOptions.Default);
+            string serializedString = JsonSerializer.Serialize(query, GlobalJsonConverterOptions.Default);
+
+            Assert.That(serializedString.Contains(@"""inverseItem"""));
+            Assert.That(serializedString.Contains(@"""regex"""));
+            Assert.That(serializedString.Contains(@"""^kulutus_"""));
+        }
+
+        [Test]
+        public void ValueFilterSerializationTest_RegexWithJsonSensitiveCharacters_RoundTrips()
+        {
+            const string pattern = "^\\d+\t\"quoted\"\r?\n\\\\path\u00e5$";
+            IValueFilter filter = new RegexFilter(pattern);
+
+            string serializedString = JsonSerializer.Serialize(filter, GlobalJsonConverterOptions.Default);
+
+            using JsonDocument document = JsonDocument.Parse(serializedString);
+            Assert.That(document.RootElement.GetProperty("query").GetString(), Is.EqualTo(pattern));
+            Assert.That(serializedString, Does.Contain(@"\\d+"));
+            Assert.That(serializedString, Does.Contain(@"\""quoted\"""));
+            Assert.That(serializedString, Does.Contain(@"\t"));
+            Assert.That(serializedString, Does.Contain(@"\n"));
+
+            IValueFilter deserializedFilter = JsonSerializer.Deserialize<IValueFilter>(serializedString, GlobalJsonConverterOptions.Default);
+            Assert.That(deserializedFilter, Is.TypeOf<RegexFilter>());
+            Assert.That(((RegexFilter)deserializedFilter).Pattern, Is.EqualTo(pattern));
+        }
+
         [Test]
         public void DeserializeSavedQuery__V1_0__ReturnsV1_0DeserializedSavedQuery()
         {

@@ -5,7 +5,7 @@ import detector from "i18next-browser-languagedetector";
 import { initReactI18next } from "react-i18next";
 
 interface TranslationContent {
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 interface TranslationsConfig {
@@ -19,7 +19,7 @@ async function loadTranslations() {
     // Check if translationsConfig.json is among the imported files
     const translationsConfigPath: string = './localization/translationsConfig.json';
     const translationsConfig: TranslationsConfig | null =
-        localizationFiles[translationsConfigPath]?.default as TranslationsConfig ??
+        localizationFiles[translationsConfigPath]?.default as unknown as TranslationsConfig ??
         null;
 
     // Define available languages primarily from translationsConfig.json, otherwise from the imported file names

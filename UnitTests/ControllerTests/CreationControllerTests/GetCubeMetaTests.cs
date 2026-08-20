@@ -1,4 +1,4 @@
-﻿using NUnit.Framework;
+using NUnit.Framework;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Px.Utils.Models.Metadata.Enums;
@@ -70,6 +70,17 @@ namespace UnitTests.ControllerTests.CreationControllerTests
 
             Assert.That(result, Is.Not.Null);
             Assert.That(result.Result, Is.TypeOf<NotFoundResult>());
+        }
+
+        [Test]
+        public async Task GetCubeMetaAsync_WithInvalidTablePath_ReturnsBadRequestResult()
+        {
+            CreationController controller = TestCreationControllerBuilder.BuildController([], [], null);
+
+            ActionResult<IReadOnlyMatrixMetadata> result = await controller.GetCubeMetaAsync("Statfin/../foo");
+
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Result, Is.TypeOf<BadRequestResult>());
         }
     }
 }

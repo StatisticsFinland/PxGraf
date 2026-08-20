@@ -1,10 +1,11 @@
 {
   "general": {
+    "loading": "Loading",
     "noResults": "No results",
+    "resultCount": "{{count}} results",
     "results": "Results",
     "noPossibleVisualizations": "Visualisation cannot be formed with the selected values. Try changing your selection.",
     "uiLanguage": "User interface language",
-    "databaseSelectorLink": "Database table selection",
     "search": "Search",
     "selectDatabaseTitle": "Select database table",
     "editorTitle": "Selecting variables and making a visualisation",
@@ -14,9 +15,7 @@
     "logoAlt": "Go to the home page"
   },
   "lang": {
-    "fi": "suomi",
-    "sv": "svenska",
-    "en": "English",
+    "self": "In English",
     "local": {
       "fi": "suomi",
       "sv": "ruotsi",
@@ -26,7 +25,6 @@
   "pages": {
     "tableTreeSelection": "Database table selection",
     "editor": "Variable selection",
-    "tableList": "List view",
     "sqid": "Selection identifier"
   },
   "chartTypes": {
@@ -47,7 +45,6 @@
   },
   "tableSelect": {
     "title": "Select the database table from the directory tree that is the source for the visualisation data.",
-    "listView": "List view",
     "showChildren": "Show children",
     "hideChildren": "Hide children",
     "openTable": "Open database table",
@@ -55,16 +52,31 @@
   },
   "variableSelect": {
     "allFilter": "All",
-    "fromFilter": "from the selected value forward",
-    "topFilter": "n latest values",
-    "itemFilter": "manual selection",
-    "selectable": "Move the mark to the right to allow the variable to be browsed",
-    "title": "Select the values manually from the variables or utilise the dynamic alternatives in the menu. The user interface is updated immediately according to your selections.",
-    "openMenu": "Open the menu",
-    "closeMenu": "Close the menu"
+    "fromFilter": "From the selected value forward",
+    "topFilter": "N latest values",
+    "itemFilter": "Manual selection",
+    "inverseItemFilter": "Inverse manual selection",
+    "regexFilter": "Regular expression",
+    "filterMethodLabel": "Filter method",
+    "valuesLabel": "Values",
+    "excludedValuesLabel": "Values to exclude",
+    "startingValueLabel": "Starting value",
+    "latestValuesCountLabel": "Number of latest values",
+    "latestValuesCountError": "Enter a whole number greater than zero",
+    "regexPatternLabel": "Regular expression",
+    "regexPatternError": "Enter a valid regular expression",
+    "selectable": "Allow user selection",
+    "selectableSettings": "User selection settings",
+    "selectableSettingsActive": "User selection settings, enabled",
+    "title": "The user interface is updated immediately according to your selections."
   },
   "editMetadata": {
     "editorTitle": "Metadata",
+    "dialogTitle": "Edit selected value metadata",
+    "dimensions": "Selected value dimensions",
+    "apply": "Apply",
+    "cancel": "Cancel",
+    "close": "Close metadata editor",
     "header": "Visualisation heading to be published",
     "valueName": "Value",
     "unit": "Unit",
@@ -80,7 +92,7 @@
     "pivot": "Pivot chart",
     "rowVariables": "Row variables",
     "columnVariables": "Column variables",
-    "cutYAxis": "Cut Y Axis",
+    "cutYAxis": "Cut Y axis",
     "sort": "Sort",
     "matchXLabelsToEnd": "Match X-axis labels to end",
     "labelInterval": "Label interval",
@@ -124,6 +136,9 @@
     "boundaryMessage": "An unexpected error occurred. Please try again.",
     "boundaryRetry": "Try again"
   },
+  "warning": {
+    "savedQueryPartiallyRecovered": "Not all metadata from the saved visualisation could be loaded. Selections and metadata for changed variables were reset to their defaults."
+  },
   "rejectionDialog": {
     "buttonText": "Other chart types",
     "titleText": "Other chart types",
@@ -139,31 +154,31 @@
     "impossibleToVisualize": "You can view the possible visualisation types when you have selected at least one value for each variable."
   },
   "infoText": {
-    "treeSelection": "Select the PX table from the directory tree that is the source for the visualisation data.",
-    "langSelector": "Select the language to be shown in the user interface menus",
-    "langTab": "Edit the necessary data in different language versions. Correct the headings at least.",
-    "varSelection": "",
-    "selectableButton": "If you want the visualisation for this variable to be selectable, select \"Selectable\". In this case, the user can change the variable value in the visualisation. ",
-    "selectableInput": "You can select the default value of the variable visible in the visualisation, which the user sees before making their own selections.",
-    "titleEdition": "Edit the heading of the visualisation to be as clear as possible. Keep FIRST/LAST at least in updated visualisations, so the time variables in the heading are updated automatically.",
-    "metaEdition": "Edit the writing of the visualisation metadata if necessary.",
-    "visualizationSelection": "Select the visualisation type you want. If the graph type you want is not possible, see the button \"Other chart types\" for further information.",
-    "otherVisualizations": "The \"Other chart types\" button can be used to view the reasons for the rejection of missing graph types. PxGraf enables graph types in accordance with the recommendations of statistical graphics.",
-    "visualizationConfiguration": "Edit visualisation. Different visualisations have different editing options.",
-    "save": "Save the finished graph/table and store the identifier. Select a frozen static option for the release and a dynamic updated option for the statistics page in the dialogue which opens by clicking \"Save\".",
-    "rescaleButtons": "Visualisation adapts automatically to displays of different sizes. Test what the visualisation looks like in different sizes."
+    "treeSelection": "Select a PX table from the directory tree as the visualisation's data source.",
+    "langSelector": "Select the user interface language.",
+    "langTab": "Edit each required language version, including at least the headings. You can edit metadata using the Edit selected value metadata button.",
+    "varSelection": "Select at least one value for each variable.",
+    "selectableButton": "Allow user selection to let users change this variable's value in the visualisation.",
+    "selectableInput": "Select the variable value shown by default before the user makes a selection.",
+    "titleEdition": "Make the heading clear. In updating visualisations, keep FIRST/LAST so heading time values update automatically.",
+    "metaEdition": "Correct the visualisation metadata if needed.",
+    "visualizationSelection": "Select a visualisation type. For unavailable types, see \"Other chart types\".",
+    "otherVisualizations": "\"Other chart types\" explains why types are unavailable. PxGraf offers types recommended for statistical graphics.",
+    "visualizationConfiguration": "Edit the visualisation using the options available for its type.",
+    "save": "Save the finished graph or table and store its identifier. Choose static for a release or dynamic for an updating statistics page.",
+    "rescaleButtons": "The visualisation adapts to different screens. Preview it at each size."
   },
   "selectable": {
     "noSelections": "No selectable values",
-    "labelText": "Default value of the variable visible in the visualisation",
+    "labelText": "Default value",
     "open": "Open",
     "close": "Close",
     "clear": "Clear"
   },
   "savedQuery": {
     "errorMsg": "Check the visualisation identifier and try again.",
-    "dialogButtonTxt": "retrieve old visualisation",
-    "dialogTitleTxt": "retrieve old visualisation",
+    "dialogButtonTxt": "Open visualisation",
+    "dialogTitleTxt": "Open visualisation",
     "inputLabel": "visualisation identifier",
     "closeButton": "Cancel",
     "searchTxt": "Search",
@@ -181,7 +196,51 @@
     "visualizationConfig": "Chart type-specific selections",
     "visualizationSize": "Chart size selection for preview"
   },
+  "previewSize": {
+    "full": "100%",
+    "desktop": "Desktop",
+    "tablet": "Tablet",
+    "mobile": "Mobile"
+  },
   "visualizationSettings": {
     "showDataPoints": "Show data values in the graph"
+  },
+  "header": {
+    "tableBreadcrumb": "Table path"
+  },
+  "computedValues": {
+    "button": "Computed values",
+    "buttonWithCount": "Computed values, {{count}} added",
+    "dialogTitle": "Computed values",
+    "addNew": "Add new",
+    "editTitle": "Edit computed value",
+    "edit": "Edit",
+    "delete": "Delete",
+    "nameEditingInfo": "Edit computed value names in the metadata editor.",
+    "noValues": "No computed values defined.",
+    "operator": "Operation",
+    "operatorSum": "Sum",
+    "operatorSubtraction": "Subtraction",
+    "operatorMultiplication": "Multiplication",
+    "operatorDivision": "Division",
+    "operandType": "Operand type",
+    "selectValues": "Select values",
+    "baseValue": "Base value",
+    "subtractValue": "Value to subtract",
+    "multiplyByValue": "Multiply by value",
+    "dividendValue": "Dividend",
+    "divisorValue": "Divisor",
+    "constant": "Constant",
+    "useConstant": "Use constant",
+    "useValue": "Use value",
+    "save": "Save",
+    "cancel": "Cancel",
+    "close": "Close",
+    "placeholderName": "Computed",
+    "validationMinOperands": "Select at least 2 values",
+    "validationSelectValue": "Select a value",
+    "validationEnterConstant": "Enter a constant",
+    "validationDivisionByZero": "Constant cannot be zero",
+    "hasDependents": "Other computed values depend on this value"
   }
 }

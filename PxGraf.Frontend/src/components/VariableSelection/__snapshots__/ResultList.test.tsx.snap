@@ -3,37 +3,46 @@
 exports[`Rendering test renders correctly 1`] = `
 <DocumentFragment>
   <div
-    class="MuiStack-root sc-eCQgVK ehigaw css-nen11g-MuiStack-root"
+    class="MuiStack-root"
   >
     <p
-      class="MuiTypography-root MuiTypography-body1 css-rizt0-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-body1"
+      id="_r_0_"
     >
       general.results:
     </p>
+    <p
+      class="MuiTypography-root MuiTypography-body1"
+      role="status"
+    >
+      general.resultCount
+    </p>
     <ul
-      class="MuiList-root MuiList-padding MuiList-dense sc-bdDsCe lcgotI css-st2ob2-MuiList-root"
+      aria-labelledby="_r_0_"
+      class="MuiList-root MuiList-padding MuiList-dense"
+      tabindex="0"
     >
       <li
-        class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding sc-gtcBCx hlejmV css-qyw6ft-MuiListItem-root"
+        class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding"
       >
         <div
-          class="MuiListItemText-root MuiListItemText-dense css-1suf81v-MuiListItemText-root"
+          class="MuiListItemText-root MuiListItemText-dense"
         >
           <span
-            class="MuiTypography-root MuiTypography-body2 MuiListItemText-primary css-7ctihp-MuiTypography-root"
+            class="MuiTypography-root MuiTypography-body2 MuiListItemText-primary"
           >
             2019
           </span>
         </div>
       </li>
       <li
-        class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding sc-gtcBCx hlejmV css-qyw6ft-MuiListItem-root"
+        class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding"
       >
         <div
-          class="MuiListItemText-root MuiListItemText-dense css-1suf81v-MuiListItemText-root"
+          class="MuiListItemText-root MuiListItemText-dense"
         >
           <span
-            class="MuiTypography-root MuiTypography-body2 MuiListItemText-primary css-7ctihp-MuiTypography-root"
+            class="MuiTypography-root MuiTypography-body2 MuiListItemText-primary"
           >
             2020
           </span>

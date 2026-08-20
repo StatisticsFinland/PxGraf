@@ -11,6 +11,7 @@ const mockNavigate = jest.fn();
 jest.mock('react-router-dom', () => ({
     ...jest.requireActual('react-router-dom'),
     useNavigate: () => mockNavigate,
+    useParams: () => ({ "*": "test-query-id" }),
 }));
 
 jest.mock('envVars', () => ({

@@ -4,6 +4,15 @@ import '@testing-library/jest-dom';
 import { LanguageSelector } from './LanguageSelector';
 import UiLanguageContext from 'contexts/uiLanguageContext';
 
+jest.mock('react-i18next', () => ({
+    useTranslation: () => ({
+        t: (key: string) => key,
+        i18n: {
+            getFixedT: (lng: string) => (key: string) => `${key}.${lng}`,
+        },
+    }),
+}));
+
 const setLanguage = jest.fn();
 const language = 'fi';
 const setLanguageTab = jest.fn();
@@ -24,15 +33,26 @@ describe('Rendering test', () => {
 });
 
 describe('Assertion tests', () => {
+    it('marks the current language as selected', () => {
+        render(
+            <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
+                <LanguageSelector />
+            </UiLanguageContext.Provider>
+        );
+
+        expect(screen.getByRole('button', { name: 'general.uiLanguage: lang.self.fi' })).toHaveAttribute('aria-pressed', 'true');
+        expect(screen.getByRole('button', { name: 'general.uiLanguage: lang.self.en' })).toHaveAttribute('aria-pressed', 'false');
+    });
+
     it('should invoke setLanguage if clicked', () => {
         render(
             <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
                 <LanguageSelector />
             </UiLanguageContext.Provider>
         );
-        fireEvent.click(screen.getByText('FI'));
+        fireEvent.click(screen.getByText('lang.self.fi'));
         expect(setLanguage).toHaveBeenCalledTimes(1);
-        fireEvent.click(screen.getByText('SV'));
+        fireEvent.click(screen.getByText('lang.self.sv'));
         expect(setLanguage).toHaveBeenCalledTimes(2);
     });
 });

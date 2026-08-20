@@ -69,7 +69,7 @@ namespace PxGraf.ChartTypeSelection
         {
             string trimmedInput = input.Replace(" ", "");
 
-            if (trimmedInput.Equals("NOTALLOWED", StringComparison.CurrentCultureIgnoreCase) || trimmedInput == "0" || trimmedInput == "")
+            if (trimmedInput.Equals("NOTALLOWED", StringComparison.CurrentCultureIgnoreCase) || trimmedInput.Equals("0", StringComparison.Ordinal) || trimmedInput == "")
             {
                 Min = 0;
                 Max = 0;

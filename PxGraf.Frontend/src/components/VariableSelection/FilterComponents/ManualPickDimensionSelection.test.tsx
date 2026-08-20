@@ -1,5 +1,6 @@
 import React from 'react';
 import { render } from "@testing-library/react";
+import '@testing-library/jest-dom';
 import ManualPickDimensionSelection from "./ManualPickDimensionSelection";
 import UiLanguageContext from "contexts/uiLanguageContext";
 import { IDimensionValue } from "../../../types/cubeMeta";
@@ -81,11 +82,38 @@ describe('Functionality test', () => {
                     onQueryChanged={mockOnQueryChanged} />
             </UiLanguageContext.Provider>
         );
-        const selectableMenu = getByLabelText('variableSelect.itemFilter');
+        const selectableMenu = getByLabelText('variableSelect.valuesLabel');
         await user.click(selectableMenu);
         const valueSelect = await findByRole('option', { name: '2020' });
         await user.click(valueSelect);
 
         expect(mockOnQueryChanged).toHaveBeenCalledWith(["2018", "2020"]);
     })
+
+    it('uses the default values label when no label is provided', () => {
+        const { getByLabelText } = render(
+            <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
+                <ManualPickDimensionSelection
+                    options={mockDimensionValues}
+                    selectedValues={[]}
+                    onQueryChanged={() => {}} />
+            </UiLanguageContext.Provider>
+        );
+
+        expect(getByLabelText('variableSelect.valuesLabel')).toBeInTheDocument();
+    });
+
+    it('uses the provided label when given', () => {
+        const { getByLabelText } = render(
+            <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
+                <ManualPickDimensionSelection
+                    options={mockDimensionValues}
+                    selectedValues={[]}
+                    onQueryChanged={() => {}}
+                    label="variableSelect.excludedValuesLabel" />
+            </UiLanguageContext.Provider>
+        );
+
+        expect(getByLabelText('variableSelect.excludedValuesLabel')).toBeInTheDocument();
+    });
 });

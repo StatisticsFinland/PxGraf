@@ -1,8 +1,9 @@
-import { IDimension, EDimensionType } from "types/cubeMeta";
-import { getDefaultQueries, getErrorText, getVisualizationOptionsForVisualizationType, resolveDimensions } from "./editorHelpers";
+import { IDimension, EDimensionType, IContentDimensionValue, EMetaPropertyType } from "types/cubeMeta";
+import { getDefaultQueries, getErrorText, getVisualizationOptionsForVisualizationType, resolveDimensions, enrichDimensionsWithVirtualValues, getVirtualValueDefinitionsSignature } from "./editorHelpers";
 import { IVisualizationOptions } from "../types/editorContentsResponse";
 import { VisualizationType } from "../types/visualizationType";
 import { EDatabaseTableError } from "../types/tableListItems";
+import { FilterType, ICubeQuery, IDimensionQuery, ISumDefinition } from "types/query";
 
 const mockDimensions: IDimension[] = [
     {
@@ -33,19 +34,140 @@ describe('getDefaultQueries tests', () => {
     it('Should return the correct object', () => {
         const expected = {
             foo: {
-                valueFilter: { type: 'item', query: [] },
+                valueFilter: { type: 'item', query: ['foo'] },
                 selectable: false,
-                virtualValueDefinitions: null
+                virtualValueDefinitions: []
             }
         }
         const result = getDefaultQueries(mockDimensions);
+        expect(result).toEqual(expected);
+    });
+
+    it('Should default a time dimension to "all"', () => {
+        const timeDimension: IDimension[] = [
+            {
+                code: "time",
+                name: { fi: 'aika' },
+                type: EDimensionType.Time,
+                values: [
+                    { code: '2020', name: { fi: '2020' }, isVirtual: false },
+                    { code: '2021', name: { fi: '2021' }, isVirtual: false }
+                ]
+            }
+        ];
+        const expected = {
+            time: {
+                valueFilter: { type: 'all' },
+                selectable: false,
+                virtualValueDefinitions: []
+            }
+        };
+        const result = getDefaultQueries(timeDimension);
+        expect(result).toEqual(expected);
+    });
+
+    it('Should default a non-time dimension to its elimination value when one is defined', () => {
+        const dimensionsWithElimination: IDimension[] = [
+            {
+                code: "region",
+                name: { fi: 'alue' },
+                type: EDimensionType.Geographical,
+                additionalProperties: {
+                    ELIMINATION: { type: EMetaPropertyType.Text, value: 'sss' }
+                },
+                values: [
+                    { code: 'sss', name: { fi: 'Koko maa' }, isVirtual: false },
+                    { code: '001', name: { fi: 'Alue 1' }, isVirtual: false }
+                ]
+            }
+        ];
+        const expected = {
+            region: {
+                valueFilter: { type: 'item', query: ['sss'] },
+                selectable: false,
+                virtualValueDefinitions: []
+            }
+        };
+        const result = getDefaultQueries(dimensionsWithElimination);
+        expect(result).toEqual(expected);
+    });
+
+    it('Should default a non-time dimension without elimination to its first value', () => {
+        const dimensionsWithoutElimination: IDimension[] = [
+            {
+                code: "region",
+                name: { fi: 'alue' },
+                type: EDimensionType.Geographical,
+                values: [
+                    { code: '001', name: { fi: 'Alue 1' }, isVirtual: false },
+                    { code: '002', name: { fi: 'Alue 2' }, isVirtual: false }
+                ]
+            }
+        ];
+        const expected = {
+            region: {
+                valueFilter: { type: 'item', query: ['001'] },
+                selectable: false,
+                virtualValueDefinitions: []
+            }
+        };
+        const result = getDefaultQueries(dimensionsWithoutElimination);
+        expect(result).toEqual(expected);
+    });
+
+    it('Should fall back to the first value when the elimination code does not match any value', () => {
+        const dimensionsWithInvalidElimination: IDimension[] = [
+            {
+                code: "region",
+                name: { fi: 'alue' },
+                type: EDimensionType.Geographical,
+                additionalProperties: {
+                    ELIMINATION: { type: EMetaPropertyType.Text, value: 'does-not-exist' }
+                },
+                values: [
+                    { code: '001', name: { fi: 'Alue 1' }, isVirtual: false },
+                    { code: '002', name: { fi: 'Alue 2' }, isVirtual: false }
+                ]
+            }
+        ];
+        const expected = {
+            region: {
+                valueFilter: { type: 'item', query: ['001'] },
+                selectable: false,
+                virtualValueDefinitions: []
+            }
+        };
+        const result = getDefaultQueries(dimensionsWithInvalidElimination);
+        expect(result).toEqual(expected);
+    });
+
+    it('Should default a non-time dimension without values to an empty item filter', () => {
+        const emptyDimension: IDimension[] = [
+            {
+                code: "region",
+                name: { fi: 'alue' },
+                type: EDimensionType.Geographical,
+                values: []
+            }
+        ];
+        const expected = {
+            region: {
+                valueFilter: { type: 'item', query: [] },
+                selectable: false,
+                virtualValueDefinitions: []
+            }
+        };
+        const result = getDefaultQueries(emptyDimension);
         expect(result).toEqual(expected);
     });
 });
 
 describe('resolveVariables tests', () => {
     it('Should return the correct object', () => {
-        const expected: IDimension[] = [{ code: 'foo', name: { fi: 'nimi' }, type: EDimensionType.Content, values: [] }];
+        const expected: IDimension[] = [{ code: 'foo', name: { fi: 'nimi' }, type: EDimensionType.Content, values: [
+            { code: 'bar', name: {}, isVirtual: true },
+            { code: 'baz', name: {}, isVirtual: true },
+        ] }];
         const result = resolveDimensions(mockDimensions, {'foo': ['bar', 'baz']});
         expect(result).toEqual(expected);
     });
@@ -142,5 +264,221 @@ describe('getErrorText tests', () => {
     it('Should return contentLoad for default/unknown error', () => {
         const result = getErrorText(EDatabaseTableError.contentLoad, mockT);
         expect(result).toBe('error.contentLoad');
+    });
+});
+
+describe('enrichDimensionsWithVirtualValues tests', () => {
+    const translateForLang = (lang: string, operator: string) => `${operator}_placeholder_${lang}`;
+
+    it('Should return dimensions unchanged when query is null', () => {
+        const result = enrichDimensionsWithVirtualValues(mockDimensions, null, [], translateForLang);
+        expect(result).toEqual(mockDimensions);
+    });
+
+    it('Should return dimensions unchanged when no virtual definitions', () => {
+        const query: { [key: string]: IDimensionQuery } = { foo: { valueFilter: { type: FilterType.Item, query: [] }, selectable: false, virtualValueDefinitions: [] } };
+        const result = enrichDimensionsWithVirtualValues(mockDimensions, query, [], translateForLang);
+        expect(result).toEqual(mockDimensions);
+    });
+
+    it('Should append virtual values with placeholder names', () => {
+        const query: { [key: string]: IDimensionQuery } = {
+            foo: {
+                valueFilter: { type: FilterType.Item, query: [] },
+                selectable: false,
+                virtualValueDefinitions: [{ type: 'sum', code: 'virtual_1', operandCodes: ['foo'] } as ISumDefinition]
+            }
+        };
+        const result = enrichDimensionsWithVirtualValues(mockDimensions, query, ['fi'], translateForLang);
+        expect(result[0].values).toHaveLength(2);
+        expect(result[0].values[1].name).toEqual({ fi: 'sum_placeholder_fi 1' });
+        expect(result[0].values[1].code).toBe('virtual_1');
+        expect(result[0].values[1].isVirtual).toBe(true);
+    });
+
+    it('Should generate placeholder name even without any valueEdits', () => {
+        const query: { [key: string]: IDimensionQuery } = {
+            foo: {
+                valueFilter: { type: FilterType.Item, query: [] },
+                selectable: false,
+                virtualValueDefinitions: [{ type: 'sum', code: 'virtual_1', operandCodes: ['foo'] } as ISumDefinition]
+            }
+        };
+        const result = enrichDimensionsWithVirtualValues(mockDimensions, query, ['fi'], translateForLang);
+        expect(result[0].values).toHaveLength(2);
+        expect(result[0].values[1].name).toEqual({ fi: 'sum_placeholder_fi 1' });
+    });
+
+    it('Should handle empty dimensions array', () => {
+        const query: { [key: string]: IDimensionQuery } = {};
+        const result = enrichDimensionsWithVirtualValues([], query, [], translateForLang);
+        expect(result).toEqual([]);
+    });
+
+    it('Should populate unit and additionalProperties for content dimension virtual values', () => {
+        const query: { [key: string]: IDimensionQuery } = {
+            foo: {
+                valueFilter: { type: FilterType.Item, query: [] },
+                selectable: false,
+                virtualValueDefinitions: [{ type: 'sum', code: 'virtual_1', operandCodes: ['foo'] } as ISumDefinition]
+            }
+        };
+        const result = enrichDimensionsWithVirtualValues(mockDimensions, query, ['fi'], translateForLang);
+        const virtualValue = result[0].values[1] as IContentDimensionValue;
+        expect(virtualValue.unit).toEqual({ fi: 'sum_placeholder_fi' });
+        expect(virtualValue.additionalProperties?.['SOURCE']).toEqual({
+            type: EMetaPropertyType.MultilanguageText,
+            value: { fi: 'sum_placeholder_fi' },
+        });
+    });
+
+    it('Should generate placeholder names with correct sequence numbers for multiple virtual values', () => {
+        const query: { [key: string]: IDimensionQuery } = {
+            foo: {
+                valueFilter: { type: FilterType.Item, query: [] },
+                selectable: false,
+                virtualValueDefinitions: [
+                    { type: 'sum', code: 'virtual_1', operandCodes: ['foo'] } as ISumDefinition,
+                    { type: 'sum', code: 'virtual_2', operandCodes: ['foo'] } as ISumDefinition,
+                ]
+            }
+        };
+        const result = enrichDimensionsWithVirtualValues(mockDimensions, query, ['fi'], translateForLang);
+        expect(result[0].values).toHaveLength(3);
+        expect(result[0].values[1].name).toEqual({ fi: 'sum_placeholder_fi 1' });
+        expect(result[0].values[2].name).toEqual({ fi: 'sum_placeholder_fi 2' });
+    });
+
+    it('Should replace existing virtual stubs with enriched ones (no duplicates)', () => {
+        const dimensionsWithStub: IDimension[] = [{
+            code: 'foo',
+            name: { fi: 'nimi' },
+            type: EDimensionType.Content,
+            values: [
+                { code: 'foo', name: { fi: 'nimi' }, isVirtual: false },
+                { code: 'virtual_1', name: {}, isVirtual: true }, // pre-existing empty stub
+            ]
+        }];
+        const query: { [key: string]: IDimensionQuery } = {
+            foo: {
+                valueFilter: { type: FilterType.Item, query: [] },
+                selectable: false,
+                virtualValueDefinitions: [{ type: 'sum', code: 'virtual_1', operandCodes: ['foo'] } as ISumDefinition]
+            }
+        };
+        const result = enrichDimensionsWithVirtualValues(dimensionsWithStub, query, ['fi'], translateForLang);
+        // Should have exactly 2 values (1 real + 1 enriched virtual), not 3
+        expect(result[0].values).toHaveLength(2);
+        expect(result[0].values[1].code).toBe('virtual_1');
+        expect(result[0].values[1].name).toEqual({ fi: 'sum_placeholder_fi 1' });
+    });
+
+    it('Should generate placeholder names for all provided languages', () => {
+        const query: { [key: string]: IDimensionQuery } = {
+            foo: {
+                valueFilter: { type: FilterType.Item, query: [] },
+                selectable: false,
+                virtualValueDefinitions: [{ type: 'sum', code: 'virtual_1', operandCodes: ['foo'] } as ISumDefinition]
+            }
+        };
+        const result = enrichDimensionsWithVirtualValues(mockDimensions, query, ['fi', 'en'], translateForLang);
+        expect(result[0].values[1].name).toEqual({ fi: 'sum_placeholder_fi 1', en: 'sum_placeholder_en 1' });
+    });
+
+    it('Should use nameEdit from cubeQuery when provided', () => {
+        const query: { [key: string]: IDimensionQuery } = {
+            foo: {
+                valueFilter: { type: FilterType.Item, query: [] },
+                selectable: false,
+                virtualValueDefinitions: [{ type: 'sum', code: 'virtual_1', operandCodes: ['foo'] } as ISumDefinition]
+            }
+        };
+        const cubeQuery: ICubeQuery = {
+            variableQueries: {
+                foo: {
+                    valueEdits: {
+                        virtual_1: { nameEdit: { fi: 'Muokattu nimi' } }
+                    }
+                }
+            }
+        };
+        const result = enrichDimensionsWithVirtualValues(mockDimensions, query, ['fi'], translateForLang, cubeQuery);
+        expect(result[0].values[1].name).toEqual({ fi: 'Muokattu nimi' });
+    });
+
+    it('Should only enrich resolved virtual stubs when restrictToResolved is true', () => {
+        const dimensionsWithOneStub: IDimension[] = [{
+            code: 'foo',
+            name: { fi: 'nimi' },
+            type: EDimensionType.Nominal,
+            values: [
+                { code: 'foo', name: { fi: 'nimi' }, isVirtual: false },
+                { code: 'virtual_1', name: {}, isVirtual: true }, // only virtual_1 is resolved
+            ]
+        }];
+        const query: { [key: string]: IDimensionQuery } = {
+            foo: {
+                valueFilter: { type: FilterType.Item, query: [] },
+                selectable: false,
+                virtualValueDefinitions: [
+                    { type: 'sum', code: 'virtual_1', operandCodes: ['foo'] } as ISumDefinition,
+                    { type: 'sum', code: 'virtual_2', operandCodes: ['foo'] } as ISumDefinition, // not resolved
+                ]
+            }
+        };
+        const result = enrichDimensionsWithVirtualValues(dimensionsWithOneStub, query, ['fi'], translateForLang, null, true);
+        expect(result[0].values).toHaveLength(2); // 1 real + 1 resolved virtual (not virtual_2)
+        expect(result[0].values.map(v => v.code)).toEqual(['foo', 'virtual_1']);
+    });
+
+    it('Should remove unresolved virtual stubs when restrictToResolved is true and no stubs are resolved', () => {
+        const dimensionsWithNoStubs: IDimension[] = [{
+            code: 'foo',
+            name: { fi: 'nimi' },
+            type: EDimensionType.Nominal,
+            values: [
+                { code: 'foo', name: { fi: 'nimi' }, isVirtual: false },
+            ]
+        }];
+        const query: { [key: string]: IDimensionQuery } = {
+            foo: {
+                valueFilter: { type: FilterType.Item, query: [] },
+                selectable: false,
+                virtualValueDefinitions: [
+                    { type: 'sum', code: 'virtual_1', operandCodes: ['foo'] } as ISumDefinition,
+                ]
+            }
+        };
+        const result = enrichDimensionsWithVirtualValues(dimensionsWithNoStubs, query, ['fi'], translateForLang, null, true);
+        expect(result[0].values).toHaveLength(1); // only the real value
+        expect(result[0].values[0].code).toBe('foo');
+    });
+});
+
+describe('getVirtualValueDefinitionsSignature tests', () => {
+    const virtualValueDefinitions = [{ type: 'sum', code: 'virtual_1', operandCodes: ['foo'] } as ISumDefinition];
+
+    it('stays unchanged when only dimension filters change', () => {
+        const initialQuery: { [key: string]: IDimensionQuery } = {
+            foo: { valueFilter: { type: FilterType.Item, query: ['value_1'] }, selectable: false, virtualValueDefinitions }
+        };
+        const changedQuery: { [key: string]: IDimensionQuery } = {
+            foo: { valueFilter: { type: FilterType.Item, query: ['value_2'] }, selectable: false, virtualValueDefinitions }
+        };
+
+        expect(getVirtualValueDefinitionsSignature(mockDimensions, changedQuery))
+            .toBe(getVirtualValueDefinitionsSignature(mockDimensions, initialQuery));
+    });
+
+    it('changes when virtual value definitions change', () => {
+        const initialQuery: { [key: string]: IDimensionQuery } = {
+            foo: { valueFilter: { type: FilterType.All }, selectable: false, virtualValueDefinitions: [] }
+        };
+        const changedQuery: { [key: string]: IDimensionQuery } = {
+            foo: { valueFilter: { type: FilterType.All }, selectable: false, virtualValueDefinitions }
+        };
+
+        expect(getVirtualValueDefinitionsSignature(mockDimensions, changedQuery))
+            .not.toBe(getVirtualValueDefinitionsSignature(mockDimensions, initialQuery));
     });
 });

@@ -1,55 +1,40 @@
 import { Stack, Button } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { UiLanguageContext } from "contexts/uiLanguageContext";
 import { LangText } from './LangText';
-import styled from 'styled-components';
-import Typography from '@mui/material/Typography';
+import { styled } from '@mui/material/styles';
 import InfoBubble from 'components/InfoBubble/InfoBubble';
 
-const SelectorWrapper = styled(Stack)`
-    padding: 8px;
-`;
+const SelectorWrapper = styled(Stack)({ padding: 4, gap: 2 });
 
-const StyledSecondaryText = styled(Typography)`
-    margin-bottom: -2px;
-    margin-top: -2px;
-    text-align: right;
-`;
-
-const TitleWrapper = styled.div`
-    display: flex;
-    align-items: center;
-`;
-
-const StyledLangButton = styled(Button)`
-    && {
-        padding: 6px 12px;
-        min-width: 0;
-    }
-`;
+const StyledLangButton = styled(Button, {
+    shouldForwardProp: prop => prop !== 'selected',
+})<{ selected?: boolean }>(({ selected, theme }) => ({
+    padding: '4px 10px',
+    minWidth: 0,
+    color: selected ? theme.palette.primary.main : theme.palette.text.secondary,
+    backgroundColor: 'transparent',
+    fontWeight: selected ? theme.typography.fontWeightBold : theme.typography.fontWeightMedium,
+    border: `1px solid ${selected ? theme.palette.primary.main : 'transparent'}`,
+    borderRadius: theme.shape.borderRadius,
+    '&:hover': {
+        backgroundColor: theme.palette.primary.light,
+    },
+}));
 
 export const LanguageSelector: React.FC = () => {
-    const { t } = useTranslation();
-    const theme = useTheme();
+    const { t, i18n } = useTranslation();
     const { language, setLanguage, availableUiLanguages } = React.useContext(UiLanguageContext);
 
     return (
-        <SelectorWrapper direction="column">
-            <TitleWrapper>
-                <StyledSecondaryText variant="body2" sx={{ color: theme.palette.text.secondary }}>
-                    {t("general.uiLanguage")}
-                </StyledSecondaryText>
-                <InfoBubble info={t("infoText.langSelector")} ariaLabel={t("general.uiLanguage")} />
-            </TitleWrapper>
-            <Stack direction="row" flexWrap='wrap'>
-                {availableUiLanguages.map(lang => (
-                    <StyledLangButton size="small" href='#' aria-label={`${t('general.uiLanguage')}: ${t('lang.' + lang)}`} key={lang} onClick={() => setLanguage(lang)}>
-                        <LangText text={lang.toUpperCase()} underline={language === lang} />
-                    </StyledLangButton>
-                ))}
-            </Stack>
+        <SelectorWrapper direction="row" alignItems="center" flexWrap='wrap'>
+            {availableUiLanguages.map(lang => (
+                <StyledLangButton size="small" selected={language === lang} aria-pressed={language === lang} aria-label={`${t('general.uiLanguage')}: ${i18n.getFixedT(lang)('lang.self')}`} key={lang} onClick={() => setLanguage(lang)}>
+                    <LangText text={i18n.getFixedT(lang)('lang.self')} />
+                </StyledLangButton>
+            ))}
+            <InfoBubble info={t("infoText.langSelector")} ariaLabel={t("general.uiLanguage")} />
         </SelectorWrapper>
     );
 }

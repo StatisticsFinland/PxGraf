@@ -81,7 +81,12 @@ namespace UnitTests.Fixtures
                     TitleVariable = "muuttujana",
                     TitleVariablePlural = "muuttujina",
                     Source = "Lähde",
-                    Unit = "Yksikkö"
+                    Unit = "Yksikkö",
+                    ComputedValuePlaceholder = "Laskettu",
+                    SumPlaceholder = "Summa",
+                    SubtractionPlaceholder = "V\u00e4hennyslasku",
+                    MultiplicationPlaceholder = "Kertolasku",
+                    DivisionPlaceholder = "Jakolasku"
                 },
                 ["en"] = new Translation()
                 {
@@ -155,7 +160,12 @@ namespace UnitTests.Fixtures
                     TitleVariable = "by",
                     TitleVariablePlural = "by",
                     Source = "Source",
-                    Unit = "Unit"
+                    Unit = "Unit",
+                    ComputedValuePlaceholder = "Computed",
+                    SumPlaceholder = "Sum",
+                    SubtractionPlaceholder = "Subtraction",
+                    MultiplicationPlaceholder = "Multiplication",
+                    DivisionPlaceholder = "Division"
                 },
                 ["sv"] = new Translation()
                 {
@@ -229,7 +239,12 @@ namespace UnitTests.Fixtures
                     TitleVariable = "av",
                     TitleVariablePlural = "av",
                     Source = "Källa",
-                    Unit = "Enhet"
+                    Unit = "Enhet",
+                    ComputedValuePlaceholder = "Ber\u00e4knat",
+                    SumPlaceholder = "Summa",
+                    SubtractionPlaceholder = "Subtraktion",
+                    MultiplicationPlaceholder = "Multiplikation",
+                    DivisionPlaceholder = "Division"
                 }
             };
     }

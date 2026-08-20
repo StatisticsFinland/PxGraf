@@ -24,6 +24,16 @@ describe('Rendering test', () => {
 });
 
 describe('Assertion test', () => {
+    it('uses an accessible icon button in compact mode', () => {
+        render(<HashRouter><SavedQueryFinder compact /></HashRouter>);
+        const openButton = screen.getByRole('button', { name: 'savedQuery.dialogButtonTxt' });
+
+        expect(openButton).toContainElement(screen.getByTestId('FolderOpenIcon'));
+        expect(openButton).not.toHaveTextContent('savedQuery.dialogButtonTxt');
+        fireEvent.click(openButton);
+        expect(screen.getByText('savedQuery.dialogTitleTxt')).toBeInTheDocument();
+    });
+
     it('Renders dialog if opened, eliminates dialog if closed', async () => {
         render(<HashRouter><SavedQueryFinder /></HashRouter>);
         fireEvent.click(screen.getByText('savedQuery.dialogButtonTxt'));

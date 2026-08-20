@@ -1,11 +1,9 @@
-import { debounce } from 'lodash';
 import * as React from 'react';
 import { ICubeQuery, Query } from 'types/query';
 
 interface IQueryContext {
     cubeQuery: ICubeQuery;
-    /** Debounced setter (1 s) — accepts a full ICubeQuery value, not a functional updater. */
-    setCubeQuery: (newQuery: ICubeQuery) => void;
+    setCubeQuery: React.Dispatch<React.SetStateAction<ICubeQuery>>;
     query: Query | null;
     setQuery: React.Dispatch<React.SetStateAction<Query | null>>;
 }
@@ -21,26 +19,10 @@ export const QueryProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const [cubeQuery, setCubeQueryState] = React.useState<ICubeQuery>({ variableQueries: {} });
     const [query, setQuery] = React.useState<Query | null>(null);
 
-    const debouncedCubeQuery = React.useMemo(() => {
-        return debounce((newQuery: ICubeQuery) => {
-            setCubeQueryState(newQuery);
-        }, 1000);
-    }, []);
-
-    const setCubeQuery = React.useCallback((newQuery: ICubeQuery) => {
-        debouncedCubeQuery(newQuery);
-    }, [debouncedCubeQuery]);
-
-    React.useEffect(() => {
-        return () => {
-            debouncedCubeQuery.cancel();
-        };
-    }, [debouncedCubeQuery]);
-
     const contextValue = React.useMemo(() => ({
-        cubeQuery, setCubeQuery,
+        cubeQuery, setCubeQuery: setCubeQueryState,
         query, setQuery,
-    }), [cubeQuery, setCubeQuery, query, setQuery]);
+    }), [cubeQuery, query]);
 
     return (
         <QueryContext.Provider value={contextValue}>

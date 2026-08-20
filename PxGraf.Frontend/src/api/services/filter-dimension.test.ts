@@ -21,8 +21,9 @@ const createWrapper = () => {
     const queryClient = new QueryClient({
         defaultOptions: { queries: { retry: false } },
     });
-    return ({ children }: { children: React.ReactNode }) =>
-        React.createElement(QueryClientProvider, { client: queryClient }, children);
+    return function TestWrapper({ children }: { children: React.ReactNode }) {
+        return React.createElement(QueryClientProvider, { client: queryClient }, children);
+    };
 };
 
 const mockIdStack = ['db', 'table.px'];
@@ -34,8 +35,8 @@ describe('useResolveDimensionFiltersQuery', () => {
 
     it('transforms query dimension filters and calls the correct endpoint', async () => {
         const mockQuery: Query = {
-            dim1: { valueFilter: { type: FilterType.All }, selectable: false, virtualValueDefinitions: null },
-            dim2: { valueFilter: { type: FilterType.Item, query: ['a', 'b'] }, selectable: true, virtualValueDefinitions: null }
+            dim1: { valueFilter: { type: FilterType.All }, selectable: false, virtualValueDefinitions: [] },
+            dim2: { valueFilter: { type: FilterType.Item, query: ['a', 'b'] }, selectable: true, virtualValueDefinitions: [] }
         };
         const mockData = { dim1: ['val1'], dim2: ['a', 'b'] };
         mockPostAsync.mockResolvedValueOnce(mockData);
@@ -56,6 +57,39 @@ describe('useResolveDimensionFiltersQuery', () => {
         expect(requestBody.filters.dim1).toEqual({ type: FilterType.All });
         expect(requestBody.filters.dim2).toEqual({ type: FilterType.Item, query: ['a', 'b'] });
         expect(result.current.data).toEqual(mockData);
+    });
+
+    it('keeps the previous resolved codes while a changed query is loading', async () => {
+        const initialQuery: Query = {
+            dim1: { valueFilter: { type: FilterType.Item, query: ['a'] }, selectable: false, virtualValueDefinitions: [] }
+        };
+        const changedQuery: Query = {
+            dim1: { valueFilter: { type: FilterType.Item, query: ['b'] }, selectable: false, virtualValueDefinitions: [] }
+        };
+        const initialData = { dim1: ['a'] };
+        let resolveChangedRequest: (value: { dim1: string[] }) => void;
+        const changedRequest = new Promise<{ dim1: string[] }>((resolve) => {
+            resolveChangedRequest = resolve;
+        });
+
+        mockPostAsync
+            .mockResolvedValueOnce(initialData)
+            .mockReturnValueOnce(changedRequest);
+
+        const { result, rerender } = renderHook(
+            ({ query }) => useResolveDimensionFiltersQuery(mockIdStack, query),
+            { initialProps: { query: initialQuery }, wrapper: createWrapper() }
+        );
+
+        await waitFor(() => expect(result.current.data).toEqual(initialData));
+
+        rerender({ query: changedQuery });
+
+        expect(result.current.data).toEqual(initialData);
+        expect(result.current.isLoading).toBe(false);
+
+        resolveChangedRequest({ dim1: ['b'] });
+        await waitFor(() => expect(result.current.data).toEqual({ dim1: ['b'] }));
     });
 
     it('handles null query gracefully', async () => {
@@ -87,7 +121,7 @@ describe('useResolveDimensionFiltersQuery', () => {
 
     it('sets isError when fetch fails', async () => {
         const mockQuery: Query = {
-            dim1: { valueFilter: { type: FilterType.All }, selectable: false, virtualValueDefinitions: null }
+            dim1: { valueFilter: { type: FilterType.All }, selectable: false, virtualValueDefinitions: [] }
         };
         mockPostAsync.mockRejectedValueOnce(new Error('Network error'));
 

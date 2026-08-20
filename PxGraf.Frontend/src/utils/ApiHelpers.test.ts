@@ -26,13 +26,14 @@ const mockQuery: Query = {
         valueFilter: {
             type: FilterType.All
         },
-        virtualValueDefinitions: ['foo', 'bar', 'baz']
+        virtualValueDefinitions: []
     }
 }
 
 const mockBackendOldQueryRespons: IFetchSavedQueryResponse = {
     id: 'mock-id',
     draft: false,
+    recoveredWithChanges: false,
     query: merge(
         { tableReference: buildTableReference(mockIdStack) },
         { variableQueries: mockQuery },

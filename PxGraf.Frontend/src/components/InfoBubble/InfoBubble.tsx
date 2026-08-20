@@ -1,6 +1,6 @@
 import { Popper } from "@mui/material";
+import { styled } from '@mui/material/styles';
 import React from 'react';
-import styled from "styled-components";
 import InfoIcon from '@mui/icons-material/Info';
 import { useTranslation } from "react-i18next";
 interface IInfoBubbleProps {
@@ -10,28 +10,23 @@ interface IInfoBubbleProps {
     id?: string;
 }
 
-const InfoButton = styled.button`
-    background: transparent;
-    border: none;
-`;
+const InfoButton = styled('button')({ background: 'transparent', border: 'none' });
 
-const PopperInfo = styled.div`
-    background-color: var(--info-blue);
-    color: var(--surface-white);
-    border: none;
-    padding: 16px;
-    box-shadow: 3px 3px 10px var(--shadow-color);
-    border-radius: 5px;
-    max-width: 300px;
-`;
+const PopperInfo = styled('div')(({ theme }) => ({
+    backgroundColor: theme.palette.info.main,
+    color: theme.palette.info.contrastText,
+    border: 'none',
+    padding: 16,
+    boxShadow: theme.shadows[3],
+    borderRadius: theme.shape.borderRadius,
+    maxWidth: 300,
+}));
 
-const StyledPopper = styled(Popper)`
-    z-index: 999;
-`;
+const StyledPopper = styled(Popper)({ zIndex: 999 });
 
 export const InfoBubble: React.FC<IInfoBubbleProps> = ({ info, ariaLabel, placement = 'auto', id = null }) => {
     const [open, setOpen] = React.useState(false);
-    const anchorElement = React.useRef(null);
+    const [anchorElement, setAnchorElement] = React.useState<HTMLButtonElement | null>(null);
     const { t } = useTranslation();
 
     // Event listener for pressing the escape key to close the info bubble
@@ -61,11 +56,11 @@ export const InfoBubble: React.FC<IInfoBubbleProps> = ({ info, ariaLabel, placem
                 onMouseEnter={() => setOpen(true)}
                 onMouseLeave={() => setOpen(false)}
                 onClick={() => setOpen(!open)}
-                ref={anchorElement}
+                ref={setAnchorElement}
             >
                 <InfoIcon color={'info'} />
             </InfoButton>
-            <StyledPopper role="alert" keepMounted popperOptions={{ placement: placement }} open={open} anchorEl={anchorElement.current} onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)} >
+            <StyledPopper role="alert" keepMounted popperOptions={{ placement: placement }} open={open} anchorEl={anchorElement} onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)} >
                 <PopperInfo>
                     {info}
                 </PopperInfo>
