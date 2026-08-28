@@ -101,7 +101,7 @@ export const Preview: React.FC<IPreviewProps> = ({ path, query, selectedVisualiz
             return;
         }
 
-        const chartConfig = getChartConfig(data as IJsonStatDataset, languageTab, cubeQuery?.chartHeaderEdit?.[languageTab]);
+        const chartConfig = getChartConfig(data as IJsonStatDataset, languageTab, data.label);
         if (chartRef.current) {
             chartRef.current.update(data as IJsonStatDataset, chartConfig, resolvedSelections);
         } else {
