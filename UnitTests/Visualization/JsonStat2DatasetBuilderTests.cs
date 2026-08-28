@@ -152,6 +152,23 @@ namespace UnitTests.Visualization
         }
 
         [Test]
+        public void Build_ReplacesTimePlaceholdersInEditedHeader()
+        {
+            List<DimensionParameters> dimensions =
+            [
+                new DimensionParameters(DimensionType.Time, 3),
+                new DimensionParameters(DimensionType.Content, 1)
+            ];
+            Matrix<DecimalDataValue> matrix = TestDataCubeBuilder.BuildTestMatrix(dimensions, missingData: false);
+            MatrixQuery query = TestDataCubeBuilder.BuildTestCubeQuery(dimensions);
+            query.ChartHeaderEdit = new MultilanguageString("fi", "Muokattu [FIRST]-[LAST]");
+
+            JsonStat2 result = JsonStat2DatasetBuilder.Build(matrix, "fi", null, query);
+
+            Assert.That(result.Label, Is.EqualTo("Muokattu 2000-2002"));
+        }
+
+        [Test]
         public void Build_UsesDefaultLocalizationForMissingDescriptions_WhenTableLanguageIsNotLocalized()
         {
             List<DimensionParameters> dimensions =
@@ -195,6 +212,7 @@ namespace UnitTests.Visualization
             ];
             Matrix<DecimalDataValue> matrix = TestDataCubeBuilder.BuildTestMatrix(dimensions, missingData: false);
             MatrixQuery query = TestDataCubeBuilder.BuildTestCubeQuery(dimensions);
+            query.ChartHeaderEdit = new MultilanguageString("fi", "Muokattu [FIRST]-[LAST]");
             VisualizationSettings settings = new VisualizationCreationSettings
             {
                 SelectedVisualization = VisualizationType.ScatterPlot
@@ -208,6 +226,8 @@ namespace UnitTests.Visualization
             Assert.That(jsonStat.Value, Is.EqualTo(visualizationResponse.Data));
             Assert.That(jsonStat.Extension.VisualizationConfig.Layout.Rows, Is.EqualTo(visualizationResponse.RowDimensionCodes));
             Assert.That(jsonStat.Extension.VisualizationConfig.Layout.Columns, Is.EqualTo(visualizationResponse.ColumnDimensionCodes));
+            Assert.That(jsonStat.Label, Is.EqualTo(visualizationResponse.Header["fi"]));
+            Assert.That(jsonStat.Label, Is.EqualTo("Muokattu 2000-2002"));
         }
 
         [Test]

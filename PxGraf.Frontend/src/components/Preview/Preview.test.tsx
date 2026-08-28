@@ -13,6 +13,7 @@ import { QueryContext } from "../../contexts/queryContext";
 import { VisualizationContext } from "../../contexts/visualizationContext";
 import { ISelectableSelections } from "../SelectableVariableMenus/SelectableDimensionMenus";
 import { EDimensionType } from "../../types/cubeMeta";
+import { createChart } from "@statisticsfinland/jsonstat-chart";
 
 jest.mock('envVars', () => ({
     PxGrafUrl: 'pxGrafUrl.fi/',
@@ -31,6 +32,7 @@ const mockVisualizationQueryResult: IVisualizationResult = {
     data: ({
         version: '2.0',
         class: 'dataset',
+        label: 'kulutus_t-fi 2018-2021',
         id: ['Tiedot', 'Vuosi'],
         size: [1, 4],
         dimension: {
@@ -251,6 +253,12 @@ describe('Rendering test', () => {
             </UiLanguageContext.Provider>);
 
         expect(asFragment()).toMatchSnapshot();
+        expect(createChart).toHaveBeenCalledWith(
+            expect.anything(),
+            expect.anything(),
+            expect.objectContaining({ title: 'kulutus_t-fi 2018-2021' }),
+            expect.anything()
+        );
     });
 });
 

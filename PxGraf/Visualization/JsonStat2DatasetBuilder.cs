@@ -8,6 +8,7 @@ using Px.Utils.Models.Metadata.Dimensions;
 using Px.Utils.Models.Metadata.Enums;
 using Px.Utils.Models.Metadata.MetaProperties;
 using PxGraf.Language;
+using PxGraf.Models.Metadata;
 using PxGraf.Models.Queries;
 using PxGraf.Models.Responses;
 using PxGraf.Datasource.ApiDatasource.SerializationModels;
@@ -101,7 +102,9 @@ namespace PxGraf.Visualization
                 Geo = geoRoles.Count > 0 ? [.. geoRoles] : null
             };
 
-            string label = TryGetOptionalLocalizedMetaProperty(metadata.AdditionalProperties, PxSyntaxConstants.DESCRIPTION_KEY, language) ?? string.Empty;
+            string label = query is null
+                ? TryGetOptionalLocalizedMetaProperty(metadata.AdditionalProperties, PxSyntaxConstants.DESCRIPTION_KEY, language) ?? string.Empty
+                : HeaderBuildingUtilities.GetHeader(metadata, query)[language];
             string source = ResolveSource(metadata, language);
             List<string>? note = TryGetOptionalLocalizedMetaProperty(metadata.AdditionalProperties, PxSyntaxConstants.NOTE_KEY, language) is string datasetNote
                 ? [datasetNote]
