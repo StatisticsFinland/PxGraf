@@ -50,19 +50,6 @@ namespace PxGraf.Visualization
             return BuildVisualizationResponse(matrix, savedQuery.Query, savedQuery.Settings);
         }
 
-        public static void EnsureLayout(SavedQuery savedQuery, IReadOnlyMatrixMetadata metadata)
-        {
-            if (savedQuery.Settings.Layout is null)
-            {
-                bool legacyPivotRequested = savedQuery.LegacyProperties.TryGetValue("PivotRequested", out object? obj) && obj is true;
-                savedQuery.Settings.Layout = LayoutRules.GetPivotBasedLayout(
-                    savedQuery.Settings.VisualizationType,
-                    metadata,
-                    savedQuery.Query,
-                    legacyPivotRequested);
-            }
-        }
-
         /// <summary>
         /// Builds a visualization response for a matrix and a query.
         /// </summary>
@@ -89,6 +76,19 @@ namespace PxGraf.Visualization
                 Header = HeaderBuildingUtilities.GetHeader(matrix.Metadata, query),
                 VisualizationSettings = BuildVisualizationSettings(matrix, settings)
             };
+        }
+
+        public static void EnsureLayout(SavedQuery savedQuery, IReadOnlyMatrixMetadata metadata)
+        {
+            if (savedQuery.Settings.Layout is null)
+            {
+                bool legacyPivotRequested = savedQuery.LegacyProperties.TryGetValue("PivotRequested", out object? obj) && obj is true;
+                savedQuery.Settings.Layout = LayoutRules.GetPivotBasedLayout(
+                    savedQuery.Settings.VisualizationType,
+                    metadata,
+                    savedQuery.Query,
+                    legacyPivotRequested);
+            }
         }
 
         public static Matrix<DecimalDataValue> TransformVisualizationMatrix(
