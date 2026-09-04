@@ -9,6 +9,7 @@ import { FilterType, ISumDefinition } from 'types/query';
 import Editor from "./Editor";
 import { HashRouter } from "react-router-dom";
 import { IVisualizationResult } from "api/services/visualization";
+import { IJsonStatDataset } from "types/jsonStatChart";
 import { EVariableType, ETimeVariableInterval, EVisualizationType } from "@statisticsfinland/pxvisualizer";
 import serializer from "../../testUtils/stripHighchartsHashes";
 import { NavigationProvider } from "contexts/navigationContext";
@@ -51,6 +52,10 @@ jest.mock('envVars', () => ({
     PxGrafUrl: 'pxGrafUrl.fi/',
     PublicUrl: 'publicUrl.fi/',
     BasePath: ''
+}));
+
+jest.mock('@statisticsfinland/jsonstatgraphs', () => ({
+    createChart: jest.fn(() => ({ update: jest.fn(), destroy: jest.fn() })),
 }));
 
 jest.mock('api/services/cube-meta', () => ({
@@ -104,8 +109,9 @@ jest.mock('api/services/editor-contents', () => ({
 
 const mockVisualizationResult: IVisualizationResult = {
     isLoading: false,
+    isFetching: false,
     isError: false,
-    data: {
+    data: ({
         data: [1, 2, 3, 4],
         missingDataInfo: {},
         dataNotes: [],
@@ -167,7 +173,7 @@ const mockVisualizationResult: IVisualizationResult = {
                     }],
             }],
         tableReference: { hierarchy: ["foo", "bar"], name: "foobar_table" },
-    },
+    } as unknown as IJsonStatDataset),
 }
 
 const mockSaveQueryResult: ISaveQueryResult = {
