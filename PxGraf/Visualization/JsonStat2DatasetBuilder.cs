@@ -142,7 +142,7 @@ namespace PxGraf.Visualization
 
             if (settings is not null)
             {
-                Dictionary<string, List<string>> selectableSelections = query?.DimensionQueries
+                Dictionary<string, List<string>>? selectableSelections = query?.DimensionQueries
                     .Where(pair => pair.Value.Selectable)
                     .ToDictionary(
                         pair => pair.Key,
@@ -181,6 +181,18 @@ namespace PxGraf.Visualization
             }
 
             string language = ResolveLanguage(metadata, requestedLanguage);
+            JsonStatSourceExtension? sources = BuildJsonStatSourceExtension(metadata, query, language);
+
+            return sources is null
+                ? null
+                : new JsonStatChartExtension
+                {
+                    Sources = sources
+                };
+        }
+
+        private static JsonStatSourceExtension? BuildJsonStatSourceExtension(IReadOnlyMatrixMetadata metadata, MatrixQuery query, string language)
+        {
             Dictionary<string, string> dimensionSources = [];
             Dictionary<string, Dictionary<string, string>> categorySources = [];
 
@@ -191,31 +203,7 @@ namespace PxGraf.Visualization
                     continue;
                 }
 
-                Dictionary<string, string> sourcesForDimension = [];
-                foreach (IReadOnlyDimensionValue value in dimension.Values)
-                {
-                    string? source = ResolveEditedSource(dimensionQuery, value.Code, language);
-                    if (source is null && TryGetLocalizedMetaProperty(value.AdditionalProperties, PxSyntaxConstants.SOURCE_KEY, language, out string? metadataSource))
-                    {
-                        source = metadataSource;
-                    }
-
-                    if (!string.IsNullOrWhiteSpace(source))
-                    {
-                        sourcesForDimension[value.Code] = source;
-                    }
-                }
-
-                if (sourcesForDimension.Count > 0)
-                {
-                    categorySources[dimension.Code] = sourcesForDimension;
-                }
-
-                string? dimensionSource = sourcesForDimension.Values.Distinct().FirstOrDefault();
-                if (dimensionSource is not null && sourcesForDimension.Values.Distinct().Count() == 1)
-                {
-                    dimensionSources[dimension.Code] = dimensionSource;
-                }
+                AddSourcesForContentDimension(dimension, dimensionQuery, language, dimensionSources, categorySources);
             }
 
             if (dimensionSources.Count == 0 && categorySources.Count == 0)
@@ -223,14 +211,67 @@ namespace PxGraf.Visualization
                 return null;
             }
 
-            return new JsonStatChartExtension
+            return new JsonStatSourceExtension
             {
-                Sources = new JsonStatSourceExtension
-                {
-                    Dimension = dimensionSources.Count > 0 ? dimensionSources : null,
-                    Category = categorySources.Count > 0 ? categorySources : null
-                }
+                Dimension = dimensionSources.Count > 0 ? dimensionSources : null,
+                Category = categorySources.Count > 0 ? categorySources : null
             };
+        }
+
+        private static void AddSourcesForContentDimension(
+            IReadOnlyDimension dimension,
+            DimensionQuery dimensionQuery,
+            string language,
+            Dictionary<string, string> dimensionSources,
+            Dictionary<string, Dictionary<string, string>> categorySources)
+        {
+            Dictionary<string, string> sourcesForDimension = BuildSourcesForContentDimension(dimension, dimensionQuery, language);
+            if (sourcesForDimension.Count == 0)
+            {
+                return;
+            }
+
+            categorySources[dimension.Code] = sourcesForDimension;
+
+            string? dimensionSource = ResolveSharedDimensionSource(sourcesForDimension);
+            if (dimensionSource is not null)
+            {
+                dimensionSources[dimension.Code] = dimensionSource;
+            }
+        }
+
+        private static Dictionary<string, string> BuildSourcesForContentDimension(IReadOnlyDimension dimension, DimensionQuery dimensionQuery, string language)
+        {
+            Dictionary<string, string> sourcesForDimension = [];
+            foreach (IReadOnlyDimensionValue value in dimension.Values)
+            {
+                string? source = ResolveContentSource(dimensionQuery, value, language);
+                if (!string.IsNullOrWhiteSpace(source))
+                {
+                    sourcesForDimension[value.Code] = source;
+                }
+            }
+
+            return sourcesForDimension;
+        }
+
+        private static string? ResolveContentSource(DimensionQuery dimensionQuery, IReadOnlyDimensionValue value, string language)
+        {
+            string? source = ResolveEditedSource(dimensionQuery, value.Code, language);
+            if (source is not null)
+            {
+                return source;
+            }
+
+            return TryGetLocalizedMetaProperty(value.AdditionalProperties, PxSyntaxConstants.SOURCE_KEY, language, out string? metadataSource)
+                ? metadataSource
+                : null;
+        }
+
+        private static string? ResolveSharedDimensionSource(Dictionary<string, string> sourcesForDimension)
+        {
+            List<string> distinctSources = [.. sourcesForDimension.Values.Distinct()];
+            return distinctSources.Count == 1 ? distinctSources[0] : null;
         }
 
         private static string? ResolveEditedSource(DimensionQuery query, string valueCode, string language)

@@ -1,3 +1,4 @@
+#nullable enable
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
@@ -6,19 +7,20 @@ namespace PxGraf.Models.Responses
     public class JsonStat2Extension
     {
         [JsonPropertyName("missingValueDescriptions")]
-        public IReadOnlyDictionary<string, string> MissingValueDescriptions { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public IReadOnlyDictionary<string, string>? MissingValueDescriptions { get; set; }
 
         [JsonPropertyName("selectableConfig")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public SelectableConfig SelectableConfig { get; set; }
+        public SelectableConfig? SelectableConfig { get; set; }
 
         [JsonPropertyName("visualizationConfig")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public JsonStatVisualizationConfig VisualizationConfig { get; set; }
+        public JsonStatVisualizationConfig? VisualizationConfig { get; set; }
 
         [JsonPropertyName("visualizationSettings")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public VisualizationResponse.PxVisualizerSettings VisualizationSettings { get; set; }
+        public VisualizationResponse.PxVisualizerSettings? VisualizationSettings { get; set; }
 
         [JsonPropertyName("jsonstatChart")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -29,21 +31,21 @@ namespace PxGraf.Models.Responses
     {
         [JsonPropertyName("selectableSelections")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public Dictionary<string, List<string>> SelectableSelections { get; set; }
+        public Dictionary<string, List<string>>? SelectableSelections { get; set; }
 
         [JsonPropertyName("defaultSelectableSelections")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public Dictionary<string, List<string>> DefaultSelectableSelections { get; set; }
+        public Dictionary<string, List<string>>? DefaultSelectableSelections { get; set; }
 
         [JsonPropertyName("multiSelectableDimensionCode")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string MultiSelectableDimensionCode { get; set; }
+        public string? MultiSelectableDimensionCode { get; set; }
     }
 
     public class JsonStatVisualizationConfig
     {
         [JsonPropertyName("chartType")]
-        public string ChartType { get; set; }
+        public string? ChartType { get; set; }
 
         [JsonPropertyName("layout")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -55,16 +57,16 @@ namespace PxGraf.Models.Responses
 
         [JsonPropertyName("sorting")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string Sorting { get; set; }
+        public string? Sorting { get; set; }
     }
 
     public class JsonStatLayout
     {
         [JsonPropertyName("rows")]
-        public IReadOnlyList<string> Rows { get; set; }
+        public IReadOnlyList<string> Rows { get; set; } = [];
 
         [JsonPropertyName("columns")]
-        public IReadOnlyList<string> Columns { get; set; }
+        public IReadOnlyList<string> Columns { get; set; } = [];
     }
 
     public class JsonStatChartExtension
@@ -85,3 +87,4 @@ namespace PxGraf.Models.Responses
         public Dictionary<string, Dictionary<string, string>>? Category { get; set; }
     }
 }
+#nullable restore
