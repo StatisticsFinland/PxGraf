@@ -6,7 +6,7 @@ import React from 'react';
 import { Query } from 'types/query';
 import { IVisualizationSettings } from 'types/visualizationSettings';
 import { useVisualizationQuery } from 'api/services/visualization';
-import { createChart, ChartInstance } from '@statisticsfinland/jsonstat-chart';
+import { createChart, ChartInstance } from '@statisticsfinland/jsonstatgraphs';
 import useSelections from 'components/SelectableVariableMenus/hooks/useSelections';
 import { IJsonStatDataset, IJsonStatSelectable, getChartConfig, getSelectables as getJsonStatSelectables } from 'types/jsonStatChart';
 import { VisualizationType } from 'types/visualizationType';

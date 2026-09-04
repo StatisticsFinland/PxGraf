@@ -17,7 +17,7 @@ jest.mock('envVars', () => ({
     BasePath: ''
 }));
 
-jest.mock('@statisticsfinland/jsonstat-chart', () => ({
+jest.mock('@statisticsfinland/jsonstatgraphs', () => ({
     createChart: jest.fn(() => ({ update: jest.fn(), destroy: jest.fn() })),
 }));
 
