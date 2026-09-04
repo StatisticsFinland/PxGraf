@@ -13,7 +13,7 @@ import { QueryContext } from "../../contexts/queryContext";
 import { VisualizationContext } from "../../contexts/visualizationContext";
 import { ISelectableSelections } from "../SelectableVariableMenus/SelectableDimensionMenus";
 import { EDimensionType } from "../../types/cubeMeta";
-import { createChart } from "@statisticsfinland/jsonstat-chart";
+import { createChart } from "@statisticsfinland/jsonstatgraphs";
 
 jest.mock('envVars', () => ({
     PxGrafUrl: 'pxGrafUrl.fi/',
@@ -21,7 +21,7 @@ jest.mock('envVars', () => ({
     BasePath: ''
 }));
 
-jest.mock('@statisticsfinland/jsonstat-chart', () => ({
+jest.mock('@statisticsfinland/jsonstatgraphs', () => ({
     createChart: jest.fn(() => ({ update: jest.fn(), destroy: jest.fn() })),
 }));
 

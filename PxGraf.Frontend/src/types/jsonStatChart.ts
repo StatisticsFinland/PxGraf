@@ -1,4 +1,4 @@
-import { ChartConfig, ChartType, JsonStatDataset, SelectableSelections } from '@statisticsfinland/jsonstat-chart';
+import { ChartConfig, ChartType, JsonStatDataset, SelectableSelections } from '@statisticsfinland/jsonstatgraphs';
 import { EDimensionType } from './cubeMeta';
 import { IVariable } from './visualizationResponse';
 import { IVisualizationSettings } from './visualizationSettings';
