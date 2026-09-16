@@ -1,13 +1,15 @@
 using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
+using Px.Utils.Language;
 using Px.Utils.Models;
 using Px.Utils.Models.Data.DataValue;
 using Px.Utils.Models.Metadata;
 using Px.Utils.Models.Metadata.Enums;
-using PxGraf.Data.MetaData;
 using PxGraf.Datasource.ApiDatasource.SerializationModels;
 using PxGraf.Language;
 using PxGraf.Enums;
+using PxGraf.Models.Queries;
+using PxGraf.Models.Requests;
 using PxGraf.Models.Responses;
 using PxGraf.Settings;
 using PxGraf.Visualization;
@@ -44,10 +46,8 @@ namespace UnitTests.Visualization
             ];
 
             Matrix<DecimalDataValue> matrix = TestDataCubeBuilder.BuildTestMatrix(dimensions, missingData: true);
-            VisualizationResponse.PxVisualizerSettings visualizationSettings = new()
-            {
-                VisualizationType = VisualizationType.LineChart
-            };
+            VisualizationSettings visualizationSettings = new LineChartVisualizationSettings(
+                new Layout([], ["variable-0"]), false, null);
 
             JsonStat2 result = JsonStat2DatasetBuilder.Build(matrix, "fi", visualizationSettings);
 
@@ -67,7 +67,7 @@ namespace UnitTests.Visualization
             Assert.That(result.Dimensions["variable-0"].Category.Index["2001"], Is.EqualTo(1));
             Assert.That(result.Dimensions["variable-0"].Category.Index["2002"], Is.EqualTo(2));
             Assert.That(result.Extension.MissingValueDescriptions["3"], Is.Not.Empty);
-            Assert.That(result.Extension.VisualizationSettings, Is.Not.Null);
+            Assert.That(result.Extension.VisualizationConfig.ChartType, Is.EqualTo("line"));
         }
 
         [Test]
@@ -152,6 +152,23 @@ namespace UnitTests.Visualization
         }
 
         [Test]
+        public void Build_ReplacesTimePlaceholdersInEditedHeader()
+        {
+            List<DimensionParameters> dimensions =
+            [
+                new DimensionParameters(DimensionType.Time, 3),
+                new DimensionParameters(DimensionType.Content, 1)
+            ];
+            Matrix<DecimalDataValue> matrix = TestDataCubeBuilder.BuildTestMatrix(dimensions, missingData: false);
+            MatrixQuery query = TestDataCubeBuilder.BuildTestCubeQuery(dimensions);
+            query.ChartHeaderEdit = new MultilanguageString("fi", "Muokattu [FIRST]-[LAST]");
+
+            JsonStat2 result = JsonStat2DatasetBuilder.Build(matrix, "fi", null, query);
+
+            Assert.That(result.Label, Is.EqualTo("Muokattu 2000-2002"));
+        }
+
+        [Test]
         public void Build_UsesDefaultLocalizationForMissingDescriptions_WhenTableLanguageIsNotLocalized()
         {
             List<DimensionParameters> dimensions =
@@ -177,15 +194,103 @@ namespace UnitTests.Visualization
             ];
 
             Matrix<DecimalDataValue> matrix = TestDataCubeBuilder.BuildTestMatrix(dimensions, missingData: false);
-            JsonStat2 result = JsonStat2DatasetBuilder.Build(matrix, "fi", new VisualizationResponse.PxVisualizerSettings
-            {
-                VisualizationType = VisualizationType.LineChart
-            });
+            JsonStat2 result = JsonStat2DatasetBuilder.Build(matrix, "fi", new LineChartVisualizationSettings(
+                new Layout([], ["variable-0"]), false, null));
 
             using JsonDocument document = JsonDocument.Parse(JsonSerializer.Serialize(result, GlobalJsonConverterOptions.Default));
-            JsonElement settings = document.RootElement.GetProperty("extension").GetProperty("visualizationSettings");
-            Assert.That(settings.TryGetProperty("visualizationType", out _), Is.True);
-            Assert.That(settings.TryGetProperty("selectedVisualization", out _), Is.False);
+            JsonElement settings = document.RootElement.GetProperty("extension").GetProperty("visualizationConfig");
+            Assert.That(settings.GetProperty("chartType").GetString(), Is.EqualTo("line"));
+        }
+
+        [Test]
+        public void Build_UsesVisualizationResponseDimensionAndValueOrdering()
+        {
+            List<DimensionParameters> dimensions =
+            [
+                new DimensionParameters(DimensionType.Time, 3),
+                new DimensionParameters(DimensionType.Content, 2)
+            ];
+            Matrix<DecimalDataValue> matrix = TestDataCubeBuilder.BuildTestMatrix(dimensions, missingData: false);
+            MatrixQuery query = TestDataCubeBuilder.BuildTestCubeQuery(dimensions);
+            query.ChartHeaderEdit = new MultilanguageString("fi", "Muokattu [FIRST]-[LAST]");
+            VisualizationSettings settings = new VisualizationCreationSettings
+            {
+                SelectedVisualization = VisualizationType.ScatterPlot
+            }.ToVisualizationSettings(matrix.Metadata, query);
+
+            VisualizationResponse visualizationResponse = PxVisualizerCubeAdapter.BuildVisualizationResponse(matrix, query, settings);
+            JsonStat2 jsonStat = JsonStat2DatasetBuilder.Build(matrix, "fi", settings, query);
+
+            Assert.That(jsonStat.Id, Is.EqualTo(visualizationResponse.MetaData.Select(variable => variable.Code)));
+            Assert.That(jsonStat.Size, Is.EqualTo(visualizationResponse.MetaData.Select(variable => variable.Values.Count)));
+            Assert.That(jsonStat.Value, Is.EqualTo(visualizationResponse.Data));
+            Assert.That(jsonStat.Extension.VisualizationConfig.Layout.Rows, Is.EqualTo(visualizationResponse.RowDimensionCodes));
+            Assert.That(jsonStat.Extension.VisualizationConfig.Layout.Columns, Is.EqualTo(visualizationResponse.ColumnDimensionCodes));
+            Assert.That(jsonStat.Label, Is.EqualTo(visualizationResponse.Header["fi"]));
+            Assert.That(jsonStat.Label, Is.EqualTo("Muokattu 2000-2002"));
+        }
+
+        [Test]
+        public void Build_AppliesDimensionValueUnitAndSourceEdits()
+        {
+            List<DimensionParameters> dimensions =
+            [
+                new DimensionParameters(DimensionType.Time, 2),
+                new DimensionParameters(DimensionType.Content, 1)
+            ];
+            Matrix<DecimalDataValue> matrix = TestDataCubeBuilder.BuildTestMatrix(dimensions, missingData: false);
+            MatrixQuery query = TestDataCubeBuilder.BuildTestCubeQuery(dimensions).ApplyNameEdits(
+                (MatrixMetadata)matrix.Metadata,
+                dimensionNameEdits: new Dictionary<string, MultilanguageString>
+                {
+                    ["variable-0"] = new MultilanguageString("fi", "Muokattu aika")
+                },
+                valueNameEdits: new Dictionary<string, Dictionary<string, MultilanguageString>>
+                {
+                    ["variable-1"] = new Dictionary<string, MultilanguageString>
+                    {
+                        ["value-0"] = new MultilanguageString("fi", "Muokattu tieto")
+                    }
+                });
+            query.DimensionQueries["variable-1"].ValueEdits["value-0"].ContentComponent = new ContentComponentEdition
+            {
+                UnitEdit = new MultilanguageString("fi", "muokattu yksikkö"),
+                SourceEdit = new MultilanguageString("fi", "muokattu lähde")
+            };
+
+            JsonStat2 result = JsonStat2DatasetBuilder.Build(matrix, "fi", null, query);
+
+            Assert.That(result.Dimensions["variable-0"].Label, Is.EqualTo("Muokattu aika"));
+            Assert.That(result.Dimensions["variable-1"].Category.Label["value-0"], Is.EqualTo("Muokattu tieto"));
+            Assert.That(result.Dimensions["variable-1"].Category.Unit["value-0"].Label, Is.EqualTo("muokattu yksikkö"));
+            Assert.That(result.Extension.JsonStatChart.Sources.Category["variable-1"]["value-0"], Is.EqualTo("muokattu lähde"));
+        }
+
+        [Test]
+        public void Build_EmitsDimensionSourceWhenAllContentValuesShareIt()
+        {
+            List<DimensionParameters> dimensions =
+            [
+                new DimensionParameters(DimensionType.Time, 2),
+                new DimensionParameters(DimensionType.Content, 2)
+            ];
+            Matrix<DecimalDataValue> matrix = TestDataCubeBuilder.BuildTestMatrix(dimensions, missingData: false);
+            MatrixQuery query = TestDataCubeBuilder.BuildTestCubeQuery(dimensions);
+            foreach (string valueCode in matrix.Metadata.Dimensions.Single(dimension => dimension.Type == DimensionType.Content).ValueCodes)
+            {
+                query.DimensionQueries["variable-1"].ValueEdits[valueCode] = new DimensionQuery.DimensionValueEdition
+                {
+                    ContentComponent = new ContentComponentEdition
+                    {
+                        SourceEdit = new MultilanguageString("fi", "yhteinen lähde")
+                    }
+                };
+            }
+
+            JsonStat2 result = JsonStat2DatasetBuilder.Build(matrix, "fi", null, query);
+
+            Assert.That(result.Extension.JsonStatChart.Sources.Dimension["variable-1"], Is.EqualTo("yhteinen lähde"));
+            Assert.That(result.Extension.JsonStatChart.Sources.Category["variable-1"].Count, Is.EqualTo(2));
         }
     }
 }

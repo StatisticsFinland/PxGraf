@@ -476,7 +476,8 @@ namespace PxGraf.Controllers
                     JsonStat2 dataset = JsonStat2DatasetBuilder.Build(
                         matrix,
                         lang,
-                        PxVisualizerCubeAdapter.BuildVisualizationSettings(matrix, visualizationSettings));
+                        visualizationSettings,
+                        request.Query);
                     _logger.LogDebug("Returning JSON-stat visualization result.");
                     return new JsonResult(dataset)
                     {
@@ -548,10 +549,10 @@ namespace PxGraf.Controllers
                 Type = type,
                 AllowManualPivot = manualPivotability,
                 allowMultiselect = (type == VisualizationType.LineChart) && query.DimensionQueries.Any(vq => vq.Value.Selectable),
-                AllowShowingDataPoints = type == VisualizationType.VerticalBarChart,
+                AllowShowingDataPoints = false,
                 AllowCuttingYAxis = AllowCuttingYAxis,
                 AllowMatchXLabelsToEnd = AllowMatchXLabelsToEnd,
-                AllowSetMarkerScale = type == VisualizationType.ScatterPlot,
+                AllowSetMarkerScale = false,
                 SortingOptions = CubeSorting.Get(type, meta, manualPivotability, query)
             };
         }

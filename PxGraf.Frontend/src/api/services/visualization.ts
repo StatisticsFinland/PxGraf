@@ -1,9 +1,9 @@
 /* istanbul ignore file */
 
 import ApiClient from "api/client";
-import { IQueryVisualizationResponse } from "@statisticsfinland/pxvisualizer";
 import { useQuery } from "@tanstack/react-query";
 import { ICubeQuery, Query } from "types/query";
+import { IJsonStatDataset } from "types/jsonStatChart";
 import { IVisualizationSettings } from "types/visualizationSettings";
 
 import { buildCubeQuery, defaultQueryOptions } from "utils/ApiHelpers";
@@ -12,12 +12,13 @@ import { buildCubeQuery, defaultQueryOptions } from "utils/ApiHelpers";
  * Interface for a visualization result.
  * @property {boolean} isLoading - Flag to indicate if the data is still loading.
  * @property {boolean} isError - Flag to indicate if an error occurred during loading.
- * @property {IQueryVisualizationResponse} data - The visualization result represented as PxVisualizer @see {@link IQueryVisualizationResponse}.
+ * @property {IJsonStatDataset} data - The visualization result represented as a JSON-stat 2.0 dataset.
  */
 export interface IVisualizationResult {
     isLoading: boolean;
+    isFetching: boolean;
     isError: boolean;
-    data: IQueryVisualizationResponse;
+    data: IJsonStatDataset;
 }
 
 const fetchVisualization = async (
@@ -27,7 +28,7 @@ const fetchVisualization = async (
     language: string,
     selectedVisualization: string,
     visualizationSettings: IVisualizationSettings
-): Promise<IQueryVisualizationResponse> => {
+): Promise<IJsonStatDataset> => {
 
     const client = new ApiClient();
 
@@ -40,7 +41,7 @@ const fetchVisualization = async (
         }
     });
 
-    const url = 'creation/visualization';
+    const url = `creation/jsonstat?lang=${encodeURIComponent(language)}`;
     return await client.postAsync(url, requestBody);
 }
 
