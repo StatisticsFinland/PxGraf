@@ -14,6 +14,9 @@
   "navbar": {
     "logoAlt": "Go to the home page"
   },
+  "app": {
+    "version": "Version {{version}}"
+  },
   "lang": {
     "self": "In English",
     "local": {

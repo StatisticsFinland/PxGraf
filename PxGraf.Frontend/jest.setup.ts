@@ -55,7 +55,8 @@ if (!globalThis.CSS.supports) globalThis.CSS.supports = () => true;
 jest.mock('envVars', () => ({
     PxGrafUrl: 'http://localhost:3000',
     PublicUrl: '',
-    BasePath: ''
+    BasePath: '',
+    AppVersion: '2.8.4',
 }));
 
 // Centralized react-i18next mock for all test files
