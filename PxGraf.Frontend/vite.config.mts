@@ -1,5 +1,6 @@
 import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
+import packageJson from './package.json'
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
@@ -7,6 +8,9 @@ export default defineConfig(({ mode }) => {
 
     return {
         base: env.VITE_BASE_PATH || '/',
+        define: {
+            'import.meta.env.VITE_APP_VERSION': JSON.stringify(packageJson.version),
+        },
         plugins: [react()],
         resolve: {
             alias: {
@@ -27,7 +31,7 @@ export default defineConfig(({ mode }) => {
         server: {
             port: 3000,
             proxy: {
-                '/api': env.VITE_PXGRAF_URL,
+                '/api': env.VITE_PXGRAF_PROXY_TARGET || 'http://localhost:5000',
             },
         },
         build: {

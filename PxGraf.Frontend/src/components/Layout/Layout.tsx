@@ -5,10 +5,11 @@ import { styled } from '@mui/material/styles';
 import Header from 'components/Header/Header';
 import { EditorProvider } from 'contexts/editorContext';
 import Editor from 'views/Editor/Editor';
+import VersionDisplay from 'components/VersionDisplay/VersionDisplay';
 
 const LayoutWrapper = styled('div')({
     display: 'grid',
-    gridTemplateRows: 'auto 1fr',
+    gridTemplateRows: 'auto 1fr auto',
     height: '100%',
     overflow: 'hidden',
 });
@@ -26,6 +27,7 @@ export const PageLayout: React.FC<{ element: ReactNode }> = ({ element }) => (
     <LayoutWrapper>
         <HeaderArea><Header /><Divider /></HeaderArea>
         <ContentArea id="mainContent" tabIndex={-1}>{element}</ContentArea>
+        <VersionDisplay />
     </LayoutWrapper>
 );
 
