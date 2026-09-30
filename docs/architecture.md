@@ -173,7 +173,7 @@ Testing: Jest 30, Testing Library (React + DOM + user-event), ts-jest.
 | `Preview/Preview` | Chart preview with selectable dimension menus; size controls are in `EditorMetaSection`. Consumes `QueryContext` and `VisualizationContext`. Uses `@statisticsfinland/pxvisualizer` `Chart` component |
 | `ChartTypeSelector/` | UI for selecting visualization type |
 | `ChartTypeRejectionReasons/` | Displays reasons a chart type is not available |
-| `MetaEditor/` | `MetadataDialog` edits selected dimension value names, units and sources; `HeaderEditor` edits the chart header in the main editor. Also contains `BasicDimensionEditor`, `ContentDimensionEditor`, `ContentDimensionValueEditor`, `DimensionEditor`, `Editorfield`, `RevertButton` |
+| `MetaEditor/` | `MetadataDialog` edits selected dimension value names, units and sources; `HeaderEditor` edits the chart header in the main editor. Also contains `BasicDimensionEditor`, `ContentDimensionEditor`, `ContentDimensionValueEditor`, `DimensionEditor`, `EditorField`, `RevertButton` |
 | `VariableSelection/` | Dimension filter UI: `DefaultSelectableDimensionSelection`, `DimensionSelection`, `DimensionSelectionList`, filter sub-components and computed-value controls |
 | `SelectableVariableMenus/` | `SelectableDimensionMenus`, `ValueSelect` — dropdowns for selectable dimensions in preview |
 | `VisualizationSettingsControls/` | Visualization settings UI. Sub-folders: `TypeSpecificControls/` (`MultiselectableSelector`, `TablePivotSettings`) and `UtilityComponents/` (`DimensionList`, `MarkerScaler`, `SortingSelector`, `VisualizationSettingsSwitch`) |
