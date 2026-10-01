@@ -5,6 +5,15 @@ exports[`Rendering test renders correctly 1`] = `
   <div
     class="MuiBox-root"
   >
+    <div
+      class="MuiBox-root"
+    >
+      <p
+        class="MuiTypography-root MuiTypography-caption"
+      >
+        app.version
+      </p>
+    </div>
     <button
       aria-label="tooltip.open: editor.save"
     >

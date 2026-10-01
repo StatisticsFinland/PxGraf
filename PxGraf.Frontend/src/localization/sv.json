@@ -14,6 +14,9 @@
   "navbar": {
     "logoAlt": "Till förstasidan"
   },
+  "app": {
+    "version": "Version {{version}}"
+  },
   "lang": {
     "self": "På svenska",
     "local": {

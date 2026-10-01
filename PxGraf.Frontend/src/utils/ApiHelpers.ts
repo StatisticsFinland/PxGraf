@@ -45,7 +45,7 @@ export const buildTableReference = (idStack: string[]) => {
 }
 
 export const pxGrafUrl = (path: string) => {
-    return PxGrafUrl + path;
+  return PxGrafUrl + path;
 }
 
 export const defaultQueryOptions = {

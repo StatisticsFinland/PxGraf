@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { styled } from '@mui/material/styles';
 import InfoBubble from 'components/InfoBubble/InfoBubble';
 import CellCount from 'components/CellCount/CellCount';
+import VersionDisplay from 'components/VersionDisplay/VersionDisplay';
 
 const FooterBtnWrapper = styled(Box)(({ theme }) => ({
     gridArea: 'footer',
@@ -56,6 +57,7 @@ export const EditorFooterSection: React.FC<IEditorFooterSectionProps> = ({ size,
     return(
         <FooterBtnWrapper>
             {(size != null && maximumSize != null && warningLimit != null) ? <CellCountWrapper><CellCount size={size} maximumSize={maximumSize} warningLimit={warningLimit} /></CellCountWrapper> : <></>}
+            <Box sx={{ marginRight: 2 }}><VersionDisplay /></Box>
             <InfoBubble info={t('infoText.save')} ariaLabel={t("editor.save")} />
             <Button variant="contained" size="small" startIcon={<SaveIcon />} sx={{ minWidth: 104 }} onClick={() => setSaveDialogOpen(true)}>
                 {t("editor.save")}
