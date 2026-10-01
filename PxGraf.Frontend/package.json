@@ -1,6 +1,6 @@
 {
   "name": "pxgraf",
-  "version": "2.8.5",
+  "version": "2.8.6",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -21,6 +21,7 @@
   },
   "scripts": {
     "start": "vite",
+    "start:standalone": "vite --mode standalone",
     "build": "tsc && vite build",
     "serve": "vite preview",
     "typecheck": "tsc --noEmit",

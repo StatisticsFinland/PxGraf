@@ -104,9 +104,11 @@ This will also build the frontend.
 
 ## Frontend
 
-1. Follow the steps in Backend section to build the frontend.
-2. When the build process has completed, run `npm start` in the PxGraf.Frontend folder. This will start the development server for the frontend.
-3. You should now be able to navigate to localhost:3000 using your browser and see the application. (Requires PxGraf backend to also be running)
+1. Install the frontend dependencies in the PxGraf.Frontend folder with `npm install`.
+2. Run `npm start` to use the real backend, or `npm run start:standalone` to explore and test the UI without a backend.
+3. Open localhost:3000 in your browser. Normal mode requires the PxGraf backend; connection failures remain errors and never enable sample responses.
+
+Standalone mode is available only through the explicit development command. It provides a sample database and table, simulated visualization responses, and in-memory saved queries (including draft and archive actions). Saved queries reset on refresh; chart values and publication results are illustrative, not real backend calculations. The standalone mock code is omitted from production builds, even when the build uses `--mode standalone`.
 
 ## Unit tests
 Both the backend and the frontend have unit tests. The backend tests can be run by running `dotnet test` in the solution folder or using Visual Studio test explorer. The frontend tests can be run by running `npm run test` in the PxGraf.Frontend folder.
