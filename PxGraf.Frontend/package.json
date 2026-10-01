@@ -21,6 +21,7 @@
   },
   "scripts": {
     "start": "vite",
+    "start:standalone": "vite --mode standalone",
     "build": "tsc && vite build",
     "serve": "vite preview",
     "typecheck": "tsc --noEmit",

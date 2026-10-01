@@ -15,6 +15,10 @@ export class ApiClientV2 {
     BASE_URL_V2 = pxGrafUrl('api/');
 
     async postAsync(url: string, requestBody?: string) {
+        if (typeof __PXGRAF_STANDALONE__ !== 'undefined' && __PXGRAF_STANDALONE__) {
+            const { handleStandaloneRequest } = await import('./standalone/handler');
+            return handleStandaloneRequest('POST', url, requestBody);
+        }
 
         const requestParameters: IRequestParameters = {
             method: 'POST',
@@ -44,6 +48,10 @@ export class ApiClientV2 {
         if (getParams) {
             const params = new URLSearchParams(getParams);
             getParamPart = '?' + params.toString();
+        }
+        if (typeof __PXGRAF_STANDALONE__ !== 'undefined' && __PXGRAF_STANDALONE__) {
+            const { handleStandaloneRequest } = await import('./standalone/handler');
+            return handleStandaloneRequest('GET', url + getParamPart);
         }
         const response = await fetch(this.BASE_URL_V2 + url + getParamPart);
 
