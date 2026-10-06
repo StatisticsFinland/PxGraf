@@ -201,6 +201,26 @@ namespace UnitTests.SortingTests
         }
 
         [Test]
+        public void SortingOptionsTest_PercentHorizontalBarChart()
+        {
+            List<DimensionParameters> varParams =
+            [
+                new(DimensionType.Content, 1),
+                new(DimensionType.Other, 4),
+                new(DimensionType.Unknown, 3),
+            ];
+
+            IReadOnlyMatrixMetadata meta = TestDataCubeBuilder.BuildTestMeta(varParams);
+            MatrixQuery query = TestDataCubeBuilder.BuildTestCubeQuery(varParams);
+
+            VisualizationOption.SortingOptionsCollection sortingOptions = CubeSorting.Get(VisualizationType.PercentHorizontalBarChart, meta, true, query);
+            List<string> defaultExpected = ["value-0", "value-1", "value-2", "sum", "no_sorting", "reversed"];
+            Assert.That(sortingOptions.Default.Select(so => so.Code).ToList(), Is.EqualTo(defaultExpected));
+            List<string> pivotedExpected = ["value-0", "value-1", "value-2", "value-3", "sum", "no_sorting", "reversed"];
+            Assert.That(sortingOptions.Pivoted.Select(so => so.Code).ToList(), Is.EqualTo(pivotedExpected));
+        }
+
+        [Test]
         public void SortingOptionsTest_VerticalBarChart()
         {
             List<DimensionParameters> varParams =
