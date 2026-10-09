@@ -3,10 +3,10 @@ import {
 } from '@mui/material';
 import React from 'react';
 import { UiLanguageContext } from 'contexts/uiLanguageContext';
-import { IVariable } from '../../types/visualizationResponse';
+import { ISelectableDimension } from './selectableDimension';
 
 export interface IValueSelectProps {
-    dimension: IVariable;
+    dimension: ISelectableDimension;
     multiselect: boolean;
     activeSelections: string | string[];
     onValueChanged: (value: string | string[]) => void;

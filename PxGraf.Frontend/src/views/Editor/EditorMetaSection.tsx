@@ -17,6 +17,7 @@ import { EPreviewSize } from 'types/previewSize';
 import { IEditorContentsResult } from '../../api/services/editor-contents';
 import { getVisualizationOptionsForVisualizationType, getVisualizationSettingVisibility } from '../../utils/editorHelpers';
 import { IVisualizationSettings } from '../../types/visualizationSettings';
+import { VisualizationLibrary } from 'utils/visualizationLibrary';
 
 const MetaWrapper = styled(Box)(({ theme }) => ({
   gridArea: 'parameters',
@@ -60,7 +61,12 @@ const VisualizationSettingsRow = styled('div')(({ theme }) => ({
 }));
 
 const PreviewSizeControlWrapper = styled('div')({
-    display: 'flex', alignItems: 'center', gap: 4, marginLeft: 'auto',
+    display: 'flex',
+    alignItems: 'center',
+    gap: 4,
+    marginLeft: 'auto',
+    flexWrap: 'wrap',
+    justifyContent: 'flex-end',
 });
 
 const ChartTypeSelectorWrapper = styled('div')({
@@ -88,6 +94,8 @@ interface IEditorMetaSectionProps {
     visualizationSettings: IVisualizationSettings;
     previewSize: EPreviewSize;
     onPreviewSizeChange: (size: EPreviewSize) => void;
+    visualizationLibrary: VisualizationLibrary;
+    onVisualizationLibraryChange: (library: VisualizationLibrary) => void;
 }
 
 const TitleWrapper = styled('div')({ display: 'flex', alignItems: 'center' });
@@ -95,7 +103,7 @@ const TitleWrapper = styled('div')({ display: 'flex', alignItems: 'center' });
 /**
  * Component for editing meta data information for the visualization. Used in @see {@link Editor} view.
  * In this view the user can change the visualization type and settings and edit the meta data information such as the chart header for the visualization.
- * @param {IEditorMetaSectionProps} editorContentsResponse Editor contents response from the API.
+ * @param {IEditorContentsResult} editorContentsResponse Editor contents response from the API.
  * @param {VisualizationType} selectedVisualization Currently selected visualization type.
  * @param {IDimension[]} resolvedDimensions: Resolved dimension codes.
  * @param {Query} dimensionQuery: Query object containing the selected values for each dimension.
@@ -103,8 +111,10 @@ const TitleWrapper = styled('div')({ display: 'flex', alignItems: 'center' });
  * @param {IVisualizationSettings} visualizationSettings: Visualization settings for the selected visualization type.
  * @param {EPreviewSize} previewSize: The current preview size selection.
  * @param {(size: EPreviewSize) => void} onPreviewSizeChange: Callback for when the preview size changes.
+ * @param {VisualizationLibrary} visualizationLibrary The charting library used for the preview.
+ * @param {(library: VisualizationLibrary) => void} onVisualizationLibraryChange Callback when the preview library changes.
  */
-export const EditorMetaSection: React.FC<IEditorMetaSectionProps> = ({ editorContentsResponse, selectedVisualization, resolvedDimensions, dimensionQuery, contentLanguages, visualizationSettings, previewSize, onPreviewSizeChange }) => {
+export const EditorMetaSection: React.FC<IEditorMetaSectionProps> = ({ editorContentsResponse, selectedVisualization, resolvedDimensions, dimensionQuery, contentLanguages, visualizationSettings, previewSize, onPreviewSizeChange, visualizationLibrary, onVisualizationLibraryChange }) => {
     const { language, languageTab, setLanguageTab } = React.useContext(UiLanguageContext);
 
     // If the UI language is changed, content language is updated if applicable
@@ -179,6 +189,17 @@ export const EditorMetaSection: React.FC<IEditorMetaSectionProps> = ({ editorCon
                             {(editorContentsResponse.data?.visualizationRejectionReasons && Object.keys(editorContentsResponse.data?.visualizationRejectionReasons).length > 0) ? <ChartTypeRejectionReasons rejectionReasons={editorContentsResponse.data?.visualizationRejectionReasons} /> : <></>}
                         </FlexContentWrapper>
                         <PreviewSizeControlWrapper>
+                            <ToggleButtonGroup
+                                size="small"
+                                color="primary"
+                                exclusive
+                                value={visualizationLibrary}
+                                aria-label={t('editor.visualizationLibrary')}
+                                onChange={(_, value) => value != null && onVisualizationLibraryChange(value)}
+                            >
+                                <ToggleButton value="jsonstatgraphs">{t('editor.jsonstatgraphs')}</ToggleButton>
+                                <ToggleButton value="pxvisualizer">{t('editor.pxvisualizer')}</ToggleButton>
+                            </ToggleButtonGroup>
                             <InfoBubble info={t("infoText.rescaleButtons")} ariaLabel={t('tooltip.visualizationSize')} />
                             <ToggleButtonGroup
                                 size="small"

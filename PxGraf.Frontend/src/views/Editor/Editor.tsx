@@ -25,6 +25,7 @@ import { VirtualValueOperator } from 'types/query';
 import { useEditorContentsQuery } from '../../api/services/editor-contents';
 import { getValidatedSettings } from '../../utils/ChartSettingHelpers';
 import { EPreviewSize } from 'types/previewSize';
+import { getVisualizationLibraryPreference, setVisualizationLibraryPreference, VisualizationLibrary } from 'utils/visualizationLibrary';
 
 //Used to set the width of the dimension selection and preview margin in pixels
 const dimensionSelectionWidth = 450;
@@ -254,7 +255,13 @@ export const Editor = () => {
     const saveQueryMutation = useSaveMutation(path, modifiedQuery, cubeQuery, selectedVisualization, visualizationSettings, saveId);
 
     const [previewSize, setPreviewSize] = React.useState<EPreviewSize>(EPreviewSize.Desktop);
+    const [visualizationLibrary, setVisualizationLibrary] = React.useState<VisualizationLibrary>(getVisualizationLibraryPreference);
     const [metadataDialogOpen, setMetadataDialogOpen] = React.useState(false);
+
+    const handleVisualizationLibraryChange = (library: VisualizationLibrary) => {
+        setVisualizationLibrary(library);
+        setVisualizationLibraryPreference(library);
+    };
 
     const errorContainer = (errorMessage: string) => {
         return (
@@ -343,6 +350,8 @@ export const Editor = () => {
                     visualizationSettings={visualizationSettings}
                     previewSize={previewSize}
                     onPreviewSizeChange={setPreviewSize}
+                    visualizationLibrary={visualizationLibrary}
+                    onVisualizationLibraryChange={handleVisualizationLibraryChange}
                 />
                 <PreviewDivider />
                 <EditorPreviewSection
@@ -352,6 +361,7 @@ export const Editor = () => {
                     visualizationSettings={visualizationSettings}
                     selectedVisualization={selectedVisualization}
                     previewSize={previewSize}
+                    visualizationLibrary={visualizationLibrary}
                 />
                 <FooterDivider />
                 <EditorFooterSection

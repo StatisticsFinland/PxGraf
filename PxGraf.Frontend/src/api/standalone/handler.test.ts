@@ -62,6 +62,38 @@ describe('standalone API', () => {
         expect(preview).toHaveProperty('data', [2320, 2405, 2490]);
     });
 
+    it('returns a localized JSON-stat dataset for the query-suffixed route', async () => {
+        const result = await handleStandaloneRequest('POST', 'creation/jsonstat?lang=fi', JSON.stringify({
+            query,
+            language: 'en',
+            visualizationSettings: { selectedVisualization: VisualizationType.Table },
+        }));
+
+        expect(result).toMatchObject({
+            version: '2.0',
+            class: 'dataset',
+            id: ['Year', 'Area', 'Measure'],
+            size: [3, 2, 1],
+            label: 'Vaestoesimerkki',
+            value: [2000, 2320, 2085, 2405, 2170, 2490],
+            extension: {
+                visualizationConfig: {
+                    chartType: 'table',
+                    layout: { rows: ['Year', 'Area', 'Measure'], columns: [] },
+                },
+            },
+        });
+        expect(result).toHaveProperty('dimension.Year.label', 'Vuosi');
+        expect(result).toHaveProperty('dimension.Area.category.label.north', 'Pohjoinen');
+    });
+
+    it('rejects unsupported JSON-stat languages', async () => {
+        await expect(handleStandaloneRequest('POST', 'creation/jsonstat?lang=xx', JSON.stringify({
+            query,
+            visualizationSettings: { selectedVisualization: VisualizationType.Table },
+        }))).rejects.toThrow('Unsupported standalone language');
+    });
+
     it('does not preview or save a query with an empty dimension', async () => {
         const emptyQuery = {
             ...query,

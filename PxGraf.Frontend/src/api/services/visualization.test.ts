@@ -106,6 +106,18 @@ describe('useVisualizationQuery', () => {
         expect(mockPostAsync).toHaveBeenCalledWith('creation/jsonstat?lang=fi', expect.any(String));
     });
 
+    it('uses the legacy endpoint when PxVisualizer is selected', async () => {
+        mockPostAsync.mockResolvedValueOnce({ data: [] });
+
+        const { result } = renderHook(
+            () => useVisualizationQuery(mockIdStack, mockQuery, mockCubeQuery, 'fi', 'lineChart', {}, 'pxvisualizer'),
+            { wrapper: createWrapper() }
+        );
+
+        await waitFor(() => expect(result.current.isLoading).toBe(false));
+        expect(mockPostAsync).toHaveBeenCalledWith('creation/visualization', expect.any(String));
+    });
+
     it('sets isError when fetch fails', async () => {
         const settings: IVisualizationSettings = {};
         mockPostAsync.mockRejectedValueOnce(new Error('Network error'));

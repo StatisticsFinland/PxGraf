@@ -285,6 +285,7 @@ describe('Rendering test', () => {
                 visualizationSettings={mockVisualizationSettings}
                 editorContents={mockEditorContents}
                 previewSize={EPreviewSize.Desktop}
+                visualizationLibrary="jsonstatgraphs"
             />);
         expect(asFragment()).toMatchSnapshot();
     });
@@ -297,6 +298,7 @@ describe('Rendering test', () => {
                 visualizationSettings={mockVisualizationSettings}
                 editorContents={mockEditorContentsNoValidVisualization}
                 previewSize={EPreviewSize.Desktop}
+                visualizationLibrary="jsonstatgraphs"
             />);
         expect(asFragment()).toMatchSnapshot();
     });
@@ -309,6 +311,7 @@ describe('Rendering test', () => {
                 visualizationSettings={mockVisualizationSettings}
                 editorContents={mockEditorContentsEmptyVisualizationsAndRejections}
                 previewSize={EPreviewSize.Desktop}
+                visualizationLibrary="jsonstatgraphs"
             />);
         expect(asFragment()).toMatchSnapshot();
     });

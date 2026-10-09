@@ -8,10 +8,12 @@ import { VisualizationType } from 'types/visualizationType';
 import { IVisualizationSettings } from 'types/visualizationSettings';
 import { useTranslation } from 'react-i18next';
 import { IEditorContentsResult } from '../../api/services/editor-contents';
+import { VisualizationLibrary } from 'utils/visualizationLibrary';
 
 const PreviewWrapper = styled(Box)(({ theme }) => ({
     gridArea: 'preview',
-    display: 'block',
+    display: 'flex',
+    height: '100%',
     position: 'relative',
     padding: '12px 24px',
     boxSizing: 'border-box',
@@ -22,9 +24,10 @@ const PreviewWrapper = styled(Box)(({ theme }) => ({
 
 const PreviewCenterer = styled('div')({
     display: 'flex',
-    alignItems: 'center',
+    alignItems: 'stretch',
     width: '100%',
-    minHeight: '100%',
+    height: '100%',
+    minHeight: 0,
     '& > *': {
         flexShrink: 0,
     },
@@ -43,18 +46,20 @@ interface IEditorPreviewSectionProps {
     visualizationSettings: IVisualizationSettings;
     editorContents: IEditorContentsResult;
     previewSize: EPreviewSize;
+    visualizationLibrary: VisualizationLibrary;
 }
 
 /**
  * Component for previewing the visualization. Used in the @see {@link Editor} component. The preview is rendered in the @see {@link Preview} component.
  * @param {string[]} path Path to the current table in the Px file system.
  * @param {Query} query Current query settings.
- * @param {VisualizationType} visualizationType Selected visualization type.
+ * @param {VisualizationType} selectedVisualization Selected visualization type.
  * @param {IVisualizationSettings} visualizationSettings Selected visualization settings.
- * @param {IEditorContentsResponse} editorContents Contents of the editor. This includes the visualization options and rejection reasons.
+ * @param {IEditorContentsResult} editorContents Contents of the editor. This includes the visualization options and rejection reasons.
  * @param {EPreviewSize} previewSize The current preview size for the chart.
+ * @param {VisualizationLibrary} visualizationLibrary Library used to render the preview.
  */
-export const EditorPreviewSection: React.FC<IEditorPreviewSectionProps> = ({ path, query, selectedVisualization, visualizationSettings, editorContents, previewSize }) => {
+export const EditorPreviewSection: React.FC<IEditorPreviewSectionProps> = ({ path, query, selectedVisualization, visualizationSettings, editorContents, previewSize, visualizationLibrary }) => {
     const { t } = useTranslation();
 
     if (!editorContents.data?.visualizationOptions?.length) {
@@ -82,6 +87,7 @@ export const EditorPreviewSection: React.FC<IEditorPreviewSectionProps> = ({ pat
                     selectedVisualization={selectedVisualization}
                     visualizationSettings={visualizationSettings}
                     previewSize={previewSize}
+                    visualizationLibrary={visualizationLibrary}
                 />
             </PreviewCenterer>
         </PreviewWrapper>

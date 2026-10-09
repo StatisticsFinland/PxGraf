@@ -6,7 +6,7 @@ import Preview, { ISelectabilityInfo, getSelectables, getResolvedSelections } fr
 import { EPreviewSize } from 'types/previewSize';
 import { IVisualizationResult } from "api/services/visualization";
 import { IJsonStatDataset } from "types/jsonStatChart";
-import { EVariableType, EVisualizationType, ETimeVariableInterval } from "@statisticsfinland/pxvisualizer";
+import { EVariableType, EVisualizationType, ETimeVariableInterval, IQueryVisualizationResponse, Chart as PxVisualizerChart } from "@statisticsfinland/pxvisualizer";
 import serializer from "../../testUtils/stripHighchartsHashes";
 import UiLanguageContext from "../../contexts/uiLanguageContext";
 import { QueryContext } from "../../contexts/queryContext";
@@ -25,7 +25,12 @@ jest.mock('@statisticsfinland/jsonstatgraphs', () => ({
     createChart: jest.fn(() => ({ update: jest.fn(), destroy: jest.fn() })),
 }));
 
-const mockVisualizationQueryResult: IVisualizationResult = {
+jest.mock('@statisticsfinland/pxvisualizer', () => ({
+    ...jest.requireActual('@statisticsfinland/pxvisualizer'),
+    Chart: jest.fn(() => null),
+}));
+
+const jsonStatVisualizationQueryResult: IVisualizationResult = {
     isLoading: false,
     isFetching: false,
     isError: false,
@@ -154,6 +159,7 @@ const mockVisualizationQueryResult: IVisualizationResult = {
         tableReference: { hierarchy: ["foo", "bar"], name:  "table" }
     } as unknown as IJsonStatDataset)
 };
+let mockVisualizationQueryResult = jsonStatVisualizationQueryResult;
 const mockPath = [
     "foo",
     "bar",
@@ -216,6 +222,11 @@ describe('Rendering test', () => {
         expect.addSnapshotSerializer(serializer);
     });
 
+    beforeEach(() => {
+        mockVisualizationQueryResult = jsonStatVisualizationQueryResult;
+        jest.clearAllMocks();
+    });
+
     it('renders correctly', () => {
         const { asFragment } = render(
             <UiLanguageContext.Provider value={{
@@ -247,6 +258,7 @@ describe('Rendering test', () => {
                             selectedVisualization={mockSelectedVisualization}
                             visualizationSettings={mockVisualizationSettings}
                             previewSize={EPreviewSize.Desktop}
+                            visualizationLibrary="jsonstatgraphs"
                         />
                     </VisualizationContext.Provider>
                 </QueryContext.Provider>
@@ -259,6 +271,59 @@ describe('Rendering test', () => {
             expect.objectContaining({ title: 'kulutus_t-fi 2018-2021' }),
             expect.anything()
         );
+    });
+
+    it('renders PxVisualizer data and passes the resolved selectable values', () => {
+        const pxVisualizerData = {
+            ...(jsonStatVisualizationQueryResult.data as unknown as IQueryVisualizationResponse),
+            selectableVariableCodes: ['Vuosi'],
+            visualizationSettings: {
+                ...(jsonStatVisualizationQueryResult.data as unknown as IQueryVisualizationResponse).visualizationSettings,
+                multiselectableVariableCode: 'Vuosi',
+                defaultSelectableVariableCodes: { Vuosi: ['2019'] },
+            },
+        } as IQueryVisualizationResponse;
+        mockVisualizationQueryResult = { ...jsonStatVisualizationQueryResult, data: pxVisualizerData };
+
+        render(
+            <UiLanguageContext.Provider value={{
+                language: mockLanguage,
+                setLanguage: jest.fn(),
+                languageTab: mockLanguage,
+                setLanguageTab: jest.fn(),
+                uiContentLanguage: mockLanguage,
+                setUiContentLanguage: jest.fn(),
+                availableUiLanguages: ['fi', 'en', 'sv'],
+            }}>
+                <QueryContext.Provider value={{ cubeQuery: mockCubeQueryTextEdits, setCubeQuery, query, setQuery }}>
+                    <VisualizationContext.Provider value={{
+                        selectedVisualizationUserInput,
+                        setSelectedVisualizationUserInput,
+                        visualizationSettingsUserInput,
+                        setVisualizationSettingsUserInput,
+                        defaultSelectables: {},
+                        setDefaultSelectables,
+                    }}>
+                        <Preview
+                            path={mockPath}
+                            query={mockQuery}
+                            selectedVisualization={mockSelectedVisualization}
+                            visualizationSettings={mockVisualizationSettings}
+                            previewSize={EPreviewSize.Desktop}
+                            visualizationLibrary="pxvisualizer"
+                        />
+                    </VisualizationContext.Provider>
+                </QueryContext.Provider>
+            </UiLanguageContext.Provider>
+        );
+
+        expect(PxVisualizerChart).toHaveBeenCalled();
+        expect((PxVisualizerChart as jest.Mock).mock.calls[0][0]).toMatchObject({
+            pxGraphData: pxVisualizerData,
+            locale: mockLanguage,
+            selectedVariableCodes: { Vuosi: ['2019'] },
+        });
+        expect(createChart).not.toHaveBeenCalled();
     });
 });
 
@@ -285,8 +350,7 @@ const mockSelectables: ISelectabilityInfo[] = [
                     contentComponent: null
                 }
             ]
-        },
-        multiselectable: false
+        }
     }
 ]
 
@@ -340,9 +404,9 @@ describe('Assertion tests', () => {
 
     it('getSelectables returns correct information about selectable dimensions', () => {
         const mockVisualizationResponseWithSelectables: IJsonStatDataset = {
-            ...mockVisualizationQueryResult.data,
+            ...mockVisualizationQueryResult.data as IJsonStatDataset,
             extension: {
-                ...mockVisualizationQueryResult.data.extension,
+                ...(mockVisualizationQueryResult.data as IJsonStatDataset).extension,
                 selectableConfig: { selectableSelections: { Tiedot: ['kulutus_t'], Vuosi: ['2018'] } }
             }
         };

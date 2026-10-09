@@ -32,7 +32,6 @@ const mockSelectables: ISelectabilityInfo[] = [
                 contentComponent: null,
             }],
         },
-        multiselectable: false,
     },
     {
         dimension: {
@@ -54,7 +53,6 @@ const mockSelectables: ISelectabilityInfo[] = [
                 contentComponent: null,
             }],
         },
-        multiselectable: false,
     }
 ]
 
