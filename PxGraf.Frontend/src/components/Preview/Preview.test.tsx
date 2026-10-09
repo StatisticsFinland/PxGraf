@@ -4,24 +4,16 @@ import { FilterType, ICubeQuery, Query } from "types/query";
 import { IVisualizationSettings } from "types/visualizationSettings";
 import Preview, { ISelectabilityInfo, getSelectables, getResolvedSelections } from "./Preview";
 import { EPreviewSize } from 'types/previewSize';
-import { EVariableType, EVisualizationType, ETimeVariableInterval, IQueryVisualizationResponse } from "@statisticsfinland/pxvisualizer";
 import { IVisualizationResult } from "api/services/visualization";
+import { IJsonStatDataset } from "types/jsonStatChart";
+import { EVariableType, EVisualizationType, ETimeVariableInterval, IQueryVisualizationResponse, Chart as PxVisualizerChart } from "@statisticsfinland/pxvisualizer";
 import serializer from "../../testUtils/stripHighchartsHashes";
 import UiLanguageContext from "../../contexts/uiLanguageContext";
 import { QueryContext } from "../../contexts/queryContext";
 import { VisualizationContext } from "../../contexts/visualizationContext";
 import { ISelectableSelections } from "../SelectableVariableMenus/SelectableDimensionMenus";
 import { EDimensionType } from "../../types/cubeMeta";
-
-function mockComponentMocker(name) {
-    return function MockComponent(...args) {
-        return (
-            <pre data-testid={name}>
-               args={JSON.stringify(args)}
-            </pre>
-        );
-    };
-}
+import { createChart } from "@statisticsfinland/jsonstatgraphs";
 
 jest.mock('envVars', () => ({
     PxGrafUrl: 'pxGrafUrl.fi/',
@@ -29,18 +21,31 @@ jest.mock('envVars', () => ({
     BasePath: ''
 }));
 
-jest.mock('@statisticsfinland/pxvisualizer', () => {
-    const lib = jest.requireActual("@statisticsfinland/pxvisualizer");
-    return {
-        ...lib,
-        Chart: mockComponentMocker('Chart')
-    }
-});
+jest.mock('@statisticsfinland/jsonstatgraphs', () => ({
+    createChart: jest.fn(() => ({ update: jest.fn(), destroy: jest.fn() })),
+}));
 
-const mockVisualizationQueryResult: IVisualizationResult = {
+jest.mock('@statisticsfinland/pxvisualizer', () => ({
+    ...jest.requireActual('@statisticsfinland/pxvisualizer'),
+    Chart: jest.fn(() => null),
+}));
+
+const jsonStatVisualizationQueryResult: IVisualizationResult = {
     isLoading: false,
+    isFetching: false,
     isError: false,
-    data: {
+    data: ({
+        version: '2.0',
+        class: 'dataset',
+        label: 'kulutus_t-fi 2018-2021',
+        id: ['Tiedot', 'Vuosi'],
+        size: [1, 4],
+        dimension: {
+            Tiedot: { label: 'Tiedot', category: { index: { kulutus_t: 0 }, label: { kulutus_t: 'Kulutus' } } },
+            Vuosi: { label: 'Vuosi', category: { index: { '2018': 0, '2019': 1, '2020': 2, '2021': 3 }, label: { '2018': '2018', '2019': '2019', '2020': '2020', '2021': '2021' } } },
+        },
+        value: [3107, 2383, 1555, 1839],
+        extension: { visualizationConfig: { chartType: 'table' }, selectableConfig: { selectableSelections: {} } },
         data: [3107, 2383, 1555, 1839],
         missingDataInfo: {},
         dataNotes: {},
@@ -152,8 +157,9 @@ const mockVisualizationQueryResult: IVisualizationResult = {
             defaultSelectableVariableCodes: null,
         },
         tableReference: { hierarchy: ["foo", "bar"], name:  "table" }
-    }
+    } as unknown as IJsonStatDataset)
 };
+let mockVisualizationQueryResult = jsonStatVisualizationQueryResult;
 const mockPath = [
     "foo",
     "bar",
@@ -216,6 +222,11 @@ describe('Rendering test', () => {
         expect.addSnapshotSerializer(serializer);
     });
 
+    beforeEach(() => {
+        mockVisualizationQueryResult = jsonStatVisualizationQueryResult;
+        jest.clearAllMocks();
+    });
+
     it('renders correctly', () => {
         const { asFragment } = render(
             <UiLanguageContext.Provider value={{
@@ -247,12 +258,72 @@ describe('Rendering test', () => {
                             selectedVisualization={mockSelectedVisualization}
                             visualizationSettings={mockVisualizationSettings}
                             previewSize={EPreviewSize.Desktop}
+                            visualizationLibrary="jsonstatgraphs"
                         />
                     </VisualizationContext.Provider>
                 </QueryContext.Provider>
             </UiLanguageContext.Provider>);
 
         expect(asFragment()).toMatchSnapshot();
+        expect(createChart).toHaveBeenCalledWith(
+            expect.anything(),
+            expect.anything(),
+            expect.objectContaining({ title: 'kulutus_t-fi 2018-2021' }),
+            expect.anything()
+        );
+    });
+
+    it('renders PxVisualizer data and passes the resolved selectable values', () => {
+        const pxVisualizerData = {
+            ...(jsonStatVisualizationQueryResult.data as unknown as IQueryVisualizationResponse),
+            selectableVariableCodes: ['Vuosi'],
+            visualizationSettings: {
+                ...(jsonStatVisualizationQueryResult.data as unknown as IQueryVisualizationResponse).visualizationSettings,
+                multiselectableVariableCode: 'Vuosi',
+                defaultSelectableVariableCodes: { Vuosi: ['2019'] },
+            },
+        } as IQueryVisualizationResponse;
+        mockVisualizationQueryResult = { ...jsonStatVisualizationQueryResult, data: pxVisualizerData };
+
+        render(
+            <UiLanguageContext.Provider value={{
+                language: mockLanguage,
+                setLanguage: jest.fn(),
+                languageTab: mockLanguage,
+                setLanguageTab: jest.fn(),
+                uiContentLanguage: mockLanguage,
+                setUiContentLanguage: jest.fn(),
+                availableUiLanguages: ['fi', 'en', 'sv'],
+            }}>
+                <QueryContext.Provider value={{ cubeQuery: mockCubeQueryTextEdits, setCubeQuery, query, setQuery }}>
+                    <VisualizationContext.Provider value={{
+                        selectedVisualizationUserInput,
+                        setSelectedVisualizationUserInput,
+                        visualizationSettingsUserInput,
+                        setVisualizationSettingsUserInput,
+                        defaultSelectables: {},
+                        setDefaultSelectables,
+                    }}>
+                        <Preview
+                            path={mockPath}
+                            query={mockQuery}
+                            selectedVisualization={mockSelectedVisualization}
+                            visualizationSettings={mockVisualizationSettings}
+                            previewSize={EPreviewSize.Desktop}
+                            visualizationLibrary="pxvisualizer"
+                        />
+                    </VisualizationContext.Provider>
+                </QueryContext.Provider>
+            </UiLanguageContext.Provider>
+        );
+
+        expect(PxVisualizerChart).toHaveBeenCalled();
+        expect((PxVisualizerChart as jest.Mock).mock.calls[0][0]).toMatchObject({
+            pxGraphData: pxVisualizerData,
+            locale: mockLanguage,
+            selectedVariableCodes: { Vuosi: ['2019'] },
+        });
+        expect(createChart).not.toHaveBeenCalled();
     });
 });
 
@@ -279,8 +350,7 @@ const mockSelectables: ISelectabilityInfo[] = [
                     contentComponent: null
                 }
             ]
-        },
-        multiselectable: false
+        }
     }
 ]
 
@@ -333,10 +403,13 @@ describe('Assertion tests', () => {
     });
 
     it('getSelectables returns correct information about selectable dimensions', () => {
-        const mockVisualizationResponseWithSelectables: IQueryVisualizationResponse = {
-            ...mockVisualizationQueryResult.data,
-            selectableVariableCodes: ['Tiedot', 'Vuosi']
-        }
+        const mockVisualizationResponseWithSelectables: IJsonStatDataset = {
+            ...mockVisualizationQueryResult.data as IJsonStatDataset,
+            extension: {
+                ...(mockVisualizationQueryResult.data as IJsonStatDataset).extension,
+                selectableConfig: { selectableSelections: { Tiedot: ['kulutus_t'], Vuosi: ['2018'] } }
+            }
+        };
         const mockVisualizationSettingsWithMultiselect: IVisualizationSettings = {
             ...mockVisualizationSettings,
             multiselectableVariableCode: 'Vuosi'

@@ -5,6 +5,7 @@ import { IEditorContentsResponse } from 'types/editorContentsResponse';
 import { FilterType, IValueFilter } from 'types/query';
 import { IVisualizationSettings } from 'types/visualizationSettings';
 import { VisualizationType } from 'types/visualizationType';
+import { getChartType, IJsonStatDataset } from 'types/jsonStatChart';
 import { cubeMetadata, groupContents, rootContents, tablePath, tableReference, visualizationOptions } from './fixture';
 
 type CubeRequest = IFetchSavedQueryResponse['query'];
@@ -142,6 +143,60 @@ const visualization = (request: PreviewRequest): IQueryVisualizationResponse => 
     };
 };
 
+const jsonStatVisualization = (request: PreviewRequest, requestedLanguage?: string): IJsonStatDataset => {
+    const language = requestedLanguage ?? cubeMetadata.defaultLanguage;
+    if (!cubeMetadata.availableLanguages.includes(language)) throw new Error(`Unsupported standalone language: ${language}`);
+
+    const response = visualization(request);
+    const dimensions = Object.fromEntries(response.metaData.map(variable => [
+        variable.code,
+        {
+            label: variable.name[language] ?? variable.name.en ?? variable.code,
+            category: {
+                index: Object.fromEntries(variable.values.map((value, index) => [value.code, index])),
+                label: Object.fromEntries(variable.values.map(value => [
+                    value.code,
+                    value.name[language] ?? value.name.en ?? value.code,
+                ])),
+            },
+        },
+    ]));
+    const settings = request.visualizationSettings;
+    const selectableSelections = Object.fromEntries(response.selectableVariableCodes.map(code => [
+        code,
+        response.metaData.find(variable => variable.code === code)?.values.map(value => value.code) ?? [],
+    ]));
+    const visualizationType = settings.selectedVisualization ?? VisualizationType.LineChart;
+
+    return {
+        version: '2.0',
+        class: 'dataset',
+        label: response.header[language] ?? response.header.en ?? '',
+        id: response.metaData.map(variable => variable.code),
+        size: response.metaData.map(variable => variable.values.length),
+        dimension: dimensions,
+        value: response.data,
+        role: {
+            time: response.metaData.filter(variable => variable.type === EVariableType.Time).map(variable => variable.code),
+            geo: response.metaData.filter(variable => variable.type === EVariableType.Geological).map(variable => variable.code),
+            metric: response.metaData.filter(variable => variable.type === EVariableType.Content).map(variable => variable.code),
+        },
+        extension: {
+            visualizationConfig: {
+                chartType: getChartType(visualizationType as VisualizationType),
+                layout: { rows: response.rowVariableCodes, columns: response.columnVariableCodes },
+                cutValueAxis: settings.cutYAxis,
+                sorting: settings.sorting,
+            },
+            selectableConfig: {
+                selectableSelections,
+                defaultSelectableSelections: settings.defaultSelectableVariableCodes ?? undefined,
+                multiSelectableDimensionCode: settings.multiselectableVariableCode,
+            },
+        },
+    };
+};
+
 export async function handleStandaloneRequest(method: 'GET' | 'POST', url: string, body?: string): Promise<unknown> {
     if (method === 'GET') {
         if (url === 'creation/data-bases/') return rootContents;
@@ -161,6 +216,10 @@ export async function handleStandaloneRequest(method: 'GET' | 'POST', url: strin
         if (url === 'creation/filter-dimension') return resolveFilters(request as FilterRequest);
         if (url === 'creation/editor-contents') return editorContents(request as CubeRequest);
         if (url === 'creation/visualization') return visualization(request as PreviewRequest);
+        const requestUrl = new URL(url, 'http://localhost');
+        if (requestUrl.pathname.replace(/^\/+/, '') === 'creation/jsonstat') {
+            return jsonStatVisualization(request as PreviewRequest, requestUrl.searchParams.get('lang') ?? undefined);
+        }
         if (url === 'sq/save' || url === 'sq/archive') {
             const save = request as SaveRequest;
             if (selectedDimensions(save.query).some(({ codes }) => codes.length === 0)) throw new Error('No values selected');

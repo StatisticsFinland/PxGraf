@@ -94,11 +94,23 @@ describe('useVisualizationQuery', () => {
 
     it('calls API when all conditions are met for a chart that does not require sorting', async () => {
         const settings: IVisualizationSettings = {};
-        const mockData = { data: [], metaData: [], selectableVariableCodes: [] };
+        const mockData = { id: [], size: [], dimension: {}, value: [] };
         mockPostAsync.mockResolvedValueOnce(mockData);
 
         const { result } = renderHook(
             () => useVisualizationQuery(mockIdStack, mockQuery, mockCubeQuery, 'fi', 'lineChart', settings),
+            { wrapper: createWrapper() }
+        );
+
+        await waitFor(() => expect(result.current.isLoading).toBe(false));
+        expect(mockPostAsync).toHaveBeenCalledWith('creation/jsonstat?lang=fi', expect.any(String));
+    });
+
+    it('uses the legacy endpoint when PxVisualizer is selected', async () => {
+        mockPostAsync.mockResolvedValueOnce({ data: [] });
+
+        const { result } = renderHook(
+            () => useVisualizationQuery(mockIdStack, mockQuery, mockCubeQuery, 'fi', 'lineChart', {}, 'pxvisualizer'),
             { wrapper: createWrapper() }
         );
 

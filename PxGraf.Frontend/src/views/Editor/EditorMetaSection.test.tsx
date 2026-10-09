@@ -1,6 +1,6 @@
 import React from 'react';
 import EditorMetaSection from "./EditorMetaSection";
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { EMetaPropertyType, IDimension, EDimensionType } from "types/cubeMeta";
 import { FilterType, Query } from "types/query";
 import { IVisualizationSettings } from "types/visualizationSettings";
@@ -242,11 +242,37 @@ describe('Rendering test', () => {
                     visualizationSettings={mockVisualizationSettings}
                     previewSize={EPreviewSize.Desktop}
                     onPreviewSizeChange={() => {}}
+                    visualizationLibrary="jsonstatgraphs"
+                    onVisualizationLibraryChange={() => {}}
                 />
                 </UiLanguageContext.Provider>
             );
             expect(screen.getByTestId('visualization-settings-row')).not.toBeNull();
         expect(asFragment()).toMatchSnapshot();
+    });
+
+    it('changes the selected visualization library', () => {
+        const onVisualizationLibraryChange = jest.fn();
+        render(
+            <UiLanguageContext.Provider value={{ language, setLanguage, languageTab, setLanguageTab, availableUiLanguages, uiContentLanguage, setUiContentLanguage }}>
+                <EditorMetaSection
+                    editorContentsResponse={editorContentsResult}
+                    resolvedDimensions={mockDimensions}
+                    selectedVisualization={selectedVisualizationMock}
+                    dimensionQuery={mockQuery}
+                    contentLanguages={["fi", "sv", "en"]}
+                    visualizationSettings={mockVisualizationSettings}
+                    previewSize={EPreviewSize.Desktop}
+                    onPreviewSizeChange={() => {}}
+                    visualizationLibrary="jsonstatgraphs"
+                    onVisualizationLibraryChange={onVisualizationLibraryChange}
+                />
+            </UiLanguageContext.Provider>
+        );
+
+        fireEvent.click(screen.getByRole('button', { name: 'editor.pxvisualizer' }));
+
+        expect(onVisualizationLibraryChange).toHaveBeenCalledWith('pxvisualizer');
     });
 
         it('omits the settings row when the visualization has no visible settings', () => {
@@ -277,6 +303,8 @@ describe('Rendering test', () => {
                         visualizationSettings={mockVisualizationSettings}
                         previewSize={EPreviewSize.Desktop}
                         onPreviewSizeChange={() => {}}
+                        visualizationLibrary="jsonstatgraphs"
+                        onVisualizationLibraryChange={() => {}}
                     />
                 </UiLanguageContext.Provider>
             );
@@ -296,6 +324,8 @@ describe('Rendering test', () => {
                         visualizationSettings={mockVisualizationSettings}
                         previewSize={EPreviewSize.Desktop}
                         onPreviewSizeChange={() => {}}
+                        visualizationLibrary="jsonstatgraphs"
+                        onVisualizationLibraryChange={() => {}}
                     />
                 </UiLanguageContext.Provider>
             );

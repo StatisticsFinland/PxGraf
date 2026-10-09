@@ -89,7 +89,10 @@
   },
   "editor": {
     "contentLanguage": "Muokkaa visualisoinnin kieliversioita",
-    "save": "Tallenna"
+    "save": "Tallenna",
+    "visualizationLibrary": "Visualisointikirjasto",
+    "jsonstatgraphs": "Jsonstatgraphs",
+    "pxvisualizer": "PxVisualizer"
   },
   "chartSettings": {
     "pivot": "Käännä kuvaaja",

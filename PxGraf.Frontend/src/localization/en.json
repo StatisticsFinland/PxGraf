@@ -89,7 +89,10 @@
   },
   "editor": {
     "contentLanguage": "Edit language versions of the visualisation",
-    "save": "Save"
+    "save": "Save",
+    "visualizationLibrary": "Visualization library",
+    "jsonstatgraphs": "Jsonstatgraphs",
+    "pxvisualizer": "PxVisualizer"
   },
   "chartSettings": {
     "pivot": "Pivot chart",

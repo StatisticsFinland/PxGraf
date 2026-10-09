@@ -89,7 +89,10 @@
   },
   "editor": {
     "contentLanguage": "Redigera visualiseringens språkversioner",
-    "save": "Spara"
+    "save": "Spara",
+    "visualizationLibrary": "Visualiseringsbibliotek",
+    "jsonstatgraphs": "Jsonstatgraphs",
+    "pxvisualizer": "PxVisualizer"
   },
   "chartSettings": {
     "pivot": "Rotera grafen",

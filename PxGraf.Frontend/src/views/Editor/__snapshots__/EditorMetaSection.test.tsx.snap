@@ -226,6 +226,30 @@ exports[`Rendering test renders correctly 1`] = `
             </button>
           </div>
           <div>
+            <div
+              aria-label="editor.visualizationLibrary"
+              class="MuiToggleButtonGroup-root MuiToggleButtonGroup-horizontal"
+              role="group"
+            >
+              <button
+                aria-pressed="true"
+                class="MuiButtonBase-root MuiToggleButtonGroup-grouped MuiToggleButtonGroup-groupedHorizontal MuiToggleButton-root Mui-selected MuiToggleButton-sizeSmall MuiToggleButton-primary MuiToggleButtonGroup-grouped MuiToggleButtonGroup-groupedHorizontal MuiToggleButtonGroup-firstButton"
+                tabindex="0"
+                type="button"
+                value="jsonstatgraphs"
+              >
+                editor.jsonstatgraphs
+              </button>
+              <button
+                aria-pressed="false"
+                class="MuiButtonBase-root MuiToggleButtonGroup-grouped MuiToggleButtonGroup-groupedHorizontal MuiToggleButton-root MuiToggleButton-sizeSmall MuiToggleButton-primary MuiToggleButtonGroup-grouped MuiToggleButtonGroup-groupedHorizontal MuiToggleButtonGroup-lastButton"
+                tabindex="0"
+                type="button"
+                value="pxvisualizer"
+              >
+                editor.pxvisualizer
+              </button>
+            </div>
             <button
               aria-label="tooltip.open: tooltip.visualizationSize"
             >

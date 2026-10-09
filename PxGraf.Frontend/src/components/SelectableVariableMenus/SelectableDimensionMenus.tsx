@@ -1,7 +1,7 @@
 import { Stack } from '@mui/material';
 import { ValueSelect } from './ValueSelect';
 import React, { Dispatch, SetStateAction } from 'react';
-import { ISelectabilityInfo } from 'components/Preview/Preview';
+import { ISelectabilityInfo } from './selectableDimension';
 
 export interface ISelectableSelections {
     [key: string]: string[];
