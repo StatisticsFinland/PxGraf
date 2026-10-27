@@ -95,10 +95,14 @@ namespace PxGraf.Data
         private static VisualizationOption.SortingOptionsCollection GetMultiDimHorizontalBarChartOptions(VisualizationType visualization, IReadOnlyMatrixMetadata meta, bool allowPivot, MatrixQuery query)
         {
             List<IReadOnlyDimension> multiselects = [.. meta.GetMultivalueDimensions().Where(mvv => !query.DimensionQueries[mvv.Code].Selectable)];
+            IReadOnlyDimension defaultSortingDimension = multiselects.Single(dimension => dimension.Code ==
+                LayoutRules.GetTwoDimensionalLayout(false, visualization, meta, query).RowDimensionCodes[0]);
+            IReadOnlyDimension pivotedSortingDimension = multiselects.Single(dimension => dimension.Code ==
+                LayoutRules.GetTwoDimensionalLayout(true, visualization, meta, query).RowDimensionCodes[0]);
             return new VisualizationOption.SortingOptionsCollection
             {
-                Default = GetOptions(multiselects[0]), // OBS: Highcharts flips columns and rows in horizontal bar charts
-                Pivoted = allowPivot ? GetOptions(multiselects[1]) : null
+                Default = GetOptions(defaultSortingDimension),
+                Pivoted = allowPivot ? GetOptions(pivotedSortingDimension) : null
             };
 
             List<SortingOption> GetOptions(IReadOnlyDimension sortingDimension)

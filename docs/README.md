@@ -47,6 +47,8 @@ The architecture supports various combinations:
 
 ### Information about production setup can be found [here](PRODUCTION_SETUP.md).
 
+### User-facing features and their code owners are listed in the [feature map](FEATURE_MAP.md).
+
 ## Configuration
 
 ### appsettings.json
