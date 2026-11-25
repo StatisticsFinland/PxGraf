@@ -17,6 +17,14 @@ Return the PR description as raw Markdown inside a single fenced code block labe
 
 Keep the PR description focused on purpose, changes, risk, review targets, and test coverage. Do not include commit IDs/SHAs, commit subjects or history, branch/base/merge-base details, or working-tree/index status in the description. Put required comparison warnings and exclusion disclosures in a separate note outside the PR description. Keep any limitations that materially affect understanding or reviewing the changes in the description.
 
+Use three distinct outputs; this format overrides any earlier instruction to return the description in a single code block:
+
+- **Title:** a short summary of the changes made.
+- **Description:** the most important information, using the applicable risk template below. Hard limit: 4,000 characters total, including Markdown formatting. Prioritize essential purpose, changes, risk/review guidance, and test coverage.
+- **Comment (optional):** additional relevant information that does not fit in the title or description; omit when none applies.
+
+Label the values `Title`, `Description`, and `Comment`, omitting Comment when unused. Do not duplicate information across outputs. Put comparison warnings and working-tree exclusions in a separate note.
+
 For `low` risk:
 
 ```markdown
