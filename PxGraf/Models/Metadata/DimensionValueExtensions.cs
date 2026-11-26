@@ -35,11 +35,15 @@ namespace PxGraf.Models.Metadata
                 MultilanguageString? source = input.GetDimensionValueMultilanguageProperty(PxSyntaxConstants.SOURCE_KEY);
                 source = valueEdits?.ContentComponent?.SourceEdit is null
                     ? source : source?.CopyAndEdit(valueEdits.ContentComponent.SourceEdit);
-                MultilanguageString? unit = valueEdits?.ContentComponent?.UnitEdit is null ?
-                    cdv.Unit : cdv.Unit.CopyAndEdit(valueEdits.ContentComponent.UnitEdit);
+                MultilanguageString unit = cdv.GetEffectiveUnit(valueEdits);
                 cc = new ContentComponent(unit, source, cdv.Precision, PxSyntaxConstants.FormatPxDateTime(cdv.LastUpdated));
             }
             return new VariableValue(input.Code, name, valueNote, isSum, cc);
+        }
+
+        public static MultilanguageString GetEffectiveUnit(this ContentDimensionValue value, DimensionQuery.DimensionValueEdition? valueEdits)
+        {
+            return value.Unit.CopyAndEdit(valueEdits?.ContentComponent?.UnitEdit);
         }
 
         private static MultilanguageString? GetDimensionValueMultilanguageProperty(this IReadOnlyDimensionValue value, string propertyKey)

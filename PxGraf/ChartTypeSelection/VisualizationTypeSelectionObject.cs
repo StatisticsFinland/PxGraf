@@ -136,7 +136,11 @@ namespace PxGraf.ChartTypeSelection
                 if (dimension.Type == DimensionType.Content && dimension is ContentDimension cDim)
                 {
                     if (query.Selectable) result.NumberOfUnits = 1;
-                    else result.NumberOfUnits = cDim.Values.Map(v => v.Unit).Distinct().Count();
+                    else result.NumberOfUnits = cDim.Values.Map(v =>
+                    {
+                        query.ValueEdits.TryGetValue(v.Code, out DimensionQuery.DimensionValueEdition? edits);
+                        return v.GetEffectiveUnit(edits);
+                    }).Distinct().Count();
                 }
                 else if (dimension.Type == DimensionType.Time && dimension is TimeDimension timeDim)
                 {

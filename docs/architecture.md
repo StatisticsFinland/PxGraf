@@ -86,6 +86,12 @@ Rule-based engine that determines which visualization types are valid for a give
 | `ChartSpecificLimits/*Check.cs` | Per-chart-type rules (VerticalBarChart, LineChart, PieChart, ScatterPlot, PyramidChart, Table, stacked/grouped/horizontal/percent variants) |
 | `ChartSelectionLimits`, `ChartTypeLimits` | JSON-configurable dimension limits |
 
+For chart types requiring a common content unit, selection compares effective
+multilingual units of the selected output values. Unit edits override nonempty
+translations; missing or empty edits fall back to source translations, as in
+rendered metadata. Units must match across all available content languages.
+Selectable content dimensions retain their single-unit treatment.
+
 Supported chart types (enum `VisualizationType`): VerticalBarChart, GroupVerticalBarChart, StackedVerticalBarChart, PercentVerticalBarChart, HorizontalBarChart, GroupHorizontalBarChart, StackedHorizontalBarChart, PercentHorizontalBarChart, PyramidChart, PieChart, LineChart, ScatterPlot, Table.
 
 ### Models
