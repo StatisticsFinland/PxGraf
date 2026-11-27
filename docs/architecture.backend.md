@@ -79,7 +79,7 @@ Key config sections: `DatabaseConfig`, `QueryStorageConfig`, `CacheOptions`, `Co
 
 ## External Dependencies (NuGet)
 
-`Px.Utils` (1.4.0) — core PX file parsing/matrix library. `Azure.Identity` + `Azure.Storage.Blobs` — Azure storage. `Microsoft.FeatureManagement.AspNetCore` — feature flags. `NLog` — logging. `Swashbuckle` — Swagger/OpenAPI. `Microsoft.ApplicationInsights` — telemetry.
+`Px.Utils` — core PX file parsing/matrix library. `Azure.Identity` + `Azure.Storage.Blobs` — Azure storage. `Microsoft.FeatureManagement.AspNetCore` — feature flags. `NLog` — logging. `Swashbuckle` — Swagger/OpenAPI. `Microsoft.ApplicationInsights` — telemetry.
 
 ## Configuration & Feature Flags
 

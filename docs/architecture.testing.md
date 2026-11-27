@@ -2,7 +2,7 @@
 
 ## Frontend Tests
 
-Jest 30 + Testing Library. Tests are co-located with source files using `*.test.tsx`/`*.test.ts` naming. Context tests are in `src/contexts/__tests__/`. Snapshot tests in `__snapshots__/` subdirectories.
+Jest + Testing Library. Tests are co-located with source files using `*.test.tsx`/`*.test.ts` naming. Context tests are in `src/contexts/__tests__/`. Snapshot tests in `__snapshots__/` subdirectories.
 
 | Test Area | Key Test Files |
 |---|---|
@@ -15,7 +15,7 @@ Jest 30 + Testing Library. Tests are co-located with source files using `*.test.
 
 ## Backend Unit Tests — `UnitTests/`
 
-NUnit 4 + Moq 4. Tests mirror backend structure.
+NUnit + Moq. Tests mirror backend structure.
 
 ### Test Organization
 

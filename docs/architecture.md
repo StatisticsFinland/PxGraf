@@ -1,6 +1,6 @@
 # PxGraf Solution Architecture
 
-PxGraf is a statistical data visualization tool. Users browse database tables, filter dimensions, select charts, and save or publish visualizations. `PxGraf.sln` comprises the .NET 10 backend API (`PxGraf/PxGraf.csproj`), React 19/TypeScript frontend (`PxGraf.Frontend/pxgraf.frontend.esproj`), and NUnit backend tests (`UnitTests/UnitTests.csproj`, .NET 10).
+PxGraf is a statistical data visualization tool. Users browse database tables, filter dimensions, select charts, and save or publish visualizations. `PxGraf.sln` comprises the .NET backend API (`PxGraf/PxGraf.csproj`), React/TypeScript frontend (`PxGraf.Frontend/pxgraf.frontend.esproj`), and NUnit backend tests (`UnitTests/UnitTests.csproj`).
 
 ## Documentation index
 

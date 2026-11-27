@@ -4,9 +4,9 @@ Frontend paths are relative to `PxGraf.Frontend/`. For editor components, API ho
 
 ## Tech Stack
 
-React 19, TypeScript, Vite 8, MUI 7, styled-components, react-router-dom 7, TanStack React Query 5, i18next, lodash, `@statisticsfinland/pxvisualizer` (chart rendering).
+React, TypeScript, Vite, MUI, styled-components, react-router-dom, TanStack React Query, i18next, lodash, `@statisticsfinland/pxvisualizer` (chart rendering).
 
-Testing: Jest 30, Testing Library (React + DOM + user-event), ts-jest.
+Testing: Jest, Testing Library (React + DOM + user-event), ts-jest.
 
 ## Application Shell
 
@@ -65,6 +65,6 @@ Testing: Jest 30, Testing Library (React + DOM + user-event), ts-jest.
 
 ## Styling
 
-The MUI 7 theme (`src/styles/materialTheme.ts`) is the authoritative source for application UI colors, typography, surfaces, borders, shape, shadows, and interaction states. Application components should consume semantic theme roles through MUI `styled` or `sx`; reusable UI colors should not be defined directly in components. Styled-components remains available for layout-only styles that do not need theme tokens.
+The MUI theme (`src/styles/materialTheme.ts`) is the authoritative source for application UI colors, typography, surfaces, borders, shape, shadows, and interaction states. Application components should consume semantic theme roles through MUI `styled` or `sx`; reusable UI colors should not be defined directly in components. Styled-components remains available for layout-only styles that do not need theme tokens.
 
 Visualization output is a separate styling boundary. Do not apply the application theme to HTML tables or graphs rendered by `@statisticsfinland/pxvisualizer`. The `.tk-table` rules in `src/index.css`, the public `pxgraf-styles/pxgraf-table.css` stylesheet, and pxvisualizer chart styles control visualization and export appearance independently and must be reviewed separately from application UI changes.
