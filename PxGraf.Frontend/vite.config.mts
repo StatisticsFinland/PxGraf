@@ -3,13 +3,15 @@ import react from '@vitejs/plugin-react'
 import packageJson from './package.json'
 
 // https://vitejs.dev/config/
-export default defineConfig(({ mode }) => {
+export default defineConfig(({ command, mode }) => {
     const env = loadEnv(mode, process.cwd(), '');
+    const standalone = command === 'serve' && mode === 'standalone';
 
     return {
         base: env.VITE_BASE_PATH || '/',
         define: {
             'import.meta.env.VITE_APP_VERSION': JSON.stringify(packageJson.version),
+            '__PXGRAF_STANDALONE__': JSON.stringify(standalone),
         },
         plugins: [react()],
         resolve: {
@@ -30,7 +32,7 @@ export default defineConfig(({ mode }) => {
         },
         server: {
             port: 3000,
-            proxy: {
+            proxy: standalone ? {} : {
                 '/api': env.VITE_PXGRAF_PROXY_TARGET || 'http://localhost:5000',
             },
         },

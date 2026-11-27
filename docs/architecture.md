@@ -2,6 +2,8 @@
 
 > **Purpose**: Machine-readable architecture reference for AI coding agents. Provides high-level structural context to minimize token usage when reasoning about the codebase.
 
+For user-facing feature names and UI terms, start with the [feature map](FEATURE_MAP.md); use this reference for the underlying architecture.
+
 ## Solution Overview
 
 PxGraf is a statistical data visualization tool. Users browse hierarchical database tables, configure dimension filters, select a chart type, and save/publish visualizations ("saved queries"). The solution consists of a .NET 10 backend API, a React/TypeScript SPA frontend, and an NUnit test project.
@@ -111,6 +113,8 @@ Key config sections: `DatabaseConfig`, `QueryStorageConfig`, `CacheOptions`, `Co
 | `AuditLogService` / `IAuditLogService` | Structured audit logging |
 | `PublicationWebhookService` / `IPublicationWebhookService` | HTTP webhook for query publication events; also exposes `CheckWebhookReachabilityAsync` for health probing |
 | `HealthCheckService` / `IHealthCheckService` | Probes all configured dependencies (database, saved query storage, archive storage, publication webhook) and returns aggregated `HealthResponse` |
+| `VirtualValueValidationService` / `IVirtualValueValidationService` | Validates calculated dimension value definitions against existing values |
+| `VirtualValueComputationService` / `IVirtualValueComputationService` | Computes calculated dimension values when building matrices for previews, saved queries and visualization responses |
 
 ### Other Backend Folders
 
@@ -142,7 +146,7 @@ Testing: Jest 30, Testing Library (React + DOM + user-event), ts-jest.
 | File | Purpose |
 |---|---|
 | `src/App.tsx` | Root: `QueryClientProvider` → `UiLanguageProvider` → `NavigationProvider` → `ThemeProvider` → `ErrorBoundary` → `Router` |
-| `src/Router.tsx` | Route definitions with `PageLayout` wrapper (Header + Divider + content) |
+| `src/Router.tsx` | Route definitions using `PageLayout` for browsing/loading and `EditorRoute` for the editor; both are defined in `src/components/Layout/Layout.tsx` |
 
 ### Routes
 
@@ -150,17 +154,15 @@ Testing: Jest 30, Testing Library (React + DOM + user-event), ts-jest.
 |---|---|---|
 | `/` | `TableTreeSelection` | Browse database hierarchy as a tree |
 | `/editor/*` | `Editor` (wrapped in `EditorProvider`) | Configure dimensions, chart type, metadata; preview & save |
-| `/table-list/*` | `TableListSelection` | Detail view of a folder's contents |
-| `/sqid/*` | `QueryLoader` | Load & display a saved query by ID |
+| `/sqid/*` | `QueryLoader` | Fetch a saved query by ID and redirect to the editor |
 
 ### Views (`src/views/`)
 
 | View | Key Responsibilities |
 |---|---|
-| `Editor/Editor.tsx` | Main editor orchestrator. Loads cube metadata, resolves dimensions, determines valid visualization types. Consumes `QueryContext`, `VisualizationContext`, and `SaveContext` for state. Sub-components: `EditorFilterSection` (dimension value selection), `EditorMetaSection` (metadata/chart type editing), `EditorPreviewSection` (chart preview), `EditorFooterSection` (save actions), `EditorDialogs` (save mutation dialogs) |
+| `Editor/Editor.tsx` | Main editor orchestrator. Loads cube metadata, resolves dimensions, determines valid visualization types. Consumes `QueryContext`, `VisualizationContext`, and `SaveContext` for state. Sub-components: `EditorFilterSection` (dimension value selection), `EditorMetaSection` (chart header, type, settings and preview size), `EditorPreviewSection` (chart preview), `EditorFooterSection` (save actions), `EditorDialogs` (metadata and save dialogs) |
 | `TableTreeSelection/` | Tree view using `NestedList` for hierarchical database browsing |
-| `TableListSelection/` | Flat list of `DirectoryInfo` and `TableInfo` components for a path |
-| `QueryLoader/` | Fetches saved query by URL param and renders the visualization |
+| `QueryLoader/` | Fetches saved query by URL param and redirects to `/editor/*`, passing the query as navigation state |
 
 ### Components (`src/components/`)
 
@@ -168,11 +170,11 @@ Testing: Jest 30, Testing Library (React + DOM + user-event), ts-jest.
 |---|---|
 | `Header/Header` | Application header bar |
 | `NestedList/NestedList` | Recursive tree list for database hierarchy. Uses `TableListItem` (folder) and `TableItem` (table) |
-| `Preview/Preview` | Chart preview with size controls and selectable dimension menus. Consumes `QueryContext` and `VisualizationContext`. Uses `@statisticsfinland/pxvisualizer` `Chart` component |
+| `Preview/Preview` | Chart preview with selectable dimension menus; size controls are in `EditorMetaSection`. Consumes `QueryContext` and `VisualizationContext`. Uses `@statisticsfinland/pxvisualizer` `Chart` component |
 | `ChartTypeSelector/` | UI for selecting visualization type |
 | `ChartTypeRejectionReasons/` | Displays reasons a chart type is not available |
-| `MetaEditor/` | Editors for dimension metadata: `MetaEditor`, `HeaderEditor`, `BasicDimensionEditor`, `ContentDimensionEditor`, `ContentDimensionValueEditor`, `DimensionEditor`, `EditorField`, `RevertButton` |
-| `VariableSelection/` | Dimension filter UI: `AllDimensionSelection`, `DefaultSelectableDimensionSelection`, `DimensionSelection`, `DimensionSelectionList`, filter sub-components |
+| `MetaEditor/` | `MetadataDialog` edits selected dimension value names, units and sources; `HeaderEditor` edits the chart header in the main editor. Also contains `BasicDimensionEditor`, `ContentDimensionEditor`, `ContentDimensionValueEditor`, `DimensionEditor`, `EditorField`, `RevertButton` |
+| `VariableSelection/` | Dimension filter UI: `DefaultSelectableDimensionSelection`, `DimensionSelection`, `DimensionSelectionList`, filter sub-components and computed-value controls |
 | `SelectableVariableMenus/` | `SelectableDimensionMenus`, `ValueSelect` — dropdowns for selectable dimensions in preview |
 | `VisualizationSettingsControls/` | Visualization settings UI. Sub-folders: `TypeSpecificControls/` (`MultiselectableSelector`, `TablePivotSettings`) and `UtilityComponents/` (`DimensionList`, `MarkerScaler`, `SortingSelector`, `VisualizationSettingsSwitch`) |
 | `SaveDialog/SaveDialog` | Save query dialog with dynamic/static and draft/publish options. Consumes `SaveContext` |
@@ -183,8 +185,6 @@ Testing: Jest 30, Testing Library (React + DOM + user-event), ts-jest.
 | `TabPanel/TabPanel` | Generic tab panel wrapper for tabbed content |
 | `CellCount/` | Shows current/max query cell count |
 | `InfoBubble/` | Tooltip info component |
-| `DirectoryInfo/` | Card for a database subfolder |
-| `TableInfo/` | Card for a database table |
 
 ### API Layer (`src/api/`)
 
@@ -349,17 +349,25 @@ Frontend: EditorFooterSection → useSaveMutation
 Backend: SqController.SaveQueryAsync → validate → ISqFileInterface.SerializeToSqFileAsync → optional webhook
 ```
 
-### 5. View Saved Query
+### 5. Reopen Saved Query in Editor
 ```
-Frontend: QueryLoader → GET api/sq/visualization/{sqId}
-Backend: VisualizationController → MultiStateMemoryTaskCache (Fresh/Stale/Error) → ISqFileInterface → PxVisualizerCubeAdapter
+Frontend: QueryLoader (or SavedQueryFinder) → GET api/sq/{sqId} → redirect to /editor/*
+Backend: SqController.GetSavedQueryAsync → ISqFileInterface → current table metadata/data → reconcile saved query
+Frontend: Editor initializes query and settings from navigation state; warns if recovery changed the query
+```
+
+### 6. Serve Saved Visualization to API Consumers
+```
+Client: GET api/sq/visualization/{sqId} (or GET api/sq/jsonstat/{sqId})
+Backend: VisualizationController → MultiStateMemoryTaskCache → ISqFileInterface
+    → archived matrix snapshot or current datasource matrix → PxVisualizerCubeAdapter / JsonStat2DatasetBuilder
 ```
 
 ---
 
 ## Configuration & Feature Flags
 
-- **`CreationAPI`**: Feature flag gating `CreationController` and `SqController` (save/archive). When disabled, only visualization serving (`VisualizationController`, `QueryMetaController`) is available.
+- **`CreationAPI`**: Feature flag gating `CreationController` and `SqController` (including saved-query loading and saving). When disabled, visualization serving and query metadata remain available; health and info endpoints are not gated by this flag.
 - **Database sources**: Local filesystem (`LocalFilesystemDatabaseConfig`), Azure Blob (`BlobContainerDatabaseConfig`), or PxWeb API (`PxWebDatabaseConfig`).
 - **Query storage**: Local filesystem (`LocalQueryStorageConfig`) or Azure Blob (`BlobQueryStorageConfig`).
 - **Publication webhook**: Optional HTTP webhook triggered on non-draft saves/archives.

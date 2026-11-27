@@ -14,6 +14,11 @@ using Moq;
 using Px.Utils.Models;
 using Px.Utils.Models.Data.DataValue;
 using PxGraf.Services;
+using Px.Utils.Language;
+using PxGraf.Enums;
+using PxGraf.Models.Requests;
+using System.Linq;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace UnitTests.ControllerTests.CreationControllerTests
 {
@@ -58,6 +63,98 @@ namespace UnitTests.ControllerTests.CreationControllerTests
             Assert.That(editorContent, Is.Not.Null);
             Assert.That(editorContent.Value, Is.Not.Null);
             Assert.That(editorContent.Value.PublicationWebhookEnabled, Is.Not.Null);
+        }
+
+        [Test]
+        public async Task EditedContentUnits_ControlLineChartOptionsAndVisualization()
+        {
+            List<DimensionParameters> dimensions =
+            [
+                new(DimensionType.Content, 2),
+                new(DimensionType.Time, 3)
+            ];
+            CreationController controller = TestCreationControllerBuilder.BuildController(dimensions, dimensions);
+            MatrixQuery query = TestDataCubeBuilder.BuildTestCubeQuery(dimensions);
+            DimensionQuery content = query.DimensionQueries["variable-0"];
+
+            ActionResult<EditorContentsResponse> before = await controller.GetEditorContents(query);
+            string expectedReason = string.Format(
+                Localization.FromLanguage("en").Translation.RejectionReasons.UnambiguousContentUnitRequired,
+                2, "variable-0");
+            Assert.That(before.Value.VisualizationRejectionReasons[VisualizationType.LineChart]["en"], Is.EqualTo(expectedReason));
+
+            content.ValueEdits["value-0"] = new()
+            {
+                ContentComponent = new() { UnitEdit = new MultilanguageString(new Dictionary<string, string> { ["fi"] = "u", ["en"] = "unit" }) }
+            };
+            content.ValueEdits["value-1"] = new()
+            {
+                ContentComponent = new() { UnitEdit = new MultilanguageString(new Dictionary<string, string> { ["fi"] = "u", ["en"] = "different" }) }
+            };
+            ActionResult<EditorContentsResponse> mismatch = await controller.GetEditorContents(query);
+            Assert.That(mismatch.Value.VisualizationRejectionReasons[VisualizationType.LineChart]["en"], Is.EqualTo(expectedReason));
+
+            content.ValueEdits["value-1"].ContentComponent.UnitEdit = new MultilanguageString(
+                new Dictionary<string, string> { ["fi"] = "u", ["en"] = "unit" });
+            ActionResult<EditorContentsResponse> after = await controller.GetEditorContents(query);
+            Assert.That(after.Value.VisualizationOptions.Select(option => option.Type), Does.Contain(VisualizationType.LineChart));
+            Assert.That(after.Value.VisualizationRejectionReasons, Does.Not.ContainKey(VisualizationType.LineChart));
+
+            ChartRequest request = new()
+            {
+                Query = query,
+                Language = "fi",
+                ActiveSelectableDimensionValues = [],
+                VisualizationSettings = new()
+                {
+                    SelectedVisualization = VisualizationType.LineChart,
+                    RowDimensionCodes = ["variable-1"],
+                    ColumnDimensionCodes = ["variable-0"],
+                    MultiselectableDimensionCode = string.Empty,
+                    Sorting = "NO_SORTING",
+                    DefaultSelectableDimensionCodes = []
+                }
+            };
+            ActionResult<VisualizationResponse> visualization = await controller.GetVisualizationAsync(request);
+            Assert.That(visualization.Value, Is.Not.Null);
+            Assert.That(visualization.Value.MetaData.Single(dimension => dimension.DimensionType == DimensionType.Content)
+                .Values.Select(value => value.ContentComponent.Unit["en"]), Is.All.EqualTo("unit"));
+        }
+
+        [Test]
+        public async Task EditedVirtualContentUnit_IgnoresOperandOnlyValues()
+        {
+            List<DimensionParameters> dimensions =
+            [
+                new(DimensionType.Content, 2),
+                new(DimensionType.Time, 3)
+            ];
+            VirtualValueComputationService service = new(NullLogger<VirtualValueComputationService>.Instance);
+            Mock<IVirtualValueComputationService> virtualValues = new();
+            virtualValues.Setup(s => s.ApplyVirtualValues(It.IsAny<Matrix<DecimalDataValue>>(), It.IsAny<MatrixQuery>()))
+                .Returns((Matrix<DecimalDataValue> matrix, MatrixQuery query) => service.ApplyVirtualValues(matrix, query));
+            CreationController controller = TestCreationControllerBuilder.BuildController(dimensions, dimensions, virtualValueComputationService: virtualValues);
+            MatrixQuery query = TestDataCubeBuilder.BuildTestCubeQuery(dimensions);
+            DimensionQuery content = query.DimensionQueries["variable-0"];
+            content.ValueFilter = new ItemFilter(["value-0", "virtual"]);
+            content.VirtualValueDefinitions = [new SumDefinition { Code = "virtual", OperandCodes = ["value-1"], Constant = 0 }];
+            content.ValueEdits["value-0"] = new()
+            {
+                ContentComponent = new() { UnitEdit = new MultilanguageString(new Dictionary<string, string> { ["fi"] = "u", ["en"] = "unit" }) }
+            };
+            content.ValueEdits["virtual"] = new()
+            {
+                ContentComponent = new() { UnitEdit = new MultilanguageString(new Dictionary<string, string> { ["fi"] = "u", ["en"] = "unit" }) }
+            };
+
+            ActionResult<EditorContentsResponse> result = await controller.GetEditorContents(query);
+            Assert.That(result.Value.VisualizationOptions.Select(option => option.Type), Does.Contain(VisualizationType.LineChart));
+            Assert.That(result.Value.Size, Is.EqualTo(6));
+
+            content.ValueEdits["virtual"].ContentComponent.UnitEdit = new MultilanguageString(
+                new Dictionary<string, string> { ["fi"] = "u", ["en"] = "different" });
+            result = await controller.GetEditorContents(query);
+            Assert.That(result.Value.VisualizationRejectionReasons, Does.ContainKey(VisualizationType.LineChart));
         }
 
         [Test]
