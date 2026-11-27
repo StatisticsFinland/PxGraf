@@ -135,6 +135,7 @@ namespace PxGraf.ChartTypeSelection
 
                 if (dimension.Type == DimensionType.Content && dimension is ContentDimension cDim)
                 {
+                    // Compare rendered units, including edits, across all content languages.
                     if (query.Selectable) result.NumberOfUnits = 1;
                     else result.NumberOfUnits = cDim.Values.Map(v =>
                     {
